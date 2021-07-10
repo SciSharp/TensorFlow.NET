@@ -224,7 +224,7 @@ namespace Tensorflow
                         dtype = t.dtype.as_base_dtype();
                         break;
                     case NDArray t:
-                        dtype = t.dtype.as_tf_dtype();
+                        dtype = t.dtype;
                         break;
                 }
 

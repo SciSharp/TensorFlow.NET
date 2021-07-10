@@ -15,46 +15,26 @@ namespace Tensorflow.NumPy
         public static readonly Slice newaxis = new Slice(null, null, 1) { IsNewAxis = true };
 
         // https://docs.scipy.org/doc/numpy-1.16.0/user/basics.types.html
-        public static readonly Type bool_ = typeof(bool);
-        public static readonly Type bool8 = bool_;
-        public static readonly Type @bool = bool_;
-
-        public static readonly Type @char = typeof(char);
-
-        public static readonly Type @byte = typeof(byte);
-        public static readonly Type uint8 = typeof(byte);
-        public static readonly Type ubyte = uint8;
-
-
-        public static readonly Type int16 = typeof(short);
-
-        public static readonly Type uint16 = typeof(ushort);
-
-        public static readonly Type int32 = typeof(int);
-
-        public static readonly Type uint32 = typeof(uint);
-
-        public static readonly Type int_ = typeof(long);
-        public static readonly Type int64 = int_;
-        public static readonly Type intp = int_; //TODO! IntPtr?
-        public static readonly Type int0 = int_;
-
-        public static readonly Type uint64 = typeof(ulong);
-        public static readonly Type uint0 = uint64;
-        public static readonly Type @uint = uint64;
-
-        public static readonly Type float32 = typeof(float);
-
-        public static readonly Type float_ = typeof(double);
-        public static readonly Type float64 = float_;
-        public static readonly Type @double = float_;
-
-        public static readonly Type complex_ = typeof(Complex);
-        public static readonly Type complex128 = complex_;
-        public static readonly Type complex64 = complex_;
-        public static readonly Type @decimal = typeof(decimal);
-
-        public static Type chars => throw new NotSupportedException("Please use char with extra dimension.");
+        #region data type
+        public static readonly TF_DataType @bool = TF_DataType.TF_BOOL;
+        public static readonly TF_DataType @char = TF_DataType.TF_INT8;
+        public static readonly TF_DataType @byte = TF_DataType.TF_INT8;
+        public static readonly TF_DataType uint8 = TF_DataType.TF_UINT8;
+        public static readonly TF_DataType ubyte = TF_DataType.TF_UINT8;
+        public static readonly TF_DataType int16 = TF_DataType.TF_INT16;
+        public static readonly TF_DataType uint16 = TF_DataType.TF_UINT16;
+        public static readonly TF_DataType int32 = TF_DataType.TF_INT32;
+        public static readonly TF_DataType uint32 = TF_DataType.TF_UINT32;
+        public static readonly TF_DataType int64 = TF_DataType.TF_INT64;
+        public static readonly TF_DataType uint64 = TF_DataType.TF_UINT64;
+        public static readonly TF_DataType float32 = TF_DataType.TF_FLOAT;
+        public static readonly TF_DataType float64 = TF_DataType.TF_DOUBLE;
+        public static readonly TF_DataType @double = TF_DataType.TF_DOUBLE;
+        public static readonly TF_DataType @decimal = TF_DataType.TF_DOUBLE;
+        public static readonly TF_DataType complex_ = TF_DataType.TF_COMPLEX;
+        public static readonly TF_DataType complex64 = TF_DataType.TF_COMPLEX64;
+        public static readonly TF_DataType complex128 = TF_DataType.TF_COMPLEX128; 
+        #endregion
 
         public static double nan => double.NaN;
         public static double NAN => double.NaN;
@@ -69,8 +49,6 @@ namespace Tensorflow.NumPy
         public static double PINF => double.PositiveInfinity;
         public static double Infinity => double.PositiveInfinity;
         public static double infinity => double.PositiveInfinity;
-
-        
 
         public static bool array_equal(NDArray a, NDArray b)
             => throw new NotImplementedException("");

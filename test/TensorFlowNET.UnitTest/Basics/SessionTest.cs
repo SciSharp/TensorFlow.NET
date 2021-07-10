@@ -94,7 +94,7 @@ namespace TensorFlowNET.UnitTest
             var input = tf.placeholder(tf.float64, shape: new TensorShape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
-            var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NumpyDType.Single) + 0.1f));
+            var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
 
             ret.Should().BeOfType<double>().And.BeShaped(2, 3).And.BeOfValuesApproximately(0.001d, 1.1, 2.1, 3.1, 4.1, 5.1, 6.1);
             print(ret.dtype);
@@ -108,7 +108,7 @@ namespace TensorFlowNET.UnitTest
             var input = tf.placeholder(tf.int64, shape: new TensorShape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
-            var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NumpyDType.Single) + 0.1f));
+            var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
 
             ret.Should().BeOfType<long>().And.BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
             print(ret.dtype);
@@ -122,7 +122,7 @@ namespace TensorFlowNET.UnitTest
             var input = tf.placeholder(tf.byte8, shape: new TensorShape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
-            var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(NumpyDType.Single) + 0.1f));
+            var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
 
             ret.Should().BeOfType<byte>().And.BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
             print(ret.dtype);

@@ -9,7 +9,7 @@ namespace Tensorflow.NumPy
     public partial class NDArray
     {
         Tensor _tensor;
-        public NumpyDType dtype => _tensor.dtype.as_numpy_typecode();
+        public TF_DataType dtype => _tensor.dtype;
         public ulong size => _tensor.size;
         public ulong dtypesize => _tensor.itemsize;
         public int ndim => _tensor.NDims;
@@ -40,7 +40,7 @@ namespace Tensorflow.NumPy
         public T MoveNext<T>() => throw new NotImplementedException("");
         public NDArray reshape(Shape newshape) => new NDArray(_tensor, newshape);
         public NDArray astype(Type type) => throw new NotImplementedException("");
-        public NDArray astype(NumpyDType type) => throw new NotImplementedException("");
+        public NDArray astype(TF_DataType type) => throw new NotImplementedException("");
         public bool array_equal(NDArray rhs) => throw new NotImplementedException("");
         public NDArray ravel() => throw new NotImplementedException("");
         public void shuffle(NDArray nd) => throw new NotImplementedException("");

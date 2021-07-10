@@ -55,7 +55,7 @@ namespace Tensorflow.Keras
                 value = 0f;
 
             var type = dtypes.tf_dtype_from_name(dtype);
-            var nd = new NDArray((length.Count(), maxlen.Value), dtype: type.as_numpy_typecode());
+            var nd = new NDArray((length.Count(), maxlen.Value), dtype: type);
 
             for (int i = 0; i < nd.dims[0]; i++)
             {

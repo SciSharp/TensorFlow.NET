@@ -133,7 +133,7 @@ namespace Tensorflow
         }
 
         public unsafe Tensor(NDArray nd)
-            => _handle = TF_NewTensor(nd.shape, nd.dtype.as_tf_dtype(), nd.data.ToPointer());
+            => _handle = TF_NewTensor(nd.shape, nd.dtype, nd.data.ToPointer());
 
         #region scala
         public Tensor(bool value) => _handle = TF_NewTensor(value);

@@ -7,7 +7,7 @@ namespace Tensorflow.NumPy
 {
     public partial class NumPyImpl
     {
-        public NDArray eye(int N, int? M = null, int k = 0, NumpyDType dtype = NumpyDType.Double)
+        public NDArray eye(int N, int? M = null, int k = 0, TF_DataType dtype = TF_DataType.TF_DOUBLE)
         {
             if (!M.HasValue)
                 M = N;
@@ -28,16 +28,16 @@ namespace Tensorflow.NumPy
                     diag_len = N + k;
             }
 
-            var diagonal_ = array_ops.ones(new TensorShape(diag_len), dtype: dtype.as_tf_dtype());
+            var diagonal_ = array_ops.ones(new TensorShape(diag_len), dtype: dtype);
             var tensor = array_ops.matrix_diag(diagonal: diagonal_, num_rows: N, num_cols: M.Value, k: k);
             return new NDArray(tensor);
         }
 
         public NDArray linspace<T>(T start, T stop, int num = 50, bool endpoint = true, bool retstep = false,
-            NumpyDType dtype = NumpyDType.Double, int axis = 0)
+            TF_DataType dtype = TF_DataType.TF_DOUBLE, int axis = 0)
         {
-            var start_tensor = array_ops.constant(start, dtype: dtype.as_tf_dtype());
-            var stop_tensor = array_ops.constant(stop, dtype: dtype.as_tf_dtype());
+            var start_tensor = array_ops.constant(start, dtype: dtype);
+            var stop_tensor = array_ops.constant(stop, dtype: dtype);
             var num_tensor = array_ops.constant(num);
             // var step_tensor = array_ops.constant(np.nan);
             Tensor result = null;

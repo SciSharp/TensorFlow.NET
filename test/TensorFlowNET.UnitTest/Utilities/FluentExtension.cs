@@ -204,12 +204,6 @@ namespace TensorFlowNET.UnitTest
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
-        public AndConstraint<NDArrayAssertions> BeOfType(NumpyDType typeCode)
-        {
-            Subject.dtype.Should().Be(typeCode);
-            return new AndConstraint<NDArrayAssertions>(this);
-        }
-
         public AndConstraint<NDArrayAssertions> BeOfType(Type typeCode)
         {
             Subject.dtype.Should().Be(typeCode);
@@ -287,7 +281,7 @@ namespace TensorFlowNET.UnitTest
 
             switch (Subject.dtype)
             {
-                case NumpyDType.Boolean:
+                case TF_DataType.TF_BOOL:
                     {
                         var iter = Subject.AsIterator<bool>();
                         var hasnext = iter.HasNext;
@@ -308,7 +302,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Byte:
+                case TF_DataType.TF_INT8:
                     {
                         var iter = Subject.AsIterator<byte>();
                         /*var next = iter.MoveNext;
@@ -330,7 +324,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Int16:
+                case TF_DataType.TF_INT16:
                     {
                         var iter = Subject.AsIterator<short>();
                         /*var next = iter.MoveNext;
@@ -352,7 +346,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.UInt16:
+                case TF_DataType.TF_UINT16:
                     {
                         var iter = Subject.AsIterator<ushort>();
                         /*var next = iter.MoveNext;
@@ -374,7 +368,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Int32:
+                case TF_DataType.TF_INT32:
                     {
                         var iter = Subject.AsIterator<int>();
                         /*var next = iter.MoveNext;
@@ -396,7 +390,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.UInt32:
+                case TF_DataType.TF_UINT32:
                     {
                         var iter = Subject.AsIterator<uint>();
                         /*var next = iter.MoveNext;
@@ -418,7 +412,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Int64:
+                case TF_DataType.TF_INT64:
                     {
                         var iter = Subject.AsIterator<long>();
                         /*var next = iter.MoveNext;
@@ -440,7 +434,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.UInt64:
+                case TF_DataType.TF_UINT64:
                     {
                         var iter = Subject.AsIterator<ulong>();
                         /*var next = iter.MoveNext;
@@ -462,7 +456,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Char:
+                case TF_DataType.TF_UINT8:
                     {
                         var iter = Subject.AsIterator<char>();
                         /*var next = iter.MoveNext;
@@ -484,7 +478,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Double:
+                case TF_DataType.TF_DOUBLE:
                     {
                         var iter = Subject.AsIterator<double>();
                         /*var next = iter.MoveNext;
@@ -506,7 +500,7 @@ namespace TensorFlowNET.UnitTest
                         break;
                     }
 
-                case NumpyDType.Single:
+                case TF_DataType.TF_FLOAT:
                     {
                         var iter = Subject.AsIterator<float>();
                         /*var next = iter.MoveNext;
@@ -527,29 +521,6 @@ namespace TensorFlowNET.UnitTest
 
                         break;
                     }
-
-                case NumpyDType.Decimal:
-                    {
-                        var iter = Subject.AsIterator<decimal>();
-                        /*var next = iter.MoveNext;
-                        var hasnext = iter.HasNext;
-                        for (int i = 0; i < values.Length; i++)
-                        {
-                            Execute.Assertion
-                                .ForCondition(hasnext())
-                                .FailWith($"Expected the NDArray to have atleast {values.Length} but in fact it has size of {i}.");
-
-                            var expected = Convert.ToDecimal(values[i]);
-                            var nextval = next();
-
-                            Execute.Assertion
-                                .ForCondition(expected == nextval)
-                                .FailWith($"Expected NDArray's {{2}}th value to be {{0}}, but found {{1}} (dtype: Decimal).\n------- Subject -------\n{Subject.ToString(false)}\n------- Expected -------\n[{string.Join(", ", values.Select(v => v.ToString()))}]", expected, nextval, i);
-                        }*/
-
-                        break;
-                    }
-
                 default:
                     throw new NotSupportedException();
             }

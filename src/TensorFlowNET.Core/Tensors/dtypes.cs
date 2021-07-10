@@ -83,46 +83,6 @@ namespace Tensorflow
         /// 
         /// </summary>
         /// <param name="type"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException">When <paramref name="type"/> has no equivalent <see cref="NumpyDType"/></exception>
-        public static NumpyDType as_numpy_typecode(this TF_DataType type)
-        {
-            switch (type)
-            {
-                case TF_DataType.TF_BOOL:
-                    return NumpyDType.Boolean;
-                case TF_DataType.TF_UINT8:
-                    return NumpyDType.Byte;
-                case TF_DataType.TF_INT64:
-                    return NumpyDType.Int64;
-                case TF_DataType.TF_INT32:
-                    return NumpyDType.Int32;
-                case TF_DataType.TF_INT16:
-                    return NumpyDType.Int16;
-                case TF_DataType.TF_UINT64:
-                    return NumpyDType.UInt64;
-                case TF_DataType.TF_UINT32:
-                    return NumpyDType.UInt32;
-                case TF_DataType.TF_UINT16:
-                    return NumpyDType.UInt16;
-                case TF_DataType.TF_FLOAT:
-                    return NumpyDType.Single;
-                case TF_DataType.TF_DOUBLE:
-                    return NumpyDType.Double;
-                case TF_DataType.TF_STRING:
-                    return NumpyDType.String;
-                case TF_DataType.TF_COMPLEX128:
-                case TF_DataType.TF_COMPLEX64: //64 is also TF_COMPLEX
-                    return NumpyDType.Complex;
-                default:
-                    throw new NotSupportedException($"Unable to convert {type} to a NumSharp typecode.");
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
         /// <param name="dtype"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">When <paramref name="type"/> has no equivalent <see cref="TF_DataType"/></exception>
@@ -369,15 +329,5 @@ namespace Tensorflow
                 || type == TF_DataType.TF_UINT32
                 || type == TF_DataType.TF_UINT64;
         }
-
-        public static TF_DataType as_tf_dtype(this NumpyDType type)
-            => type switch
-            {
-                NumpyDType.Int32 => TF_DataType.TF_INT32,
-                NumpyDType.Int64 => TF_DataType.TF_INT64,
-                NumpyDType.Float => TF_DataType.TF_FLOAT,
-                NumpyDType.Double => TF_DataType.TF_DOUBLE,
-                _ => TF_DataType.TF_UINT8
-            };
     }
 }

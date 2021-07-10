@@ -9,7 +9,7 @@ namespace Tensorflow.NumPy
         /// <summary>
         ///     The size of a single item stored in <see cref="Address"/>.
         /// </summary>
-        /// <remarks>Equivalent to <see cref="NumpyDType.SizeOf"/> extension.</remarks>
+        /// <remarks>Equivalent to <see cref="TF_DataType.SizeOf"/> extension.</remarks>
         int ItemLength { get; }
 
         /// <summary>
@@ -30,8 +30,8 @@ namespace Tensorflow.NumPy
         long BytesLength { get; }
 
         /// <summary>
-        ///     The <see cref="NumpyDType"/> of the type stored inside this memory block.
+        ///     The <see cref="TF_DataType"/> of the type stored inside this memory block.
         /// </summary>
-        NumpyDType TypeCode { get; }
+        TF_DataType TypeCode { get; }
     }
 }

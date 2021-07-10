@@ -16,9 +16,9 @@ namespace Tensorflow.Keras.Utils
         /// <returns></returns>
         public static NDArray to_categorical(NDArray y, int num_classes = -1, TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
-            var y1 = y.astype(NumpyDType.Int32).ToArray<int>();
+            var y1 = y.astype(np.int32).ToArray<int>();
             // var input_shape = y.shape[..^1];
-            var categorical = np.zeros(((int)y.size, num_classes), dtype: dtype.as_numpy_typecode());
+            var categorical = np.zeros(((int)y.size, num_classes), dtype: dtype);
             // categorical[np.arange(y.size), y] = 1;
             for (ulong i = 0; i < y.size; i++)
             {

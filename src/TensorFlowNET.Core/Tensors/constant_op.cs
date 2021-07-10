@@ -148,7 +148,7 @@ namespace Tensorflow
             }
             else if (dtype != TF_DataType.DtInvalid &&
                 value is NDArray nd &&
-                nd.dtype.as_tf_dtype() != dtype)
+                nd.dtype != dtype)
             {
                 value = nd.astype(dtype.as_system_dtype());
             }

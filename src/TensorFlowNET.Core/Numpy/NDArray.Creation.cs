@@ -18,10 +18,8 @@ namespace Tensorflow.NumPy
 
         public NDArray(Array value, Shape? shape = null) => _tensor = new EagerTensor(value, shape);
 
-        public NDArray(Shape shape, NumpyDType dtype = NumpyDType.Float)
-        {
-            Initialize(shape, dtype: dtype);
-        }
+        public NDArray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
+            => _tensor = new EagerTensor(shape, dtype: dtype);
 
         public NDArray(Tensor value, Shape? shape = null)
         {
@@ -44,12 +42,6 @@ namespace Tensorflow.NumPy
                 double val => new NDArray(val),
                 _ => throw new NotImplementedException("")
             };
-        }
-
-        void Initialize(Shape shape, NumpyDType dtype = NumpyDType.Float)
-        {
-            // _tensor = tf.zeros(shape, dtype: dtype.as_tf_dtype());
-            _tensor = new EagerTensor(shape, dtype: dtype.as_tf_dtype());
         }
     }
 }
