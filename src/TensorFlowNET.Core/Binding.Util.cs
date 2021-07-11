@@ -508,6 +508,12 @@ namespace Tensorflow
 
         public static Shape GetShape(this object data)
         {
+            if (data is NDArray nd)
+                return nd.shape;
+
+            if (data is Tensor tensor)
+                return tensor.shape;
+
             if (!data.GetType().IsArray)
                 return Shape.Scalar;
 

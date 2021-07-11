@@ -37,7 +37,7 @@ namespace Tensorflow.NumPy
             => new NDArray(value);
 
         public static implicit operator Tensor(NDArray nd)
-            => nd._tensor;
+            => constant_op.constant(nd);
 
         public static implicit operator NDArray(Tensor tensor)
             => new NDArray(tensor);
