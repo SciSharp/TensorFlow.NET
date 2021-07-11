@@ -93,7 +93,8 @@ namespace Tensorflow
         /// TFE_TensorHandle
         /// </summary>
         public SafeTensorHandleHandle EagerTensorHandle { get; set; }
-
+        protected bool _createdInGraphMode;
+        public bool CreatedInGraphMode => _createdInGraphMode;
         public bool IsEagerTensor => this is EagerTensor;
         public bool IsSparseTensor => this is SparseTensor;
 
@@ -262,29 +263,6 @@ namespace Tensorflow
 #if TRACK_TENSOR_LIFE
             print($"Delete Tensor 0x{handle.ToString("x16")} {AllocationType} Data: 0x{TensorDataPointer.ToString("x16")}");
 #endif
-            if (AllocationHandle != null)
-            {
-                if (AllocationType == AllocationType.GCHandle)
-                {
-                    ((GCHandle)AllocationHandle).Free();
-                    AllocationHandle = null;
-                    AllocationType = AllocationType.None;
-                }
-                else if (AllocationType == AllocationType.Marshal)
-                {
-                    Marshal.FreeHGlobal((IntPtr)AllocationHandle);
-                    AllocationHandle = null;
-                    AllocationType = AllocationType.None;
-                }
-                else if (AllocationType == AllocationType.FromPointer)
-                {
-                    AllocationHandle = null;
-                    AllocationType = AllocationType.None;
-                }
-                else
-                    throw new InvalidOperationException($"Tensor.AllocationHandle is not null ({AllocationHandle}) but AllocationType is not matched to a C# allocation type ({AllocationType}).");
-            }
-
             if (dtype == TF_DataType.TF_STRING)
             {
                 long size = 1;

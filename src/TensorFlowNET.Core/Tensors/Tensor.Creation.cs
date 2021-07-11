@@ -19,8 +19,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 using static Tensorflow.c_api;
 
@@ -29,21 +27,6 @@ namespace Tensorflow
     [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
     public partial class Tensor
     {
-        /// <summary>
-        ///     The handle that was used to allocate this tensor, dependent on <see cref="AllocationType"/>.
-        /// </summary>
-        protected object AllocationHandle;
-
-        /// <summary>
-        ///     True if this Tensor holds data allocated by C#.
-        /// </summary>
-        public bool IsMemoryOwner => AllocationType >= AllocationType.Marshal;
-
-        /// <summary>
-        ///     The allocation method used to create this Tensor.
-        /// </summary>
-        public AllocationType AllocationType { get; protected set; }
-
         public IntPtr TensorDataPointer => _handle == IntPtr.Zero ? IntPtr.Zero : TF_TensorData(_handle);
 
         public Tensor()
@@ -125,11 +108,7 @@ namespace Tensorflow
         /// <param name="num_bytes">Size of the tensor in memory</param>
         public Tensor(IntPtr data_ptr, long[] shape, TF_DataType dType, int num_bytes)
         {
-            unsafe
-            {
-                _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (ulong)num_bytes);
-                AllocationType = TF_TensorData(_handle) == data_ptr ? AllocationType.FromPointer : AllocationType.Tensorflow;
-            }
+            _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (ulong)num_bytes);
         }
 
         public unsafe Tensor(NDArray nd)
