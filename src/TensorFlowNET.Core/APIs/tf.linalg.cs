@@ -28,7 +28,7 @@ namespace Tensorflow
             public Tensor eye(int num_rows,
                 int num_columns = -1,
                 TensorShape batch_shape = null,
-                TF_DataType dtype = TF_DataType.TF_FLOAT,
+                TF_DataType dtype = TF_DataType.TF_DOUBLE,
                 string name = null)
                 => ops.eye(num_rows, num_columns: num_columns, batch_shape: batch_shape, dtype: dtype, name: name);
 

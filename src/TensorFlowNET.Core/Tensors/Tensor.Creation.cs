@@ -67,16 +67,17 @@ namespace Tensorflow
         }
 
         #region scala
-        public Tensor(bool value) => InitTensor(value);
-        public Tensor(byte value) => InitTensor(value);
-        public Tensor(sbyte value) => InitTensor(value);
-        public Tensor(short value) => InitTensor(value);
-        public Tensor(int value) => InitTensor(value);
-        public Tensor(uint value) => InitTensor(value);
-        public Tensor(long value) => InitTensor(value);
-        public Tensor(ulong value) => InitTensor(value);
-        public Tensor(float value) => InitTensor(value);
-        public Tensor(double value) => InitTensor(value);
+        public Tensor(bool value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(byte value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(sbyte value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(short value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(int value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(uint value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(long value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(ulong value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(float value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(double value) => InitTensor(new[] { value }, Shape.Scalar);
+        public Tensor(string value) => InitTensor(new[] { value }, TensorShape.Scalar);
         #endregion
 
         #region 1d array
@@ -94,6 +95,10 @@ namespace Tensorflow
         public Tensor(Complex[] data, Shape? shape = null) => InitTensor(data, shape);
         #endregion
 
+        public Tensor(Shape shape, TF_DataType dtype) => InitTensor(shape, dtype);
+        public Tensor(Array array, Shape? shape = null) => InitTensor(array, shape);
+        public Tensor(byte[] bytes, TF_DataType dtype) => InitTensor(bytes, dtype);
+
         public Tensor(Operation op, int value_index, TF_DataType dtype)
         {
             _op = op;
@@ -103,65 +108,87 @@ namespace Tensorflow
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
-        internal Tensor(Shape shape, TF_DataType dtype) => InitTensor(shape, dtype);
-        internal Tensor(Array array, Shape? shape = null) => InitTensor(array, shape);
-        internal Tensor(string value) => InitTensor(value);
-
-        protected unsafe void InitTensor<T>(T data) where T : unmanaged
-        {
-            _handle = TF_NewTensor(data);
-            isCreatedInGraphMode = !tf.executing_eagerly();
-        }
-
         protected unsafe void InitTensor(Shape shape, TF_DataType dtype)
         {
             _handle = TF_NewTensor(shape, dtype, null);
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
-        protected void InitTensor(string value)
+        protected unsafe void InitTensor(byte[] bytes, TF_DataType dtype)
         {
-            _handle = StringTensor(new[] { value }, TensorShape.Scalar);
+            if (dtype == TF_DataType.TF_STRING)
+                _handle = StringTensor(new byte[][] { bytes }, TensorShape.Scalar);
+            else
+                throw new NotImplementedException("");
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         protected unsafe void InitTensor(Array array, Shape? shape = null)
         {
-            shape = shape ?? array.GetShape();
-            var dtype = array.GetType().GetElementType().as_tf_dtype();
+            isCreatedInGraphMode = !tf.executing_eagerly();
 
-            switch (array)
+            shape = shape ?? array.GetShape();
+            var dtype = array.GetDataType();
+
+            if (shape.size == 0)
             {
-                case bool[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case bool[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case bool[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case bool[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case byte[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case byte[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case byte[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case byte[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case int[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case int[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case int[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case int[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case long[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case long[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case long[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case long[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case float[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case float[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case float[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case float[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case double[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case double[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case double[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case double[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
-                case string[] val: _handle = StringTensor(val, shape); break;
-                default:
-                    throw new NotImplementedException("");
+                _handle = TF_NewTensor(shape, dtype, null);
+                return;
             }
 
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _handle = array switch
+            {
+                bool[] val => InitTensor(val, shape, dtype),
+                bool[,] val => InitTensor(val, shape, dtype),
+                bool[,,] val => InitTensor(val, shape, dtype),
+                bool[,,,] val => InitTensor(val, shape, dtype),
+                byte[] val => InitTensor(val, shape, dtype),
+                byte[,] val => InitTensor(val, shape, dtype),
+                byte[,,] val => InitTensor(val, shape, dtype),
+                byte[,,,] val => InitTensor(val, shape, dtype),
+                int[] val => InitTensor(val, shape, dtype),
+                int[,] val => InitTensor(val, shape, dtype),
+                int[,,] val => InitTensor(val, shape, dtype),
+                int[,,,] val => InitTensor(val, shape, dtype),
+                long[] val => InitTensor(val, shape, dtype),
+                long[,] val => InitTensor(val, shape, dtype),
+                long[,,] val => InitTensor(val, shape, dtype),
+                long[,,,] val => InitTensor(val, shape, dtype),
+                float[] val => InitTensor(val, shape, dtype),
+                float[,] val => InitTensor(val, shape, dtype),
+                float[,,] val => InitTensor(val, shape, dtype),
+                float[,,,] val => InitTensor(val, shape, dtype),
+                double[] val => InitTensor(val, shape, dtype),
+                double[,] val => InitTensor(val, shape, dtype),
+                double[,,] val => InitTensor(val, shape, dtype),
+                double[,,,] val => InitTensor(val, shape, dtype),
+                string[] val => StringTensor(val, shape),
+                _ => throw new NotImplementedException("")
+            };
+        }
+
+        unsafe IntPtr InitTensor<T>(T[] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        {
+            fixed (T* addr = &array[0])
+                return TF_NewTensor(shape, dtype, addr);
+        }
+
+        unsafe IntPtr InitTensor<T>(T[,] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        {
+            fixed (T* addr = &array[0, 0])
+                return TF_NewTensor(shape, dtype, addr);
+        }
+
+        unsafe IntPtr InitTensor<T>(T[,,] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        {
+            fixed (T* addr = &array[0, 0, 0])
+                return TF_NewTensor(shape, dtype, addr);
+        }
+
+        unsafe IntPtr InitTensor<T>(T[,,,] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        {
+            fixed (T* addr = &array[0, 0, 0, 0])
+                return TF_NewTensor(shape, dtype, addr);
         }
     }
 }

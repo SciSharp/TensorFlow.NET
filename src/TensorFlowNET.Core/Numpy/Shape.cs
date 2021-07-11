@@ -62,11 +62,17 @@ namespace Tensorflow
         {
             get
             {
+                // scalar
+                if (ndim == 0) 
+                    return 1;
+
                 var computed = 1L;
                 for (int i = 0; i < _dims.Length; i++)
                 {
                     var val = _dims[i];
-                    if (val <= 0)
+                    if (val == 0)
+                        return 0;
+                    else if (val < 0)
                         continue;
                     computed *= val;
                 }

@@ -160,6 +160,9 @@ namespace Tensorflow
         {
             if (dims != null && shape2.dims != null)
             {
+                if (dims.Contains(-1) || shape2.dims.Contains(-1))
+                    return true;
+
                 if (shape.size != (ulong)shape2.size)
                     return false;
             }

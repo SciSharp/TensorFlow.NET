@@ -152,8 +152,9 @@ namespace Tensorflow
                 value = nd.astype(dtype.as_system_dtype());
             }
 
+            // non ascii char
             if (dtype == TF_DataType.TF_STRING && value is byte[] bytes)
-                return new EagerTensor(bytes, ctx.DeviceName, TF_DataType.TF_STRING);
+                return new EagerTensor(bytes, TF_DataType.TF_STRING);
 
             switch (value)
             {

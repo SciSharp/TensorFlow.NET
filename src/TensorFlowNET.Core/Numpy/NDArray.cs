@@ -39,8 +39,8 @@ namespace Tensorflow.NumPy
         public bool HasNext() => throw new NotImplementedException("");
         public T MoveNext<T>() => throw new NotImplementedException("");
         public NDArray reshape(Shape newshape) => new NDArray(_tensor, newshape);
-        public NDArray astype(Type type) => throw new NotImplementedException("");
-        public NDArray astype(TF_DataType type) => throw new NotImplementedException("");
+        public NDArray astype(Type type) => new NDArray(math_ops.cast(_tensor, type.as_tf_dtype()));
+        public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(_tensor, dtype));
         public NDArray ravel() => throw new NotImplementedException("");
         public void shuffle(NDArray nd) => throw new NotImplementedException("");
         public Array ToMuliDimArray<T>() => throw new NotImplementedException("");

@@ -8,7 +8,7 @@ namespace Tensorflow
         public Tensor eye(int num_rows,
             int num_columns = -1,
             TensorShape batch_shape = null,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
+            TF_DataType dtype = TF_DataType.TF_DOUBLE,
             string name = null)
         {
             return tf_with(ops.name_scope(name, default_name: "eye", new { num_rows, num_columns, batch_shape }), scope =>
