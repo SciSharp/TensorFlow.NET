@@ -75,7 +75,7 @@ namespace Tensorflow
                 case TF_DataType.TF_COMPLEX64: //64 is also TF_COMPLEX
                     return typeof(Complex);
                 default:
-                    return null;
+                    throw new NotSupportedException($"Unable to convert {type} to a system data type.");
             }
         }
 
@@ -83,24 +83,25 @@ namespace Tensorflow
         /// 
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="dtype"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">When <paramref name="type"/> has no equivalent <see cref="TF_DataType"/></exception>
-        public static TF_DataType as_tf_dtype(this Type type, TF_DataType? dtype = null)
+        public static TF_DataType as_tf_dtype(this Type type)
         {
             while (type.IsArray)
                 type = type.GetElementType();
 
+            TF_DataType dtype = TF_DataType.DtInvalid;
+
             switch (type.Name)
             {
                 case "Char":
-                    dtype = dtype ?? TF_DataType.TF_UINT8;
+                    dtype = TF_DataType.TF_UINT8;
                     break;
                 case "SByte":
                     dtype = TF_DataType.TF_INT8;
                     break;
                 case "Byte":
-                    dtype = dtype ?? TF_DataType.TF_UINT8;
+                    dtype = TF_DataType.TF_UINT8;
                     break;
                 case "Int16":
                     dtype = TF_DataType.TF_INT16;
@@ -136,60 +137,32 @@ namespace Tensorflow
                     dtype = TF_DataType.TF_BOOL;
                     break;
                 default:
-                    throw new NotSupportedException($"Unable to convert {type} to a NumSharp typecode.");
+                    throw new NotSupportedException($"Unable to convert {type} to a TensorFlow data type.");
             }
 
-            return dtype.Value;
+            return dtype;
         }
 
         public static TF_DataType tf_dtype_from_name(string name)
         {
-            TF_DataType dtype = TF_DataType.DtInvalid;
-            switch (name.ToLower())
+            TF_DataType dtype = name.ToLower() switch
             {
-                case "char":
-                    dtype = TF_DataType.TF_UINT8;
-                    break;
-                case "boolean":
-                    dtype = TF_DataType.TF_BOOL;
-                    break;
-                case "sbyte":
-                    dtype = TF_DataType.TF_INT8;
-                    break;
-                case "byte":
-                    dtype = TF_DataType.TF_UINT8;
-                    break;
-                case "int16":
-                    dtype = TF_DataType.TF_INT16;
-                    break;
-                case "uint16":
-                    dtype = TF_DataType.TF_UINT16;
-                    break;
-                case "int32":
-                    dtype = TF_DataType.TF_INT32;
-                    break;
-                case "uint32":
-                    dtype = TF_DataType.TF_UINT32;
-                    break;
-                case "int64":
-                    dtype = TF_DataType.TF_INT64;
-                    break;
-                case "uint64":
-                    dtype = TF_DataType.TF_UINT64;
-                    break;
-                case "single":
-                    dtype = TF_DataType.TF_FLOAT;
-                    break;
-                case "double":
-                    dtype = TF_DataType.TF_DOUBLE;
-                    break;
-                case "complex":
-                    dtype = TF_DataType.TF_COMPLEX128;
-                    break;
-                case "string":
-                    dtype = TF_DataType.TF_STRING;
-                    break;
-            }
+                "char" => TF_DataType.TF_UINT8,
+                "boolean" => TF_DataType.TF_BOOL,
+                "sbyte" => TF_DataType.TF_INT8,
+                "byte" => TF_DataType.TF_UINT8,
+                "int16" => TF_DataType.TF_INT16,
+                "uint16" => TF_DataType.TF_UINT16,
+                "int32" => TF_DataType.TF_INT32,
+                "uint32" => TF_DataType.TF_UINT32,
+                "int64" => TF_DataType.TF_INT64,
+                "uint64" => TF_DataType.TF_UINT64,
+                "single" => TF_DataType.TF_FLOAT,
+                "double" => TF_DataType.TF_DOUBLE,
+                "complex" => TF_DataType.TF_COMPLEX128,
+                "string" => TF_DataType.TF_STRING,
+                _ => TF_DataType.DtInvalid
+            };
 
             return dtype;
         }

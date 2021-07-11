@@ -7,7 +7,7 @@ namespace TensorFlowNET.UnitTest
     [TestClass]
     public class MnistModelLoaderTest
     {
-        [TestMethod]
+        [TestMethod, Ignore]
         public async Task TestLoad()
         {
             var loader = new MnistModelLoader();

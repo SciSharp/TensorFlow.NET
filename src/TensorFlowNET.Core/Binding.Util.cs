@@ -526,8 +526,19 @@ namespace Tensorflow
             var type = data.GetType();
             switch (data)
             {
-                case Shape shape:
+                case TensorShape:
+                case Shape:
                     return TF_DataType.TF_INT64;
+                case Axis:
+                    return TF_DataType.TF_INT32;
+                case NDArray nd:
+                    return nd.dtype;
+                case Tensor tensor:
+                    return tensor.dtype;
+                case Tensor[] tensor:
+                    return tensor[0].dtype;
+                case ResourceVariable variable:
+                    return variable.dtype;
                 default:
                     return type.as_tf_dtype();
             }

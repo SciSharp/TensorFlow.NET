@@ -142,7 +142,7 @@ namespace Tensorflow.Contexts
             bool has_graph_arg = !tf.Context.executing_eagerly();
             foreach (var el in flatten_args)
             {
-                if (el is Tensor tensor && !tensor.IsEagerTensor)
+                if (el is Tensor tensor && tensor.IsCreatedInGraphMode)
                 {
                     has_graph_arg = true;
                     break;

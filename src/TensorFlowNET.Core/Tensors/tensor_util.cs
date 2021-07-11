@@ -108,7 +108,7 @@ namespace Tensorflow
             if (values is TensorProto tp)
                 return tp;
 
-            dtype = values.GetType().as_tf_dtype();
+            dtype = values.GetDataType();
             shape = shape ?? values.GetShape();
             var tensor_proto = new TensorProto
             {
@@ -117,7 +117,13 @@ namespace Tensorflow
             };
 
             // scalar
-            if (!values.GetType().IsArray)
+            if (values is NDArray nd)
+            {
+                var len = nd.dtypesize * nd.size;
+                byte[] bytes = nd.ToByteArray();
+                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
+            }
+            else if (!values.GetType().IsArray)
             {
                 switch (values)
                 {
@@ -154,7 +160,7 @@ namespace Tensorflow
                 else if (values is byte[] byte_values)
                     tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
             }
-            else if(values is Array array)
+            else if (values is Array array)
             {
                 // array
                 var len = dtype.get_datatype_size() * (int)shape.size;

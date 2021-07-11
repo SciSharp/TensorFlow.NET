@@ -50,9 +50,6 @@ namespace Tensorflow.Eager
         public EagerTensor(Shape shape, TF_DataType dtype) : base(shape, dtype)
             => NewEagerTensorHandle(_handle);
 
-        internal unsafe EagerTensor(string value) : base(value)
-            => NewEagerTensorHandle(_handle);
-
         internal unsafe EagerTensor(Array array, Shape shape) : base(array, shape)
             => NewEagerTensorHandle(_handle);
 

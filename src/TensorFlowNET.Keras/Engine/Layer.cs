@@ -115,7 +115,7 @@ namespace Tensorflow.Keras.Engine
         bool _in_functional_construction_mode(Tensors inputs)
         {
             return tf.Context.executing_eagerly()
-                && inputs.Count(x => !x.IsEagerTensor) == inputs.Count();
+                && inputs.Count(x => x.IsCreatedInGraphMode) == inputs.Count();
         }
 
         public void SetConnectivityMetadata(Tensors inputs, Tensors outputs)
@@ -177,7 +177,7 @@ namespace Tensorflow.Keras.Engine
             tf.init_scope();
 
             bool need_restore_mode = false;
-            if (inputs.IsEagerTensor || tf.Context.is_build_function())
+            if (!inputs.IsCreatedInGraphMode || tf.Context.is_build_function())
             {
                 need_restore_mode = true;
                 tf.Context.eager_mode(isFunc: tf.Context.is_build_function());

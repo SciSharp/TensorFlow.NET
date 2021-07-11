@@ -21,6 +21,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using static Tensorflow.c_api;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -31,7 +32,7 @@ namespace Tensorflow
 
         public Tensor()
         {
-
+            isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         /// <summary>
@@ -41,60 +42,7 @@ namespace Tensorflow
         public Tensor(IntPtr handle)
         {
             _handle = handle;
-            //no need to set AllocationType = AllocationType.None;
-#if TRACK_TENSOR_LIFE
-            print($"New Tensor 0x{_handle.ToString("x16")} {AllocationType} String Data: 0x{TensorDataPointer.ToString("x16")}");
-#endif
-        }
-
-        unsafe internal Tensor(Shape shape, TF_DataType dtype)
-            => _handle = TF_NewTensor(shape, dtype, null);
-
-        internal Tensor(Array array, Shape? shape = null)
-            => InitTensor(array, shape);
-
-        unsafe void InitTensor(Array array, Shape? shape = null)
-        {
-            shape = shape ?? array.GetShape();
-            var dtype = array.GetType().GetElementType().as_tf_dtype();
-
-            switch (array)
-            {
-                case bool[] val:
-                    fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case int[] val:
-                    fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case int[,] val:
-                    fixed (void* addr = &val[0, 0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case long[] val:
-                    fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case float[] val:
-                    fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case float[,] val:
-                    fixed (void* addr = &val[0, 0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case double[] val:
-                    fixed (void* addr = &val[0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                case double[,] val:
-                    fixed (void* addr = &val[0, 0])
-                        _handle = TF_NewTensor(shape, dtype, addr);
-                    break;
-                default:
-                    throw new NotImplementedException("");
-            }
+            isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         /// <summary>
@@ -109,22 +57,26 @@ namespace Tensorflow
         public Tensor(IntPtr data_ptr, long[] shape, TF_DataType dType, int num_bytes)
         {
             _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (ulong)num_bytes);
+            isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         public unsafe Tensor(NDArray nd)
-            => _handle = TF_NewTensor(nd.shape, nd.dtype, nd.data.ToPointer());
+        {
+            _handle = TF_NewTensor(nd.shape, nd.dtype, nd.data.ToPointer());
+            isCreatedInGraphMode = !tf.executing_eagerly();
+        }
 
         #region scala
-        public Tensor(bool value) => _handle = TF_NewTensor(value);
-        public Tensor(byte value) => _handle = TF_NewTensor(value);
-        public Tensor(sbyte value) => _handle = TF_NewTensor(value);
-        public Tensor(short value) => _handle = TF_NewTensor(value);
-        public Tensor(int value) => _handle = TF_NewTensor(value);
-        public Tensor(uint value) => _handle = TF_NewTensor(value);
-        public Tensor(long value) => _handle = TF_NewTensor(value);
-        public Tensor(ulong value) => _handle = TF_NewTensor(value);
-        public Tensor(float value) => _handle = TF_NewTensor(value);
-        public Tensor(double value) => _handle = TF_NewTensor(value);
+        public Tensor(bool value) => InitTensor(value);
+        public Tensor(byte value) => InitTensor(value);
+        public Tensor(sbyte value) => InitTensor(value);
+        public Tensor(short value) => InitTensor(value);
+        public Tensor(int value) => InitTensor(value);
+        public Tensor(uint value) => InitTensor(value);
+        public Tensor(long value) => InitTensor(value);
+        public Tensor(ulong value) => InitTensor(value);
+        public Tensor(float value) => InitTensor(value);
+        public Tensor(double value) => InitTensor(value);
         #endregion
 
         #region 1d array
@@ -142,31 +94,74 @@ namespace Tensorflow
         public Tensor(Complex[] data, Shape? shape = null) => InitTensor(data, shape);
         #endregion
 
-        /// <summary>
-        ///     Create a string Tensor from the given string
-        /// </summary>
-        public Tensor(string str)
-        {
-            _handle = StringTensor(new string[] { str }, TensorShape.Scalar);
-#if TRACK_TENSOR_LIFE
-            print($"New Tensor 0x{_handle.ToString("x16")} {AllocationType} String Data: 0x{TensorDataPointer.ToString("x16")}");
-#endif
-        }
-
-        public Tensor(string[] strings)
-        {
-            _handle = StringTensor(strings, new TensorShape(strings.Length));
-#if TRACK_TENSOR_LIFE
-            print($"New Tensor 0x{_handle.ToString("x16")} {AllocationType} String Data: 0x{TensorDataPointer.ToString("x16")}");
-#endif
-        }
-
         public Tensor(Operation op, int value_index, TF_DataType dtype)
         {
             _op = op;
             _value_index = value_index;
             _override_dtype = dtype;
             _id = ops.uid();
+            isCreatedInGraphMode = !tf.executing_eagerly();
+        }
+
+        internal Tensor(Shape shape, TF_DataType dtype) => InitTensor(shape, dtype);
+        internal Tensor(Array array, Shape? shape = null) => InitTensor(array, shape);
+        internal Tensor(string value) => InitTensor(value);
+
+        protected unsafe void InitTensor<T>(T data) where T : unmanaged
+        {
+            _handle = TF_NewTensor(data);
+            isCreatedInGraphMode = !tf.executing_eagerly();
+        }
+
+        protected unsafe void InitTensor(Shape shape, TF_DataType dtype)
+        {
+            _handle = TF_NewTensor(shape, dtype, null);
+            isCreatedInGraphMode = !tf.executing_eagerly();
+        }
+
+        protected void InitTensor(string value)
+        {
+            _handle = StringTensor(new[] { value }, TensorShape.Scalar);
+            isCreatedInGraphMode = !tf.executing_eagerly();
+        }
+
+        protected unsafe void InitTensor(Array array, Shape? shape = null)
+        {
+            shape = shape ?? array.GetShape();
+            var dtype = array.GetType().GetElementType().as_tf_dtype();
+
+            switch (array)
+            {
+                case bool[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case bool[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case bool[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case bool[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case byte[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case byte[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case byte[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case byte[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case int[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case int[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case int[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case int[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case long[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case long[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case long[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case long[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case float[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case float[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case float[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case float[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case double[] val: fixed (void* addr = &val[0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case double[,] val: fixed (void* addr = &val[0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case double[,,] val: fixed (void* addr = &val[0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case double[,,,] val: fixed (void* addr = &val[0, 0, 0, 0]) _handle = TF_NewTensor(shape, dtype, addr); break;
+                case string[] val: _handle = StringTensor(val, shape); break;
+                default:
+                    throw new NotImplementedException("");
+            }
+
+            isCreatedInGraphMode = !tf.executing_eagerly();
         }
     }
 }

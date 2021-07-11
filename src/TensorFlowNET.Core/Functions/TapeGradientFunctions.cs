@@ -141,7 +141,7 @@ namespace Tensorflow.Functions
                 src_graph: _func_graph);
 
             var captures_from_forward = backwards_graph.external_captures
-                .Where(x => !x.IsEagerTensor && x.graph == _func_graph)
+                .Where(x => x.IsCreatedInGraphMode && x.graph == _func_graph)
                 .ToArray();
             foreach(var capture in captures_from_forward)
             {

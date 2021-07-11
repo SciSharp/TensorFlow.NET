@@ -98,7 +98,6 @@ namespace Tensorflow
                 attrs: attrs,
                 name: name);
 
-            var o = op.outputs;
             return op.outputs[0];
         }
 
@@ -167,9 +166,9 @@ namespace Tensorflow
                 case TensorShape val:
                     return new EagerTensor(val.dims, ctx.DeviceName);
                 case string val:
-                    return new EagerTensor(val);
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case string[] val:
-                    return new EagerTensor(val, ctx.DeviceName);
+                    return new EagerTensor(val, new Shape(val.Length));
                 case bool val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case byte val:

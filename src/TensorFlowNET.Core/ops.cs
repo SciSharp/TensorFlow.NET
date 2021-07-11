@@ -123,7 +123,7 @@ namespace Tensorflow
             if (dtype == TF_DataType.DtInvalid)
                 dtype = preferred_dtype;
 
-            if (value is EagerTensor eager_tensor)
+            if (value is EagerTensor eager_tensor && !eager_tensor.IsCreatedInGraphMode)
             {
                 if (tf.executing_eagerly())
                 {
@@ -140,7 +140,13 @@ namespace Tensorflow
                 }
             }
             else if (value is NDArray nd)
+            {
                 return nd;
+            }
+            else if (value is Tensor tensor && tensor.IsReferencedByNDArray)
+            {
+                return tensor;
+            }
 
             // graph mode
             Tensor ret = value switch

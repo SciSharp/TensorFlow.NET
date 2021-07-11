@@ -21,7 +21,7 @@ namespace Tensorflow
         public TensorShape shape => items.First().TensorShape;
         public int rank => items.First().rank;
         public Graph graph => items.First().graph;
-        public bool IsEagerTensor => items.First().IsEagerTensor;
+        public bool IsCreatedInGraphMode => items.First().IsCreatedInGraphMode;
         public bool IsList { get; set; }
         public int Length => items.Count();
 
