@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.NumPy;
 using System.Linq;
 using Tensorflow;
-using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.Basics
+namespace TensorFlowNET.UnitTest
 {
     /// <summary>
     /// Find more examples in https://www.programcreek.com/python/example/90444/tensorflow.read_file
@@ -84,14 +82,14 @@ namespace TensorFlowNET.UnitTest.Basics
 
                 var result = sess.run(cropped);
                 // check if cropped to 1x1 center was succesfull
-                result.size.Should().Be(1);
-                result[0, 0, 0, 0].Should().Be(4f);
+                Assert.AreEqual(result.size, 1);
+                Assert.AreEqual(result[0, 0, 0, 0], 4f);
 
                 cropped = tf.image.crop_and_resize(image2, box, boxInd, cropSize2_2);
                 result = sess.run(cropped);
                 // check if flipped and no cropping occured
-                result.size.Should().Be(16);
-                result[0, 0, 0, 0].Should().Be(12f);
+                Assert.AreEqual(result.size, 16);
+                Assert.AreEqual(result[0, 0, 0, 0], 12f);
 
             }
         }

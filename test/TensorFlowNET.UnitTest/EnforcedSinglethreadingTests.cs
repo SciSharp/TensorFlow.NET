@@ -34,7 +34,7 @@ namespace TensorFlowNET.UnitTest
                 using (var sess = tf.Session())
                 {
                     var default_graph = tf.peak_default_graph();
-                    var sess_graph = sess.GetPrivate<Graph>("_graph");
+                    var sess_graph = sess.graph;
                     sess_graph.Should().NotBeNull();
                     default_graph.Should().NotBeNull()
                         .And.BeEquivalentTo(sess_graph);

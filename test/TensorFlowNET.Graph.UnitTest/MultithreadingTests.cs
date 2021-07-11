@@ -1,12 +1,10 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.NumPy;
 using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Tensorflow;
-using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest
@@ -24,15 +22,15 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                tf.peak_default_graph().Should().BeNull();
+                Assert.IsNull(tf.peak_default_graph());
 
                 using (var sess = tf.Session())
                 {
                     var default_graph = tf.peak_default_graph();
-                    var sess_graph = sess.GetPrivate<Graph>("_graph");
-                    sess_graph.Should().NotBeNull();
-                    default_graph.Should().NotBeNull()
-                        .And.BeEquivalentTo(sess_graph);
+                    var sess_graph = sess.graph;
+                    Assert.IsNotNull(default_graph);
+                    Assert.IsNotNull(sess_graph);
+                    Assert.AreEqual(default_graph, sess_graph);
                 }
             }
         }
@@ -47,15 +45,15 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                tf.peak_default_graph().Should().BeNull();
+                Assert.IsNull(tf.peak_default_graph());
                 //tf.Session created an other graph
                 using (var sess = tf.Session())
                 {
                     var default_graph = tf.peak_default_graph();
-                    var sess_graph = sess.GetPrivate<Graph>("_graph");
-                    sess_graph.Should().NotBeNull();
-                    default_graph.Should().NotBeNull()
-                        .And.BeEquivalentTo(sess_graph);
+                    var sess_graph = sess.graph;
+                    Assert.IsNotNull(default_graph);
+                    Assert.IsNotNull(sess_graph);
+                    Assert.AreEqual(default_graph, sess_graph);
                 }
             }
         }
@@ -70,19 +68,18 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                tf.peak_default_graph().Should().BeNull();
+                Assert.IsNull(tf.peak_default_graph());
                 var beforehand = tf.get_default_graph(); //this should create default automatically.
-                beforehand.graph_key.Should().NotContain("-0/", "Already created a graph in an other thread.");
                 beforehand.as_default();
-                tf.peak_default_graph().Should().NotBeNull();
+                Assert.IsNotNull(tf.peak_default_graph());
 
                 using (var sess = tf.Session())
                 {
                     var default_graph = tf.peak_default_graph();
-                    var sess_graph = sess.GetPrivate<Graph>("_graph");
-                    sess_graph.Should().NotBeNull();
-                    default_graph.Should().NotBeNull()
-                        .And.BeEquivalentTo(sess_graph);
+                    var sess_graph = sess.graph;
+                    Assert.IsNotNull(default_graph);
+                    Assert.IsNotNull(sess_graph);
+                    Assert.AreEqual(default_graph, sess_graph);
 
                     Console.WriteLine($"{tid}-{default_graph.graph_key}");
 
@@ -188,7 +185,7 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                tf.peak_default_graph().Should().BeNull();
+                Assert.IsNull(tf.peak_default_graph());
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
@@ -197,7 +194,8 @@ namespace TensorFlowNET.UnitTest
                 {
                     using (var sess = tf.Session())
                     {
-                        sess.run(math).GetAtIndex<float>(0).Should().Be(5);
+                        var result = sess.run(math);
+                        Assert.AreEqual(result.GetAtIndex<float>(0), 5f);
                     }
                 }
             }
@@ -213,14 +211,14 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var sess = tf.Session())
                 {
-                    tf.peak_default_graph().Should().NotBeNull();
+                    Assert.IsNotNull(tf.peak_default_graph());
                     //graph is created automatically to perform create these operations
                     var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                     var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                     var math = a1 + a2;
 
                     var result = sess.run(math);
-                    result.GetAtIndex<float>(0).Should().Be(5);
+                    Assert.AreEqual(result.GetAtIndex<float>(0), 5f);
                 }
             }
         }
@@ -235,7 +233,7 @@ namespace TensorFlowNET.UnitTest
             {
                 using (var sess = tf.Session())
                 {
-                    tf.peak_default_graph().Should().NotBeNull();
+                    Assert.IsNotNull(tf.peak_default_graph());
                     //graph is created automatically to perform create these operations
                     var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                     var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
@@ -252,7 +250,7 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                tf.peak_default_graph().Should().BeNull();
+                Assert.IsNull(tf.peak_default_graph());
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
@@ -268,7 +266,7 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                tf.peak_default_graph().Should().BeNull();
+                Assert.IsNull(tf.peak_default_graph());
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 }, name: "ConstantK");

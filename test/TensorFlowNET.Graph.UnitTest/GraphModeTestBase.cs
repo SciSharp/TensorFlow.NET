@@ -1,9 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TensorFlowNET.UnitTest;
 using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
-namespace Tensorflow.UnitTest
+namespace TensorFlowNET.UnitTest
 {
     public class GraphModeTestBase : PythonTest
     {
@@ -16,7 +14,6 @@ namespace Tensorflow.UnitTest
         [TestCleanup]
         public void TestClean()
         {
-            keras.backend.clear_session();
             tf.enable_eager_execution();
         }
     }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
-using Tensorflow.UnitTest;
 
-namespace TensorFlowNET.UnitTest.control_flow_ops_test
+namespace TensorFlowNET.UnitTest.ControlFlowTest
 {
     /// <summary>
     /// excerpt of tensorflow/python/framework/ops/control_flow_ops_test.py

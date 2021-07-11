@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
-using Tensorflow.UnitTest;
-using Tensorflow.Util;
 using static Tensorflow.Binding;
 using Buffer = Tensorflow.Buffer;
 

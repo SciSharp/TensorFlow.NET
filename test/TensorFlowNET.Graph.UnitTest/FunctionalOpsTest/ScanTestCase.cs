@@ -2,10 +2,9 @@
 using Tensorflow.NumPy;
 using System;
 using Tensorflow;
-using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.functional_ops_test
+namespace TensorFlowNET.UnitTest.FunctionalOpsTest
 {
     /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/scan
@@ -22,7 +21,8 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
 
             var input = tf.placeholder(TF_DataType.TF_INT32, new TensorShape(6));
             var scan = functional_ops.scan(fn, input);
-            sess.run(scan, (input, np.array(1, 2, 3, 4, 5, 6))).Should().Be(np.array(1, 3, 6, 10, 15, 21));
+            var result = sess.run(scan, (input, np.array(1, 2, 3, 4, 5, 6)));
+            Assert.AreEqual(result, np.array(1, 3, 6, 10, 15, 21));
         }
 
         [TestMethod, Ignore("need UpdateEdge API")]
@@ -34,7 +34,8 @@ namespace TensorFlowNET.UnitTest.functional_ops_test
 
             var input = tf.placeholder(TF_DataType.TF_INT32, new TensorShape(6));
             var scan = functional_ops.scan(fn, input, reverse: true);
-            sess.run(scan, (input, np.array(1, 2, 3, 4, 5, 6))).Should().Be(np.array(21, 20, 18, 15, 11, 6));
+            var result = sess.run(scan, (input, np.array(1, 2, 3, 4, 5, 6)));
+            Assert.AreEqual(result, np.array(21, 20, 18, 15, 11, 6));
         }
     }
 }

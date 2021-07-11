@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Tensorflow;
-using Tensorflow.UnitTest;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.control_flow_ops_test
+namespace TensorFlowNET.UnitTest.ControlFlowTest
 {
     [TestClass]
     public class WhileContextTestCase : GraphModeTestBase
