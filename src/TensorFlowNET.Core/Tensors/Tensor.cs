@@ -89,10 +89,11 @@ namespace Tensorflow
         /// </summary>
         public object Tag { get; set; }
 
+        protected SafeTensorHandleHandle _eagerTensorHandle;
         /// <summary>
         /// TFE_TensorHandle
         /// </summary>
-        public SafeTensorHandleHandle EagerTensorHandle { get; set; }
+        public SafeTensorHandleHandle EagerTensorHandle => _eagerTensorHandle;
 
         protected bool isReferencedByNDArray;
         public bool IsReferencedByNDArray => isReferencedByNDArray;
@@ -212,6 +213,7 @@ namespace Tensorflow
         }
 
         public void SetReferencedByNDArray() => isReferencedByNDArray = true;
+        public void SetEagerTensorHandle(SafeTensorHandleHandle handle) => _eagerTensorHandle = handle;
 
         public Tensor MaybeMove()
         {
@@ -254,30 +256,16 @@ namespace Tensorflow
             }
         }
 
-        /// <summary>
-        ///     Dispose any managed resources.
-        /// </summary>
-        /// <remarks>Equivalent to what you would perform inside <see cref="DisposableObject.Dispose"/></remarks>
-        protected override void DisposeManagedResources()
-        {
-
-        }
-
         [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-#if TRACK_TENSOR_LIFE
-            print($"Delete Tensor 0x{handle.ToString("x16")} {AllocationType} Data: 0x{TensorDataPointer.ToString("x16")}");
-#endif
             if (dtype == TF_DataType.TF_STRING)
             {
                 long size = 1;
                 foreach (var s in TensorShape.dims)
                     size *= s;
                 var tstr = TensorDataPointer;
-#if TRACK_TENSOR_LIFE
-                print($"Delete TString 0x{handle.ToString("x16")} {AllocationType} Data: 0x{tstr.ToString("x16")}");
-#endif
+
                 for (int i = 0; i < size; i++)
                 {
                     c_api.TF_StringDealloc(tstr);

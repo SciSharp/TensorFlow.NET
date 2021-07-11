@@ -18,7 +18,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
             var span = new Span<float>(array, 100, 500);
             fixed (float* ptr = &MemoryMarshal.GetReference(span))
             {
-                using (var t = new Tensor((IntPtr)ptr, new long[] { span.Length }, tf.float32, 4 * span.Length))
+                using (var t = new Tensor((IntPtr)ptr, new long[] { span.Length }, tf.float32))
                 {
                     Assert.IsFalse(t.IsDisposed);
                     Assert.AreEqual(2000, (int)t.bytesize);
@@ -27,7 +27,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
 
             fixed (float* ptr = &array[0])
             {
-                using (var t = new Tensor((IntPtr)ptr, new long[] { array.Length }, tf.float32, 4 * array.Length))
+                using (var t = new Tensor((IntPtr)ptr, new long[] { array.Length }, tf.float32))
                 {
                     Assert.IsFalse(t.IsDisposed);
                     Assert.AreEqual(4000, (int)t.bytesize);

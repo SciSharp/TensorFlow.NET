@@ -101,7 +101,7 @@ namespace Tensorflow
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len)
         {
-            return c_api.TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
+            return TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
         }
 
         public static unsafe IntPtr TF_NewTensor(Shape shape, TF_DataType dtype, void* data)

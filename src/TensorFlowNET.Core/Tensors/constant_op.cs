@@ -101,7 +101,7 @@ namespace Tensorflow
             return op.outputs[0];
         }
 
-        private static Tensor _eager_reshape(EagerTensor tensor, int[] shape, Context ctx)
+        private static Tensor _eager_reshape(Tensor tensor, int[] shape, Context ctx)
         {
             var attr_t = tensor.dtype.as_datatype_enum();
             var dims_t = convert_to_eager_tensor(shape, ctx, dtypes.int32);
@@ -111,7 +111,7 @@ namespace Tensorflow
             return result[0];
         }
 
-        private static Tensor _eager_fill(int[] dims, EagerTensor value, Context ctx)
+        private static Tensor _eager_fill(int[] dims, Tensor value, Context ctx)
         {
             var attr_t = value.dtype.as_datatype_enum();
             var dims_t = convert_to_eager_tensor(dims, ctx, dtypes.int32);
@@ -121,7 +121,7 @@ namespace Tensorflow
             return result[0];
         }
 
-        private static EagerTensor convert_to_eager_tensor(object value, Context ctx, TF_DataType dtype = TF_DataType.DtInvalid)
+        private static Tensor convert_to_eager_tensor(object value, Context ctx, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             ctx.ensure_initialized();
             // convert data type
@@ -161,7 +161,7 @@ namespace Tensorflow
                 case EagerTensor val:
                     return val;
                 case NDArray val:
-                    return (EagerTensor)val;
+                    return val;
                 case Shape val:
                     return new EagerTensor(val.dims, new Shape(val.ndim));
                 case TensorShape val:

@@ -10,7 +10,7 @@ namespace Tensorflow.Eager
         public EagerTensor(SafeTensorHandleHandle handle)
         {
             _id = ops.uid();
-            EagerTensorHandle = handle;
+            _eagerTensorHandle = handle;
             Resolve();
         }
 
@@ -59,20 +59,14 @@ namespace Tensorflow.Eager
         void NewEagerTensorHandle(IntPtr h)
         {
             _id = ops.uid();
-            EagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status.Handle);
+            _eagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status.Handle);
             tf.Status.Check(true);
-#if TRACK_TENSOR_LIFE
-            print($"New EagerTensorHandle {EagerTensorHandle} {Id} From 0x{h.ToString("x16")}");
-#endif
         }
 
         private void Resolve()
         {
-            _handle = c_api.TFE_TensorHandleResolve(EagerTensorHandle, tf.Status.Handle);
+            _handle = c_api.TFE_TensorHandleResolve(_eagerTensorHandle, tf.Status.Handle);
             tf.Status.Check(true);
-#if TRACK_TENSOR_LIFE
-            print($"Take EagerTensorHandle {EagerTensorHandle} {Id} Resolving 0x{_handle.ToString("x16")}");
-#endif
         }
 
         /// <summary>
@@ -104,7 +98,7 @@ namespace Tensorflow.Eager
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             base.DisposeUnmanagedResources(handle);
-            EagerTensorHandle.Dispose();
+            _eagerTensorHandle.Dispose();
         }
     }
 }

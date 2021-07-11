@@ -25,6 +25,7 @@ namespace Tensorflow.NumPy
                 bool val => new NDArray(val),
                 byte val => new NDArray(val),
                 int val => new NDArray(val),
+                long val => new NDArray(val),
                 float val => new NDArray(val),
                 double val => new NDArray(val),
                 _ => throw new NotImplementedException("")
@@ -32,26 +33,44 @@ namespace Tensorflow.NumPy
 
         void Init<T>(T value) where T : unmanaged
         {
-            _tensor = new EagerTensor(value);
+            _tensor = value switch
+            {
+                bool val => new Tensor(val),
+                byte val => new Tensor(val),
+                int val => new Tensor(val),
+                long val => new Tensor(val),
+                float val => new Tensor(val),
+                double val => new Tensor(val),
+                _ => throw new NotImplementedException("")
+            };
             _tensor.SetReferencedByNDArray();
+
+            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
+            _tensor.SetEagerTensorHandle(_handle);
         }
 
         void Init(Array value, Shape? shape = null)
         {
-            _tensor = new EagerTensor(value, shape ?? value.GetShape());
+            _tensor = new Tensor(value, shape ?? value.GetShape());
             _tensor.SetReferencedByNDArray();
+
+            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
+            _tensor.SetEagerTensorHandle(_handle);
         }
 
         void Init(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
         {
-            _tensor = new EagerTensor(shape, dtype: dtype);
+            _tensor = new Tensor(shape, dtype: dtype);
             _tensor.SetReferencedByNDArray();
+
+            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
+            _tensor.SetEagerTensorHandle(_handle);
         }
 
         void Init(Tensor value, Shape? shape = null)
         {
             if (shape is not null)
-                _tensor = tf.reshape(value, shape);
+                _tensor = new Tensor(value.TensorDataPointer, shape, value.dtype);
             else
                 _tensor = value;
 
@@ -59,6 +78,9 @@ namespace Tensorflow.NumPy
                 _tensor = tf.get_default_session().eval(_tensor);
 
             _tensor.SetReferencedByNDArray();
+
+            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
+            _tensor.SetEagerTensorHandle(_handle);
         }
     }
 }

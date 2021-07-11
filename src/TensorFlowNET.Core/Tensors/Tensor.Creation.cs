@@ -53,10 +53,9 @@ namespace Tensorflow
         /// <param name="data_ptr">Pointer to unmanaged, fixed or pinned memory which the caller owns</param>
         /// <param name="shape">Tensor shape</param>
         /// <param name="dType">TF data type</param>
-        /// <param name="num_bytes">Size of the tensor in memory</param>
-        public Tensor(IntPtr data_ptr, long[] shape, TF_DataType dType, int num_bytes)
+        public unsafe Tensor(IntPtr data_ptr, Shape shape, TF_DataType dtype)
         {
-            _handle = TF_NewTensor(dType, dims: shape, num_dims: shape.Length, data: data_ptr, len: (ulong)num_bytes);
+            _handle = TF_NewTensor(shape, dtype, data: data_ptr.ToPointer());
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
