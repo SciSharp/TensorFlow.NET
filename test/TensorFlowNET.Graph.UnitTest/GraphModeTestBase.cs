@@ -10,11 +10,5 @@ namespace TensorFlowNET.UnitTest
         {
             tf.compat.v1.disable_eager_execution();
         }
-
-        [TestCleanup]
-        public void TestClean()
-        {
-            tf.enable_eager_execution();
-        }
     }
 }

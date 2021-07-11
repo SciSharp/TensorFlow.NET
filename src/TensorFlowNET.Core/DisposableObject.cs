@@ -29,14 +29,12 @@ namespace Tensorflow
         protected IntPtr _handle;
         protected bool _disposed;
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         protected DisposableObject()
         { }
 
         protected DisposableObject(IntPtr handle)
             => _handle = handle;
 
-        [SuppressMessage("ReSharper", "InvertIf")]
         private void Dispose(bool disposing)
         {
             if (_disposed)

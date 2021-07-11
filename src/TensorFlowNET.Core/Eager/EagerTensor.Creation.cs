@@ -94,11 +94,5 @@ namespace Tensorflow.Eager
                 // c_api.TF_GraphSetOutputHandleShapesAndTypes(target_t.graph, target_t._as_tf_output(), 0, new IntPtr[0], new int[0], new DataType[0], tf.Status.Handle);
             }
         }
-
-        protected override void DisposeUnmanagedResources(IntPtr handle)
-        {
-            base.DisposeUnmanagedResources(handle);
-            _eagerTensorHandle.Dispose();
-        }
     }
 }

@@ -43,44 +43,30 @@ namespace Tensorflow.NumPy
                 double val => new Tensor(val),
                 _ => throw new NotImplementedException("")
             };
-            _tensor.SetReferencedByNDArray();
 
-            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
-            _tensor.SetEagerTensorHandle(_handle);
+            _tensor.SetReferencedByNDArray();
         }
 
         void Init(Array value, Shape? shape = null)
         {
             _tensor = new Tensor(value, shape ?? value.GetShape());
             _tensor.SetReferencedByNDArray();
-
-            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
-            _tensor.SetEagerTensorHandle(_handle);
         }
 
         void Init(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
         {
             _tensor = new Tensor(shape, dtype: dtype);
             _tensor.SetReferencedByNDArray();
-
-            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
-            _tensor.SetEagerTensorHandle(_handle);
         }
 
         void Init(Tensor value, Shape? shape = null)
         {
-            if (shape is not null)
-                _tensor = new Tensor(value.TensorDataPointer, shape, value.dtype);
-            else
-                _tensor = value;
+            // created tensor in graph mode
+            if (value.TensorDataPointer == IntPtr.Zero)
+                value = tf.defaultSession.eval(value);
 
-            if (_tensor.TensorDataPointer == IntPtr.Zero)
-                _tensor = tf.get_default_session().eval(_tensor);
-
+            _tensor = new Tensor(value.TensorDataPointer, shape ?? value.shape, value.dtype);
             _tensor.SetReferencedByNDArray();
-
-            var _handle = c_api.TFE_NewTensorHandle(_tensor, tf.Status.Handle);
-            _tensor.SetEagerTensorHandle(_handle);
         }
     }
 }

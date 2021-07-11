@@ -212,9 +212,12 @@ namespace Tensorflow
             return _tf_output.Value;
         }
 
-        public void SetReferencedByNDArray() => isReferencedByNDArray = true;
-        public void SetEagerTensorHandle(SafeTensorHandleHandle handle) => _eagerTensorHandle = handle;
-
+        public void SetReferencedByNDArray() 
+        {
+            isReferencedByNDArray = true;
+            _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+        }
+        
         public Tensor MaybeMove()
         {
             var tensor = c_api.TF_TensorMaybeMove(_handle);
@@ -256,7 +259,6 @@ namespace Tensorflow
             }
         }
 
-        [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             if (dtype == TF_DataType.TF_STRING)
@@ -274,6 +276,9 @@ namespace Tensorflow
             }
 
             c_api.TF_DeleteTensor(handle);
+
+            if (_eagerTensorHandle is not null)
+                _eagerTensorHandle.Dispose();
         }
 
         public bool IsDisposed => _disposed;

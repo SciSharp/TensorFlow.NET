@@ -6,7 +6,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
 {
-    public partial class NDArray : DisposableObject
+    public partial class NDArray
     {
         Tensor _tensor;
         public TF_DataType dtype => _tensor.dtype;
@@ -57,12 +57,6 @@ namespace Tensorflow.NumPy
         public override string ToString()
         {
             return tensor_util.to_numpy_string(_tensor);
-        }
-
-        protected override void DisposeUnmanagedResources(IntPtr handle)
-        {
-            _tensor.EagerTensorHandle.Dispose();
-            _tensor.Dispose();
         }
     }
 }

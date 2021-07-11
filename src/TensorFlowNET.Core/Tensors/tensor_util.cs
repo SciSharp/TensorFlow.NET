@@ -35,7 +35,9 @@ namespace Tensorflow
         /// <returns></returns>
         public static NDArray constant_value(Tensor tensor, bool partial = false)
         {
-            if (tensor is EagerTensor)
+            if (tensor.IsReferencedByNDArray)
+                return new NDArray(tensor);
+            else if (tensor is EagerTensor)
                 return tensor.numpy();
 
             NDArray ret = _ConstantValue(tensor, partial);
