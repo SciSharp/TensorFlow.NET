@@ -171,6 +171,9 @@ namespace Tensorflow
                 _ => constant_op.constant(value, dtype: dtype, name: name)
             };
 
+            if (dtype == TF_DataType.TF_STRING)
+                return ret;
+
             var original_dtype = value.GetDataType();
             if (dtype != TF_DataType.DtInvalid && dtype != original_dtype)
                 ret = gen_math_ops.cast(ret, dtype.as_base_dtype(), name: name);

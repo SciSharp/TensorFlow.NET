@@ -49,8 +49,12 @@ namespace Tensorflow
 
         protected NDArray GetNDArray(TF_DataType dtype)
         {
-            /*if (dtype == TF_DataType.TF_STRING)
-                return np.array(StringData());*/
+            if (dtype == TF_DataType.TF_STRING)
+            {
+                var str= StringData();
+                return new NDArray(str, new Shape(str.Length));
+            }
+                
             return new NDArray(this);
         }
 
