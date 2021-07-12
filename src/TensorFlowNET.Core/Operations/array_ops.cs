@@ -186,7 +186,7 @@ namespace Tensorflow
 
         private static Tensor _constant_if_small(int value, Tensor shape)
         {
-            return shape < 1000L;
+            return shape < 1000UL;
         }
 
         private static Tensor _constant_if_small<T>(T value, TensorShape shape, TF_DataType dtype, string name)
@@ -330,7 +330,7 @@ namespace Tensorflow
             {
                 name = scope;
                 var input_tensor = ops.convert_to_tensor(inputs);
-                return constant_op.constant(input_tensor.NDims, dtype: tf.int32, name: name);
+                return constant_op.constant(input_tensor.ndim, dtype: tf.int32, name: name);
             });
         }
 
@@ -340,7 +340,7 @@ namespace Tensorflow
             {
                 name = scope;
                 var input_tensor = ops.convert_to_tensor(input);
-                var input_shape = tensor_util.to_shape(input_tensor.shape);
+                var input_shape = input_tensor.shape;
                 if (optimize && input_shape.ndim > 0)
                     return constant_op.constant(input_shape.ndim, dtype: tf.int32, name: name);
                 else
@@ -364,7 +364,7 @@ namespace Tensorflow
                 tensor = ops.convert_to_tensor(tensor, name: "tensor");
 
                 // is_fully_defined return unexpected value.
-                if (optimize && tensor_util.to_shape(tensor.shape).is_fully_defined() && dtype != TF_DataType.TF_VARIANT)
+                if (optimize && tensor.shape.is_fully_defined() && dtype != TF_DataType.TF_VARIANT)
                 {
 
                 }
@@ -589,9 +589,9 @@ namespace Tensorflow
                 if (!tf.Context.executing_eagerly())
                 {
                     var input_shape = input.TensorShape;
-                    if (optimize && input.NDims > -1 && input_shape.is_fully_defined())
+                    if (optimize && input.ndim > -1 && input_shape.is_fully_defined())
                     {
-                        var nd = np.array(input.shape).astype(out_type.as_system_dtype());
+                        var nd = np.array(input.shape.dims).astype(out_type.as_system_dtype());
                         return constant_op.constant(nd, name: name);
                     }
                 }
@@ -607,7 +607,7 @@ namespace Tensorflow
                 name = scope;
 
                 var input_tensor = ops.convert_to_tensor(input);
-                var input_shape = tensor_util.to_shape(input_tensor.shape);
+                var input_shape = input_tensor.shape;
                 if (optimize)
                 {
                     if (input_shape.is_fully_defined())
@@ -633,7 +633,7 @@ namespace Tensorflow
                 tensor = ops.convert_to_tensor(tensor, name: "tensor");
 
                 // is_fully_defined return unexpected value.
-                if (optimize && tensor_util.to_shape(tensor.shape).is_fully_defined() && dtype != TF_DataType.TF_VARIANT)
+                if (optimize && tensor.shape.is_fully_defined() && dtype != TF_DataType.TF_VARIANT)
                 {
 
                 }
@@ -933,7 +933,7 @@ namespace Tensorflow
             string name = "split")
         {
             if (num == -1)
-                num = size_splits.shape[0];
+                num = (int)size_splits.shape[0];
 
             return gen_array_ops.split_v(value, size_splits, axis, num, name: name);
         }

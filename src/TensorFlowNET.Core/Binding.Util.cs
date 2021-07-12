@@ -155,7 +155,7 @@ namespace Tensorflow
             switch (a)
             {
                 case Tensor tensor:
-                    return tensor.shape[0];
+                    return (int)tensor.shape[0];
                 case Tensors arr:
                     return arr.Length;
                 case Array arr:

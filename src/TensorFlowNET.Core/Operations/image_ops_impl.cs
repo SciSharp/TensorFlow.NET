@@ -341,14 +341,14 @@ or rank = 4. Had rank = {0}", rank));
                 {
                     h = _get_dim(image, 0); // img_h == h[0], dynamic_h == h[1]
                     w = _get_dim(image, 1);
-                    d = image.shape[3];
+                    d = (int)image.shape[3];
                 }
                 else
                 {
-                    bs = image.shape[0];
+                    bs = (int)image.shape[0];
                     h = _get_dim(image, 1);
                     w = _get_dim(image, 2);
-                    d = image.shape[3];
+                    d = (int)image.shape[3];
                 }
 
                 object hd, bbox_h_start;
@@ -1115,7 +1115,7 @@ new_height, new_width");
                                  array_ops.expand_dims(tf.constant(3), 0));
                  var multiples = array_ops.concat(new Tensor[] { shape_list }, 0);
                  var rgb = array_ops.tile(images, multiples, name: name);
-                 int[] rgb_temp = images.shape.Take(images.shape.Length - 1).ToArray();
+                 int[] rgb_temp = images.shape.dims.Take(images.shape.ndim - 1).Select(x => (int)x).ToArray();
                  rgb.set_shape(array_ops.concat(new Tensor[] { ops.convert_to_tensor(rgb_temp) }, 3));
                  return rgb;
              });
@@ -1459,7 +1459,7 @@ new_height, new_width");
 
             // shape takes an int, python code passes size, a Tensor. NDims is the only int type
             // i could think of a Tensor having. it might be incorrect tho, so keep that in mind.
-            return array_ops.reshape(g, shape: new int[] { size.NDims, size.NDims, 1, 1 });
+            return array_ops.reshape(g, shape: new int[] { size.ndim, size.ndim, 1, 1 });
         }
 
         internal static (Tensor, Tensor) _ssim_per_channel(Tensor img1, Tensor img2, float max_val = 1f,
@@ -1487,7 +1487,7 @@ new_height, new_width");
                 img1 = array_ops.identity(img1);
 
             var kernel = _fspecial_gauss(filter_size_tensor, filter_sigma_tensor);
-            kernel = array_ops.tile(kernel, multiples: new Tensor(new int[] { 1, 1, shape1_tensor.dims[shape1_tensor.dims.Length - 2], 1 }));
+            kernel = array_ops.tile(kernel, multiples: new Tensor(new int[] { 1, 1, (int)shape1_tensor.dims[shape1_tensor.dims.Length - 2], 1 }));
 
             float compensation = 1.0f;
 
@@ -1503,8 +1503,8 @@ new_height, new_width");
             (Tensor luminance, Tensor cs) = _ssim_helper(img1, img2, reducer, max_val, compensation, k1, k2);
 
             var axes = constant_op.constant(new[] { -3, -2 }, dtype: dtypes.int32);
-            var ssim_val = math_ops.reduce_mean(luminance * cs, new(axes.dims));
-            cs = math_ops.reduce_mean(cs, new(axes.dims));
+            var ssim_val = math_ops.reduce_mean(luminance * cs, axes.dims);
+            cs = math_ops.reduce_mean(cs, axes.dims);
             return (ssim_val, cs);
         }
 
@@ -1685,7 +1685,7 @@ new_height, new_width");
             var kernels_tf = constant_op.constant(kernels, dtype: image.dtype);
 
             kernels_tf = array_ops.tile(
-                kernels_tf, new Tensor(new int[] { 1, 1, image_shape.dims[image_shape.dims.Length - 2], 1 }), name: "sobel_filters");
+                kernels_tf, new Tensor(new int[] { 1, 1, (int)image_shape.dims[image_shape.dims.Length - 2], 1 }), name: "sobel_filters");
 
             var pad_sizes = new int[,] { { 0, 0 }, { 1, 1 }, { 1, 1 }, { 0, 0 } };
             var padded = array_ops.pad(image, new Tensor(pad_sizes), mode: "reflect");
@@ -1966,8 +1966,8 @@ new_height, new_width");
                 Tensor index_offsets, indices, sorted_scores, sorted_boxes, sorted_scores_indices;
                 using (ops.name_scope("sort_scores_and_boxes"))
                 {
-                    batch_size = array_ops.shape(boxes).dims[0];
-                    num_boxes = array_ops.shape(boxes).dims[1];
+                    batch_size = (int)array_ops.shape(boxes).dims[0];
+                    num_boxes = (int)array_ops.shape(boxes).dims[1];
                     sorted_scores_indices = null; /*sort_ops.argsort(
                         scores, axis: 1, direction: "DESCENDING); */
                     index_offsets = math_ops.range(batch_size) * num_boxes;

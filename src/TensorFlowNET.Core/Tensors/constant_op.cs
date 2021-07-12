@@ -124,6 +124,8 @@ namespace Tensorflow
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case long val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
+                case ulong val:
+                    return new EagerTensor(new[] { val }, Shape.Scalar);
                 case float val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case double val:
@@ -146,7 +148,7 @@ namespace Tensorflow
             if (shape == null)
                 return t;
 
-            if (t.shape.Select(x => Convert.ToInt64(x)).SequenceEqual(shape.dims))
+            if (t.shape.dims.SequenceEqual(shape.dims))
                 return t;
 
             if (verify_shape)

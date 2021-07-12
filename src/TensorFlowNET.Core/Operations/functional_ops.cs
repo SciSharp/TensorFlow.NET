@@ -91,7 +91,7 @@ namespace Tensorflow
                     elem.dtype,
                     size: tf.constant(n),
                     dynamic_size: false,
-                    element_shape: elem.shape.Skip(1).ToArray(),
+                    element_shape: elem.shape.dims.Skip(1).ToArray(),
                     infer_shape: true)).ToList();
 
                 for (int index = 0; index < elems_ta.Count; index++)

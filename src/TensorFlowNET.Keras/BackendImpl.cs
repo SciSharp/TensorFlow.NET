@@ -297,8 +297,8 @@ namespace Tensorflow.Keras
                 // x = permute_dimensions(x, [0, 3, 1, 2]);
                 throw new NotImplementedException("");
 
-            int new_height = original_shape[rows] < 0 ? -1 : original_shape[rows] * height_factor;
-            int new_width = original_shape[cols] < 0 ? -1 : original_shape[cols] * width_factor;
+            int new_height = original_shape[rows] < 0 ? -1 : (int)original_shape[rows] * height_factor;
+            int new_width = original_shape[cols] < 0 ? -1 : (int)original_shape[cols] * width_factor;
 
             TensorShape output_shape = data_format == "channels_first" ?
                 (-1, -1, new_height, new_width) : (-1, new_height, new_width, -1);
@@ -316,7 +316,7 @@ namespace Tensorflow.Keras
         {
             if(axis < 0)
             {
-                var rank = tensors[0].NDims;
+                var rank = tensors[0].ndim;
                 if (rank > -1)
                     axis += rank;
                 else

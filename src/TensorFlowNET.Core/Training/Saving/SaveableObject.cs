@@ -45,7 +45,7 @@ namespace Tensorflow
             var restored_tensor = restored_tensors[0];
             return gen_state_ops.assign(op,
                 restored_tensor,
-                validate_shape: restored_shapes == null && tensor_util.to_shape(op.shape).is_fully_defined());
+                validate_shape: restored_shapes == null && op.shape.is_fully_defined());
         }
     }
 }

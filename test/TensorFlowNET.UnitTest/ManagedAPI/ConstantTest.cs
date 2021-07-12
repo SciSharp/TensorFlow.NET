@@ -145,7 +145,7 @@ namespace TensorFlowNET.UnitTest.Basics
             var tensor = tf.constant(nd);
             var data = tensor.numpy().ToArray<int>();
 
-            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 2, 3 }, tensor.shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 2, 3 }, tensor.shape.dims));
             Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 1, 1, 2, 1, 3 }, data));
         }
 

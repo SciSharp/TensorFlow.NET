@@ -37,7 +37,7 @@ namespace Tensorflow
         {
             get
             {
-                return _row_splits.shape[0] - 1;
+                return (int)_row_splits.shape[0] - 1;
             }
         }
 

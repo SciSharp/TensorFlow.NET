@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Tensorflow
@@ -22,6 +23,12 @@ namespace Tensorflow
 
         public static implicit operator Axis(int[] axis)
             => new Axis(axis);
+
+        public static implicit operator Axis(long[] shape)
+            => new Axis(shape.Select(x => (int)x).ToArray());
+
+        public static implicit operator Axis(Shape shape)
+            => new Axis(shape.dims.Select(x => (int)x).ToArray());
     }
 }
 

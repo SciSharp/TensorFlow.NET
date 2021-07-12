@@ -109,7 +109,8 @@ namespace Tensorflow
             var length = shape.size * (ulong)dtype.get_datatype_size();
             var handle = TF_AllocateTensor(dtype, shape.dims, shape.ndim, length);
             var tensor = TF_TensorData(handle);
-            System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);
+            if (tensor != IntPtr.Zero)
+                System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);
             return handle;
         }
 

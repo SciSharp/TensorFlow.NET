@@ -178,7 +178,7 @@ namespace Tensorflow
             logits = ops.convert_to_tensor(logits);
 
             var shape = logits.shape;
-            bool is_last_dim = dim == -1 || dim == shape.Length - 1;
+            bool is_last_dim = dim == -1 || dim == shape.ndim - 1;
             if (is_last_dim)
                 return compute_op(logits, name);
 

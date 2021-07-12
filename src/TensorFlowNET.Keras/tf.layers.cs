@@ -212,13 +212,13 @@ namespace Tensorflow.Keras
                 string data_format = "channels_last")
             {
                 var input_shape = inputs.shape;
-                if (inputs.shape.Length == 0)
+                if (inputs.shape.ndim == 0)
                     throw new ValueError($"Input 0 of layer flatten is incompatible with the layer: : expected min_ndim={1}, found ndim={0}. Full shape received: ()");
 
                 var premutation = new List<int>() { 0 };
-                if (data_format == "channels_first" && inputs.NDims > 1)
+                if (data_format == "channels_first" && inputs.ndim > 1)
                 {
-                    premutation.AddRange(Binding.range(2, inputs.NDims));
+                    premutation.AddRange(Binding.range(2, inputs.ndim));
                     premutation.Add(1);
                     inputs = array_ops.transpose(inputs, premutation.ToArray());
                 }

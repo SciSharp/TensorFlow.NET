@@ -40,7 +40,7 @@ namespace Tensorflow.Native.UnitTest.Sessions
             csession.Run(s);
             Tensor outTensor = csession.output_tensor(0);
             EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
-            EXPECT_EQ(0, outTensor.NDims);
+            EXPECT_EQ(0, outTensor.ndim);
             ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
             var output_contents = outTensor.ToArray<int>();
             EXPECT_EQ(3 + 2, output_contents[0]);
@@ -61,7 +61,7 @@ namespace Tensorflow.Native.UnitTest.Sessions
             outTensor = csession.output_tensor(0);
             ASSERT_TRUE(outTensor != IntPtr.Zero);
             EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
-            EXPECT_EQ(0, outTensor.NDims); // scalar
+            EXPECT_EQ(0, outTensor.ndim); // scalar
             ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);
             output_contents = outTensor.ToArray<int>();
             EXPECT_EQ(-(7 + 2), output_contents[0]);

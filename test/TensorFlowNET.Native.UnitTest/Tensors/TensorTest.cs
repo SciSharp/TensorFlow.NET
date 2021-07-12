@@ -66,7 +66,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
             long[] dims = { 2, 3 };
             Tensor t = c_api.TF_AllocateTensor(TF_DataType.TF_FLOAT, dims, 2, num_bytes);
             EXPECT_EQ(TF_DataType.TF_FLOAT, t.dtype);
-            EXPECT_EQ(2, t.NDims);
+            EXPECT_EQ(2, t.ndim);
             EXPECT_EQ((int)dims[0], t.shape[0]);
             EXPECT_EQ(num_bytes, t.bytesize);
             t.Dispose();

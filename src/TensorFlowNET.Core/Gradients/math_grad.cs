@@ -195,7 +195,7 @@ namespace Tensorflow.Gradients
 
             if (op is EagerOperation op_eager &&
                 op_eager.SkipInputIndices.Contains(1) &&
-                y.NDims == 0)
+                y.ndim == 0)
             {
                 return new Tensor[]
                 {
@@ -759,7 +759,7 @@ namespace Tensorflow.Gradients
 
             if (op is EagerOperation op_eager &&
                 op_eager.SkipInputIndices.Contains(1) &&
-                y.NDims == 0)
+                y.ndim == 0)
             {
                 x = math_ops.conj(x);
                 y = math_ops.conj(y);

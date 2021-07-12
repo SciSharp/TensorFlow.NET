@@ -72,17 +72,17 @@ namespace Tensorflow
         /// </summary>
         public TF_DataType dtype => _handle == IntPtr.Zero ? _override_dtype : c_api.TF_TensorType(_handle);
         public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
-        public ulong itemsize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
-        public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / itemsize;
+        public ulong dtypesize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
+        public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dtypesize;
         public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
-        public int NDims => rank;
+        public int ndim => rank;
 
         /// <summary>
         ///     The name of the device on which this tensor will be produced, or null.
         /// </summary>
         public virtual string Device => op.Device;
-        public int[] dims => shape;
+        public long[] dims => shape.dims;
 
         /// <summary>
         ///     Used for keep other pointer when do implicit operating
@@ -107,7 +107,7 @@ namespace Tensorflow
         ///     Returns the shape of a tensor.
         /// </summary>
         /// <remarks>https://www.tensorflow.org/api_docs/python/tf/shape</remarks>
-        public int[] shape
+        public Shape shape
         {
             get
             {
@@ -123,7 +123,7 @@ namespace Tensorflow
                         dims[i] = c_api.TF_Dim(_handle, i);
                 }
 
-                return dims.Select(x => ((IConvertible)x).ToInt32(CultureInfo.InvariantCulture)).ToArray();
+                return dims;
             }
 
             set
@@ -131,7 +131,7 @@ namespace Tensorflow
                 if (value == null)
                     c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status.Handle);
                 else
-                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.Select(Convert.ToInt64).ToArray(), value.Length, tf.Status.Handle);
+                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.dims, value.ndim, tf.Status.Handle);
 
                 tf.Status.Check(true);
             }
@@ -139,10 +139,10 @@ namespace Tensorflow
 
         public int[] _shape_tuple()
         {
-            return rank < 0 ? null : shape;
+            return rank < 0 ? null : shape.dims.Select(x => (int)x).ToArray();
         }
 
-        public TensorShape TensorShape => rank < 0 ? new TensorShape() : tensor_util.to_shape(shape);
+        public TensorShape TensorShape => rank < 0 ? new TensorShape() : shape;
 
         /// <summary>
         /// Keras History: (Layer, (node_index, tensor_index))

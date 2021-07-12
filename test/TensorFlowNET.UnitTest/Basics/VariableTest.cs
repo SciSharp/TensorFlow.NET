@@ -126,7 +126,7 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var x = tf.constant(new[,] { { 1, 2 } });
             var neg_x = tf.negative(x);
-            Assert.IsTrue(Enumerable.SequenceEqual(new[] { 1, 2 }, neg_x.shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 1, 2 }, neg_x.shape.dims));
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { -1, -2 }, neg_x.numpy().ToArray<int>()));
         }
 

@@ -127,7 +127,7 @@ namespace Tensorflow
             }
             else if (values is Tensor tensor && tensor.IsReferencedByNDArray)
             {
-                var len = tensor.itemsize * tensor.size;
+                var len = tensor.dtypesize * tensor.size;
                 byte[] bytes = tensor.BufferToArray();
                 tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }

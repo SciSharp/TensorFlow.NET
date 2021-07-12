@@ -85,14 +85,14 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
                 { { 1 }, { 2 }, { 3 } },
                 { { 4 }, { 5 }, { 6 } }
             }));
-            Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 3, 1 }, a.shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 2, 3, 1 }, a.shape.dims));
 
             var b = tf.constant(new[, ,]
             {
                 { { 1 }, { 2 }, { 3 } },
                 { { 4 }, { 5 }, { 6 } }
             });
-            Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 3, 1 }, b.shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 2, 3, 1 }, b.shape.dims));
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var c = tf.constant(new[,] { { 9, 10 }, { 11, 12 } });
 
             var concatValue = tf.concat(new[] { a, b, c }, axis: 0);
-            Assert.IsTrue(Enumerable.SequenceEqual(new[] { 6, 2 }, concatValue.shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 6, 2 }, concatValue.shape.dims));
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var c = tf.constant(new[,] { { 9.0, 10.0 }, { 11.0, 12.0 } });
 
             var concatValue = tf.concat(new[] { a, b, c }, axis: 0);
-            Assert.IsTrue(Enumerable.SequenceEqual(new[] { 6, 2 }, concatValue.shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 6, 2 }, concatValue.shape.dims));
         }
 
         [TestMethod]
@@ -128,7 +128,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
 
             var splitValue = tf.split(value, 3, axis: 0);
             Assert.AreEqual(3, splitValue.Length);
-            Assert.IsTrue(Enumerable.SequenceEqual(new[] { 2, 2 }, splitValue[0].shape));
+            Assert.IsTrue(Enumerable.SequenceEqual(new long[] { 2, 2 }, splitValue[0].shape.dims));
         }
 
         #region ones/zeros like

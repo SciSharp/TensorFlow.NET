@@ -29,7 +29,7 @@ namespace Tensorflow.Keras.Metrics
             var y_true_rank = y_true.TensorShape.ndim;
             // If the shape of y_true is (num_samples, 1), squeeze to (num_samples,)
             if (y_true_rank != -1 && y_pred_rank != -1
-                && y_true.shape.Length == y_pred.shape.Length)
+                && y_true.shape.ndim == y_pred.shape.ndim)
                 y_true = array_ops.squeeze(y_true, axis: new[] { -1 });
             y_pred = math_ops.argmax(y_pred, -1);
 

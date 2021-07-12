@@ -50,7 +50,7 @@ namespace Tensorflow
         public Operation Op => _variable.op;
 
         public TF_DataType dtype => _variable.dtype;
-        public TensorShape shape => tensor_util.to_shape(_variable.shape);
+        public TensorShape shape => _variable.shape;
         public string Device => "";
 
         public string Name => _variable.name;

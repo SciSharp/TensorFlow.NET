@@ -48,12 +48,20 @@ namespace Tensorflow
         public static implicit operator Shape((long, long, long, long) dims)
             => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);
 
+        public static implicit operator int[](Shape shape)
+            => shape.dims.Select(x => (int)x).ToArray();
+
+        public static implicit operator long[](Shape shape)
+            => shape.dims;
+
         public bool IsEmpty => size == 0;
 
         public bool IsScalar => ndim == 0;
 
         public static Shape Scalar
             => new Shape(new long[0]);
+
+        public long this[int n] => dims[n];
 
         /// <summary>
         ///     Returns the size this shape represents.
@@ -79,6 +87,25 @@ namespace Tensorflow
 
                 return (ulong)computed;
             }
+        }
+
+        public bool is_fully_defined()
+        {
+            return ndim > -1 && dims != null && dims.Count(x => x < 1) == 0;
+        }
+
+        public bool is_compatible_with(TensorShape shape2)
+        {
+            if (dims != null && shape2.dims != null)
+            {
+                if (dims.Contains(-1) || shape2.dims.Contains(-1))
+                    return true;
+
+                if (size != (ulong)shape2.size)
+                    return false;
+            }
+
+            return true;
         }
 
         public override bool Equals(object obj)

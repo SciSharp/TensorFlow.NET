@@ -10,7 +10,7 @@ namespace Tensorflow.Framework
     {
         public static void assert_is_compatible_with(this Tensor self, Tensor other)
         {
-            if (!self.is_compatible_with(other))
+            /*if (!self.is_compatible_with(other))
             {
                 var selfDim = self.shape
                     .Aggregate(new StringBuilder("{"), (sb, i) => sb.Append(i).Append(", "), sb => sb.ToString())
@@ -21,7 +21,7 @@ namespace Tensorflow.Framework
                     .Replace(", }", "}");
 
                 throw new ArgumentException($"Dimensions {selfDim} and {otherDim} are not compatible");
-            }
+            }*/
         }
 
         public static bool is_compatible_with(this Tensor self, Tensor other)

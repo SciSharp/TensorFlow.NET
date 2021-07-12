@@ -18,7 +18,7 @@ namespace Tensorflow
             if (typeof(T).as_tf_dtype() != dtype)
                 throw new ArrayTypeMismatchException($"dtype {dtype} mismatch.");
 
-            if (NDims == 0 && size == 1)  //is it a scalar?
+            if (ndim == 0 && size == 1)  //is it a scalar?
             {
                 unsafe
                 {
@@ -28,7 +28,7 @@ namespace Tensorflow
 
             //types match, no need to perform cast
             var ret = new T[size];
-            var len = (long)(size * itemsize);
+            var len = (long)(size * dtypesize);
             var src = (T*)buffer;
 
             fixed (T* dst = ret)

@@ -27,9 +27,9 @@ namespace Tensorflow.Operations
         {
             var p = prefix;
             var p_static = tensor_util.constant_value(prefix);
-            if (p.NDims == 0)
+            if (p.ndim == 0)
                 p = array_ops.expand_dims(p, 0);
-            else if (p.NDims != 1)
+            else if (p.ndim != 1)
                 throw new ValueError($"prefix tensor must be either a scalar or vector, but saw tensor: {p}");
 
             var s_tensor_shape = new TensorShape(suffix);

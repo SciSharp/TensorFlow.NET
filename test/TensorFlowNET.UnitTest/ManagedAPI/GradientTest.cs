@@ -57,7 +57,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var b = tf.Variable(-0.73f, name: "bias");
             using var g = tf.GradientTape();
             var pred = W * X + b;
-            var test = tf.slice(pred, new[] { 0 }, pred.shape);
+            var test = tf.slice(pred, new[] { 0 }, (int[])pred.shape);
             var gradients = g.gradient(test, (W, b));
             Assert.AreEqual((float)gradients.Item1, 0f);
             Assert.AreEqual((float)gradients.Item2, 10f);

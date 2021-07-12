@@ -11,8 +11,9 @@ namespace Tensorflow.NumPy
         Tensor _tensor;
         public TF_DataType dtype => _tensor.dtype;
         public ulong size => _tensor.size;
-        public ulong dtypesize => _tensor.itemsize;
-        public int ndim => _tensor.NDims;
+        public ulong dtypesize => _tensor.dtypesize;
+        public ulong bytesize => _tensor.bytesize;
+        public int ndim => _tensor.ndim;
         public long[] dims => _tensor.dims.Select(x => Convert.ToInt64(x)).ToArray();
         public Shape shape => _tensor.shape;
         public IntPtr data => _tensor.TensorDataPointer;

@@ -92,7 +92,7 @@ namespace Tensorflow
 
         public Tensor _batch_shape()
         {
-            return array_ops.broadcast_static_shape(new Tensor(_loc.shape), new Tensor(_scale.shape));
+            return array_ops.broadcast_static_shape(new Tensor(_loc.shape.dims), new Tensor(_scale.shape.dims));
         }
 
         protected override Tensor _log_prob(Tensor x)
