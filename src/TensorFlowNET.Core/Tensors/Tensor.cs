@@ -155,8 +155,7 @@ namespace Tensorflow
         /// </summary>
         public virtual void set_shape(TensorShape shape)
         {
-            // this.shape = shape.rank >= 0 ? shape.dims : null;
-            throw new NotImplementedException("");
+            this.shape = shape.rank >= 0 ? shape : null;
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 Assert.AreEqual("scope1/Const_1:0", const3.name);
             });
 
-            g.Dispose();
+            g.Exit();
 
             Assert.AreEqual("", g._name_stack);
         }
@@ -70,7 +70,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 Assert.AreEqual("scope1/Const_1:0", const3.name);
             };
 
-            g.Dispose();
+            g.Exit();
 
             Assert.AreEqual("", g._name_stack);
         }

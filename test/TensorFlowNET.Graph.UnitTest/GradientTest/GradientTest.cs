@@ -14,8 +14,6 @@ namespace TensorFlowNET.UnitTest.Gradient
         [TestMethod]
         public void BroadcastToGrad()
         {
-            var graph = tf.Graph().as_default();
-
             var x = tf.constant(2, dtype: dtypes.float32);
             var y = tf.broadcast_to(x, (2, 4, 3));
             var grad = tf.gradients(y, x);
@@ -30,8 +28,6 @@ namespace TensorFlowNET.UnitTest.Gradient
         [TestMethod]
         public void CumsumGrad()
         {
-            var graph = tf.Graph().as_default();
-
             var x = tf.constant(2, dtype: dtypes.float32);
             var y = tf.broadcast_to(x, (2, 4, 3));
             var z = tf.cumsum(y, axis: 1);
@@ -47,7 +43,6 @@ namespace TensorFlowNET.UnitTest.Gradient
         [TestMethod, Ignore]
         public void testGradients()
         {
-            var g = tf.Graph().as_default();
             var inp = tf.constant(1.0, shape: new[] { 32, 100 }, name: "in");
             var w = tf.constant(1.0, shape: new[] { 100, 10 }, name: "w");
             var b = tf.Variable(1.0, shape: new[] { 10 }, name: "b");
