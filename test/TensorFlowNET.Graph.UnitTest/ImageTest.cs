@@ -82,15 +82,14 @@ namespace TensorFlowNET.UnitTest
 
                 var result = sess.run(cropped);
                 // check if cropped to 1x1 center was succesfull
-                Assert.AreEqual(result.size, 1);
+                Assert.AreEqual(result.size, 1ul);
                 Assert.AreEqual(result[0, 0, 0, 0], 4f);
 
                 cropped = tf.image.crop_and_resize(image2, box, boxInd, cropSize2_2);
                 result = sess.run(cropped);
                 // check if flipped and no cropping occured
-                Assert.AreEqual(result.size, 16);
+                Assert.AreEqual(result.size, 16ul);
                 Assert.AreEqual(result[0, 0, 0, 0], 12f);
-
             }
         }
     }

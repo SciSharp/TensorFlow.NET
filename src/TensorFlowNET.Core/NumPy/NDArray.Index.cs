@@ -25,7 +25,7 @@ namespace Tensorflow.NumPy
         {
             get
             {
-                return _tensor[index.Select(x => new Slice(x, x + 1)).ToArray()];
+                 return _tensor[index.Select(x => new Slice(x, x + 1)).ToArray()];
             }
 
             set

@@ -125,6 +125,12 @@ namespace Tensorflow
                 byte[] bytes = nd.ToByteArray();
                 tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }
+            else if (values is Tensor tensor && tensor.IsReferencedByNDArray)
+            {
+                var len = tensor.itemsize * tensor.size;
+                byte[] bytes = tensor.BufferToArray();
+                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
+            }
             else if (!values.GetType().IsArray)
             {
                 switch (values)

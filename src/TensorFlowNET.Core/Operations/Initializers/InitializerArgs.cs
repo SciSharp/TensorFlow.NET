@@ -5,11 +5,11 @@
         public string Name { get; set; }
         public TensorShape Shape { get; set; }
         public TF_DataType DType { get; set; }
-        public bool? VerifyShape { get; set; } = null;
+        public bool VerifyShape { get; set; }
 
         public InitializerArgs(TensorShape shape,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            bool? verify_shape = null,
+            bool verify_shape = false,
             string name = null)
         {
             Shape = shape;

@@ -34,12 +34,11 @@ namespace Tensorflow.Operations.Initializers
             if (args.DType == TF_DataType.DtInvalid)
                 args.DType = this.dtype;
 
-            if (!args.VerifyShape.HasValue)
-                args.VerifyShape = _verify_shape;
+            args.VerifyShape = _verify_shape;
 
-            return constant_op._constant_impl(value, args.DType, args.Shape,
+            return constant_op.constant(value, args.DType, args.Shape,
                 name: "Const",
-                verify_shape: args.VerifyShape.Value,
+                verify_shape: args.VerifyShape,
                 allow_broadcast: false);
         }
     }

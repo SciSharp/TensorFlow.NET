@@ -64,10 +64,10 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             int[] shape = null,
             string name = "Const",
-            bool verify_shape = false) => constant_op._constant_impl(value,
-                dtype,
-                shape,
-                name,
+            bool verify_shape = false) => constant_op.constant(value,
+                dtype: dtype,
+                shape: shape,
+                name: name,
                 verify_shape: verify_shape,
                 allow_broadcast: false);
 

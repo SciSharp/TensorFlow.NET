@@ -30,10 +30,10 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             TensorShape shape = null,
             string name = "Const")
-            => constant_op._constant_impl(value,
-                dtype,
-                shape,
-                name,
+            => constant_op.constant(value,
+                dtype: dtype,
+                shape: shape,
+                name: name,
                 verify_shape: false,
                 allow_broadcast: true);
 
