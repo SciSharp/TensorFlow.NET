@@ -56,9 +56,6 @@ namespace Tensorflow.NumPy
         public static NDArray concatenate(NDArray[] arrays, int axis = 0) 
             => throw new NotImplementedException("");
 
-        public static NDArray frombuffer(byte[] bytes, Type dtype) 
-            => throw new NotImplementedException("");
-
         public static NDArray frombuffer(byte[] bytes, string dtype)
             => throw new NotImplementedException("");
 

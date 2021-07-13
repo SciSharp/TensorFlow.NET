@@ -591,8 +591,10 @@ namespace Tensorflow
                     var input_shape = input.shape;
                     if (optimize && input.ndim > -1 && input_shape.IsFullyDefined)
                     {
-                        var nd = np.array(input.shape.dims).astype(out_type.as_system_dtype());
-                        return constant_op.constant(nd, name: name);
+                        if(out_type == TF_DataType.TF_INT32)
+                            return constant_op.constant(input.shape.as_int_list(), name: name);
+                        else
+                            return constant_op.constant(input.shape.dims, name: name);
                     }
                 }
 

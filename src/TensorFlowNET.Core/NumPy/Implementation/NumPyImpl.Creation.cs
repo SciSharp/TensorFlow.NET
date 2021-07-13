@@ -33,6 +33,11 @@ namespace Tensorflow.NumPy
             return new NDArray(tensor);
         }
 
+        public NDArray frombuffer(byte[] bytes, TF_DataType dtype)
+        {
+            throw new NotImplementedException("");
+        }
+
         public NDArray linspace<T>(T start, T stop, int num = 50, bool endpoint = true, bool retstep = false,
             TF_DataType dtype = TF_DataType.TF_DOUBLE, int axis = 0)
         {

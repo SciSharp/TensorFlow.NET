@@ -60,11 +60,11 @@ namespace Tensorflow
 
         public static NDArray MakeNdarray(TensorProto tensor)
         {
-            var shape = tensor.TensorShape.Dim.Select(x => (int)x.Size).ToArray();
-            int num_elements = np.prod(shape);
-            var tensor_dtype = tensor.Dtype.as_numpy_dtype();
+            var shape = new Shape(tensor.TensorShape.Dim.Select(x => x.Size).ToArray());
+            var num_elements = shape.size;
+            var tensor_dtype = tensor.Dtype.as_tf_dtype();
 
-            if (shape.Length > 0 && tensor.TensorContent.Length > 0)
+            if (shape.ndim > 0 && tensor.TensorContent.Length > 0)
             {
                 return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype).reshape(shape);
             }

@@ -214,6 +214,11 @@ namespace Tensorflow
             return new Shape(new_dims.ToArray());
         }
 
+        public int[] as_int_list()
+        {
+            return _dims.Select(x => (int)x).ToArray();
+        }
+
         public void assert_has_rank(int rank)
         {
             if (rank != ndim)
