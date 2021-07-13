@@ -123,6 +123,9 @@ namespace Tensorflow
             if (dtype == TF_DataType.DtInvalid)
                 dtype = preferred_dtype;
 
+            if (dtype == TF_DataType.DtInvalid)
+                dtype = value.GetDataType();
+
             if (value is EagerTensor eager_tensor && !eager_tensor.IsCreatedInGraphMode)
             {
                 if (tf.executing_eagerly())
@@ -173,8 +176,7 @@ namespace Tensorflow
             if (dtype == TF_DataType.TF_STRING)
                 return ret;
 
-            var original_dtype = value.GetDataType();
-            if (dtype != TF_DataType.DtInvalid && dtype != original_dtype)
+            if (dtype != ret.dtype)
                 ret = gen_math_ops.cast(ret, dtype.as_base_dtype(), name: name);
 
             return ret;

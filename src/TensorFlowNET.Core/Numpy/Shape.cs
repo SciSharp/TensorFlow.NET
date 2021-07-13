@@ -245,7 +245,7 @@ namespace Tensorflow
                 -1 => "<unknown>",
                 0 => "()",
                 1 => $"({dims[0]},)",
-                _ => $"{string.Join(", ", _dims).Replace("-1", "None")}"
+                _ => $"({string.Join(", ", _dims).Replace("-1", "None")})"
             };
     }
 }
