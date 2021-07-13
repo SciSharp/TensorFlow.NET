@@ -1,7 +1,24 @@
-﻿using System;
+﻿/*****************************************************************************
+   Copyright 2021 Haiping Chen. All Rights Reserved.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.NumPy;
 
 namespace Tensorflow
 {
@@ -10,6 +27,16 @@ namespace Tensorflow
         public int ndim => _dims == null ? -1 : _dims.Length;
         long[] _dims;
         public long[] dims => _dims;
+        public int rank => ndim;
+        long[] _strides;
+        public long[] strides
+        {
+            get
+            {
+                _strides = _strides ?? ShapeHelper.GetStrides(this);
+                return _strides;
+            }
+        }
 
         private Shape() 
         {
@@ -65,6 +92,9 @@ namespace Tensorflow
         public static implicit operator long[](Shape shape)
             => shape.dims;
 
+        public static implicit operator Tensor(Shape shape)
+            => constant_op.constant(shape);
+
         public bool IsEmpty => size == 0;
 
         public bool IsScalar => ndim == 0;
@@ -100,28 +130,7 @@ namespace Tensorflow
         /// <summary>
         ///     Returns the size this shape represents.
         /// </summary>
-        public long size
-        {
-            get
-            {
-                // scalar
-                if (ndim == 0) 
-                    return 1;
-
-                var computed = 1L;
-                for (int i = 0; i < _dims.Length; i++)
-                {
-                    var val = _dims[i];
-                    if (val == 0)
-                        return 0;
-                    else if (val < 0)
-                        continue;
-                    computed *= val;
-                }
-
-                return computed;
-            }
-        }
+        public long size => ShapeHelper.GetSize(this);
 
         public bool is_compatible_with(Shape shape2)
         {
@@ -225,32 +234,8 @@ namespace Tensorflow
                 throw new ValueError(String.Format("Shape {0} must have rank {1}", ndim, rank));
         }
 
-        public override bool Equals(object obj)
-        {
-            switch (obj)
-            {
-                case Shape shape1:
-                    if (ndim == -1 && shape1.ndim == -1)
-                        return false;
-                    else if (ndim != shape1.ndim)
-                        return false;
-                    return Enumerable.SequenceEqual(shape1.dims, dims);
-                case long[] shape2:
-                    if (ndim != shape2.Length)
-                        return false;
-                    return Enumerable.SequenceEqual(dims, shape2);
-                default:
-                    return false;
-            }
-        }
+        public override bool Equals(object obj) => ShapeHelper.Equals(this, obj);
 
-        public override string ToString()
-            => ndim switch
-            {
-                -1 => "<unknown>",
-                0 => "()",
-                1 => $"({dims[0]},)",
-                _ => $"({string.Join(", ", _dims).Replace("-1", "None")})"
-            };
+        public override string ToString() => ShapeHelper.ToString(this);
     }
 }

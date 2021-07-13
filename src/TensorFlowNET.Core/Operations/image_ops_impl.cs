@@ -1898,7 +1898,7 @@ new_height, new_width");
                 )
                 */
                 var suppressed_iou = new Tensor(new int[] { });
-                var suppressed_box = math_ops.reduce_sum(suppressed_iou, 1) > 0;
+                var suppressed_box = math_ops.reduce_sum(suppressed_iou, constant_op.constant(1)) > 0;
                 box_slice = box_slice * array_ops.expand_dims(
                     1.0f - math_ops.cast(suppressed_box, box_slice.dtype), 2);
 
@@ -1913,7 +1913,7 @@ new_height, new_width");
 
                 output_size = output_size + math_ops.reduce_sum(
                     math_ops.cast(
-                        math_ops.reduce_any(box_slice > 0, new(2)), dtypes.int32), new int[] { 1 });
+                        math_ops.reduce_any(box_slice > 0, new(2)), dtypes.int32), constant_op.constant(new int[] { 1 }));
             }
             return (boxes, iou_threshold, output_size, idx + 1);
         }

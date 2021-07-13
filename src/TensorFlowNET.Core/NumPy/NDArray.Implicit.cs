@@ -6,11 +6,21 @@ namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
+        public void Deconstruct(out byte blue, out byte green, out byte red)
+        {
+            blue = (byte)dims[0];
+            green = (byte)dims[1];
+            red = (byte)dims[2];
+        }
+
         public static implicit operator NDArray(Array array)
             => new NDArray(array);
 
         public static implicit operator bool(NDArray nd)
             => nd._tensor.ToArray<bool>()[0];
+
+        public static implicit operator byte(NDArray nd)
+            => nd._tensor.ToArray<byte>()[0];
 
         public static implicit operator byte[](NDArray nd)
             => nd.ToByteArray();

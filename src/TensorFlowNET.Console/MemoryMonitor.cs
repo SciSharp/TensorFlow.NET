@@ -12,13 +12,26 @@ namespace Tensorflow
     {
         public void WarmUp()
         {
+            var x1 = tf.Variable(10, name: "x");
+
+            tf.compat.v1.disable_eager_execution();
+            var input = np.array(4);
+            var nd = tf.reshape(input, new int[] { 1, 1});
+            var z = nd[0, 0];
             while (true)
             {
-                var ones = np.ones((128, 128));
-                Thread.Sleep(1);
+                var x = tf.placeholder(tf.float64, shape: (1024, 1024));
+                var log = tf.log(x);
+
+                using (var sess = tf.Session())
+                {
+                    var ones = np.ones((1024, 1024), dtype: np.float64);
+                    var o = sess.run(log, new FeedItem(x, ones));
+                }
+                // Thread.Sleep(1);
             }
 
-            TensorShape shape = (1, 32, 32, 3);
+            Shape shape = (1, 32, 32, 3);
             np.arange(shape.size).astype(np.float32).reshape(shape.dims);
 
             print($"tensorflow native version: v{tf.VERSION}");

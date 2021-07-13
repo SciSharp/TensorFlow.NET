@@ -70,7 +70,7 @@ namespace Tensorflow.Gradients
 
             var softmax = op.outputs[0];
             var mul = grad_softmax * softmax;
-            var sum_channels = math_ops.reduce_sum(mul, -1, keepdims: true);
+            var sum_channels = math_ops.reduce_sum(mul, axis: constant_op.constant(-1), keepdims: true);
             var sub = grad_softmax - sum_channels;
             return new Tensor[] { sub * softmax };
         }

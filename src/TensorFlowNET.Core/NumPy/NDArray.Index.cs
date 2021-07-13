@@ -30,7 +30,22 @@ namespace Tensorflow.NumPy
 
             set
             {
-
+                var offset = ShapeHelper.GetOffset(shape, index);
+                unsafe
+                {
+                    if (dtype == TF_DataType.TF_BOOL)
+                        *((bool*)data + offset) = value;
+                    else if (dtype == TF_DataType.TF_UINT8)
+                        *((byte*)data + offset) = value;
+                    else if (dtype == TF_DataType.TF_INT32)
+                        *((int*)data + offset) = value;
+                    else if (dtype == TF_DataType.TF_INT64)
+                        *((long*)data + offset) = value;
+                    else if (dtype == TF_DataType.TF_FLOAT)
+                        *((float*)data + offset) = value;
+                    else if (dtype == TF_DataType.TF_DOUBLE)
+                        *((double*)data + offset) = value;
+                }
             }
         }
 
@@ -43,7 +58,13 @@ namespace Tensorflow.NumPy
 
             set
             {
-
+                var pos = _tensor[slices];
+                var len = value.bytesize;
+                unsafe
+                {
+                    System.Buffer.MemoryCopy(value.data.ToPointer(), pos.TensorDataPointer.ToPointer(), len, len);
+                }
+                // _tensor[slices].assign(constant_op.constant(value));
             }
         }
 

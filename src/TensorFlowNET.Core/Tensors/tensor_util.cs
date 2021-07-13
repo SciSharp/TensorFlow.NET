@@ -151,6 +151,9 @@ namespace Tensorflow
             {
                 switch (values)
                 {
+                    case Axis val:
+                        tensor_proto.IntVal.AddRange(val.axis);
+                        break;
                     case bool val:
                         tensor_proto.BoolVal.AddRange(new[] { val });
                         break;

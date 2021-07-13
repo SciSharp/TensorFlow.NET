@@ -123,7 +123,8 @@ namespace Tensorflow
             var tensor = TF_TensorData(handle);
             if (tensor == IntPtr.Zero)
                 throw new TensorflowException("AllocateTensor failed.");
-            System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);
+            if (data != null)
+                System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);
             return handle;
         }
 

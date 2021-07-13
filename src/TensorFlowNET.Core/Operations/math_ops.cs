@@ -554,7 +554,7 @@ namespace Tensorflow
                 var result = gen_math_ops.log(
                 reduce_sum(
                     gen_math_ops.exp(gen_math_ops.sub(input_tensor, my_max)),
-                    axis[0],
+                    constant_op.constant(axis[0]),
                     keepdims));
                 if (!keepdims)
                 {
@@ -634,30 +634,10 @@ namespace Tensorflow
             throw new NotImplementedException();
         }
 
-        public static Tensor reduce_sum(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
-        {
-            var dims = _ReductionDims(input_tensors, axis);
-            var m = gen_math_ops._sum(input_tensors, dims, keep_dims: keepdims, name: name);
-            return _may_reduce_to_scalar(keepdims, axis, m);
-        }
-
         public static Tensor reduce_sum(Tensor input_tensor, Tensor axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var m = gen_math_ops._sum(input_tensor, r, keep_dims: keepdims, name: name);
-            return _may_reduce_to_scalar(keepdims, axis, m);
-        }
-
-        public static Tensor reduce_sum(Tensor input_tensor, int[] axis, bool keepdims = false, string name = null)
-        {
-            var m = gen_math_ops._sum(input_tensor, axis, keep_dims: keepdims, name: name);
-            return _may_reduce_to_scalar(keepdims, axis, m);
-        }
-
-        public static Tensor reduce_sum(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
-        {
-            var dims = _ReductionDims(input_tensor, axis);
-            var m = gen_math_ops._sum(input_tensor, dims, keep_dims: keepdims, name: name);
             return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
@@ -671,7 +651,7 @@ namespace Tensorflow
             return output;
         }
 
-        private static Tensor _may_reduce_to_scalar(bool keepdims, int[] axis, Tensor output)
+        private static Tensor _may_reduce_to_scalar(bool keepdims, Axis axis, Tensor output)
         {
             if (!common_shapes.has_fully_defined_shape(output) &&
                 !keepdims &&
@@ -699,16 +679,6 @@ namespace Tensorflow
                 var rank = array_ops.rank(x);
                 return range(0, rank, 1);
             }
-        }
-
-        private static int _ReductionDims(Tensor x, int axis)
-        {
-            return axis;
-        }
-
-        private static Tensor _ReductionDims(Tensor[] x, int? axis = null, string name = null)
-        {
-            return range(0, array_ops.rank(x));
         }
 
         private static Tensor _ReductionDims(Tensor x, Axis? axis)

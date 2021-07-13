@@ -33,6 +33,9 @@ namespace Tensorflow
             public Tensor erf(Tensor x, string name = null)
                 => math_ops.erf(x, name);
 
+            public Tensor sum(Tensor x, Axis? axis = null, string name = null)
+                => math_ops.reduce_sum(x, axis: axis, name: name);
+
             /// <summary>
             /// 
             /// </summary>
@@ -495,36 +498,17 @@ namespace Tensorflow
         /// <summary>
         /// Computes the sum of elements across dimensions of a tensor.
         /// </summary>
-        /// <param name="input_tensors"></param>
-        /// <param name="axis"></param>
-        /// <param name="keepdims"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Tensor reduce_sum(Tensor[] input_tensors, int? axis = null, bool keepdims = false, string name = null)
-            => math_ops.reduce_sum(input_tensors, axis: axis, keepdims: keepdims, name: name);
-
-        /// <summary>
-        /// Computes the sum of elements across dimensions of a tensor.
-        /// </summary>
         /// <param name="input"></param>
         /// <param name="axis"></param>
         /// <returns></returns>
-        public Tensor reduce_sum(Tensor input, int? axis = null, int? reduction_indices = null,
+        public Tensor reduce_sum(Tensor input, Axis? axis = null, Axis? reduction_indices = null,
             bool keepdims = false, string name = null)
         {
-            if (!axis.HasValue && reduction_indices.HasValue && !keepdims)
-                return math_ops.reduce_sum(input, reduction_indices.Value);
-            else if (axis.HasValue && !reduction_indices.HasValue && !keepdims)
-                return math_ops.reduce_sum(input, axis.Value);
-            else if (axis.HasValue && !reduction_indices.HasValue && keepdims)
-                return math_ops.reduce_sum(input, keepdims: keepdims, axis: axis.Value, name: name);
+            if(keepdims)
+                return math_ops.reduce_sum(input, axis: constant_op.constant(axis ?? reduction_indices), keepdims: keepdims, name: name);
             else
-                return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
+                return math_ops.reduce_sum(input, axis: constant_op.constant(axis ?? reduction_indices));
         }
-
-        public Tensor reduce_sum(Tensor input, Shape axis, int? reduction_indices = null,
-            bool keepdims = false, string name = null)
-            => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 
         /// <summary>
         /// Computes the maximum of elements across dimensions of a tensor.

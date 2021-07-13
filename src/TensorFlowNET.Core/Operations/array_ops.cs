@@ -327,23 +327,12 @@ namespace Tensorflow
         public static Tensor rank(Tensor input, string name = null)
             => rank_internal(input, name, optimize: true);
 
-        public static Tensor rank(Tensor[] inputs, string name = null)
-        {
-            return tf_with(ops.name_scope(name, "Rank", new { inputs }), scope =>
-            {
-                name = scope;
-                var input_tensor = ops.convert_to_tensor(inputs);
-                return constant_op.constant(input_tensor.ndim, dtype: tf.int32, name: name);
-            });
-        }
-
         public static Tensor rank_internal(Tensor input, string name = null, bool optimize = true)
         {
             return tf_with(ops.name_scope(name, "Rank", new List<Tensor> { input }), scope =>
             {
                 name = scope;
-                var input_tensor = ops.convert_to_tensor(input);
-                var input_shape = input_tensor.shape;
+                var input_shape = input.shape;
                 if (optimize && input_shape.ndim > 0)
                     return constant_op.constant(input_shape.ndim, dtype: tf.int32, name: name);
                 else

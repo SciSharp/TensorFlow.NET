@@ -62,11 +62,11 @@ namespace Tensorflow.Keras
                 var s = sequences.ElementAt(i);
                 if (s.Length > maxlen.Value)
                 {
-                    throw new NotImplementedException("");
-                    // s = (truncating == "pre") ? s.Slice(s.Length - maxlen.Value, s.Length) : s.Slice(0, maxlen.Value);
+                    s = (truncating == "pre") ? s.Skip(s.Length - maxlen.Value).ToArray() : s.Take(maxlen.Value).ToArray();
                 }
                 var sliceString = (padding == "pre") ? $"{i},{maxlen - s.Length}:" : $"{i},:{s.Length}";
-                nd[sliceString] = np.array(s);
+                var slices = sliceString.Split(',').Select(x => new Slice(x)).ToArray();
+                nd[slices] = np.array(s);
             }
 
             return nd;

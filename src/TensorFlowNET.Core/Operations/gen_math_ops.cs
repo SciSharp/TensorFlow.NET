@@ -509,19 +509,6 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Sum", name, 
                 new ExecuteOpArgs(input, axis).SetAttributes(new { keep_dims, reduction_indices = axis }));
 
-        public static Tensor _sum(Tensor[] inputs, Tensor axis = default, bool keep_dims = false, string name = null)
-        {
-            if (tf.Context.executing_eagerly())
-            {
-                return _sum_eager_fallback(inputs, axis,
-                        keep_dims: keep_dims, name: name, ctx: tf.Context);
-            }
-
-            var _op = tf.OpDefLib._apply_op_helper("Sum", name, args: new { inputs, reduction_indices = axis, keep_dims });
-
-            return _op.outputs[0];
-        }
-
         private static Tensor _sum_eager_fallback(Tensor[] inputs, Tensor axis, bool keep_dims = false, string name = null, Context ctx = null)
         {
             var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new[] { inputs });

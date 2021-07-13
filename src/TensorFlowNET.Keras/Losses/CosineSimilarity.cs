@@ -22,7 +22,7 @@ namespace Tensorflow.Keras.Losses
         {
             Tensor y_true_normalize = nn_impl.l2_normalize(y_true, axis : this.axis);
             Tensor y_pred_normalize = nn_impl.l2_normalize(y_pred, axis: this.axis);
-            return -math_ops.reduce_sum(y_true_normalize * y_pred_normalize, axis : this.axis);
+            return -math_ops.reduce_sum(y_true_normalize * y_pred_normalize, axis : constant_op.constant(this.axis));
         }
     }
 }

@@ -197,7 +197,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
+                Assert.AreEqual(o, intResult);
             }
 
             // Testing `operator +(Tensor x, Tensor y)`
@@ -207,7 +207,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
+                Assert.AreEqual(o, intResult);
             }
 
             // Testing `operator +(Tensor x, int y)`
@@ -216,7 +216,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
+                Assert.AreEqual(o, intResult);
             }
 
             // Testing `operator +(int x, Tensor y)`
@@ -225,7 +225,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
+                Assert.AreEqual(o, intResult);
             }
             #endregion
 
@@ -246,7 +246,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
+                Assert.AreEqual(o, floatResult);
             }
 
             // Testing `operator +(Tensor x, Tensor y)
@@ -256,7 +256,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
+                Assert.AreEqual(o, floatResult);
             }
 
             // Testing `operator +(Tensor x, float y)
@@ -265,7 +265,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
+                Assert.AreEqual(o, floatResult);
             }
 
             // Testing `operator +(float x, Tensor y)
@@ -274,7 +274,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
+                Assert.AreEqual(o, floatResult);
             }
             #endregion
 
@@ -305,7 +305,7 @@ namespace TensorFlowNET.UnitTest.Basics
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
+                Assert.AreEqual(o, doubleResult);
             }
 
             // Testing `operator +(Tensor x, double y)
@@ -314,7 +314,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
+                Assert.AreEqual(o, doubleResult);
             }
 
             // Testing `operator +(double x, Tensor y)
@@ -323,7 +323,7 @@ namespace TensorFlowNET.UnitTest.Basics
             {
                 var o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
+                Assert.AreEqual(o, doubleResult);
             }
             #endregion
         }

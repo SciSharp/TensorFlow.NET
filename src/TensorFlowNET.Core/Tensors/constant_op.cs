@@ -41,6 +41,9 @@ namespace Tensorflow
             Shape shape = null, bool verify_shape = false,
             bool allow_broadcast = true, string name = "Const")
         {
+            if (value == null)
+                return null;
+
             if(tf.executing_eagerly())
                 return convert_to_eager_tensor(value, dtype, shape, name, verify_shape: verify_shape, allow_broadcast: allow_broadcast);
             else
@@ -113,6 +116,8 @@ namespace Tensorflow
                     return val;
                 case Shape val:
                     return new EagerTensor(val.dims, new Shape(val.ndim));
+                case Axis val:
+                    return new EagerTensor(val.axis, new Shape(val.size));
                 case string val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case string[] val:
