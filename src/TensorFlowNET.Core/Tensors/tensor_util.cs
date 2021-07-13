@@ -123,6 +123,8 @@ namespace Tensorflow
                 }
                 else
                     values = Convert.ChangeType(values, new_system_dtype);
+
+                dtype = values.GetDataType();
             }
 
             shape = shape ?? values.GetShape();
