@@ -21,7 +21,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var mse = keras.losses.MeanSquaredError();
             var call = mse.Call(y_true, y_pred);
-            Assert.AreEqual((NDArray)0.5, call.numpy()) ;
+            Assert.AreEqual(call.numpy(), 0.5);
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace TensorFlowNET.Keras.UnitTest
 
             var mse = keras.losses.MeanSquaredError();
             var call = mse.Call(y_true_float, y_pred_float);
-            Assert.AreEqual((NDArray)0.5, call.numpy());
+            Assert.AreEqual(call.numpy(), 0.5f);
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var mse = keras.losses.MeanSquaredError();
             var call = mse.Call(y_true, y_pred, sample_weight: (NDArray)new double[] { 0.7, 0.3 });
-            Assert.AreEqual((NDArray)0.25, call.numpy());
+            Assert.AreEqual(call.numpy(), 0.25);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var mse = keras.losses.MeanSquaredError(reduction: Reduction.SUM);
             var call = mse.Call(y_true, y_pred);
-            Assert.AreEqual((NDArray)1.0, call.numpy());
+            Assert.AreEqual(call.numpy(), 1.0);
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var mse = keras.losses.MeanSquaredError(reduction: Reduction.NONE);
             var call = mse.Call(y_true, y_pred);
-            Assert.AreEqual((NDArray)new double[] { 0.5, 0.5 }, call.numpy());
+            Assert.AreEqual(call.numpy(), new double[] { 0.5, 0.5 });
         }
     }
 }

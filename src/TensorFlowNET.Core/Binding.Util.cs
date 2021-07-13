@@ -540,8 +540,10 @@ namespace Tensorflow
                     return nd.dtype;
                 case Tensor tensor:
                     return tensor.dtype;
-                case Tensor[] tensor:
-                    return tensor[0].dtype;
+                case Tensors tensors:
+                    return tensors.dtype;
+                case IEnumerable<Tensor> tensors:
+                    return tensors.First().dtype;
                 case ResourceVariable variable:
                     return variable.dtype;
                 default:

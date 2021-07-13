@@ -186,7 +186,10 @@ namespace Tensorflow
 
         private static Tensor _constant_if_small(int value, Tensor shape)
         {
-            return shape < 1000L;
+            if (shape.dtype == TF_DataType.TF_INT64)
+                return shape < 1000L;
+            else
+                return shape < 1000;
         }
 
         private static Tensor _constant_if_small<T>(T value, Shape shape, TF_DataType dtype, string name)

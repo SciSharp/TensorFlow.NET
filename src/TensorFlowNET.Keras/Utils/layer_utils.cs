@@ -184,7 +184,7 @@ namespace Tensorflow.Keras.Utils
         public static int count_params(Layer layer, List<IVariableV1> weights)
         {
             var weight_shapes = weights.Select(x => x.shape).ToArray();
-            var total = weight_shapes.Select(p => (int)np.prod(p.dims)).Sum();
+            var total = weight_shapes.Select(p => (int)p.size).Sum();
             return total;
         }
 

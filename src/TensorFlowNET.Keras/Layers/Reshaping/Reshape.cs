@@ -21,12 +21,14 @@ namespace Tensorflow.Keras.Layers
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            var shapes = new List<object>();
+            var shapes = new List<Tensor>();
             shapes.Add(array_ops.shape(inputs)[0]);
+            var dtype = shapes[0].dtype;
             if (args.TargetShapeObjects != null)
-                shapes.AddRange(args.TargetShapeObjects);
+                // shapes.AddRange(args.TargetShapeObjects);
+                throw new NotImplementedException("");
             if (args.TargetShape != null)
-                args.TargetShape.dims.ToList().ForEach(x => shapes.Add(x));
+                shapes.AddRange(args.TargetShape.dims.Select(x => constant_op.constant(x, dtype)));
             var shape = ops.convert_to_tensor(shapes);
 
             var result = array_ops.reshape(inputs, shape);

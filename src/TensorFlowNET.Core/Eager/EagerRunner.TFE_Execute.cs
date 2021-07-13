@@ -51,7 +51,8 @@ namespace Tensorflow.Eager
                     SafeTensorHandleHandle tensor_handle = inputs[i] switch
                     {
                         EagerTensor et => et.EagerTensorHandle,
-                        _ => throw new NotImplementedException("")
+                        Tensor nd => nd.EagerTensorHandle,
+                        _ => throw new NotImplementedException("Eager tensor handle has not been allocated.")
                     };
                     c_api.TFE_OpAddInput(op, tensor_handle, status.Handle);
                     status.Check(true);

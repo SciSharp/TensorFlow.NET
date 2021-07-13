@@ -67,7 +67,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
             Tensor t = c_api.TF_AllocateTensor(TF_DataType.TF_FLOAT, dims, 2, num_bytes);
             EXPECT_EQ(TF_DataType.TF_FLOAT, t.dtype);
             EXPECT_EQ(2, t.ndim);
-            EXPECT_EQ((int)dims[0], t.shape[0]);
+            EXPECT_EQ(dims[0], t.shape[0]);
             EXPECT_EQ(num_bytes, t.bytesize);
             t.Dispose();
         }
@@ -101,9 +101,9 @@ namespace Tensorflow.Native.UnitTest.Tensors
 
             EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
             EXPECT_EQ(tensor.rank, nd.ndim);
-            EXPECT_EQ((int)tensor.shape[0], nd.dims[0]);
-            EXPECT_EQ((int)tensor.shape[1], nd.dims[1]);
-            EXPECT_EQ(tensor.bytesize, (ulong)nd.size * sizeof(float));
+            EXPECT_EQ(tensor.shape[0], nd.dims[0]);
+            EXPECT_EQ(tensor.shape[1], nd.dims[1]);
+            EXPECT_EQ(tensor.bytesize, nd.size * sizeof(float));
             Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
         }
 

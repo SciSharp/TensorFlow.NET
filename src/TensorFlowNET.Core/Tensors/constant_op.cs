@@ -74,7 +74,7 @@ namespace Tensorflow
             if (dtype != TF_DataType.DtInvalid &&
                 value.GetType().Name != "NDArray" &&
                 value.GetType().BaseType.Name != "Array" &&
-                dtypes.as_base_dtype(dtype) != dtypes.as_tf_dtype(value.GetType()))
+                dtype != value.GetDataType())
             {
                 switch (dtype)
                 {
@@ -86,6 +86,9 @@ namespace Tensorflow
                         break;
                     case TF_DataType.TF_INT64:
                         value = Convert.ToInt64(value);
+                        break;
+                    case TF_DataType.TF_INT32:
+                        value = Convert.ToInt32(value);
                         break;
                     default:
                         break;

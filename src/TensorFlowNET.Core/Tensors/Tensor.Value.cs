@@ -16,7 +16,7 @@ namespace Tensorflow
         {
             //Are the types matching?
             if (typeof(T).as_tf_dtype() != dtype)
-                throw new ArrayTypeMismatchException($"dtype {dtype} mismatch.");
+                throw new ArrayTypeMismatchException($"Required dtype {dtype} mismatch with {typeof(T).as_tf_dtype()}.");
 
             if (ndim == 0 && size == 1)  //is it a scalar?
             {

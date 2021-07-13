@@ -162,7 +162,7 @@ namespace Tensorflow
                             ? tensor.AsPlaceholder(name: name)
                             : tensor.AsConstant(name: name),
                 Tensor tensor => tensor,
-                Tensor[] tensors => array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name),
+                IEnumerable<Tensor> tensors => array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name),
                 RefVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
                 ResourceVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
                 Axis ts => constant_op.constant(ts.axis, dtype: dtype, name: name),
