@@ -59,9 +59,6 @@ namespace Tensorflow.NumPy
         public static NDArray frombuffer(byte[] bytes, string dtype)
             => throw new NotImplementedException("");
 
-        public static NDArray squeeze(NDArray x1)
-            => throw new NotImplementedException("");
-
         public static bool allclose(NDArray a, NDArray b, double rtol = 1.0E-5, double atol = 1.0E-8,
             bool equal_nan = false) => throw new NotImplementedException("");
 

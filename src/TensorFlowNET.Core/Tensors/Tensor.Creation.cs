@@ -96,7 +96,7 @@ namespace Tensorflow
 
         public Tensor(Shape shape, TF_DataType dtype) => InitTensor(shape, dtype);
         public Tensor(Array array, Shape? shape = null) => InitTensor(array, shape);
-        public Tensor(byte[] bytes, TF_DataType dtype) => InitTensor(bytes, dtype);
+        public Tensor(byte[] bytes, Shape shape, TF_DataType dtype) => InitTensor(shape, bytes, dtype);
 
         public Tensor(Operation op, int value_index, TF_DataType dtype)
         {
@@ -113,12 +113,12 @@ namespace Tensorflow
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
-        protected unsafe void InitTensor(byte[] bytes, TF_DataType dtype)
+        protected unsafe void InitTensor(Shape shape, byte[] bytes, TF_DataType dtype)
         {
             if (dtype == TF_DataType.TF_STRING)
                 _handle = StringTensor(new byte[][] { bytes }, Shape.Scalar);
             else
-                throw new NotImplementedException("");
+                _handle = TF_NewTensor(bytes, shape, dtype);
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 

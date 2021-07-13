@@ -104,13 +104,26 @@ namespace Tensorflow
             return TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
         }
 
+        public static unsafe IntPtr TF_NewTensor(byte[] data, Shape shape, TF_DataType dtype)
+        {
+            var length = data.Length;
+            var handle = TF_AllocateTensor(dtype, shape.dims, shape.ndim, (ulong)length);
+            var tensor = TF_TensorData(handle);
+            if (tensor == IntPtr.Zero)
+                throw new TensorflowException("AllocateTensor failed.");
+            fixed (void* addr = &data[0])
+                System.Buffer.MemoryCopy(addr, tensor.ToPointer(), length, length);
+            return handle;
+        }
+
         public static unsafe IntPtr TF_NewTensor(Shape shape, TF_DataType dtype, void* data)
         {
             var length = shape.size * dtype.get_datatype_size();
             var handle = TF_AllocateTensor(dtype, shape.dims, shape.ndim, (ulong)length);
             var tensor = TF_TensorData(handle);
-            if (tensor != IntPtr.Zero)
-                System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);
+            if (tensor == IntPtr.Zero)
+                throw new TensorflowException("AllocateTensor failed.");
+            System.Buffer.MemoryCopy(data, tensor.ToPointer(), length, length);
             return handle;
         }
 

@@ -100,7 +100,7 @@ namespace Tensorflow
 
             // non ascii char
             if (dtype == TF_DataType.TF_STRING && value is byte[] bytes)
-                return new EagerTensor(bytes, TF_DataType.TF_STRING);
+                return new EagerTensor(bytes, Shape.Scalar, TF_DataType.TF_STRING);
 
             switch (value)
             {

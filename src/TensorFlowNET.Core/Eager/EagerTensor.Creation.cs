@@ -53,7 +53,7 @@ namespace Tensorflow.Eager
         public EagerTensor(Array array, Shape shape) : base(array, shape)
             => NewEagerTensorHandle(_handle);
 
-        public EagerTensor(byte[] bytes, TF_DataType dtype) : base(bytes, dtype)
+        public EagerTensor(byte[] bytes, Shape shape, TF_DataType dtype) : base(bytes, shape, dtype)
             => NewEagerTensorHandle(_handle);
 
         void NewEagerTensorHandle(IntPtr h)

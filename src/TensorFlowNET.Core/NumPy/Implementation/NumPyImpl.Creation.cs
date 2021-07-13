@@ -33,9 +33,9 @@ namespace Tensorflow.NumPy
             return new NDArray(tensor);
         }
 
-        public NDArray frombuffer(byte[] bytes, TF_DataType dtype)
+        public NDArray frombuffer(byte[] bytes, Shape shape, TF_DataType dtype)
         {
-            throw new NotImplementedException("");
+            return new NDArray(bytes, shape, dtype);
         }
 
         public NDArray linspace<T>(T start, T stop, int num = 50, bool endpoint = true, bool retstep = false,

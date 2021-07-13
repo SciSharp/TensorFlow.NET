@@ -66,7 +66,7 @@ namespace Tensorflow
 
             if (shape.ndim > 0 && tensor.TensorContent.Length > 0)
             {
-                return np.frombuffer(tensor.TensorContent.ToByteArray(), tensor_dtype).reshape(shape);
+                return np.frombuffer(tensor.TensorContent.ToByteArray(), shape, tensor_dtype);
             }
             else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
             {

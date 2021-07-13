@@ -33,8 +33,8 @@ namespace Tensorflow.NumPy
         public static NDArray full<T>(Shape shape, T fill_value)
             => new NDArray(tf.fill(tf.constant(shape), fill_value));
 
-        public static NDArray frombuffer(byte[] bytes, TF_DataType dtype)
-            => tf.numpy.frombuffer(bytes, dtype);
+        public static NDArray frombuffer(byte[] bytes, Shape shape, TF_DataType dtype)
+            => tf.numpy.frombuffer(bytes, shape, dtype);
 
         public static NDArray linspace<T>(T start, T stop, int num = 50, bool endpoint = true, bool retstep = false,
             TF_DataType dtype = TF_DataType.TF_DOUBLE, int axis = 0) where T : unmanaged
