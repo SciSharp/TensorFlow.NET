@@ -43,21 +43,21 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(Tensors inputs)
         {
-            TensorShape input_shape = inputs.shape;
+            Shape input_shape = inputs.shape;
             var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = (int)last_dim;
             inputSpec = new InputSpec(min_ndim: 2, axes: axes);
             kernel = add_weight(
                 "kernel",
-                shape: new TensorShape(last_dim, args.Units),
+                shape: new Shape(last_dim, args.Units),
                 initializer: args.KernelInitializer,
                 dtype: DType,
                 trainable: true);
             if (args.UseBias)
                 bias = add_weight(
                   "bias",
-                  shape: new TensorShape(args.Units),
+                  shape: new Shape(args.Units),
                   initializer: args.BiasInitializer,
                   dtype: DType,
                   trainable: true);

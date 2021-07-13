@@ -27,9 +27,9 @@ namespace Tensorflow.Gradients
         {
             var grad = grads[0];
             var image = op.inputs[0];
-            var shape = new TensorShape(image.shape.dims.Skip(1).Take(2).ToArray());
+            var shape = new Shape(image.shape.dims.Skip(1).Take(2).ToArray());
             Tensor image_shape = null;
-            if (shape.is_fully_defined())
+            if (shape.IsFullyDefined)
                 image_shape = constant_op.constant(image.shape.dims.Skip(1).Take(2).ToArray());
             else
                 image_shape = array_ops.shape(image)["1:3"];

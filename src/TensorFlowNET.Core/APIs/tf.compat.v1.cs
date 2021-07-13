@@ -25,7 +25,7 @@ namespace Tensorflow
             => tf.Context.graph_mode();
 
         public IVariableV1 get_variable(string name,
-            TensorShape shape = null,
+            Shape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             object initializer = null, // IInitializer or Tensor
             bool? trainable = null,

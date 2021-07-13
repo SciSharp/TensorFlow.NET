@@ -50,7 +50,7 @@ namespace Tensorflow
                 Tensor maxlength = null,
                 TF_DataType dtype = TF_DataType.TF_INT32,
                 string name = null,
-                TensorShape axis = null,
+                Shape axis = null,
                 bool binary_output = false)
                 => math_ops.bincount(arr, weights: weights, minlength: minlength, maxlength: maxlength,
                     dtype: dtype, name: name, axis: axis, binary_output: binary_output);
@@ -327,7 +327,7 @@ namespace Tensorflow
             => gen_math_ops.log(x, name);
 
         public Tensor equal(Tensor x, Tensor y, string name = null)
-            => gen_math_ops.equal(x, y, name);
+            => gen_math_ops.equal(x, y, name: name);
 
         /// <summary>
         /// Computes arctangent of `y/x` element-wise, respecting signs of the arguments.
@@ -453,7 +453,7 @@ namespace Tensorflow
         public static Tensor truediv(Tensor x, Tensor y, string name = null)
             => math_ops.truediv(x, y, name: name);
 
-        public Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
+        public Tensor range(object start, object limit = null, object delta = null, TF_DataType? dtype = null, string name = "range")
             => math_ops.range(start, limit: limit, delta: delta, dtype: dtype, name: name);
 
         public Tensor real(Tensor input, string name = null)
@@ -522,7 +522,7 @@ namespace Tensorflow
                 return math_ops.reduce_sum(input, keepdims: keepdims, name: name);
         }
 
-        public Tensor reduce_sum(Tensor input, TensorShape axis, int? reduction_indices = null,
+        public Tensor reduce_sum(Tensor input, Shape axis, int? reduction_indices = null,
             bool keepdims = false, string name = null)
             => math_ops.reduce_sum(input, axis, keepdims: keepdims, name: name);
 

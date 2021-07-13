@@ -422,25 +422,33 @@ namespace Tensorflow
         public static Tensor lgamma(Tensor x, string name = null)
             => gen_math_ops.lgamma(x, name: name);
 
-        public static Tensor linspace(Tensor start, Tensor stop, Tensor num, string name = null, int axis = 0)
+        public static Tensor linspace(Tensor start, Tensor stop, int num = 50, string name = null, int axis = 0)
         {
             return tf_with(ops.name_scope(name, "linspace", new { start, stop }), scope =>
             {
+                var num_int_tensor = array_ops.constant(num);
+                var num_tensor = array_ops.constant(num, dtype: start.dtype);
+
+                var broadcast_shape = array_ops.broadcast_dynamic_shape(array_ops.shape(start), array_ops.shape(stop));
+                start = gen_array_ops.broadcast_to(start, broadcast_shape);
+                stop = gen_array_ops.broadcast_to(stop, broadcast_shape);
+
                 var expanded_start = array_ops.expand_dims(start, axis: axis);
                 var expanded_stop = array_ops.expand_dims(stop, axis: axis);
+
                 var shape = array_ops.shape(expanded_start);
                 var ndims = array_ops.shape(shape)[0];
 
                 var axis_tensor = array_ops.where_v2(constant_op.constant(axis >= 0), x: axis, y: ndims + axis);
 
                 // The purpose is to avoid having negative values when repeating.
-                var num_fill = gen_math_ops.maximum(num - 2, 0);
-                var n_steps = gen_math_ops.maximum(num - 1, 1);
+                var num_fill = gen_math_ops.maximum(num_int_tensor - 2, 0);
+                var n_steps = gen_math_ops.maximum(num_int_tensor - 1, 1);
                 var delta = (expanded_stop - expanded_start) / cast(n_steps, expanded_stop.dtype);
 
-                var range_end = array_ops.where_v2(num >= 0, n_steps, -1);
+                var range_end = array_ops.where_v2(num_int_tensor >= 0, n_steps, -1);
                 var desired_range = cast(range(1, range_end, dtype: dtypes.int64), delta.dtype);
-                var mask = gen_math_ops.equal(axis, range(ndims));
+                var mask = gen_math_ops.equal(axis_tensor, range(ndims));
                 var desired_range_shape = array_ops.where_v2(mask, num_fill, 1);
                 desired_range = array_ops.reshape(desired_range, desired_range_shape);
                 var res = expanded_start + delta * desired_range;
@@ -450,7 +458,7 @@ namespace Tensorflow
                 var all_tensors = new[] { expanded_start, res, expanded_stop };
                 var concatenated = array_ops.concat(all_tensors, axis: axis);
                 var begin = array_ops.zeros_like(shape);
-                var size = array_ops.where_v2(mask, num, shape);
+                var size = array_ops.where_v2(mask, num_int_tensor, shape);
 
                 return array_ops.slice(concatenated, begin, size);
             });
@@ -745,7 +753,7 @@ namespace Tensorflow
                 return tf.Context.ExecuteOp("Pow", name, new ExecuteOpArgs(x_tensor, y_tensor));
             });
 
-        public static Tensor range(object start, object limit = null, object delta = null, TF_DataType dtype = TF_DataType.DtInvalid, string name = "range")
+        public static Tensor range(object start, object limit = null, object delta = null, TF_DataType? dtype = null, string name = "range")
         {
             if (limit == null)
             {
@@ -753,36 +761,14 @@ namespace Tensorflow
                 start = 0;
             }
 
-            if (dtype == TF_DataType.DtInvalid)
-            {
-                if (limit is Tensor tensor)
-                    dtype = tensor.dtype;
-                else
-                    dtype = limit.GetType().as_tf_dtype();
-            }
-                
-
-            if (delta == null)
-            {
-                if (dtype == TF_DataType.TF_INT32)
-                    delta = 1;
-                else if (dtype == TF_DataType.TF_INT64)
-                    delta = 1L;
-                else if (dtype == TF_DataType.TF_FLOAT)
-                    delta = 1.0f;
-                else if (dtype == TF_DataType.TF_DOUBLE)
-                    delta = 1.0d;
-                else
-                    delta = 1;
-            }
+            var dtype1 = dtype ?? limit.GetDataType();
 
             return tf_with(ops.name_scope(name, "Range", new { start, limit, delta }), scope =>
             {
                 name = scope;
-                var start1 = ops.convert_to_tensor(start, name: "start", dtype: dtype);
-                var limit1 = ops.convert_to_tensor(limit, name: "limit", dtype: dtype);
-                var delta1 = ops.convert_to_tensor(delta, name: "delta", dtype: dtype);
-
+                var start1 = ops.convert_to_tensor(start, name: "start", dtype: dtype1);
+                var limit1 = ops.convert_to_tensor(limit, name: "limit", dtype: dtype1);
+                var delta1 = ops.convert_to_tensor(delta ?? 1, name: "delta", dtype: dtype1);
                 return gen_math_ops.range(start1, limit1, delta1, name);
             });
         }
@@ -860,7 +846,7 @@ namespace Tensorflow
              Tensor maxlength = null,
              TF_DataType dtype = TF_DataType.TF_INT32,
              string name = null,
-             TensorShape axis = null,
+             Shape axis = null,
              bool binary_output = false)
             => tf_with(ops.name_scope(name, "bincount"), scope =>
             {
@@ -906,9 +892,9 @@ namespace Tensorflow
         {
             Tensor _tensordot_reshape(Tensor a, int[] axes, bool flipped = false)
             {
-                if (a.TensorShape.is_fully_defined() && isinstance(axes, (typeof(List<object>), typeof(Tuple))))
+                if (a.shape.IsFullyDefined && isinstance(axes, (typeof(List<object>), typeof(Tuple))))
                 {
-                    var shape_a = a.TensorShape.as_list();
+                    var shape_a = a.shape.dims;
 
                     // axes
                     int iter = 0;
@@ -950,11 +936,11 @@ namespace Tensorflow
                                                                  + ops.convert_to_tensor(list(axes));
 
                     // new_shape
-                    TensorShape new_shape;
+                    Shape new_shape;
                     if (flipped)
-                        new_shape = new TensorShape(new int[] { prod_axes, prod_free });
+                        new_shape = new Shape(new int[] { prod_axes, prod_free });
                     else
-                        new_shape = new TensorShape(new int[] { prod_free, prod_axes });
+                        new_shape = new Shape(new int[] { prod_free, prod_axes });
                 }
 
                 throw new NotImplementedException("_tensordot_reshape");

@@ -25,7 +25,7 @@ namespace Tensorflow.Queues
     {
         public PaddingFIFOQueue(int capacity,
             TF_DataType[] dtypes,
-            TensorShape[] shapes,
+            Shape[] shapes,
             string[] names = null,
             string shared_name = null,
             string name = "padding_fifo_queue")

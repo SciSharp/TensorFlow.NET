@@ -123,16 +123,16 @@ namespace Tensorflow
                     maximum_iterations: tf.constant(n));
                 var results_flat = r_a.Accs_ta.Select(r => r.stack()).ToArray();
 
-                var n_static = new Dimension(tensor_shape.dimension_value(elems_flat[0].TensorShape.with_rank_at_least(1).dims[0]));
+                var n_static = new Dimension(tensor_shape.dimension_value(elems_flat[0].shape.with_rank_at_least(1).dims[0]));
 
                 foreach (var elem in elems_flat.Skip(1))
                 {
-                    n_static.merge_with(new Dimension(tensor_shape.dimension_value(elem.TensorShape.with_rank_at_least(1).dims[0])));
+                    n_static.merge_with(new Dimension(tensor_shape.dimension_value(elem.shape.with_rank_at_least(1).dims[0])));
                 }
 
                 foreach (Tensor r in results_flat)
                 {
-                    r.set_shape(new TensorShape(n_static).concatenate(r.dims.Skip(1).ToArray()));
+                    r.shape = new Shape(n_static).concatenate(r.dims.Skip(1).ToArray());
                 }
 
                 // todo get working when the above caching_device is fixed

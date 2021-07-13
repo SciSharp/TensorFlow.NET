@@ -88,7 +88,7 @@ namespace Tensorflow.Operations
         ///    
         ///    Returns a <c>Tensor</c> of same shape and type as the elements of <c>inputs</c>.
         /// </remarks>
-        public static Tensor accumulate_n_v2(Tensor[] inputs, TensorShape shape, string name = "AccumulateNV2")
+        public static Tensor accumulate_n_v2(Tensor[] inputs, Shape shape, string name = "AccumulateNV2")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -754,7 +754,7 @@ namespace Tensorflow.Operations
         ///    container.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor anonymous_iterator(TF_DataType[] output_types, TensorShape[] output_shapes, string name = "AnonymousIterator")
+        public static Tensor anonymous_iterator(TF_DataType[] output_types, Shape[] output_shapes, string name = "AnonymousIterator")
         {
             var dict = new Dictionary<string, object>();
             dict["output_types"] = output_types;
@@ -2559,7 +2559,7 @@ namespace Tensorflow.Operations
         ///    incomplete element has some undefined components in its value tuple,
         ///    and may be updated using BarrierInsertMany.
         /// </remarks>
-        public static Tensor barrier(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "Barrier")
+        public static Tensor barrier(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "Barrier")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -2883,7 +2883,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor batch_dataset(Tensor input_dataset, Tensor batch_size, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BatchDataset")
+        public static Tensor batch_dataset(Tensor input_dataset, Tensor batch_size, TF_DataType[] output_types, Shape[] output_shapes, string name = "BatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -2918,7 +2918,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor batch_dataset_v2(Tensor input_dataset, Tensor batch_size, Tensor drop_remainder, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BatchDatasetV2")
+        public static Tensor batch_dataset_v2(Tensor input_dataset, Tensor batch_size, Tensor drop_remainder, TF_DataType[] output_types, Shape[] output_shapes, string name = "BatchDatasetV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -4367,7 +4367,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor bytes_produced_stats_dataset(Tensor input_dataset, Tensor tag, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "BytesProducedStatsDataset")
+        public static Tensor bytes_produced_stats_dataset(Tensor input_dataset, Tensor tag, TF_DataType[] output_types, Shape[] output_shapes, string name = "BytesProducedStatsDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -4587,7 +4587,7 @@ namespace Tensorflow.Operations
         ///    (e.g. cannot be opened, contains tensors of the wrong shape / size), an error
         ///    will the returned when used.
         /// </remarks>
-        public static Tensor cache_dataset(Tensor input_dataset, Tensor filename, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "CacheDataset")
+        public static Tensor cache_dataset(Tensor input_dataset, Tensor filename, TF_DataType[] output_types, Shape[] output_shapes, string name = "CacheDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -4802,7 +4802,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor collective_bcast_recv(TF_DataType T, int group_size, int group_key, int instance_key, TensorShape shape, string name = "CollectiveBcastRecv")
+        public static Tensor collective_bcast_recv(TF_DataType T, int group_size, int group_key, int instance_key, Shape shape, string name = "CollectiveBcastRecv")
         {
             var dict = new Dictionary<string, object>();
             dict["T"] = T;
@@ -4837,7 +4837,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor collective_bcast_send(Tensor input, int group_size, int group_key, int instance_key, TensorShape shape, string name = "CollectiveBcastSend")
+        public static Tensor collective_bcast_send(Tensor input, int group_size, int group_key, int instance_key, Shape shape, string name = "CollectiveBcastSend")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -5187,7 +5187,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor concatenate_dataset(Tensor input_dataset, Tensor another_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ConcatenateDataset")
+        public static Tensor concatenate_dataset(Tensor input_dataset, Tensor another_dataset, TF_DataType[] output_types, Shape[] output_shapes, string name = "ConcatenateDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -5232,7 +5232,7 @@ namespace Tensorflow.Operations
         ///    resets the aggregate to 0, and increments the global_step recorded by
         ///    the accumulator.
         /// </remarks>
-        public static Tensor conditional_accumulator(TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "ConditionalAccumulator")
+        public static Tensor conditional_accumulator(TF_DataType dtype, Shape shape, string container = null, string shared_name = null, string name = "ConditionalAccumulator")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -7271,7 +7271,7 @@ namespace Tensorflow.Operations
         ///    The components of the single element of <c>input</c>.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] dataset_to_single_element(Tensor dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "DatasetToSingleElement")
+        public static Tensor[] dataset_to_single_element(Tensor dataset, TF_DataType[] output_types, Shape[] output_shapes, string name = "DatasetToSingleElement")
         {
             var dict = new Dictionary<string, object>();
             dict["dataset"] = dataset;
@@ -8294,7 +8294,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor dense_to_sparse_batch_dataset(Tensor input_dataset, Tensor batch_size, Tensor row_shape, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "DenseToSparseBatchDataset")
+        public static Tensor dense_to_sparse_batch_dataset(Tensor input_dataset, Tensor batch_size, Tensor row_shape, TF_DataType[] output_types, Shape[] output_shapes, string name = "DenseToSparseBatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -10059,7 +10059,7 @@ namespace Tensorflow.Operations
         ///    Raises an error if the input tensor's shape does not match the specified shape.
         ///    Returns the input tensor otherwise.
         /// </remarks>
-        public static Tensor ensure_shape(Tensor input, TensorShape shape, string name = "EnsureShape")
+        public static Tensor ensure_shape(Tensor input, Shape shape, string name = "EnsureShape")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -10584,7 +10584,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor f_i_f_o_queue(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueue")
+        public static Tensor f_i_f_o_queue(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -10632,7 +10632,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor f_i_f_o_queue_v2(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueueV2")
+        public static Tensor f_i_f_o_queue_v2(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "FIFOQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -10670,7 +10670,7 @@ namespace Tensorflow.Operations
         ///    \"Fake\" output value. This should not be consumed by another op.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor fake_param(TF_DataType dtype, TensorShape shape, string name = "FakeParam")
+        public static Tensor fake_param(TF_DataType dtype, Shape shape, string name = "FakeParam")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -11048,7 +11048,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor filter_by_last_component_dataset(Tensor input_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "FilterByLastComponentDataset")
+        public static Tensor filter_by_last_component_dataset(Tensor input_dataset, TF_DataType[] output_types, Shape[] output_shapes, string name = "FilterByLastComponentDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -13428,7 +13428,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    The current implementation memmaps the tensor from a file.
         /// </remarks>
-        public static Tensor immutable_const(TF_DataType dtype, TensorShape shape, string memory_region_name, string name = "ImmutableConst")
+        public static Tensor immutable_const(TF_DataType dtype, Shape shape, string memory_region_name, string name = "ImmutableConst")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -13547,7 +13547,7 @@ namespace Tensorflow.Operations
         ///    A tensor that will be provided using the infeed mechanism.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor infeed_dequeue(TF_DataType dtype, TensorShape shape, string name = "InfeedDequeue")
+        public static Tensor infeed_dequeue(TF_DataType dtype, Shape shape, string name = "InfeedDequeue")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -13577,7 +13577,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    simultaneously as an XLA tuple.
         /// </remarks>
-        public static Tensor[] infeed_dequeue_tuple(TF_DataType[] dtypes, TensorShape[] shapes, string name = "InfeedDequeueTuple")
+        public static Tensor[] infeed_dequeue_tuple(TF_DataType[] dtypes, Shape[] shapes, string name = "InfeedDequeueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -13608,7 +13608,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation infeed_enqueue(Tensor input, TensorShape shape = null, int? device_ordinal = null, string name = "InfeedEnqueue")
+        public static Operation infeed_enqueue(Tensor input, Shape shape = null, int? device_ordinal = null, string name = "InfeedEnqueue")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -13641,7 +13641,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    Returns the description of the operation
         /// </returns>
-        public static Operation infeed_enqueue_tuple(Tensor[] inputs, TensorShape[] shapes, int? device_ordinal = null, string name = "InfeedEnqueueTuple")
+        public static Operation infeed_enqueue_tuple(Tensor[] inputs, Shape[] shapes, int? device_ordinal = null, string name = "InfeedEnqueueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["inputs"] = inputs;
@@ -14163,7 +14163,7 @@ namespace Tensorflow.Operations
         ///    or "IteratorGetNext" op.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator(string shared_name, string container, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "Iterator")
+        public static Tensor iterator(string shared_name, string container, TF_DataType[] output_types, Shape[] output_shapes, string name = "Iterator")
         {
             var dict = new Dictionary<string, object>();
             dict["shared_name"] = shared_name;
@@ -14195,7 +14195,7 @@ namespace Tensorflow.Operations
         ///    A handle to an iterator resource.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator_from_string_handle(Tensor string_handle, TF_DataType[] output_types = null, TensorShape[] output_shapes = null, string name = "IteratorFromStringHandle")
+        public static Tensor iterator_from_string_handle(Tensor string_handle, TF_DataType[] output_types = null, Shape[] output_shapes = null, string name = "IteratorFromStringHandle")
         {
             var dict = new Dictionary<string, object>();
             dict["string_handle"] = string_handle;
@@ -14224,7 +14224,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] iterator_get_next(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNext")
+        public static Tensor[] iterator_get_next(Tensor iterator, TF_DataType[] output_types, Shape[] output_shapes, string name = "IteratorGetNext")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -14253,7 +14253,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor iterator_get_next_as_optional(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNextAsOptional")
+        public static Tensor iterator_get_next_as_optional(Tensor iterator, TF_DataType[] output_types, Shape[] output_shapes, string name = "IteratorGetNextAsOptional")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -14286,7 +14286,7 @@ namespace Tensorflow.Operations
         ///    the calling thread is not a member of the thread pool used to execute parallel
         ///    operations (e.g. in eager mode).
         /// </remarks>
-        public static Tensor[] iterator_get_next_sync(Tensor iterator, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "IteratorGetNextSync")
+        public static Tensor[] iterator_get_next_sync(Tensor iterator, TF_DataType[] output_types, Shape[] output_shapes, string name = "IteratorGetNextSync")
         {
             var dict = new Dictionary<string, object>();
             dict["iterator"] = iterator;
@@ -14495,7 +14495,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor latency_stats_dataset(Tensor input_dataset, Tensor tag, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "LatencyStatsDataset")
+        public static Tensor latency_stats_dataset(Tensor input_dataset, Tensor tag, TF_DataType[] output_types, Shape[] output_shapes, string name = "LatencyStatsDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -17568,7 +17568,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a scalar. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_dense_hash_table(Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTable")
+        public static Tensor mutable_dense_hash_table(Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, Shape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTable")
         {
             var dict = new Dictionary<string, object>();
             dict["empty_key"] = empty_key;
@@ -17636,7 +17636,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a scalar. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_dense_hash_table_v2(Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTableV2")
+        public static Tensor mutable_dense_hash_table_v2(Tensor empty_key, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, Shape value_shape = null, int? initial_num_buckets = null, float? max_load_factor = null, string name = "MutableDenseHashTableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["empty_key"] = empty_key;
@@ -17742,7 +17742,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a vector. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_hash_table_of_tensors(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, string name = "MutableHashTableOfTensors")
+        public static Tensor mutable_hash_table_of_tensors(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, Shape value_shape = null, string name = "MutableHashTableOfTensors")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -17794,7 +17794,7 @@ namespace Tensorflow.Operations
         ///    values. Each value must be a vector. Data can be inserted into the table using
         ///    the insert operations. It does not support the initialization operation.
         /// </remarks>
-        public static Tensor mutable_hash_table_of_tensors_v2(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, TensorShape value_shape = null, string name = "MutableHashTableOfTensorsV2")
+        public static Tensor mutable_hash_table_of_tensors_v2(TF_DataType key_dtype, TF_DataType value_dtype, string container = null, string shared_name = null, bool? use_node_name_sharing = null, Shape value_shape = null, string name = "MutableHashTableOfTensorsV2")
         {
             var dict = new Dictionary<string, object>();
             dict["key_dtype"] = key_dtype;
@@ -18607,7 +18607,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Creates a dataset by applying optimizations to <c>input_dataset</c>.
         /// </remarks>
-        public static Tensor optimize_dataset(Tensor input_dataset, Tensor optimizations, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "OptimizeDataset")
+        public static Tensor optimize_dataset(Tensor input_dataset, Tensor optimizations, TF_DataType[] output_types, Shape[] output_shapes, string name = "OptimizeDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -18654,7 +18654,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor[] optional_get_value(Tensor optional, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "OptionalGetValue")
+        public static Tensor[] optional_get_value(Tensor optional, TF_DataType[] output_types, Shape[] output_shapes, string name = "OptionalGetValue")
         {
             var dict = new Dictionary<string, object>();
             dict["optional"] = optional;
@@ -19037,7 +19037,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    block indefinitely until data is available.
         /// </remarks>
-        public static Tensor outfeed_dequeue(TF_DataType dtype, TensorShape shape, int? device_ordinal = null, string name = "OutfeedDequeue")
+        public static Tensor outfeed_dequeue(TF_DataType dtype, Shape shape, int? device_ordinal = null, string name = "OutfeedDequeue")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -19075,7 +19075,7 @@ namespace Tensorflow.Operations
         ///    tuple.  This operations will block indefinitely until data is available.
         ///    Output <c>i</c> corresponds to XLA tuple element <c>i</c>.
         /// </remarks>
-        public static Tensor[] outfeed_dequeue_tuple(TF_DataType[] dtypes, TensorShape[] shapes, int? device_ordinal = null, string name = "OutfeedDequeueTuple")
+        public static Tensor[] outfeed_dequeue_tuple(TF_DataType[] dtypes, Shape[] shapes, int? device_ordinal = null, string name = "OutfeedDequeueTuple")
         {
             var dict = new Dictionary<string, object>();
             dict["dtypes"] = dtypes;
@@ -19303,7 +19303,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor padded_batch_dataset(Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, TensorShape[] output_shapes, string name = "PaddedBatchDataset")
+        public static Tensor padded_batch_dataset(Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, Shape[] output_shapes, string name = "PaddedBatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -19347,7 +19347,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor padded_batch_dataset_v2(Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, Tensor drop_remainder, TensorShape[] output_shapes, string name = "PaddedBatchDatasetV2")
+        public static Tensor padded_batch_dataset_v2(Tensor input_dataset, Tensor batch_size, Tensor[] padded_shapes, Tensor[] padding_values, Tensor drop_remainder, Shape[] output_shapes, string name = "PaddedBatchDatasetV2")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -19401,7 +19401,7 @@ namespace Tensorflow.Operations
         ///    to 0 in the shape attr.  In this case DequeueMany will pad up to the maximum
         ///    size of any given element in the minibatch.  See below for details.
         /// </remarks>
-        public static Tensor padding_f_i_f_o_queue(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueue")
+        public static Tensor padding_f_i_f_o_queue(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -19458,7 +19458,7 @@ namespace Tensorflow.Operations
         ///    to 0 in the shape attr.  In this case DequeueMany will pad up to the maximum
         ///    size of any given element in the minibatch.  See below for details.
         /// </remarks>
-        public static Tensor padding_f_i_f_o_queue_v2(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueueV2")
+        public static Tensor padding_f_i_f_o_queue_v2(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, string container = null, string shared_name = null, string name = "PaddingFIFOQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -19511,7 +19511,7 @@ namespace Tensorflow.Operations
         ///    will copy pieces of the input into the output as they become available, in
         ///    some situations this can provide a performance benefit.
         /// </remarks>
-        public static Tensor parallel_concat(Tensor[] values, TensorShape shape, string name = "ParallelConcat")
+        public static Tensor parallel_concat(Tensor[] values, Shape shape, string name = "ParallelConcat")
         {
             var dict = new Dictionary<string, object>();
             dict["values"] = values;
@@ -19729,7 +19729,7 @@ namespace Tensorflow.Operations
         ///    dense_values :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_example(Tensor serialized, Tensor names, Tensor[] sparse_keys, Tensor[] dense_keys, Tensor[] dense_defaults, TF_DataType[] sparse_types, TensorShape[] dense_shapes, string name = "ParseExample")
+        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_example(Tensor serialized, Tensor names, Tensor[] sparse_keys, Tensor[] dense_keys, Tensor[] dense_defaults, TF_DataType[] sparse_types, Shape[] dense_shapes, string name = "ParseExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -19801,7 +19801,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor parse_example_dataset(Tensor input_dataset, Tensor num_parallel_calls, Tensor[] dense_defaults, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, TensorShape[] dense_shapes, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ParseExampleDataset")
+        public static Tensor parse_example_dataset(Tensor input_dataset, Tensor num_parallel_calls, Tensor[] dense_defaults, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, Shape[] dense_shapes, TF_DataType[] output_types, Shape[] output_shapes, string name = "ParseExampleDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -19923,7 +19923,7 @@ namespace Tensorflow.Operations
         ///    feature_list_dense_lengths :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values, Tensor[] feature_list_dense_lengths) parse_sequence_example(Tensor serialized, Tensor debug_name, Tensor[] context_dense_defaults, string[] feature_list_dense_missing_assumed_empty, string[] context_sparse_keys, string[] context_dense_keys, string[] feature_list_sparse_keys, string[] feature_list_dense_keys, int? Ncontext_sparse = null, int? Ncontext_dense = null, int? Nfeature_list_sparse = null, int? Nfeature_list_dense = null, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, TensorShape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, TensorShape[] feature_list_dense_shapes = null, string name = "ParseSequenceExample")
+        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values, Tensor[] feature_list_dense_lengths) parse_sequence_example(Tensor serialized, Tensor debug_name, Tensor[] context_dense_defaults, string[] feature_list_dense_missing_assumed_empty, string[] context_sparse_keys, string[] context_dense_keys, string[] feature_list_sparse_keys, string[] feature_list_dense_keys, int? Ncontext_sparse = null, int? Ncontext_dense = null, int? Nfeature_list_sparse = null, int? Nfeature_list_dense = null, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, Shape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, Shape[] feature_list_dense_shapes = null, string name = "ParseSequenceExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20029,7 +20029,7 @@ namespace Tensorflow.Operations
         ///    dense_values :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_single_example(Tensor serialized, Tensor[] dense_defaults, int num_sparse, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, TensorShape[] dense_shapes, string name = "ParseSingleExample")
+        public static (Tensor[] sparse_indices, Tensor[] sparse_values, Tensor[] sparse_shapes, Tensor[] dense_values) parse_single_example(Tensor serialized, Tensor[] dense_defaults, int num_sparse, string[] sparse_keys, string[] dense_keys, TF_DataType[] sparse_types, Shape[] dense_shapes, string name = "ParseSingleExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20140,7 +20140,7 @@ namespace Tensorflow.Operations
         ///    feature_list_dense_values :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values) parse_single_sequence_example(Tensor serialized, Tensor feature_list_dense_missing_assumed_empty, Tensor[] context_sparse_keys, Tensor[] context_dense_keys, Tensor[] feature_list_sparse_keys, Tensor[] feature_list_dense_keys, Tensor[] context_dense_defaults, Tensor debug_name, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, TensorShape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, TensorShape[] feature_list_dense_shapes = null, string name = "ParseSingleSequenceExample")
+        public static (Tensor[] context_sparse_indices, Tensor[] context_sparse_values, Tensor[] context_sparse_shapes, Tensor[] context_dense_values, Tensor[] feature_list_sparse_indices, Tensor[] feature_list_sparse_values, Tensor[] feature_list_sparse_shapes, Tensor[] feature_list_dense_values) parse_single_sequence_example(Tensor serialized, Tensor feature_list_dense_missing_assumed_empty, Tensor[] context_sparse_keys, Tensor[] context_dense_keys, Tensor[] feature_list_sparse_keys, Tensor[] feature_list_dense_keys, Tensor[] context_dense_defaults, Tensor debug_name, TF_DataType[] context_sparse_types = null, TF_DataType[] feature_list_dense_types = null, Shape[] context_dense_shapes = null, TF_DataType[] feature_list_sparse_types = null, Shape[] feature_list_dense_shapes = null, string name = "ParseSingleSequenceExample")
         {
             var dict = new Dictionary<string, object>();
             dict["serialized"] = serialized;
@@ -20224,7 +20224,7 @@ namespace Tensorflow.Operations
         ///    intended as a way to represent a value that will always be fed, and to
         ///    provide attrs that enable the fed value to be checked at runtime.
         /// </remarks>
-        public static Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = "Placeholder")
+        public static Tensor placeholder(TF_DataType dtype, Shape shape = null, string name = "Placeholder")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -20258,7 +20258,7 @@ namespace Tensorflow.Operations
         ///    intended as a way to represent a value that will always be fed, and to
         ///    provide attrs that enable the fed value to be checked at runtime.
         /// </remarks>
-        public static Tensor placeholder_v2(TF_DataType dtype, TensorShape shape, string name = "PlaceholderV2")
+        public static Tensor placeholder_v2(TF_DataType dtype, Shape shape, string name = "PlaceholderV2")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -20284,7 +20284,7 @@ namespace Tensorflow.Operations
         ///    A placeholder tensor that defaults to <c>input</c> if it is not fed.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor placeholder_with_default(Tensor input, TensorShape shape, string name = "PlaceholderWithDefault")
+        public static Tensor placeholder_with_default(Tensor input, Shape shape, string name = "PlaceholderWithDefault")
         {
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
@@ -20403,7 +20403,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor prefetch_dataset(Tensor input_dataset, Tensor buffer_size, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "PrefetchDataset")
+        public static Tensor prefetch_dataset(Tensor input_dataset, Tensor buffer_size, TF_DataType[] output_types, Shape[] output_shapes, string name = "PrefetchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -20532,7 +20532,7 @@ namespace Tensorflow.Operations
         ///    and DequeueMany) on a PriorityQueue will all require (resp. output) one extra
         ///    entry in their input (resp. output) lists.
         /// </remarks>
-        public static Tensor priority_queue(TensorShape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueue")
+        public static Tensor priority_queue(Shape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["shapes"] = shapes;
@@ -20587,7 +20587,7 @@ namespace Tensorflow.Operations
         ///    and DequeueMany) on a PriorityQueue will all require (resp. output) one extra
         ///    entry in their input (resp. output) lists.
         /// </remarks>
-        public static Tensor priority_queue_v2(TensorShape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueueV2")
+        public static Tensor priority_queue_v2(Shape[] shapes, TF_DataType[] component_types = null, int? capacity = null, string container = null, string shared_name = null, string name = "PriorityQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["shapes"] = shapes;
@@ -22781,7 +22781,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_dataset(Tensor seed, Tensor seed2, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RandomDataset")
+        public static Tensor random_dataset(Tensor seed, Tensor seed2, TF_DataType[] output_types, Shape[] output_shapes, string name = "RandomDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["seed"] = seed;
@@ -23035,7 +23035,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_shuffle_queue(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueue")
+        public static Tensor random_shuffle_queue(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueue")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -23101,7 +23101,7 @@ namespace Tensorflow.Operations
         ///    The handle to the queue.
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, TensorShape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueueV2")
+        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, Shape[] shapes = null, int? capacity = null, int? min_after_dequeue = null, int? seed = null, int? seed2 = null, string container = null, string shared_name = null, string name = "RandomShuffleQueueV2")
         {
             var dict = new Dictionary<string, object>();
             dict["component_types"] = component_types;
@@ -23322,7 +23322,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor range_dataset(Tensor start, Tensor stop, Tensor step, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RangeDataset")
+        public static Tensor range_dataset(Tensor start, Tensor stop, Tensor step, TF_DataType[] output_types, Shape[] output_shapes, string name = "RangeDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["start"] = start;
@@ -24458,7 +24458,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor repeat_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "RepeatDataset")
+        public static Tensor repeat_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, Shape[] output_shapes, string name = "RepeatDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -29811,7 +29811,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    pseudorandomly.
         /// </remarks>
-        public static Tensor shuffle_and_repeat_dataset(Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ShuffleAndRepeatDataset")
+        public static Tensor shuffle_and_repeat_dataset(Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, Tensor count, TF_DataType[] output_types, Shape[] output_shapes, string name = "ShuffleAndRepeatDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -29862,7 +29862,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor shuffle_dataset(Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, TF_DataType[] output_types, TensorShape[] output_shapes, bool? reshuffle_each_iteration = null, string name = "ShuffleDataset")
+        public static Tensor shuffle_dataset(Tensor input_dataset, Tensor buffer_size, Tensor seed, Tensor seed2, TF_DataType[] output_types, Shape[] output_shapes, bool? reshuffle_each_iteration = null, string name = "ShuffleDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -30084,7 +30084,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor skip_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SkipDataset")
+        public static Tensor skip_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, Shape[] output_shapes, string name = "SkipDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -30222,7 +30222,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor slide_dataset(Tensor input_dataset, Tensor window_size, Tensor window_shift, Tensor window_stride, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SlideDataset")
+        public static Tensor slide_dataset(Tensor input_dataset, Tensor window_size, Tensor window_shift, Tensor window_stride, TF_DataType[] output_types, Shape[] output_shapes, string name = "SlideDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -31745,7 +31745,7 @@ namespace Tensorflow.Operations
         ///    resets the aggregate to 0, and increments the global_step recorded by
         ///    the accumulator.
         /// </remarks>
-        public static Tensor sparse_conditional_accumulator(TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "SparseConditionalAccumulator")
+        public static Tensor sparse_conditional_accumulator(TF_DataType dtype, Shape shape, string container = null, string shared_name = null, string name = "SparseConditionalAccumulator")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -33565,7 +33565,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor sql_dataset(Tensor driver_name, Tensor data_source_name, Tensor query, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "SqlDataset")
+        public static Tensor sql_dataset(Tensor driver_name, Tensor data_source_name, Tensor query, TF_DataType[] output_types, Shape[] output_shapes, string name = "SqlDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["driver_name"] = driver_name;
@@ -35743,7 +35743,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor take_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "TakeDataset")
+        public static Tensor take_dataset(Tensor input_dataset, Tensor count, TF_DataType[] output_types, Shape[] output_shapes, string name = "TakeDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -35953,7 +35953,7 @@ namespace Tensorflow.Operations
         ///    var = state_ops.assign_add(var, [[6.0, 7.0]])
         ///    final = state_ops._destroy_temporary_variable(var, var_name=var_name)
         /// </remarks>
-        public static Tensor temporary_variable(TensorShape shape, TF_DataType dtype, string var_name = null, string name = "TemporaryVariable")
+        public static Tensor temporary_variable(Shape shape, TF_DataType dtype, string var_name = null, string name = "TemporaryVariable")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -36028,7 +36028,7 @@ namespace Tensorflow.Operations
         ///    lengths :
         ///    The Operation can be fetched from any of the Tensorreturned in the tuple values, by fetching the Operation property.
         /// </returns>
-        public static (Tensor value, Tensor lengths) tensor_array_concat_v2(Tensor handle, Tensor flow_in, TF_DataType dtype, TensorShape element_shape_except0 = null, string name = "TensorArrayConcatV2")
+        public static (Tensor value, Tensor lengths) tensor_array_concat_v2(Tensor handle, Tensor flow_in, TF_DataType dtype, Shape element_shape_except0 = null, string name = "TensorArrayConcatV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36089,7 +36089,7 @@ namespace Tensorflow.Operations
         ///    
         ///    All elements must have the same shape (excepting the first dimension).
         /// </remarks>
-        public static (Tensor value, Tensor lengths) tensor_array_concat_v3(Tensor handle, Tensor flow_in, TF_DataType dtype, TensorShape element_shape_except0 = null, string name = "TensorArrayConcatV3")
+        public static (Tensor value, Tensor lengths) tensor_array_concat_v3(Tensor handle, Tensor flow_in, TF_DataType dtype, Shape element_shape_except0 = null, string name = "TensorArrayConcatV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36124,7 +36124,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_gather_v2(Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, TensorShape element_shape = null, string name = "TensorArrayGatherV2")
+        public static Tensor tensor_array_gather_v2(Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, Shape element_shape = null, string name = "TensorArrayGatherV2")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36169,7 +36169,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    All elements selected by <c>indices</c> must have the same shape.
         /// </remarks>
-        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, TensorShape element_shape = null, string name = "TensorArrayGatherV3")
+        public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in, TF_DataType dtype, Shape element_shape = null, string name = "TensorArrayGatherV3")
         {
             var dict = new Dictionary<string, object>();
             dict["handle"] = handle;
@@ -36613,7 +36613,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_array_v2(Tensor size, TF_DataType dtype, TensorShape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, string tensor_array_name = null, string name = "TensorArrayV2")
+        public static Tensor tensor_array_v2(Tensor size, TF_DataType dtype, Shape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, string tensor_array_name = null, string name = "TensorArrayV2")
         {
             var dict = new Dictionary<string, object>();
             dict["size"] = size;
@@ -36679,7 +36679,7 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    Write data via Write and read via Read or Pack.
         /// </remarks>
-        public static (Tensor handle, Tensor flow) tensor_array_v3(Tensor size, TF_DataType dtype, TensorShape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, bool? identical_element_shapes = null, string tensor_array_name = null, string name = "TensorArrayV3")
+        public static (Tensor handle, Tensor flow) tensor_array_v3(Tensor size, TF_DataType dtype, Shape element_shape = null, bool? dynamic_size = null, bool? clear_after_read = null, bool? identical_element_shapes = null, string tensor_array_name = null, string name = "TensorArrayV3")
         {
             var dict = new Dictionary<string, object>();
             dict["size"] = size;
@@ -36776,7 +36776,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_dataset(Tensor[] components, TensorShape[] output_shapes, string name = "TensorDataset")
+        public static Tensor tensor_dataset(Tensor[] components, Shape[] output_shapes, string name = "TensorDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
@@ -37144,7 +37144,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor tensor_slice_dataset(Tensor[] components, TensorShape[] output_shapes, string name = "TensorSliceDataset")
+        public static Tensor tensor_slice_dataset(Tensor[] components, Shape[] output_shapes, string name = "TensorSliceDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["components"] = components;
@@ -37899,7 +37899,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor unbatch_dataset(Tensor input_dataset, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "UnbatchDataset")
+        public static Tensor unbatch_dataset(Tensor input_dataset, TF_DataType[] output_types, Shape[] output_shapes, string name = "UnbatchDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_dataset"] = input_dataset;
@@ -38656,7 +38656,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape, string container = null, string shared_name = null, string name = "VarHandleOp")
+        public static Tensor var_handle_op(TF_DataType dtype, Shape shape, string container = null, string shared_name = null, string name = "VarHandleOp")
         {
             var dict = new Dictionary<string, object>();
             dict["dtype"] = dtype;
@@ -38710,7 +38710,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor variable(TensorShape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "Variable")
+        public static Tensor variable(Shape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "Variable")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -38787,7 +38787,7 @@ namespace Tensorflow.Operations
         ///    TODO(zhifengc/mrry): Adds a pointer to a more detail document
         ///    about sharing states in tensorflow.
         /// </remarks>
-        public static Tensor variable_v2(TensorShape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "VariableV2")
+        public static Tensor variable_v2(Shape shape, TF_DataType dtype, string container = null, string shared_name = null, string name = "VariableV2")
         {
             var dict = new Dictionary<string, object>();
             dict["shape"] = shape;
@@ -39064,7 +39064,7 @@ namespace Tensorflow.Operations
         /// <returns>
         ///    The Operation can be fetched from the resulting Tensor, by fetching the Operation property from the result.
         /// </returns>
-        public static Tensor zip_dataset(Tensor[] input_datasets, TF_DataType[] output_types, TensorShape[] output_shapes, string name = "ZipDataset")
+        public static Tensor zip_dataset(Tensor[] input_datasets, TF_DataType[] output_types, Shape[] output_shapes, string name = "ZipDataset")
         {
             var dict = new Dictionary<string, object>();
             dict["input_datasets"] = input_datasets;

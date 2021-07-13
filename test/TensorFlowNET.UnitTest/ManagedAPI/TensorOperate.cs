@@ -73,7 +73,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
                 }
             }));
             #endregion
-            Assert.AreEqual((4, 2, 1, 2), actual_transposed_a.TensorShape);
+            Assert.AreEqual((4, 2, 1, 2), actual_transposed_a.shape);
             Assert.AreEqual(expected_transposed_a.numpy(), actual_transposed_a.numpy());
         }
 

@@ -44,7 +44,7 @@ namespace Tensorflow.Graphs
             if (args.Arguments[0] is Tensors inputs)
             {
                 originalInputs = inputs;
-                var new_inputs = inputs.Select(x => tf.placeholder(x.dtype, shape: x.TensorShape, name: "inputs")).ToArray();
+                var new_inputs = inputs.Select(x => tf.placeholder(x.dtype, shape: x.shape, name: "inputs")).ToArray();
                 args.Arguments[0] = new Tensors(new_inputs);
             }
             else
@@ -56,7 +56,7 @@ namespace Tensorflow.Graphs
                     if (args.Arguments[i] is EagerTensor tensor)
                     {
                         originalInputs.Add(tensor);
-                        args.Arguments[i] = tf.placeholder(tensor.dtype, shape: tensor.TensorShape, name: "inputs");
+                        args.Arguments[i] = tf.placeholder(tensor.dtype, shape: tensor.shape, name: "inputs");
                     }
                 }
             }

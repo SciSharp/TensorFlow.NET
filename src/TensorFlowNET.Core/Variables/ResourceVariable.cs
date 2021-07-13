@@ -36,7 +36,7 @@ namespace Tensorflow
             TF_DataType dtype = TF_DataType.DtInvalid,
             string import_scope = "",
             VariableAggregation aggregation = VariableAggregation.None,
-            TensorShape shape = null)
+            Shape shape = null)
         {
             if (variable_def != null)
             {
@@ -64,7 +64,7 @@ namespace Tensorflow
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             VariableAggregation aggregation = VariableAggregation.None,
-            TensorShape shape = null)
+            Shape shape = null)
         {
             var init_from_fn = initial_value.GetType().Name == "Func`1" ||
                 initial_value.GetType().GetInterface("IInitializer") != null;
@@ -112,7 +112,7 @@ namespace Tensorflow
                         }
                     });
 
-                    _shape = shape ?? _initial_value.TensorShape;
+                    _shape = shape ?? _initial_value.shape;
 
                     if (_in_graph_mode)
                     {
@@ -162,7 +162,7 @@ namespace Tensorflow
             handle = g.as_graph_element(prepend_name_scope) as Tensor;
             _handle_name = handle.name;
             _name = handle.name;
-            _shape = new TensorShape(handle.op.get_attr("shape") as TensorShapeProto);
+            _shape = new Shape(handle.op.get_attr("shape") as TensorShapeProto);
 
             prepend_name_scope = ops.prepend_name_scope(variable_def.InitializerName, import_scope: import_scope);
             initializer_op = g.as_graph_element(prepend_name_scope) as Operation;

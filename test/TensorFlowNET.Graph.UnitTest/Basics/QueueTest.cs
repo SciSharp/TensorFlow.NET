@@ -12,7 +12,7 @@ namespace TensorFlowNET.UnitTest.Basics
         public void PaddingFIFOQueue()
         {
             var numbers = tf.placeholder(tf.int32);
-            var queue = tf.PaddingFIFOQueue(10, tf.int32, new TensorShape(-1));
+            var queue = tf.PaddingFIFOQueue(10, tf.int32, new Shape(-1));
             var enqueue = queue.enqueue(numbers);
             var dequeue_many = queue.dequeue_many(n: 3);
 

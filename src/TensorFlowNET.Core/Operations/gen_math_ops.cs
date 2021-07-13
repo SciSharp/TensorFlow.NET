@@ -397,8 +397,12 @@ namespace Tensorflow
         /// <param name="y"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
-            => tf.Context.ExecuteOp("Equal", name, new ExecuteOpArgs(x, y));
+        public static Tensor equal<Tx, Ty>(Tx x, Ty y, bool incompatible_shape_error = true, string name = null)
+            => tf.Context.ExecuteOp("Equal", name, new ExecuteOpArgs(x, y)
+                .SetAttributes(new
+                {
+                    incompatible_shape_error
+                }));
 
         /// <summary>
         /// Returns the truth value of (x != y) element-wise.

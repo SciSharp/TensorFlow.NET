@@ -28,7 +28,7 @@ namespace Tensorflow.Keras.Metrics
         }
 
         protected override IVariableV1 add_weight(string name,
-            TensorShape shape = null,
+            Shape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
             IRegularizer regularizer = null,
@@ -38,7 +38,7 @@ namespace Tensorflow.Keras.Metrics
             Func<VariableArgs, IVariableV1> getter = null)
         {
             if (shape == null)
-                shape = new TensorShape(new int[0]);
+                shape = new Shape(new int[0]);
 
             return tf_with(ops.init_scope(), delegate
             {

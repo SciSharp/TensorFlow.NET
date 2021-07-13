@@ -103,7 +103,7 @@ namespace Tensorflow.Graphs
         }
 
         const int _EAGER_CONST_THRESHOLD = 128;
-        public Tensor capture(Tensor tensor, string name = null, TensorShape shape = null)
+        public Tensor capture(Tensor tensor, string name = null, Shape shape = null)
         {
             if(tensor is EagerTensor)
             {
@@ -167,7 +167,7 @@ namespace Tensorflow.Graphs
             return graph_const;
         }
 
-        Tensor _capture_helper(Tensor tensor, string name, TensorShape shape = null)
+        Tensor _capture_helper(Tensor tensor, string name, Shape shape = null)
         {
             Tensor placeholder = null;
             if (!_captures.ContainsKey(tensor.Id))
@@ -206,7 +206,7 @@ namespace Tensorflow.Graphs
         Tensor _create_substitute_placeholder(Tensor value, 
             string name = null, 
             TF_DataType dtype = TF_DataType.DtInvalid, 
-            TensorShape shape = null)
+            Shape shape = null)
         {
             if (shape is null)
                 shape = value.shape;

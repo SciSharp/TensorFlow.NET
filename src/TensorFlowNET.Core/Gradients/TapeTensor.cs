@@ -6,9 +6,9 @@ namespace Tensorflow.Gradients
     {
         long id;
         TF_DataType dtype;
-        TensorShape shape;
+        Shape shape;
 
-        public TapeTensor(long id, TF_DataType dtype, TensorShape shape)
+        public TapeTensor(long id, TF_DataType dtype, Shape shape)
         {
             this.id = id;
             this.dtype = dtype;

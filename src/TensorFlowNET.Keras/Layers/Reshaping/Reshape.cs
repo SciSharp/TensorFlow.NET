@@ -31,11 +31,11 @@ namespace Tensorflow.Keras.Layers
 
             var result = array_ops.reshape(inputs, shape);
             if (!tf.Context.executing_eagerly())
-                result.set_shape(ComputeOutputShape(inputs.shape));
+                result.shape = ComputeOutputShape(inputs.shape);
             return result;
         }
 
-        public override TensorShape ComputeOutputShape(TensorShape input_shape)
+        public override Shape ComputeOutputShape(Shape input_shape)
         {
             if (input_shape.dims.Skip(1).Contains(-1))
             {
@@ -43,7 +43,7 @@ namespace Tensorflow.Keras.Layers
             }
             else
             {
-                input_shape = input_shape.dims[0];
+                input_shape = new Shape(input_shape.dims[0]);
                 var output_shape = input_shape.concatenate(args.TargetShape.dims);
                 return output_shape;
             }

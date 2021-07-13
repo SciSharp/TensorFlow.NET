@@ -27,7 +27,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="data_format"></param>
         /// <param name="interpolation"></param>
         /// <returns></returns>
-        public UpSampling2D UpSampling2D(TensorShape size = null,
+        public UpSampling2D UpSampling2D(Shape size = null,
             string data_format = null,
             string interpolation = "nearest")
             => new UpSampling2D(new UpSampling2DArgs
@@ -40,7 +40,7 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         /// <param name="target_shape"></param>
         /// <returns></returns>
-        public Reshape Reshape(TensorShape target_shape)
+        public Reshape Reshape(Shape target_shape)
             => new Reshape(new ReshapeArgs
             {
                 TargetShape = target_shape

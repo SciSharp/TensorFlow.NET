@@ -810,8 +810,8 @@ namespace Tensorflow.Gradients
         private static (Tensor, Tensor, bool)[] SmartBroadcastGradientArgs(Tensor x, Tensor y, Tensor grad)
         {
             Tensor sx, sy;
-            if (x.TensorShape.is_fully_defined() &&
-                y.TensorShape.is_fully_defined())
+            if (x.shape.IsFullyDefined &&
+                y.shape.IsFullyDefined)
             {
                 sx = array_ops.shape(x);
                 sy = array_ops.shape(y);
@@ -825,8 +825,8 @@ namespace Tensorflow.Gradients
             var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
             return new[]
             {
-                (sx, rx, !x.TensorShape.Equals(grad.TensorShape)),
-                (sy, ry, !y.TensorShape.Equals(grad.TensorShape))
+                (sx, rx, !x.shape.Equals(grad.shape)),
+                (sy, ry, !y.shape.Equals(grad.shape))
             };
         }
     }

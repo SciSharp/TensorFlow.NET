@@ -298,7 +298,7 @@ namespace Tensorflow
 
         // TODO for Switch/Case
         public static RefVariable get_variable(string embeddingMatrix, IInitializer initializer, bool use_resource,
-            TensorShape shape = null,
+            Shape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool trainable = false,
             bool validate_shape = true)

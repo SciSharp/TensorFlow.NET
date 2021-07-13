@@ -37,7 +37,7 @@ namespace Tensorflow.Operations
         bool _infer_shape;
         public bool infer_shape => _infer_shape;
         public bool _dynamic_size;
-        public List<TensorShape> _element_shape;
+        public List<Shape> _element_shape;
 
         public List<Tensor> _colocate_with;
 
@@ -47,7 +47,7 @@ namespace Tensorflow.Operations
 
         public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
             bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
-            bool infer_shape = true, TensorShape element_shape = null,
+            bool infer_shape = true, Shape element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
             clear_after_read = clear_after_read ?? true;
@@ -66,12 +66,12 @@ namespace Tensorflow.Operations
             if (element_shape == null)
             {
                 _infer_shape = infer_shape;
-                _element_shape = new List<TensorShape> { };
+                _element_shape = new List<Shape> { };
             }
             else
             {
                 _infer_shape = true;
-                _element_shape = new List<TensorShape> { element_shape };
+                _element_shape = new List<Shape> { element_shape };
             }
 
             tf_with(ops.name_scope(name, "TensorArray", new { handle, size, flow }), scope =>
@@ -124,7 +124,7 @@ namespace Tensorflow.Operations
                 value = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
                 if (_infer_shape)
                 {
-                    var shape = new TensorShape(value.TensorShape.dims.Skip(1).ToArray());
+                    var shape = new Shape(value.shape.dims.Skip(1).ToArray());
                     _merge_element_shape(shape);
                 }
 
@@ -149,7 +149,7 @@ namespace Tensorflow.Operations
             });
         }
 
-        public void _merge_element_shape(TensorShape shape)
+        public void _merge_element_shape(Shape shape)
         {
             _element_shape.Add(shape);
         }
@@ -169,7 +169,7 @@ namespace Tensorflow.Operations
                 name: name);
 
             if (_element_shape != null)
-                value.set_shape(_element_shape[0].dims);
+                value.shape = _element_shape[0].dims;
 
             return value;
         }
@@ -207,7 +207,7 @@ namespace Tensorflow.Operations
 
         public Tensor gather(Tensor indices, string name = null)
         {
-            var element_shape = new TensorShape();
+            var element_shape = Shape.Null;
 
             if (_element_shape.Count > 0)
                 element_shape = _element_shape[0];

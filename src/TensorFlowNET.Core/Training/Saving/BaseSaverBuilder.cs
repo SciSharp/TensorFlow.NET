@@ -214,7 +214,7 @@ namespace Tensorflow
             // string tensors as "HostMemory" inputs.
             foreach (var saveable in saveables)
             {
-                List<TensorShape> shapes = null;
+                List<Shape> shapes = null;
                 if (reshape)
                 {
                     throw new NotImplementedException("_AddRestoreOps");

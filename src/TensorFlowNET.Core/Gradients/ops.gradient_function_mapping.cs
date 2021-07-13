@@ -56,7 +56,7 @@ namespace Tensorflow
                                    null,
                                    args: new object[] { oper, out_grads }) as Tensor[];
                                 foreach (var result in results.Where(x => x != null))
-                                    tf.Logger.Debug($"Gradient: {result.name} {result.TensorShape}");
+                                    tf.Logger.Debug($"Gradient: {result.name} {result.shape}");
                                 return results;
                             }
                         );

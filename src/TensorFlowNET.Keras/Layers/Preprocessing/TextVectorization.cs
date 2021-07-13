@@ -33,7 +33,7 @@ namespace Tensorflow.Keras.Layers
         public override void adapt(IDatasetV2 data, bool reset_state = true)
         {
             var shape = data.output_shapes[0];
-            if (shape.rank == 1)
+            if (shape.ndim == 1)
                 data = data.map(tensor => array_ops.expand_dims(tensor, -1));
             build(data.variant_tensor);
             var preprocessed_inputs = data.map(_preprocess);

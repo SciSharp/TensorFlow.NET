@@ -12,7 +12,7 @@ namespace Tensorflow.Keras.Engine
     /// </summary>
     public partial class Functional : Model
     {
-        TensorShape _build_input_shape;
+        Shape _build_input_shape;
         bool _compute_output_and_mask_jointly;
         bool _expects_training_arg;
         bool _expects_mask_arg;
@@ -338,7 +338,7 @@ namespace Tensorflow.Keras.Engine
                     tf.Logger.Debug($"Depth {depth}: {node.Layer}: {node.Layer.Name}");
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training);
                     foreach (var output in outputs.Where(x => x != null))
-                        tf.Logger.Information($"Depth {depth}: {node.Layer}: {node.Layer.Name} {output.TensorShape}");
+                        tf.Logger.Information($"Depth {depth}: {node.Layer}: {node.Layer.Name} {output.shape}");
                     // Update tensor_dict for next input
                     foreach (var (x_id, y) in zip(node.FlatOutputIds, outputs))
                         tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y));

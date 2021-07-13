@@ -13,7 +13,7 @@ namespace Tensorflow.Keras.Engine
             _layers.AddRange(layers);
         }
 
-        public virtual TensorShape ComputeOutputShape(TensorShape input_shape)
+        public virtual Shape ComputeOutputShape(Shape input_shape)
             => throw new NotImplementedException("");
     }
 }

@@ -258,7 +258,7 @@ namespace Tensorflow.Operations.ControlFlows
                     throw new NotImplementedException("AddBackpropAccumulatedValue");
                 }
                 pop = gen_data_flow_ops.stack_pop_v2(history_value, value.dtype.as_base_dtype());
-                pop.set_shape(value.TensorShape);
+                pop.shape = value.shape;
                 grad_context.Exit();
             });
             var parallel_iterations = grad_context.parallel_iterations;

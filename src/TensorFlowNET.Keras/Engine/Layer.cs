@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Engine
 
         protected bool computePreviousMask;
         protected List<Operation> updates;
-        public TensorShape BatchInputShape => args.BatchInputShape;
+        public Shape BatchInputShape => args.BatchInputShape;
 
         List<INode> inboundNodes;
         public List<INode> InboundNodes => inboundNodes;
@@ -84,7 +84,7 @@ namespace Tensorflow.Keras.Engine
         public CallContext CallContext => callContext.Value;
         public Tensor[] input => inboundNodes[0].input_tensors;
         public Dictionary<int, List<INode>> NodesByDepth { get; set; }
-        public TensorShape output_shape => inboundNodes[0].Outputs.shape;
+        public Shape output_shape => inboundNodes[0].Outputs.shape;
         public Layer(LayerArgs args)
         {
             this.args = args;

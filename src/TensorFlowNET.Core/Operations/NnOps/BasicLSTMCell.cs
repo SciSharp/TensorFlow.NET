@@ -46,7 +46,7 @@ namespace Tensorflow
                 _activation = tf.nn.tanh();
         }
 
-        protected override void build(TensorShape input_shape)
+        protected override void build(Shape input_shape)
         {
             var input_depth = input_shape.dims.Last();
             var h_depth = _num_units;

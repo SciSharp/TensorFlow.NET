@@ -10,12 +10,12 @@
         /// <summary>
         /// specifying the size of the pooling window.
         /// </summary>
-        public TensorShape PoolSize { get; set; }
+        public Shape PoolSize { get; set; }
 
         /// <summary>
         /// specifying the strides of the pooling operation.
         /// </summary>
-        public TensorShape Strides { get; set; }
+        public Shape Strides { get; set; }
 
         /// <summary>
         /// The padding method, either 'valid' or 'same'.

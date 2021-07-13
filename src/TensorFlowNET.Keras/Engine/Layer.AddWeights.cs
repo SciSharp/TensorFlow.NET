@@ -7,7 +7,7 @@ namespace Tensorflow.Keras.Engine
     public partial class Layer
     {
         protected virtual IVariableV1 add_weight(string name,
-            TensorShape shape,
+            Shape shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
             IRegularizer regularizer = null,

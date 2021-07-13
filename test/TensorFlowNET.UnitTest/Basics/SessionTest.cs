@@ -77,7 +77,7 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case1()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.float32, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.float32, shape: new Shape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6)));
@@ -91,7 +91,7 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case2()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.float64, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.float64, shape: new Shape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
@@ -105,7 +105,7 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case3()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.int64, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.int64, shape: new Shape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
@@ -119,7 +119,7 @@ namespace TensorFlowNET.UnitTest
         public void Autocast_Case4()
         {
             var sess = tf.Session().as_default();
-            var input = tf.placeholder(tf.byte8, shape: new TensorShape(6));
+            var input = tf.placeholder(tf.byte8, shape: new Shape(6));
             var op = tf.reshape(input, new int[] { 2, 3 });
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));

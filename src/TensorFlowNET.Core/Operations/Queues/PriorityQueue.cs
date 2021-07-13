@@ -24,7 +24,7 @@ namespace Tensorflow.Queues
     {
         public PriorityQueue(int capacity,
             TF_DataType[] dtypes,
-            TensorShape[] shapes,
+            Shape[] shapes,
             string[] names = null,
             string shared_name = null,
             string name = "priority_queue")
@@ -44,7 +44,7 @@ namespace Tensorflow.Queues
             _dtypes = dtypes1.ToArray();
 
             var shapes1 = shapes.ToList();
-            shapes1.Insert(0, new TensorShape());
+            shapes1.Insert(0, Shape.Null);
             _shapes = shapes1.ToArray();
         }
 

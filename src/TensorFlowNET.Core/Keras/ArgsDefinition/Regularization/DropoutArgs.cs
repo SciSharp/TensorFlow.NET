@@ -11,7 +11,7 @@
         /// 1D integer tensor representing the shape of the
         /// binary dropout mask that will be multiplied with the input.
         /// </summary>
-        public TensorShape NoiseShape { get; set; }
+        public Shape NoiseShape { get; set; }
 
         /// <summary>
         /// random seed.

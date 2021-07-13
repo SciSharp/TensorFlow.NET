@@ -40,12 +40,12 @@ namespace Tensorflow
             this.name = name;
         }
 
-        public virtual Operation restore(Tensor[] restored_tensors, TensorShape[] restored_shapes = null)
+        public virtual Operation restore(Tensor[] restored_tensors, Shape[] restored_shapes = null)
         {
             var restored_tensor = restored_tensors[0];
             return gen_state_ops.assign(op,
                 restored_tensor,
-                validate_shape: restored_shapes == null && op.shape.is_fully_defined());
+                validate_shape: restored_shapes == null && op.shape.IsFullyDefined);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Tensorflow.Keras.Engine
             else
             {
                 // Ok for a model to have no compiled loss.
-                return array_ops.zeros(new TensorShape());
+                return array_ops.zeros(Shape.Null);
             }
         }
 

@@ -24,7 +24,7 @@ namespace Tensorflow.Keras.Layers
             return math_ops.cast(inputs, args.DType) * scale + offset;
         }
 
-        public override TensorShape ComputeOutputShape(TensorShape input_shape)
+        public override Shape ComputeOutputShape(Shape input_shape)
         {
             return input_shape;
         }

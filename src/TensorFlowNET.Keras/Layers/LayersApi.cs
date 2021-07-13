@@ -195,11 +195,11 @@ namespace Tensorflow.Keras.Layers
         /// <param name="activity_regularizer">Regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
         /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public Conv2D Conv2D(int filters,
-            TensorShape kernel_size = null,
-            TensorShape strides = null,
+            Shape kernel_size = null,
+            Shape strides = null,
             string padding = "valid",
             string data_format = null,
-            TensorShape dilation_rate = null,
+            Shape dilation_rate = null,
             int groups = 1,
             Activation activation = null,
             bool use_bias = true,
@@ -248,11 +248,11 @@ namespace Tensorflow.Keras.Layers
         /// <param name="activity_regularizer">The name of the regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
         /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public Conv2D Conv2D(int filters,
-            TensorShape kernel_size = null,
-            TensorShape strides = null,
+            Shape kernel_size = null,
+            Shape strides = null,
             string padding = "valid",
             string data_format = null,
-            TensorShape dilation_rate = null,
+            Shape dilation_rate = null,
             int groups = 1,
             string activation = null,
             bool use_bias = true,
@@ -292,11 +292,11 @@ namespace Tensorflow.Keras.Layers
         /// <param name="activity_regularizer">The name of the regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
         /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public Conv2DTranspose Conv2DTranspose(int filters,
-            TensorShape kernel_size = null,
-            TensorShape strides = null,
+            Shape kernel_size = null,
+            Shape strides = null,
             string output_padding = "valid",
             string data_format = null,
-            TensorShape dilation_rate = null,
+            Shape dilation_rate = null,
             string activation = null,
             bool use_bias = true,
             string kernel_initializer = null,
@@ -338,7 +338,7 @@ namespace Tensorflow.Keras.Layers
             IInitializer kernel_initializer = null,
             bool use_bias = true,
             IInitializer bias_initializer = null,
-            TensorShape input_shape = null)
+            Shape input_shape = null)
             => new Dense(new DenseArgs
             {
                 Units = units,
@@ -377,7 +377,7 @@ namespace Tensorflow.Keras.Layers
         /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
         public Dense Dense(int units,
             string activation = null,
-            TensorShape input_shape = null)
+            Shape input_shape = null)
             => new Dense(new DenseArgs
             {
                 Units = units,
@@ -438,7 +438,7 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <param name="seed">An integer to use as random seed.</param>
         /// <returns></returns>
-        public Dropout Dropout(float rate, TensorShape noise_shape = null, int? seed = null)
+        public Dropout Dropout(float rate, Shape noise_shape = null, int? seed = null)
             => new Dropout(new DropoutArgs
             {
                 Rate = rate,
@@ -461,7 +461,7 @@ namespace Tensorflow.Keras.Layers
             int output_dim,
             IInitializer embeddings_initializer = null,
             bool mask_zero = false,
-            TensorShape input_shape = null,
+            Shape input_shape = null,
             int input_length = -1)
             => new Embedding(new EmbeddingArgs
             {
@@ -502,7 +502,7 @@ namespace Tensorflow.Keras.Layers
         /// In this case, values of 'None' in the 'shape' argument represent ragged dimensions. For more information about RaggedTensors, see this guide.
         /// </param>
         /// <returns>A tensor.</returns>
-        public Tensors Input(TensorShape shape,
+        public Tensors Input(Shape shape,
             string name = null,
             bool sparse = false,
             bool ragged = false)
@@ -518,7 +518,7 @@ namespace Tensorflow.Keras.Layers
             return input_layer.InboundNodes[0].Outputs;
         }
 
-        public InputLayer InputLayer(TensorShape input_shape,
+        public InputLayer InputLayer(Shape input_shape,
             string name = null,
             bool sparse = false,
             bool ragged = false)
@@ -580,8 +580,8 @@ namespace Tensorflow.Keras.Layers
         /// It defaults to the image_data_format value found in your Keras config file at ~/.keras/keras.json. 
         /// If you never set it, then it will be "channels_last"</param>
         /// <returns></returns>
-        public MaxPooling2D MaxPooling2D(TensorShape pool_size = null,
-            TensorShape strides = null,
+        public MaxPooling2D MaxPooling2D(Shape pool_size = null,
+            Shape strides = null,
             string padding = "valid",
             string data_format = null)
             => new MaxPooling2D(new MaxPooling2DArgs
@@ -752,7 +752,7 @@ namespace Tensorflow.Keras.Layers
         /// <returns></returns>
         public Rescaling Rescaling(float scale,
             float offset = 0,
-            TensorShape input_shape = null)
+            Shape input_shape = null)
             => new Rescaling(new RescalingArgs
             {
                 Scale = scale,

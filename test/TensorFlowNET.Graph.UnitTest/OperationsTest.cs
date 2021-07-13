@@ -188,8 +188,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondIntFeed = Enumerable.Repeat(secondIntVal, rows * cols).ToArray();
             var intResult = firstIntFeed.Sum() + secondIntFeed.Sum();
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.add(a, b), 1));
 
             using (var sess = tf.Session())
@@ -237,8 +237,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondFloatFeed = Enumerable.Repeat(secondFloatVal, rows * cols).ToArray();
             var floatResult = firstFloatFeed.Sum() + secondFloatFeed.Sum();
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.add(a, b), 1));
 
             using (var sess = tf.Session())
@@ -286,8 +286,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondDoubleFeed = Enumerable.Repeat(secondDoubleVal, rows * cols).ToArray();
             var doubleResult = firstDoubleFeed.Sum() + secondDoubleFeed.Sum();
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.add(a, b), 1));
 
             using (var sess = tf.Session())
@@ -343,8 +343,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var intResult = firstIntFeed.Sum() - secondIntFeed.Sum();
             var intResultTwo = -firstIntFeed.Sum();
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.sub(a, b), 1));
 
             using (var sess = tf.Session())
@@ -402,8 +402,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var floatResult = firstFloatFeed.Sum() - secondFloatFeed.Sum();
             var floatResultTwo = -firstFloatFeed.Sum();
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.sub(a, b), 1));
 
             using (var sess = tf.Session())
@@ -461,8 +461,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var doubleResult = firstDoubleFeed.Sum() - secondDoubleFeed.Sum();
             var doubleResultTwo = -firstDoubleFeed.Sum();
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.sub(a, b), 1));
 
             using (var sess = tf.Session())
@@ -584,8 +584,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondIntFeed = Enumerable.Repeat(secondIntVal, rows * cols).ToArray();
             var intResult = MultiplyArray(firstIntFeed, secondIntFeed).Sum();
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.multiply(a, b), 1));
 
             using (var sess = tf.Session())
@@ -633,8 +633,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondFloatFeed = Enumerable.Repeat(secondFloatVal, rows * cols).ToArray();
             var floatResult = MultiplyArray(firstFloatFeed, secondFloatFeed).Sum();
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.multiply(a, b), 1));
 
             using (var sess = tf.Session())
@@ -682,8 +682,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondDoubleFeed = Enumerable.Repeat(secondDoubleVal, rows * cols).ToArray();
             var doubleResult = MultiplyArray(firstDoubleFeed, secondDoubleFeed).Sum();
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.multiply(a, b), 1));
 
             using (var sess = tf.Session())
@@ -739,8 +739,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondIntFeed = Enumerable.Repeat(secondIntVal, rows * cols).ToArray();
             var intResult = (int)(firstIntFeed.Sum() / (float)secondIntVal);
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(gen_math_ops.floor_div(a, b), 1));
 
             using (var sess = tf.Session())
@@ -788,8 +788,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondFloatFeed = Enumerable.Repeat(secondFloatVal, rows * cols).ToArray();
             var floatResult = MultiplyArray(firstFloatFeed, secondFloatFeed.Select(x => 1 / x).ToArray()).Sum();
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.divide(a, b), 1));
 
             using (var sess = tf.Session())
@@ -837,8 +837,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var secondDoubleFeed = Enumerable.Repeat(secondDoubleVal, rows * cols).ToArray();
             var doubleResult = MultiplyArray(firstDoubleFeed, secondDoubleFeed.Select(x => 1 / x).ToArray()).Sum();
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.divide(a, b), 1));
 
             using (var sess = tf.Session())
@@ -893,8 +893,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var intResult = firstIntFeed.Count(elem => elem > intThreshold);
             var intResultTwo = firstIntFeed.Count(elem => elem < intThreshold);
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -942,8 +942,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var floatResult = firstFloatFeed.Count(elem => elem > floatThreshold);
             var floatResultTwo = firstFloatFeed.Count(elem => elem < floatThreshold);
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -991,8 +991,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var doubleResult = firstDoubleFeed.Count(elem => elem > doubleThreshold);
             var doubleResultTwo = firstDoubleFeed.Count(elem => elem < doubleThreshold);
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1047,8 +1047,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var intResult = firstIntFeed.Count(elem => elem < intThreshold);
             var intResultTwo = firstIntFeed.Count(elem => elem > intThreshold);
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1096,8 +1096,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var floatResult = firstFloatFeed.Count(elem => elem < floatThreshold);
             var floatResultTwo = firstFloatFeed.Count(elem => elem > floatThreshold);
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1145,8 +1145,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var doubleResult = firstDoubleFeed.Count(elem => elem < doubleThreshold);
             var doubleResultTwo = firstDoubleFeed.Count(elem => elem > doubleThreshold);
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1201,8 +1201,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var intResult = firstIntFeed.Count(elem => elem >= intThreshold);
             var intResultTwo = firstIntFeed.Count(elem => elem <= intThreshold);
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater_equal(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1250,8 +1250,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var floatResult = firstFloatFeed.Count(elem => elem >= floatThreshold);
             var floatResultTwo = firstFloatFeed.Count(elem => elem <= floatThreshold);
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater_equal(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1299,8 +1299,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var doubleResult = firstDoubleFeed.Count(elem => elem >= doubleThreshold);
             var doubleResultTwo = firstDoubleFeed.Count(elem => elem <= doubleThreshold);
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater_equal(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1355,8 +1355,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var intResult = firstIntFeed.Count(elem => elem <= intThreshold);
             var intResultTwo = firstIntFeed.Count(elem => elem >= intThreshold);
 
-            var a = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
-            var b = tf.placeholder(tf.int32, shape: new TensorShape(rows, cols));
+            var a = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
+            var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less_equal(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1404,8 +1404,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var floatResult = firstFloatFeed.Count(elem => elem <= floatThreshold);
             var floatResultTwo = firstFloatFeed.Count(elem => elem >= floatThreshold);
 
-            a = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float32, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less_equal(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())
@@ -1453,8 +1453,8 @@ namespace TensorFlowNET.UnitTest.Basics
             var doubleResult = firstDoubleFeed.Count(elem => elem <= doubleThreshold);
             var doubleResultTwo = firstDoubleFeed.Count(elem => elem >= doubleThreshold);
 
-            a = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
-            b = tf.placeholder(tf.float64, shape: new TensorShape(rows, cols));
+            a = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
+            b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less_equal(a, b), tf.int32), 1));
 
             using (var sess = tf.Session())

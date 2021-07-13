@@ -47,7 +47,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns>Dense `Tensor` of shape `output_shape`.  Has the same type as `sparse_values`.</returns>
         public Tensor sparse_to_dense<T>(Tensor sparse_indices,
-            TensorShape output_shape,
+            Shape output_shape,
             T sparse_values,
             T default_value = default,
             bool validate_indices = true,

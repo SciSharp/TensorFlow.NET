@@ -42,13 +42,13 @@ namespace TensorFlowNET.UnitTest
 
         public AndConstraint<ShapeAssertions> BeOfSize(int size, string because = null, params object[] becauseArgs)
         {
-            Subject.size.Should().Be((ulong)size, because, becauseArgs);
+            Subject.size.Should().Be(size, because, becauseArgs);
             return new AndConstraint<ShapeAssertions>(this);
         }
 
         public AndConstraint<ShapeAssertions> NotBeOfSize(int size, string because = null, params object[] becauseArgs)
         {
-            Subject.size.Should().NotBe((ulong)size, because, becauseArgs);
+            Subject.size.Should().NotBe(size, because, becauseArgs);
             return new AndConstraint<ShapeAssertions>(this);
         }
 

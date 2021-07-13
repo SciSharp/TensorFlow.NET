@@ -96,7 +96,7 @@ namespace Tensorflow
                     seed: seed,
                     dtype: dtype);
 
-            public IInitializer zeros_initializer(TensorShape shape = null,
+            public IInitializer zeros_initializer(Shape shape = null,
                 TF_DataType dtype = TF_DataType.TF_FLOAT) => new Zeros(shape: shape,
                     dtype: dtype);
         }

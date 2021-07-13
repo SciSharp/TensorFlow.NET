@@ -18,10 +18,10 @@ namespace Tensorflow.Operations.Initializers
 {
     public class Zeros : IInitializer
     {
-        TensorShape shape;
+        Shape shape;
         TF_DataType dtype;
 
-        public Zeros(TensorShape shape = null, TF_DataType dtype = TF_DataType.TF_FLOAT)
+        public Zeros(Shape shape = null, TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
             this.shape = shape;
             this.dtype = dtype;

@@ -64,7 +64,7 @@ namespace Tensorflow.Keras
             _GRAPH_VARIABLES[graph.graph_key] = v;
         }
 
-        public Tensor placeholder(TensorShape shape = null,
+        public Tensor placeholder(Shape shape = null,
             int ndim = -1,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool sparse = false,
@@ -300,9 +300,9 @@ namespace Tensorflow.Keras
             int new_height = original_shape[rows] < 0 ? -1 : (int)original_shape[rows] * height_factor;
             int new_width = original_shape[cols] < 0 ? -1 : (int)original_shape[cols] * width_factor;
 
-            TensorShape output_shape = data_format == "channels_first" ?
+            Shape output_shape = data_format == "channels_first" ?
                 (-1, -1, new_height, new_width) : (-1, new_height, new_width, -1);
-            x.set_shape(output_shape);
+            x.shape = output_shape;
             return x;
         }
 
@@ -329,10 +329,10 @@ namespace Tensorflow.Keras
         public Tensor conv2d_transpose(Tensor x,
                      IVariableV1 kernel,
                      Tensor output_shape,
-                     TensorShape strides = null,
+                     Shape strides = null,
                      string padding = "valid",
                      string data_format = null,
-                     TensorShape dilation_rate = null)
+                     Shape dilation_rate = null)
         {
             var force_transpose = false;
             if (data_format == "channels_first" && !dilation_rate.Equals(new[] { 1, 1 }))
@@ -340,7 +340,7 @@ namespace Tensorflow.Keras
             // x, tf_data_format = _preprocess_conv2d_input(x, data_format, force_transpose)
             var tf_data_format = "NHWC";
             padding = padding.ToUpper();
-            strides = new TensorShape(1, strides[0], strides[1], 1);
+            strides = new Shape(1, strides[0], strides[1], 1);
             if (dilation_rate.Equals(new[] { 1, 1 }))
                 x = nn_impl.conv2d_transpose(x, kernel, output_shape, strides,
                     padding: padding,

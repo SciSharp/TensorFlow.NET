@@ -482,11 +482,7 @@ namespace Tensorflow
         /// <param name="name"> A name for the operation (optional).</param>
         /// <returns> `Tensor`. Has the same type as `s0`.</returns>
         public static Tensor broadcast_args(Tensor s0, Tensor s1, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("BroadcastArgs", name, args: new { s0, s1, name });
-
-            return _op.outputs[0];
-        }
+            => tf.Context.ExecuteOp("BroadcastArgs", name, new ExecuteOpArgs(s0, s1));
 
         /// <summary>
         /// Broadcast an array for a compatible shape.

@@ -37,7 +37,7 @@ namespace Tensorflow
             {
                 var results = ops.iterator_get_next(_iterator_resource, _dataset.output_types, _dataset.output_shapes);
                 foreach(var (i, tensor) in enumerate(results))
-                    tensor.set_shape(_element_spec[i].shape);
+                    tensor.shape = _element_spec[i].shape;
                 return results;
             }
             catch (OutOfRangeError ex)

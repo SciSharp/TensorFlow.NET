@@ -25,12 +25,12 @@
         /// <summary>
         /// Only applicable to input layers.
         /// </summary>
-        public TensorShape InputShape { get; set; }
+        public Shape InputShape { get; set; }
 
         /// <summary>
         /// Only applicable to input layers.
         /// </summary>
-        public TensorShape BatchInputShape { get; set; }
+        public Shape BatchInputShape { get; set; }
 
         public int BatchSize { get; set; } = -1;
 

@@ -55,12 +55,12 @@ namespace Tensorflow
 
         void _init()
         {
-            var indices_shape = indices.TensorShape.with_rank(2);
-            var values_shape = values.TensorShape.with_rank(1);
-            var dense_shape_shape = dense_shape.TensorShape.with_rank(1);
+            var indices_shape = indices.shape.with_rank(2);
+            var values_shape = values.shape.with_rank(1);
+            var dense_shape_shape = dense_shape.shape.with_rank(1);
 
-            indices_shape["0"].merge_with(values_shape[0]);
-            indices_shape["1"].merge_with(dense_shape_shape[0]);
+            indices_shape["0"].merge_with(new Shape(values_shape[0]));
+            indices_shape["1"].merge_with(new Shape(dense_shape_shape[0]));
         }
 
         public static implicit operator Tensor(SparseTensor indexedSlices)

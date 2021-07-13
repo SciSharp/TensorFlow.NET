@@ -319,7 +319,7 @@ namespace Tensorflow
                 return gen_array_ops.identity(data, name: name);
         }
 
-        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, TensorShape[] shapes = null)
+        public static void _SetShapeInvariants(Tensor[] input_vars, Tensor[] enter_vars, Shape[] shapes = null)
         {
             if (shapes == null)
                 return;
@@ -327,7 +327,7 @@ namespace Tensorflow
             var flat_shapes = nest.flatten2(shapes);
             foreach (var (inp, var, shape) in zip(input_vars, enter_vars, flat_shapes))
             {
-                var.set_shape(shape);
+                var.shape = shape;
             }
         }
 
@@ -706,7 +706,7 @@ namespace Tensorflow
         /// <param name="loop_vars"></param>
         /// <param name="shape_invariants"></param>
         public static TItem while_loop<TItem>(Func<TItem, Tensor> cond, Func<TItem, TItem> body, TItem loop_vars,
-            TensorShape[] shape_invariants = null,
+            Shape[] shape_invariants = null,
             int parallel_iterations = 10,
             bool back_prop = true,
             bool swap_memory = false,
@@ -803,7 +803,7 @@ namespace Tensorflow
                     data, frame_name, is_constant, parallel_iterations, name: name);
 
             if (use_input_shape)
-                result.set_shape(data.TensorShape);
+                result.shape = data.shape;
 
             return result;
         }

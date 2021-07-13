@@ -118,14 +118,14 @@ namespace Tensorflow.Operations
                     VariableScope varscope = scope1;
                     // Obtain the first sequence of the input
                     var first_input = inputs[0];
-                    if (first_input.TensorShape.rank != 1)
+                    if (first_input.shape.ndim != 1)
                     {
-                        var input_shape = first_input.TensorShape.with_rank_at_least(2);
+                        var input_shape = first_input.shape.with_rank_at_least(2);
                         fixed_batch_size = input_shape.dims[0];
                         var flat_inputs = nest.flatten2(inputs);
                         foreach (var flat_input in flat_inputs)
                         {
-                            input_shape = flat_input.TensorShape.with_rank_at_least(2);
+                            input_shape = flat_input.shape.with_rank_at_least(2);
                             batch_size = tensor_shape.dimension_at_index(input_shape, 0);
                             var input_size = input_shape[new Slice(1)];
                             fixed_batch_size.merge_with(batch_size);
@@ -138,7 +138,7 @@ namespace Tensorflow.Operations
                         }
                     }
                     else
-                        fixed_batch_size = first_input.TensorShape.with_rank_at_least(1).dims[0];
+                        fixed_batch_size = first_input.shape.with_rank_at_least(1).dims[0];
 
                     if (tensor_shape.dimension_value(fixed_batch_size) >= 0)
                         batch_size = tensor_shape.dimension_value(fixed_batch_size);
@@ -243,7 +243,7 @@ namespace Tensorflow.Operations
             var input_shape = array_ops.shape(flat_input[0]);
             var time_steps = input_shape.slice(0);
             var batch_size = _best_effort_input_batch_size(flat_input);
-            var inputs_got_shape = flat_input.Select(input_ => input_.TensorShape.with_rank_at_least(3)).ToArray();
+            var inputs_got_shape = flat_input.Select(input_ => input_.shape.with_rank_at_least(3)).ToArray();
 
             var dims = inputs_got_shape[0].dims.Take(2).ToArray();
             var (const_time_steps, const_batch_size) = (dims[0], dims[1]);
@@ -292,7 +292,7 @@ namespace Tensorflow.Operations
             string base_name = null;
             tf_with(ops.name_scope("dynamic_rnn"), scope => base_name = scope);
 
-            Func<string, TensorShape, TF_DataType, TensorArray> _create_ta = (name, element_shape, dtype_) =>
+            Func<string, Shape, TF_DataType, TensorArray> _create_ta = (name, element_shape, dtype_) =>
             {
                 var ta = new TensorArray(dtype: dtype_,
                                         size: time_steps,
@@ -309,7 +309,7 @@ namespace Tensorflow.Operations
                 foreach (var (i, out_size) in enumerate(flat_output_size))
                 {
                     output_ta.Add(_create_ta($"output_{i}",
-                        new TensorShape(const_batch_size).concatenate(
+                        new Shape(const_batch_size).concatenate(
                             _maybe_tensor_shape_from_tensor(out_size)),
                         _infer_state_dtype(dtype, state)));
                 }
@@ -317,7 +317,7 @@ namespace Tensorflow.Operations
                 foreach (var (i, flat_input_i) in enumerate(flat_input))
                 {
                     input_ta.Add(_create_ta($"input_{i}",
-                        new TensorShape(flat_input_i.dims.Skip(1).ToArray()),
+                        new Shape(flat_input_i.dims.Skip(1).ToArray()),
                         flat_input_i.dtype));
                 }
 
@@ -350,7 +350,7 @@ namespace Tensorflow.Operations
                     input_t = input_ta.Select(ta => ta.read(time1)).ToArray();
                     // Restore some shape information
                     foreach (var (input_, shape) in zip(input_t, inputs_got_shape))
-                        input_.set_shape(shape[new Slice(1)]);
+                        input_.shape = shape[new Slice(1)];
                 }
                 else
                 {
@@ -397,17 +397,17 @@ namespace Tensorflow.Operations
             foreach (var (output, output_size) in zip(final_outputs, flat_output_size))
             {
                 var shape = rnn_cell_impl._concat(new int[] { (int)const_time_steps, (int)const_batch_size }, output_size, @static: true);
-                output.set_shape(shape);
+                output.shape = shape;
             }
 
             return (final_outputs[0], final_state);
         }
 
-        private static TensorShape _maybe_tensor_shape_from_tensor(Tensor shape)
-            => shape.TensorShape;
+        private static Shape _maybe_tensor_shape_from_tensor(Tensor shape)
+            => shape.shape;
 
-        private static TensorShape _maybe_tensor_shape_from_tensor(int shape)
-            => new TensorShape(shape);
+        private static Shape _maybe_tensor_shape_from_tensor(int shape)
+            => new Shape(shape);
 
         private static TF_DataType _infer_state_dtype(TF_DataType explicit_dtype, Tensor state)
         {
@@ -424,7 +424,7 @@ namespace Tensorflow.Operations
         /// <returns></returns>
         public static Tensor _transpose_batch_time(Tensor x)
         {
-            var x_static_shape = x.TensorShape;
+            var x_static_shape = x.shape;
             if (x_static_shape.ndim == 1)
                 return x;
 
@@ -436,12 +436,12 @@ namespace Tensorflow.Operations
             };
             var x_t = array_ops.transpose(x, array_ops.concat(con1, 0));
 
-            var dims = new [] { x_static_shape.dims[1], x_static_shape.dims[0] }
+            var dims = new long[] { x_static_shape.dims[1], x_static_shape.dims[0] }
                 .ToList();
             dims.AddRange(x_static_shape.dims.Skip(2));
-            var shape = new TensorShape(dims.ToArray());
+            var shape = new Shape(dims.ToArray());
 
-            x_t.set_shape(shape);
+            x_t.shape = shape;
 
             return x_t;
         }
@@ -455,7 +455,7 @@ namespace Tensorflow.Operations
         {
             foreach (var input_ in flat_input)
             {
-                var shape = input_.TensorShape;
+                var shape = input_.shape;
                 if (shape.ndim < 0)
                     continue;
                 if (shape.ndim < 2)

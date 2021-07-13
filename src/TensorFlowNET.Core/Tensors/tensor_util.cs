@@ -180,7 +180,7 @@ namespace Tensorflow
             return tensor_proto;
         }
 
-        public static TensorShape constant_value_as_shape(Tensor tensor)
+        public static Shape constant_value_as_shape(Tensor tensor)
         {
             bool hasattr(Graph property, string attr)
             {
@@ -196,12 +196,12 @@ namespace Tensorflow
             if (tensor.GetType() == typeof(EagerTensor))
             {
                 if(tensor.dtype == TF_DataType.TF_INT64)
-                    return new TensorShape(tensor.ToArray<long>());
+                    return new Shape(tensor.ToArray<long>());
                 else
-                    return new TensorShape(tensor.ToArray<int>());
+                    return new Shape(tensor.ToArray<int>());
             }
 
-            if (tensor.TensorShape.ndim == 0)
+            if (tensor.shape.ndim == 0)
             {
                 var value_ = constant_value(tensor);
                 if (value_ == null)
@@ -212,13 +212,13 @@ known scalar with value '-1' to describe an unknown shape.");
                     throw new ValueError(
                         String.Format(@"Received a scalar value {0} as shape; require a statically known
 scalar with value '-1' to describe an unknown shape.", value_));
-                return tensor.TensorShape.unknown_shape(-1);
+                return tensor.shape.unknown_shape(-1);
             }
 
-            var shape = tensor.TensorShape.with_rank(1);
-            if (shape == new TensorShape(new int[] { 1 }))
+            var shape = tensor.shape.with_rank(1);
+            if (shape == new Shape(new int[] { 1 }))
             {
-                return new TensorShape(new int[] { });
+                return new Shape(new int[] { });
             }
             else if (tensor.op.type == "Cast")
             {
@@ -227,10 +227,10 @@ scalar with value '-1' to describe an unknown shape.", value_));
                     return pre_cast;
                 var cast_dtype = dtypes.as_tf_dtype((Type)tensor.op.get_attr("DstT"));
                 if (!Array.Exists(new[] { dtypes.int32, dtypes.int64 }, cast_dtype_ => cast_dtype_ == cast_dtype))
-                    return tensor.TensorShape.unknown_shape((int)shape.dims[0]);
+                    return tensor.shape.unknown_shape((int)shape.dims[0]);
 
                 long[] x_ = { };
-                foreach (var x in pre_cast.as_list())
+                foreach (var x in pre_cast.dims)
                     if (x != -1)
                         x_[x_.Length] = x;
                     else
@@ -243,7 +243,7 @@ scalar with value '-1' to describe an unknown shape.", value_));
                         y_[y_.Length] = y;
                     else
                         y_[y_.Length] = -1;
-                return new TensorShape(y_);
+                return new Shape(y_);
             }
             else if (tensor.op.type == "Shape")
             {
@@ -251,7 +251,7 @@ scalar with value '-1' to describe an unknown shape.", value_));
             }
             else if (tensor.op.type == "Pack")
             {
-                var ret_ = new TensorShape(new int[] { });
+                var ret_ = new Shape(new int[] { });
                 if ((int)tensor.op.get_attr("axis") != 0)
                     throw new ValueError(String.Format(
                         @"Since rank 1 inputs are expected, Pack's axis: {0} must be 0, otherwise it
@@ -278,7 +278,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             }
             else if (tensor.op.type == "Concat")
             {
-                var ret_ = new TensorShape(new int[] { });
+                var ret_ = new Shape(new int[] { });
 
                 var inputlist_ = new ArraySegment<Tensor>(tensor.op.inputs, 1,
                                                         tensor.op.inputs.Length - 1);
@@ -336,7 +336,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                                 if ((iter + strides) > prev_.Length)
                                     break;
                             }
-                            var ret_ = new TensorShape(prev);
+                            var ret_ = new Shape(prev);
                             return ret_;
                         }
                     }
@@ -363,7 +363,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 }
             }
 
-            var ret = tensor.TensorShape.unknown_shape((int)shape.dims[0]);
+            var ret = tensor.shape.unknown_shape((int)shape.dims[0]);
             var value = constant_value(tensor);
             if (!(value is null))
             {
@@ -371,7 +371,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 foreach (var (index, d) in enumerate(value.ToArray<int>()))
                     d_[index] = d >= 0 ? d : -1;
                 
-                ret = ret.merge_with(new TensorShape(d_));
+                ret = ret.merge_with(new Shape(d_));
             }
             return ret;
         }
@@ -402,19 +402,14 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             return shape;
         }
 
-        public static TensorShape to_shape(long[] dims)
+        public static Shape to_shape(long[] dims)
         {
-            return new TensorShape(dims.Select(x => (int)x).ToArray());
+            return new Shape(dims.Select(x => (int)x).ToArray());
         }
 
-        public static TensorShape to_shape(int[] dims)
+        public static Shape to_shape(int[] dims)
         {
-            return new TensorShape(dims);
-        }
-
-        public static TensorShape as_shape(this Shape shape)
-        {
-            return new TensorShape(shape.dims);
+            return new Shape(dims);
         }
 
         public static TensorShapeProto as_shape_proto(this Shape tshape)
@@ -433,12 +428,12 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             return shape;
         }
 
-        public static TensorShape reshape(this Shape shape, int[] dims)
+        public static Shape reshape(this Shape shape, int[] dims)
         {
-            return new TensorShape(dims);
+            return new Shape(dims);
         }
 
-        public static TensorShapeProto as_proto(this TensorShape tshape)
+        public static TensorShapeProto as_proto(this Shape tshape)
         {
             TensorShapeProto shape = new TensorShapeProto();
 
@@ -518,12 +513,12 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             if (shape.ndim == 0)
                 return array[0].ToString();
 
-            var display = "[";
+            var display = "array([";
             if (array.Length < 10)
                 display += string.Join(", ", array);
             else
                 display += string.Join(", ", array.Take(3)) + " ... " + string.Join(", ", array.Skip(array.Length - 3));
-            return display + "]";
+            return display + "])";
         }
         
 

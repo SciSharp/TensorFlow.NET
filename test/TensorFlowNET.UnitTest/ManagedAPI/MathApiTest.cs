@@ -43,7 +43,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.IsTrue(Enumerable.SequenceEqual(new[] { 3.9f, -8.6f }, x3.ToArray<float>()));
 
             var x4 = tf.reduce_sum(b, 1, keepdims: true);
-            Assert.AreEqual((2, 1), x4.TensorShape);
+            Assert.AreEqual((2, 1), x4.shape);
 
             var x5 = tf.reduce_sum(b, (0, 1));
             Assert.AreEqual(-4.7f, (float)x5);

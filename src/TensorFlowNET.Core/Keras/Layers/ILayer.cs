@@ -16,8 +16,8 @@ namespace Tensorflow.Keras
         List<IVariableV1> trainable_variables { get; }
         List<IVariableV1> trainable_weights { get; }
         List<IVariableV1> non_trainable_weights { get; }
-        TensorShape output_shape { get; }
-        TensorShape BatchInputShape { get; }
+        Shape output_shape { get; }
+        Shape BatchInputShape { get; }
         TF_DataType DType { get; }
         int count_params();
         LayerArgs get_config();

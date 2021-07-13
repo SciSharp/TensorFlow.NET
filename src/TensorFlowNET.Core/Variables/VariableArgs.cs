@@ -8,7 +8,7 @@ namespace Tensorflow
         public object InitialValue { get; set; }
         public Func<VariableArgs, IVariableV1> Getter { get; set; }
         public string Name { get; set; }
-        public TensorShape Shape { get; set; }
+        public Shape Shape { get; set; }
         public TF_DataType DType { get; set; } = TF_DataType.DtInvalid;
         public IInitializer Initializer { get; set; }
         public bool Trainable { get; set; }

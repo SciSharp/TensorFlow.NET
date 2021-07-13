@@ -257,7 +257,7 @@ namespace Tensorflow.Keras.Optimizers
         }
 
         ResourceVariable add_weight(string name,
-            TensorShape shape,
+            Shape shape,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             IInitializer initializer = null,
             bool trainable = false,

@@ -29,9 +29,9 @@ namespace Tensorflow
                 var t_min = math_ops.minimum(values, clip_value_max);
                 // Assert that the shape is compatible with the initial shape,
                 // to prevent unintentional broadcasting.
-                _ = values.TensorShape.merge_with(t_min.shape);
+                _ = values.shape.merge_with(t_min.shape);
                 var t_max = math_ops.maximum(t_min, clip_value_min, name: name);
-                _ = values.TensorShape.merge_with(t_max.shape);
+                _ = values.shape.merge_with(t_max.shape);
 
                 return t_max;
             });

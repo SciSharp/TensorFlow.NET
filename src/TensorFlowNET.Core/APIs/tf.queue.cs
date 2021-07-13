@@ -32,7 +32,7 @@ namespace Tensorflow
         /// <returns></returns>
         public PaddingFIFOQueue PaddingFIFOQueue(int capacity,
             TF_DataType[] dtypes,
-            TensorShape[] shapes,
+            Shape[] shapes,
             string[] names = null,
             string shared_name = null,
             string name = "padding_fifo_queue")
@@ -45,7 +45,7 @@ namespace Tensorflow
 
         public PaddingFIFOQueue PaddingFIFOQueue(int capacity,
             TF_DataType dtype,
-            TensorShape shape,
+            Shape shape,
             string shared_name = null,
             string name = "padding_fifo_queue")
             => new PaddingFIFOQueue(capacity,
@@ -66,7 +66,7 @@ namespace Tensorflow
         /// <returns></returns>
         public FIFOQueue FIFOQueue(int capacity,
             TF_DataType[] dtypes,
-            TensorShape[] shapes = null,
+            Shape[] shapes = null,
             string[] names = null,
             string shared_name = null,
             string name = "fifo_queue")
@@ -79,12 +79,12 @@ namespace Tensorflow
 
         public FIFOQueue FIFOQueue(int capacity,
             TF_DataType dtype,
-            TensorShape shape = null,
+            Shape shape = null,
             string shared_name = null,
             string name = "fifo_queue")
             => new FIFOQueue(capacity,
                 new[] { dtype },
-                new[] { shape ?? new TensorShape() },
+                new[] { shape ?? Shape.Null },
                 shared_name: shared_name,
                 name: name);
 
@@ -99,26 +99,26 @@ namespace Tensorflow
         /// <returns></returns>
         public PriorityQueue PriorityQueue(int capacity,
             TF_DataType dtype,
-            TensorShape shape = null,
+            Shape shape = null,
             string shared_name = null,
             string name = "priority_queue")
             => new PriorityQueue(capacity,
                 new[] { dtype },
-                new[] { shape ?? new TensorShape() },
+                new[] { shape ?? Shape.Null },
                 shared_name: shared_name,
                 name: name);
 
         public RandomShuffleQueue RandomShuffleQueue(int capacity,
             int min_after_dequeue,
             TF_DataType dtype,
-            TensorShape shape = null,
+            Shape shape = null,
             int? seed = null,
             string shared_name = null,
             string name = "random_shuffle_queue")
             => new RandomShuffleQueue(capacity,
                 min_after_dequeue: min_after_dequeue,
                 new[] { dtype },
-                new[] { shape ?? new TensorShape() },
+                new[] { shape ?? Shape.Null },
                 seed: seed,
                 shared_name: shared_name,
                 name: name);

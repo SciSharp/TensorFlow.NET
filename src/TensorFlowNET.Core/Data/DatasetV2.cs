@@ -19,7 +19,7 @@ namespace Tensorflow
 
         public TensorSpec[] structure { get; set; }
 
-        public TensorShape[] output_shapes => structure.Select(x => x.shape).ToArray();
+        public Shape[] output_shapes => structure.Select(x => x.shape).ToArray();
 
         public TF_DataType[] output_types => structure.Select(x => x.dtype).ToArray();
 

@@ -37,7 +37,7 @@ namespace Tensorflow.Keras.Layers
 
             var channel_axis = _get_channel_axis();
             var input_dim = input_shape[-1];
-            var kernel_shape = new TensorShape(kernel_size[0], kernel_size[1], filters, input_dim);
+            var kernel_shape = new Shape(kernel_size[0], kernel_size[1], filters, input_dim);
 
             kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
@@ -62,7 +62,7 @@ namespace Tensorflow.Keras.Layers
             if (data_format == "channels_first")
                 (h_axis, w_axis) = (2, 3);
             var (height, width) = (-1, -1);
-            if(inputs.shape.rank > -1)
+            if(inputs.shape.ndim > -1)
             {
                 var dims = inputs.shape.dims;
                 (height, width) = ((int)dims[h_axis], (int)dims[w_axis]);
@@ -105,7 +105,7 @@ namespace Tensorflow.Keras.Layers
             if (!tf.Context.executing_eagerly())
             {
                 var out_shape = ComputeOutputShape(inputs.shape);
-                outputs.set_shape(out_shape);
+                outputs.shape = out_shape;
             }
 
             if (use_bias)
@@ -117,7 +117,7 @@ namespace Tensorflow.Keras.Layers
             return outputs;
         }
 
-        public override TensorShape ComputeOutputShape(TensorShape input_shape)
+        public override Shape ComputeOutputShape(Shape input_shape)
         {
             var output_shape = input_shape.dims;
             var (c_axis, h_axis, w_axis) = (3, 1, 2);
@@ -144,7 +144,7 @@ namespace Tensorflow.Keras.Layers
                 stride: (int)stride_w,
                 dilation: (int)dilation_rate[1]);
 
-            return new TensorShape(output_shape);
+            return new Shape(output_shape);
         }
     }
 }

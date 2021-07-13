@@ -10,7 +10,7 @@ namespace Tensorflow
 
         Tensor variant_tensor { get; set; }
 
-        TensorShape[] output_shapes { get; }
+        Shape[] output_shapes { get; }
 
         TF_DataType[] output_types { get; }
 

@@ -33,10 +33,10 @@ namespace Tensorflow.Keras.Engine
 
         bool _compute_output_and_mask_jointly;
         bool _auto_track_sub_layers;
-        TensorShape _inferred_input_shape;
+        Shape _inferred_input_shape;
         bool _has_explicit_input_shape;
         
-        public TensorShape output_shape => outputs[0].TensorShape;
+        public Shape output_shape => outputs[0].shape;
 
         public Sequential(SequentialArgs args)
             : base(args.Inputs, args.Outputs, name: args.Name)

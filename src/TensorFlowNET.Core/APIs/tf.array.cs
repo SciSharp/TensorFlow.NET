@@ -65,7 +65,7 @@ namespace Tensorflow
         /// <param name="shape"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor broadcast_to(Tensor input, TensorShape shape, string name = null)
+        public Tensor broadcast_to(Tensor input, Shape shape, string name = null)
             => gen_array_ops.broadcast_to(input, shape, name: name);
 
         public Tensor check_numerics(Tensor tensor, string message, string name = null)
@@ -85,7 +85,7 @@ namespace Tensorflow
                 return tf_with(ops.name_scope(name), scope =>
                 {
                     var tensor = ops.convert_to_tensor(axis, name: "concat_dim", dtype: dtypes.int32);
-                    Debug.Assert(tensor.TensorShape.ndim == 0);
+                    Debug.Assert(tensor.shape.ndim == 0);
                     return identity(values.First(), name: scope);
                 });
             }
@@ -152,7 +152,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="conjugate"></param>
         /// <returns></returns>
-        public Tensor transpose<T1>(T1 a, TensorShape perm = null, string name = "transpose", bool conjugate = false)
+        public Tensor transpose<T1>(T1 a, Shape perm = null, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace Tensorflow
         /// <typeparam name="T"></typeparam>
         /// <param name="input">A `Tensor`. The default value to produce when output is not fed.</param>
         /// <param name="shape">
-        /// A `tf.TensorShape` or list of `int`s. The (possibly partial) shape of
+        /// A `tf.Shape` or list of `int`s. The (possibly partial) shape of
         /// the tensor.
         /// </param>
         /// <param name="name">A name for the operation (optional).</param>

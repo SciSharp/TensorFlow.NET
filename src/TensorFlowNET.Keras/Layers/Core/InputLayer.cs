@@ -96,7 +96,7 @@ namespace Tensorflow.Keras.Layers
             });
             node.Connect(this);
 
-            typeSpec = new TensorSpec(args.InputTensor.TensorShape,
+            typeSpec = new TensorSpec(args.InputTensor.shape,
                 dtype: args.InputTensor.dtype,
                 name: Name);
         }

@@ -25,12 +25,12 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(Tensors inputs)
         {
-            /*var shape_set = new HashSet<TensorShape>();
+            /*var shape_set = new HashSet<Shape>();
             var reduced_inputs_shapes = inputs.Select(x => x.shape).ToArray();
             for (var i = 0; i < reduced_inputs_shapes.Length; i++)
             {
                 int seq = -1;
-                TensorShape shape = reduced_inputs_shapes[i].Where(x =>
+                Shape shape = reduced_inputs_shapes[i].Where(x =>
                 {
                     seq++;
                     return seq != i;

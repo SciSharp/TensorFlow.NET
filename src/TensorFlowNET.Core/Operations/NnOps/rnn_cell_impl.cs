@@ -32,18 +32,18 @@ namespace Tensorflow.Operations
             else if (p.ndim != 1)
                 throw new ValueError($"prefix tensor must be either a scalar or vector, but saw tensor: {p}");
 
-            var s_tensor_shape = new TensorShape(suffix);
+            var s_tensor_shape = new Shape(suffix);
             var s_static = s_tensor_shape.ndim > -1 ?
                 s_tensor_shape.dims :
                 null;
-            var s = s_tensor_shape.is_fully_defined() ?
+            var s = s_tensor_shape.IsFullyDefined ?
                 constant_op.constant(s_tensor_shape.dims, dtype: dtypes.int32) :
                 null;
 
             if (@static)
             {
                 if (p_static is null) return null;
-                var shape = new TensorShape(p_static).concatenate(s_static);
+                var shape = new Shape(p_static).concatenate(s_static);
                 throw new NotImplementedException("RNNCell _concat");
             }
             else
@@ -54,24 +54,24 @@ namespace Tensorflow.Operations
             }
         }
 
-        public static TensorShape _concat(int[] prefix, int suffix, bool @static = false)
+        public static Shape _concat(int[] prefix, int suffix, bool @static = false)
         {
-            var p = new TensorShape(prefix);
+            var p = new Shape(prefix);
             var p_static = prefix;
-            var p_tensor = p.is_fully_defined() ? constant_op.constant(p.as_list(), dtype: dtypes.int32) : null;
+            var p_tensor = p.IsFullyDefined ? constant_op.constant(p, dtype: dtypes.int32) : null;
 
-            var s_tensor_shape = new TensorShape(suffix);
+            var s_tensor_shape = new Shape(suffix);
             var s_static = s_tensor_shape.ndim > -1 ?
                 s_tensor_shape.dims :
                 null;
-            var s_tensor = s_tensor_shape.is_fully_defined() ?
+            var s_tensor = s_tensor_shape.IsFullyDefined ?
                 constant_op.constant(s_tensor_shape.dims, dtype: dtypes.int32) :
                 null;
 
             if (@static)
             {
                 if (p_static is null) return null;
-                var shape = new TensorShape(p_static).concatenate(s_static);
+                var shape = new Shape(p_static).concatenate(s_static);
                 return shape;
             }
             else

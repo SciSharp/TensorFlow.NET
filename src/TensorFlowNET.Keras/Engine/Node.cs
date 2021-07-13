@@ -37,8 +37,8 @@ namespace Tensorflow.Keras.Engine
         public int[] tensor_indices;
         public Tensors input_tensors => is_input ? Outputs : args.InputTensors;
         public Tensors Outputs => args.Outputs;
-        public TensorShape[] input_shapes;
-        public TensorShape[] output_shapes;
+        public Shape[] input_shapes;
+        public Shape[] output_shapes;
         public List<Tensor> KerasInputs { get; set; } = new List<Tensor>();
         ILayer _layer;
         public ILayer Layer => _layer;

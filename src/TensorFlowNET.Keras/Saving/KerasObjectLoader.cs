@@ -157,7 +157,7 @@ namespace Tensorflow.Keras.Saving
             }
         }
 
-        bool _try_build_layer(Model obj, int node_id, TensorShape build_input_shape)
+        bool _try_build_layer(Model obj, int node_id, Shape build_input_shape)
         {
             if (obj.Built)
                 return true;
@@ -165,7 +165,7 @@ namespace Tensorflow.Keras.Saving
             return false;
         }
 
-        bool _try_build_layer(Layer obj, int node_id, TensorShape build_input_shape)
+        bool _try_build_layer(Layer obj, int node_id, Shape build_input_shape)
         {
             if (obj.Built)
                 return true;

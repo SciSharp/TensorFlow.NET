@@ -37,7 +37,7 @@ namespace Tensorflow.Keras.Layers
             else
             {
                 var input_shape = inputs.shape;
-                var rank = inputs.shape.rank;
+                var rank = inputs.shape.ndim;
                 if (rank == 1)
                     return array_ops.expand_dims(inputs, axis: 1);
                 var batch_dim = tensor_shape.dimension_value(input_shape[0]);

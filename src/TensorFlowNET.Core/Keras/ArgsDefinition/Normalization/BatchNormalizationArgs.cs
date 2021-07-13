@@ -4,7 +4,7 @@ namespace Tensorflow.Keras.ArgsDefinition
 {
     public class BatchNormalizationArgs : LayerArgs
     {
-        public TensorShape Axis { get; set; } = -1;
+        public Shape Axis { get; set; } = -1;
         public float Momentum { get; set; } = 0.99f;
         public float Epsilon { get; set; } = 1e-3f;
         public bool Center { get; set; } = true;

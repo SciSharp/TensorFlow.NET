@@ -111,7 +111,10 @@ namespace Tensorflow
         {
             get
             {
-                var dims = new long[rank < 0 ? 0 : rank];
+                if (rank < 0)
+                    return Shape.Null;
+
+                var dims = new Shape(new long[rank]);
 
                 if (_handle == IntPtr.Zero)
                 {
@@ -128,6 +131,13 @@ namespace Tensorflow
 
             set
             {
+                if (this is EagerTensor)
+                {
+                    if(!shape.is_compatible_with(value))
+                        throw new ValueError($"Tensor's shape is not compatible.");
+                    return;
+                }
+
                 if (value == null)
                     c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status.Handle);
                 else
@@ -142,21 +152,11 @@ namespace Tensorflow
             return rank < 0 ? null : shape.dims.Select(x => (int)x).ToArray();
         }
 
-        public TensorShape TensorShape => rank < 0 ? new TensorShape() : shape;
-
         /// <summary>
         /// Keras History: (Layer, (node_index, tensor_index))
         /// </summary>
         public KerasHistory KerasHistory { get; set; }
         public Tensor KerasMask { get; set; }
-
-        /// <summary>
-        ///     Updates the shape of this tensor.
-        /// </summary>
-        public virtual void set_shape(TensorShape shape)
-        {
-            this.shape = shape.rank >= 0 ? shape : null;
-        }
 
         /// <summary>
         ///     Updates the shape of this tensor.
@@ -250,11 +250,11 @@ namespace Tensorflow
             switch (rank)
             {
                 case -1:
-                    return $"tf.Tensor '{name}' shape={TensorShape} dtype={dtype.as_numpy_name()}";
+                    return $"tf.Tensor '{name}' shape={shape} dtype={dtype.as_numpy_name()}";
                 case 0:
-                    return $"tf.Tensor '{name}' shape={TensorShape} dtype={dtype.as_numpy_name()}";
+                    return $"tf.Tensor '{name}' shape={shape} dtype={dtype.as_numpy_name()}";
                 default:
-                    return $"tf.Tensor '{name}' shape={TensorShape} dtype={dtype.as_numpy_name()}";
+                    return $"tf.Tensor '{name}' shape={shape} dtype={dtype.as_numpy_name()}";
             }
         }
 
@@ -263,7 +263,7 @@ namespace Tensorflow
             if (dtype == TF_DataType.TF_STRING)
             {
                 long size = 1;
-                foreach (var s in TensorShape.dims)
+                foreach (var s in shape.dims)
                     size *= s;
                 var tstr = TensorDataPointer;
 

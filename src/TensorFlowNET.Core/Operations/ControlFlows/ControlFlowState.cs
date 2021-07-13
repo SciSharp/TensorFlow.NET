@@ -261,7 +261,7 @@ namespace Tensorflow.Operations.ControlFlows
         public Tensor ZerosLikeForExit(Tensor val)
         {
             Tensor result = null;
-            var val_shape = val.TensorShape;
+            var val_shape = val.shape;
             var forward_ctxt = val.op._get_control_flow_context();
             var outer_forward_ctxt = forward_ctxt.outer_context;
             if (outer_forward_ctxt != null)
@@ -278,7 +278,7 @@ namespace Tensorflow.Operations.ControlFlows
             {
                 // If the shape is known statically, just create a zero tensor
                 // with the right shape.
-                if (val_shape.is_fully_defined())
+                if (val_shape.IsFullyDefined)
                     result = array_ops.zeros(val_shape.dims, val.dtype);
                 else
                     result = array_ops.zeros_like(val, optimize: false);
@@ -299,8 +299,8 @@ namespace Tensorflow.Operations.ControlFlows
                         // depend on its value at iteration i. So use zeros as the
                         // gradients for all iterations > 0.
                         var dtype = b_merge.op.inputs[0].dtype;
-                        var shape = b_merge.op.inputs[0].TensorShape;
-                        if (shape.is_fully_defined())
+                        var shape = b_merge.op.inputs[0].shape;
+                        if (shape.IsFullyDefined)
                         {
                             grad_state.grad_context.Enter();
                             // Create a zeros and use it for iterations > 0.

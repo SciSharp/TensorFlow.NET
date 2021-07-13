@@ -8,16 +8,16 @@ namespace Tensorflow.Keras.ArgsDefinition
         public int Rank { get; set; } = 2;
         public int Filters { get; set; }
         public int NumSpatialDims { get; set; } = Unknown;
-        public TensorShape KernelSize { get; set; } = 5;
+        public Shape KernelSize { get; set; } = 5;
 
         /// <summary>
         /// specifying the stride length of the convolution.
         /// </summary>
-        public TensorShape Strides { get; set; } = (1, 1);
+        public Shape Strides { get; set; } = (1, 1);
 
         public string Padding { get; set; } = "valid";
         public string DataFormat { get; set; }
-        public TensorShape DilationRate { get; set; } = (1, 1);
+        public Shape DilationRate { get; set; } = (1, 1);
         public int Groups { get; set; } = 1;
         public Activation Activation { get; set; }
         public bool UseBias { get; set; }

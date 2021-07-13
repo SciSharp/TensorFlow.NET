@@ -45,7 +45,7 @@ namespace Tensorflow
         Tensor GraphElement { get; }
         Graph Graph { get; }
         TF_DataType dtype { get; }
-        TensorShape shape { get; }
+        Shape shape { get; }
         Tensor assign_add<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
         Tensor assign_sub<T>(T delta, bool use_locking = false, string name = null, bool read_value = true);
         IVariableV1 assign_sub_lazy_load(Tensor delta, string name = null);

@@ -22,7 +22,7 @@ namespace Tensorflow.Queues
     {
         public FIFOQueue(int capacity,
             TF_DataType[] dtypes,
-            TensorShape[] shapes,
+            Shape[] shapes,
             string[] names = null,
             string shared_name = null,
             string name = "fifo_queue")

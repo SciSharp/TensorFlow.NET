@@ -28,7 +28,7 @@ namespace Tensorflow.Framework
         {
             bool _shape_is_compatible_0dim(Shape _this, Shape _other)
             {
-                var __other = tensor_shape.as_shape(_other);
+                var __other = _other;
                 if (_this.dims == null || __other.dims == null)
                     return true;
 
@@ -54,9 +54,9 @@ namespace Tensorflow.Framework
                    !self.IsSparseTensor;
         }
 
-        public static Dimension dimension_at_index(TensorShape shape, int index)
+        public static Dimension dimension_at_index(Shape shape, int index)
         {
-            return shape.rank < 0 ?
+            return shape.ndim < 0 ?
                 new Dimension(-1) :
                 new Dimension(shape.dims[index]);
         }
@@ -64,19 +64,16 @@ namespace Tensorflow.Framework
         public static int dimension_value(Dimension dimension)
             => (int)dimension.value;
 
-        public static TensorShape as_shape(this Shape shape)
-             => new TensorShape(shape.dims);
-
-        public static TensorShape most_specific_compatible_shape(this TensorShape self, TensorShape other)
+        public static Shape most_specific_compatible_shape(this Shape self, Shape other)
         {
-            var dims = range(self.rank).Select(x => -1L).ToArray();
+            var dims = range(self.ndim).Select(x => -1L).ToArray();
             foreach(var (i, (d1, d2)) in enumerate(zip(self.dims, other.dims)))
             {
                 if (d1 == d2)
                     dims[i] = d1;
             }
 
-            return new TensorShape(dims);
+            return new Shape(dims);
         }
     }
 }

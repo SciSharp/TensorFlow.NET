@@ -39,7 +39,7 @@ namespace Tensorflow
         }
 
         public IVariableV1 get_variable(string name,
-            TensorShape shape = null,
+            Shape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             object initializer = null, // IInitializer or Tensor
             bool? reuse = null,
@@ -64,7 +64,7 @@ namespace Tensorflow
         }
 
         private IVariableV1 _true_getter(string name,
-            TensorShape shape = null,
+            Shape shape = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT,
             object initializer = null,
             bool? trainable = null,
@@ -113,7 +113,7 @@ namespace Tensorflow
         }
 
         private IVariableV1 _get_single_variable(string name,
-            TensorShape shape = null,
+            Shape shape = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             IInitializer initializer = null,
             Tensor init_value = null,

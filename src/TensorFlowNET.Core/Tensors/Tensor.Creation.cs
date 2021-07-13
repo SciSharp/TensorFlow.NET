@@ -76,7 +76,7 @@ namespace Tensorflow
         public Tensor(ulong value) => InitTensor(new[] { value }, Shape.Scalar);
         public Tensor(float value) => InitTensor(new[] { value }, Shape.Scalar);
         public Tensor(double value) => InitTensor(new[] { value }, Shape.Scalar);
-        public Tensor(string value) => InitTensor(new[] { value }, TensorShape.Scalar);
+        public Tensor(string value) => InitTensor(new[] { value }, Shape.Scalar);
         #endregion
 
         #region 1d array
@@ -116,7 +116,7 @@ namespace Tensorflow
         protected unsafe void InitTensor(byte[] bytes, TF_DataType dtype)
         {
             if (dtype == TF_DataType.TF_STRING)
-                _handle = StringTensor(new byte[][] { bytes }, TensorShape.Scalar);
+                _handle = StringTensor(new byte[][] { bytes }, Shape.Scalar);
             else
                 throw new NotImplementedException("");
             isCreatedInGraphMode = !tf.executing_eagerly();

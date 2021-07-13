@@ -36,7 +36,7 @@ namespace Tensorflow.Keras.Layers
         bool fused;
         int[] axis;
         string _data_format;
-        TensorShape kernel_size;
+        Shape kernel_size;
         IInitializer beta_initializer => args.BetaInitializer;
         IInitializer gamma_initializer => args.GammaInitializer;
         IInitializer moving_mean_initializer => args.MovingMeanInitializer;
@@ -55,7 +55,7 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(Tensors inputs)
         {
-            TensorShape input_shape = inputs.shape;
+            Shape input_shape = inputs.shape;
             var ndims = input_shape.ndim;
             foreach (var (idx, x) in enumerate(axis))
                 if (x < 0)
@@ -121,7 +121,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        public override TensorShape ComputeOutputShape(TensorShape input_shape)
+        public override Shape ComputeOutputShape(Shape input_shape)
         {
             return input_shape;
         }
@@ -148,7 +148,7 @@ namespace Tensorflow.Keras.Layers
         {
             Tensor outputs = null;
             var training_tensor = training == null
-                ? tf.placeholder(tf.@bool, TensorShape.Scalar)
+                ? tf.placeholder(tf.@bool, Shape.Scalar)
                 : tf.logical_and(training.Value, Trainable);
             if (fused)
             {
@@ -198,13 +198,13 @@ namespace Tensorflow.Keras.Layers
             outputs = nn_impl.batch_normalization(inputs, mean, variance,
                 offset_tensor, scale_tensor, epsilon);
             // If some components of the shape got lost due to adjustments, fix that.
-            outputs.set_shape(input_shape);
+            outputs.shape = input_shape;
             return outputs;
         }
 
         private Tensor _fused_batch_norm(Tensor inputs, Tensor training)
         {
-            TensorShape input_batch_size = null;
+            Shape input_batch_size = null;
             var use_fused_avg_updates = true;
             float exponential_avg_factor = 0;
             if (use_fused_avg_updates)

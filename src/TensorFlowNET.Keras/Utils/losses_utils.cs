@@ -45,7 +45,7 @@ namespace Tensorflow.Keras.Utils
 
         public static (Tensor, Tensor) squeeze_or_expand_dimensions(Tensor y_pred, Tensor sample_weight)
         {
-            var weights_shape = sample_weight.TensorShape;
+            var weights_shape = sample_weight.shape;
             var weights_rank = weights_shape.ndim;
             if (weights_rank == 0)
                 return (y_pred, sample_weight);

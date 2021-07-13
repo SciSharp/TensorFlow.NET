@@ -19,7 +19,7 @@ namespace Tensorflow
     public partial class tensorflow
     {
         public Tensor reshape(Tensor tensor,
-                TensorShape shape,
+                Shape shape,
                 string name = null) 
             => gen_array_ops.reshape(tensor, shape, name);
 

@@ -30,11 +30,11 @@ namespace Tensorflow.Keras.Layers
         ConvolutionalArgs args;
         protected int rank => args.Rank;
         protected int filters => args.Filters;
-        protected TensorShape kernel_size => args.KernelSize;
-        protected TensorShape strides => args.Strides;
+        protected Shape kernel_size => args.KernelSize;
+        protected Shape strides => args.Strides;
         protected string padding => args.Padding;
         protected string data_format => args.DataFormat;
-        protected TensorShape dilation_rate => args.DilationRate;
+        protected Shape dilation_rate => args.DilationRate;
         protected Activation activation => args.Activation;
         protected bool use_bias => args.UseBias;
         protected IInitializer kernel_initializer => args.KernelInitializer;
@@ -59,12 +59,12 @@ namespace Tensorflow.Keras.Layers
 
         protected override void build(Tensors inputs)
         {
-            TensorShape input_shape = inputs.shape;
+            Shape input_shape = inputs.shape;
             int channel_axis = data_format == "channels_first" ? 1 : -1;
             var input_channel = channel_axis < 0 ?
                 input_shape.dims[input_shape.ndim + channel_axis] :
                 input_shape.dims[channel_axis];
-            TensorShape kernel_shape = kernel_size.dims.concat(new long[] { input_channel / args.Groups, filters });
+            Shape kernel_shape = kernel_size.dims.concat(new long[] { input_channel / args.Groups, filters });
             kernel = add_weight(name: "kernel",
                 shape: kernel_shape,
                 initializer: kernel_initializer,

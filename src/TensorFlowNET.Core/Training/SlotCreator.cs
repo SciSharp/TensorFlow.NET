@@ -32,7 +32,7 @@ namespace Tensorflow.Train
         /// <returns></returns>
         public IVariableV1 create_slot(RefVariable primary, Tensor val, string name, bool colocate_with_primary = true)
         {
-            var validate_shape = val.TensorShape.is_fully_defined();
+            var validate_shape = val.shape.IsFullyDefined;
             var prefix = primary.Op.name;
             return tf_with(tf.variable_scope(name: null, prefix + "/" + name), delegate
             {
@@ -53,7 +53,7 @@ namespace Tensorflow.Train
             if (dtype == TF_DataType.DtInvalid)
                 dtype = primary.dtype;
             var slot_shape = primary.shape;
-            if (slot_shape.is_fully_defined())
+            if (slot_shape.IsFullyDefined)
             {
                 var initializer = new Zeros();
                 return create_slot_with_initializer(
@@ -70,10 +70,10 @@ namespace Tensorflow.Train
         /// Creates a slot initialized using an `Initializer`.
         /// </summary>
         /// <returns></returns>
-        public IVariableV1 create_slot_with_initializer(IVariableV1 primary, IInitializer initializer, TensorShape shape,
+        public IVariableV1 create_slot_with_initializer(IVariableV1 primary, IInitializer initializer, Shape shape,
             TF_DataType dtype, string name, bool colocate_with_primary = true)
         {
-            var validate_shape = shape.is_fully_defined();
+            var validate_shape = shape.IsFullyDefined;
             var prefix = primary.Op.name;
             return tf_with(new variable_scope(string.Empty, prefix + "/" + name), delegate
             {
@@ -92,7 +92,7 @@ namespace Tensorflow.Train
         /// <param name="dtype"></param>
         /// <returns></returns>
         private IVariableV1 _create_slot_var(IVariableV1 primary, object val, string scope, bool validate_shape,
-            TensorShape shape, TF_DataType dtype)
+            Shape shape, TF_DataType dtype)
         {
             bool use_resource = primary is ResourceVariable;
             if (resource_variable_ops.is_resource_variable(primary))

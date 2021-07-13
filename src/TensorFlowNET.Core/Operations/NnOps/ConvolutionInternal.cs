@@ -38,8 +38,8 @@ namespace Tensorflow.Operations
 
         public Tensor Apply(Tensors input, IVariableV1 filters)
         {
-            var filters_rank = filters.shape.rank;
-            var inputs_rank = input.shape.rank;
+            var filters_rank = filters.shape.ndim;
+            var inputs_rank = input.shape.ndim;
             var num_spatial_dims = args.NumSpatialDims;
             if (args.Rank == 1)
             {

@@ -26,7 +26,7 @@ namespace Tensorflow.Queues
         public RandomShuffleQueue(int capacity,
             int min_after_dequeue,
             TF_DataType[] dtypes,
-            TensorShape[] shapes,
+            Shape[] shapes,
             string[] names = null,
             int? seed = null,
             string shared_name = null,

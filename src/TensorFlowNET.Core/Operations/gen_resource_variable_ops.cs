@@ -94,7 +94,7 @@ namespace Tensorflow
         /// <param name="shared_name"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor var_handle_op(TF_DataType dtype, TensorShape shape,
+        public static Tensor var_handle_op(TF_DataType dtype, Shape shape,
             string container = "", string shared_name = "", string name = null)
         {
             if (tf.Context.executing_eagerly())

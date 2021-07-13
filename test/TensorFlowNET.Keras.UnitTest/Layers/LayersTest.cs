@@ -39,7 +39,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var layers = keras.layers;
 
             var inputs = keras.Input(shape: 784);
-            Assert.AreEqual((-1, 784), inputs.TensorShape);
+            Assert.AreEqual((-1, 784), inputs.shape);
 
             var dense = layers.Dense(64, activation: keras.activations.Relu);
             var x = dense.Apply(inputs);
@@ -73,7 +73,7 @@ namespace TensorFlowNET.Keras.UnitTest
             model.summary();
             Assert.AreEqual(model.Layers.Count, 8);
             var result = model.predict(tf.constant(np.arange(24).astype(np.float32)[np.newaxis, Slice.All]));
-            Assert.AreEqual(result.shape, new TensorShape(1, 24));
+            Assert.AreEqual(result.shape, new Shape(1, 24));
             model.fit(np.arange(24).astype(np.float32)[np.newaxis, Slice.All], np.arange(24).astype(np.float32)[np.newaxis, Slice.All], verbose: 0);
         }
 
@@ -86,7 +86,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var emb = keras.layers.Embedding(256, 12, input_length: 4);
             var input_array = np.arange(12).reshape((3, 4)).astype(np.float32);
             var output = emb.Apply(input_array);
-            Assert.AreEqual(new TensorShape(3, 4, 12), output.shape);
+            Assert.AreEqual(new Shape(3, 4, 12), output.shape);
         }
 
         /// <summary>

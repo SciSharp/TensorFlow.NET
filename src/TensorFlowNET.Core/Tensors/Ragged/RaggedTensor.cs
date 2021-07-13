@@ -34,13 +34,13 @@ namespace Tensorflow
         Tensor _row_splits => _row_partition.row_splits;
 
         public TF_DataType dtype => _values.dtype;
-        public TensorShape shape
+        public Shape shape
         {
             get
             {
                 var nrows = _row_partition.static_nrows;
                 var ncols = _row_partition.static_uniform_row_length;
-                return new TensorShape(nrows, ncols);
+                return new Shape(nrows, ncols);
             }
         }
 

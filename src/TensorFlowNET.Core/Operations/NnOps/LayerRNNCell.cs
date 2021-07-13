@@ -49,7 +49,7 @@ namespace Tensorflow
             _keras_style = false;
         }
 
-        protected virtual void build(TensorShape inputs_shape)
+        protected virtual void build(Shape inputs_shape)
         {
 
         }

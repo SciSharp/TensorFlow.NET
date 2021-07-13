@@ -28,7 +28,7 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor constant(object value,
             TF_DataType dtype = TF_DataType.DtInvalid,
-            TensorShape shape = null,
+            Shape shape = null,
             string name = "Const")
             => constant_op.constant(value,
                 dtype: dtype,
@@ -37,13 +37,13 @@ namespace Tensorflow
                 verify_shape: false,
                 allow_broadcast: true);
 
-        public Tensor zeros(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        public Tensor zeros(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
             => array_ops.zeros(shape, dtype, name);
 
         public Tensor zeros(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
             => array_ops.zeros(shape, dtype, name);
 
-        public Tensor ones(TensorShape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        public Tensor ones(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
             => array_ops.ones(shape, dtype, name);
 
         public Tensor size(Tensor input,

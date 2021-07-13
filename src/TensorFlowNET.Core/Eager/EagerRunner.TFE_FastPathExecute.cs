@@ -298,7 +298,7 @@ namespace Tensorflow.Eager
                 c_api.TFE_OpSetAttrStringList(op, key, values3, values3.Select(x => Convert.ToUInt64(x.Length)).ToArray(), values3.Length);
                 attr_list_sizes[key] = values3.Length;
             }
-            else if (type == TF_AttrType.TF_ATTR_SHAPE && values is TensorShape[] values1)
+            else if (type == TF_AttrType.TF_ATTR_SHAPE && values is Shape[] values1)
             {
                 // Make one pass through the input counting the total number of
                 // dims across all the input lists.

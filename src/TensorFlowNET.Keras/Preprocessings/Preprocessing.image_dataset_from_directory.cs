@@ -32,7 +32,7 @@ namespace Tensorflow.Keras
             string[] class_names = null,
             string color_mode = "rgb",
             int batch_size = 32,
-            TensorShape image_size = null,
+            Shape image_size = null,
             bool shuffle = true,
             int? seed = null,
             float validation_split = 0.2f,

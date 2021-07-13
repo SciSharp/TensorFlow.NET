@@ -96,7 +96,7 @@ namespace Tensorflow
                 var keep_mask = random_tensor >= rate;
                 ret = x * scale * math_ops.cast(keep_mask, x.dtype);
                 if (!tf.executing_eagerly())
-                    ret.set_shape(x.TensorShape);
+                    ret.shape = x.shape;
                 return ret;
             });
         }
@@ -203,14 +203,14 @@ namespace Tensorflow
                 var precise_logits = logits.dtype == TF_DataType.TF_HALF ? math_ops.cast(logits, dtypes.float32) : logits;
 
                 // Store label shape for result later.
-                var labels_static_shape = labels.TensorShape;
+                var labels_static_shape = labels.shape;
                 var labels_shape = array_ops.shape(labels);
                 /*bool static_shapes_fully_defined = (
                     labels_static_shape.is_fully_defined() &&
                         logits.get_shape()[:-1].is_fully_defined());*/
 
                 // Check if no reshapes are required.
-                if (logits.TensorShape.ndim == 2)
+                if (logits.shape.ndim == 2)
                 {
                     var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
                         precise_logits, labels, name: name);
@@ -236,7 +236,7 @@ namespace Tensorflow
                 name = scope;
                 var precise_logits = logits;
                 var input_rank = array_ops.rank(precise_logits);
-                var shape = logits.TensorShape;
+                var shape = logits.shape;
 
                 if (axis != -1)
                     throw new NotImplementedException("softmax_cross_entropy_with_logits_v2_helper axis != -1");
@@ -282,7 +282,7 @@ namespace Tensorflow
             // Set output shape if known.
             if (!tf.Context.executing_eagerly())
             {
-                var shape = logits.TensorShape;
+                var shape = logits.shape;
                 if (shape != null && shape.ndim > 0)
                 {
                     var product = 1L;

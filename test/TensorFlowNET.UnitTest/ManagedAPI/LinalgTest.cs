@@ -11,7 +11,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         {
             var tensor = tf.linalg.eye(3);
 
-            Assert.AreEqual((3, 3), tensor.TensorShape);
+            Assert.AreEqual(tensor.shape, (3, 3));
 
             Assert.AreEqual(0.0f, (double)tensor[2, 0]);
             Assert.AreEqual(0.0f, (double)tensor[2, 1]);

@@ -41,7 +41,7 @@ namespace Tensorflow
         }
 
         public static (Tensor, Tensor) tensor_array_v3<T>(T size, TF_DataType dtype = TF_DataType.DtInvalid,
-            TensorShape element_shape = null, bool dynamic_size = false, bool clear_after_read = true,
+            Shape element_shape = null, bool dynamic_size = false, bool clear_after_read = true,
             bool identical_element_shapes = false, string tensor_array_name = "", string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("TensorArrayV3", name, new
@@ -72,7 +72,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+        public static Tensor padding_fifo_queue_v2(TF_DataType[] component_types, Shape[] shapes,
             int capacity = -1, string container = "", string shared_name = "",
             string name = null)
         {
@@ -88,7 +88,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor fifo_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+        public static Tensor fifo_queue_v2(TF_DataType[] component_types, Shape[] shapes,
             int capacity = -1, string container = "", string shared_name = "",
             string name = null)
         {
@@ -104,7 +104,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor priority_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+        public static Tensor priority_queue_v2(TF_DataType[] component_types, Shape[] shapes,
             int capacity = -1, string container = "", string shared_name = "",
             string name = null)
         {
@@ -120,7 +120,7 @@ namespace Tensorflow
             return _op.output;
         }
 
-        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, TensorShape[] shapes,
+        public static Tensor random_shuffle_queue_v2(TF_DataType[] component_types, Shape[] shapes,
             int capacity = -1, int min_after_dequeue = 0, int seed = 0, int seed2 = 0,
             string container = "", string shared_name = "", string name = null)
         {
@@ -259,7 +259,7 @@ namespace Tensorflow
         }
 
         public static Tensor tensor_array_gather_v3(Tensor handle, Tensor indices, Tensor flow_in,
-            TF_DataType dtype, TensorShape element_shape = null, string name = null)
+            TF_DataType dtype, Shape element_shape = null, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("TensorArrayGatherV3", name, new
             {

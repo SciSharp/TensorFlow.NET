@@ -42,7 +42,7 @@ namespace Tensorflow
     /// This operation results in an output matrix with `self.output_size` columns.
     /// If `self.state_size` is an integer, this operation also results in a new
     /// state matrix with `self.state_size` columns.  If `self.state_size` is a
-    /// (possibly nested tuple of) TensorShape object(s), then it should return a
+    /// (possibly nested tuple of) Shape object(s), then it should return a
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
@@ -70,9 +70,9 @@ namespace Tensorflow
         public List<IVariableV1> trainable_weights => throw new NotImplementedException();
         public List<IVariableV1> non_trainable_weights => throw new NotImplementedException();
 
-        public TensorShape output_shape => throw new NotImplementedException();
+        public Shape output_shape => throw new NotImplementedException();
 
-        public TensorShape BatchInputShape => throw new NotImplementedException();
+        public Shape BatchInputShape => throw new NotImplementedException();
 
         public TF_DataType DType => throw new NotImplementedException();
         protected bool built = false;

@@ -16,8 +16,8 @@ namespace Tensorflow.Keras.Losses
 
             // Try to adjust the shape so that rank of labels = rank of logits - 1.
             var output_shape = array_ops.shape_v2(output);
-            var output_rank = output.TensorShape.ndim;
-            var target_rank = target.TensorShape.ndim;
+            var output_rank = output.shape.ndim;
+            var target_rank = target.shape.ndim;
             var update_shape = target_rank != output_rank - 1;
             if (update_shape)
             {

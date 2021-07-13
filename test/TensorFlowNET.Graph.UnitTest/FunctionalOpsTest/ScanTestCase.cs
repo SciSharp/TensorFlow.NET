@@ -19,7 +19,7 @@ namespace TensorFlowNET.UnitTest.FunctionalOpsTest
 
             var sess = tf.Session().as_default();
 
-            var input = tf.placeholder(TF_DataType.TF_INT32, new TensorShape(6));
+            var input = tf.placeholder(TF_DataType.TF_INT32, new Shape(6));
             var scan = functional_ops.scan(fn, input);
             var result = sess.run(scan, (input, np.array(1, 2, 3, 4, 5, 6)));
             Assert.AreEqual(result, np.array(1, 3, 6, 10, 15, 21));
@@ -32,7 +32,7 @@ namespace TensorFlowNET.UnitTest.FunctionalOpsTest
 
             var sess = tf.Session().as_default();
 
-            var input = tf.placeholder(TF_DataType.TF_INT32, new TensorShape(6));
+            var input = tf.placeholder(TF_DataType.TF_INT32, new Shape(6));
             var scan = functional_ops.scan(fn, input, reverse: true);
             var result = sess.run(scan, (input, np.array(1, 2, 3, 4, 5, 6)));
             Assert.AreEqual(result, np.array(21, 20, 18, 15, 11, 6));

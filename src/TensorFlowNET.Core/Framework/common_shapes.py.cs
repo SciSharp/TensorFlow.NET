@@ -34,8 +34,8 @@ namespace Tensorflow.Framework
         /// <summary>
         /// Helper functions for is_broadcast_compatible and broadcast_shape.
         /// </summary>
-        /// <param name="shape_x"> A `TensorShape`</param>
-        /// <param name="shape_y"> A `TensorShape`</param>
+        /// <param name="shape_x"> A `Shape`</param>
+        /// <param name="shape_y"> A `Shape`</param>
         /// <return> Returns None if the shapes are not broadcast compatible,
         /// a list of the broadcast dimensions otherwise.
         /// </return>
@@ -51,7 +51,7 @@ namespace Tensorflow.Framework
 
         public static bool has_fully_defined_shape(Tensor tensor)
         {
-            return tensor.TensorShape.is_fully_defined();
+            return tensor.shape.IsFullyDefined;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Tensorflow
                 string name = null)
                 => image_ops_impl.resize_images(images, size, method, preserve_aspect_ratio, antialias, name);
 
-            public Tensor resize_images_v2(Tensor images, TensorShape size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio = false, bool antialias = false,
+            public Tensor resize_images_v2(Tensor images, Shape size, string method = ResizeMethod.BILINEAR, bool preserve_aspect_ratio = false, bool antialias = false,
                 string name = null)
                 => image_ops_impl.resize_images_v2(images, size, method, preserve_aspect_ratio, antialias, name);
 

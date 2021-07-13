@@ -72,7 +72,7 @@ namespace Tensorflow.Functions
         }
 
         /*public ConcreteFunction(Func<Tensors, Tensors> func,
-            TF_DataType[] dtypes, TensorShape[] shapes)
+            TF_DataType[] dtypes, Shape[] shapes)
         {
             string func_name = $"{func.Method.Name}_{ops.uid_function()}";
 

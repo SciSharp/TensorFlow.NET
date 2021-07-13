@@ -234,7 +234,7 @@ namespace Tensorflow
                                         in_grad.Tag == null && // maybe a IndexedSlice
                                         t_in.dtype != TF_DataType.TF_RESOURCE)
                                     {
-                                        in_grad.set_shape(t_in.TensorShape);
+                                        in_grad.shape = t_in.shape;
                                     }
 
                                     _SetGrad(grads, t_in, in_grad);

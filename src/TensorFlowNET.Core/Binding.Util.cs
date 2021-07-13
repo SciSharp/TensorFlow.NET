@@ -168,7 +168,7 @@ namespace Tensorflow
                     return ndArray.ndim == 0 ? 1 : (int)ndArray.dims[0];
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
-                case TensorShape arr:
+                case Shape arr:
                     return arr.ndim;
             }
             throw new NotImplementedException("len() not implemented for type: " + a.GetType());
@@ -532,7 +532,6 @@ namespace Tensorflow
             var type = data.GetType();
             switch (data)
             {
-                case TensorShape:
                 case Shape:
                     return TF_DataType.TF_INT64;
                 case Axis:

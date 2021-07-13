@@ -24,9 +24,9 @@ namespace Tensorflow.Keras.Layers
             return image_ops_impl.resize_images_v2(inputs, new[] { args.Height, args.Width }, method: args.Interpolation);
         }
 
-        public override TensorShape ComputeOutputShape(TensorShape input_shape)
+        public override Shape ComputeOutputShape(Shape input_shape)
         {
-            return new TensorShape(input_shape.dims[0], args.Height, args.Width, input_shape.dims[3]);
+            return new Shape(input_shape.dims[0], args.Height, args.Width, input_shape.dims[3]);
         }
 
         public static Resizing from_config(JObject config)

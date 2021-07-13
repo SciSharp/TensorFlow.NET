@@ -7,7 +7,7 @@ namespace Tensorflow.Keras
     public partial class Preprocessing
     {
         public IDatasetV2 paths_and_labels_to_dataset(string[] image_paths,
-            TensorShape image_size,
+            Shape image_size,
             int num_channels,
             int[] labels,
             string label_mode,
@@ -26,7 +26,7 @@ namespace Tensorflow.Keras
             return img_ds;
         }
 
-        Tensor path_to_image(Tensor path, TensorShape image_size, int num_channels, string interpolation)
+        Tensor path_to_image(Tensor path, Shape image_size, int num_channels, string interpolation)
         {
             var img = tf.io.read_file(path);
             img = tf.image.decode_image(

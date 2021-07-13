@@ -50,7 +50,7 @@ namespace Tensorflow
                 _activation = activation;
         }
 
-        protected override void build(TensorShape inputs_shape)
+        protected override void build(Shape inputs_shape)
         {
             var input_depth = inputs_shape.dims[inputs_shape.ndim - 1];
 

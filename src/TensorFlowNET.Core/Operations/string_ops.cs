@@ -96,9 +96,9 @@ namespace Tensorflow
                         }
                     }.SetAttributes(new { maxsplit }));
                 var (indices, values, shape) = (result[0], result[1], result[2]);
-                indices.set_shape(new TensorShape(-1, 2));
-                values.set_shape(new TensorShape(-1));
-                shape.set_shape(new TensorShape(2));
+                indices.shape = new Shape(-1, 2);
+                values.shape = new Shape(-1);
+                shape.shape = new Shape(2);
 
                 var sparse_result = new SparseTensor(indices, values, shape);
                 return RaggedTensor.from_value_rowids(sparse_result.values,

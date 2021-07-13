@@ -74,7 +74,7 @@ namespace Tensorflow
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
             VariableAggregation aggregation = VariableAggregation.None,
-            int[] shape = null)
+            Shape shape = null)
             => new ResourceVariable(data,
                     trainable: trainable,
                     validate_shape: validate_shape,
@@ -83,7 +83,7 @@ namespace Tensorflow
                     aggregation: aggregation,
                     shape: shape);
 
-        public Tensor placeholder(TF_DataType dtype, TensorShape shape = null, string name = null)
+        public Tensor placeholder(TF_DataType dtype, Shape shape = null, string name = null)
             => array_ops.placeholder(dtype, shape, name);
 
         public void enable_eager_execution()

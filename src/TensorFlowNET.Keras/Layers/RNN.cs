@@ -44,14 +44,14 @@ namespace Tensorflow.Keras.Layers
             // false case, output from previous timestep is returned for masked timestep.
             var zeroOutputForMask = (bool)args.Kwargs.Get("zero_output_for_mask", false);
 
-            TensorShape input_shape;
-            var propIS = (TensorShape)args.Kwargs.Get("input_shape", null);
+            Shape input_shape;
+            var propIS = (Shape)args.Kwargs.Get("input_shape", null);
             var propID = (int?)args.Kwargs.Get("input_dim", null);
             var propIL = (int?)args.Kwargs.Get("input_length", null);
 
             if (propIS == null && (propID != null || propIL != null))
             {
-                input_shape = new TensorShape(
+                input_shape = new Shape(
                     propIL ?? -1,
                     propID ?? -1);
                 args.Kwargs["input_shape"] = input_shape;
@@ -113,7 +113,7 @@ namespace Tensorflow.Keras.Layers
             var myIndexerProperty = state_size.GetType().GetProperty("Item");
             return myIndexerProperty != null
                 && myIndexerProperty.GetIndexParameters().Length == 1
-                && !(state_size.GetType() == typeof(TensorShape));
+                && !(state_size.GetType() == typeof(Shape));
         }
     }
 }

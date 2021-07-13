@@ -53,11 +53,11 @@ namespace Tensorflow
 
         internal static long[] _ImageDimensions(Tensor image, int rank)
         {
-            if (image.TensorShape.is_fully_defined())
-                return image.TensorShape.as_list();
+            if (image.shape.IsFullyDefined)
+                return image.shape.dims;
             else
             {
-                var static_shape = image.TensorShape.with_rank(rank).as_list();
+                var static_shape = image.shape.with_rank(rank).dims;
                 var dynamic_shape = array_ops.unstack(array_ops.shape(image), rank);
 
                 long[] ss_storage = null;
@@ -82,23 +82,23 @@ namespace Tensorflow
 
         internal static Operation[] _CheckAtLeast3DImage(Tensor image, bool require_static)
         {
-            TensorShape image_shape;
+            Shape image_shape;
             try
             {
-                if (image.TensorShape.ndim == Unknown)
+                if (image.shape.ndim == Unknown)
                 {
-                    image_shape = image.TensorShape.with_rank(3);
+                    image_shape = image.shape.with_rank(3);
                 }
                 else
                 {
-                    image_shape = image.TensorShape.with_rank_at_least(3);
+                    image_shape = image.shape.with_rank_at_least(3);
                 }
             }
             catch (ValueError)
             {
                 throw new ValueError("'image' must be at least three-dimensional.");
             }
-            if (require_static & !image_shape.is_fully_defined())
+            if (require_static & !image_shape.IsFullyDefined)
             {
                 throw new ValueError("\'image\' must be fully defined.");
             }
@@ -110,11 +110,11 @@ namespace Tensorflow
                 }
             }
 
-            var image_shape_last_three_elements = new TensorShape(new[] {
+            var image_shape_last_three_elements = new Shape(new[] {
                                                 image_shape.dims[image_shape.dims.Length - 1],
                                                 image_shape.dims[image_shape.dims.Length - 2],
                                                 image_shape.dims[image_shape.dims.Length - 3]});
-            if (!image_shape_last_three_elements.is_fully_defined())
+            if (!image_shape_last_three_elements.IsFullyDefined)
             {
                 Tensor image_shape_ = array_ops.shape(image);
                 var image_shape_return = tf.constant(new[] {
@@ -142,15 +142,15 @@ namespace Tensorflow
 
         internal static Tensor fix_image_flip_shape(Tensor image, Tensor result)
         {
-            TensorShape image_shape = image.shape;
+            Shape image_shape = image.shape;
             if (image_shape == image_shape.unknown_shape())
             {
                 // c# defaults null types to 0 anyhow, so this should be a pretty equivalent port
-                result.set_shape(new TensorShape(new long[] { 0, 0, 0 }));
+                result.shape = new long[] { 0, 0, 0 };
             }
             else
             {
-                result.set_shape(image_shape);
+                result.shape = image_shape;
             }
             return result;
         }
@@ -173,7 +173,7 @@ namespace Tensorflow
              {
                  image = ops.convert_to_tensor(image, name: "image");
                  image = _AssertAtLeast3DImage(image);
-                 TensorShape shape = image.shape;
+                 Shape shape = image.shape;
                  if (shape.ndim == 3 || shape.ndim == Unknown)
                  {
                      Tensor uniform_random = random_ops.random_uniform(new int[] { }, 0f, 1.0f, seed: seed);
@@ -219,7 +219,7 @@ namespace Tensorflow
               {
                   image = ops.convert_to_tensor(image, name: "image");
                   image = _AssertAtLeast3DImage(image);
-                  TensorShape shape = image.shape;
+                  Shape shape = image.shape;
                   if (shape.ndim == 3 || shape.ndim == Unknown)
                   {
                       return fix_image_flip_shape(image, gen_array_ops.reverse(image, new { flip_index }));
@@ -245,10 +245,10 @@ namespace Tensorflow
                  // can't get k to convert to tensor without throwing error about it being an int---
                  // might rework later. for now, k2 == k as Tensor
                  Tensor k2 = ops.convert_to_tensor(k, dtype: dtypes.int32, name: "k");
-                 k2.TensorShape.assert_has_rank(0);
+                 k2.shape.assert_has_rank(0);
                  k2 = gen_ops.mod(k2, tf.constant(4));
 
-                 TensorShape shape = image.shape;
+                 Shape shape = image.shape;
                  if (shape.ndim == 3 || shape.ndim == Unknown)
                  {
                      return _rot90_3D(image, k, scope);
@@ -284,7 +284,7 @@ namespace Tensorflow
                                 math_ops.equal(k, 3), _rot270()};
 
             var result = control_flow_ops.case_v2(cases, callable_default: () => new Tensor[] { image }, exclusive: true, name: name_scope);
-            result.set_shape(new long[] { -1, -1, image.TensorShape.dims[2] });
+            result.shape = new long[] { -1, -1, image.shape.dims[2] };
             return result;
         }
 
@@ -295,7 +295,7 @@ namespace Tensorflow
                  {
                      image = ops.convert_to_tensor(image, name: "image");
                      image = _AssertAtLeast3DImage(image);
-                     TensorShape shape = image.shape;
+                     Shape shape = image.shape;
                      if (shape.ndim == 3 || shape.ndim == Unknown)
                      {
                          return array_ops.transpose(image, new[] { 1, 0, 2 }, name: name);
@@ -322,14 +322,14 @@ namespace Tensorflow
                     return image;
 
                 _AssertAtLeast3DImage(image);
-                var rank = image.TensorShape.ndim;
+                var rank = image.shape.ndim;
                 if (rank != 3 && rank != 4)
                     throw new ValueError(String.Format(@"`image` should either be a Tensor with rank = 3
 or rank = 4. Had rank = {0}", rank));
 
                 object[] _get_dim(Tensor tensor, int idx)
                 {
-                    var static_shape = tensor.TensorShape.dims[idx];
+                    var static_shape = tensor.shape.dims[idx];
                     if (static_shape != (int)None)
                         return new object[2] { static_shape, false };
                     return new object[2] { array_ops.shape(tensor)[idx], true };
@@ -445,7 +445,7 @@ or rank = 4. Had rank = {0}", rank));
                  image = ops.convert_to_tensor(image, name: "image");
 
                  bool is_batch = true;
-                 TensorShape image_shape = image.shape;
+                 Shape image_shape = image.shape;
                  if (image_shape.ndim == 3)
                  {
                      is_batch = false;
@@ -455,7 +455,7 @@ or rank = 4. Had rank = {0}", rank));
                  {
                      is_batch = false;
                      image = array_ops.expand_dims(image, 0);
-                     image.set_shape(new TensorShape(0, 0, 0, 0));
+                     image.shape = new Shape(0, 0, 0, 0);
                  }
                  else if (image_shape.ndim != 4)
                  {
@@ -494,7 +494,7 @@ or rank = 4. Had rank = {0}", rank));
                  );
                  var padded = array_ops.pad(image, paddings);
 
-                 TensorShape padded_shape_result()
+                 Shape padded_shape_result()
                  {
                      long[] i_remnants = { };
                      foreach (var i in new[] { bhwd[0], target_height, target_width, bhwd[3] })
@@ -502,10 +502,10 @@ or rank = 4. Had rank = {0}", rank));
                              return null;
                          else
                              i_remnants[i_remnants.Length] = i;
-                     return new TensorShape(i_remnants);
+                     return new Shape(i_remnants);
                  };
-                 TensorShape padded_shape = padded_shape_result();
-                 padded.set_shape(padded_shape);
+                 Shape padded_shape = padded_shape_result();
+                 padded.shape = padded_shape;
 
                  if (!is_batch)
                  {
@@ -524,7 +524,7 @@ or rank = 4. Had rank = {0}", rank));
                  image = ops.convert_to_tensor(image, name: "image");
 
                  bool is_batch = true;
-                 TensorShape image_shape = image.shape;
+                 Shape image_shape = image.shape;
                  if (image_shape.ndim == 3)
                  {
                      is_batch = false;
@@ -534,7 +534,7 @@ or rank = 4. Had rank = {0}", rank));
                  {
                      is_batch = false;
                      image = array_ops.expand_dims(image, 0);
-                     image.set_shape(new TensorShape(new long[] { 0, 0, 0, 0 }));
+                     image.shape = new long[] { 0, 0, 0, 0 };
                  }
                  else if (image_shape.ndim != 4)
                  {
@@ -573,7 +573,7 @@ or rank = 4. Had rank = {0}", rank));
                      image, array_ops.stack(new[] { 0, offset_height, offset_width, 0 }),
                      array_ops.stack(new[] { -1, target_height, target_width, -1 }));
 
-                 TensorShape cropped_shape_result()
+                 Shape cropped_shape_result()
                  {
                      long[] i_remnants = { };
                      foreach (var i in new[] { bhwd[0], target_height, target_width, bhwd[3] })
@@ -581,10 +581,10 @@ or rank = 4. Had rank = {0}", rank));
                              return null;
                          else
                              i_remnants[i_remnants.Length] = i;
-                     return new TensorShape(i_remnants);
+                     return new Shape(i_remnants);
                  };
                  var cropped_shape = cropped_shape_result();
-                 cropped.set_shape(cropped_shape);
+                 cropped.shape = cropped_shape;
 
                  if (!is_batch)
                  {
@@ -601,7 +601,7 @@ or rank = 4. Had rank = {0}", rank));
                 return tf_with(ops.name_scope(null, "resize_image_with_crop_or_pad", new[] { image }), delegate
                  {
                      image = ops.convert_to_tensor(image, name: "image");
-                     TensorShape image_shape = image.shape;
+                     Shape image_shape = image.shape;
                      bool is_batch = true;
                      if (image_shape.ndim == 3)
                      {
@@ -612,7 +612,7 @@ or rank = 4. Had rank = {0}", rank));
                      {
                          is_batch = false;
                          image = array_ops.expand_dims(image, 0);
-                         image.set_shape(new TensorShape(new int[] { 0, 0, 0, 0 }));
+                         image.shape = new long[] { 0, 0, 0, 0 };
                      }
                      else if (image_shape.ndim != 4)
                      {
@@ -684,7 +684,7 @@ or rank = 4. Had rank = {0}", rank));
                      Tensor resized = pad_to_bounding_box(cropped, offset_pad_height, offset_pad_width,
                                                      (int)target_height, (int)target_width);
 
-                     if (resized.TensorShape.ndim == Unknown)
+                     if (resized.shape.ndim == Unknown)
                          throw new ValueError("resized contains no shape.");
 
                      var _rhrw_ = _ImageDimensions(resized, rank: 4);
@@ -713,20 +713,20 @@ or rank = 4. Had rank = {0}", rank));
         {
             return tf_with(ops.name_scope(name, "resize", new[] { images, size }), delegate
               {
-                  if (images.TensorShape.ndim == Unknown)
+                  if (images.shape.ndim == Unknown)
                       throw new ValueError("\'images\' contains no shape.");
                   bool is_batch = true;
-                  if (images.TensorShape.ndim == 3)
+                  if (images.shape.ndim == 3)
                   {
                       is_batch = false;
                       images = array_ops.expand_dims(images, 0);
                   }
-                  else if (images.TensorShape.ndim != 4)
+                  else if (images.shape.ndim != 4)
                       throw new ValueError("\'images\' must have either 3 or 4 dimensions.");
 
                   var (height, width) = (images.dims[1], images.dims[2]);
 
-                  if (!size.TensorShape.is_compatible_with(new[] { 2 }))
+                  if (!size.shape.is_compatible_with(new[] { 2 }))
                       throw new ValueError(@"\'size\' must be a 1-D Tensor of 2 elements:
 new_height, new_width");
 
@@ -782,7 +782,7 @@ new_height, new_width");
 
                   images = resizer_fn(images, size);
 
-                  images.set_shape(new TensorShape(new long[] { Unknown, new_height_const, new_width_const, Unknown }));
+                  images.shape = new Shape(Unknown, new_height_const, new_width_const, Unknown);
 
                   if (!is_batch)
                       images = array_ops.squeeze(images, axis: new int[] { 0 });
@@ -862,7 +862,7 @@ new_height, new_width");
                 return tf_with(ops.name_scope(null, "resize_image_with_pad", new[] { image }), delegate
                  {
                      image = ops.convert_to_tensor(image, name: "tensor");
-                     var image_shape = image.TensorShape;
+                     var image_shape = image.shape;
                      bool is_batch = true;
                      if (image_shape.ndim == 3)
                      {
@@ -873,7 +873,7 @@ new_height, new_width");
                      {
                          is_batch = false;
                          image = array_ops.expand_dims(image, 0);
-                         image.set_shape(new TensorShape(new[] { Unknown, Unknown, Unknown, Unknown }));
+                         image.shape = new Shape(Unknown, Unknown, Unknown, Unknown);
                      }
                      else if (image_shape.ndim != 4)
                      {
@@ -928,7 +928,7 @@ new_height, new_width");
                      var padded = pad_to_bounding_box(resized, p_height, p_width, target_height,
                                                      target_width);
 
-                     if (padded.TensorShape.ndim == Unknown)
+                     if (padded.shape.ndim == Unknown)
                          throw new ValueError("padded contains no shape.");
 
                      _ImageDimensions(padded, rank: 4);
@@ -1175,7 +1175,7 @@ new_height, new_width");
             return tf_with(ops.name_scope(name, "adjust_jpeg_quality", new[] { image }), delegate
              {
                  image = ops.convert_to_tensor(image, name: "image");
-                 var channels = image.TensorShape.as_list()[image.TensorShape.dims.Length - 1];
+                 var channels = image.shape[image.shape.dims.Length - 1];
                  var orig_dtype = image.dtype;
                  // python code checks to ensure jpeq_quality is a tensor; unnecessary here since
                  // it is passed as a tensor
@@ -1327,7 +1327,7 @@ new_height, new_width");
                                                     {0.587f, -0.27455667f, -0.52273617f},
                                                     {0.114f, -0.32134392f, 0.31119955f}};
             Tensor kernel = ops.convert_to_tensor(_rgb_to_yiq_kernel, dtype: images.dtype, name: "kernel");
-            var ndims = images.TensorShape.ndim;
+            var ndims = images.shape.ndim;
             return math_ops.tensordot(images, kernel, axes: new int[] { ndims - 1, 0 });
         }
 
@@ -1338,7 +1338,7 @@ new_height, new_width");
                                                     {0.95598634f, -0.27201283f, -1.10674021f},
                                                     {0.6208248f, -0.64720424f, 1.70423049f}};
             Tensor kernel = ops.convert_to_tensor(_yiq_to_rgb_kernel, dtype: images.dtype, name: "kernel");
-            var ndims = images.TensorShape.ndim;
+            var ndims = images.shape.ndim;
             return math_ops.tensordot(images, kernel, axes: new int[] { ndims - 1, 0 });
         }
 
@@ -1349,7 +1349,7 @@ new_height, new_width");
                                                     {0.587f, -0.28886916f, -0.51496512f},
                                                     {0.114f, 0.43601035f, -0.10001026f}};
             Tensor kernel = ops.convert_to_tensor(_rgb_to_yuv_kernel, dtype: images.dtype, name: "kernel");
-            var ndims = images.TensorShape.ndim;
+            var ndims = images.shape.ndim;
             return math_ops.tensordot(images, kernel, axes: new int[] { ndims - 1, 0 });
         }
 
@@ -1360,15 +1360,15 @@ new_height, new_width");
                                                     {0f, -0.394642334f, 2.03206185f},
                                                     {1.13988303f, -0.58062185f, 0f}};
             Tensor kernel = ops.convert_to_tensor(_yuv_to_rgb_kernel, dtype: images.dtype, name: "kernel");
-            var ndims = images.TensorShape.ndim;
+            var ndims = images.shape.ndim;
             return math_ops.tensordot(images, kernel, axes: new int[] { ndims - 1, 0 });
         }
 
         internal static (Tensor, Tensor, Operation[]) _verify_compatible_image_shapes(Tensor img1, Tensor img2)
         {
-            TensorShape shape1 = img1.TensorShape.with_rank_at_least(3);
-            TensorShape shape2 = img2.TensorShape.with_rank_at_least(3);
-            shape1 = new TensorShape(shape1.dims.Skip(shape1.dims.Length - 3).Take(shape1.dims.Length - (shape1.dims.Length - 3)).ToArray());
+            Shape shape1 = img1.shape.with_rank_at_least(3);
+            Shape shape2 = img2.shape.with_rank_at_least(3);
+            shape1 = new Shape(shape1.dims.Skip(shape1.dims.Length - 3).Take(shape1.dims.Length - (shape1.dims.Length - 3)).ToArray());
             tensor_shape.assert_is_compatible_with(self: new Tensor(shape1.dims), other: new Tensor(shape2.dims.Skip(shape2.dims.Length - 3).Take(shape2.dims.Length - (shape2.dims.Length - 3)).ToArray()));
 
             if (shape1.ndim != -1 && shape2.ndim != -1)
@@ -1653,7 +1653,7 @@ new_height, new_width");
 
         public static (Tensor, Tensor) image_gradients(Tensor image)
         {
-            if (image.TensorShape.ndim != 4)
+            if (image.shape.ndim != 4)
                 throw new ValueError(String.Format(@"image_gradients expects a 4D tensor [batch_size, h, w, d], not {0}.", image.shape));
 
             var image_shape = array_ops.shape(image);
@@ -1674,7 +1674,7 @@ new_height, new_width");
 
         public static Tensor sobel_edges(Tensor image)
         {
-            var static_image_shape = image.TensorShape;
+            var static_image_shape = image.shape;
             var image_shape = array_ops.shape(image);
             var kernels = new Tensor(new int[,] {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1},
                                                  {-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}});
@@ -1695,7 +1695,7 @@ new_height, new_width");
 
             var shape = array_ops.concat(new Tensor[] { image_shape, ops.convert_to_tensor(num_kernels) }, 0);
             output = array_ops.reshape(output, shape: shape);
-            output.set_shape(static_image_shape.concatenate(new int[] { num_kernels }));
+            output.shape = static_image_shape.concatenate(new int[] { num_kernels });
             return output;
         }
 
@@ -1930,7 +1930,7 @@ new_height, new_width");
                 return tf_with(ops.name_scope(name, "non_max_suppression_padded"), delegate
                 {
                     if (!pad_to_max_output_size)
-                        if (boxes.TensorShape.rank != -1 && boxes.TensorShape.rank > 2)
+                        if (boxes.shape.ndim != -1 && boxes.shape.ndim > 2)
                             throw new ValueError(String.Format(
                                 "'pad_to_max_output_size' (value {0}) must be true for 'batched input'", pad_to_max_output_size));
                     if (name == null)
@@ -1943,11 +1943,11 @@ new_height, new_width");
                         //   0, slice(None, num_valid, None)
                         // which is what I tried to replicate below, but i don't think that Unknown is the exact
                         // equivalent to None, and don't know about the slice function bit.
-                        idx = idx[0, slice(Unknown, num_valid.TensorShape.ndim, Unknown).ToArray()[0]];
+                        idx = idx[0, slice(Unknown, num_valid.shape.ndim, Unknown).ToArray()[0]];
                     else
                     {
                         var batch_dims = array_ops.concat(new Tensor[] {
-                            new Tensor(array_ops.shape(boxes).dims.Take(boxes.TensorShape.dims.Length - 2).ToArray()),
+                            new Tensor(array_ops.shape(boxes).dims.Take(boxes.shape.dims.Length - 2).ToArray()),
                             array_ops.expand_dims(max_output_size, 0)
                         }, 0);
                         idx = array_ops.reshape(idx, batch_dims);
@@ -1984,8 +1984,8 @@ new_height, new_width");
                 return (sorted_scores, sorted_boxes, sorted_scores_indices);
             }
 
-            var batch_dims = array_ops.shape(boxes).dims.Take(boxes.TensorShape.dims.Length - 2).ToArray();
-            var num_boxes = array_ops.shape(boxes).dims[boxes.TensorShape.dims.Length - 2];
+            var batch_dims = array_ops.shape(boxes).dims.Take(boxes.shape.dims.Length - 2).ToArray();
+            var num_boxes = array_ops.shape(boxes).dims[boxes.shape.dims.Length - 2];
             boxes = array_ops.reshape(boxes, new[] { -1, num_boxes, 4 });
             scores = array_ops.reshape(scores, new[] { -1, num_boxes });
             var batch_size = array_ops.shape(boxes).dims[0];
@@ -2059,14 +2059,14 @@ new_height, new_width");
                 body: (Tensor[] args) => suppression_loop_body(args),
                 loop_vars: new object[] {
                     boxes, iou_threshold,
-                    array_ops.zeros(new TensorShape(batch_size), dtypes.int32),
+                    array_ops.zeros(new Shape(batch_size), dtypes.int32),
                     constant_op.constant(0)
                 },
-                shape_invariants: new TensorShape[] {
-                    new TensorShape(new int[] {Unknown, Unknown, 4}),
-                    new TensorShape(new int[] {}),
-                    new TensorShape(new int[] {Unknown}),
-                    new TensorShape(new int[] {})
+                shape_invariants: new Shape[] {
+                    new Shape(new int[] {Unknown, Unknown, 4}),
+                    new Shape(new int[] {}),
+                    new Shape(new int[] {Unknown}),
+                    new Shape(new int[] {})
                 }
             );
             */

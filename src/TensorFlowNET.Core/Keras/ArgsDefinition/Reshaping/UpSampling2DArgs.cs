@@ -2,7 +2,7 @@
 {
     public class UpSampling2DArgs : LayerArgs
     {
-        public TensorShape Size { get; set; }
+        public Shape Size { get; set; }
         public string DataFormat { get; set; }
         /// <summary>
         /// 'nearest', 'bilinear'

@@ -28,7 +28,7 @@ namespace Tensorflow.NumPy
                     diag_len = N + k;
             }
 
-            var diagonal_ = array_ops.ones(new TensorShape(diag_len), dtype: dtype);
+            var diagonal_ = array_ops.ones(new Shape(diag_len), dtype: dtype);
             var tensor = array_ops.matrix_diag(diagonal: diagonal_, num_rows: N, num_cols: M.Value, k: k);
             return new NDArray(tensor);
         }
@@ -38,13 +38,13 @@ namespace Tensorflow.NumPy
         {
             var start_tensor = array_ops.constant(start, dtype: dtype);
             var stop_tensor = array_ops.constant(stop, dtype: dtype);
-            var num_tensor = array_ops.constant(num);
+
             // var step_tensor = array_ops.constant(np.nan);
             Tensor result = null;
 
             if (endpoint)
             {
-                result = math_ops.linspace(start_tensor, stop_tensor, num_tensor, axis: axis);
+                result = math_ops.linspace(start_tensor, stop_tensor, num, axis: axis);
             }
             else
             {
@@ -53,10 +53,10 @@ namespace Tensorflow.NumPy
                     var step = (stop_tensor - start_tensor) / num;
                     var new_stop = math_ops.cast(stop_tensor, step.dtype) - step;
                     start_tensor = math_ops.cast(start_tensor, new_stop.dtype);
-                    result = math_ops.linspace(start_tensor, new_stop, num_tensor, axis: axis);
+                    result = math_ops.linspace(start_tensor, new_stop, num, axis: axis);
                 }
                 else
-                    result = math_ops.linspace(start_tensor, stop_tensor, num_tensor, axis: axis);
+                    result = math_ops.linspace(start_tensor, stop_tensor, num, axis: axis);
             }
 
             return new NDArray(result);

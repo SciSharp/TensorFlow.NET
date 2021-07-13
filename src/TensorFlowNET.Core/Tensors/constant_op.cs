@@ -38,7 +38,7 @@ namespace Tensorflow
         /// <param name="name">Optional name for the tensor.</param>
         /// <returns></returns>
         public static Tensor constant(object value, TF_DataType dtype = TF_DataType.DtInvalid, 
-            int[] shape = null, bool verify_shape = false,
+            Shape shape = null, bool verify_shape = false,
             bool allow_broadcast = true, string name = "Const")
         {
             if(tf.executing_eagerly())
@@ -110,8 +110,6 @@ namespace Tensorflow
                     return val;
                 case Shape val:
                     return new EagerTensor(val.dims, new Shape(val.ndim));
-                case TensorShape val:
-                    return new EagerTensor(val.dims, ctx.DeviceName);
                 case string val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case string[] val:
@@ -139,23 +137,23 @@ namespace Tensorflow
 
         static Tensor convert_to_eager_tensor(object value,
             TF_DataType dtype,
-            TensorShape shape,
+            Shape shape,
             string name,
             bool verify_shape,
             bool allow_broadcast)
         {
             var t = convert_to_eager_tensor(value, tf.Context, dtype: dtype);
-            if (shape == null)
+            if (shape is null || shape.IsNull)
                 return t;
 
-            if (t.shape.dims.SequenceEqual(shape.dims))
+            if (t.shape.Equals(shape))
                 return t;
 
             if (verify_shape)
                 throw new TypeError($"Expected Tensor's shape: {shape}, got {t.shape}.");
 
-            var num_t = t.TensorShape.num_elements();
-            if (num_t == shape.num_elements())
+            var num_t = t.shape.size;
+            if (num_t == shape.size)
                 return _eager_reshape(t, shape, tf.Context);
             if (num_t == 1)
             {
@@ -170,7 +168,7 @@ namespace Tensorflow
 
         static Tensor convert_to_graph_tensor(object value,
             TF_DataType dtype,
-            TensorShape shape,
+            Shape shape,
             string name,
             bool verify_shape,
             bool allow_broadcast)
@@ -202,14 +200,14 @@ namespace Tensorflow
         }
 
         /// <summary>
-        /// Function to convert TensorShape to Tensor.
+        /// Function to convert Shape to Tensor.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="dtype"></param>
         /// <param name="name"></param>
         /// <param name="as_ref"></param>
         /// <returns></returns>
-        public static Tensor _tensor_shape_tensor_conversion_function(TensorShape s,
+        public static Tensor _tensor_shape_tensor_conversion_function(Shape s,
             TF_DataType dtype = TF_DataType.DtInvalid,
             string name = null,
             bool as_ref = false)

@@ -25,11 +25,11 @@ namespace Tensorflow
         public static Tensor conv2d_transpose(Tensor value = null,
             IVariableV1 filter = null,
             Tensor output_shape = null,
-            TensorShape strides = null,
+            Shape strides = null,
             string padding = "SAME",
             string data_format = "NHWC",
             string name = null,
-            TensorShape dilations = null)
+            Shape dilations = null)
         {
             if (dilations == null)
                 dilations = (1, 1, 1, 1);
@@ -186,7 +186,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope("count_nonzero", "count_nonzero", new { input_tensor }), scope =>
             {
-                var zero = array_ops.zeros(new Shape(), dtype: input_tensor.dtype);
+                var zero = array_ops.zeros(Shape.Null, dtype: input_tensor.dtype);
                 var nonzero_count = math_ops.reduce_sum(
                 math_ops.cast(gen_math_ops.not_equal(input_tensor, zero), dtype: dtype), name: "nonzero_count");
                 return nonzero_count;
@@ -200,7 +200,7 @@ namespace Tensorflow
                 name = scope;
                 logits = ops.convert_to_tensor(logits, name: "logits");
                 labels = ops.convert_to_tensor(labels, name: "labels");
-                labels.TensorShape.merge_with(logits.TensorShape);
+                labels.shape.merge_with(logits.shape);
 
                 var zeros = array_ops.zeros_like(logits, dtype: logits.dtype);
                 var cond = (logits >= zeros);

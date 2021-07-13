@@ -25,7 +25,7 @@ namespace Tensorflow
         public Tensor tile(Tensor input, object[] multiples, string name = null)
             => gen_array_ops.tile(input, multiples, name);
 
-        public Tensor tile(Tensor input, TensorShape multiples, string name = null) 
+        public Tensor tile(Tensor input, Shape multiples, string name = null) 
         {
             var multiples_tensor = constant_op.constant(multiples);
             return gen_array_ops.tile(input, multiples_tensor, name);

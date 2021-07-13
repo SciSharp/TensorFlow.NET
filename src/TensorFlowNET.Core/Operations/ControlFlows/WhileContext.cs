@@ -117,7 +117,7 @@ namespace Tensorflow.Operations
         internal LoopVar<TItem> BuildLoop<TItem>(Func<LoopVar<TItem>, Tensor> pred,
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> loop_vars,
-            TensorShape[] shape_invariants,
+            Shape[] shape_invariants,
             bool return_same_structure) where TItem : IFromMergeVars<TItem>, new()
         {
             // Keep original_loop_vars to identify which are TensorArrays
@@ -159,9 +159,9 @@ namespace Tensorflow.Operations
             throw new NotImplementedException("_convert_tensorarray_to_flow");
         }
 
-        private TensorShape _get_shape_invariant(Tensor var, int[] shape = null)
+        private Shape _get_shape_invariant(Tensor var, int[] shape = null)
         {
-            return var.TensorShape;
+            return var.shape;
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace Tensorflow.Operations
             Func<LoopVar<TItem>, LoopVar<TItem>> body,
             LoopVar<TItem> original_loop_vars,
             Tensor[] loop_vars,
-            TensorShape[] shape_invariants) where TItem : IFromMergeVars<TItem>, new()
+            Shape[] shape_invariants) where TItem : IFromMergeVars<TItem>, new()
         {
             var flat_loop_vars = nest.flatten2(original_loop_vars)
                 .Select(x => (ITensorOrTensorArray)x)
@@ -459,8 +459,8 @@ namespace Tensorflow.Operations
             // dynamically from the forward inference. Getting the shape right
             // for the zeros is only needed for the base case when the loop exits
             // without running any iterations.
-            var shape = grad.TensorShape;
-            if (shape.is_fully_defined())
+            var shape = grad.shape;
+            if (shape.IsFullyDefined)
             {
                 if (outer_context != null)
                     outer_context.Enter();

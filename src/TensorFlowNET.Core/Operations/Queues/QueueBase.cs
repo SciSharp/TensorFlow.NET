@@ -23,12 +23,12 @@ namespace Tensorflow.Queues
     public class QueueBase
     {
         protected TF_DataType[] _dtypes;
-        protected TensorShape[] _shapes;
+        protected Shape[] _shapes;
         protected string[] _names;
         protected Tensor _queue_ref;
         protected string _name;
 
-        public QueueBase(TF_DataType[] dtypes, TensorShape[] shapes, string[] names)
+        public QueueBase(TF_DataType[] dtypes, Shape[] shapes, string[] names)
         {
             _dtypes = dtypes;
             _shapes = shapes;

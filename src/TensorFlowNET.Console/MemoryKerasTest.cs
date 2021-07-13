@@ -19,7 +19,7 @@ namespace Tensorflow
         public Action<int, int> InputLayer
             => (epoch, iterate) =>
             {
-                TensorShape shape = (32, 256, 256, 3); // 48M
+                Shape shape = (32, 256, 256, 3); // 48M
                 var images = np.arange(shape.size).astype(np.float32).reshape(shape.dims);
 
                 var inputs = keras.Input((shape.dims[1], shape.dims[2], 3));
@@ -31,7 +31,7 @@ namespace Tensorflow
         public Action<int, int> Prediction
             => (epoch, iterate) =>
             {
-                TensorShape shape = (32, 256, 256, 3); // 48M
+                Shape shape = (32, 256, 256, 3); // 48M
                 var images = np.arange(shape.size).astype(np.float32).reshape(shape.dims);
 
                 var inputs = keras.Input((shape.dims[1], shape.dims[2], 3));

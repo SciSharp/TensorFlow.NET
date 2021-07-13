@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Gradients
 {
@@ -323,7 +324,7 @@ namespace Tensorflow.Gradients
 
             // Compute linear indices(flattened to 1D).
             var cast1 = math_ops.cast(outerdim, TF_DataType.TF_INT64);
-            var range2 = math_ops.range(0L, cast1 * in_lastdim, in_lastdim);
+            var range2 = math_ops.range(tf.constant(0L), cast1 * in_lastdim, in_lastdim);
             var dim2 = array_ops.expand_dims(range2, -1);
             var cast2 = math_ops.cast(dim2, TF_DataType.TF_INT32);
             var ind = array_ops.reshape(ind_2d + cast2, new int[] { -1 });

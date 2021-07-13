@@ -65,9 +65,9 @@ namespace Tensorflow.Keras
         /// If set, the layer will not create a placeholder tensor.
         /// </param>
         /// <returns></returns>
-        public Tensor Input(TensorShape shape = null,
+        public Tensor Input(Shape shape = null,
                 int batch_size = -1,
-                TensorShape batch_input_shape = null,
+                Shape batch_input_shape = null,
                 TF_DataType dtype = TF_DataType.DtInvalid,
                 string name = null,
                 bool sparse = false,

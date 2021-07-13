@@ -7,7 +7,7 @@ namespace Tensorflow
     {
         public Tensor eye(int num_rows,
             int num_columns = -1,
-            TensorShape batch_shape = null,
+            Shape batch_shape = null,
             TF_DataType dtype = TF_DataType.TF_DOUBLE,
             string name = null)
         {
@@ -19,7 +19,7 @@ namespace Tensorflow
                 bool is_square = num_columns == num_rows;
                 var diag_size = Math.Min(num_rows, num_columns);
                 if (batch_shape == null)
-                    batch_shape = new TensorShape(new int[0]);
+                    batch_shape = new Shape(new int[0]);
                 var diag_shape = batch_shape.dims.concat(new long[] { diag_size });
 
                 long[] shape = null;

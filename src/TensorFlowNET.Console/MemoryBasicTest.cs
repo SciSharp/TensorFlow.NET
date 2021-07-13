@@ -151,7 +151,7 @@ namespace Tensorflow
         public Action<int, int> Dataset
             => (epoch, iterate) =>
             {
-                TensorShape shape = (16, 32, 32, 3);
+                Shape shape = (16, 32, 32, 3);
                 var images = np.arange(shape.size).astype(np.float32).reshape(shape.dims);
                 var data_handler = new DataHandler(new DataHandlerArgs
                 {
