@@ -40,6 +40,9 @@ namespace Tensorflow.NumPy
             TF_DataType dtype = TF_DataType.TF_DOUBLE, int axis = 0) where T : unmanaged
             => tf.numpy.linspace(start, stop, num: num, endpoint: endpoint, retstep: retstep, dtype: dtype, axis: axis);
 
+        public static NDArray load(string file)
+            => tf.numpy.load(file);
+
         public static (NDArray, NDArray) meshgrid<T>(T x, T y, bool copy = true, bool sparse = false)
             => tf.numpy.meshgrid(new[] { x, y }, copy: copy, sparse: sparse);
 

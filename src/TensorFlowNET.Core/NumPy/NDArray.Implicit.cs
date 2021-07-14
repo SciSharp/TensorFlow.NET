@@ -8,9 +8,10 @@ namespace Tensorflow.NumPy
     {
         public void Deconstruct(out byte blue, out byte green, out byte red)
         {
-            blue = (byte)dims[0];
-            green = (byte)dims[1];
-            red = (byte)dims[2];
+            var data = Data<byte>();
+            blue = data[0];
+            green = data[1];
+            red = data[2];
         }
 
         public static implicit operator NDArray(Array array)

@@ -19,6 +19,7 @@ namespace Tensorflow.NumPy
         public NDArray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE) => Init(shape, dtype: dtype);
         public NDArray(Tensor value, Shape? shape = null) => Init(value, shape);
         public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) => Init(bytes, shape, dtype);
+        public NDArray(IntPtr address, Shape shape, TF_DataType dtype) => Init(address, shape, dtype);
 
         public static NDArray Scalar<T>(T value) where T : unmanaged
             => value switch
@@ -73,6 +74,12 @@ namespace Tensorflow.NumPy
         void Init(byte[] bytes, Shape shape, TF_DataType dtype)
         {
             _tensor = new Tensor(bytes, shape, dtype);
+            _tensor.SetReferencedByNDArray();
+        }
+
+        void Init(IntPtr address, Shape shape, TF_DataType dtype)
+        {
+            _tensor = new Tensor(address, shape, dtype);
             _tensor.SetReferencedByNDArray();
         }
     }

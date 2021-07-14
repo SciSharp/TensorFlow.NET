@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
@@ -65,6 +68,19 @@ namespace Tensorflow.NumPy
             }
 
             return new NDArray(result);
+        }
+
+        Array ReadValueMatrix(BinaryReader reader, Array matrix, int bytes, Type type, int[] shape)
+        {
+            int total = 1;
+            for (int i = 0; i < shape.Length; i++)
+                total *= shape[i];
+            var buffer = new byte[bytes * total];
+
+            reader.Read(buffer, 0, buffer.Length);
+            System.Buffer.BlockCopy(buffer, 0, matrix, 0, buffer.Length);
+
+            return matrix;
         }
 
         public (NDArray, NDArray) meshgrid<T>(T[] array, bool copy = true, bool sparse = false)
