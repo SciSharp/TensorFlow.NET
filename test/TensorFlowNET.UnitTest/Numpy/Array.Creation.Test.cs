@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using Tensorflow.NumPy;
 
-namespace TensorFlowNET.UnitTest.Numpy
+namespace TensorFlowNET.UnitTest.NumPy
 {
     /// <summary>
     /// https://numpy.org/doc/stable/reference/routines.array-creation.html
     /// </summary>
     [TestClass]
-    public class NumpyArrayCreationTest : EagerModeTestBase
+    public class ArrayCreationTest : EagerModeTestBase
     {
         [TestMethod]
         public void empty_zeros_ones_full()

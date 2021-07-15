@@ -271,14 +271,18 @@ namespace Tensorflow
             }
         }
 
-        public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2)
+        public static IEnumerable<(T, T)> zip<T>(NDArray t1, NDArray t2, Axis axis = null)
             where T : unmanaged
         {
-            /*var a = t1.AsIterator<T>();
-            var b = t2.AsIterator<T>();
-            while (a.HasNext() && b.HasNext())
-                yield return (a.MoveNext(), b.MoveNext());*/
-            throw new NotImplementedException("");
+            if (axis == null)
+            {
+                var a = t1.Data<T>();
+                var b = t2.Data<T>();
+                for (int i = 0; i < a.Length; i++)
+                    yield return (a[i], b[i]);
+            }
+            else
+                throw new NotImplementedException("");
         }
 
         public static IEnumerable<(T1, T2)> zip<T1, T2>(IList<T1> t1, IList<T2> t2)

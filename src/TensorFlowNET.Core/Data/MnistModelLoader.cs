@@ -166,7 +166,7 @@ namespace Tensorflow
             for (int row = 0; row < num_labels; row++)
             {
                 var col = labels[row];
-                labels_one_hot.SetData(1.0, row, col);
+                labels_one_hot[row, col] = 1.0;
             }
 
             return labels_one_hot;

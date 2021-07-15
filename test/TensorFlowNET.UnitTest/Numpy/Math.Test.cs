@@ -6,13 +6,13 @@ using System.Text;
 using Tensorflow;
 using Tensorflow.NumPy;
 
-namespace TensorFlowNET.UnitTest.Numpy
+namespace TensorFlowNET.UnitTest.NumPy
 {
     /// <summary>
     /// https://numpy.org/doc/stable/reference/generated/numpy.prod.html
     /// </summary>
     [TestClass]
-    public class NumpyMathTest : EagerModeTestBase
+    public class MathTest : EagerModeTestBase
     {
         [TestMethod]
         public void prod()

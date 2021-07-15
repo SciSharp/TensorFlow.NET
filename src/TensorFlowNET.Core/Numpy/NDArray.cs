@@ -25,6 +25,7 @@ namespace Tensorflow.NumPy
     public partial class NDArray
     {
         Tensor _tensor;
+        public Tensor Tensor => _tensor;
         public TF_DataType dtype => _tensor.dtype;
         public ulong size => _tensor.size;
         public ulong dtypesize => _tensor.dtypesize;
@@ -47,15 +48,12 @@ namespace Tensorflow.NumPy
         public ValueType GetValue(params int[] indices)
             => throw new NotImplementedException("");
 
-        public void SetData(object value, params int[] indices)
-            => throw new NotImplementedException("");
-
         public NDIterator<T> AsIterator<T>(bool autoreset = false) where T : unmanaged
             => throw new NotImplementedException("");
 
         public bool HasNext() => throw new NotImplementedException("");
         public T MoveNext<T>() => throw new NotImplementedException("");
-        public NDArray reshape(Shape newshape) => new NDArray(_tensor, newshape);
+        public NDArray reshape(Shape newshape) => new NDArray(tf.reshape(_tensor, newshape));
         public NDArray astype(Type type) => new NDArray(math_ops.cast(_tensor, type.as_tf_dtype()));
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(_tensor, dtype));
         public NDArray ravel() => throw new NotImplementedException("");

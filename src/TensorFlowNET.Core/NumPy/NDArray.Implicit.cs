@@ -8,7 +8,7 @@ namespace Tensorflow.NumPy
     {
         public void Deconstruct(out byte blue, out byte green, out byte red)
         {
-            var data = Data<byte>();
+            var data = ToArray<byte>();
             blue = data[0];
             green = data[1];
             red = data[2];
@@ -17,23 +17,23 @@ namespace Tensorflow.NumPy
         public static implicit operator NDArray(Array array)
             => new NDArray(array);
 
-        public static implicit operator bool(NDArray nd)
-            => nd._tensor.ToArray<bool>()[0];
+        public unsafe static implicit operator bool(NDArray nd)
+            => *(bool*)nd.data;
 
-        public static implicit operator byte(NDArray nd)
-            => nd._tensor.ToArray<byte>()[0];
+        public unsafe static implicit operator byte(NDArray nd)
+            => *(byte*)nd.data;
 
-        public static implicit operator byte[](NDArray nd)
-            => nd.ToByteArray();
+        public unsafe static implicit operator int(NDArray nd)
+            => *(int*)nd.data;
 
-        public static implicit operator int(NDArray nd)
-            => nd._tensor.ToArray<int>()[0];
+        public unsafe static implicit operator long(NDArray nd)
+            => *(long*)nd.data;
 
-        public static implicit operator float(NDArray nd)
-            => nd._tensor.ToArray<float>()[0];
+        public unsafe static implicit operator float(NDArray nd)
+            => *(float*)nd.data;
 
-        public static implicit operator double(NDArray nd)
-            => nd._tensor.ToArray<double>()[0];
+        public unsafe static implicit operator double(NDArray nd)
+            => *(double*)nd.data;
 
         public static implicit operator NDArray(bool value)
             => new NDArray(value);

@@ -25,6 +25,10 @@ namespace Tensorflow.NumPy
         {
             if (x.ndim != y.ndim)
                 return false;
+            else if (x.size != y.size)
+                return false;
+            else if (x.dtype != y.dtype)
+                return false;
 
             return Enumerable.SequenceEqual(x.ToByteArray(), y.ToByteArray());
         }

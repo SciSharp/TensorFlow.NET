@@ -229,7 +229,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(9, oov_count);
         }
 
-        [TestMethod, Ignore("slice assign doesn't work")]
+        [TestMethod]
         public void PadSequencesWithDefaults()
         {
             var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
@@ -241,12 +241,12 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, padded.dims[0]);
             Assert.AreEqual(22, padded.dims[1]);
 
-            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 19]);
+            Assert.AreEqual(padded[0, 19], tokenizer.word_index["worst"]);
             for (var i = 0; i < 8; i++)
-                Assert.AreEqual(0, padded[0, i]);
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 10]);
+                Assert.AreEqual(padded[0, i], 0);
+            Assert.AreEqual(padded[1, 10], tokenizer.word_index["proud"]);
             for (var i = 0; i < 20; i++)
-                Assert.AreNotEqual(0, padded[1, i]);
+                Assert.AreNotEqual(padded[1, i], 0);
         }
 
         [TestMethod, Ignore("slice assign doesn't work")]

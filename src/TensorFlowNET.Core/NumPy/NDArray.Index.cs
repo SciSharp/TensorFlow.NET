@@ -8,64 +8,27 @@ namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
-        public NDArray this[int index]
-        {
-            get
-            {
-                return _tensor[index];
-            }
-
-            set
-            {
-
-            }
-        }
-
         public NDArray this[params int[] index]
         {
-            get
+            get => _tensor[index.Select(x => new Slice
             {
-                 return _tensor[index.Select(x => new Slice(x, x + 1)).ToArray()];
-            }
+                Start = x,
+                Stop = x + 1,
+                IsIndex = true
+            }).ToArray()];
 
-            set
+            set => SetData(index.Select(x => new Slice
             {
-                var offset = ShapeHelper.GetOffset(shape, index);
-                unsafe
-                {
-                    if (dtype == TF_DataType.TF_BOOL)
-                        *((bool*)data + offset) = value;
-                    else if (dtype == TF_DataType.TF_UINT8)
-                        *((byte*)data + offset) = value;
-                    else if (dtype == TF_DataType.TF_INT32)
-                        *((int*)data + offset) = value;
-                    else if (dtype == TF_DataType.TF_INT64)
-                        *((long*)data + offset) = value;
-                    else if (dtype == TF_DataType.TF_FLOAT)
-                        *((float*)data + offset) = value;
-                    else if (dtype == TF_DataType.TF_DOUBLE)
-                        *((double*)data + offset) = value;
-                }
-            }
+                Start = x,
+                Stop = x + 1,
+                IsIndex = true
+            }), value);
         }
 
         public NDArray this[params Slice[] slices]
         {
-            get
-            {
-                return _tensor[slices];
-            }
-
-            set
-            {
-                var pos = _tensor[slices];
-                var len = value.bytesize;
-                unsafe
-                {
-                    System.Buffer.MemoryCopy(value.data.ToPointer(), pos.TensorDataPointer.ToPointer(), len, len);
-                }
-                // _tensor[slices].assign(constant_op.constant(value));
-            }
+            get => _tensor[slices];
+            set => SetData(slices, value);
         }
 
         public NDArray this[NDArray mask]
@@ -77,7 +40,46 @@ namespace Tensorflow.NumPy
 
             set
             {
+                throw new NotImplementedException("");
+            }
+        }
 
+        void SetData(IEnumerable<Slice> slices, NDArray array)
+            => SetData(slices, array, -1, slices.Select(x => 0).ToArray());
+
+        void SetData(IEnumerable<Slice> slices, NDArray array, int currentNDim, int[] indices)
+        {
+            if (dtype != array.dtype)
+                throw new ArrayTypeMismatchException($"Required dtype {dtype} but {array.dtype} is assigned.");
+
+            if (!slices.Any())
+                return;
+
+            var slice = slices.First();
+
+            if (slices.Count() == 1)
+            {
+
+                if (slice.Step != 1)
+                    throw new NotImplementedException("");
+
+                indices[indices.Length - 1] = slice.Start ?? 0;
+                var offset = (ulong)ShapeHelper.GetOffset(shape, indices);
+                var bytesize = array.bytesize;
+                unsafe
+                {
+                    var dst = (byte*)data + offset * dtypesize;
+                    System.Buffer.MemoryCopy(array.data.ToPointer(), dst, bytesize, bytesize);
+                }
+
+                return;
+            }
+
+            currentNDim++;
+            for (var i = slice.Start ?? 0; i < slice.Stop; i++)
+            {
+                indices[currentNDim] = i;
+                SetData(slices.Skip(1), array, currentNDim, indices);
             }
         }
     }
