@@ -276,8 +276,8 @@ namespace Tensorflow
         {
             if (axis == null)
             {
-                var a = t1.Data<T>();
-                var b = t2.Data<T>();
+                var a = t1.ToArray<T>();
+                var b = t2.ToArray<T>();
                 for (int i = 0; i < a.Length; i++)
                     yield return (a[i], b[i]);
             }

@@ -162,7 +162,7 @@ namespace Tensorflow
             var num_labels = labels_dense.dims[0];
             var index_offset = np.arange(num_labels) * num_classes;
             var labels_one_hot = np.zeros((num_labels, num_classes));
-            var labels = labels_dense.Data<byte>();
+            var labels = labels_dense.ToArray<byte>();
             for (int row = 0; row < num_labels; row++)
             {
                 var col = labels[row];
@@ -176,7 +176,7 @@ namespace Tensorflow
         {
             var buffer = new byte[sizeof(uint)];
             var count = bytestream.Read(buffer, 0, 4);
-            return np.frombuffer(buffer, ">u4").Data<int>()[0];
+            return np.frombuffer(buffer, ">u4").ToArray<int>()[0];
         }
     }
 }

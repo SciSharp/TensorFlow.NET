@@ -506,7 +506,7 @@ namespace Tensorflow.Gradients
                 if (!(axes is null))
                 {
                     var rank = input_0_shape.Length;
-                    if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.Data<int>()))
+                    if (Enumerable.SequenceEqual(Enumerable.Range(0, rank), axes.ToArray<int>()))
                     {
                         if (tf.Context.executing_eagerly())
                         {

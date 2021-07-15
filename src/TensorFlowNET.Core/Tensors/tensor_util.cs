@@ -257,7 +257,7 @@ scalar with value '-1' to describe an unknown shape.", value_));
                 var dest_dtype_shape_array = np.array(x_).astype(cast_dtype.as_system_dtype());
 
                 long[] y_ = { };
-                foreach (int y in dest_dtype_shape_array.Data<int>())
+                foreach (int y in dest_dtype_shape_array.ToArray<int>())
                     if (y >= 0)
                         y_[y_.Length] = y;
                     else

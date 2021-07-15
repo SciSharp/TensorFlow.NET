@@ -249,7 +249,7 @@ namespace TensorFlowNET.Keras.UnitTest
                 Assert.AreNotEqual(padded[1, i], 0);
         }
 
-        [TestMethod, Ignore("slice assign doesn't work")]
+        [TestMethod]
         public void PadSequencesPrePaddingTrunc()
         {
             var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
@@ -261,15 +261,15 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, padded.dims[0]);
             Assert.AreEqual(15, padded.dims[1]);
 
-            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 12]);
+            Assert.AreEqual(padded[0, 12], tokenizer.word_index["worst"]);
             for (var i = 0; i < 3; i++)
-                Assert.AreEqual(0, padded[0, i]);
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 3]);
+                Assert.AreEqual(padded[0, i], 0);
+            Assert.AreEqual(padded[1, 3], tokenizer.word_index["proud"]);
             for (var i = 0; i < 15; i++)
-                Assert.AreNotEqual(0, padded[1, i]);
+                Assert.AreNotEqual(padded[1, i], 0);
         }
 
-        [TestMethod, Ignore("slice assign doesn't work")]
+        [TestMethod]
         public void PadSequencesPrePaddingTrunc_Larger()
         {
             var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
@@ -281,13 +281,13 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, padded.dims[0]);
             Assert.AreEqual(45, padded.dims[1]);
 
-            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 42]);
+            Assert.AreEqual(padded[0, 42], tokenizer.word_index["worst"]);
             for (var i = 0; i < 33; i++)
-                Assert.AreEqual(0, padded[0, i]);
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 33]);
+                Assert.AreEqual(padded[0, i], 0);
+            Assert.AreEqual(padded[1, 33], tokenizer.word_index["proud"]);
         }
 
-        [TestMethod, Ignore("slice assign doesn't work")]
+        [TestMethod]
         public void PadSequencesPostPaddingTrunc()
         {
             var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
@@ -299,15 +299,15 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, padded.dims[0]);
             Assert.AreEqual(15, padded.dims[1]);
 
-            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 9]);
+            Assert.AreEqual(padded[0, 9], tokenizer.word_index["worst"]);
             for (var i = 12; i < 15; i++)
-                Assert.AreEqual(0, padded[0, i]);
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 10]);
+                Assert.AreEqual(padded[0, i], 0);
+            Assert.AreEqual(padded[1, 10], tokenizer.word_index["proud"]);
             for (var i = 0; i < 15; i++)
-                Assert.AreNotEqual(0, padded[1, i]);
+                Assert.AreNotEqual(padded[1, i], 0);
         }
 
-        [TestMethod, Ignore("slice assign doesn't work")]
+        [TestMethod]
         public void PadSequencesPostPaddingTrunc_Larger()
         {
             var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV);
@@ -319,10 +319,10 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(4, padded.dims[0]);
             Assert.AreEqual(45, padded.dims[1]);
 
-            Assert.AreEqual(tokenizer.word_index["worst"], padded[0, 9]);
+            Assert.AreEqual(padded[0, 9], tokenizer.word_index["worst"]);
             for (var i = 32; i < 45; i++)
-                Assert.AreEqual(0, padded[0, i]);
-            Assert.AreEqual(tokenizer.word_index["proud"], padded[1, 10]);
+                Assert.AreEqual(padded[0, i], 0);
+            Assert.AreEqual(padded[1, 10], tokenizer.word_index["proud"]);
         }
 
         [TestMethod]

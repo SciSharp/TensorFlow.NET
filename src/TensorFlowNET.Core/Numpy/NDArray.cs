@@ -62,12 +62,8 @@ namespace Tensorflow.NumPy
         public byte[] ToByteArray() => _tensor.BufferToArray();
         public static string[] AsStringArray(NDArray arr) => throw new NotImplementedException("");
 
-        public T[] Data<T>() where T : unmanaged
-            => _tensor.ToArray<T>();
         public T[] ToArray<T>() where T : unmanaged
             => _tensor.ToArray<T>();
-
-        public static NDArray operator /(NDArray x, NDArray y) => throw new NotImplementedException("");
 
         public override string ToString()
         {

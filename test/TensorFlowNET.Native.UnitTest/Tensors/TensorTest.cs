@@ -104,7 +104,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
             EXPECT_EQ(tensor.shape[0], nd.dims[0]);
             EXPECT_EQ(tensor.shape[1], nd.dims[1]);
             EXPECT_EQ(tensor.bytesize, nd.size * sizeof(float));
-            Assert.IsTrue(Enumerable.SequenceEqual(nd.Data<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
+            Assert.IsTrue(Enumerable.SequenceEqual(nd.ToArray<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace TensorFlowNET.UnitTest.NumPy
 
             p = np.prod(new[,] { { 1.0, 2.0 }, { 3.0, 4.0 } }, axis: 1);
             Assert.AreEqual(p.shape, 2);
-            Assert.IsTrue(Equal(p.Data<double>(), new[] { 2.0, 12.0 }));
+            Assert.IsTrue(Equal(p.ToArray<double>(), new[] { 2.0, 12.0 }));
         }
     }
 }
