@@ -136,6 +136,8 @@ namespace Tensorflow
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case double val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
+                case IEnumerable<Tensor> val:
+                    return ops.convert_to_tensor(val);
                 case Array val:
                     return new EagerTensor(val, val.GetShape());
                 default:

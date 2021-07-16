@@ -52,7 +52,7 @@ namespace Tensorflow
             if (dtype == TF_DataType.TF_STRING)
             {
                 var str= StringData();
-                return new NDArray(str, new Shape(str.Length));
+                return new NDArray(str, shape);
             }
                 
             return new NDArray(this);
