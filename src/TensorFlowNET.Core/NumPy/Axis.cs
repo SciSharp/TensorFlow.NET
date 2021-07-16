@@ -50,6 +50,9 @@ namespace Tensorflow
 
         public static implicit operator Tensor(Axis axis)
             => constant_op.constant(axis);
+
+        public override string ToString()
+            => $"({string.Join(", ", axis)})";
     }
 }
 

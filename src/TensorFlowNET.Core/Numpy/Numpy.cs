@@ -105,5 +105,7 @@ namespace Tensorflow.NumPy
         {
             throw new NotImplementedException("");
         }
+
+        public static LinearAlgebraImpl linalg = new LinearAlgebraImpl();
     }
 }

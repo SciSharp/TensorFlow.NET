@@ -62,6 +62,20 @@ namespace TensorFlowNET.UnitTest
             Assert.IsTrue(Math.Abs(expected - actual) < eps * Math.Max(1.0f, Math.Abs(expected)), $"{msg}: expected {expected} vs actual {actual}");
         }
 
+        public void AssetSequenceEqual(float[] expected, float[] actual)
+        {
+            float eps = 1e-5f;
+            for (int i = 0; i < expected.Length; i++)
+                Assert.IsTrue(Math.Abs(expected[i] - actual[i]) < eps * Math.Max(1.0f, Math.Abs(expected[i])), $"expected {expected} vs actual {actual}");
+        }
+
+        public void AssetSequenceEqual(double[] expected, double[] actual)
+        {
+            double eps = 1e-5f;
+            for (int i = 0; i < expected.Length; i++)
+                Assert.IsTrue(Math.Abs(expected[i] - actual[i]) < eps * Math.Max(1.0f, Math.Abs(expected[i])), $"expected {expected} vs actual {actual}");
+        }
+
         public void assertEqual(object given, object expected)
         {
             /*if (given is NDArray && expected is NDArray)

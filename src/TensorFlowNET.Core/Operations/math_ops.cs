@@ -791,6 +791,18 @@ namespace Tensorflow
                 if (transpose_b && adjoint_b)
                     throw new ValueError("Only one of transpose_b and adjoint_b can be True.");
 
+                if(adjoint_a)
+                {
+                    a = conj(a);
+                    transpose_a = true;
+                }
+
+                if (adjoint_b)
+                {
+                    b = conj(b);
+                    transpose_b = true;
+                }
+
                 result = gen_math_ops.mat_mul(a, b, transpose_a, transpose_b, name);
             });
 

@@ -38,6 +38,16 @@ namespace Tensorflow
             }
         }
 
+        #region https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/ranges
+        public int Length => ndim;
+        public long[] Slice(int start, int length)
+        {
+            var slice = new long[length];
+            Array.Copy(_dims, start, slice, 0, length);
+            return slice;
+        } 
+        #endregion
+
         private Shape() 
         {
         }
@@ -107,7 +117,7 @@ namespace Tensorflow
 
         public long this[int n] 
         {
-            get => dims[n];
+            get => n < 0 ? dims[ndim + n] : dims[n];
             set => dims[n] = value;
         }
 

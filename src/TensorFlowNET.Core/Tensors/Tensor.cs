@@ -103,6 +103,8 @@ namespace Tensorflow
         public bool IsCreatedInGraphMode => isCreatedInGraphMode;
         public bool IsSparseTensor => this is SparseTensor;
 
+        public Tensor TensorShape => tf.shape(this);
+
         /// <summary>
         ///     Returns the shape of a tensor.
         /// </summary>

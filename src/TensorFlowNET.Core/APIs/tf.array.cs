@@ -152,7 +152,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <param name="conjugate"></param>
         /// <returns></returns>
-        public Tensor transpose<T1>(T1 a, Shape perm = null, string name = "transpose", bool conjugate = false)
+        public Tensor transpose<T1>(T1 a, Axis perm = null, string name = "transpose", bool conjugate = false)
             => array_ops.transpose(a, perm, name, conjugate);
 
         /// <summary>

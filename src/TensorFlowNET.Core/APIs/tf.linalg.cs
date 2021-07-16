@@ -13,6 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ******************************************************************************/
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -40,13 +41,20 @@ namespace Tensorflow
 
             public Tensor batch_matmul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
                 => math_ops.batch_matmul(x, y, adj_x: adj_x, adj_y: adj_y, name: name);
+
+            public Tensor inv(Tensor input, bool adjoint = false, string name = null)
+                => ops.matrix_inverse(input, adjoint: adjoint, name: name);
+
+            public Tensor lstsq(Tensor matrix, Tensor rhs,
+                NDArray l2_regularizer = null, bool fast = true, string name = null)
+                => ops.matrix_solve_ls(matrix, rhs, l2_regularizer: l2_regularizer, fast: fast, name: name);
         }
 
         public Tensor diag(Tensor diagonal, string name = null)
             => gen_array_ops.diag(diagonal, name: name);
 
-        public Tensor matmul(Tensor a, Tensor b)
-            => math_ops.matmul(a, b);
+        public Tensor matmul(Tensor a, Tensor b, bool transpose_a = false, bool transpose_b = false)
+            => math_ops.matmul(a, b, transpose_a: transpose_a, transpose_b: transpose_b);
 
         /// <summary>
         /// Multiply slices of the two matrices "x" and "y".

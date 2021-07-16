@@ -774,10 +774,10 @@ namespace Tensorflow
                 int k = 0,
                 int num_rows = -1,
                 int num_cols = -1,
-                double padding_value = 0,
+                float padding_value = 0f,
                 string align = "RIGHT_LEFT")
             => tf.Context.ExecuteOp("MatrixDiagV3", name, 
-                new ExecuteOpArgs(diagonal, k, num_rows, num_cols, padding_value)
+                new ExecuteOpArgs(diagonal, k, num_rows, num_cols, ops.convert_to_tensor(padding_value, dtype: diagonal.dtype))
                     .SetAttributes(new { align }));
 
         public static Tensor matrix_set_diag(Tensor input,
@@ -900,7 +900,7 @@ namespace Tensorflow
             return gen_array_ops.gather_v2(@params, indices, axis, name: name);
         }
 
-        public static Tensor transpose<T1>(T1 a, Shape perm, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1>(T1 a, Axis perm, string name = "transpose", bool conjugate = false)
         {
             return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
