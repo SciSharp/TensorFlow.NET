@@ -46,6 +46,9 @@ namespace Tensorflow.NumPy
         public static (NDArray, NDArray) meshgrid<T>(T x, T y, bool copy = true, bool sparse = false)
             => tf.numpy.meshgrid(new[] { x, y }, copy: copy, sparse: sparse);
 
+        public static NDArray ndarray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
+            => new NDArray(tf.zeros(shape, dtype: dtype));
+
         public static NDArray ones(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
             => new NDArray(tf.ones(shape, dtype: dtype));
 

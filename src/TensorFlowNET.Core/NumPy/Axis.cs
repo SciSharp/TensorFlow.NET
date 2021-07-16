@@ -30,6 +30,9 @@ namespace Tensorflow
         public static implicit operator int[]?(Axis axis)
             => axis?.axis;
 
+        public static implicit operator int(Axis axis)
+            => axis.axis[0];
+
         public static implicit operator Axis(int axis)
             => new Axis(axis);
 

@@ -50,7 +50,7 @@ namespace Tensorflow
         /// <param name="output_type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+        public static Tensor arg_max(Tensor input, Axis dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => tf.Context.ExecuteOp("ArgMax", name, new ExecuteOpArgs(input, dimension)
                 .SetAttributes(new { output_type }));
 
@@ -308,10 +308,7 @@ namespace Tensorflow
         public static Tensor log1p(Tensor x, string name = null)
             => tf.Context.ExecuteOp("Log1p", name, new ExecuteOpArgs(x));
 
-        public static Tensor logical_and(Tensor x, Tensor y, string name = null)
-            => tf.Context.ExecuteOp("LogicalAnd", name, new ExecuteOpArgs(x, y));
-
-        public static Tensor logical_and(bool x, bool y, string name = null)
+        public static Tensor logical_and<T>(T x, T y, string name = null)
             => tf.Context.ExecuteOp("LogicalAnd", name, new ExecuteOpArgs(x, y));
 
         public static Tensor logical_not(Tensor x, string name = null)

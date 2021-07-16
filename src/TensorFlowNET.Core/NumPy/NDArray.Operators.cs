@@ -12,5 +12,7 @@ namespace Tensorflow.NumPy
         public static NDArray operator -(NDArray lhs, NDArray rhs) => lhs.Tensor - rhs.Tensor;
         public static NDArray operator *(NDArray lhs, NDArray rhs) => lhs.Tensor * rhs.Tensor;
         public static NDArray operator /(NDArray lhs, NDArray rhs) => lhs.Tensor / rhs.Tensor;
+        public static NDArray operator >(NDArray lhs, NDArray rhs) => lhs.Tensor > rhs.Tensor;
+        public static NDArray operator <(NDArray lhs, NDArray rhs) => lhs.Tensor < rhs.Tensor;
     }
 }

@@ -9,8 +9,20 @@ namespace Tensorflow.NumPy
 {
     public partial class np
     {
+        public static NDArray exp(NDArray x)
+            => tf.exp(x);
+
         public static NDArray log(NDArray x)
             => tf.log(x);
+
+        public static NDArray multiply(NDArray x1, NDArray x2)
+            => tf.multiply(x1, x2);
+
+        public static NDArray maximum(NDArray x1, NDArray x2)
+            => tf.maximum(x1, x2);
+
+        public static NDArray minimum(NDArray x1, NDArray x2)
+            => tf.minimum(x1, x2);
 
         public static NDArray prod(NDArray array, Axis? axis = null, Type? dtype = null, bool keepdims = false)
             => tf.reduce_prod(array, axis: axis);
@@ -18,8 +30,8 @@ namespace Tensorflow.NumPy
         public static NDArray prod<T>(params T[] array) where T : unmanaged
             => tf.reduce_prod(ops.convert_to_tensor(array));
 
-        public static NDArray multiply(NDArray x1,  NDArray x2)
-            => tf.multiply(x1, x2);
+        public static NDArray sqrt(NDArray x)
+            => tf.sqrt(x);
 
         public static NDArray sum(NDArray x1, Axis? axis = null)
             => tf.math.sum(x1, axis);

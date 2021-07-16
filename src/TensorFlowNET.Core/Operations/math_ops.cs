@@ -71,7 +71,7 @@ namespace Tensorflow
             return gen_math_ops.add_n(inputs, name: name);
         }
 
-        public static Tensor argmax(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+        public static Tensor argmax(Tensor input, Axis dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
 
         public static Tensor round(Tensor x, string name = null)
@@ -545,7 +545,7 @@ namespace Tensorflow
         /// dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`.</param>
         /// <param name="keepdims"></param>
         /// <returns> The reduced tensor.</returns>
-        public static Tensor reduce_logsumexp(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_logsumexp(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             return tf_with(ops.name_scope(name, "ReduceLogSumExp", new { input_tensor }), scope =>
             {
@@ -565,7 +565,7 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor reduce_any(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_any(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var max = (axis != null) ? gen_math_ops._any(input_tensor, axis, keepdims, name) :
@@ -573,7 +573,7 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
-        public static Tensor reduce_max(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_max(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var max = (axis != null) ? gen_math_ops._max(input_tensor, axis, keepdims, name) :
@@ -581,14 +581,7 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
-        public static Tensor reduce_max(Tensor input_tensor, int axis, bool keepdims = false, string name = null)
-        {
-            var r = _ReductionDims(input_tensor, axis);
-            var max = gen_math_ops._max(input_tensor, r, keepdims, name);
-            return _may_reduce_to_scalar(keepdims, axis, max);
-        }
-
-        public static Tensor reduce_min(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
+        public static Tensor reduce_min(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
             var min = gen_math_ops._min(input_tensor, r, keepdims, name);

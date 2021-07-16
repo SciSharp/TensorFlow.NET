@@ -245,10 +245,7 @@ namespace Tensorflow
         public Tensor log1p(Tensor x, string name = null)
             => gen_math_ops.log1p(x, name);
 
-        public Tensor logical_and(Tensor x, Tensor y, string name = null)
-            => gen_math_ops.logical_and(x, y, name);
-
-        public Tensor logical_and(bool x, bool y, string name = null)
+        public Tensor logical_and<T>(T x, T y, string name = null)
             => gen_math_ops.logical_and(x, y, name);
 
         public Tensor logical_not(Tensor x, string name = null)
