@@ -80,5 +80,13 @@ namespace TensorFlowNET.UnitTest.NumPy
             Assert.IsTrue(Equal(new double[] { 0, 1 }, yv.ToArray<double>()));
             AssetSequenceEqual(new long[] { 2, 1 }, yv.shape.dims);
         }
+
+        [TestMethod]
+        public void meshgrid_same_ndim()
+        {
+            var (a, b) = np.meshgrid(np.arange(3), np.arange(3));
+            AssetSequenceEqual(a.ToArray<int>(), new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 });
+            AssetSequenceEqual(b.ToArray<int>(), new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 });
+        }
     }
 }
