@@ -43,6 +43,9 @@ namespace Tensorflow.NumPy
         {
             get
             {
+                if(mask.dtype == TF_DataType.TF_INT32)
+                    return GetData(mask.ToArray<int>());
+
                 throw new NotImplementedException("");
             }
 
@@ -54,7 +57,39 @@ namespace Tensorflow.NumPy
 
         NDArray GetData(IEnumerable<Slice> slices)
         {
-            return _tensor[slices.ToArray()];
+            var tensor = _tensor[slices.ToArray()];
+            return new NDArray(tensor);
+        }
+
+        NDArray GetData(int[] indices, int axis = 0)
+        {
+            if(axis == 0)
+            {
+                var dims = shape.as_int_list();
+                dims[0] = indices.Length;
+
+                var array = np.ndarray(dims, dtype: dtype);
+
+                dims[0] = 1;
+                var bytesize = new Shape(dims).size * dtype.get_datatype_size();
+
+                int dst_index = 0;
+                foreach (var index in indices)
+                {
+                    var src_offset = (ulong)ShapeHelper.GetOffset(shape, index);
+                    var dst_offset = (ulong)ShapeHelper.GetOffset(array.shape, dst_index++);
+                    unsafe
+                    {
+                        var src = (byte*)data + src_offset * dtypesize;
+                        var dst = (byte*)array.data.ToPointer() + dst_offset * dtypesize;
+                        System.Buffer.MemoryCopy(src, dst, bytesize, bytesize);
+                    }
+                }
+
+                return array;
+            }
+            else
+                throw new NotImplementedException("");
         }
 
         void SetData(IEnumerable<Slice> slices, NDArray array)

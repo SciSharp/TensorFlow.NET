@@ -65,9 +65,14 @@ namespace Tensorflow.NumPy
         {
             // created tensor in graph mode
             if (value.TensorDataPointer == IntPtr.Zero)
-                value = tf.defaultSession.eval(value);
-
-            _tensor = new Tensor(value.TensorDataPointer, shape ?? value.shape, value.dtype);
+            {
+                if (!value.graph.building_function)
+                {
+                    value = tf.defaultSession.eval(value);
+                    value = new Tensor(value.TensorDataPointer, shape ?? value.shape, value.dtype);
+                }
+            }
+            _tensor = value;
             _tensor.SetReferencedByNDArray();
         }
 

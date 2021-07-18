@@ -157,6 +157,9 @@ namespace Tensorflow
                     case bool val:
                         tensor_proto.BoolVal.AddRange(new[] { val });
                         break;
+                    case sbyte val:
+                        tensor_proto.IntVal.AddRange(new[] { (int)val });
+                        break;
                     case int val:
                         tensor_proto.IntVal.AddRange(new[] { val });
                         break;

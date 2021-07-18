@@ -215,8 +215,11 @@ namespace Tensorflow
 
         public void SetReferencedByNDArray() 
         {
-            isReferencedByNDArray = true;
-            _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+            if (_handle != IntPtr.Zero)
+            {
+                isReferencedByNDArray = true;
+                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+            }
         }
         
         public Tensor MaybeMove()

@@ -129,7 +129,7 @@ namespace Tensorflow
             shape = shape ?? array.GetShape();
             var dtype = array.GetDataType();
 
-            if (shape.size == 0)
+            if (shape.size == 0 && dtype != TF_DataType.TF_STRING)
             {
                 _handle = TF_NewTensor(shape, dtype, null);
                 return;

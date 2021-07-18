@@ -210,12 +210,6 @@ namespace TensorFlowNET.UnitTest
             return new AndConstraint<NDArrayAssertions>(this);
         }
 
-        public AndConstraint<NDArrayAssertions> BeOfType<T>()
-        {
-            Subject.dtype.Should().Be(InfoOf<T>.NPTypeCode);
-            return new AndConstraint<NDArrayAssertions>(this);
-        }
-
         public AndConstraint<NDArrayAssertions> NotBeScalar()
         {
             Subject.shape.IsScalar.Should().BeFalse();

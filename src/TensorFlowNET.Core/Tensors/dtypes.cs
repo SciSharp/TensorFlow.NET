@@ -202,12 +202,13 @@ namespace Tensorflow
             {
                 TF_DataType.TF_BOOL => sizeof(bool),
                 TF_DataType.TF_UINT8 => sizeof(byte),
+                TF_DataType.TF_INT8 => sizeof(byte),
                 TF_DataType.TF_INT16 => sizeof(short),
                 TF_DataType.TF_INT32 => sizeof(int),
                 TF_DataType.TF_INT64 => sizeof(long),
                 TF_DataType.TF_FLOAT => sizeof(float),
                 TF_DataType.TF_DOUBLE => sizeof(double),
-                _ => -1
+                _ => throw new NotImplementedException("")
             };
 
         public static Type as_numpy_dtype(this DataType type)

@@ -123,7 +123,7 @@ namespace Tensorflow
 
                 bytestream.Read(buf, 0, buf.Length);
 
-                var data = np.frombuffer(buf, (rows, cols), np.@byte);
+                var data = np.frombuffer(buf, new Shape(buf.Length), np.@byte);
                 data = data.reshape((num_images, rows, cols, 1));
 
                 return data;

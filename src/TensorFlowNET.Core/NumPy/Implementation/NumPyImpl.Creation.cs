@@ -36,6 +36,21 @@ namespace Tensorflow.NumPy
             return new NDArray(tensor);
         }
 
+        public NDArray frombuffer(byte[] bytes, string dtype)
+        {
+            if (dtype == ">u4")
+            {
+                var size = bytes.Length / sizeof(uint);
+                var ints = new int[size];
+                for (var index = 0; index < size; index++)
+                    ints[index] = bytes[0] * 256 + bytes[1] + bytes[2] * 256 + bytes[3];
+
+                return new NDArray(ints, shape: new Shape(size));
+            }
+
+            throw new NotImplementedException("");
+        }
+
         public NDArray frombuffer(byte[] bytes, Shape shape, TF_DataType dtype)
         {
             return new NDArray(bytes, shape, dtype);
