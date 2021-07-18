@@ -10,24 +10,32 @@ namespace Tensorflow.NumPy
     {
         public NDArray this[params int[] index]
         {
-            get => _tensor[index.Select(x => new Slice
+            get => GetData(index.Select(x => new Slice
             {
                 Start = x,
                 Stop = x + 1,
                 IsIndex = true
-            }).ToArray()];
+            }));
 
-            set => SetData(index.Select(x => new Slice
+            set => SetData(index.Select(x => 
             {
-                Start = x,
-                Stop = x + 1,
-                IsIndex = true
+                if(x < 0)
+                    x = (int)dims[0] + x;
+                
+                var slice = new Slice
+                {
+                    Start = x,
+                    Stop = x + 1,
+                    IsIndex = true
+                };
+
+                return slice;
             }), value);
         }
 
         public NDArray this[params Slice[] slices]
         {
-            get => _tensor[slices];
+            get => GetData(slices);
             set => SetData(slices, value);
         }
 
@@ -42,6 +50,11 @@ namespace Tensorflow.NumPy
             {
                 throw new NotImplementedException("");
             }
+        }
+
+        NDArray GetData(IEnumerable<Slice> slices)
+        {
+            return _tensor[slices.ToArray()];
         }
 
         void SetData(IEnumerable<Slice> slices, NDArray array)
@@ -61,7 +74,10 @@ namespace Tensorflow.NumPy
             {
 
                 if (slice.Step != 1)
-                    throw new NotImplementedException("");
+                    throw new NotImplementedException("slice.step should == 1");
+
+                if (slice.Start < 0)
+                    throw new NotImplementedException("slice.start should > -1");
 
                 indices[indices.Length - 1] = slice.Start ?? 0;
                 var offset = (ulong)ShapeHelper.GetOffset(shape, indices);

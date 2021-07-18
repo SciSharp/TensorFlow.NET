@@ -81,6 +81,9 @@ namespace Tensorflow.NumPy
             for (int i = 0; i < indices.Length; i++)
                 offset += strides[i] * indices[i];
 
+            if (offset < 0)
+                throw new NotImplementedException("");
+
             return offset;
         }
     }

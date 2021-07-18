@@ -29,7 +29,7 @@ namespace Tensorflow
 
             var tstr = c_api.TF_TensorData(handle);
 #if TRACK_TENSOR_LIFE
-            print($"New TString 0x{handle.ToString("x16")} {AllocationType} Data: 0x{tstr.ToString("x16")}");
+            print($"New TString 0x{handle.ToString("x16")} Data: 0x{tstr.ToString("x16")}");
 #endif
             for (int i = 0; i < buffer.Length; i++)
             {

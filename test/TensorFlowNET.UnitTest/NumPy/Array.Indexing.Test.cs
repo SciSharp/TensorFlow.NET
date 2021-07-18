@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow;
 using Tensorflow.NumPy;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.NumPy
 {
@@ -52,6 +53,15 @@ namespace TensorFlowNET.UnitTest.NumPy
             var y = x[Slice.ParseSlices("0:1,2:")];
             Assert.AreEqual(y.shape, (1, 2));
             Assert.AreEqual(y, np.array(new[] { 2, 3 }).reshape((1, 2)));
+        }
+
+        [TestMethod]
+        public void slice_out_bound()
+        {
+            var input_shape = tf.constant(new int[] { 1, 1 });
+            var input_shape_val = input_shape.numpy();
+            input_shape_val[(int)input_shape.size - 1] = 1;
+            input_shape.Dispose();
         }
     }
 }
