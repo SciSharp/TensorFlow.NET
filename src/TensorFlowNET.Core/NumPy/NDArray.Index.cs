@@ -64,9 +64,9 @@ namespace Tensorflow.NumPy
             if (tensor.Handle == null)
             {
                 if (tf.executing_eagerly())
-                    return new NDArray(tensor);
-                else
                     tensor = tf.defaultSession.eval(tensor);
+                else
+                    return new NDArray(tensor);
             }
                 
             return new NDArray(tensor);

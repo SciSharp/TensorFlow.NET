@@ -255,19 +255,7 @@ namespace Tensorflow
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            if (dtype == TF_DataType.TF_STRING)
-            {
-                long size = 1;
-                foreach (var s in shape.dims)
-                    size *= s;
-                var tstr = TensorDataPointer;
 
-                for (int i = 0; i < size; i++)
-                {
-                    c_api.TF_StringDealloc(tstr);
-                    tstr += TF_TSRING_SIZE;
-                }
-            }
         }
 
         public bool IsDisposed => _disposed;

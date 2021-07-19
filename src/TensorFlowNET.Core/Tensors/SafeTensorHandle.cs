@@ -20,9 +20,9 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public sealed class SafeTensorHandle : SafeTensorflowHandle
+    public class SafeTensorHandle : SafeTensorflowHandle
     {
-        private SafeTensorHandle()
+        protected SafeTensorHandle()
         {
         }
 
