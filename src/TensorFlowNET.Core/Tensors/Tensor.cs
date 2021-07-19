@@ -97,9 +97,6 @@ namespace Tensorflow
         /// </summary>
         public SafeTensorHandleHandle EagerTensorHandle => _eagerTensorHandle;
 
-        protected bool isReferencedByNDArray;
-        public bool IsReferencedByNDArray => isReferencedByNDArray;
-
         protected bool isCreatedInGraphMode;
         
         public bool IsCreatedInGraphMode => isCreatedInGraphMode;
@@ -213,15 +210,6 @@ namespace Tensorflow
                 _tf_output = new TF_Output(op, value_index);
 
             return _tf_output.Value;
-        }
-
-        public void SetReferencedByNDArray() 
-        {
-            if (_handle is not null)
-            {
-                isReferencedByNDArray = true;
-                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
-            }
         }
         
         public Tensor MaybeMove()

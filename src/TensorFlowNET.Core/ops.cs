@@ -149,13 +149,6 @@ namespace Tensorflow
                 else
                     return constant_op.constant(nd);
             }
-            else if (value is Tensor tensor && tensor.IsReferencedByNDArray)
-            {
-                if (tf.executing_eagerly())
-                    return tensor;
-                else
-                    return constant_op.constant(tensor);
-            }
 
             // graph mode
             Tensor ret = value switch

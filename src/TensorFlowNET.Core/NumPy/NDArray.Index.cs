@@ -62,8 +62,14 @@ namespace Tensorflow.NumPy
 
             var tensor = base[slices.ToArray()];
             if (tensor.Handle == null)
-                tensor = tf.defaultSession.eval(tensor);
-            return new NDArray(tensor.Handle);
+            {
+                if (tf.executing_eagerly())
+                    return new NDArray(tensor);
+                else
+                    tensor = tf.defaultSession.eval(tensor);
+            }
+                
+            return new NDArray(tensor);
         }
 
         unsafe T GetAtIndex<T>(params int[] indices) where T : unmanaged

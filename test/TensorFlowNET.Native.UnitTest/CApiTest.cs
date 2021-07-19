@@ -74,9 +74,6 @@ namespace Tensorflow.Native.UnitTest
         protected SafeStatusHandle TF_NewStatus()
             => c_api.TF_NewStatus();
 
-        protected void TF_DeleteTensor(SafeTensorHandle t)
-            => c_api.TF_DeleteTensor(t.DangerousGetHandle());
-
         protected IntPtr TF_TensorData(SafeTensorHandle t)
             => c_api.TF_TensorData(t);
 

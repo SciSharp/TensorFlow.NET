@@ -21,7 +21,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             using var status = c_api.TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            c_api.TF_DeleteTensor(t.DangerousGetHandle());
+            t.Dispose();
             return th;
         }
 
@@ -127,7 +127,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             using var status = TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TF_DeleteTensor(t);
+            t.Dispose();
             return th;
         }
 
@@ -139,7 +139,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             using var status = TF_NewStatus();
             var th = TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TF_DeleteTensor(t);
+            t.Dispose();
             return th;
         }
 
@@ -151,7 +151,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             using var status = TF_NewStatus();
             var th = TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            TF_DeleteTensor(t);
+            t.Dispose();
             return th;
         }
     }

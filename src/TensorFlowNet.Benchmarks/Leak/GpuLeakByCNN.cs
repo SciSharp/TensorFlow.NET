@@ -50,7 +50,7 @@ namespace Tensorflow.Benchmark.Leak
              optimizer: keras.optimizers.RMSprop(),
              metrics: new[] { "accuracy" });
 
-            model.fit(new NDArray(inputImages), outLables, batch_size: 32, epochs: 200);
+            model.fit(inputImages, outLables, batch_size: 32, epochs: 200);
 
             keras.backend.clear_session();
         }

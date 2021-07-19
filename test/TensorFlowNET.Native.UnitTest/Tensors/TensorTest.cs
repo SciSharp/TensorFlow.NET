@@ -39,24 +39,18 @@ namespace Tensorflow.Native.UnitTest.Tensors
         public void TensorFromArray()
         {
             var array = new float[1000];
-            /*using (var t = new Tensor(array, new long[] { array.Length }, tf.float32))
+            using (var t = new Tensor(array))
             {
                 Assert.IsFalse(t.IsDisposed);
                 Assert.AreEqual(1000 * sizeof(float), (int)t.bytesize);
             }
 
-            using (var t = new Tensor(new float[] { 1 }, new long[] { 1 }, tf.float32))
+            using (var t = new Tensor(1))
             {
                 Assert.IsFalse(t.IsDisposed);
                 Assert.AreEqual(1 * sizeof(float), (int)t.bytesize);
+                Assert.AreEqual(t.shape, Shape.Scalar);
             }
-
-            using (var t = new Tensor(new float[] { 1 }, null, tf.float32))
-            {
-                Assert.IsFalse(t.IsDisposed);
-                Assert.AreEqual(1 * sizeof(float), (int)t.bytesize);
-                t.shape.Should().BeEmpty();
-            }*/
         }
 
         [TestMethod]
@@ -80,8 +74,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
         [TestMethod, Ignore]
         public void MaybeMove()
         {
-            NDArray nd = np.array(2, 3);
-            Tensor t = new Tensor(nd);
+            Tensor t = new Tensor(new[] { 2, 3 });
             Tensor o = t.MaybeMove();
             ASSERT_TRUE(o.Handle.IsInvalid); // It is unsafe to move memory TF might not own.
             t.Dispose();
@@ -94,17 +87,15 @@ namespace Tensorflow.Native.UnitTest.Tensors
         [TestMethod]
         public void Tensor()
         {
-            var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape((2, 3));
-
-            var tensor = new Tensor(nd);
-            var array = tensor.ToArray<float>();
+            var array = new[] { 1f, 2f, 3f, 4f, 5f, 6f };
+            var tensor = new Tensor(array, (2, 3));
 
             EXPECT_EQ(tensor.dtype, TF_DataType.TF_FLOAT);
-            EXPECT_EQ(tensor.rank, nd.ndim);
-            EXPECT_EQ(tensor.shape[0], nd.dims[0]);
-            EXPECT_EQ(tensor.shape[1], nd.dims[1]);
-            EXPECT_EQ(tensor.bytesize, nd.size * sizeof(float));
-            Assert.IsTrue(Enumerable.SequenceEqual(nd.ToArray<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
+            EXPECT_EQ(tensor.rank, 2);
+            EXPECT_EQ(tensor.shape[0], 2L);
+            EXPECT_EQ(tensor.shape[1], 3L);
+            EXPECT_EQ(tensor.bytesize, 6ul * sizeof(float));
+            Assert.IsTrue(Enumerable.SequenceEqual(tensor.ToArray<float>(), new float[] { 1, 2, 3, 4, 5, 6 }));
         }
 
         /// <summary>
@@ -130,7 +121,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
             Assert.AreEqual(TF_TString_Type.TF_TSTR_SMALL, c_api.TF_StringGetType(tensor));
             Assert.AreEqual(0, c_api.TF_NumDims(tensor));
 
-            TF_DeleteTensor(tensor);
+            tensor.Dispose();
             c_api.TF_StringDealloc(tstr);
         }
 

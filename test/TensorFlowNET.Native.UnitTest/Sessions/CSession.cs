@@ -64,7 +64,7 @@ namespace Tensorflow.Native.UnitTest
             foreach (var output in outputs)
             {
                 outputs_.Add(output);
-                output_values_.Add(new SafeTensorHandle(IntPtr.Zero));
+                output_values_.Add(null);
             }
         }
 
