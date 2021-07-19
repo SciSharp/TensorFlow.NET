@@ -226,9 +226,6 @@ namespace Tensorflow
                     case Tensor t:
                         dtype = t.dtype.as_base_dtype();
                         break;
-                    case NDArray t:
-                        dtype = t.dtype;
-                        break;
                 }
 
                 if (dtype != TF_DataType.DtInvalid)
@@ -1007,10 +1004,10 @@ namespace Tensorflow
                     var new_shape = new List<int>();
                     foreach ((NDArray padding, int dim) in zip(paddings_constant.GetNDArrays(), np.array(input_shape.dims).GetNDArrays()))
                     {
-                        if (padding is null || dim == -1 || padding.GetData<int>().Contains(-1))
+                        if (padding is null || dim == -1 || padding.ToArray<int>().Contains(-1))
                             new_shape.Add(-1);
                         else
-                            new_shape.Add(np.sum(padding) + dim);
+                            new_shape.Add((int)np.sum(padding) + dim);
                     }
                     result.shape = new_shape.ToArray();
                 }

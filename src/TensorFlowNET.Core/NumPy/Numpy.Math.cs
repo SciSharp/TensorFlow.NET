@@ -10,30 +10,30 @@ namespace Tensorflow.NumPy
     public partial class np
     {
         public static NDArray exp(NDArray x)
-            => tf.exp(x);
+            => new NDArray(tf.exp(x));
 
         public static NDArray log(NDArray x)
-            => tf.log(x);
+            => new NDArray(tf.log(x));
 
         public static NDArray multiply(NDArray x1, NDArray x2)
-            => tf.multiply(x1, x2);
+            => new NDArray(tf.multiply(x1, x2));
 
         public static NDArray maximum(NDArray x1, NDArray x2)
-            => tf.maximum(x1, x2);
+            => new NDArray(tf.maximum(x1, x2));
 
         public static NDArray minimum(NDArray x1, NDArray x2)
-            => tf.minimum(x1, x2);
+            => new NDArray(tf.minimum(x1, x2));
 
         public static NDArray prod(NDArray array, Axis? axis = null, Type? dtype = null, bool keepdims = false)
-            => tf.reduce_prod(array, axis: axis);
+            => new NDArray(tf.reduce_prod(array, axis: axis));
 
         public static NDArray prod<T>(params T[] array) where T : unmanaged
-            => tf.reduce_prod(ops.convert_to_tensor(array));
+            => new NDArray(tf.reduce_prod(new NDArray(array)));
 
         public static NDArray sqrt(NDArray x)
-            => tf.sqrt(x);
+            => new NDArray(tf.sqrt(x));
 
         public static NDArray sum(NDArray x1, Axis? axis = null)
-            => tf.math.sum(x1, axis);
+            => new NDArray(tf.math.sum(x1, axis));
     }
 }

@@ -429,9 +429,9 @@ namespace Tensorflow.Keras.Text
                         var c = kv.Value + 0.0;
                         var id = 0;
                         var _ = index_docs.TryGetValue(j, out id);
-                        var tf = 1.0 + np.log(c);
+                        var tf = 1.0 + (double)np.log(c);
                         var idf = np.log(1.0 + document_count / (1 + id));
-                        x[i, j] = tf * idf;
+                        x[i, j] = tf * (double)idf;
                     }
                 }
             }

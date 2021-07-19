@@ -164,8 +164,6 @@ namespace Tensorflow
                     return arr.Count;
                 case ICollection arr:
                     return arr.Count;
-                case NDArray ndArray:
-                    return ndArray.ndim == 0 ? 1 : (int)ndArray.dims[0];
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
                 case Shape arr:

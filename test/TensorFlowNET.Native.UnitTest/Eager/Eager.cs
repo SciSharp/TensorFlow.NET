@@ -21,7 +21,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             using var status = c_api.TF_NewStatus();
             var th = c_api.TFE_NewTensorHandle(t, status);
             CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
-            c_api.TF_DeleteTensor(t);
+            c_api.TF_DeleteTensor(t.DangerousGetHandle());
             return th;
         }
 

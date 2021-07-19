@@ -141,7 +141,7 @@ namespace TensorFlowNET.UnitTest
         public void assertAllClose(double value, NDArray array2, double eps = 1e-5)
         {
             var array1 = np.ones_like(array2) * value;
-            Assert.IsTrue(np.allclose(array1, array2, rtol: eps));
+            Assert.IsTrue(np.allclose(new NDArray(array1), array2, rtol: eps));
         }
 
         public void assertProtoEquals(object toProto, object o)

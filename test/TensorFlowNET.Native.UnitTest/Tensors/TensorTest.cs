@@ -83,7 +83,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
             NDArray nd = np.array(2, 3);
             Tensor t = new Tensor(nd);
             Tensor o = t.MaybeMove();
-            ASSERT_TRUE(o == IntPtr.Zero); // It is unsafe to move memory TF might not own.
+            ASSERT_TRUE(o.Handle.IsInvalid); // It is unsafe to move memory TF might not own.
             t.Dispose();
         }
 
@@ -91,7 +91,7 @@ namespace Tensorflow.Native.UnitTest.Tensors
         /// Port from c_api_test.cc
         /// `TEST(CAPI, Tensor)`
         /// </summary>
-        [TestMethod, Ignore("")]
+        [TestMethod]
         public void Tensor()
         {
             var nd = np.array(1f, 2f, 3f, 4f, 5f, 6f).reshape((2, 3));

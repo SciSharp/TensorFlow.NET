@@ -74,13 +74,13 @@ namespace Tensorflow.Native.UnitTest
         protected SafeStatusHandle TF_NewStatus()
             => c_api.TF_NewStatus();
 
-        protected void TF_DeleteTensor(IntPtr t)
-            => c_api.TF_DeleteTensor(t);
+        protected void TF_DeleteTensor(SafeTensorHandle t)
+            => c_api.TF_DeleteTensor(t.DangerousGetHandle());
 
-        protected IntPtr TF_TensorData(IntPtr t)
+        protected IntPtr TF_TensorData(SafeTensorHandle t)
             => c_api.TF_TensorData(t);
 
-        protected ulong TF_TensorByteSize(IntPtr t)
+        protected ulong TF_TensorByteSize(SafeTensorHandle t)
             => c_api.TF_TensorByteSize(t);
 
         protected void TFE_OpAddInput(SafeOpHandle op, SafeTensorHandleHandle h, SafeStatusHandle status)
@@ -98,7 +98,7 @@ namespace Tensorflow.Native.UnitTest
         protected SafeOpHandle TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status)
             => c_api.TFE_NewOp(ctx, op_or_function_name, status);
 
-        protected SafeTensorHandleHandle TFE_NewTensorHandle(IntPtr t, SafeStatusHandle status)
+        protected SafeTensorHandleHandle TFE_NewTensorHandle(SafeTensorHandle t, SafeStatusHandle status)
             => c_api.TFE_NewTensorHandle(t, status);
 
         protected void TFE_Execute(SafeOpHandle op, SafeTensorHandleHandle[] retvals, out int num_retvals, SafeStatusHandle status)
@@ -128,7 +128,7 @@ namespace Tensorflow.Native.UnitTest
         protected void TFE_ExecutorWaitForAllPendingNodes(SafeExecutorHandle executor, SafeStatusHandle status)
             => c_api.TFE_ExecutorWaitForAllPendingNodes(executor, status);
 
-        protected IntPtr TFE_TensorHandleResolve(SafeTensorHandleHandle h, SafeStatusHandle status)
+        protected SafeTensorHandle TFE_TensorHandleResolve(SafeTensorHandleHandle h, SafeStatusHandle status)
             => c_api.TFE_TensorHandleResolve(h, status);
 
         protected string TFE_TensorHandleDeviceName(SafeTensorHandleHandle h, SafeStatusHandle status)

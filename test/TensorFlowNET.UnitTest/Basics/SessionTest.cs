@@ -24,7 +24,7 @@ namespace TensorFlowNET.UnitTest
                 using (var sess = tf.Session())
                 {
                     var result = c.eval(sess);
-                    Assert.AreEqual(6, result.GetAtIndex<double>(0));
+                    Assert.AreEqual(result[0], 6.0);
                 }
             }
         }

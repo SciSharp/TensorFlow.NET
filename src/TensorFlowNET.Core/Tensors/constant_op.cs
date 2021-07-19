@@ -101,7 +101,7 @@ namespace Tensorflow
                 value is NDArray nd &&
                 nd.dtype != dtype)
             {
-                value = nd.astype(dtype.as_system_dtype());
+                value = nd.astype(dtype);
             }
 
             // non ascii char

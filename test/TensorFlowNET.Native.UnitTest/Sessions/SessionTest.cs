@@ -59,7 +59,7 @@ namespace Tensorflow.Native.UnitTest.Sessions
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
 
             outTensor = csession.output_tensor(0);
-            ASSERT_TRUE(outTensor != IntPtr.Zero);
+            ASSERT_TRUE(outTensor.Handle.DangerousGetHandle() != IntPtr.Zero);
             EXPECT_EQ(TF_DataType.TF_INT32, outTensor.dtype);
             EXPECT_EQ(0, outTensor.ndim); // scalar
             ASSERT_EQ((ulong)sizeof(uint), outTensor.bytesize);

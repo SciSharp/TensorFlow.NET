@@ -75,7 +75,7 @@ namespace Tensorflow
             }
             else
             {
-                _handle = handle;
+                _handle = handle.Handle == null ? IntPtr.Zero : handle.Handle.DangerousGetHandle();
             }
 
 #if TRACK_TENSOR_LIFE

@@ -24,35 +24,6 @@ namespace Tensorflow
 {
     public partial class Tensor
     {
-#if _REGEN
-        #region Compute
-        %operators = ["add", "sub", "mul", "div", "mod"]
-        %operators_sign = ["+", "-", "*", "/", "%"]
-        %operators_comparers = [">", "<", ">=", "<="]
-        %operators_comparers_names = ["greater", "less", "greater_equal", "less_equal"]
-
-        %possabilities = ["NDArray", "sbyte", "byte", "short", "ushort", "int", "uint", "ulong", "long", "float", "double", "Complex"]
-		
-        %foreach operators, operators_sign%
-        public static Tensor operator #2(Tensor lhs, Tensor rhs) => BinaryOpWrapper("#1", lhs, rhs);
-            %foreach possabilities%
-        public static Tensor operator #2(Tensor lhs, #101 rhs) => BinaryOpWrapper("#1", lhs, rhs);
-        public static Tensor operator #2(#101 lhs, Tensor rhs) => BinaryOpWrapper("#1", lhs, rhs);
-            %
-        %		
-
-        %foreach operators_comparers_names, operators_comparers %
-        public static Tensor operator #2(Tensor lhs, Tensor rhs) => gen_math_ops.#1(lhs, rhs);
-            %foreach possabilities%
-        public static Tensor operator #2(Tensor lhs, #101 rhs) => gen_math_ops.#1(lhs, rhs);
-        public static Tensor operator #2(#101 lhs, Tensor rhs) => gen_math_ops.#1(lhs, rhs);
-            %
-        %
-        public static Tensor operator -(Tensor x) => gen_math_ops.neg(x);
-        #endregion
-#else
-        #region Compute
-
         public static Tensor operator +(Tensor lhs, ResourceVariable rhs) => BinaryOpWrapper("add", lhs, rhs);
         public static Tensor operator +(Tensor lhs, Tensor rhs) => BinaryOpWrapper("add", lhs, rhs);
         public static Tensor operator +(Tensor lhs, NDArray rhs) => BinaryOpWrapper("add", lhs, rhs);
@@ -281,8 +252,7 @@ namespace Tensorflow
         public static Tensor operator <=(Tensor lhs, Complex rhs) => gen_math_ops.less_equal(lhs, rhs);
         public static Tensor operator <=(Complex lhs, Tensor rhs) => gen_math_ops.less_equal(lhs, rhs);
         public static Tensor operator -(Tensor x) => gen_math_ops.neg(x);
-        #endregion
-#endif
+
 
         private static readonly TF_DataType[] _intTfDataTypes = {
             TF_DataType.TF_INT8, TF_DataType.TF_INT16, TF_DataType.TF_INT32, TF_DataType.TF_INT64,
@@ -306,7 +276,7 @@ namespace Tensorflow
             return is_floating ? "truediv" : name;
         }
 
-        private static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)
+        protected static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)
         {
             TF_DataType dtype = TF_DataType.DtInvalid;
 

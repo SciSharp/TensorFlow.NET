@@ -51,7 +51,7 @@ namespace Tensorflow.Native.UnitTest.Eager
                     ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
                     ASSERT_EQ(sizeof(float), (int)TF_TensorByteSize(t));
                     tf.memcpy(&value, TF_TensorData(t).ToPointer(), sizeof(float));
-                    c_api.TF_DeleteTensor(t);
+                    c_api.TF_DeleteTensor(t.DangerousGetHandle());
                     EXPECT_EQ(12.0f, value);
                 }
                 finally

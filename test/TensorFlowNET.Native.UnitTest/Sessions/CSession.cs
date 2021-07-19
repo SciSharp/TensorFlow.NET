@@ -64,7 +64,7 @@ namespace Tensorflow.Native.UnitTest
             foreach (var output in outputs)
             {
                 outputs_.Add(output);
-                output_values_.Add(IntPtr.Zero);
+                output_values_.Add(new SafeTensorHandle(IntPtr.Zero));
             }
         }
 
@@ -77,7 +77,7 @@ namespace Tensorflow.Native.UnitTest
         public unsafe void Run(Status s)
         {
             var inputs_ptr = inputs_.ToArray();
-            var input_values_ptr = input_values_.Select(x => (IntPtr)x).ToArray();
+            var input_values_ptr = input_values_.Select(x => x.Handle.DangerousGetHandle()).ToArray();
             var outputs_ptr = outputs_.ToArray();
             var output_values_ptr = output_values_.Select(x => IntPtr.Zero).ToArray();
             IntPtr[] targets_ptr = new IntPtr[0];
@@ -90,12 +90,12 @@ namespace Tensorflow.Native.UnitTest
             s.Check();
 
             for (var i = 0; i < outputs_.Count; i++)
-                output_values_[i] = output_values_ptr[i];
+                output_values_[i] = new SafeTensorHandle(output_values_ptr[i]);
         }
 
-        public IntPtr output_tensor(int i)
+        public SafeTensorHandle output_tensor(int i)
         {
-            return output_values_[i];
+            return output_values_[i].Handle;
         }
 
         public void CloseAndDelete(Status s)

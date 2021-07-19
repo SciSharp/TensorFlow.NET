@@ -8,16 +8,16 @@ namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
-        public NDArray this[params int[] index]
+        public NDArray this[params int[] indices]
         {
-            get => GetData(index.Select(x => new Slice
+            get => GetData(indices.Select(x => new Slice
             {
                 Start = x,
                 Stop = x + 1,
                 IsIndex = true
             }));
 
-            set => SetData(index.Select(x => 
+            set => SetData(indices.Select(x => 
             {
                 if(x < 0)
                     x = (int)dims[0] + x;
@@ -57,12 +57,37 @@ namespace Tensorflow.NumPy
 
         NDArray GetData(IEnumerable<Slice> slices)
         {
-            var tensor = _tensor[slices.ToArray()];
-            return new NDArray(tensor);
+            if (shape.IsScalar)
+                return GetScalar();
+
+            var tensor = base[slices.ToArray()];
+            if (tensor.Handle == null)
+                tensor = tf.defaultSession.eval(tensor);
+            return new NDArray(tensor.Handle);
+        }
+
+        unsafe T GetAtIndex<T>(params int[] indices) where T : unmanaged
+        {
+            var offset = (ulong)ShapeHelper.GetOffset(shape, indices);
+            return *((T*)data + offset);
+        }
+
+        NDArray GetScalar()
+        {
+            var array = new NDArray(Shape.Scalar, dtype: dtype);
+            unsafe
+            {
+                var src = (byte*)data + dtypesize;
+                System.Buffer.MemoryCopy(src, array.buffer.ToPointer(), bytesize, bytesize);
+            }
+            return array;
         }
 
         NDArray GetData(int[] indices, int axis = 0)
         {
+            if (shape.IsScalar)
+                return GetScalar();
+
             if(axis == 0)
             {
                 var dims = shape.as_int_list();

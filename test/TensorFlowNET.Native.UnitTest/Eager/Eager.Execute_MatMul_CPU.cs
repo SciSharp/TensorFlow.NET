@@ -27,7 +27,7 @@ namespace Tensorflow.Native.UnitTest.Eager
                 return c_api.TFE_NewContext(opts, status);
             }
 
-            IntPtr t;
+            SafeTensorHandle t;
             using (var ctx = NewContext(async, status))
             {
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -58,7 +58,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             EXPECT_EQ(product.Length * sizeof(float), (int)TF_TensorByteSize(t));
             tf.memcpy(product, TF_TensorData(t), TF_TensorByteSize(t));
 
-            c_api.TF_DeleteTensor(t);
+            c_api.TF_DeleteTensor(t.DangerousGetHandle());
             EXPECT_EQ(7f, product[0]);
             EXPECT_EQ(10f, product[1]);
             EXPECT_EQ(15f, product[2]);

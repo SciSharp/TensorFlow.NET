@@ -1,23 +1,18 @@
-﻿using Tensorflow.NumPy;
-using System;
+﻿using System;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public partial class Tensor
     {
-        public static implicit operator IntPtr(Tensor tensor)
-        {
-            return tensor._handle;
-        }
-
+        public static implicit operator SafeTensorHandle(Tensor tensor)
+            => tensor._handle;
+        
         public static implicit operator Operation(Tensor tensor)
             => tensor?.op;
 
-        public static implicit operator TF_Tensor(Tensor tensor)
-            => new TF_Tensor(tensor._handle);
-
-        public static implicit operator Tensor(IntPtr handle)
+        public static implicit operator Tensor(SafeTensorHandle handle)
             => new Tensor(handle);
     }
 }

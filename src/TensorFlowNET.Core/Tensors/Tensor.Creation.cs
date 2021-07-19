@@ -28,7 +28,7 @@ namespace Tensorflow
     [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
     public partial class Tensor
     {
-        public IntPtr TensorDataPointer => _handle == IntPtr.Zero ? IntPtr.Zero : TF_TensorData(_handle);
+        public IntPtr TensorDataPointer => _handle == null ? IntPtr.Zero : TF_TensorData(_handle);
 
         public Tensor()
         {
@@ -39,7 +39,7 @@ namespace Tensorflow
         ///     Create a Tensor object from an existing TF handle
         /// </summary>
         /// <param name="handle">Handle to a <see cref="Tensor"/> object.</param>
-        public Tensor(IntPtr handle)
+        public Tensor(SafeTensorHandle handle)
         {
             _handle = handle;
             isCreatedInGraphMode = !tf.executing_eagerly();
@@ -174,25 +174,25 @@ namespace Tensorflow
             };
         }
 
-        unsafe IntPtr InitTensor<T>(T[] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        unsafe SafeTensorHandle InitTensor<T>(T[] array, Shape shape, TF_DataType dtype) where T : unmanaged
         {
             fixed (T* addr = &array[0])
                 return TF_NewTensor(shape, dtype, addr);
         }
 
-        unsafe IntPtr InitTensor<T>(T[,] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        unsafe SafeTensorHandle InitTensor<T>(T[,] array, Shape shape, TF_DataType dtype) where T : unmanaged
         {
             fixed (T* addr = &array[0, 0])
                 return TF_NewTensor(shape, dtype, addr);
         }
 
-        unsafe IntPtr InitTensor<T>(T[,,] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        unsafe SafeTensorHandle InitTensor<T>(T[,,] array, Shape shape, TF_DataType dtype) where T : unmanaged
         {
             fixed (T* addr = &array[0, 0, 0])
                 return TF_NewTensor(shape, dtype, addr);
         }
 
-        unsafe IntPtr InitTensor<T>(T[,,,] array, Shape shape, TF_DataType dtype) where T : unmanaged
+        unsafe SafeTensorHandle InitTensor<T>(T[,,,] array, Shape shape, TF_DataType dtype) where T : unmanaged
         {
             fixed (T* addr = &array[0, 0, 0, 0])
                 return TF_NewTensor(shape, dtype, addr);

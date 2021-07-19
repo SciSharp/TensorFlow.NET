@@ -46,11 +46,5 @@ namespace Tensorflow.NumPy
 
         public static implicit operator NDArray(double value)
             => new NDArray(value);
-
-        public static implicit operator Tensor(NDArray nd)
-            => nd?._tensor;
-
-        public static implicit operator NDArray(Tensor tensor)
-            => new NDArray(tensor);
     }
 }

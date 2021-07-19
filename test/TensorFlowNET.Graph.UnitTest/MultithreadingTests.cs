@@ -195,7 +195,7 @@ namespace TensorFlowNET.UnitTest
                     using (var sess = tf.Session())
                     {
                         var result = sess.run(math);
-                        Assert.AreEqual(result.GetAtIndex<float>(0), 5f);
+                        Assert.AreEqual(result[0], 5f);
                     }
                 }
             }
@@ -218,7 +218,7 @@ namespace TensorFlowNET.UnitTest
                     var math = a1 + a2;
 
                     var result = sess.run(math);
-                    Assert.AreEqual(result.GetAtIndex<float>(0), 5f);
+                    Assert.AreEqual(result[0], 5f);
                 }
             }
         }

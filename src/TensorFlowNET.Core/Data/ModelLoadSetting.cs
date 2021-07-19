@@ -6,7 +6,7 @@ namespace Tensorflow
     {
         public string TrainDir { get; set; }
         public bool OneHot { get; set; }
-        public Type DataType { get; set; } = typeof(float);
+        public TF_DataType DataType { get; set; } = TF_DataType.TF_FLOAT;
         public bool ReShape { get; set; }
         public int ValidationSize { get; set; } = 5000;
         public int? TrainSize { get; set; }

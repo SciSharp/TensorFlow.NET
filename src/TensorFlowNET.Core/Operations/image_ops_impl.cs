@@ -355,7 +355,7 @@ or rank = 4. Had rank = {0}", rank));
                 if ((bool)h[1])
                 {
                     hd = math_ops.cast((IVariableV1)h[0], dtypes.float64);
-                    bbox_h_start = math_ops.cast(((int)hd - (int)hd * central_fraction) / 2, dtypes.int32);
+                    bbox_h_start = ((int)hd - (int)hd * central_fraction) / 2;
                 }
                 else
                 {
@@ -367,7 +367,7 @@ or rank = 4. Had rank = {0}", rank));
                 if ((bool)w[1])
                 {
                     wd = math_ops.cast((IVariableV1)w[0], dtypes.float64);
-                    bbox_w_start = math_ops.cast(((int)wd - (int)wd * central_fraction) / 2, dtypes.int32);
+                    bbox_w_start = ((int)wd - (int)wd * central_fraction) / 2;
                 }
                 else
                 {
@@ -734,20 +734,16 @@ new_height, new_width");
                   {
                       var _chcw_ = _ImageDimensions(images, rank: 4);
 
-                      var scale_factor_height = (
-                          math_ops.cast(size[0], dtypes.float32) /
-                          math_ops.cast(_chcw_[1], dtypes.float32));
-                      var scale_factor_width = (
-                          math_ops.cast(size[1], dtypes.float32) /
-                          math_ops.cast(_chcw_[2], dtypes.float32));
+                      var scale_factor_height = 
+                          math_ops.cast(size[0], dtypes.float32) / _chcw_[1];
+                      var scale_factor_width = 
+                          math_ops.cast(size[1], dtypes.float32) / _chcw_[2];
                       var scale_factor = math_ops.minimum(scale_factor_height, scale_factor_width);
                       var scaled_height_const = math_ops.cast(
-                          math_ops.round(scale_factor *
-                                      math_ops.cast(_chcw_[1], dtypes.float32)),
+                          math_ops.round(scale_factor * _chcw_[1]),
                           dtypes.int32);
                       var scaled_width_const = math_ops.cast(
-                          math_ops.round(scale_factor *
-                                      math_ops.cast(_chcw_[2], dtypes.float32)),
+                          math_ops.round(scale_factor * _chcw_[2]),
                           dtypes.int32);
 
                       size = ops.convert_to_tensor(new[] { scaled_height_const, scaled_width_const },
@@ -903,10 +899,10 @@ new_height, new_width");
 
                      var _hw_ = _ImageDimensions(image, rank: 4);
 
-                     var f_height = math_ops.cast(_hw_[1], dtype: dtypes.float32);
-                     var f_width = math_ops.cast(_hw_[2], dtype: dtypes.float32);
-                     var f_target_height = math_ops.cast(target_height, dtype: dtypes.float32);
-                     var f_target_width = math_ops.cast(target_width, dtype: dtypes.float32);
+                     var f_height = _hw_[1];
+                     var f_width = _hw_[2];
+                     var f_target_height = target_height;
+                     var f_target_width = target_width;
 
                      var ratio = (Tensor)max_(f_width / f_target_width, f_height / f_target_height);
                      var resized_height_float = f_height / ratio;
@@ -1520,7 +1516,7 @@ new_height, new_width");
                  using (ops.control_dependencies(checks))
                      img1 = array_ops.identity(img1);
 
-                 Tensor max_val_tensor = math_ops.cast(max_val, img1.dtype);
+                 Tensor max_val_tensor = constant_op.constant(max_val, img1.dtype);
                  max_val_tensor = convert_image_dtype(max_val_tensor, dtypes.float32);
                  img1 = convert_image_dtype(img1, dtypes.float32);
                  img2 = convert_image_dtype(img2, dtypes.float32);
@@ -1546,7 +1542,7 @@ new_height, new_width");
                  using (ops.control_dependencies(checks))
                      img1 = array_ops.identity(img1);
 
-                 Tensor max_val_tensor = math_ops.cast(max_val, img1.dtype);
+                 Tensor max_val_tensor = constant_op.constant(max_val);
                  max_val_tensor = convert_image_dtype(max_val_tensor, dtypes.float32);
                  img1 = convert_image_dtype(img1, dtypes.float32);
                  img2 = convert_image_dtype(img2, dtypes.float32);
@@ -2027,8 +2023,7 @@ new_height, new_width");
             var pad = math_ops.cast(
                 gen_math_ops.ceil(
                     math_ops.cast(
-                        math_ops.maximum(num_boxes, max_output_size), dtypes.float32) /
-                    math_ops.cast(tile_size, dtypes.float32)),
+                        math_ops.maximum(num_boxes, max_output_size), dtypes.float32) / tile_size),
                 dtypes.int32) * tile_size - num_boxes;
             boxes = array_ops.pad(
                 math_ops.cast(scores, dtypes.float32), ops.convert_to_tensor(new object[,] { { 0, 0 }, { 0, pad }, { 0, 0 } }));
@@ -2078,7 +2073,7 @@ new_height, new_width");
                                                 array_ops.expand_dims(
                                                     math_ops.range(num_boxes_after_padding, 0, -1), 0),
                                                 max_output_size);
-            Tensor idx = num_boxes_after_padding - math_ops.cast(values.dims[0], dtypes.int32);
+            Tensor idx = num_boxes_after_padding - values.shape.as_int_list()[0];
             idx = math_ops.minimum(idx, num_boxes - 1);
 
             if (!sorted_input)

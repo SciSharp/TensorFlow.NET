@@ -156,7 +156,7 @@ namespace Tensorflow
 
         private static HandleData get_eager_safe_handle_data(Tensor handle)
         {
-            if (handle == IntPtr.Zero)
+            if (handle.Handle == null)
             {
                 var data = new HandleData();
                 data.ShapeAndType.Add(new HandleShapeAndType

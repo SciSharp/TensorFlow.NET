@@ -19,8 +19,8 @@ namespace Tensorflow.Keras.Layers
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            scale = math_ops.cast(args.Scale, args.DType);
-            offset = math_ops.cast(args.Offset, args.DType);
+            scale = constant_op.constant(args.Scale, args.DType);
+            offset = constant_op.constant(args.Offset, args.DType);
             return math_ops.cast(inputs, args.DType) * scale + offset;
         }
 

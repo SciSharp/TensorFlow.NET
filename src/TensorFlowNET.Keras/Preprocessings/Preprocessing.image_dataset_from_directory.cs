@@ -119,8 +119,8 @@ namespace Tensorflow.Keras
                 rng.shuffle(start_positions);
             }
 
-            var sequence_length_tensor = math_ops.cast(sequence_length, dtype: index_dtype);
-            var sampling_rate_tensor = math_ops.cast(sampling_rate, dtype: index_dtype);
+            var sequence_length_tensor = constant_op.constant(sequence_length, dtype: index_dtype);
+            var sampling_rate_tensor = constant_op.constant(sampling_rate, dtype: index_dtype);
 
             var start_positions_tensor = tf.constant(start_positions);
             var positions_ds = tf.data.Dataset.from_tensors(start_positions_tensor).repeat();

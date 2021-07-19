@@ -303,7 +303,7 @@ namespace Tensorflow
         /// <param name="t">const tensorflow::Tensor&amp;</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeTensorHandleHandle TFE_NewTensorHandle(IntPtr t, SafeStatusHandle status);
+        public static extern SafeTensorHandleHandle TFE_NewTensorHandle(SafeTensorHandle t, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern SafeTensorHandleHandle TFE_EagerTensorHandle(IntPtr t);
@@ -334,7 +334,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleResolve(SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern SafeTensorHandle TFE_TensorHandleResolve(SafeTensorHandleHandle h, SafeStatusHandle status);
 
 
         /// <summary>

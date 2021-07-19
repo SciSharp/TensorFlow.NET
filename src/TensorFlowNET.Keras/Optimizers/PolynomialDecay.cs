@@ -37,11 +37,11 @@ namespace Tensorflow.Keras.Optimizers
                 name = scope;
                 var initial_learning_rate_tensor = ops.convert_to_tensor(initial_learning_rate, name: "initial_learning_rate");
                 var dtype = initial_learning_rate_tensor.dtype;
-                var end_learning_rate_tensor = math_ops.cast(end_learning_rate, dtype);
-                var power_tensor = math_ops.cast(power, dtype);
+                var end_learning_rate_tensor = constant_op.constant(end_learning_rate, dtype);
+                var power_tensor = constant_op.constant(power, dtype);
 
-                var global_step_recomp = math_ops.cast(step, dtype);
-                var decay_steps_recomp = math_ops.cast(decay_steps, dtype);
+                var global_step_recomp = constant_op.constant(step, dtype);
+                var decay_steps_recomp = constant_op.constant(decay_steps, dtype);
 
                 if (cycle)
                 {

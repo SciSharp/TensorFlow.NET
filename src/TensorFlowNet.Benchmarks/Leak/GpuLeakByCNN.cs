@@ -24,7 +24,7 @@ namespace Tensorflow.Benchmark.Leak
 
             var bytes = new byte[num * width * height * 3];
             var inputImages = np.array(bytes) / 255.0f;
-            inputImages = inputImages.reshape((num, height, width, 3));
+            // inputImages = inputImages.reshape((num, height, width, 3));
 
             bytes = new byte[num];
             var outLables = np.array(bytes);
@@ -50,7 +50,7 @@ namespace Tensorflow.Benchmark.Leak
              optimizer: keras.optimizers.RMSprop(),
              metrics: new[] { "accuracy" });
 
-            model.fit(inputImages, outLables, batch_size: 32, epochs: 200);
+            model.fit(new NDArray(inputImages), outLables, batch_size: 32, epochs: 200);
 
             keras.backend.clear_session();
         }

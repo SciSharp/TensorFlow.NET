@@ -452,7 +452,7 @@ namespace Tensorflow.Native.UnitTest
             for (int i = 0; i < expected_results.Length; ++i)
             {
                 var output = csession.output_tensor(i);
-                ASSERT_TRUE(output != IntPtr.Zero);
+                ASSERT_TRUE(!output.IsInvalid);
                 EXPECT_EQ(TF_DataType.TF_INT32, c_api.TF_TensorType(output));
                 EXPECT_EQ(0, c_api.TF_NumDims(output));
                 ASSERT_EQ(sizeof(int), (int)c_api.TF_TensorByteSize(output));

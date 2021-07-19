@@ -25,7 +25,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             EXPECT_EQ(2.0f, data[1]);
             EXPECT_EQ(3.0f, data[2]);
             EXPECT_EQ(4.0f, data[3]);
-            c_api.TF_DeleteTensor(t);
+            c_api.TF_DeleteTensor(t.DangerousGetHandle());
         }
     }
 }

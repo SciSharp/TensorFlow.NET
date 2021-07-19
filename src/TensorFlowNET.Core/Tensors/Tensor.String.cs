@@ -10,7 +10,7 @@ namespace Tensorflow
     {
         const int TF_TSRING_SIZE = 24;
 
-        public IntPtr StringTensor(string[] strings, Shape shape)
+        public SafeTensorHandle StringTensor(string[] strings, Shape shape)
         {
             // convert string array to byte[][]
             var buffer = new byte[strings.Length][];
@@ -20,7 +20,7 @@ namespace Tensorflow
             return StringTensor(buffer, shape);
         }
 
-        public IntPtr StringTensor(byte[][] buffer, Shape shape)
+        public SafeTensorHandle StringTensor(byte[][] buffer, Shape shape)
         {
             var handle = c_api.TF_AllocateTensor(TF_DataType.TF_STRING,
                 shape.ndim == 0 ? null : shape.dims,

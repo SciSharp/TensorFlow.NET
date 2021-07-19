@@ -70,12 +70,12 @@ namespace Tensorflow
         /// <summary>
         ///     The DType of elements in this tensor.
         /// </summary>
-        public TF_DataType dtype => _handle == IntPtr.Zero ? _override_dtype : c_api.TF_TensorType(_handle);
-        public ulong bytesize => _handle == IntPtr.Zero ? 0 : c_api.TF_TensorByteSize(_handle);
-        public ulong dtypesize => _handle == IntPtr.Zero ? 0 : c_api.TF_DataTypeSize(dtype);
-        public ulong size => _handle == IntPtr.Zero ? 0 : bytesize / dtypesize;
-        public IntPtr buffer => _handle == IntPtr.Zero ? IntPtr.Zero : c_api.TF_TensorData(_handle);
-        public int num_consumers(TF_Output oper_out) => _handle == IntPtr.Zero ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
+        public TF_DataType dtype => _handle == null ? _override_dtype : c_api.TF_TensorType(_handle);
+        public ulong bytesize => _handle == null ? 0 : c_api.TF_TensorByteSize(_handle);
+        public ulong dtypesize => _handle == null ? 0 : c_api.TF_DataTypeSize(dtype);
+        public ulong size => _handle == null ? 0 : bytesize / dtypesize;
+        public IntPtr buffer => _handle == null ? IntPtr.Zero : c_api.TF_TensorData(_handle);
+        public int num_consumers(TF_Output oper_out) => _handle == null ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
         public int ndim => rank;
 
         /// <summary>
@@ -88,6 +88,8 @@ namespace Tensorflow
         ///     Used for keep other pointer when do implicit operating
         /// </summary>
         public object Tag { get; set; }
+        protected new SafeTensorHandle _handle;
+        public SafeTensorHandle Handle => _handle;
 
         protected SafeTensorHandleHandle _eagerTensorHandle;
         /// <summary>
@@ -118,7 +120,7 @@ namespace Tensorflow
 
                 var dims = new Shape(new long[rank]);
 
-                if (_handle == IntPtr.Zero)
+                if (_handle == null)
                 {
                     c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.Status.Handle);
                 }
@@ -183,7 +185,7 @@ namespace Tensorflow
         {
             get
             {
-                if (_handle == IntPtr.Zero)
+                if (_handle == null)
                 {
                     var output = _as_tf_output();
                     int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.Status.Handle);
@@ -215,7 +217,7 @@ namespace Tensorflow
 
         public void SetReferencedByNDArray() 
         {
-            if (_handle != IntPtr.Zero)
+            if (_handle is not null)
             {
                 isReferencedByNDArray = true;
                 _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
@@ -278,11 +280,6 @@ namespace Tensorflow
                     tstr += TF_TSRING_SIZE;
                 }
             }
-
-            c_api.TF_DeleteTensor(handle);
-
-            if (_eagerTensorHandle is not null)
-                _eagerTensorHandle.Dispose();
         }
 
         public bool IsDisposed => _disposed;

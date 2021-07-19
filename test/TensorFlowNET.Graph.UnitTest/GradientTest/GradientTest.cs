@@ -81,8 +81,8 @@ namespace TensorFlowNET.UnitTest.Gradient
             using (var sess = tf.Session())
             {
                 var result = sess.run(g);
-                var resultList = result[0].GetData<float>().ToList();
-                resultList.AddRange(result[1].GetData<float>());
+                var resultList = result[0].ToArray<float>().ToList();
+                resultList.AddRange(result[1].ToArray<float>());
                 Console.WriteLine(result.ToString());
                 CollectionAssert.AreEqual(resultList.ToArray(), checkG);
             }
@@ -100,7 +100,7 @@ namespace TensorFlowNET.UnitTest.Gradient
                 using (var session = tf.Session())
                 {
                     var result = session.run(new[] { y, g[0] });
-                    return (result[0].GetData<T>()[0], result[1].GetData<T>()[0]);
+                    return (result[0].ToArray<T>()[0], result[1].ToArray<T>()[0]);
                 }
             }
 
@@ -184,8 +184,8 @@ namespace TensorFlowNET.UnitTest.Gradient
             using (var sess = tf.Session())
             {
                 var result = sess.run(g);
-                var actual = result[0].GetData<float>()[0];
-                self.assertEquals(0.41997434127f, actual);
+                var actual = result[0];
+                Assert.AreEqual(actual, 0.41997434127f);
             }
         }
 
@@ -199,10 +199,10 @@ namespace TensorFlowNET.UnitTest.Gradient
             using (var sess = tf.Session())
             {
                 var result = sess.run(new object[] { g, b });
-                var actualDeriv = result[0].GetData<float>()[0];
-                var actual = result[1].GetData<float>()[0];
-                self.assertEquals(1.5061177f, actualDeriv);
-                self.assertEquals(3.17805386f, actual);
+                var actualDeriv = result[0];
+                var actual = result[1];
+                Assert.AreEqual(actualDeriv, 1.5061177f);
+                Assert.AreEqual(actual, 3.17805386f);
             }
         }
 
@@ -221,8 +221,8 @@ namespace TensorFlowNET.UnitTest.Gradient
                 var result = sess.run(new object[] { g, b });
                 var actualDeriv = np.squeeze(result[0]);
                 var actual = np.squeeze(result[1]);
-                self.assertEquals(new float[] { 1, 0 }, new float[] { actualDeriv[0], actualDeriv[1] });
-                self.assertEquals(0.9640276f, (float)actual);
+                Assert.AreEqual(actualDeriv, new float[] { 1, 0 });
+                Assert.AreEqual(actual, 0.9640276f);
             }
         }
 
@@ -236,10 +236,10 @@ namespace TensorFlowNET.UnitTest.Gradient
             using (var sess = tf.Session())
             {
                 var result = sess.run(new object[] { g, a });
-                var actualDeriv = result[0].GetData<float>()[0];
-                var actual = result[1].GetData<float>()[0];
-                self.assertEquals(1f, actualDeriv);
-                self.assertEquals(2f, actual);
+                var actualDeriv = result[0][0];
+                var actual = result[1][0];
+                Assert.AreEqual(actualDeriv, 1f);
+                Assert.AreEqual(actual, 2f);
             }
         }
 
@@ -252,8 +252,8 @@ namespace TensorFlowNET.UnitTest.Gradient
             using (var sess = tf.Session())
             {
                 var result = sess.run(g);
-                var actual = result[0].GetData<float>()[0];
-                self.assertEquals(0.41997434127f, actual);
+                var actual = result[0];
+                Assert.AreEqual(actual, 0.41997434127f);
             }
         }
         [Ignore("TODO")]

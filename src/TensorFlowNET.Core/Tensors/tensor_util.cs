@@ -35,8 +35,8 @@ namespace Tensorflow
         /// <returns></returns>
         public static NDArray constant_value(Tensor tensor, bool partial = false)
         {
-            if (tensor.IsReferencedByNDArray)
-                return new NDArray(tensor);
+            if (tensor is NDArray nd)
+                return nd;
             else if (tensor is EagerTensor)
                 return tensor.numpy();
 
@@ -230,7 +230,7 @@ namespace Tensorflow
                     throw new ValueError(
                         @"Received a scalar with unknown value as shape; require a statically
 known scalar with value '-1' to describe an unknown shape.");
-                if (value_ != -1)
+                if ((int)value_ != -1)
                     throw new ValueError(
                         String.Format(@"Received a scalar value {0} as shape; require a statically known
 scalar with value '-1' to describe an unknown shape.", value_));
@@ -257,7 +257,7 @@ scalar with value '-1' to describe an unknown shape.", value_));
                         x_[x_.Length] = x;
                     else
                         x_[x_.Length] = -1;
-                var dest_dtype_shape_array = np.array(x_).astype(cast_dtype.as_system_dtype());
+                var dest_dtype_shape_array = np.array(x_).astype(cast_dtype);
 
                 long[] y_ = { };
                 foreach (int y in dest_dtype_shape_array.ToArray<int>())
@@ -280,7 +280,7 @@ scalar with value '-1' to describe an unknown shape.", value_));
 would not be rank 1.", tensor.op.get_attr("axis")));
                 foreach (Tensor pack_input in tensor.op.inputs)
                 {
-                    var pack_input_val = constant_value(pack_input);
+                    var pack_input_val = (int)constant_value(pack_input);
                     Dimension new_dim;
                     if (pack_input_val < 0)
                     {
@@ -350,12 +350,12 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                             // sorry for the mess here, but this hacky solution was the best way
                             // i could come up with to implement the things done in python in c#
                             var prev_ = constant_value_as_shape(tensor.op.inputs[0]).dims;
-                            var prev = prev_.Skip(begin).Take(end - begin).ToArray();
+                            var prev = prev_.Skip((int)begin).Take((int)end - (int)begin).ToArray();
                             // 100 being the comparison doesn't really matter here; it's going to break anyway
-                            for (int iter = 0; iter != 100; iter = iter + strides)
+                            for (int iter = 0; iter != 100; iter = iter + (int)strides)
                             {
                                 prev[prev.Length] = prev_[iter];
-                                if ((iter + strides) > prev_.Length)
+                                if ((iter + (int)strides) > prev_.Length)
                                     break;
                             }
                             var ret_ = new Shape(prev);

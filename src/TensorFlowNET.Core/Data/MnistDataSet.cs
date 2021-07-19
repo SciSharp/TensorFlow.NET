@@ -10,7 +10,7 @@ namespace Tensorflow
         public int EpochsCompleted { get; private set; }
         public int IndexInEpoch { get; private set; }
 
-        public MnistDataSet(NDArray images, NDArray labels, Type dataType, bool reshape)
+        public MnistDataSet(NDArray images, NDArray labels, TF_DataType dataType, bool reshape)
         {
             EpochsCompleted = 0;
             IndexInEpoch = 0;

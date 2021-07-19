@@ -8,18 +8,36 @@ namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
-        public NDArray(bool value) => Init(value);
-        public NDArray(byte value) => Init(value);
-        public NDArray(short value) => Init(value);
-        public NDArray(int value) => Init(value);
-        public NDArray(long value) => Init(value);
-        public NDArray(float value) => Init(value);
-        public NDArray(double value) => Init(value);
-        public NDArray(Array value, Shape? shape = null) => Init(value, shape);
-        public NDArray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE) => Init(shape, dtype: dtype);
-        public NDArray(Tensor value, Shape? shape = null) => Init(value, shape);
-        public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) => Init(bytes, shape, dtype);
-        public NDArray(IntPtr address, Shape shape, TF_DataType dtype) => Init(address, shape, dtype);
+        public NDArray(bool value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(byte value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(short value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(int value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(long value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(float value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(double value) : base(value) { NewEagerTensorHandle(); }
+
+        public NDArray(Array value, Shape? shape = null) 
+            : base(value, shape) { NewEagerTensorHandle(); }
+
+        public NDArray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE) 
+            : base(shape, dtype: dtype) { NewEagerTensorHandle(); }
+
+        public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) 
+            : base(bytes, shape, dtype) { NewEagerTensorHandle(); }
+
+        public NDArray(IntPtr address, Shape shape, TF_DataType dtype) 
+            : base(address, shape, dtype) { NewEagerTensorHandle(); }
+
+        public NDArray(Tensor tensor) : base(tensor.Handle) 
+        {
+            if (_handle is null)
+            {
+                tensor = tf.defaultSession.eval(tensor);
+                _handle = tensor.Handle;
+            }
+                
+            NewEagerTensorHandle(); 
+        }
 
         public static NDArray Scalar<T>(T value) where T : unmanaged
             => value switch
@@ -33,59 +51,11 @@ namespace Tensorflow.NumPy
                 _ => throw new NotImplementedException("")
             };
 
-        void Init<T>(T value) where T : unmanaged
+        void NewEagerTensorHandle()
         {
-            _tensor = value switch
-            {
-                bool val => new Tensor(val),
-                byte val => new Tensor(val),
-                int val => new Tensor(val),
-                long val => new Tensor(val),
-                float val => new Tensor(val),
-                double val => new Tensor(val),
-                _ => throw new NotImplementedException("")
-            };
-
-            _tensor.SetReferencedByNDArray();
-        }
-
-        void Init(Array value, Shape? shape = null)
-        {
-            _tensor = new Tensor(value, shape ?? value.GetShape());
-            _tensor.SetReferencedByNDArray();
-        }
-
-        void Init(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
-        {
-            _tensor = new Tensor(shape, dtype: dtype);
-            _tensor.SetReferencedByNDArray();
-        }
-
-        void Init(Tensor value, Shape? shape = null)
-        {
-            // created tensor in graph mode
-            if (value.TensorDataPointer == IntPtr.Zero)
-            {
-                if (!value.graph.building_function)
-                {
-                    value = tf.defaultSession.eval(value);
-                    value = new Tensor(value.TensorDataPointer, shape ?? value.shape, value.dtype);
-                }
-            }
-            _tensor = value;
-            _tensor.SetReferencedByNDArray();
-        }
-
-        void Init(byte[] bytes, Shape shape, TF_DataType dtype)
-        {
-            _tensor = new Tensor(bytes, shape, dtype);
-            _tensor.SetReferencedByNDArray();
-        }
-
-        void Init(IntPtr address, Shape shape, TF_DataType dtype)
-        {
-            _tensor = new Tensor(address, shape, dtype);
-            _tensor.SetReferencedByNDArray();
+            _id = ops.uid();
+            _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+            tf.Status.Check(true);
         }
     }
 }

@@ -169,10 +169,7 @@ namespace Tensorflow
                                 throw new ValueError($"Tensor {v} does not match the expected dtype {key.dtype}, actual dtype: {v.dtype}");
                             feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), v);
                             break;
-                        case NDArray v:
-                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), v);
-                            break;
-                        case IntPtr v:
+                        case SafeTensorHandle v:
                             var tensor = new Tensor(v);
                             if (tensor.dtype != key.dtype)
                                 throw new ValueError($"Tensor {v} does not match the expected dtype {key.dtype}, actual dtype: {tensor.dtype}");
@@ -225,7 +222,7 @@ namespace Tensorflow
             c_api.TF_SessionRun(_handle,
                 run_options: null,
                 inputs: feed_dict.Select(f => f.Key).ToArray(),
-                input_values: feed_dict.Select(f => (IntPtr)f.Value).ToArray(),
+                input_values: feed_dict.Select(f => f.Value.Handle.DangerousGetHandle()).ToArray(),
                 ninputs: feed_dict.Length,
                 outputs: fetch_list,
                 output_values: output_values,
@@ -240,7 +237,7 @@ namespace Tensorflow
             var result = new NDArray[fetch_list.Length];
 
             for (int i = 0; i < fetch_list.Length; i++)
-                result[i] = fetchValue(output_values[i]);
+                result[i] = fetchValue(new SafeTensorHandle(output_values[i]));
 
             return result;
         }
@@ -267,10 +264,10 @@ namespace Tensorflow
 
             status.Check(true);
 
-            return new Tensor(output_values[0]);
+            return new Tensor(new SafeTensorHandle(output_values[0]));
         }
 
-        private static unsafe NDArray fetchValue(IntPtr output)
+        private static unsafe NDArray fetchValue(SafeTensorHandle output)
         {
             var tensor = new Tensor(output);
             return tensor.numpy();

@@ -56,7 +56,7 @@ namespace Tensorflow.Eager
         public EagerTensor(byte[] bytes, Shape shape, TF_DataType dtype) : base(bytes, shape, dtype)
             => NewEagerTensorHandle(_handle);
 
-        void NewEagerTensorHandle(IntPtr h)
+        void NewEagerTensorHandle(SafeTensorHandle h)
         {
             _id = ops.uid();
             _eagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status.Handle);

@@ -152,21 +152,6 @@ namespace Tensorflow
              });
         }
 
-        public static Tensor cast(float x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
-        {
-            var base_type = dtype.as_base_dtype();
-
-            return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
-            {
-                name = scope;
-                var x_tensor = ops.convert_to_tensor(x, name: "x");
-                if (x_tensor.dtype.as_base_dtype() != base_type)
-                    x_tensor = gen_math_ops.cast(x_tensor, base_type, name: name);
-
-                return x_tensor;
-            });
-        }
-
         public static Tensor cumsum<T>(Tensor x, T axis = default, bool exclusive = false, bool reverse = false, string name = null)
             => tf_with(ops.name_scope(name, "Cumsum", new { x }), scope =>
             {

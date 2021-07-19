@@ -99,7 +99,7 @@ namespace Tensorflow
         public static extern void TF_SetAttrStringList(IntPtr desc, string attr_name, IntPtr[] values, uint[] lengths, int num_values);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, IntPtr value, SafeStatusHandle status);
+        public static extern void TF_SetAttrTensor(IntPtr desc, string attr_name, SafeTensorHandle value, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrType(IntPtr desc, string attr_name, TF_DataType value);
