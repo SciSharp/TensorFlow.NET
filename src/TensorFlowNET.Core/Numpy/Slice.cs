@@ -115,11 +115,12 @@ namespace Tensorflow
         /// <param name="start">Start index of the slice, null means from the start of the array</param>
         /// <param name="stop">Stop index (first index after end of slice), null means to the end of the array</param>
         /// <param name="step">Optional step to select every n-th element, defaults to 1</param>
-        public Slice(int? start = null, int? stop = null, int step = 1)
+        public Slice(int? start = null, int? stop = null, int step = 1, bool isIndex = false)
         {
             Start = start;
             Stop = stop;
             Step = step;
+            IsIndex = isIndex; 
         }
 
         public Slice(string slice_notation)

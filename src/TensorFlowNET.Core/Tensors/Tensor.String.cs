@@ -23,7 +23,7 @@ namespace Tensorflow
         public SafeStringTensorHandle StringTensor(byte[][] buffer, Shape shape)
         {
             var handle = c_api.TF_AllocateTensor(TF_DataType.TF_STRING,
-                shape.ndim == 0 ? null : shape.dims,
+                shape.dims,
                 shape.ndim,
                 (ulong)shape.size * TF_TSRING_SIZE);
 

@@ -15,7 +15,7 @@ namespace Tensorflow.NumPy
                 Start = x,
                 Stop = x + 1,
                 IsIndex = true
-            }));
+            }).ToArray());
 
             set => SetData(indices.Select(x => 
             {
@@ -55,21 +55,58 @@ namespace Tensorflow.NumPy
             }
         }
 
-        NDArray GetData(IEnumerable<Slice> slices)
+        
+        unsafe NDArray GetData(Slice[] slices)
         {
             if (shape.IsScalar)
                 return GetScalar();
 
+            if (SliceHelper.AreAllIndex(slices, out var indices1))
+            {
+                var newshape = ShapeHelper.GetShape(shape, slices);
+                if (newshape.IsScalar)
+                {
+                    var offset = ShapeHelper.GetOffset(shape, indices1);
+                    return GetScalar((ulong)offset);
+                }
+                else
+                {
+                    return GetArrayData(newshape, indices1);
+                }
+            }
+            else if (slices.Count() == 1)
+            {
+                var slice = slices[0];
+                if (slice.Step == 1)
+                {
+                    var newshape = ShapeHelper.GetShape(shape, slice);
+                    var array = new NDArray(newshape, dtype: dtype);
+
+                    var new_dims = new int[shape.ndim];
+                    new_dims[0] = slice.Start ?? 0;
+                    //for (int i = 1; i < shape.ndim; i++)
+                        //new_dims[i] = (int)shape.dims[i];
+
+                    var offset = ShapeHelper.GetOffset(shape, new_dims);
+                    var src = (byte*)data + (ulong)offset * dtypesize;
+                    var dst = (byte*)array.data;
+                    var len = (ulong)newshape.size * dtypesize;
+
+                    System.Buffer.MemoryCopy(src, dst, len, len);
+
+                    return array;
+                }
+            }
+
+            // default, performance is bad
             var tensor = base[slices.ToArray()];
             if (tensor.Handle == null)
             {
                 if (tf.executing_eagerly())
                     tensor = tf.defaultSession.eval(tensor);
-                else
-                    return new NDArray(tensor);
             }
-                
-            return new NDArray(tensor);
+
+            return new NDArray(tensor, tf.executing_eagerly());
         }
 
         unsafe T GetAtIndex<T>(params int[] indices) where T : unmanaged
@@ -78,17 +115,26 @@ namespace Tensorflow.NumPy
             return *((T*)data + offset);
         }
 
-        NDArray GetScalar()
+        unsafe NDArray GetScalar(ulong offset = 0)
         {
             var array = new NDArray(Shape.Scalar, dtype: dtype);
-            unsafe
-            {
-                var src = (byte*)data + dtypesize;
-                System.Buffer.MemoryCopy(src, array.buffer.ToPointer(), bytesize, bytesize);
-            }
+            var src = (byte*)data + offset * dtypesize;
+            System.Buffer.MemoryCopy(src, array.buffer.ToPointer(), dtypesize, dtypesize);
             return array;
         }
 
+        unsafe NDArray GetArrayData(Shape newshape, int[] indices)
+        {
+            var offset = ShapeHelper.GetOffset(shape, indices);
+            var len = (ulong)newshape.size * dtypesize;
+            var array = new NDArray(newshape, dtype: dtype);
+
+            var src = (byte*)data + (ulong)offset * dtypesize;
+            System.Buffer.MemoryCopy(src, array.data.ToPointer(), len, len);
+
+            return array;
+        }
+        
         NDArray GetData(int[] indices, int axis = 0)
         {
             if (shape.IsScalar)

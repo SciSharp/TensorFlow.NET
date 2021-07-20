@@ -24,6 +24,7 @@ namespace Tensorflow
     public record Axis(params int[] axis)
     {
         public int size => axis == null ? -1 : axis.Length;
+        public bool IsScalar { get; init; }
 
         public int this[int index] => axis[index];
 
@@ -34,7 +35,7 @@ namespace Tensorflow
             => axis.axis[0];
 
         public static implicit operator Axis(int axis)
-            => new Axis(axis);
+            => new Axis(axis) { IsScalar = true };
 
         public static implicit operator Axis((int, int) axis)
             => new Axis(axis.Item1, axis.Item2);

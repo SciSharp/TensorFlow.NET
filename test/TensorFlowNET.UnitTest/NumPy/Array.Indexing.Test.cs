@@ -63,5 +63,43 @@ namespace TensorFlowNET.UnitTest.NumPy
             input_shape_val[(int)input_shape.size - 1] = 1;
             input_shape.Dispose();
         }
+
+        [TestMethod]
+        public void shape_helper_get_shape_3dim()
+        {
+            var x = np.arange(24).reshape((4, 3, 2));
+            var shape1 = ShapeHelper.GetShape(x.shape, new Slice(1, isIndex: true));
+            Assert.AreEqual(shape1, (3, 2));
+
+            var shape2 = ShapeHelper.GetShape(x.shape, new Slice(1));
+            Assert.AreEqual(shape2, (3, 3, 2));
+
+            var shape3 = ShapeHelper.GetShape(x.shape, new Slice(2), Slice.All);
+            Assert.AreEqual(shape3, (2, 3, 2));
+
+            var shape4 = ShapeHelper.GetShape(x.shape, new Slice(1, isIndex: true), new Slice(2));
+            Assert.AreEqual(shape4, (1, 2));
+
+            var shape5 = ShapeHelper.GetShape(x.shape, new Slice(1, isIndex: true), new Slice(1));
+            Assert.AreEqual(shape5, (2, 2));
+
+            var shape6 = ShapeHelper.GetShape(x.shape, new Slice(1), new Slice(1, isIndex: true), new Slice(1));
+            Assert.AreEqual(shape6, (3, 1));
+        }
+
+        [TestMethod]
+        public void shape_helper_get_shape_4dim()
+        {
+            var x = np.arange(120).reshape((4, 3, 2, 5));
+            var slices = new[] { new Slice(1, isIndex: true), new Slice(1), new Slice(0, isIndex: true), new Slice(1) };
+            var shape1 = ShapeHelper.GetShape(x.shape, slices);
+            Assert.AreEqual(shape1, (2, 4));
+
+            var shape2 = ShapeHelper.GetShape(x.shape, Slice.All);
+            Assert.AreEqual(shape2, (4, 3, 2, 5));
+
+            var shape3 = ShapeHelper.GetShape(x.shape, Slice.All, new Slice(0, isIndex: true));
+            Assert.AreEqual(shape3, (4, 3, 2));
+        }
     }
 }

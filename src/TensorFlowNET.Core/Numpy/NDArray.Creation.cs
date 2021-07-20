@@ -28,7 +28,7 @@ namespace Tensorflow.NumPy
         public NDArray(IntPtr address, Shape shape, TF_DataType dtype) 
             : base(address, shape, dtype) { NewEagerTensorHandle(); }
 
-        public NDArray(Tensor tensor) : base(tensor.Handle) 
+        public NDArray(Tensor tensor, bool eval = true) : base(tensor.Handle) 
         {
             if (_handle is null)
             {
@@ -53,9 +53,12 @@ namespace Tensorflow.NumPy
 
         void NewEagerTensorHandle()
         {
-            _id = ops.uid();
-            _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
-            tf.Status.Check(true);
+            if(_handle is not null)
+            {
+                _id = ops.uid();
+                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+                tf.Status.Check(true);
+            }
         }
     }
 }

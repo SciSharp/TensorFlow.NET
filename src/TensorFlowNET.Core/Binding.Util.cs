@@ -513,10 +513,13 @@ namespace Tensorflow
             if (data is NDArray nd)
                 return nd.shape;
 
-            if (data is Tensor tensor)
+            else if (data is Tensor tensor)
                 return tensor.shape;
 
-            if (!data.GetType().IsArray)
+            else if (data is Axis axis)
+                return axis.IsScalar ? Shape.Scalar : new Shape(axis.axis);
+
+            else if (!data.GetType().IsArray)
                 return Shape.Scalar;
 
             switch (data)

@@ -472,6 +472,9 @@ would not be rank 1.", tensor.op.get_attr("axis")));
 
         public static string to_numpy_string(Tensor tensor)
         {
+            if (tensor.buffer == IntPtr.Zero)
+                return "Empty";
+
             var dtype = tensor.dtype;
             var shape = tensor.shape;
 
