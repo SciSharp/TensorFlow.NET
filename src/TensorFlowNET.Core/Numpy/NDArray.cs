@@ -46,9 +46,6 @@ namespace Tensorflow.NumPy
         public byte[] ToByteArray() => BufferToArray();
         public static string[] AsStringArray(NDArray arr) => throw new NotImplementedException("");
 
-        public override string ToString()
-        {
-            return tensor_util.to_numpy_string(this);
-        }
+        public override string ToString() => tensor_util.to_numpy_string(this);
     }
 }

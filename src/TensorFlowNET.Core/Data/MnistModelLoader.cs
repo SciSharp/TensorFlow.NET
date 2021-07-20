@@ -157,8 +157,8 @@ namespace Tensorflow
 
         private NDArray DenseToOneHot(NDArray labels_dense, int num_classes)
         {
-            var num_labels = labels_dense.dims[0];
-            var index_offset = np.arange(num_labels) * num_classes;
+            var num_labels = (int)labels_dense.dims[0];
+            // var index_offset = np.arange(num_labels) * num_classes;
             var labels_one_hot = np.zeros((num_labels, num_classes));
             var labels = labels_dense.ToArray<byte>();
             for (int row = 0; row < num_labels; row++)
