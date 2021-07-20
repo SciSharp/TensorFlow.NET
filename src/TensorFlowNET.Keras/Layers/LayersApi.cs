@@ -1,4 +1,5 @@
-﻿using Tensorflow.NumPy;
+﻿using System;
+using Tensorflow.NumPy;
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
@@ -834,7 +835,8 @@ namespace Tensorflow.Keras.Layers
                 "relu" => keras.activations.Relu,
                 "sigmoid" => keras.activations.Sigmoid,
                 "tanh" => keras.activations.Tanh,
-                _ => keras.activations.Linear
+                "softmax" => keras.activations.Softmax,
+                _ => throw new Exception($"Activation {name} not found")
             };
 
         /// <summary>
