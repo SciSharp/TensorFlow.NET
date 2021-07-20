@@ -470,7 +470,20 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             return ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32, name: "shape");
         }
 
-        public static string to_numpy_string(Tensor tensor)
+        public static string to_numpy_string(Tensor array)
+        {
+            Shape shape = array.shape;
+            if (shape.ndim == 0)
+                return array[0].ToString();
+
+            var s = new StringBuilder();
+            s.Append("array(");
+            PrettyPrint(s, array);
+            s.Append(")");
+            return s.ToString();
+        }
+
+        static string Render(Tensor tensor)
         {
             if (tensor.buffer == IntPtr.Zero)
                 return "Empty";
@@ -487,7 +500,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 else
                     return $"['{string.Join("', '", tensor.StringData().Take(25))}']";
             }
-            else if(dtype == TF_DataType.TF_VARIANT)
+            else if (dtype == TF_DataType.TF_VARIANT)
             {
                 return "<unprintable>";
             }
@@ -515,7 +528,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 var array = tensor.ToArray<float>();
                 return DisplayArrayAsString(array, tensor.shape);
             }
-            else if(dtype == TF_DataType.TF_DOUBLE)
+            else if (dtype == TF_DataType.TF_DOUBLE)
             {
                 var array = tensor.ToArray<double>();
                 return DisplayArrayAsString(array, tensor.shape);
@@ -532,14 +545,72 @@ would not be rank 1.", tensor.op.get_attr("axis")));
             if (shape.ndim == 0)
                 return array[0].ToString();
 
-            var display = "array([";
+            var display = "";
             if (array.Length < 10)
                 display += string.Join(", ", array);
             else
-                display += string.Join(", ", array.Take(3)) + " ... " + string.Join(", ", array.Skip(array.Length - 3));
-            return display + "])";
+                display += string.Join(", ", array.Take(3)) + ", ..., " + string.Join(", ", array.Skip(array.Length - 3));
+            return display;
         }
-        
+
+        static void PrettyPrint(StringBuilder s, Tensor array, bool flat = false)
+        {
+            var shape = array.shape;
+
+            if (shape.Length == 1)
+            {
+                s.Append("[");
+                s.Append(Render(array));
+                s.Append("]");
+                return;
+            }
+
+            var len = shape[0];
+            s.Append("[");
+
+            if (len <= 10)
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    PrettyPrint(s, array[i], flat);
+                    if (i < len - 1)
+                    {
+                        s.Append(", ");
+                        if (!flat)
+                            s.AppendLine();
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    PrettyPrint(s, array[i], flat);
+                    if (i < len - 1)
+                    {
+                        s.Append(", ");
+                        if (!flat)
+                            s.AppendLine();
+                    }
+                }
+
+                s.Append(" ... ");
+                s.AppendLine();
+
+                for (int i = (int)array.size - 5; i < len; i++)
+                {
+                    PrettyPrint(s, array[i], flat);
+                    if (i < len - 1)
+                    {
+                        s.Append(", ");
+                        if (!flat)
+                            s.AppendLine();
+                    }
+                }
+            }
+
+            s.Append("]");
+        }
 
         public static ParsedSliceArgs ParseSlices(Slice[] slices)
         {
