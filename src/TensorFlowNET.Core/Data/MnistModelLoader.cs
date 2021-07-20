@@ -123,7 +123,7 @@ namespace Tensorflow
 
                 bytestream.Read(buf, 0, buf.Length);
 
-                var data = np.frombuffer(buf, (num_images, rows * cols), np.@byte);
+                var data = np.frombuffer(buf, (num_images, rows * cols), np.uint8);
                 return data;
             }
         }
@@ -146,7 +146,7 @@ namespace Tensorflow
 
                 bytestream.Read(buf, 0, buf.Length);
 
-                var labels = np.frombuffer(buf, new Shape(num_items), np.@byte);
+               var labels = np.frombuffer(buf, new Shape(num_items), np.uint8);
 
                 if (one_hot)
                     return DenseToOneHot(labels, num_classes);

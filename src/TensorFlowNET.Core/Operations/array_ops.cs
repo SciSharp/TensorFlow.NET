@@ -91,6 +91,9 @@ namespace Tensorflow
                             zeros = constant(0f);
                             break;
                         case TF_DataType.TF_INT8:
+                            zeros = constant((sbyte)0);
+                            break;
+                        case TF_DataType.TF_UINT8:
                             zeros = constant((byte)0);
                             break;
                         default:
