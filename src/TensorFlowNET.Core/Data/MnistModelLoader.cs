@@ -146,7 +146,7 @@ namespace Tensorflow
 
                 bytestream.Read(buf, 0, buf.Length);
 
-                var labels = np.frombuffer(buf, new Shape(num_items), np.uint8);
+                var labels = np.frombuffer(buf, new Shape(num_items), np.@byte);
 
                 if (one_hot)
                     return DenseToOneHot(labels, num_classes);

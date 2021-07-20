@@ -134,8 +134,8 @@ namespace Tensorflow.NumPy
 
             return array;
         }
-        
-        NDArray GetData(int[] indices, int axis = 0)
+
+        unsafe NDArray GetData(int[] indices, int axis = 0)
         {
             if (shape.IsScalar)
                 return GetScalar();
@@ -148,19 +148,17 @@ namespace Tensorflow.NumPy
                 var array = np.ndarray(dims, dtype: dtype);
 
                 dims[0] = 1;
-                var bytesize = new Shape(dims).size * dtype.get_datatype_size();
+                var len = new Shape(dims).size * dtype.get_datatype_size();
 
                 int dst_index = 0;
-                foreach (var index in indices)
+                foreach (var pos in indices)
                 {
-                    var src_offset = (ulong)ShapeHelper.GetOffset(shape, index);
+                    var src_offset = (ulong)ShapeHelper.GetOffset(shape, pos);
                     var dst_offset = (ulong)ShapeHelper.GetOffset(array.shape, dst_index++);
-                    unsafe
-                    {
-                        var src = (byte*)data + src_offset * dtypesize;
-                        var dst = (byte*)array.data.ToPointer() + dst_offset * dtypesize;
-                        System.Buffer.MemoryCopy(src, dst, bytesize, bytesize);
-                    }
+
+                    var src = (byte*)data + src_offset * dtypesize;
+                    var dst = (byte*)array.data + dst_offset * dtypesize;
+                    System.Buffer.MemoryCopy(src, dst, len, len);
                 }
 
                 return array;

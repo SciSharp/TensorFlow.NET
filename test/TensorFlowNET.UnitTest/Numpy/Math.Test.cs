@@ -27,5 +27,13 @@ namespace TensorFlowNET.UnitTest.NumPy
             Assert.AreEqual(p.shape, 2);
             Assert.IsTrue(Equal(p.ToArray<double>(), new[] { 2.0, 12.0 }));
         }
+
+        [TestMethod]
+        public void astype()
+        {
+            var x = np.array(new byte[] { 1, 100, 200 });
+            var x1 = x.astype(np.float32);
+            Assert.AreEqual(x1[2], 200f);
+        }
     }
 }

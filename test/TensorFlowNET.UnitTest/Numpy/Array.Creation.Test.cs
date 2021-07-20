@@ -94,9 +94,9 @@ namespace TensorFlowNET.UnitTest.NumPy
         public void to_numpy_string()
         {
             var nd = np.arange(10 * 10 * 10 * 10).reshape((10, 10, 10, 10));
-            var str = tensor_util.to_numpy_string(nd);
-            Assert.AreEqual("array([[[[0, 1, 2, ..., 7, 8, 9],", str.Substring(0, 33));
-            Assert.AreEqual("[9990, 9991, 9992, ..., 9997, 9998, 9999]]]])", str.Substring(str.Length - 45));
+            var str = NDArrayRender.ToString(nd);
+            Assert.AreEqual("array([[[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],", str.Substring(0, 40));
+            Assert.AreEqual("[9990, 9991, 9992, 9993, 9994, 9995, 9996, 9997, 9998, 9999]]]])", str.Substring(str.Length - 64));
         }
     }
 }

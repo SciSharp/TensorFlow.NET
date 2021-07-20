@@ -90,6 +90,9 @@ namespace Tensorflow
                         case TF_DataType.TF_FLOAT:
                             zeros = constant(0f);
                             break;
+                        case TF_DataType.TF_INT8:
+                            zeros = constant((byte)0);
+                            break;
                         default:
                             zeros = constant(0);
                             break;
