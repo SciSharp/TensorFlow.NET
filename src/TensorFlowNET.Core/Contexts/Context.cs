@@ -21,6 +21,7 @@ using Tensorflow.Eager;
 using static Tensorflow.Binding;
 using Google.Protobuf;
 using Tensorflow.Util;
+using Tensorflow.NumPy;
 
 namespace Tensorflow.Contexts
 {
@@ -40,8 +41,15 @@ namespace Tensorflow.Contexts
         public FunctionCallOptions FunctionCallOptions { get; }
 
         SafeContextHandle _handle;
-        public SafeContextHandle Handle => _handle;
-
+        public SafeContextHandle Handle
+        {
+            get
+            {
+                if (_handle == null)
+                    ensure_initialized();
+                return _handle;
+            }
+        }
         int? _seed;
         Random _rng;
 
@@ -142,7 +150,11 @@ namespace Tensorflow.Contexts
             bool has_graph_arg = !tf.Context.executing_eagerly();
             foreach (var el in flatten_args)
             {
-                if (el is Tensor tensor && tensor.IsCreatedInGraphMode)
+                if (el is NDArray)
+                    continue;
+                else if (el is EagerTensor)
+                    continue;
+                else if (el is Tensor)
                 {
                     has_graph_arg = true;
                     break;

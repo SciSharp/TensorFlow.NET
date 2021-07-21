@@ -97,12 +97,6 @@ namespace Tensorflow.NumPy
                 => throw new NotImplementedException("");
         }
 
-        public static NpzDictionary<T> Load_Npz<T>(byte[] bytes)
-            where T : class, IList, ICloneable, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
-        {
-            throw new NotImplementedException("");
-        }
-
         public static LinearAlgebraImpl linalg = new LinearAlgebraImpl();
     }
 }

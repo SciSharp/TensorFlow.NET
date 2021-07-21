@@ -126,7 +126,7 @@ namespace Tensorflow
             if (dtype == TF_DataType.DtInvalid)
                 dtype = value.GetDataType();
 
-            if (value is EagerTensor eager_tensor && !eager_tensor.IsCreatedInGraphMode)
+            if (value is EagerTensor eager_tensor)
             {
                 if (tf.executing_eagerly())
                 {
@@ -141,13 +141,6 @@ namespace Tensorflow
                         throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
                     return (graph as FuncGraph).capture(eager_tensor, name: name);
                 }
-            }
-            else if (value is NDArray nd)
-            {
-                if (tf.executing_eagerly())
-                    return nd;
-                else
-                    return constant_op.constant(nd);
             }
 
             // graph mode

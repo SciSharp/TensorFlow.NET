@@ -9,10 +9,10 @@ namespace Tensorflow.NumPy
 {
     public partial class np
     {
-        public static NDArray amin(NDArray x, int axis = 0)
-            => new NDArray(tf.arg_min(x, axis));
+        [AutoNumPy]
+        public static NDArray amin(NDArray x, int axis = 0) => new NDArray(tf.arg_min(x, axis));
 
-        public static NDArray amax(NDArray x, int axis = 0)
-            => new NDArray(tf.arg_max(x, axis));
+        [AutoNumPy]
+        public static NDArray amax(NDArray x, int axis = 0) => new NDArray(tf.arg_max(x, axis));
     }
 }

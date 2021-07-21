@@ -38,6 +38,7 @@ namespace Tensorflow.NumPy
 
         public bool HasNext() => throw new NotImplementedException("");
         public T MoveNext<T>() => throw new NotImplementedException("");
+        [AutoNumPy]
         public NDArray reshape(Shape newshape) => new NDArray(tf.reshape(this, newshape));
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(this, dtype));
         public NDArray ravel() => throw new NotImplementedException("");

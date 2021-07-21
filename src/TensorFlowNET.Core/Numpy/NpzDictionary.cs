@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using Tensorflow.Util;
 
 namespace Tensorflow.NumPy
 {
     public class NpzDictionary<T> : IDisposable, IReadOnlyDictionary<string, T>, ICollection<T>
-        where T : class,
-        IList, ICloneable, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
+            where T : class,
+            ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
     {
         Stream stream;
         ZipArchive archive;
@@ -88,8 +90,7 @@ namespace Tensorflow.NumPy
 
         protected virtual T Load_Npz(Stream s)
         {
-            // return np.Load<T>(s);
-            throw new NotImplementedException("");
+            return np.Load<T>(s);
         }
 
         public bool ContainsKey(string key)
@@ -139,12 +140,12 @@ namespace Tensorflow.NumPy
 
         public void Add(T item)
         {
-            //throw new ReadOnlyException();
+            throw new ReadOnlyException();
         }
 
         public void Clear()
         {
-            //throw new ReadOnlyException();
+            throw new ReadOnlyException();
         }
 
         public bool Contains(T item)
@@ -157,8 +158,7 @@ namespace Tensorflow.NumPy
 
         public bool Remove(T item)
         {
-            // throw new ReadOnlyException();
-            throw new NotImplementedException("");
+            throw new ReadOnlyException();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -198,10 +198,9 @@ namespace Tensorflow.NumPy
 
         protected override Array Load_Npz(Stream s)
         {
-            throw new NotImplementedException("");
-            /*if (jagged)
-                return np.LoadJagged(s);
-            return np.LoadMatrix(s);*/
+            //if (jagged)
+                //return np.LoadJagged(s);
+            return np.LoadMatrix(s);
         }
     }
 }
