@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Preprocessings
 {
@@ -50,8 +51,8 @@ namespace Tensorflow.Keras.Preprocessings
                 if (!seed.HasValue)
                     seed = np.random.randint((long)1e6);
                 var random_index = np.arange(label_list.Count);
-                var rng = np.random.RandomState(seed.Value);
-                rng.shuffle(random_index);
+                tf.set_random_seed(seed.Value);
+                np.random.shuffle(random_index);
                 var index = random_index.ToArray<int>();
 
                 for (int i = 0; i < label_list.Count; i++)

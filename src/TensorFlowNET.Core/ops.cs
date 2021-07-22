@@ -165,8 +165,8 @@ namespace Tensorflow
             if (dtype == TF_DataType.TF_STRING)
                 return ret;
 
-            if (dtype != ret.dtype)
-                ret = gen_math_ops.cast(ret, dtype.as_base_dtype(), name: name);
+            if (dtype.as_base_dtype() != ret.dtype.as_base_dtype())
+                ret = gen_math_ops.cast(ret, dtype, name: name);
 
             return ret;
         }

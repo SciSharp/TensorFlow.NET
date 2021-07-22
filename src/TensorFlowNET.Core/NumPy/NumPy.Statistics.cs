@@ -13,6 +13,6 @@ namespace Tensorflow.NumPy
         public static NDArray amin(NDArray x, int axis = 0) => new NDArray(tf.arg_min(x, axis));
 
         [AutoNumPy]
-        public static NDArray amax(NDArray x, int axis = 0) => new NDArray(tf.arg_max(x, axis));
+        public static NDArray amax(NDArray x, int axis = 0) => new NDArray(tf.math.argmax(x, axis));
     }
 }

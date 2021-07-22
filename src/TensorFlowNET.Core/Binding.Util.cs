@@ -549,6 +549,8 @@ namespace Tensorflow
                     return tensors.dtype;
                 case IEnumerable<Tensor> tensors:
                     return tensors.First().dtype;
+                case RefVariable variable:
+                    return variable.dtype;
                 case ResourceVariable variable:
                     return variable.dtype;
                 default:

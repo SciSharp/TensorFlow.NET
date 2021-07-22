@@ -17,7 +17,13 @@ namespace Tensorflow.NumPy
             => new NDArray(math_ops.argmax(a, axis ?? -1));
 
         [AutoNumPy]
-        public static NDArray unique(NDArray a)
-            => throw new NotImplementedException("");
+        public static (NDArray, NDArray) unique(NDArray a)
+        {
+            var(u, indice) = array_ops.unique(a);
+            return (new NDArray(u), new NDArray(indice));
+        }
+
+        [AutoNumPy]
+        public static void shuffle(NDArray x) => np.random.shuffle(x);
     }
 }

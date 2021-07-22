@@ -25,6 +25,9 @@ namespace Tensorflow.NumPy
         public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) 
             : base(bytes, shape, dtype) { NewEagerTensorHandle(); }
 
+        public NDArray(long[] value, Shape? shape = null)
+            : base(value, shape) { NewEagerTensorHandle(); }
+
         public NDArray(IntPtr address, Shape shape, TF_DataType dtype) 
             : base(address, shape, dtype) { NewEagerTensorHandle(); }
 

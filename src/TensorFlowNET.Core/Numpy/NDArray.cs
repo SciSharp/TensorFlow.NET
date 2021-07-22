@@ -42,11 +42,9 @@ namespace Tensorflow.NumPy
         public NDArray reshape(Shape newshape) => new NDArray(tf.reshape(this, newshape));
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(this, dtype));
         public NDArray ravel() => throw new NotImplementedException("");
-        public void shuffle(NDArray nd) => throw new NotImplementedException("");
+        public void shuffle(NDArray nd) => np.random.shuffle(nd);
         public Array ToMuliDimArray<T>() => throw new NotImplementedException("");
         public byte[] ToByteArray() => BufferToArray();
-        public static string[] AsStringArray(NDArray arr) => throw new NotImplementedException("");
-
         public override string ToString() => NDArrayRender.ToString(this);
     }
 }

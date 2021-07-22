@@ -141,7 +141,24 @@ namespace Tensorflow
                 byte[] bytes = nd.ToByteArray();
                 tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }
-            else if (!values.GetType().IsArray)
+            else if (dtype == TF_DataType.TF_STRING && !(values is NDArray))
+            {
+                if (values is string str)
+                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
+                else if (values is string[] str_values)
+                    tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
+                else if (values is byte[] byte_values)
+                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
+            }
+            else if (values is Array array)
+            {
+                // array
+                var len = dtype.get_datatype_size() * (int)shape.size;
+                byte[] bytes = new byte[len];
+                System.Buffer.BlockCopy(array, 0, bytes, 0, len);
+                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
+            }
+            else
             {
                 switch (values)
                 {
@@ -166,31 +183,9 @@ namespace Tensorflow
                     case double val:
                         tensor_proto.DoubleVal.AddRange(new[] { val });
                         break;
-                    case string val:
-                        tensor_proto.StringVal.AddRange(val.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x.ToString())));
-                        break;
                     default:
                         throw new Exception("make_tensor_proto Not Implemented");
                 }
-            }
-            else if (dtype == TF_DataType.TF_STRING && !(values is NDArray))
-            {
-                if (values is string str)
-                {
-                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
-                }
-                else if (values is string[] str_values)
-                    tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
-                else if (values is byte[] byte_values)
-                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
-            }
-            else if (values is Array array)
-            {
-                // array
-                var len = dtype.get_datatype_size() * (int)shape.size;
-                byte[] bytes = new byte[len];
-                System.Buffer.BlockCopy(array, 0, bytes, 0, len);
-                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }
 
             return tensor_proto;

@@ -56,7 +56,7 @@ namespace Tensorflow
             => constant_op.constant(axis);
 
         public override string ToString()
-            => $"({string.Join(", ", axis)})";
+            => IsScalar ? $"{axis[0]}" : $"({string.Join(", ", axis)})";
     }
 }
 

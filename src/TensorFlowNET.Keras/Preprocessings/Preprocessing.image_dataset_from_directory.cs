@@ -115,8 +115,8 @@ namespace Tensorflow.Keras
             var start_positions = np.arange(0, num_seqs, sequence_stride);
             if (shuffle)
             {
-                var rng = np.random.RandomState(seed);
-                rng.shuffle(start_positions);
+                tf.set_random_seed(seed);
+                np.random.shuffle(start_positions);
             }
 
             var sequence_length_tensor = constant_op.constant(sequence_length, dtype: index_dtype);
