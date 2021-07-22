@@ -20,9 +20,9 @@ namespace Tensorflow.Keras.Utils
             // var input_shape = y.shape[..^1];
             var categorical = np.zeros(((int)y.size, num_classes), dtype: dtype);
             // categorical[np.arange(y.size), y] = 1;
-            for (ulong i = 0; i < y.size; i++)
+            for (var i = 0; i < (int)y.size; i++)
             {
-                categorical[i][y1[i]] = 1;
+                categorical[i][y1[i]] = 1.0f;
             }
 
             return categorical;

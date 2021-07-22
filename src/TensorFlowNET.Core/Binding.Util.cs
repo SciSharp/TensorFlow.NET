@@ -517,7 +517,7 @@ namespace Tensorflow
                 return tensor.shape;
 
             else if (data is Axis axis)
-                return axis.IsScalar ? Shape.Scalar : new Shape(axis.axis);
+                return axis.IsScalar ? Shape.Scalar : new Shape(axis.axis.Length);
 
             else if (!data.GetType().IsArray)
                 return Shape.Scalar;
