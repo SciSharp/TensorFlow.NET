@@ -35,7 +35,11 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public static NDArray full<T>(Shape shape, T fill_value)
-            => new NDArray(tf.fill(tf.constant(shape), fill_value));
+            where T : unmanaged => new NDArray(tf.fill(tf.constant(shape), fill_value));
+
+        [AutoNumPy]
+        public static NDArray full_like<T>(NDArray x, T fill_value, TF_DataType? dtype = null, Shape shape = null)
+            where T : unmanaged => new NDArray(array_ops.fill(x.shape, constant_op.constant(fill_value)));
 
         [AutoNumPy]
         public static NDArray frombuffer(byte[] bytes, Shape shape, TF_DataType dtype)

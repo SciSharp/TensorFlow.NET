@@ -23,7 +23,10 @@ namespace Tensorflow.NumPy
         public NDArray rand(params int[] shape)
             => throw new NotImplementedException("");
 
-        public NDArray randint(long x)
+        public NDArray randint(int low, int? high = null, Shape size = null, TF_DataType dtype = TF_DataType.TF_INT32)
+            => throw new NotImplementedException("");
+
+        public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape size = null)
             => throw new NotImplementedException("");
     }
 }

@@ -49,7 +49,7 @@ namespace Tensorflow.Keras.Preprocessings
             if (shuffle)
             {
                 if (!seed.HasValue)
-                    seed = np.random.randint((long)1e6);
+                    seed = np.random.randint((int)1e6);
                 var random_index = np.arange(label_list.Count);
                 tf.set_random_seed(seed.Value);
                 np.random.shuffle(random_index);
