@@ -23,7 +23,9 @@ namespace Tensorflow.Keras.Layers {
             }
             protected override Tensors Call ( Tensors inputs, Tensor state = null, bool? training = null ) {
                   Tensor output = inputs;
-                  return tf.where(output > 0f, scale * output, scale * alpha * (tf.exp(output) - 1f));
+                  return tf.where(output > 0f,
+                        tf.multiply(scale, output),
+                        tf.multiply(scale, tf.multiply(alpha, tf.sub(tf.exp(output), 1f))));
             }
             public override Shape ComputeOutputShape ( Shape input_shape ) {
                   return input_shape;
