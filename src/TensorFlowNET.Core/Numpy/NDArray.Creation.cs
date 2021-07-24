@@ -31,7 +31,7 @@ namespace Tensorflow.NumPy
         public NDArray(IntPtr address, Shape shape, TF_DataType dtype) 
             : base(address, shape, dtype) { NewEagerTensorHandle(); }
 
-        public NDArray(Tensor tensor, bool eval = true) : base(tensor.Handle) 
+        public NDArray(Tensor tensor, bool clone = false) : base(tensor.Handle, clone: clone) 
         {
             if (_handle is null)
             {

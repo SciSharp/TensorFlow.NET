@@ -35,7 +35,7 @@ namespace Tensorflow
             tf.Status.Check(true);
             return num;
         }
-        public int NumInputs => c_api.TF_OperationNumInputs(_handle);
+        public int NumInputs => _handle == IntPtr.Zero ? -1 : c_api.TF_OperationNumInputs(_handle);
         private TF_DataType[] _input_types => _inputs_val._inputs.Select(x => x.dtype).ToArray();
 
         protected InputList _inputs_val;

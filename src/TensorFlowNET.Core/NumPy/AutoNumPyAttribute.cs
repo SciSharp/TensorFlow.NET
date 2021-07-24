@@ -1,6 +1,7 @@
 ﻿using MethodBoundaryAspect.Fody.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Eager;
 using Tensorflow.Functions;
@@ -8,6 +9,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
 {
+    [DebuggerStepThrough]
     public sealed class AutoNumPyAttribute : OnMethodBoundaryAspect
     {
         bool _changedMode = false;
