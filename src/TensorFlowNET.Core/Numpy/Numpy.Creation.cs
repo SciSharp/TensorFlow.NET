@@ -62,10 +62,16 @@ namespace Tensorflow.NumPy
         [AutoNumPy]
         public static NDArray load(string file) => tf.numpy.load(file);
 
+        public static T Load<T>(string path)
+            where T : class, ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
+        {
+            using (var stream = new FileStream(path, FileMode.Open))
+                return Load<T>(stream);
+        }
+
         [AutoNumPy]
         public static T Load<T>(Stream stream)
-            where T : class,
-            ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
+            where T : class, ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
             => tf.numpy.Load<T>(stream);
 
         [AutoNumPy]
