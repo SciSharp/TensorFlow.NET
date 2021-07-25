@@ -23,8 +23,18 @@ namespace Tensorflow.NumPy
         public NDArray rand(params int[] shape)
             => throw new NotImplementedException("");
 
+        [AutoNumPy]
         public NDArray randint(int low, int? high = null, Shape size = null, TF_DataType dtype = TF_DataType.TF_INT32)
-            => throw new NotImplementedException("");
+        {
+            if(high == null)
+            {
+                high = low;
+                low = 0;
+            }
+            size = size ?? Shape.Scalar;
+            var tensor = random_ops.random_uniform_int(shape: size, minval: low, maxval: (int)high);
+            return new NDArray(tensor);
+        }
 
         public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape size = null)
             => throw new NotImplementedException("");

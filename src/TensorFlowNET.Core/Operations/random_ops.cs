@@ -94,7 +94,6 @@ namespace Tensorflow
         public static Tensor random_uniform_int(int[] shape,
             int minval = 0,
             int maxval = 1,
-            TF_DataType dtype = TF_DataType.TF_FLOAT,
             int? seed = null,
             string name = null)
         {
@@ -103,8 +102,8 @@ namespace Tensorflow
                 name = scope;
                 var (seed1, seed2) = random_seed.get_seed(seed);
                 var tensorShape = tensor_util.shape_tensor(shape);
-                var minTensor = ops.convert_to_tensor(minval, dtype: dtype, name: "min");
-                var maxTensor = ops.convert_to_tensor(maxval, dtype: dtype, name: "max");
+                var minTensor = ops.convert_to_tensor(minval, name: "min");
+                var maxTensor = ops.convert_to_tensor(maxval, name: "max");
                 return gen_random_ops.random_uniform_int(tensorShape, minTensor, maxTensor, seed: seed1, seed2: seed2);
             });
         }
