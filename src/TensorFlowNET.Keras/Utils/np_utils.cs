@@ -22,7 +22,7 @@ namespace Tensorflow.Keras.Utils
             // categorical[np.arange(y.size), y] = 1;
             for (var i = 0; i < (int)y.size; i++)
             {
-                categorical[i][y1[i]] = 1.0f;
+                categorical[i, y1[i]] = 1.0f;
             }
 
             return categorical;

@@ -29,13 +29,13 @@ namespace Tensorflow
 
             var tstr = c_api.TF_TensorData(handle);
 #if TRACK_TENSOR_LIFE
-            print($"New TString 0x{handle.ToString("x16")} Data: 0x{tstr.ToString("x16")}");
+            print($"New StringTensor {handle} Data: 0x{tstr.ToString("x16")}");
 #endif
             for (int i = 0; i < buffer.Length; i++)
             {
                 c_api.TF_StringInit(tstr);
                 c_api.TF_StringCopy(tstr, buffer[i], buffer[i].Length);
-                var data = c_api.TF_StringGetDataPointer(tstr);
+                // var data = c_api.TF_StringGetDataPointer(tstr);
                 tstr += TF_TSRING_SIZE;
             }
 
@@ -51,6 +51,36 @@ namespace Tensorflow
                 _str[i] = Encoding.UTF8.GetString(buffer[i]);
 
             return _str;
+        }
+
+        public string StringData(int index)
+        {
+            var bytes = StringBytes(index);
+            return Encoding.UTF8.GetString(bytes);
+        }
+
+        public byte[] StringBytes(int index)
+        {
+            if (dtype != TF_DataType.TF_STRING)
+                throw new InvalidOperationException($"Unable to call StringData when dtype != TF_DataType.TF_STRING (dtype is {dtype})");
+
+            byte[] buffer = new byte[0];
+            var tstrings = TensorDataPointer;
+            for (int i = 0; i < shape.size; i++)
+            {
+                if(index == i)
+                {
+                    var data = c_api.TF_StringGetDataPointer(tstrings);
+                    var len = c_api.TF_StringGetSize(tstrings);
+                    buffer = new byte[len];
+                    // var capacity = c_api.TF_StringGetCapacity(tstrings);
+                    // var type = c_api.TF_StringGetType(tstrings);
+                    Marshal.Copy(data, buffer, 0, Convert.ToInt32(len));
+                    break;
+                }
+                tstrings += TF_TSRING_SIZE;
+            }
+            return buffer;
         }
 
         public byte[][] StringBytes()

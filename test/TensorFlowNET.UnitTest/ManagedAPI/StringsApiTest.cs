@@ -51,12 +51,11 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
         {
             var strings = new[] { "map_and_batch_fusion", "noop_elimination", "shuffle_and_repeat_fusion" };
             var tensor = tf.constant(strings, dtype: tf.@string, name: "optimizations");
-            var stringData = tensor.StringData();
 
             Assert.AreEqual(3, tensor.shape[0]);
-            Assert.AreEqual(strings[0], stringData[0]);
-            Assert.AreEqual(strings[1], stringData[1]);
-            Assert.AreEqual(strings[2], stringData[2]);
+            Assert.AreEqual(tensor[0].numpy(), strings[0]);
+            Assert.AreEqual(tensor[1].numpy(), strings[1]);
+            Assert.AreEqual(tensor[2].numpy(), strings[2]);
         }
 
         [TestMethod]

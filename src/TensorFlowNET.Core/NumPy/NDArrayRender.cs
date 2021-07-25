@@ -91,7 +91,7 @@ namespace Tensorflow.NumPy
                         .Take(25)
                         .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString())) + "'";
                 else
-                    return $"['{string.Join("', '", array.StringData().Take(25))}']";
+                    return $"'{string.Join("', '", array.StringData().Take(25))}'";
             }
             else if (dtype == TF_DataType.TF_VARIANT)
             {

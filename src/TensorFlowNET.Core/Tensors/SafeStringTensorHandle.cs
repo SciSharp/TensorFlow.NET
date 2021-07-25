@@ -8,7 +8,7 @@ namespace Tensorflow
     public sealed class SafeStringTensorHandle : SafeTensorHandle
     {
         Shape _shape;
-        IntPtr _handle;
+        SafeTensorHandle _tensorHandle;
         const int TF_TSRING_SIZE = 24;
 
         protected SafeStringTensorHandle()
@@ -18,16 +18,18 @@ namespace Tensorflow
         public SafeStringTensorHandle(SafeTensorHandle handle, Shape shape)
             : base(handle.DangerousGetHandle())
         {
-            _handle = c_api.TF_TensorData(handle);
+            _tensorHandle = handle;
             _shape = shape;
+            bool success = false;
+            _tensorHandle.DangerousAddRef(ref success);
         }
 
         protected override bool ReleaseHandle()
         {
+            var _handle = c_api.TF_TensorData(_tensorHandle);
 #if TRACK_TENSOR_LIFE
-            print($"Delete StringTensorHandle 0x{handle.ToString("x16")}");
+            Console.WriteLine($"Delete StringTensorData 0x{_handle.ToString("x16")}");
 #endif
-
             for (int i = 0; i < _shape.size; i++)
             {
                 c_api.TF_StringDealloc(_handle);
@@ -35,6 +37,7 @@ namespace Tensorflow
             }
 
             SetHandle(IntPtr.Zero);
+            _tensorHandle.DangerousRelease();
 
             return true;
         }

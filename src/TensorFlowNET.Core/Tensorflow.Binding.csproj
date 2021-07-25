@@ -51,7 +51,7 @@ tf.net 0.6x.x aligns with TensorFlow v2.6.x native library.</PackageReleaseNotes
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TRACK_TENSOR_LIFE1</DefineConstants>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>TensorFlow.NET.xml</DocumentationFile>
   </PropertyGroup>
