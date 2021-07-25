@@ -55,6 +55,12 @@ namespace Tensorflow
         public static implicit operator Tensor(Axis axis)
             => constant_op.constant(axis);
 
+        public static bool operator ==(Axis left, int right)
+            => left.IsScalar && left[0] == right;
+
+        public static bool operator !=(Axis left, int right)
+            => !(left == right);
+
         public override string ToString()
             => IsScalar ? $"{axis[0]}" : $"({string.Join(", ", axis)})";
     }
