@@ -14,7 +14,7 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public static NDArray argsort(NDArray a, Axis axis = null)
-            => new NDArray(math_ops.argmax(a, axis ?? -1));
+            => new NDArray(sort_ops.argsort(a, axis: axis ?? -1));
 
         [AutoNumPy]
         public static (NDArray, NDArray) unique(NDArray a)
