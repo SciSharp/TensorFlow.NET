@@ -15,29 +15,21 @@
 ******************************************************************************/
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
 {
-    public partial class NDArray : Tensor
+    public partial class NDArray : Tensor, IEnumerable<NDArray>
     {
         public IntPtr data => TensorDataPointer;
-
-        public NDArray[] GetNDArrays()
-            => throw new NotImplementedException("");
 
         public ValueType GetValue(params int[] indices)
             => throw new NotImplementedException("");
 
-        public NDIterator<T> AsIterator<T>(bool autoreset = false) where T : unmanaged
-            => throw new NotImplementedException("");
-
-        public bool HasNext() => throw new NotImplementedException("");
-        public T MoveNext<T>() => throw new NotImplementedException("");
         [AutoNumPy]
         public NDArray reshape(Shape newshape) => new NDArray(tf.reshape(this, newshape));
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(this, dtype));
@@ -46,5 +38,14 @@ namespace Tensorflow.NumPy
         public Array ToMuliDimArray<T>() => throw new NotImplementedException("");
         public byte[] ToByteArray() => BufferToArray();
         public override string ToString() => NDArrayRender.ToString(this);
+
+        public IEnumerator<NDArray> GetEnumerator()
+        {
+            for (int i = 0; i < dims[0]; i++)
+                yield return this[i];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
     }
 }

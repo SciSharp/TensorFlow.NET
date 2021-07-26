@@ -18,6 +18,9 @@ namespace Tensorflow.NumPy
         public static NDArray squeeze(NDArray x1, Axis? axis = null) => new NDArray(array_ops.squeeze(x1, axis));
 
         [AutoNumPy]
+        public static NDArray stack(NDArray arrays, Axis axis = null) => new NDArray(array_ops.stack(arrays, axis ?? 0));
+
+        [AutoNumPy]
         public static NDArray dstack(params NDArray[] tup) => throw new NotImplementedException("");
     }
 }

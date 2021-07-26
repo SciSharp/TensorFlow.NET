@@ -82,7 +82,8 @@ namespace TensorFlowNET.UnitTest
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6)));
 
-            ret.Should().BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
+            Assert.AreEqual(ret.shape, (2, 3));
+            Assert.AreEqual(ret, new[] { 1, 2, 3, 4, 5, 6 });
             print(ret.dtype);
             print(ret);
         }
@@ -110,7 +111,8 @@ namespace TensorFlowNET.UnitTest
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
 
-            ret.Should().BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
+            Assert.AreEqual(ret.shape, (2, 3));
+            Assert.AreEqual(ret, new[] { 1, 2, 3, 4, 5, 6 });
             print(ret.dtype);
             print(ret);
         }
@@ -124,7 +126,8 @@ namespace TensorFlowNET.UnitTest
             sess.run(tf.global_variables_initializer());
             var ret = sess.run(op, feed_dict: (input, np.array(1, 2, 3, 4, 5, 6).astype(np.float32) + 0.1f));
 
-            ret.Should().BeShaped(2, 3).And.BeOfValues(1, 2, 3, 4, 5, 6);
+            Assert.AreEqual(ret.shape, (2, 3));
+            Assert.AreEqual(ret, new[] { 1, 2, 3, 4, 5, 6 });
             print(ret.dtype);
             print(ret);
         }

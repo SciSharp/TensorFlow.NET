@@ -101,5 +101,20 @@ namespace TensorFlowNET.UnitTest.NumPy
             var shape3 = ShapeHelper.GetShape(x.shape, Slice.All, new Slice(0, isIndex: true));
             Assert.AreEqual(shape3, (4, 3, 2));
         }
+
+        [TestMethod]
+        public void iterating()
+        {
+            var array = np.array(new[,] { { 0, 3 }, { 2, 2 }, { 3, 1 } });
+            int i = 0;
+            foreach(var x in array)
+            {
+                if (i == 0)
+                    Assert.AreEqual(x, new[] { 0, 3 });
+                else
+                    Assert.AreEqual(x, array[i]);
+                i++;
+            }
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace Tensorflow.NumPy
         public static NDArray exp(NDArray x) => new NDArray(tf.exp(x));
 
         [AutoNumPy]
+        public static NDArray floor(NDArray x) => new NDArray(tf.floor(x));
+
+        [AutoNumPy]
         public static NDArray log(NDArray x) => new NDArray(tf.log(x));
 
         [AutoNumPy]

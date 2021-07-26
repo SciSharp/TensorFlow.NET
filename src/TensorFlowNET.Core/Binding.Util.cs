@@ -299,8 +299,8 @@ namespace Tensorflow
             where T1 : unmanaged
             where T2 : unmanaged
         {
-            var a = t1.AsIterator<T1>();
-            var b = t2.AsIterator<T2>();
+            //var a = t1.AsIterator<T1>();
+            //var b = t2.AsIterator<T2>();
             //while (a.HasNext() && b.HasNext())
             //yield return (a.MoveNext(), b.MoveNext());
             throw new NotImplementedException("");
