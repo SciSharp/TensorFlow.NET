@@ -71,7 +71,7 @@ namespace Tensorflow
                 string name = null)
             {
                 if (dtype.is_integer())
-                    return random_ops.random_uniform_int(shape, (int)minval, (int)maxval, dtype, seed, name);
+                    return random_ops.random_uniform_int(shape, (int)minval, (int)maxval, seed, name);
                 else
                     return random_ops.random_uniform(shape, minval, maxval, dtype, seed, name);
             }

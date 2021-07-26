@@ -75,34 +75,7 @@ namespace Tensorflow.NumPy
         public static bool allclose(NDArray a, NDArray b, double rtol = 1.0E-5, double atol = 1.0E-8,
             bool equal_nan = false) => throw new NotImplementedException("");
 
-        public static class random
-        {
-            public static NDArray permutation(int x)
-            {
-                throw new NotImplementedException("");
-            }
-
-            public static void shuffle(NDArray nd)
-            {
-
-            }
-
-            public static NDArray rand(params int[] shape)
-                => throw new NotImplementedException("");
-
-            public static NDArray randint(long x)
-                => throw new NotImplementedException("");
-
-            public static NDArray RandomState(int x)
-                => throw new NotImplementedException("");
-        }
-
-        public static NpzDictionary<T> Load_Npz<T>(byte[] bytes)
-            where T : class, IList, ICloneable, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
-        {
-            throw new NotImplementedException("");
-        }
-
+        public static RandomizedImpl random = new RandomizedImpl();
         public static LinearAlgebraImpl linalg = new LinearAlgebraImpl();
     }
 }

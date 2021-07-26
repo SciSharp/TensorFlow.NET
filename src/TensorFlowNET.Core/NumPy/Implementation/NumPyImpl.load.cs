@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +25,33 @@ namespace Tensorflow.NumPy
 
             var result = new NDArray(ReadValueMatrix(reader, array, bytes, type, shape));
             return result.reshape(shape);
+        }
+
+        public Array LoadMatrix(Stream stream)
+        {
+            using (var reader = new BinaryReader(stream, System.Text.Encoding.ASCII, leaveOpen: true))
+            {
+                int bytes;
+                Type type;
+                int[] shape;
+                if (!ParseReader(reader, out bytes, out type, out shape))
+                    throw new FormatException();
+
+                Array matrix = Array.CreateInstance(type, shape);
+
+                //if (type == typeof(String))
+                    //return ReadStringMatrix(reader, matrix, bytes, type, shape);
+                return ReadValueMatrix(reader, matrix, bytes, type, shape);
+            }
+        }
+
+        public T Load<T>(Stream stream)
+            where T : class,
+            ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
+        {
+            // if (typeof(T).IsArray && (typeof(T).GetElementType().IsArray || typeof(T).GetElementType() == typeof(string)))
+                // return LoadJagged(stream) as T;
+            return LoadMatrix(stream) as T;
         }
 
         bool ParseReader(BinaryReader reader, out int bytes, out Type t, out int[] shape)

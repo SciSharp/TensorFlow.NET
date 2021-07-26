@@ -299,8 +299,8 @@ namespace Tensorflow
             where T1 : unmanaged
             where T2 : unmanaged
         {
-            var a = t1.AsIterator<T1>();
-            var b = t2.AsIterator<T2>();
+            //var a = t1.AsIterator<T1>();
+            //var b = t2.AsIterator<T2>();
             //while (a.HasNext() && b.HasNext())
             //yield return (a.MoveNext(), b.MoveNext());
             throw new NotImplementedException("");
@@ -513,10 +513,13 @@ namespace Tensorflow
             if (data is NDArray nd)
                 return nd.shape;
 
-            if (data is Tensor tensor)
+            else if (data is Tensor tensor)
                 return tensor.shape;
 
-            if (!data.GetType().IsArray)
+            else if (data is Axis axis)
+                return axis.IsScalar ? Shape.Scalar : new Shape(axis.axis.Length);
+
+            else if (!data.GetType().IsArray)
                 return Shape.Scalar;
 
             switch (data)
@@ -546,6 +549,8 @@ namespace Tensorflow
                     return tensors.dtype;
                 case IEnumerable<Tensor> tensors:
                     return tensors.First().dtype;
+                case RefVariable variable:
+                    return variable.dtype;
                 case ResourceVariable variable:
                     return variable.dtype;
                 default:

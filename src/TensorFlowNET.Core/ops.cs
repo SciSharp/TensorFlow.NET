@@ -126,7 +126,7 @@ namespace Tensorflow
             if (dtype == TF_DataType.DtInvalid)
                 dtype = value.GetDataType();
 
-            if (value is EagerTensor eager_tensor && !eager_tensor.IsCreatedInGraphMode)
+            if (value is EagerTensor eager_tensor)
             {
                 if (tf.executing_eagerly())
                 {
@@ -142,13 +142,6 @@ namespace Tensorflow
                     return (graph as FuncGraph).capture(eager_tensor, name: name);
                 }
             }
-            else if (value is NDArray nd)
-            {
-                if (tf.executing_eagerly())
-                    return nd;
-                else
-                    return constant_op.constant(nd);
-            }
 
             // graph mode
             Tensor ret = value switch
@@ -161,7 +154,7 @@ namespace Tensorflow
                 IEnumerable<Tensor> tensors => array_ops._autopacking_helper(tensors, dtype, name == null ? "packed" : name),
                 RefVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
                 ResourceVariable varVal => varVal._TensorConversionFunction(dtype: dtype, name: name, as_ref: as_ref),
-                Axis ts => constant_op.constant(ts.axis, dtype: dtype, name: name),
+                Axis ts => constant_op.constant(ts, dtype: dtype, name: name),
                 Shape ts => constant_op.constant(ts.dims, dtype: dtype, name: name),
                 string str => constant_op.constant(str, dtype: tf.@string, name: name),
                 string[] str => constant_op.constant(str, dtype: tf.@string, name: name),
@@ -172,8 +165,8 @@ namespace Tensorflow
             if (dtype == TF_DataType.TF_STRING)
                 return ret;
 
-            if (dtype != ret.dtype)
-                ret = gen_math_ops.cast(ret, dtype.as_base_dtype(), name: name);
+            if (dtype.as_base_dtype() != ret.dtype.as_base_dtype())
+                ret = gen_math_ops.cast(ret, dtype, name: name);
 
             return ret;
         }

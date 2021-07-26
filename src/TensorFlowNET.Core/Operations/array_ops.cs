@@ -90,6 +90,12 @@ namespace Tensorflow
                         case TF_DataType.TF_FLOAT:
                             zeros = constant(0f);
                             break;
+                        case TF_DataType.TF_INT8:
+                            zeros = constant((sbyte)0);
+                            break;
+                        case TF_DataType.TF_UINT8:
+                            zeros = constant((byte)0);
+                            break;
                         default:
                             zeros = constant(0);
                             break;
@@ -1002,7 +1008,7 @@ namespace Tensorflow
                     !(paddings_constant is null))
                 {
                     var new_shape = new List<int>();
-                    foreach ((NDArray padding, int dim) in zip(paddings_constant.GetNDArrays(), np.array(input_shape.dims).GetNDArrays()))
+                    foreach ((NDArray padding, int dim) in zip(paddings_constant, input_shape.as_int_list()))
                     {
                         if (padding is null || dim == -1 || padding.ToArray<int>().Contains(-1))
                             new_shape.Add(-1);

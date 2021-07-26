@@ -39,9 +39,12 @@ namespace Tensorflow
         ///     Create a Tensor object from an existing TF handle
         /// </summary>
         /// <param name="handle">Handle to a <see cref="Tensor"/> object.</param>
-        public Tensor(SafeTensorHandle handle)
+        public unsafe Tensor(SafeTensorHandle handle, bool clone = false)
         {
             _handle = handle;
+            if (clone)
+                _handle = TF_NewTensor(shape, dtype, data: TensorDataPointer.ToPointer());
+                
             isCreatedInGraphMode = !tf.executing_eagerly();
         }
 

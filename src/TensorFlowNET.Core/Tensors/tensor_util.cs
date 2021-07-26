@@ -141,7 +141,24 @@ namespace Tensorflow
                 byte[] bytes = nd.ToByteArray();
                 tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }
-            else if (!values.GetType().IsArray)
+            else if (dtype == TF_DataType.TF_STRING && !(values is NDArray))
+            {
+                if (values is string str)
+                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
+                else if (values is string[] str_values)
+                    tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
+                else if (values is byte[] byte_values)
+                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
+            }
+            else if (values is Array array)
+            {
+                // array
+                var len = dtype.get_datatype_size() * (int)shape.size;
+                byte[] bytes = new byte[len];
+                System.Buffer.BlockCopy(array, 0, bytes, 0, len);
+                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
+            }
+            else
             {
                 switch (values)
                 {
@@ -166,31 +183,9 @@ namespace Tensorflow
                     case double val:
                         tensor_proto.DoubleVal.AddRange(new[] { val });
                         break;
-                    case string val:
-                        tensor_proto.StringVal.AddRange(val.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x.ToString())));
-                        break;
                     default:
                         throw new Exception("make_tensor_proto Not Implemented");
                 }
-            }
-            else if (dtype == TF_DataType.TF_STRING && !(values is NDArray))
-            {
-                if (values is string str)
-                {
-                    tensor_proto.StringVal.Add(Google.Protobuf.ByteString.CopyFromUtf8(str));
-                }
-                else if (values is string[] str_values)
-                    tensor_proto.StringVal.AddRange(str_values.Select(x => Google.Protobuf.ByteString.CopyFromUtf8(x)));
-                else if (values is byte[] byte_values)
-                    tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(byte_values);
-            }
-            else if (values is Array array)
-            {
-                // array
-                var len = dtype.get_datatype_size() * (int)shape.size;
-                byte[] bytes = new byte[len];
-                System.Buffer.BlockCopy(array, 0, bytes, 0, len);
-                tensor_proto.TensorContent = Google.Protobuf.ByteString.CopyFrom(bytes);
             }
 
             return tensor_proto;
@@ -469,74 +464,6 @@ would not be rank 1.", tensor.op.get_attr("axis")));
         {
             return ops.convert_to_tensor(shape, dtype: TF_DataType.TF_INT32, name: "shape");
         }
-
-        public static string to_numpy_string(Tensor tensor)
-        {
-            var dtype = tensor.dtype;
-            var shape = tensor.shape;
-
-            if (dtype == TF_DataType.TF_STRING)
-            {
-                if (tensor.rank == 0)
-                    return "'" + string.Join(string.Empty, tensor.StringBytes()[0]
-                        .Take(25)
-                        .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString())) + "'";
-                else
-                    return $"['{string.Join("', '", tensor.StringData().Take(25))}']";
-            }
-            else if(dtype == TF_DataType.TF_VARIANT)
-            {
-                return "<unprintable>";
-            }
-            else if (dtype == TF_DataType.TF_RESOURCE)
-            {
-                return "<unprintable>";
-            }
-            else if (dtype == TF_DataType.TF_BOOL)
-            {
-                var array = tensor.ToArray<bool>();
-                return DisplayArrayAsString(array, tensor.shape);
-            }
-            else if (dtype == TF_DataType.TF_INT32)
-            {
-                var array = tensor.ToArray<int>();
-                return DisplayArrayAsString(array, tensor.shape);
-            }
-            else if (dtype == TF_DataType.TF_INT64)
-            {
-                var array = tensor.ToArray<long>();
-                return DisplayArrayAsString(array, tensor.shape);
-            }
-            else if (dtype == TF_DataType.TF_FLOAT)
-            {
-                var array = tensor.ToArray<float>();
-                return DisplayArrayAsString(array, tensor.shape);
-            }
-            else if(dtype == TF_DataType.TF_DOUBLE)
-            {
-                var array = tensor.ToArray<double>();
-                return DisplayArrayAsString(array, tensor.shape);
-            }
-            else
-            {
-                var array = tensor.ToArray<byte>();
-                return DisplayArrayAsString(array, tensor.shape);
-            }
-        }
-
-        static string DisplayArrayAsString<T>(T[] array, Shape shape)
-        {
-            if (shape.ndim == 0)
-                return array[0].ToString();
-
-            var display = "array([";
-            if (array.Length < 10)
-                display += string.Join(", ", array);
-            else
-                display += string.Join(", ", array.Take(3)) + " ... " + string.Join(", ", array.Skip(array.Length - 3));
-            return display + "])";
-        }
-        
 
         public static ParsedSliceArgs ParseSlices(Slice[] slices)
         {

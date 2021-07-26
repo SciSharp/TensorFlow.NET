@@ -55,7 +55,7 @@ namespace Tensorflow
                 return new NDArray(str, shape);
             }
                 
-            return new NDArray(this);
+            return new NDArray(this, clone: true);
         }
 
         /// <summary>

@@ -281,7 +281,7 @@ namespace Tensorflow.Operations
                         data_format
                     }));
 
-        public static Tensor[] top_kv2(Tensor input, int k, bool sorted = true, string name = null)
+        public static Tensor[] top_kv2<T>(Tensor input, T k, bool sorted = true, string name = null)
         {
             var _op = tf.OpDefLib._apply_op_helper("TopKV2", name: name, args: new
             {

@@ -21,6 +21,9 @@ namespace Tensorflow
         public MathApi math { get; } = new MathApi();
         public class MathApi
         {
+            public Tensor argmax(Tensor input, Axis axis = null, string name = null, int? dimension = null, TF_DataType output_type = TF_DataType.TF_INT64)
+                => gen_math_ops.arg_max(input, axis, name: name, output_type: output_type);
+
             public Tensor log(Tensor x, string name = null)
                 => gen_math_ops.log(x, name);
 
@@ -539,14 +542,11 @@ namespace Tensorflow
         public Tensor round(Tensor x, string name = null)
             => gen_math_ops.round(x, name: name);
 
-        public Tensor cast(Tensor x, TF_DataType dtype = TF_DataType.DtInvalid, string name = null)
+        public Tensor cast(Tensor x, TF_DataType dtype, string name = null)
             => math_ops.cast(x, dtype, name);
 
         public Tensor cumsum(Tensor x, int axis = 0, bool exclusive = false, bool reverse = false, string name = null)
             => math_ops.cumsum(x, axis: axis, exclusive: exclusive, reverse: reverse, name: name);
-
-        public Tensor argmax(Tensor input, int axis = -1, string name = null, int? dimension = null, TF_DataType output_type = TF_DataType.TF_INT64)
-            => gen_math_ops.arg_max(input, axis, name: name, output_type: output_type);
 
         public Tensor square(Tensor x, string name = null)
             => gen_math_ops.square(x, name: name);

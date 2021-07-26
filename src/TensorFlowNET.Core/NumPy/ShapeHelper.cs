@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow.NumPy
 {
-    internal class ShapeHelper
+    public class ShapeHelper
     {
         public static long GetSize(Shape shape)
         {
@@ -39,6 +39,34 @@ namespace Tensorflow.NumPy
                 strides[idx - 1] = strides[idx] * shape.dims[idx];
 
             return strides;
+        }
+
+        public static Shape GetShape(Shape shape1, params Slice[] slices)
+        {
+            var new_dims = shape1.dims.ToArray();
+            slices = SliceHelper.AlignWithShape(shape1, slices);
+
+            for (int i = 0; i < shape1.dims.Length; i++)
+            {
+                Slice slice = slices[i];
+                if (slice.Equals(Slice.All))
+                    new_dims[i] = shape1.dims[i];
+                else if (slice.IsIndex)
+                    new_dims[i] = 1;
+                else // range
+                    new_dims[i] = (slice.Stop ?? shape1.dims[i]) - (slice.Start ?? 0);
+            }
+
+            // strip first dim if is index
+            var return_dims = new List<long>();
+            for (int i = 0; i< new_dims.Length; i++)
+            {
+                if (slices[i].IsIndex)
+                    continue;
+                return_dims.add(new_dims[i]);
+            }
+
+            return new Shape(return_dims.ToArray());
         }
 
         public static bool Equals(Shape shape, object target)

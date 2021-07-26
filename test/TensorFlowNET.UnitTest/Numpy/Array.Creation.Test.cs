@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow;
 using Tensorflow.NumPy;
 
 namespace TensorFlowNET.UnitTest.NumPy
@@ -87,6 +88,15 @@ namespace TensorFlowNET.UnitTest.NumPy
             var (a, b) = np.meshgrid(np.arange(3), np.arange(3));
             AssetSequenceEqual(a.ToArray<int>(), new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 });
             AssetSequenceEqual(b.ToArray<int>(), new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 });
+        }
+
+        [TestMethod]
+        public void to_numpy_string()
+        {
+            var nd = np.arange(10 * 10 * 10 * 10).reshape((10, 10, 10, 10));
+            var str = NDArrayRender.ToString(nd);
+            Assert.AreEqual("array([[[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],", str.Substring(0, 40));
+            Assert.AreEqual("[9990, 9991, 9992, 9993, 9994, 9995, 9996, 9997, 9998, 9999]]]])", str.Substring(str.Length - 64));
         }
     }
 }

@@ -96,6 +96,12 @@ namespace Tensorflow
         public static implicit operator Shape((long, long, long, long) dims)
             => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4);
 
+        public static implicit operator Shape((int, int, int, int, int) dims)
+            => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4, dims.Item5);
+
+        public static implicit operator Shape((long, long, long, long, long) dims)
+            => new Shape(dims.Item1, dims.Item2, dims.Item3, dims.Item4, dims.Item5);
+
         public static implicit operator int[](Shape shape)
             => shape.dims.Select(x => (int)x).ToArray();
 

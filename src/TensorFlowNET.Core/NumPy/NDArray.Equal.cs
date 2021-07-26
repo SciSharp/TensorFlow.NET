@@ -16,6 +16,7 @@ namespace Tensorflow.NumPy
                 long val => GetAtIndex<long>(0) == val,
                 float val => GetAtIndex<float>(0) == val,
                 double val => GetAtIndex<double>(0) == val,
+                string val => StringData(0) == val,
                 NDArray val => Equals(this, val),
                 _ => base.Equals(obj)
             };

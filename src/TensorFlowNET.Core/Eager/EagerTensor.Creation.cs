@@ -60,6 +60,9 @@ namespace Tensorflow.Eager
         {
             _id = ops.uid();
             _eagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status.Handle);
+#if TRACK_TENSOR_LIFE
+            Console.WriteLine($"New EagerTensor {_eagerTensorHandle}");
+#endif
             tf.Status.Check(true);
         }
 

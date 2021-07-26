@@ -117,7 +117,7 @@ namespace Tensorflow
                 case Shape val:
                     return new EagerTensor(val.dims, new Shape(val.ndim));
                 case Axis val:
-                    return new EagerTensor(val.axis, new Shape(val.size));
+                    return new EagerTensor(val.axis, val.IsScalar ? Shape.Scalar : new Shape(val.size));
                 case string val:
                     return new EagerTensor(new[] { val }, Shape.Scalar);
                 case string[] val:

@@ -25,10 +25,13 @@ namespace Tensorflow.NumPy
         public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) 
             : base(bytes, shape, dtype) { NewEagerTensorHandle(); }
 
+        public NDArray(long[] value, Shape? shape = null)
+            : base(value, shape) { NewEagerTensorHandle(); }
+
         public NDArray(IntPtr address, Shape shape, TF_DataType dtype) 
             : base(address, shape, dtype) { NewEagerTensorHandle(); }
 
-        public NDArray(Tensor tensor) : base(tensor.Handle) 
+        public NDArray(Tensor tensor, bool clone = false) : base(tensor.Handle, clone: clone) 
         {
             if (_handle is null)
             {
@@ -53,9 +56,12 @@ namespace Tensorflow.NumPy
 
         void NewEagerTensorHandle()
         {
-            _id = ops.uid();
-            _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
-            tf.Status.Check(true);
+            if(_handle is not null)
+            {
+                _id = ops.uid();
+                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+                tf.Status.Check(true);
+            }
         }
     }
 }

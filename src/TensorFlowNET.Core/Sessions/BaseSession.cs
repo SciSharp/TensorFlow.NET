@@ -193,6 +193,9 @@ namespace Tensorflow
                         case double v:
                             feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
                             break;
+                        case string v:
+                            feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v));
+                            break;
                         case Array v:
                             feeds[i++] = new KeyValuePair<TF_Output, Tensor>(key._as_tf_output(), new Tensor(v, v.GetShape()));
                             break;
