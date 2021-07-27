@@ -94,7 +94,7 @@ namespace Tensorflow.NumPy
             {
                 -1 => "<unknown>",
                 0 => "()",
-                1 => $"({shape.dims[0]},)",
+                1 => $"({shape.dims[0].ToString().Replace("-1", "None")},)",
                 _ => $"({string.Join(", ", shape.dims).Replace("-1", "None")})"
             };
         }

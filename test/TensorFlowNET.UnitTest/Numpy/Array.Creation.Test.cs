@@ -21,6 +21,7 @@ namespace TensorFlowNET.UnitTest.NumPy
             var zeros = np.zeros((2, 2));
             var ones = np.ones((2, 2));
             var full = np.full((2, 2), 0.1f);
+            Assert.AreEqual(np.float32, full.dtype);
         }
 
         [TestMethod]
