@@ -170,62 +170,53 @@ namespace Tensorflow.NumPy
         }
 
         void SetData(IEnumerable<Slice> slices, NDArray array)
-            => SetData(slices, array, -1, slices.Select(x => 0).ToArray());
+            => SetData(array, data, slices.ToArray(), new int[shape.ndim].ToArray(), -1);
 
-        void SetData(IEnumerable<Slice> slices, NDArray array, int currentNDim, int[] indices)
+        unsafe void SetData(NDArray src, IntPtr dst, Slice[] slices, int[] indices, int currentNDim)
         {
-            if (dtype != array.dtype)
-                array = array.astype(dtype);
+            if (dtype != src.dtype)
+                src = src.astype(dtype);
                 // throw new ArrayTypeMismatchException($"Required dtype {dtype} but {array.dtype} is assigned.");
 
             if (!slices.Any())
                 return;
 
-            var newshape = ShapeHelper.GetShape(shape, slices.ToArray());
-            if(newshape.Equals(array.shape))
+            // first iteration
+            if(currentNDim == -1)
             {
-                var offset = ShapeHelper.GetOffset(shape, slices.First().Start ?? 0);
-                unsafe
+                slices = SliceHelper.AlignWithShape(shape, slices);
+                if (!shape.Equals(src.shape))
                 {
-                    var dst = (byte*)data + (ulong)offset * dtypesize;
-                    System.Buffer.MemoryCopy(array.data.ToPointer(), dst, array.bytesize, array.bytesize);
+                    var newShape = ShapeHelper.AlignWithShape(shape, src.shape);
+                    src = src.reshape(newShape);
                 }
-                return;
             }
 
-
-            var slice = slices.First();
-
-            if (slices.Count() == 1)
+            // last dimension
+            if (currentNDim == ndim - 1)
             {
-
-                if (slice.Step != 1)
-                    throw new NotImplementedException("slice.step should == 1");
-
-                if (slice.Start < 0)
-                    throw new NotImplementedException("slice.start should > -1");
-
-                indices[indices.Length - 1] = slice.Start ?? 0;
-                var offset = (ulong)ShapeHelper.GetOffset(shape, indices);
-                var bytesize = array.bytesize;
-                unsafe
-                {
-                    var dst = (byte*)data + offset * dtypesize;
-                    System.Buffer.MemoryCopy(array.data.ToPointer(), dst, bytesize, bytesize);
-                }
-
+                System.Buffer.MemoryCopy(src.data.ToPointer(), dst.ToPointer(), src.bytesize, src.bytesize);
                 return;
             }
 
             currentNDim++;
-            if (slice.Stop == null)
-                slice.Stop = (int)dims[currentNDim];
+            var slice = slices[currentNDim];
+            
+            var start = slice.Start ?? 0;
+            var stop = slice.Stop ?? (int)dims[currentNDim];
+            var step = slice.Step;
 
-            for (var i = slice.Start ?? 0; i < slice.Stop; i++)
+            for (var i = start; i < stop; i += step)
             {
                 indices[currentNDim] = i;
-                SetData(slices.Skip(1), array, currentNDim, indices);
+                var offset = (int)ShapeHelper.GetOffset(shape, indices);
+                dst = data + offset * (int)dtypesize;
+                var srcIndex = (i - start) / step;
+                SetData(src[srcIndex], dst, slices, indices, currentNDim);
             }
+
+            // reset indices
+            indices[currentNDim] = 0;
         }
     }
 }

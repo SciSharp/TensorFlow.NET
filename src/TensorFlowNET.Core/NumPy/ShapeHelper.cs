@@ -69,6 +69,23 @@ namespace Tensorflow.NumPy
             return new Shape(return_dims.ToArray());
         }
 
+        public static Shape AlignWithShape(Shape shape, Shape preShape)
+        {
+            if (shape.ndim == preShape.ndim)
+                return preShape;
+
+            var newShape = shape.dims.Select(x => 1L).ToArray();
+            if (preShape.IsScalar)
+                return new Shape(newShape);
+
+            for (int i = 0; i < preShape.ndim; i++)
+            {
+                newShape[i + shape.ndim - preShape.ndim] = preShape[i];
+            }
+
+            return new Shape(newShape);
+        }
+
         public static bool Equals(Shape shape, object target)
         {
             switch (target)

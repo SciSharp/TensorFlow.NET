@@ -116,5 +116,20 @@ namespace TensorFlowNET.UnitTest.NumPy
                 i++;
             }
         }
+
+        [TestMethod]
+        public void slice_step()
+        {
+            var array = np.arange(32).reshape((4, 8));
+            var s1 = array[Slice.All, new Slice(2, 5, 2)] + 1;
+            Assert.AreEqual(s1.shape, (4, 2));
+            var expected = new[] { 3, 5, 11, 13, 19, 21, 27, 29 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expected, s1.ToArray<int>()));
+            array[Slice.All, new Slice(2, 5, 2)] = s1;
+            Assert.AreEqual(array[0], new[] { 0, 1, 3, 3, 5, 5, 6, 7 });
+            Assert.AreEqual(array[1], new[] { 8, 9, 11, 11, 13, 13, 14, 15 });
+            Assert.AreEqual(array[2], new[] { 16, 17, 19, 19, 21, 21, 22, 23 });
+            Assert.AreEqual(array[3], new[] { 24, 25, 27, 27, 29, 29, 30, 31 });
+        }
     }
 }

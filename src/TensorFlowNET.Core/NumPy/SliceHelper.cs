@@ -9,8 +9,11 @@ namespace Tensorflow.NumPy
     {
         public static Slice[] AlignWithShape(Shape shape, Slice[] slices)
         {
-            // align slices
             var ndim = shape.ndim;
+            if (ndim == slices.Length)
+                return slices;
+
+            // align slices
             var new_slices = new List<Slice>();
             var slice_index = 0;
 
