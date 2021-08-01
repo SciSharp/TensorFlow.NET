@@ -175,10 +175,24 @@ namespace Tensorflow.NumPy
         void SetData(IEnumerable<Slice> slices, NDArray array, int currentNDim, int[] indices)
         {
             if (dtype != array.dtype)
-                throw new ArrayTypeMismatchException($"Required dtype {dtype} but {array.dtype} is assigned.");
+                array = array.astype(dtype);
+                // throw new ArrayTypeMismatchException($"Required dtype {dtype} but {array.dtype} is assigned.");
 
             if (!slices.Any())
                 return;
+
+            var newshape = ShapeHelper.GetShape(shape, slices.ToArray());
+            if(newshape.Equals(array.shape))
+            {
+                var offset = ShapeHelper.GetOffset(shape, slices.First().Start ?? 0);
+                unsafe
+                {
+                    var dst = (byte*)data + (ulong)offset * dtypesize;
+                    System.Buffer.MemoryCopy(array.data.ToPointer(), dst, array.bytesize, array.bytesize);
+                }
+                return;
+            }
+
 
             var slice = slices.First();
 
@@ -204,6 +218,9 @@ namespace Tensorflow.NumPy
             }
 
             currentNDim++;
+            if (slice.Stop == null)
+                slice.Stop = (int)dims[currentNDim];
+
             for (var i = slice.Start ?? 0; i < slice.Stop; i++)
             {
                 indices[currentNDim] = i;

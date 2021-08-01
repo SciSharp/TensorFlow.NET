@@ -278,53 +278,37 @@ namespace Tensorflow
 
         protected static Tensor BinaryOpWrapper<Tx, Ty>(string name, Tx x, Ty y)
         {
-            TF_DataType dtype = TF_DataType.DtInvalid;
-
-            if (x is Tensor tl)
-            {
-                dtype = tl.dtype.as_base_dtype();
-            }
-
-            if (y is Tensor tr)
-            {
-                dtype = tr.dtype.as_base_dtype();
-            }
-
             return tf_with(ops.name_scope(null, name, new { x, y }), scope =>
             {
-                Tensor result;
-                var x1 = ops.convert_to_tensor(x, dtype: dtype, name: "x");
-                var y1 = ops.convert_to_tensor(y, dtype: dtype, name: "y");
+                var dtype = GetBestDType(x, y);
+                var x1 = ops.convert_to_tensor(x, name: "x", dtype: dtype);
+                var y1 = ops.convert_to_tensor(y, name: "y", dtype: dtype);
+                string newname = scope;
 
-                switch (name.ToLowerInvariant())
+                return name.ToLowerInvariant() switch
                 {
-                    case "add":
-                        result = math_ops.add_v2(x1, y1, name: scope);
-                        break;
-                    case "div":
-                        result = math_ops.div(x1, y1, name: scope);
-                        break;
-                    case "floordiv":
-                        result = gen_math_ops.floor_div(x1, y1, name: scope);
-                        break;
-                    case "truediv":
-                        result = math_ops.truediv(x1, y1, name: scope);
-                        break;
-                    case "mul":
-                        result = math_ops.multiply(x1, y1, name: scope);
-                        break;
-                    case "sub":
-                        result = gen_math_ops.sub(x1, y1, name: scope);
-                        break;
-                    case "mod":
-                        result = gen_math_ops.floor_mod(x1, y1, name: scope);
-                        break;
-                    default:
-                        throw new NotImplementedException($"BinaryOpWrapper: {name} - {typeof(Tx).Name}, {typeof(Ty).Name}");
-                }
-
-                return result;
+                    "add" => math_ops.add_v2(x1, y1, name: newname),
+                    "div" => math_ops.div(x1, y1, name: newname),
+                    "floordiv" => gen_math_ops.floor_div(x1, y1, name: newname),
+                    "truediv" => math_ops.truediv(x1, y1, name: newname),
+                    "mul" => math_ops.multiply(x1, y1, name: newname),
+                    "sub" => gen_math_ops.sub(x1, y1, name: newname),
+                    "mod" => gen_math_ops.floor_mod(x1, y1, name: newname),
+                    _ => throw new NotImplementedException($"BinaryOpWrapper: {name} - {typeof(Tx).Name}, {typeof(Ty).Name}")
+                };
             });
+        }
+
+        static TF_DataType GetBestDType<Tx, Ty>(Tx x, Ty y)
+        {
+            var dtype1 = x.GetDataType();
+            var dtype2 = y.GetDataType();
+            if (dtype1.is_integer() && dtype2.is_floating())
+                return dtype2;
+            else if (dtype1.is_floating() && dtype2.is_integer())
+                return dtype1;
+            else
+                return dtype1;
         }
     }
 }

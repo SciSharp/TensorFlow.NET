@@ -69,9 +69,6 @@ namespace Tensorflow.NumPy
         public static bool array_equal(NDArray a, NDArray b)
             => a.Equals(b);
 
-        public static NDArray concatenate(NDArray[] arrays, int axis = 0) 
-            => throw new NotImplementedException("");
-
         public static bool allclose(NDArray a, NDArray b, double rtol = 1.0E-5, double atol = 1.0E-8,
             bool equal_nan = false) => throw new NotImplementedException("");
 

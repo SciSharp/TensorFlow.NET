@@ -11,7 +11,11 @@ namespace Tensorflow.NumPy
     public partial class np
     {
         [AutoNumPy]
-        public static NDArray array(Array data) => new NDArray(data);
+        public static NDArray array(Array data, TF_DataType? dtype = null) 
+        {
+            var nd = new NDArray(data);
+            return dtype == null ? nd : nd.astype(dtype.Value);
+        }
 
         [AutoNumPy]
         public static NDArray array<T>(params T[] data)

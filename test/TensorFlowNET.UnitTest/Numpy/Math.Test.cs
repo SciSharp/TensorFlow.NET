@@ -35,5 +35,13 @@ namespace TensorFlowNET.UnitTest.NumPy
             var x1 = x.astype(np.float32);
             Assert.AreEqual(x1[2], 200f);
         }
+
+        [TestMethod]
+        public void divide()
+        {
+            var x = np.array(new float[] { 1, 100, 200 });
+            var y = x / 2;
+            Assert.AreEqual(y.dtype, np.float32);
+        }
     }
 }
