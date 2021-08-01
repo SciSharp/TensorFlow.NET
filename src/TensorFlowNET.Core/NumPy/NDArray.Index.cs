@@ -57,7 +57,7 @@ namespace Tensorflow.NumPy
             }
         }
 
-        
+        [AutoNumPy]
         unsafe NDArray GetData(Slice[] slices)
         {
             if (shape.IsScalar)
@@ -170,9 +170,9 @@ namespace Tensorflow.NumPy
         }
 
         void SetData(IEnumerable<Slice> slices, NDArray array)
-            => SetData(array, data, slices.ToArray(), new int[shape.ndim].ToArray(), -1);
+            => SetData(array, slices.ToArray(), new int[shape.ndim].ToArray(), -1);
 
-        unsafe void SetData(NDArray src, IntPtr dst, Slice[] slices, int[] indices, int currentNDim)
+        unsafe void SetData(NDArray src, Slice[] slices, int[] indices, int currentNDim)
         {
             if (dtype != src.dtype)
                 src = src.astype(dtype);
@@ -181,20 +181,23 @@ namespace Tensorflow.NumPy
             if (!slices.Any())
                 return;
 
+            if (shape.Equals(src.shape))
+            {
+                System.Buffer.MemoryCopy(src.data.ToPointer(), data.ToPointer(), src.bytesize, src.bytesize);
+                return;
+            }
+
             // first iteration
             if(currentNDim == -1)
             {
                 slices = SliceHelper.AlignWithShape(shape, slices);
-                if (!shape.Equals(src.shape))
-                {
-                    var newShape = ShapeHelper.AlignWithShape(shape, src.shape);
-                    src = src.reshape(newShape);
-                }
             }
 
             // last dimension
             if (currentNDim == ndim - 1)
             {
+                var offset = (int)ShapeHelper.GetOffset(shape, indices);
+                var dst = data + offset * (int)dtypesize;
                 System.Buffer.MemoryCopy(src.data.ToPointer(), dst.ToPointer(), src.bytesize, src.bytesize);
                 return;
             }
@@ -206,13 +209,56 @@ namespace Tensorflow.NumPy
             var stop = slice.Stop ?? (int)dims[currentNDim];
             var step = slice.Step;
 
-            for (var i = start; i < stop; i += step)
+            if(step != 1)
             {
-                indices[currentNDim] = i;
-                var offset = (int)ShapeHelper.GetOffset(shape, indices);
-                dst = data + offset * (int)dtypesize;
-                var srcIndex = (i - start) / step;
-                SetData(src[srcIndex], dst, slices, indices, currentNDim);
+                for (var i = start; i < stop; i += step)
+                {
+                    if (i >= dims[currentNDim])
+                        throw new OutOfRangeError($"Index should be in [0, {dims[currentNDim]}] but got {i}");
+
+                    indices[currentNDim] = i;
+                    if (currentNDim < ndim - src.ndim)
+                    {
+                        SetData(src, slices, indices, currentNDim);
+                    }
+                    else
+                    {
+                        var srcIndex = (i - start) / step;
+                        SetData(src[srcIndex], slices, indices, currentNDim);
+                    }
+                }
+            }
+            else
+            {
+                for (var i = start; i < stop; i++)
+                {
+                    if (i >= dims[currentNDim])
+                        throw new OutOfRangeError($"Index should be in [0, {dims[currentNDim]}] but got {i}");
+
+                    indices[currentNDim] = i;
+                    if (currentNDim < ndim - src.ndim)
+                    {
+                        SetData(src, slices, indices, currentNDim);
+                    }
+                    // last dimension
+                    else if(currentNDim == ndim - 1)
+                    {
+                        SetData(src, slices, indices, currentNDim);
+                        break;
+                    }
+                    else if(SliceHelper.IsContinuousBlock(slices, currentNDim))
+                    {
+                        var offset = (int)ShapeHelper.GetOffset(shape, indices);
+                        var dst = data + offset * (int)dtypesize;
+                        System.Buffer.MemoryCopy(src.data.ToPointer(), dst.ToPointer(), src.bytesize, src.bytesize);
+                        return;
+                    }
+                    else
+                    {
+                        var srcIndex = i - start;
+                        SetData(src[srcIndex], slices, indices, currentNDim);
+                    }
+                }
             }
 
             // reset indices

@@ -55,5 +55,16 @@ namespace Tensorflow.NumPy
             }
             return true;
         }
+
+        public static bool IsContinuousBlock(Slice[] slices, int ndim)
+        {
+            for (int i = ndim + 1; i < slices.Length; i++)
+            {
+                if (slices[i].Equals(Slice.All))
+                    continue;
+                return false;
+            }
+            return true;
+        }
     }
 }
