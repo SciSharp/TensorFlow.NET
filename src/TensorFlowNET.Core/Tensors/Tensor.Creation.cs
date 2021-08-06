@@ -42,7 +42,7 @@ namespace Tensorflow
         public unsafe Tensor(SafeTensorHandle handle, bool clone = false)
         {
             _handle = handle;
-            if (clone)
+            if (clone && handle != null)
                 _handle = TF_NewTensor(shape, dtype, data: TensorDataPointer.ToPointer());
                 
             isCreatedInGraphMode = !tf.executing_eagerly();

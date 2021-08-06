@@ -17,6 +17,7 @@
 using Tensorflow.NumPy;
 using System;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace Tensorflow
 {
@@ -221,6 +222,7 @@ namespace Tensorflow
             return (int)type > 100 ? (DataType)((int)type - 100) : type;
         }
 
+        [DebuggerStepThrough]
         public static TF_DataType as_tf_dtype(this DataType type)
         {
             return (TF_DataType)type;
