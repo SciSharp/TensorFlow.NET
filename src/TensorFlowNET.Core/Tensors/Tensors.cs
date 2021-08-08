@@ -79,6 +79,7 @@ namespace Tensorflow
         public static implicit operator Tensors((Tensor, Tensor) tuple)
             => new Tensors(tuple.Item1, tuple.Item2);
 
+        [AutoNumPy]
         public static implicit operator Tensors(NDArray nd)
             => new Tensors(nd);
 

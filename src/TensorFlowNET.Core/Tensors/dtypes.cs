@@ -138,7 +138,8 @@ namespace Tensorflow
                     dtype = TF_DataType.TF_BOOL;
                     break;
                 default:
-                    throw new NotSupportedException($"Unable to convert {type} to a TensorFlow data type.");
+                    dtype = TF_DataType.DtInvalid;
+                    break;
             }
 
             return dtype;

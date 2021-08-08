@@ -720,6 +720,8 @@ namespace Tensorflow
                 return gen_math_ops.range(start1, limit1, delta1, name);
             });
         }
+        public static Tensor floor(Tensor x, string name = null)
+            => tf.Context.ExecuteOp("Floor", name, new ExecuteOpArgs(x));
 
         public static Tensor floordiv(Tensor x, Tensor y, string name = null)
         {

@@ -26,12 +26,12 @@ namespace Tensorflow.Keras
                 images[i] = resized_image.numpy();
                 tf_output_redirect.WriteLine(image_paths[i]);
             };
+            var img_ds = tf.data.Dataset.from_tensor_slices(images);
 
             // option 2: dynamic load, but has error, need to fix
-            /* var path_ds = tf.data.Dataset.from_tensor_slices(image_paths);
-            var img_ds = path_ds.map(x => path_to_image(x, image_size, num_channels, interpolation));*/
-
-            var img_ds = tf.data.Dataset.from_tensor_slices(images);
+            // var path_ds = tf.data.Dataset.from_tensor_slices(image_paths);
+            // var img_ds = path_ds.map(x => path_to_image(x, image_size, num_channels, interpolation));
+            
             if (label_mode == "int")
             {
                 var label_ds = dataset_utils.labels_to_dataset(labels, label_mode, num_classes);
@@ -43,6 +43,7 @@ namespace Tensorflow.Keras
 
         Tensor path_to_image(Tensor path, Shape image_size, int num_channels, string interpolation)
         {
+            tf.print(path);
             var img = tf.io.read_file(path);
             img = tf.image.decode_image(
                 img, channels: num_channels, expand_animations: false);
@@ -57,8 +58,18 @@ namespace Tensorflow.Keras
             int num_classes,
             int max_length = -1)
         {
-            var path_ds = tf.data.Dataset.from_tensor_slices(image_paths);
-            var string_ds = path_ds.map(x => path_to_string_content(x, max_length));
+            var text = new string[image_paths.Length];
+            for (int i = 0; i < text.Length; i++)
+            {
+                text[i] = File.ReadAllText(image_paths[i]);
+                tf_output_redirect.WriteLine(image_paths[i]);
+            }
+
+            var images = np.array(text);
+            var string_ds = tf.data.Dataset.from_tensor_slices(images);
+
+            // var path_ds = tf.data.Dataset.from_tensor_slices(image_paths);
+            // var string_ds = path_ds.map(x => path_to_string_content(x, max_length));
 
             if (label_mode == "int")
             {

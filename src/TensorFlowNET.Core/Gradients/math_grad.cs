@@ -694,6 +694,20 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Cast")]
+        public static Tensor[] _CastGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            var src_type = x.dtype.as_base_dtype();
+            var dst_type = grad.dtype.as_base_dtype();
+            if (src_type.is_value_dtype() && dst_type.is_value_dtype())
+                return new Tensor[] { math_ops.cast(grad, src_type) };
+            else
+                return new Tensor[0];
+        }
+
         [RegisterGradient("Cos")]
         public static Tensor[] _CosGrad(Operation op, Tensor[] grads)
         {

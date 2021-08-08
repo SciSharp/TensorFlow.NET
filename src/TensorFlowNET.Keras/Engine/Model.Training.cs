@@ -4,6 +4,7 @@ using System.Text;
 using HDF.PInvoke;
 using HDF5CSharp;
 using Tensorflow.NumPy;
+using static Tensorflow.Binding;
 using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Engine
@@ -14,7 +15,11 @@ namespace Tensorflow.Keras.Engine
         public void load_weights(string filepath, bool by_name = false, bool skip_mismatch = false, object options = null)
         {
             long fileId = Hdf5.OpenFile(filepath, true);
-
+            if(fileId < 0)
+            {
+                tf_output_redirect.WriteLine($"Can't find weights file {filepath}");
+                return;
+            }
             bool msuccess = Hdf5.GroupExists(fileId, "model_weights");
             bool lsuccess = Hdf5.GroupExists(fileId, "layer_names");
 

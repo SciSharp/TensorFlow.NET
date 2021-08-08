@@ -30,7 +30,7 @@ namespace Tensorflow.Gradients
             var shape = new Shape(image.shape.dims.Skip(1).Take(2).ToArray());
             Tensor image_shape = null;
             if (shape.IsFullyDefined)
-                image_shape = constant_op.constant(image.shape.dims.Skip(1).Take(2).ToArray());
+                image_shape = constant_op.constant(image.shape.as_int_list().Skip(1).Take(2).ToArray());
             else
                 image_shape = array_ops.shape(image)["1:3"];
 

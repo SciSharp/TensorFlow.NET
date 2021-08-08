@@ -37,15 +37,8 @@ namespace Tensorflow.Eager
             => NewEagerTensorHandle(_handle); 
         #endregion
 
-        public EagerTensor(object value,string device_name, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
-        {
-            throw new NotImplementedException("");
-        }
-
         public EagerTensor(object value, Shape? shape = null, string device_name = null, TF_DataType dtype = TF_DataType.TF_UINT8) : base((float[])value)
-        {
-            NewEagerTensorHandle(_handle);
-        }
+            => NewEagerTensorHandle(_handle);
 
         public EagerTensor(Shape shape, TF_DataType dtype) : base(shape, dtype)
             => NewEagerTensorHandle(_handle);
@@ -54,6 +47,9 @@ namespace Tensorflow.Eager
             => NewEagerTensorHandle(_handle);
 
         public EagerTensor(byte[] bytes, Shape shape, TF_DataType dtype) : base(bytes, shape, dtype)
+            => NewEagerTensorHandle(_handle);
+
+        public EagerTensor(IntPtr data_ptr, Shape shape, TF_DataType dtype) : base(data_ptr, shape, dtype)
             => NewEagerTensorHandle(_handle);
 
         void NewEagerTensorHandle(SafeTensorHandle h)
