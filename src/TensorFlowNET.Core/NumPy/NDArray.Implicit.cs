@@ -18,22 +18,22 @@ namespace Tensorflow.NumPy
             => new NDArray(array);
 
         public unsafe static implicit operator bool(NDArray nd)
-            => *(bool*)nd.data;
+            => nd.dtype == TF_DataType.TF_BOOL ? *(bool*)nd.data : NDArrayConverter.Scalar<bool>(nd);
 
         public unsafe static implicit operator byte(NDArray nd)
-            => *(byte*)nd.data;
+            => nd.dtype == TF_DataType.TF_INT8 ? *(byte*)nd.data : NDArrayConverter.Scalar<byte>(nd);
 
         public unsafe static implicit operator int(NDArray nd)
-            => *(int*)nd.data;
+            => nd.dtype == TF_DataType.TF_INT32 ? *(int*)nd.data : NDArrayConverter.Scalar<int>(nd);
 
         public unsafe static implicit operator long(NDArray nd)
-            => *(long*)nd.data;
+            => nd.dtype == TF_DataType.TF_INT64 ? *(long*)nd.data : NDArrayConverter.Scalar<long>(nd);
 
         public unsafe static implicit operator float(NDArray nd)
-            => *(float*)nd.data;
+            => nd.dtype == TF_DataType.TF_FLOAT ? *(float*)nd.data : NDArrayConverter.Scalar<float>(nd);
 
         public unsafe static implicit operator double(NDArray nd)
-            => *(double*)nd.data;
+            => nd.dtype == TF_DataType.TF_DOUBLE ? *(double*)nd.data : NDArrayConverter.Scalar<double>(nd);
 
         public static implicit operator NDArray(bool value)
             => new NDArray(value);

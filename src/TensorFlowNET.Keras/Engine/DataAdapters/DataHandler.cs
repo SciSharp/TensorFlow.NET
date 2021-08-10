@@ -78,7 +78,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             _insufficient_data = false;
         }
 
-        int _infer_steps(int steps_per_epoch, IDatasetV2 dataset)
+        long _infer_steps(int steps_per_epoch, IDatasetV2 dataset)
         {
             if (steps_per_epoch > -1)
                 return steps_per_epoch;

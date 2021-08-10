@@ -175,8 +175,8 @@ namespace Tensorflow.NumPy
         unsafe void SetData(NDArray src, Slice[] slices, int[] indices, int currentNDim)
         {
             if (dtype != src.dtype)
-                src = src.astype(dtype);
-                // throw new ArrayTypeMismatchException($"Required dtype {dtype} but {array.dtype} is assigned.");
+                // src = src.astype(dtype);
+                throw new ArrayTypeMismatchException($"Required dtype {dtype} but {src.dtype} is assigned.");
 
             if (!slices.Any())
                 return;
