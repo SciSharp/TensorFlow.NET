@@ -300,10 +300,7 @@ namespace Tensorflow
             return result;
         }
 
-        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null, int dim = -1)
-            => expand_dims_v2(input, axis, name);
-
-        private static Tensor expand_dims_v2(Tensor input, int axis, string name = null)
+        public static Tensor expand_dims(Tensor input, int axis = -1, string name = null)
             => gen_array_ops.expand_dims(input, axis, name);
 
         /// <summary>

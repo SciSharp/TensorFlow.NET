@@ -15,7 +15,7 @@ namespace Tensorflow.NumPy
         public static NDArray dstack(params NDArray[] tup) => throw new NotImplementedException("");
 
         [AutoNumPy]
-        public static NDArray expand_dims(NDArray a, Axis? axis = null) => throw new NotImplementedException("");
+        public static NDArray expand_dims(NDArray a, Axis? axis = null) => new NDArray(array_ops.expand_dims(a, axis: axis ?? -1));
 
         [AutoNumPy]
         public static NDArray reshape(NDArray x1, Shape newshape) => x1.reshape(newshape);
