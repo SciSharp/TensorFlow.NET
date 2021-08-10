@@ -273,19 +273,19 @@ namespace Tensorflow.Keras.Saving
             switch (data.dtype)
             {
                 case TF_DataType.TF_FLOAT:
-                    Hdf5.WriteDatasetFromArray<float>(f, name, data.numpy().ToMuliDimArray<float>());
+                    Hdf5.WriteDatasetFromArray<float>(f, name, data.numpy().ToMultiDimArray<float>());
                     break;
                 case TF_DataType.TF_DOUBLE:
-                    Hdf5.WriteDatasetFromArray<double>(f, name, data.numpy().ToMuliDimArray<double>());
+                    Hdf5.WriteDatasetFromArray<double>(f, name, data.numpy().ToMultiDimArray<double>());
                     break;
                 case TF_DataType.TF_INT32:
-                    Hdf5.WriteDatasetFromArray<int>(f, name, data.numpy().ToMuliDimArray<int>());
+                    Hdf5.WriteDatasetFromArray<int>(f, name, data.numpy().ToMultiDimArray<int>());
                     break;
                 case TF_DataType.TF_INT64:
-                    Hdf5.WriteDatasetFromArray<long>(f, name, data.numpy().ToMuliDimArray<long>());
+                    Hdf5.WriteDatasetFromArray<long>(f, name, data.numpy().ToMultiDimArray<long>());
                     break;
                 default:
-                    Hdf5.WriteDatasetFromArray<float>(f, name, data.numpy().ToMuliDimArray<float>());
+                    Hdf5.WriteDatasetFromArray<float>(f, name, data.numpy().ToMultiDimArray<float>());
                     break;
             }
         }

@@ -51,6 +51,22 @@ namespace TensorFlowNET.UnitTest.NumPy
         }
 
         [TestMethod]
+        public void to_multi_dim_array()
+        {
+            var x1 = np.arange(12);
+            var y1 = x1.ToMultiDimArray<int>();
+            AssetSequenceEqual((int[])y1, x1.ToArray<int>());
+
+            var x2 = np.arange(12).reshape((2, 6));
+            var y2 = (int[,])x2.ToMultiDimArray<int>();
+            Assert.AreEqual(x2[0, 5], y2[0, 5]);
+
+            var x3 = np.arange(12).reshape((2, 2, 3));
+            var y3 = (int[,,])x3.ToMultiDimArray<int>();
+            Assert.AreEqual(x3[0, 1, 2], y3[0, 1, 2]);
+        }
+
+        [TestMethod]
         public void eye()
         {
             var x = np.eye(3, k: 1);

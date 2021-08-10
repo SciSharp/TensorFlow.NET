@@ -8,28 +8,28 @@ namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
-        public NDArray(bool value) : base(value) { NewEagerTensorHandle(); }
-        public NDArray(byte value) : base(value) { NewEagerTensorHandle(); }
-        public NDArray(short value) : base(value) { NewEagerTensorHandle(); }
-        public NDArray(int value) : base(value) { NewEagerTensorHandle(); }
-        public NDArray(long value) : base(value) { NewEagerTensorHandle(); }
-        public NDArray(float value) : base(value) { NewEagerTensorHandle(); }
-        public NDArray(double value) : base(value) { NewEagerTensorHandle(); }
+        public NDArray(bool value) : base(value) => NewEagerTensorHandle(); 
+        public NDArray(byte value) : base(value) => NewEagerTensorHandle();
+        public NDArray(short value) : base(value) => NewEagerTensorHandle();
+        public NDArray(int value) : base(value) => NewEagerTensorHandle();
+        public NDArray(long value) : base(value) => NewEagerTensorHandle();
+        public NDArray(float value) : base(value) => NewEagerTensorHandle();
+        public NDArray(double value) : base(value) => NewEagerTensorHandle(); 
 
-        public NDArray(Array value, Shape? shape = null) 
-            : base(value, shape) { NewEagerTensorHandle(); }
+        public NDArray(Array value, Shape? shape = null) : base(value, shape) 
+            => NewEagerTensorHandle();
 
-        public NDArray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE) 
-            : base(shape, dtype: dtype) { NewEagerTensorHandle(); }
+        public NDArray(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE) : base(shape, dtype: dtype) 
+            => NewEagerTensorHandle();
 
-        public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) 
-            : base(bytes, shape, dtype) { NewEagerTensorHandle(); }
+        public NDArray(byte[] bytes, Shape shape, TF_DataType dtype) : base(bytes, shape, dtype) 
+            => NewEagerTensorHandle();
 
-        public NDArray(long[] value, Shape? shape = null)
-            : base(value, shape) { NewEagerTensorHandle(); }
+        public NDArray(long[] value, Shape? shape = null) : base(value, shape) 
+            => NewEagerTensorHandle();
 
-        public NDArray(IntPtr address, Shape shape, TF_DataType dtype) 
-            : base(address, shape, dtype) { NewEagerTensorHandle(); }
+        public NDArray(IntPtr address, Shape shape, TF_DataType dtype) : base(address, shape, dtype) 
+            => NewEagerTensorHandle();
 
         public NDArray(Tensor tensor, bool clone = false) : base(tensor.Handle, clone: clone) 
         {

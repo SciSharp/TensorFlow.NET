@@ -30,5 +30,62 @@ namespace Tensorflow.NumPy
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
                 _ => throw new NotImplementedException("")
             };
+
+        public static unsafe Array ToMultiDimArray<T>(NDArray nd) where T : unmanaged
+        {
+            var ret = Array.CreateInstance(typeof(T), nd.shape.as_int_list());
+
+            var addr = ret switch
+            {
+                T[] array => Addr(array),
+                T[,] array => Addr(array),
+                T[,,] array => Addr(array),
+                T[,,,] array => Addr(array),
+                T[,,,,] array => Addr(array),
+                T[,,,,,] array => Addr(array),
+                _ => throw new NotImplementedException("")
+            };
+
+            System.Buffer.MemoryCopy(nd.data.ToPointer(), addr, nd.bytesize, nd.bytesize);
+            return ret;
+        }
+
+        #region multiple array
+        static unsafe T* Addr<T>(T[] array) where T : unmanaged
+        {
+            fixed (T* a = &array[0])
+                return a;
+        }
+
+        static unsafe T* Addr<T>(T[,] array) where T : unmanaged
+        {
+            fixed (T* a = &array[0, 0])
+                return a;
+        }
+
+        static unsafe T* Addr<T>(T[,,] array) where T : unmanaged
+        {
+            fixed (T* a = &array[0, 0, 0])
+                return a;
+        }
+
+        static unsafe T* Addr<T>(T[,,,] array) where T : unmanaged
+        {
+            fixed (T* a = &array[0, 0, 0, 0])
+                return a;
+        }
+
+        static unsafe T* Addr<T>(T[,,,,] array) where T : unmanaged
+        {
+            fixed (T* a = &array[0, 0, 0, 0, 0])
+                return a;
+        }
+
+        static unsafe T* Addr<T>(T[,,,,,] array) where T : unmanaged
+        {
+            fixed (T* a = &array[0, 0, 0, 0, 0, 0])
+                return a;
+        }
+        #endregion
     }
 }

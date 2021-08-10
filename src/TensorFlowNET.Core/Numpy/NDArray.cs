@@ -19,6 +19,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
@@ -35,7 +36,10 @@ namespace Tensorflow.NumPy
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(this, dtype));
         public NDArray ravel() => throw new NotImplementedException("");
         public void shuffle(NDArray nd) => np.random.shuffle(nd);
-        public Array ToMuliDimArray<T>() => throw new NotImplementedException("");
+
+        public unsafe Array ToMultiDimArray<T>() where T : unmanaged
+            => NDArrayConverter.ToMultiDimArray<T>(this);
+
         public byte[] ToByteArray() => BufferToArray();
         public override string ToString() => NDArrayRender.ToString(this);
 
