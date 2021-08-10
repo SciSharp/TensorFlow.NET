@@ -37,6 +37,6 @@ namespace Tensorflow.NumPy
         }
 
         public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape size = null)
-            => throw new NotImplementedException("");
+            => new NDArray(random_ops.random_normal(size ?? Shape.Scalar, mean: loc, stddev: scale));
     }
 }

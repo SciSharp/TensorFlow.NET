@@ -19,6 +19,9 @@ namespace Tensorflow.NumPy
         public static NDArray log(NDArray x) => new NDArray(tf.log(x));
 
         [AutoNumPy]
+        public static NDArray mean(NDArray x) => new NDArray(math_ops.reduce_mean(x));
+
+        [AutoNumPy]
         public static NDArray multiply(NDArray x1, NDArray x2) => new NDArray(tf.multiply(x1, x2));
 
         [AutoNumPy]

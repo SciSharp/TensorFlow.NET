@@ -47,6 +47,8 @@ namespace Tensorflow.NumPy
                     return GetData(mask.ToArray<int>());
                 else if (mask.dtype == TF_DataType.TF_INT64)
                     return GetData(mask.ToArray<long>().Select(x => Convert.ToInt32(x)).ToArray());
+                else if (mask.dtype == TF_DataType.TF_FLOAT)
+                    return GetData(mask.ToArray<float>().Select(x => Convert.ToInt32(x)).ToArray());
 
                 throw new NotImplementedException("");
             }
