@@ -43,5 +43,27 @@ namespace TensorFlowNET.UnitTest.NumPy
             var y = x / 2;
             Assert.AreEqual(y.dtype, np.float32);
         }
+
+        [TestMethod]
+        public void sin()
+        {
+            var x = np.sin(np.pi / 2);
+            Assert.AreEqual(x, 1d);
+        }
+
+        [TestMethod]
+        public void cos()
+        {
+            var x = np.cos(np.pi / 2);
+            Assert.AreEqual(x, 6.123233995736766e-17);
+        }
+
+        [TestMethod]
+        public void power()
+        {
+            var x = np.arange(6);
+            var y = np.power(x, 3);
+            Assert.AreEqual(y, new[] { 0, 1, 8, 27, 64, 125 });
+        }
     }
 }

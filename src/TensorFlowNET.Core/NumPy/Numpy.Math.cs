@@ -10,6 +10,9 @@ namespace Tensorflow.NumPy
     public partial class np
     {
         [AutoNumPy]
+        public static NDArray cos(NDArray x) => new NDArray(math_ops.cos(x));
+
+        [AutoNumPy]
         public static NDArray exp(NDArray x) => new NDArray(tf.exp(x));
 
         [AutoNumPy]
@@ -37,6 +40,12 @@ namespace Tensorflow.NumPy
         [AutoNumPy]
         public static NDArray prod<T>(params T[] array) where T : unmanaged
             => new NDArray(tf.reduce_prod(new NDArray(array)));
+
+        [AutoNumPy]
+        public static NDArray power(NDArray x, NDArray y) => new NDArray(tf.pow(x, y));
+
+        [AutoNumPy]
+        public static NDArray sin(NDArray x) => new NDArray(math_ops.sin(x));
 
         [AutoNumPy]
         public static NDArray sqrt(NDArray x) => new NDArray(tf.sqrt(x));

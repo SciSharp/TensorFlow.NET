@@ -36,6 +36,11 @@ namespace Tensorflow.NumPy
             return new NDArray(tensor);
         }
 
+        [AutoNumPy]
+        public NDArray randn(params int[] shape)
+            => new NDArray(random_ops.random_normal(shape ?? Shape.Scalar));
+
+        [AutoNumPy]
         public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape size = null)
             => new NDArray(random_ops.random_normal(size ?? Shape.Scalar, mean: loc, stddev: scale));
     }

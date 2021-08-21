@@ -134,6 +134,9 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor cos(Tensor x, string name = null)
+            => tf.Context.ExecuteOp("Cos", name, new ExecuteOpArgs(x));
+
         public static Tensor saturate_cast(Tensor value, TF_DataType dtype, string name = null)
         {
             return tf_with(ops.name_scope(name, "saturate_cast", new[] { value }), name =>
@@ -372,6 +375,9 @@ namespace Tensorflow
 
         public static Tensor sign<T>(T x, string name = null)
             => gen_math_ops.sign(x, name: name);
+
+        public static Tensor sin(Tensor x, string name = null)
+            => tf.Context.ExecuteOp("Sin", name, new ExecuteOpArgs(x));
 
         /// <summary>
         /// Returns (x - y)(x - y) element-wise.

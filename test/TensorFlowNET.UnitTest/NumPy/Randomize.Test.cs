@@ -33,5 +33,15 @@ namespace TensorFlowNET.UnitTest.NumPy
             var x = np.random.normal(0, 0.1f, 1000);
             Equal(np.mean(x), 0f);
         }
+
+        [TestMethod]
+        public void randn()
+        {
+            var x = np.random.randn();
+            Assert.AreEqual(np.float32, x.dtype);
+
+            x = np.random.randn(2, 4);
+            Equal(np.mean(x), 0f);
+        }
     }
 }

@@ -10,14 +10,25 @@ namespace Tensorflow.NumPy
         public unsafe static T Scalar<T>(NDArray nd) where T : unmanaged
             => nd.dtype switch
             {
+                TF_DataType.TF_UINT8 => Scalar<T>(*(byte*)nd.data),
                 TF_DataType.TF_FLOAT => Scalar<T>(*(float*)nd.data),
                 TF_DataType.TF_INT64 => Scalar<T>(*(long*)nd.data),
+                _ => throw new NotImplementedException("")
+            };
+
+        static T Scalar<T>(byte input)
+            => Type.GetTypeCode(typeof(T)) switch
+            {
+                TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
+                TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
+                TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
                 _ => throw new NotImplementedException("")
             };
 
         static T Scalar<T>(float input)
             => Type.GetTypeCode(typeof(T)) switch
             {
+                TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
                 _ => throw new NotImplementedException("")
@@ -26,6 +37,7 @@ namespace Tensorflow.NumPy
         static T Scalar<T>(long input)
             => Type.GetTypeCode(typeof(T)) switch
             {
+                TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
                 _ => throw new NotImplementedException("")

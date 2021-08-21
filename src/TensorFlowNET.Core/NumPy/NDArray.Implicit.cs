@@ -21,7 +21,7 @@ namespace Tensorflow.NumPy
             => nd.dtype == TF_DataType.TF_BOOL ? *(bool*)nd.data : NDArrayConverter.Scalar<bool>(nd);
 
         public unsafe static implicit operator byte(NDArray nd)
-            => nd.dtype == TF_DataType.TF_INT8 ? *(byte*)nd.data : NDArrayConverter.Scalar<byte>(nd);
+            => nd.dtype == TF_DataType.TF_UINT8 ? *(byte*)nd.data : NDArrayConverter.Scalar<byte>(nd);
 
         public unsafe static implicit operator int(NDArray nd)
             => nd.dtype == TF_DataType.TF_INT32 ? *(int*)nd.data : NDArrayConverter.Scalar<int>(nd);
