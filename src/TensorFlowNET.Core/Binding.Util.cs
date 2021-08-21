@@ -166,6 +166,8 @@ namespace Tensorflow
                     return arr.Count;
                 case IEnumerable enumerable:
                     return enumerable.OfType<object>().Count();
+                case Axis axis:
+                    return axis.size;
                 case Shape arr:
                     return arr.ndim;
             }

@@ -39,6 +39,9 @@ namespace Tensorflow
             public Tensor matmul(Tensor a, Tensor b)
                 => math_ops.matmul(a, b);
 
+            public Tensor norm(Tensor a, string ord = "euclidean", Axis axis = null, string name = null)
+                => ops.norm(a, ord: ord, axis: axis, name: name);
+
             public Tensor batch_matmul(Tensor x, Tensor y, bool adj_x = false, bool adj_y = false, string name = null)
                 => math_ops.batch_matmul(x, y, adj_x: adj_x, adj_y: adj_y, name: name);
 

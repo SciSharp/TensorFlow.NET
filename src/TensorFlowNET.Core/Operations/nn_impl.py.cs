@@ -109,6 +109,16 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor normalize(Tensor tensor, string ord = "euclidean", Axis axis = null, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "normalize", tensor), scope =>
+            {
+                var norm = tf.linalg.norm(tensor, ord: ord, axis: axis, name: name);
+                var normalized = tensor / norm;
+                return normalized;
+            });
+        }
+
         public static Tensor batch_normalization(Tensor x,
             Tensor mean,
             Tensor variance,

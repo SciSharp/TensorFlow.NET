@@ -19,5 +19,13 @@ namespace TensorFlowNET.UnitTest.NumPy
         {
 
         }
+
+        [TestMethod]
+        public void norm()
+        {
+            var x = np.arange(9) - 4;
+            var y = x.reshape((3, 3));
+            var norm = np.linalg.norm(y);
+        }
     }
 }
