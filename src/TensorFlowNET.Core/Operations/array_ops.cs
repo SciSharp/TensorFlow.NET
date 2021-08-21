@@ -798,7 +798,7 @@ namespace Tensorflow
                 var output = new List<Tensor>();
                 foreach (var (i, x) in enumerate(array))
                 {
-                    var shape = s0[..i].concat(new[] { -1 }).concat(s0[(i + 1)..]);
+                    var shape = s0.Take(i).ToArray().concat(new[] { -1 }).concat(s0.Skip(i + 1).ToArray());
                     output.add(reshape(stack(x), shape));
                 }
 

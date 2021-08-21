@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -53,7 +54,7 @@ namespace Tensorflow
 
         Tensor _composite_impl(Tensor matrix, Tensor rhs, Tensor l2_regularizer = null)
         {
-            Shape matrix_shape = matrix.shape[^2..];
+            Shape matrix_shape = matrix.shape.dims.Skip(matrix.shape.ndim - 2).ToArray();
             if (matrix_shape.IsFullyDefined)
             {
                 if (matrix_shape[-2] >= matrix_shape[-1])
@@ -88,7 +89,7 @@ namespace Tensorflow
                 var small_dim = first_kind ? matrix_shape[-1] : matrix_shape[-2];
                 var identity = eye(small_dim.numpy(), batch_shape: batch_shape.shape, dtype: matrix.dtype);
                 var small_dim_static = matrix.shape[first_kind ? -1 : -2];
-                identity.shape = matrix.shape[..^2].concat(new[] { small_dim_static, small_dim_static });
+                identity.shape = matrix.shape.dims.Take(matrix.shape.ndim - 2).ToArray().concat(new[] { small_dim_static, small_dim_static });
                 gramian += l2_regularizer * identity;
             }
 

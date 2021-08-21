@@ -51,7 +51,8 @@ namespace Tensorflow.Keras.Layers
                 }
                 else if (RNN._is_multiple_state(lastCell.state_size))
                 {
-                    return ((dynamic)Cells[-1].state_size)[0];
+                    // return ((dynamic)Cells[-1].state_size)[0];
+                    throw new NotImplementedException("");
                 }
                 else
                 {

@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>TensorFlow.NET</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.60.1</Version>
+    <Version>0.60.2</Version>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
@@ -20,7 +20,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.60.1.0</AssemblyVersion>
+    <AssemblyVersion>0.60.2.0</AssemblyVersion>
     <PackageReleaseNotes>tf.net 0.60.x and above are based on tensorflow native 2.6.0
 
 * Eager Mode is added finally.
@@ -35,7 +35,7 @@ Keras API is a separate package released as TensorFlow.Keras.
 tf.net 0.4x.x aligns with TensorFlow v2.4.1 native library.
 tf.net 0.5x.x aligns with TensorFlow v2.5.x native library.
 tf.net 0.6x.x aligns with TensorFlow v2.6.x native library.</PackageReleaseNotes>
-    <FileVersion>0.60.1.0</FileVersion>
+    <FileVersion>0.60.2.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
@@ -90,8 +90,8 @@ tf.net 0.6x.x aligns with TensorFlow v2.6.x native library.</PackageReleaseNotes
 
   <ItemGroup>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.139" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Protobuf.Text" Version="0.5.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
   </ItemGroup>
 </Project>
