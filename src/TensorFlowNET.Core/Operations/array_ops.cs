@@ -656,7 +656,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor stop_gradient(Tensor input, string name = null)
-            => gen_array_ops.stop_gradient(input, name);
+            => tf.Context.ExecuteOp("StopGradient", name, new ExecuteOpArgs(input));
 
         /// <summary>
         /// Extracts a strided slice of a tensor (generalized python array indexing).

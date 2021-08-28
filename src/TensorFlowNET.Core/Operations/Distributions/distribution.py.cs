@@ -60,25 +60,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "moments", new { value }), scope =>
             {
-                try
-                {
-                    return _log_prob(value);
-                }
-#pragma warning disable CS0168 // Variable is declared but never used
-                catch (Exception e1)
-#pragma warning restore CS0168 // Variable is declared but never used
-                {
-                    try
-                    {
-                        return math_ops.log(_prob(value));
-#pragma warning disable CS0168 // Variable is declared but never used
-                    }
-                    catch (Exception e2)
-#pragma warning restore CS0168 // Variable is declared but never used
-                    {
-                        throw new NotImplementedException();
-                    }
-                }
+                return math_ops.log(value);
             });
         }
 
