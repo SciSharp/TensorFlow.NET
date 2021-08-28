@@ -127,7 +127,7 @@ namespace Tensorflow
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
-            _graph_key = $"grap-key-{ops.uid()}/";
+            _graph_key = $"graph-{ops.GraphUniqueId()}/";
         }
 
         public Graph(IntPtr handle)
@@ -136,7 +136,7 @@ namespace Tensorflow
             _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
-            _graph_key = $"grap-key-{ops.uid()}/";
+            _graph_key = $"grap-{ops.GraphUniqueId()}/";
         }
 
         public ITensorOrOperation as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)

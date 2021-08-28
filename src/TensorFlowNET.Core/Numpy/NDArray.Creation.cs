@@ -56,12 +56,8 @@ namespace Tensorflow.NumPy
 
         void NewEagerTensorHandle()
         {
-            if(_handle is not null)
-            {
-                _id = ops.uid();
-                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
-                tf.Status.Check(true);
-            }
+            if (_handle is not null)
+                _eagerTensorHandle = new EagerTensor(_handle).EagerTensorHandle;
         }
     }
 }

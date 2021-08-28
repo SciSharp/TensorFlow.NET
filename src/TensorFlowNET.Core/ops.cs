@@ -366,6 +366,12 @@ namespace Tensorflow
             return Interlocked.Increment(ref uid_number);
         }
 
+        static int graph_uid_number = -1;
+        public static int GraphUniqueId()
+        {
+            return Interlocked.Increment(ref graph_uid_number);
+        }
+
         static int uid_number_for_function = 0;
         public static int uid_function()
             => Interlocked.Increment(ref uid_number_for_function);

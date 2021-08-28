@@ -28,9 +28,6 @@ namespace Tensorflow.NumPy
     {
         public IntPtr data => TensorDataPointer;
 
-        public ValueType GetValue(params int[] indices)
-            => throw new NotImplementedException("");
-
         [AutoNumPy]
         public NDArray reshape(Shape newshape) => new NDArray(tf.reshape(this, newshape));
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(this, dtype));
