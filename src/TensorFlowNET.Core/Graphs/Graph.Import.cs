@@ -52,7 +52,6 @@ namespace Tensorflow
             using (var status = new Status())
             using (var graph_def = new Buffer(bytes))
             {
-                as_default();
                 c_api.TF_ImportGraphDefOptionsSetPrefix(opts.Handle, prefix);
                 c_api.TF_GraphImportGraphDef(_handle, graph_def.Handle, opts.Handle, status.Handle);
                 status.Check(true);

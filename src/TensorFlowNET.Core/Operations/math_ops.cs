@@ -126,7 +126,6 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "Cast", new { x }), scope =>
             {
                 name = scope;
-                x = ops.convert_to_tensor(x, name: "x");
                 if (x.dtype.as_base_dtype() != base_type)
                     x = gen_math_ops.cast(x, base_type, name: name);
 

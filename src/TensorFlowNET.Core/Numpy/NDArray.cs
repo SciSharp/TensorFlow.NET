@@ -30,6 +30,7 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public NDArray reshape(Shape newshape) => new NDArray(tf.reshape(this, newshape));
+        [AutoNumPy]
         public NDArray astype(TF_DataType dtype) => new NDArray(math_ops.cast(this, dtype));
         public NDArray ravel() => throw new NotImplementedException("");
         public void shuffle(NDArray nd) => np.random.shuffle(nd);

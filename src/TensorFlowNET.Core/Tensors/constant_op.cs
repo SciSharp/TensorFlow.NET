@@ -101,7 +101,7 @@ namespace Tensorflow
                 value is NDArray nd &&
                 nd.dtype != dtype)
             {
-                value = nd.astype(dtype);
+                value = math_ops.cast(nd, dtype);
             }
 
             // non ascii char
