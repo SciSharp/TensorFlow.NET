@@ -25,6 +25,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Lite\testdata\add.bin" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Lite\testdata\add.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0-release-20210626-04" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.5" />
