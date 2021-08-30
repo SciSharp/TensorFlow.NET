@@ -78,5 +78,14 @@ namespace Tensorflow
 
         [DllImport(TensorFlowLibName)]
         public static extern TfLiteStatus TfLiteTensorCopyFromBuffer(TfLiteTensor tensor, IntPtr input_data, int input_data_size);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TfLiteStatus TfLiteInterpreterInvoke(SafeTfLiteInterpreterHandle interpreter);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern IntPtr TfLiteInterpreterGetOutputTensor(SafeTfLiteInterpreterHandle interpreter, int output_index);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern TfLiteStatus TfLiteTensorCopyToBuffer(TfLiteTensor output_tensor, IntPtr output_data, int output_data_size);
     }
 }
