@@ -18,7 +18,7 @@ namespace Tensorflow.Benchmark.Leak
 			var modelDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var ClassifierModelPath = Path.Combine(modelDir, "Leak", "TestModel", "saved_model");
 
-			for (var i = 0; i < 1000; i++)
+			for (var i = 0; i < 50; i++)
 			{
 				var session = Session.LoadFromSavedModel(ClassifierModelPath);
 
