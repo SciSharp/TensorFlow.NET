@@ -44,4 +44,20 @@
     <ProjectReference Include="..\TensorFlowNET.Keras\Tensorflow.Keras.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Leak\TestModel\saved_model\assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Leak\TestModel\saved_model\saved_model.pb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Leak\TestModel\saved_model\variables\variables.data-00000-of-00001">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Leak\TestModel\saved_model\variables\variables.index">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
