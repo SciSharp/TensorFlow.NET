@@ -26,10 +26,8 @@ namespace Tensorflow
         public Session(string target = "", Graph g = null) : base(target, g, null)
         { }
 
-        public Session(IntPtr handle, Graph g = null) : base("", g, null)
-        {
-            _handle = handle;
-        }
+        public Session(IntPtr handle, Graph g = null) : base(handle, g)
+        { }
 
         public Session(Graph g, ConfigProto config = null, Status s = null) : base("", g, config, s)
         { }
@@ -39,51 +37,29 @@ namespace Tensorflow
             return ops.set_default_session(this);
         }
 
-        [MethodImpl(MethodImplOptions.NoOptimization)]
         public static Session LoadFromSavedModel(string path)
         {
-            lock (Locks.ProcessWide)
-            {
-                var graph = c_api.TF_NewGraph();
-                using var status = new Status();
-                var opt = new SessionOptions();
+            using var graph = new Graph();
+            using var status = new Status();
+            using var opt = c_api.TF_NewSessionOptions();
 
-                var tags = new string[] { "serve" };
-                var buffer = new TF_Buffer();
+            var tags = new string[] { "serve" };
 
-                IntPtr sess;
-                try
-                {
-                    sess = c_api.TF_LoadSessionFromSavedModel(opt.Handle,
-                        IntPtr.Zero,
-                        path,
-                        tags,
-                        tags.Length,
-                        graph,
-                        ref buffer,
-                        status.Handle);
-                    status.Check(true);
-                }
-                catch (TensorflowException ex) when (ex.Message.Contains("Could not find SavedModel"))
-                {
-                    sess = c_api.TF_LoadSessionFromSavedModel(opt.Handle,
-                        IntPtr.Zero,
-                        Path.GetFullPath(path),
-                        tags,
-                        tags.Length,
-                        graph,
-                        ref buffer,
-                        status.Handle);
-                    status.Check(true);
-                }
+            var sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                    IntPtr.Zero,
+                    path,
+                    tags,
+                    tags.Length,
+                    graph,
+                    IntPtr.Zero,
+                    status.Handle);
+            status.Check(true);
 
-                // load graph bytes
-                // var data = new byte[buffer.length];
-                // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
-                // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
-
-                return new Session(sess, g: new Graph(graph)).as_default();
-            }
+            // load graph bytes
+            // var data = new byte[buffer.length];
+            // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+            // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
+            return new Session(sess, g: graph);
         }
 
         public static implicit operator IntPtr(Session session) => session._handle;

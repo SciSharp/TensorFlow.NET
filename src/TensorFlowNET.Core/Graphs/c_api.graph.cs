@@ -289,7 +289,7 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_LoadSessionFromSavedModel(SafeSessionOptionsHandle session_options, IntPtr run_options,
             string export_dir, string[] tags, int tags_len,
-            IntPtr graph, ref TF_Buffer meta_graph_def, SafeStatusHandle status);
+            IntPtr graph, IntPtr meta_graph_def, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_NewGraph();
