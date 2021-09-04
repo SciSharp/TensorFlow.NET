@@ -37,11 +37,27 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.0" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.6.0-rc0" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TensorFlowNET.Keras\Tensorflow.Keras.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Leak\TestModel\saved_model\assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Leak\TestModel\saved_model\saved_model.pb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Leak\TestModel\saved_model\variables\variables.data-00000-of-00001">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Leak\TestModel\saved_model\variables\variables.index">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

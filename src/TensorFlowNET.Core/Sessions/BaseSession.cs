@@ -36,6 +36,12 @@ namespace Tensorflow
         protected byte[] _target;
         public Graph graph => _graph;
 
+        public BaseSession(IntPtr handle, Graph g)
+        {
+            _handle = handle;
+            _graph = g ?? ops.get_default_graph();
+        }
+
         public BaseSession(string target = "", Graph g = null, ConfigProto config = null, Status status = null)
         {
             _graph = g ?? ops.get_default_graph();
@@ -291,12 +297,8 @@ namespace Tensorflow
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
-            lock (Locks.ProcessWide)
-                using (var status = new Status())
-                {
-                    c_api.TF_DeleteSession(handle, status.Handle);
-                    status.Check(true);
-                }
+            // c_api.TF_CloseSession(handle, tf.Status.Handle);
+            c_api.TF_DeleteSession(handle, tf.Status.Handle);
         }
     }
 }
