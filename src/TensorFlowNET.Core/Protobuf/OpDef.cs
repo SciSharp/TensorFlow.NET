@@ -26,35 +26,38 @@ namespace Tensorflow {
           string.Concat(
             "CiZ0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL29wX2RlZi5wcm90bxIKdGVu",
             "c29yZmxvdxoqdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay9hdHRyX3ZhbHVl",
-            "LnByb3RvGiV0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3R5cGVzLnByb3Rv",
-            "Gi90ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL3Jlc291cmNlX2hhbmRsZS5w",
-            "cm90byKUBgoFT3BEZWYSDAoEbmFtZRgBIAEoCRIrCglpbnB1dF9hcmcYAiAD",
-            "KAsyGC50ZW5zb3JmbG93Lk9wRGVmLkFyZ0RlZhIsCgpvdXRwdXRfYXJnGAMg",
-            "AygLMhgudGVuc29yZmxvdy5PcERlZi5BcmdEZWYSFgoOY29udHJvbF9vdXRw",
-            "dXQYFCADKAkSJwoEYXR0chgEIAMoCzIZLnRlbnNvcmZsb3cuT3BEZWYuQXR0",
-            "ckRlZhIuCgtkZXByZWNhdGlvbhgIIAEoCzIZLnRlbnNvcmZsb3cuT3BEZXBy",
-            "ZWNhdGlvbhIPCgdzdW1tYXJ5GAUgASgJEhMKC2Rlc2NyaXB0aW9uGAYgASgJ",
-            "EhYKDmlzX2NvbW11dGF0aXZlGBIgASgIEhQKDGlzX2FnZ3JlZ2F0ZRgQIAEo",
-            "CBITCgtpc19zdGF0ZWZ1bBgRIAEoCBIiChphbGxvd3NfdW5pbml0aWFsaXpl",
-            "ZF9pbnB1dBgTIAEoCBrjAQoGQXJnRGVmEgwKBG5hbWUYASABKAkSEwoLZGVz",
-            "Y3JpcHRpb24YAiABKAkSIgoEdHlwZRgDIAEoDjIULnRlbnNvcmZsb3cuRGF0",
-            "YVR5cGUSEQoJdHlwZV9hdHRyGAQgASgJEhMKC251bWJlcl9hdHRyGAUgASgJ",
-            "EhYKDnR5cGVfbGlzdF9hdHRyGAYgASgJEkIKC2hhbmRsZV9kYXRhGAcgAygL",
-            "Mi0udGVuc29yZmxvdy5SZXNvdXJjZUhhbmRsZVByb3RvLkR0eXBlQW5kU2hh",
-            "cGUSDgoGaXNfcmVmGBAgASgIGr0BCgdBdHRyRGVmEgwKBG5hbWUYASABKAkS",
-            "DAoEdHlwZRgCIAEoCRIsCg1kZWZhdWx0X3ZhbHVlGAMgASgLMhUudGVuc29y",
-            "Zmxvdy5BdHRyVmFsdWUSEwoLZGVzY3JpcHRpb24YBCABKAkSEwoLaGFzX21p",
-            "bmltdW0YBSABKAgSDwoHbWluaW11bRgGIAEoAxItCg5hbGxvd2VkX3ZhbHVl",
-            "cxgHIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZhbHVlIjUKDU9wRGVwcmVjYXRp",
-            "b24SDwoHdmVyc2lvbhgBIAEoBRITCgtleHBsYW5hdGlvbhgCIAEoCSInCgZP",
-            "cExpc3QSHQoCb3AYASADKAsyES50ZW5zb3JmbG93Lk9wRGVmQnsKGG9yZy50",
-            "ZW5zb3JmbG93LmZyYW1ld29ya0ILT3BEZWZQcm90b3NQAVpNZ2l0aHViLmNv",
-            "bS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL2Zy",
-            "YW1ld29yay9vcF9kZWZfZ29fcHJvdG/4AQFiBnByb3RvMw=="));
+            "LnByb3RvGil0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL2Z1bGxfdHlwZS5w",
+            "cm90bxovdGVuc29yZmxvdy9jb3JlL2ZyYW1ld29yay9yZXNvdXJjZV9oYW5k",
+            "bGUucHJvdG8aJXRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvdHlwZXMucHJv",
+            "dG8i8wYKBU9wRGVmEgwKBG5hbWUYASABKAkSKwoJaW5wdXRfYXJnGAIgAygL",
+            "MhgudGVuc29yZmxvdy5PcERlZi5BcmdEZWYSLAoKb3V0cHV0X2FyZxgDIAMo",
+            "CzIYLnRlbnNvcmZsb3cuT3BEZWYuQXJnRGVmEhYKDmNvbnRyb2xfb3V0cHV0",
+            "GBQgAygJEicKBGF0dHIYBCADKAsyGS50ZW5zb3JmbG93Lk9wRGVmLkF0dHJE",
+            "ZWYSLgoLZGVwcmVjYXRpb24YCCABKAsyGS50ZW5zb3JmbG93Lk9wRGVwcmVj",
+            "YXRpb24SDwoHc3VtbWFyeRgFIAEoCRITCgtkZXNjcmlwdGlvbhgGIAEoCRIW",
+            "Cg5pc19jb21tdXRhdGl2ZRgSIAEoCBIUCgxpc19hZ2dyZWdhdGUYECABKAgS",
+            "EwoLaXNfc3RhdGVmdWwYESABKAgSIgoaYWxsb3dzX3VuaW5pdGlhbGl6ZWRf",
+            "aW5wdXQYEyABKAgSJAocaXNfZGlzdHJpYnV0ZWRfY29tbXVuaWNhdGlvbhgV",
+            "IAEoCBqcAgoGQXJnRGVmEgwKBG5hbWUYASABKAkSEwoLZGVzY3JpcHRpb24Y",
+            "AiABKAkSIgoEdHlwZRgDIAEoDjIULnRlbnNvcmZsb3cuRGF0YVR5cGUSEQoJ",
+            "dHlwZV9hdHRyGAQgASgJEhMKC251bWJlcl9hdHRyGAUgASgJEhYKDnR5cGVf",
+            "bGlzdF9hdHRyGAYgASgJEkIKC2hhbmRsZV9kYXRhGAcgAygLMi0udGVuc29y",
+            "Zmxvdy5SZXNvdXJjZUhhbmRsZVByb3RvLkR0eXBlQW5kU2hhcGUSDgoGaXNf",
+            "cmVmGBAgASgIEjcKFmV4cGVyaW1lbnRhbF9mdWxsX3R5cGUYESABKAsyFy50",
+            "ZW5zb3JmbG93LkZ1bGxUeXBlRGVmGr0BCgdBdHRyRGVmEgwKBG5hbWUYASAB",
+            "KAkSDAoEdHlwZRgCIAEoCRIsCg1kZWZhdWx0X3ZhbHVlGAMgASgLMhUudGVu",
+            "c29yZmxvdy5BdHRyVmFsdWUSEwoLZGVzY3JpcHRpb24YBCABKAkSEwoLaGFz",
+            "X21pbmltdW0YBSABKAgSDwoHbWluaW11bRgGIAEoAxItCg5hbGxvd2VkX3Zh",
+            "bHVlcxgHIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZhbHVlIjUKDU9wRGVwcmVj",
+            "YXRpb24SDwoHdmVyc2lvbhgBIAEoBRITCgtleHBsYW5hdGlvbhgCIAEoCSIn",
+            "CgZPcExpc3QSHQoCb3AYASADKAsyES50ZW5zb3JmbG93Lk9wRGVmQnsKGG9y",
+            "Zy50ZW5zb3JmbG93LmZyYW1ld29ya0ILT3BEZWZQcm90b3NQAVpNZ2l0aHVi",
+            "LmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3Jl",
+            "L2ZyYW1ld29yay9vcF9kZWZfZ29fcHJvdG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.ResourceHandleReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.FullTypeReflection.Descriptor, global::Tensorflow.ResourceHandleReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef), global::Tensorflow.OpDef.Parser, new[]{ "Name", "InputArg", "OutputArg", "ControlOutput", "Attr", "Deprecation", "Summary", "Description", "IsCommutative", "IsAggregate", "IsStateful", "AllowsUninitializedInput" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.ArgDef), global::Tensorflow.OpDef.Types.ArgDef.Parser, new[]{ "Name", "Description", "Type", "TypeAttr", "NumberAttr", "TypeListAttr", "HandleData", "IsRef" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef), global::Tensorflow.OpDef.Parser, new[]{ "Name", "InputArg", "OutputArg", "ControlOutput", "Attr", "Deprecation", "Summary", "Description", "IsCommutative", "IsAggregate", "IsStateful", "AllowsUninitializedInput", "IsDistributedCommunication" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.ArgDef), global::Tensorflow.OpDef.Types.ArgDef.Parser, new[]{ "Name", "Description", "Type", "TypeAttr", "NumberAttr", "TypeListAttr", "HandleData", "IsRef", "ExperimentalFullType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDef.Types.AttrDef), global::Tensorflow.OpDef.Types.AttrDef.Parser, new[]{ "Name", "Type", "DefaultValue", "Description", "HasMinimum", "Minimum", "AllowedValues" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpDeprecation), global::Tensorflow.OpDeprecation.Parser, new[]{ "Version", "Explanation" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.OpList), global::Tensorflow.OpList.Parser, new[]{ "Op" }, null, null, null, null)
@@ -106,6 +109,7 @@ namespace Tensorflow {
       isAggregate_ = other.isAggregate_;
       isStateful_ = other.isStateful_;
       allowsUninitializedInput_ = other.allowsUninitializedInput_;
+      isDistributedCommunication_ = other.isDistributedCommunication_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -297,6 +301,22 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "is_distributed_communication" field.</summary>
+    public const int IsDistributedCommunicationFieldNumber = 21;
+    private bool isDistributedCommunication_;
+    /// <summary>
+    /// Indicates whether the op implementation uses distributed communication.
+    /// If True, the op is allowed to return errors for network disconnection and
+    /// trigger TF network failure handling logics.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDistributedCommunication {
+      get { return isDistributedCommunication_; }
+      set {
+        isDistributedCommunication_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as OpDef);
@@ -322,6 +342,7 @@ namespace Tensorflow {
       if (IsAggregate != other.IsAggregate) return false;
       if (IsStateful != other.IsStateful) return false;
       if (AllowsUninitializedInput != other.AllowsUninitializedInput) return false;
+      if (IsDistributedCommunication != other.IsDistributedCommunication) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -340,6 +361,7 @@ namespace Tensorflow {
       if (IsAggregate != false) hash ^= IsAggregate.GetHashCode();
       if (IsStateful != false) hash ^= IsStateful.GetHashCode();
       if (AllowsUninitializedInput != false) hash ^= AllowsUninitializedInput.GetHashCode();
+      if (IsDistributedCommunication != false) hash ^= IsDistributedCommunication.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -389,6 +411,10 @@ namespace Tensorflow {
         output.WriteBool(AllowsUninitializedInput);
       }
       controlOutput_.WriteTo(output, _repeated_controlOutput_codec);
+      if (IsDistributedCommunication != false) {
+        output.WriteRawTag(168, 1);
+        output.WriteBool(IsDistributedCommunication);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -423,6 +449,9 @@ namespace Tensorflow {
         size += 2 + 1;
       }
       if (AllowsUninitializedInput != false) {
+        size += 2 + 1;
+      }
+      if (IsDistributedCommunication != false) {
         size += 2 + 1;
       }
       if (_unknownFields != null) {
@@ -466,6 +495,9 @@ namespace Tensorflow {
       }
       if (other.AllowsUninitializedInput != false) {
         AllowsUninitializedInput = other.AllowsUninitializedInput;
+      }
+      if (other.IsDistributedCommunication != false) {
+        IsDistributedCommunication = other.IsDistributedCommunication;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -529,6 +561,10 @@ namespace Tensorflow {
             controlOutput_.AddEntriesFrom(input, _repeated_controlOutput_codec);
             break;
           }
+          case 168: {
+            IsDistributedCommunication = input.ReadBool();
+            break;
+          }
         }
       }
     }
@@ -573,6 +609,7 @@ namespace Tensorflow {
           typeListAttr_ = other.typeListAttr_;
           handleData_ = other.handleData_.Clone();
           isRef_ = other.isRef_;
+          experimentalFullType_ = other.experimentalFullType_ != null ? other.experimentalFullType_.Clone() : null;
           _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
         }
 
@@ -704,6 +741,28 @@ namespace Tensorflow {
           }
         }
 
+        /// <summary>Field number for the "experimental_full_type" field.</summary>
+        public const int ExperimentalFullTypeFieldNumber = 17;
+        private global::Tensorflow.FullTypeDef experimentalFullType_;
+        /// <summary>
+        /// Experimental. Full type declaration for this argument.
+        /// The full type specification combines type, type_attr, type_list_attr,
+        /// etc. into a unified representation.
+        /// This declaration may contain non-concrete types (for example,
+        /// Tensor&lt;TypeVar&lt;'T'>> is a valid type declaration.
+        ///
+        /// Note: this is a transient field. The long-term aim is to represent the
+        /// entire OpDef as a single type: a callable. In that context, this field is
+        /// just the type of a single argument.
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public global::Tensorflow.FullTypeDef ExperimentalFullType {
+          get { return experimentalFullType_; }
+          set {
+            experimentalFullType_ = value;
+          }
+        }
+
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public override bool Equals(object other) {
           return Equals(other as ArgDef);
@@ -725,6 +784,7 @@ namespace Tensorflow {
           if (TypeListAttr != other.TypeListAttr) return false;
           if(!handleData_.Equals(other.handleData_)) return false;
           if (IsRef != other.IsRef) return false;
+          if (!object.Equals(ExperimentalFullType, other.ExperimentalFullType)) return false;
           return Equals(_unknownFields, other._unknownFields);
         }
 
@@ -739,6 +799,7 @@ namespace Tensorflow {
           if (TypeListAttr.Length != 0) hash ^= TypeListAttr.GetHashCode();
           hash ^= handleData_.GetHashCode();
           if (IsRef != false) hash ^= IsRef.GetHashCode();
+          if (experimentalFullType_ != null) hash ^= ExperimentalFullType.GetHashCode();
           if (_unknownFields != null) {
             hash ^= _unknownFields.GetHashCode();
           }
@@ -781,6 +842,10 @@ namespace Tensorflow {
             output.WriteRawTag(128, 1);
             output.WriteBool(IsRef);
           }
+          if (experimentalFullType_ != null) {
+            output.WriteRawTag(138, 1);
+            output.WriteMessage(ExperimentalFullType);
+          }
           if (_unknownFields != null) {
             _unknownFields.WriteTo(output);
           }
@@ -810,6 +875,9 @@ namespace Tensorflow {
           size += handleData_.CalculateSize(_repeated_handleData_codec);
           if (IsRef != false) {
             size += 2 + 1;
+          }
+          if (experimentalFullType_ != null) {
+            size += 2 + pb::CodedOutputStream.ComputeMessageSize(ExperimentalFullType);
           }
           if (_unknownFields != null) {
             size += _unknownFields.CalculateSize();
@@ -843,6 +911,12 @@ namespace Tensorflow {
           handleData_.Add(other.handleData_);
           if (other.IsRef != false) {
             IsRef = other.IsRef;
+          }
+          if (other.experimentalFullType_ != null) {
+            if (experimentalFullType_ == null) {
+              ExperimentalFullType = new global::Tensorflow.FullTypeDef();
+            }
+            ExperimentalFullType.MergeFrom(other.ExperimentalFullType);
           }
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
@@ -885,6 +959,13 @@ namespace Tensorflow {
               }
               case 128: {
                 IsRef = input.ReadBool();
+                break;
+              }
+              case 138: {
+                if (experimentalFullType_ == null) {
+                  ExperimentalFullType = new global::Tensorflow.FullTypeDef();
+                }
+                input.ReadMessage(ExperimentalFullType);
                 break;
               }
             }

@@ -58,19 +58,20 @@ namespace Tensorflow {
             "YW1lGAEgASgJEisKBXNoYXBlGAIgASgLMhwudGVuc29yZmxvdy5UZW5zb3JT",
             "aGFwZVByb3RvEiMKBWR0eXBlGAMgASgOMhQudGVuc29yZmxvdy5EYXRhVHlw",
             "ZRIoCgdtaW5pbXVtGAQgASgLMhcudGVuc29yZmxvdy5UZW5zb3JQcm90bxIo",
-            "CgdtYXhpbXVtGAUgASgLMhcudGVuc29yZmxvdy5UZW5zb3JQcm90byKoAwoN",
+            "CgdtYXhpbXVtGAUgASgLMhcudGVuc29yZmxvdy5UZW5zb3JQcm90byLbAwoN",
             "VHlwZVNwZWNQcm90bxJACg90eXBlX3NwZWNfY2xhc3MYASABKA4yJy50ZW5z",
             "b3JmbG93LlR5cGVTcGVjUHJvdG8uVHlwZVNwZWNDbGFzcxIvCgp0eXBlX3N0",
             "YXRlGAIgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUSHAoUdHlw",
-            "ZV9zcGVjX2NsYXNzX25hbWUYAyABKAkihQIKDVR5cGVTcGVjQ2xhc3MSCwoH",
+            "ZV9zcGVjX2NsYXNzX25hbWUYAyABKAkiuAIKDVR5cGVTcGVjQ2xhc3MSCwoH",
             "VU5LTk9XThAAEhYKElNQQVJTRV9URU5TT1JfU1BFQxABEhcKE0lOREVYRURf",
             "U0xJQ0VTX1NQRUMQAhIWChJSQUdHRURfVEVOU09SX1NQRUMQAxIVChFURU5T",
             "T1JfQVJSQVlfU1BFQxAEEhUKEURBVEFfREFUQVNFVF9TUEVDEAUSFgoSREFU",
             "QV9JVEVSQVRPUl9TUEVDEAYSEQoNT1BUSU9OQUxfU1BFQxAHEhQKEFBFUl9S",
             "RVBMSUNBX1NQRUMQCBIRCg1WQVJJQUJMRV9TUEVDEAkSFgoSUk9XX1BBUlRJ",
-            "VElPTl9TUEVDEAoiBAgLEAtCV1pVZ2l0aHViLmNvbS90ZW5zb3JmbG93L3Rl",
-            "bnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL3Byb3RvYnVmL2Zvcl9jb3Jl",
-            "X3Byb3Rvc19nb19wcm90b2IGcHJvdG8z"));
+            "VElPTl9TUEVDEAoSGAoUUkVHSVNURVJFRF9UWVBFX1NQRUMQDBIXChNFWFRF",
+            "TlNJT05fVFlQRV9TUEVDEA0iBAgLEAtCV1pVZ2l0aHViLmNvbS90ZW5zb3Jm",
+            "bG93L3RlbnNvcmZsb3cvdGVuc29yZmxvdy9nby9jb3JlL3Byb3RvYnVmL2Zv",
+            "cl9jb3JlX3Byb3Rvc19nb19wcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorReflection.Descriptor, global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -2116,10 +2117,14 @@ namespace Tensorflow {
     public const int TypeSpecClassNameFieldNumber = 3;
     private string typeSpecClassName_ = "";
     /// <summary>
-    /// This is currently redundant with the type_spec_class enum, and is only
-    /// used for error reporting.  In particular, if you use an older binary to
-    /// load a newer model, and the model uses a TypeSpecClass that the older
-    /// binary doesn't support, then this lets us display a useful error message.
+    /// The name of the TypeSpec class.
+    ///  * If type_spec_class == REGISTERED_TYPE_SPEC, the TypeSpec class is
+    ///    the one registered under this name. For types registered outside
+    ///    core TensorFlow by an add-on library, that library must be loaded
+    ///    before this value can be deserialized by StructureCoder.
+    ///  * If type_spec_class specifies a particular TypeSpec class, this field is
+    ///    redundant with the type_spec_class enum, and is only used for error
+    ///    reporting in older binaries that do not know the tupe_spec_class enum.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string TypeSpecClassName {
@@ -2295,6 +2300,14 @@ namespace Tensorflow {
         /// RowPartitionSpec from ragged/row_partition.py
         /// </summary>
         [pbr::OriginalName("ROW_PARTITION_SPEC")] RowPartitionSpec = 10,
+        /// <summary>
+        /// The type registered as type_spec_class_name.
+        /// </summary>
+        [pbr::OriginalName("REGISTERED_TYPE_SPEC")] RegisteredTypeSpec = 12,
+        /// <summary>
+        /// Subclasses of tf.ExtensionType
+        /// </summary>
+        [pbr::OriginalName("EXTENSION_TYPE_SPEC")] ExtensionTypeSpec = 13,
       }
 
     }
