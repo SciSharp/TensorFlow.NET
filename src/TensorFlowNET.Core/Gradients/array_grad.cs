@@ -223,6 +223,22 @@ namespace Tensorflow.Gradients
             return new Tensor[] { array_ops.reshape(grads[0], array_ops.shape(op.inputs[0])), null };
         }
 
+        [RegisterGradient("Pack")]
+        public static Tensor[] _PackGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var num = op.get_attr<int>("N");
+            var axis = op.get_attr<int>("axis");
+            return array_ops.unstack(grad, num: num, axis: axis);
+        }
+
+        [RegisterGradient("Unpack")]
+        public static Tensor[] _UnpackGrad(Operation op, Tensor[] grads)
+        {
+            var axis = op.get_attr<int>("axis");
+            return new[] { array_ops.stack(grads, axis: axis) };
+        }
+
         [RegisterGradient("Pad")]
         public static Tensor[] _PadGrad(Operation op, Tensor[] grads)
         {
