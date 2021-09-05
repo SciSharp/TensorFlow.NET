@@ -56,7 +56,7 @@ namespace Tensorflow
         public static extern TfLiteTensor TfLiteInterpreterGetInputTensor(SafeTfLiteInterpreterHandle interpreter, int input_index);
 
         [DllImport(TensorFlowLibName)]
-        public static extern TF_DataType TfLiteTensorType(TfLiteTensor tensor);
+        public static extern TfLiteDataType TfLiteTensorType(TfLiteTensor tensor);
 
         [DllImport(TensorFlowLibName)]
         public static extern int TfLiteTensorNumDims(TfLiteTensor tensor);

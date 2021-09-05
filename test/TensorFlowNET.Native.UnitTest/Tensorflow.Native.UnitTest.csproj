@@ -26,10 +26,14 @@
 
   <ItemGroup>
     <None Remove="Lite\testdata\add.bin" />
+    <None Remove="Lite\testdata\add_quantized.bin" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Lite\testdata\add.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lite\testdata\add_quantized.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
