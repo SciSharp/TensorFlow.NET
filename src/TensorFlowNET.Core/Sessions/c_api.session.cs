@@ -22,6 +22,18 @@ namespace Tensorflow
     public partial class c_api
     {
         /// <summary>
+        /// Close a session.
+        /// 
+        /// Contacts any other processes associated with the session, if applicable.
+        /// May not be called after TF_DeleteSession().
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="status"></param>
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_CloseSession(IntPtr session, SafeStatusHandle status);
+
+        /// <summary>
         /// Destroy a session object.
         ///
         /// Even if error information is recorded in *status, this call discards all
