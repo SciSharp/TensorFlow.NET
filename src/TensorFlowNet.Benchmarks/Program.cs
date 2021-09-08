@@ -13,7 +13,9 @@ namespace TensorFlowBenchmark
         static void Main(string[] args)
         {
             print(tf.VERSION);
-            /*new RepeatDataSetCrash().Run();
+
+            /*new SavedModelCleanup().Run();
+            new RepeatDataSetCrash().Run();
             new GpuLeakByCNN().Run();*/
 
             if (args?.Length > 0)

@@ -265,10 +265,8 @@ namespace Tensorflow
         }
 
         public static Tensor[] unpack(Tensor value, int num, int axis = 0, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("Unpack", name, new { value, num, axis });
-            return _op.outputs;
-        }
+            => tf.Context.ExecuteOp("Unpack", name, new ExecuteOpArgs(value, num)
+                    .SetAttributes(new { axis }));
 
         public static Tensor where(Tensor condition, string name = null)
         {

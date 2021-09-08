@@ -28,39 +28,43 @@ namespace Tensorflow {
             "ZW5zb3JmbG93Gip0ZW5zb3JmbG93L2NvcmUvZnJhbWV3b3JrL2F0dHJfdmFs",
             "dWUucHJvdG8aKHRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvbm9kZV9kZWYu",
             "cHJvdG8aJnRlbnNvcmZsb3cvY29yZS9mcmFtZXdvcmsvb3BfZGVmLnByb3Rv",
-            "ImoKEkZ1bmN0aW9uRGVmTGlicmFyeRIpCghmdW5jdGlvbhgBIAMoCzIXLnRl",
-            "bnNvcmZsb3cuRnVuY3Rpb25EZWYSKQoIZ3JhZGllbnQYAiADKAsyFy50ZW5z",
-            "b3JmbG93LkdyYWRpZW50RGVmIsQGCgtGdW5jdGlvbkRlZhIkCglzaWduYXR1",
-            "cmUYASABKAsyES50ZW5zb3JmbG93Lk9wRGVmEi8KBGF0dHIYBSADKAsyIS50",
-            "ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLkF0dHJFbnRyeRI2CghhcmdfYXR0chgH",
-            "IAMoCzIkLnRlbnNvcmZsb3cuRnVuY3Rpb25EZWYuQXJnQXR0ckVudHJ5ElAK",
-            "FnJlc291cmNlX2FyZ191bmlxdWVfaWQYCCADKAsyMC50ZW5zb3JmbG93LkZ1",
-            "bmN0aW9uRGVmLlJlc291cmNlQXJnVW5pcXVlSWRFbnRyeRIlCghub2RlX2Rl",
-            "ZhgDIAMoCzITLnRlbnNvcmZsb3cuTm9kZURlZhItCgNyZXQYBCADKAsyIC50",
-            "ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLlJldEVudHJ5EjwKC2NvbnRyb2xfcmV0",
-            "GAYgAygLMicudGVuc29yZmxvdy5GdW5jdGlvbkRlZi5Db250cm9sUmV0RW50",
-            "cnkaQgoJQXR0ckVudHJ5EgsKA2tleRgBIAEoCRIkCgV2YWx1ZRgCIAEoCzIV",
-            "LnRlbnNvcmZsb3cuQXR0clZhbHVlOgI4ARqIAQoIQXJnQXR0cnMSOAoEYXR0",
-            "chgBIAMoCzIqLnRlbnNvcmZsb3cuRnVuY3Rpb25EZWYuQXJnQXR0cnMuQXR0",
-            "ckVudHJ5GkIKCUF0dHJFbnRyeRILCgNrZXkYASABKAkSJAoFdmFsdWUYAiAB",
-            "KAsyFS50ZW5zb3JmbG93LkF0dHJWYWx1ZToCOAEaUAoMQXJnQXR0ckVudHJ5",
-            "EgsKA2tleRgBIAEoDRIvCgV2YWx1ZRgCIAEoCzIgLnRlbnNvcmZsb3cuRnVu",
-            "Y3Rpb25EZWYuQXJnQXR0cnM6AjgBGjoKGFJlc291cmNlQXJnVW5pcXVlSWRF",
-            "bnRyeRILCgNrZXkYASABKA0SDQoFdmFsdWUYAiABKA06AjgBGioKCFJldEVu",
-            "dHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEaMQoPQ29udHJv",
-            "bFJldEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAFKBAgC",
-            "EAMiOwoLR3JhZGllbnREZWYSFQoNZnVuY3Rpb25fbmFtZRgBIAEoCRIVCg1n",
-            "cmFkaWVudF9mdW5jGAIgASgJQoABChhvcmcudGVuc29yZmxvdy5mcmFtZXdv",
-            "cmtCDkZ1bmN0aW9uUHJvdG9zUAFaT2dpdGh1Yi5jb20vdGVuc29yZmxvdy90",
-            "ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9mcmFtZXdvcmsvZnVuY3Rp",
-            "b25fZ29fcHJvdG/4AQFiBnByb3RvMw=="));
+            "IqgBChJGdW5jdGlvbkRlZkxpYnJhcnkSKQoIZnVuY3Rpb24YASADKAsyFy50",
+            "ZW5zb3JmbG93LkZ1bmN0aW9uRGVmEikKCGdyYWRpZW50GAIgAygLMhcudGVu",
+            "c29yZmxvdy5HcmFkaWVudERlZhI8ChRyZWdpc3RlcmVkX2dyYWRpZW50cxgD",
+            "IAMoCzIeLnRlbnNvcmZsb3cuUmVnaXN0ZXJlZEdyYWRpZW50IsQGCgtGdW5j",
+            "dGlvbkRlZhIkCglzaWduYXR1cmUYASABKAsyES50ZW5zb3JmbG93Lk9wRGVm",
+            "Ei8KBGF0dHIYBSADKAsyIS50ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLkF0dHJF",
+            "bnRyeRI2CghhcmdfYXR0chgHIAMoCzIkLnRlbnNvcmZsb3cuRnVuY3Rpb25E",
+            "ZWYuQXJnQXR0ckVudHJ5ElAKFnJlc291cmNlX2FyZ191bmlxdWVfaWQYCCAD",
+            "KAsyMC50ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLlJlc291cmNlQXJnVW5pcXVl",
+            "SWRFbnRyeRIlCghub2RlX2RlZhgDIAMoCzITLnRlbnNvcmZsb3cuTm9kZURl",
+            "ZhItCgNyZXQYBCADKAsyIC50ZW5zb3JmbG93LkZ1bmN0aW9uRGVmLlJldEVu",
+            "dHJ5EjwKC2NvbnRyb2xfcmV0GAYgAygLMicudGVuc29yZmxvdy5GdW5jdGlv",
+            "bkRlZi5Db250cm9sUmV0RW50cnkaQgoJQXR0ckVudHJ5EgsKA2tleRgBIAEo",
+            "CRIkCgV2YWx1ZRgCIAEoCzIVLnRlbnNvcmZsb3cuQXR0clZhbHVlOgI4ARqI",
+            "AQoIQXJnQXR0cnMSOAoEYXR0chgBIAMoCzIqLnRlbnNvcmZsb3cuRnVuY3Rp",
+            "b25EZWYuQXJnQXR0cnMuQXR0ckVudHJ5GkIKCUF0dHJFbnRyeRILCgNrZXkY",
+            "ASABKAkSJAoFdmFsdWUYAiABKAsyFS50ZW5zb3JmbG93LkF0dHJWYWx1ZToC",
+            "OAEaUAoMQXJnQXR0ckVudHJ5EgsKA2tleRgBIAEoDRIvCgV2YWx1ZRgCIAEo",
+            "CzIgLnRlbnNvcmZsb3cuRnVuY3Rpb25EZWYuQXJnQXR0cnM6AjgBGjoKGFJl",
+            "c291cmNlQXJnVW5pcXVlSWRFbnRyeRILCgNrZXkYASABKA0SDQoFdmFsdWUY",
+            "AiABKA06AjgBGioKCFJldEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgC",
+            "IAEoCToCOAEaMQoPQ29udHJvbFJldEVudHJ5EgsKA2tleRgBIAEoCRINCgV2",
+            "YWx1ZRgCIAEoCToCOAFKBAgCEAMiOwoLR3JhZGllbnREZWYSFQoNZnVuY3Rp",
+            "b25fbmFtZRgBIAEoCRIVCg1ncmFkaWVudF9mdW5jGAIgASgJIkcKElJlZ2lz",
+            "dGVyZWRHcmFkaWVudBIVCg1ncmFkaWVudF9mdW5jGAEgASgJEhoKEnJlZ2lz",
+            "dGVyZWRfb3BfdHlwZRgCIAEoCUKAAQoYb3JnLnRlbnNvcmZsb3cuZnJhbWV3",
+            "b3JrQg5GdW5jdGlvblByb3Rvc1ABWk9naXRodWIuY29tL3RlbnNvcmZsb3cv",
+            "dGVuc29yZmxvdy90ZW5zb3JmbG93L2dvL2NvcmUvZnJhbWV3b3JrL2Z1bmN0",
+            "aW9uX2dvX3Byb3Rv+AEBYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.AttrValueReflection.Descriptor, global::Tensorflow.NodeDefReflection.Descriptor, global::Tensorflow.OpDefReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDefLibrary), global::Tensorflow.FunctionDefLibrary.Parser, new[]{ "Function", "Gradient" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDefLibrary), global::Tensorflow.FunctionDefLibrary.Parser, new[]{ "Function", "Gradient", "RegisteredGradients" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDef), global::Tensorflow.FunctionDef.Parser, new[]{ "Signature", "Attr", "ArgAttr", "ResourceArgUniqueId", "NodeDef", "Ret", "ControlRet" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.FunctionDef.Types.ArgAttrs), global::Tensorflow.FunctionDef.Types.ArgAttrs.Parser, new[]{ "Attr" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             null, null, null, null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GradientDef), global::Tensorflow.GradientDef.Parser, new[]{ "FunctionName", "GradientFunc" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.GradientDef), global::Tensorflow.GradientDef.Parser, new[]{ "FunctionName", "GradientFunc" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.RegisteredGradient), global::Tensorflow.RegisteredGradient.Parser, new[]{ "GradientFunc", "RegisteredOpType" }, null, null, null, null)
           }));
     }
     #endregion
@@ -97,6 +101,7 @@ namespace Tensorflow {
     public FunctionDefLibrary(FunctionDefLibrary other) : this() {
       function_ = other.function_.Clone();
       gradient_ = other.gradient_.Clone();
+      registeredGradients_ = other.registeredGradients_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -125,6 +130,16 @@ namespace Tensorflow {
       get { return gradient_; }
     }
 
+    /// <summary>Field number for the "registered_gradients" field.</summary>
+    public const int RegisteredGradientsFieldNumber = 3;
+    private static readonly pb::FieldCodec<global::Tensorflow.RegisteredGradient> _repeated_registeredGradients_codec
+        = pb::FieldCodec.ForMessage(26, global::Tensorflow.RegisteredGradient.Parser);
+    private readonly pbc::RepeatedField<global::Tensorflow.RegisteredGradient> registeredGradients_ = new pbc::RepeatedField<global::Tensorflow.RegisteredGradient>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Tensorflow.RegisteredGradient> RegisteredGradients {
+      get { return registeredGradients_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as FunctionDefLibrary);
@@ -140,6 +155,7 @@ namespace Tensorflow {
       }
       if(!function_.Equals(other.function_)) return false;
       if(!gradient_.Equals(other.gradient_)) return false;
+      if(!registeredGradients_.Equals(other.registeredGradients_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -148,6 +164,7 @@ namespace Tensorflow {
       int hash = 1;
       hash ^= function_.GetHashCode();
       hash ^= gradient_.GetHashCode();
+      hash ^= registeredGradients_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -163,6 +180,7 @@ namespace Tensorflow {
     public void WriteTo(pb::CodedOutputStream output) {
       function_.WriteTo(output, _repeated_function_codec);
       gradient_.WriteTo(output, _repeated_gradient_codec);
+      registeredGradients_.WriteTo(output, _repeated_registeredGradients_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -173,6 +191,7 @@ namespace Tensorflow {
       int size = 0;
       size += function_.CalculateSize(_repeated_function_codec);
       size += gradient_.CalculateSize(_repeated_gradient_codec);
+      size += registeredGradients_.CalculateSize(_repeated_registeredGradients_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -186,6 +205,7 @@ namespace Tensorflow {
       }
       function_.Add(other.function_);
       gradient_.Add(other.gradient_);
+      registeredGradients_.Add(other.registeredGradients_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -203,6 +223,10 @@ namespace Tensorflow {
           }
           case 18: {
             gradient_.AddEntriesFrom(input, _repeated_gradient_codec);
+            break;
+          }
+          case 26: {
+            registeredGradients_.AddEntriesFrom(input, _repeated_registeredGradients_codec);
             break;
           }
         }
@@ -812,6 +836,175 @@ namespace Tensorflow {
           }
           case 18: {
             GradientFunc = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// RegisteredGradient stores a gradient function that is registered in the
+  /// gradients library and used in the ops of a function in the function library.
+  /// Unlike GradientDef, these gradients are identified by op type, and not
+  /// directly linked to any function.
+  /// </summary>
+  public sealed partial class RegisteredGradient : pb::IMessage<RegisteredGradient> {
+    private static readonly pb::MessageParser<RegisteredGradient> _parser = new pb::MessageParser<RegisteredGradient>(() => new RegisteredGradient());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<RegisteredGradient> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tensorflow.FunctionReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RegisteredGradient() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RegisteredGradient(RegisteredGradient other) : this() {
+      gradientFunc_ = other.gradientFunc_;
+      registeredOpType_ = other.registeredOpType_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public RegisteredGradient Clone() {
+      return new RegisteredGradient(this);
+    }
+
+    /// <summary>Field number for the "gradient_func" field.</summary>
+    public const int GradientFuncFieldNumber = 1;
+    private string gradientFunc_ = "";
+    /// <summary>
+    /// The gradient function's name.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GradientFunc {
+      get { return gradientFunc_; }
+      set {
+        gradientFunc_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "registered_op_type" field.</summary>
+    public const int RegisteredOpTypeFieldNumber = 2;
+    private string registeredOpType_ = "";
+    /// <summary>
+    /// The gradient function's registered op type.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string RegisteredOpType {
+      get { return registeredOpType_; }
+      set {
+        registeredOpType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as RegisteredGradient);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(RegisteredGradient other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (GradientFunc != other.GradientFunc) return false;
+      if (RegisteredOpType != other.RegisteredOpType) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (GradientFunc.Length != 0) hash ^= GradientFunc.GetHashCode();
+      if (RegisteredOpType.Length != 0) hash ^= RegisteredOpType.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (GradientFunc.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(GradientFunc);
+      }
+      if (RegisteredOpType.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(RegisteredOpType);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (GradientFunc.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GradientFunc);
+      }
+      if (RegisteredOpType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RegisteredOpType);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(RegisteredGradient other) {
+      if (other == null) {
+        return;
+      }
+      if (other.GradientFunc.Length != 0) {
+        GradientFunc = other.GradientFunc;
+      }
+      if (other.RegisteredOpType.Length != 0) {
+        RegisteredOpType = other.RegisteredOpType;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            GradientFunc = input.ReadString();
+            break;
+          }
+          case 18: {
+            RegisteredOpType = input.ReadString();
             break;
           }
         }
