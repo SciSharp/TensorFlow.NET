@@ -27,8 +27,8 @@ namespace Tensorflow.Benchmark.Leak
 						var inputOp = g.OperationByName("inference_input");
 						var outputOp = g.OperationByName("StatefulPartitionedCall");
 
-						var inp = np.zeros(new Shape(new int[] { 1, 96, 2 }));
-						var ops = g.OperationByName("StatefulPartitionedCall");
+						var inp = np.zeros(new Shape(new int[] { 1, 2, 96 }), TF_DataType.TF_FLOAT);
+						sess.run(outputOp.outputs[0], new FeedItem(inputOp.outputs[0], inp));
 					}
 				}
 			}
