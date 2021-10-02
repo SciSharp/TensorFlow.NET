@@ -217,7 +217,7 @@ namespace Tensorflow {
         = pb::FieldCodec.ForInt32(58);
     private readonly pbc::RepeatedField<int> intVal_ = new pbc::RepeatedField<int>();
     /// <summary>
-    /// DT_INT32, DT_INT16, DT_INT8, DT_UINT8.
+    /// DT_INT32, DT_INT16, DT_UINT16, DT_INT8, DT_UINT8.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> IntVal {

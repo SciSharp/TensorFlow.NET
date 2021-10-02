@@ -24,6 +24,7 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/kernel_def.
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/log_memory.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/tensor_slice.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/summary.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/full_type.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/op_def.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/saver.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/saved_object_graph.proto
@@ -39,6 +40,7 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/trackable_ob
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/struct.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/verifier_config.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/util/event.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/util/memmapped_file_system.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/training/checkpoint_state.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/framework/cpp_shape_inference.proto
 

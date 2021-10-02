@@ -10,7 +10,9 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Benchmark.Leak
 {
-	
+	/// <summary>
+	/// https://github.com/SciSharp/TensorFlow.NET/issues/418
+	/// </summary>
 	public class SavedModelCleanup
 	{
 		[Benchmark]
@@ -22,6 +24,8 @@ namespace Tensorflow.Benchmark.Leak
 			for (var i = 0; i < 1024; i++)
             {
 				using var sess = Session.LoadFromSavedModel(ClassifierModelPath);
+				// destory graph
+				using var g = sess.graph;
 			}
 		}
 	}

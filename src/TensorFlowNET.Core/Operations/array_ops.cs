@@ -494,20 +494,12 @@ namespace Tensorflow
                 return ops.convert_to_tensor(values, name: name);
             }
 
-            var value_shape = ops.convert_to_tensor(values[0], name: name).shape;
-
             return gen_array_ops.pack(values, axis: axis, name: name);
         }
 
         public static Tensor[] unstack(Tensor value, int? num = null, int axis = 0, string name = "unstack")
         {
-            if (num == null)
-            {
-                value = ops.convert_to_tensor(value);
-                var value_shape = value.shape;
-                num = (int)value_shape.dims[axis];
-            }
-
+            num = num ?? value.shape.as_int_list()[axis];
             return gen_array_ops.unpack(value, num: num.Value, axis: axis, name: name);
         }
 

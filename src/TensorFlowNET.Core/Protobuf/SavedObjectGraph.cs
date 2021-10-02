@@ -36,7 +36,7 @@ namespace Tensorflow {
             "aW9ucxgCIAMoCzIzLnRlbnNvcmZsb3cuU2F2ZWRPYmplY3RHcmFwaC5Db25j",
             "cmV0ZUZ1bmN0aW9uc0VudHJ5GlsKFkNvbmNyZXRlRnVuY3Rpb25zRW50cnkS",
             "CwoDa2V5GAEgASgJEjAKBXZhbHVlGAIgASgLMiEudGVuc29yZmxvdy5TYXZl",
-            "ZENvbmNyZXRlRnVuY3Rpb246AjgBItkFCgtTYXZlZE9iamVjdBJSCghjaGls",
+            "ZENvbmNyZXRlRnVuY3Rpb246AjgBIpAGCgtTYXZlZE9iamVjdBJSCghjaGls",
             "ZHJlbhgBIAMoCzJALnRlbnNvcmZsb3cuVHJhY2thYmxlT2JqZWN0R3JhcGgu",
             "VHJhY2thYmxlT2JqZWN0Lk9iamVjdFJlZmVyZW5jZRJeCg5zbG90X3Zhcmlh",
             "YmxlcxgDIAMoCzJGLnRlbnNvcmZsb3cuVHJhY2thYmxlT2JqZWN0R3JhcGgu",
@@ -48,51 +48,54 @@ namespace Tensorflow {
             "RwoWYmFyZV9jb25jcmV0ZV9mdW5jdGlvbhgIIAEoCzIlLnRlbnNvcmZsb3cu",
             "U2F2ZWRCYXJlQ29uY3JldGVGdW5jdGlvbkgAEi0KCGNvbnN0YW50GAkgASgL",
             "MhkudGVuc29yZmxvdy5TYXZlZENvbnN0YW50SAASLQoIcmVzb3VyY2UYCiAB",
-            "KAsyGS50ZW5zb3JmbG93LlNhdmVkUmVzb3VyY2VIABJGChBzYXZlYWJsZV9v",
-            "YmplY3RzGAsgAygLMiwudGVuc29yZmxvdy5TYXZlZE9iamVjdC5TYXZlYWJs",
-            "ZU9iamVjdHNFbnRyeRpSChRTYXZlYWJsZU9iamVjdHNFbnRyeRILCgNrZXkY",
-            "ASABKAkSKQoFdmFsdWUYAiABKAsyGi50ZW5zb3JmbG93LlNhdmVhYmxlT2Jq",
-            "ZWN0OgI4AUIGCgRraW5kSgQIAhADUgphdHRyaWJ1dGVzImAKD1NhdmVkVXNl",
-            "ck9iamVjdBISCgppZGVudGlmaWVyGAEgASgJEicKB3ZlcnNpb24YAiABKAsy",
-            "Fi50ZW5zb3JmbG93LlZlcnNpb25EZWYSEAoIbWV0YWRhdGEYAyABKAkiKgoK",
-            "U2F2ZWRBc3NldBIcChRhc3NldF9maWxlX2RlZl9pbmRleBgBIAEoBSJcCg1T",
-            "YXZlZEZ1bmN0aW9uEhoKEmNvbmNyZXRlX2Z1bmN0aW9ucxgBIAMoCRIvCg1m",
-            "dW5jdGlvbl9zcGVjGAIgASgLMhgudGVuc29yZmxvdy5GdW5jdGlvblNwZWMi",
-            "qAEKFVNhdmVkQ29uY3JldGVGdW5jdGlvbhIUCgxib3VuZF9pbnB1dHMYAiAD",
-            "KAUSQgodY2Fub25pY2FsaXplZF9pbnB1dF9zaWduYXR1cmUYAyABKAsyGy50",
-            "ZW5zb3JmbG93LlN0cnVjdHVyZWRWYWx1ZRI1ChBvdXRwdXRfc2lnbmF0dXJl",
-            "GAQgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUirQEKGVNhdmVk",
-            "QmFyZUNvbmNyZXRlRnVuY3Rpb24SHgoWY29uY3JldGVfZnVuY3Rpb25fbmFt",
-            "ZRgBIAEoCRIZChFhcmd1bWVudF9rZXl3b3JkcxgCIAMoCRIkChxhbGxvd2Vk",
-            "X3Bvc2l0aW9uYWxfYXJndW1lbnRzGAMgASgDEi8KDWZ1bmN0aW9uX3NwZWMY",
-            "BCABKAsyGC50ZW5zb3JmbG93LkZ1bmN0aW9uU3BlYyIiCg1TYXZlZENvbnN0",
-            "YW50EhEKCW9wZXJhdGlvbhgBIAEoCSLXAgoNU2F2ZWRWYXJpYWJsZRIjCgVk",
-            "dHlwZRgBIAEoDjIULnRlbnNvcmZsb3cuRGF0YVR5cGUSKwoFc2hhcGUYAiAB",
-            "KAsyHC50ZW5zb3JmbG93LlRlbnNvclNoYXBlUHJvdG8SEQoJdHJhaW5hYmxl",
-            "GAMgASgIEjwKD3N5bmNocm9uaXphdGlvbhgEIAEoDjIjLnRlbnNvcmZsb3cu",
-            "VmFyaWFibGVTeW5jaHJvbml6YXRpb24SNAoLYWdncmVnYXRpb24YBSABKA4y",
-            "Hy50ZW5zb3JmbG93LlZhcmlhYmxlQWdncmVnYXRpb24SDAoEbmFtZRgGIAEo",
-            "CRIOCgZkZXZpY2UYByABKAkSTwosZXhwZXJpbWVudGFsX2Rpc3RyaWJ1dGVk",
-            "X3ZhcmlhYmxlX2NvbXBvbmVudHMYCCADKAsyGS50ZW5zb3JmbG93LlNhdmVk",
-            "VmFyaWFibGUi+wEKDEZ1bmN0aW9uU3BlYxIwCgtmdWxsYXJnc3BlYxgBIAEo",
-            "CzIbLnRlbnNvcmZsb3cuU3RydWN0dXJlZFZhbHVlEhEKCWlzX21ldGhvZBgC",
-            "IAEoCBI0Cg9pbnB1dF9zaWduYXR1cmUYBSABKAsyGy50ZW5zb3JmbG93LlN0",
-            "cnVjdHVyZWRWYWx1ZRI4CgtqaXRfY29tcGlsZRgGIAEoDjIjLnRlbnNvcmZs",
-            "b3cuRnVuY3Rpb25TcGVjLkppdENvbXBpbGUiKgoKSml0Q29tcGlsZRILCgdE",
-            "RUZBVUxUEAASBgoCT04QARIHCgNPRkYQAkoECAMQBEoECAQQBSIfCg1TYXZl",
-            "ZFJlc291cmNlEg4KBmRldmljZRgBIAEoCSJBCg5TYXZlYWJsZU9iamVjdBIV",
-            "Cg1zYXZlX2Z1bmN0aW9uGAIgASgFEhgKEHJlc3RvcmVfZnVuY3Rpb24YAyAB",
-            "KAVCWlpVZ2l0aHViLmNvbS90ZW5zb3JmbG93L3RlbnNvcmZsb3cvdGVuc29y",
-            "Zmxvdy9nby9jb3JlL3Byb3RvYnVmL2Zvcl9jb3JlX3Byb3Rvc19nb19wcm90",
-            "b/gBAWIGcHJvdG8z"));
+            "KAsyGS50ZW5zb3JmbG93LlNhdmVkUmVzb3VyY2VIABI1Cg9jYXB0dXJlZF90",
+            "ZW5zb3IYDCABKAsyGi50ZW5zb3JmbG93LkNhcHR1cmVkVGVuc29ySAASRgoQ",
+            "c2F2ZWFibGVfb2JqZWN0cxgLIAMoCzIsLnRlbnNvcmZsb3cuU2F2ZWRPYmpl",
+            "Y3QuU2F2ZWFibGVPYmplY3RzRW50cnkaUgoUU2F2ZWFibGVPYmplY3RzRW50",
+            "cnkSCwoDa2V5GAEgASgJEikKBXZhbHVlGAIgASgLMhoudGVuc29yZmxvdy5T",
+            "YXZlYWJsZU9iamVjdDoCOAFCBgoEa2luZEoECAIQA1IKYXR0cmlidXRlcyJk",
+            "Cg9TYXZlZFVzZXJPYmplY3QSEgoKaWRlbnRpZmllchgBIAEoCRInCgd2ZXJz",
+            "aW9uGAIgASgLMhYudGVuc29yZmxvdy5WZXJzaW9uRGVmEhQKCG1ldGFkYXRh",
+            "GAMgASgJQgIYASIqCgpTYXZlZEFzc2V0EhwKFGFzc2V0X2ZpbGVfZGVmX2lu",
+            "ZGV4GAEgASgFIlwKDVNhdmVkRnVuY3Rpb24SGgoSY29uY3JldGVfZnVuY3Rp",
+            "b25zGAEgAygJEi8KDWZ1bmN0aW9uX3NwZWMYAiABKAsyGC50ZW5zb3JmbG93",
+            "LkZ1bmN0aW9uU3BlYyI5Cg5DYXB0dXJlZFRlbnNvchIMCgRuYW1lGAEgASgJ",
+            "EhkKEWNvbmNyZXRlX2Z1bmN0aW9uGAIgASgJIqgBChVTYXZlZENvbmNyZXRl",
+            "RnVuY3Rpb24SFAoMYm91bmRfaW5wdXRzGAIgAygFEkIKHWNhbm9uaWNhbGl6",
+            "ZWRfaW5wdXRfc2lnbmF0dXJlGAMgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1",
+            "cmVkVmFsdWUSNQoQb3V0cHV0X3NpZ25hdHVyZRgEIAEoCzIbLnRlbnNvcmZs",
+            "b3cuU3RydWN0dXJlZFZhbHVlIq0BChlTYXZlZEJhcmVDb25jcmV0ZUZ1bmN0",
+            "aW9uEh4KFmNvbmNyZXRlX2Z1bmN0aW9uX25hbWUYASABKAkSGQoRYXJndW1l",
+            "bnRfa2V5d29yZHMYAiADKAkSJAocYWxsb3dlZF9wb3NpdGlvbmFsX2FyZ3Vt",
+            "ZW50cxgDIAEoAxIvCg1mdW5jdGlvbl9zcGVjGAQgASgLMhgudGVuc29yZmxv",
+            "dy5GdW5jdGlvblNwZWMiIgoNU2F2ZWRDb25zdGFudBIRCglvcGVyYXRpb24Y",
+            "ASABKAki1wIKDVNhdmVkVmFyaWFibGUSIwoFZHR5cGUYASABKA4yFC50ZW5z",
+            "b3JmbG93LkRhdGFUeXBlEisKBXNoYXBlGAIgASgLMhwudGVuc29yZmxvdy5U",
+            "ZW5zb3JTaGFwZVByb3RvEhEKCXRyYWluYWJsZRgDIAEoCBI8Cg9zeW5jaHJv",
+            "bml6YXRpb24YBCABKA4yIy50ZW5zb3JmbG93LlZhcmlhYmxlU3luY2hyb25p",
+            "emF0aW9uEjQKC2FnZ3JlZ2F0aW9uGAUgASgOMh8udGVuc29yZmxvdy5WYXJp",
+            "YWJsZUFnZ3JlZ2F0aW9uEgwKBG5hbWUYBiABKAkSDgoGZGV2aWNlGAcgASgJ",
+            "Ek8KLGV4cGVyaW1lbnRhbF9kaXN0cmlidXRlZF92YXJpYWJsZV9jb21wb25l",
+            "bnRzGAggAygLMhkudGVuc29yZmxvdy5TYXZlZFZhcmlhYmxlIvsBCgxGdW5j",
+            "dGlvblNwZWMSMAoLZnVsbGFyZ3NwZWMYASABKAsyGy50ZW5zb3JmbG93LlN0",
+            "cnVjdHVyZWRWYWx1ZRIRCglpc19tZXRob2QYAiABKAgSNAoPaW5wdXRfc2ln",
+            "bmF0dXJlGAUgASgLMhsudGVuc29yZmxvdy5TdHJ1Y3R1cmVkVmFsdWUSOAoL",
+            "aml0X2NvbXBpbGUYBiABKA4yIy50ZW5zb3JmbG93LkZ1bmN0aW9uU3BlYy5K",
+            "aXRDb21waWxlIioKCkppdENvbXBpbGUSCwoHREVGQVVMVBAAEgYKAk9OEAES",
+            "BwoDT0ZGEAJKBAgDEARKBAgEEAUiHwoNU2F2ZWRSZXNvdXJjZRIOCgZkZXZp",
+            "Y2UYASABKAkiQQoOU2F2ZWFibGVPYmplY3QSFQoNc2F2ZV9mdW5jdGlvbhgC",
+            "IAEoBRIYChByZXN0b3JlX2Z1bmN0aW9uGAMgASgFQlpaVWdpdGh1Yi5jb20v",
+            "dGVuc29yZmxvdy90ZW5zb3JmbG93L3RlbnNvcmZsb3cvZ28vY29yZS9wcm90",
+            "b2J1Zi9mb3JfY29yZV9wcm90b3NfZ29fcHJvdG/4AQFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Tensorflow.TensorShapeReflection.Descriptor, global::Tensorflow.TypesReflection.Descriptor, global::Tensorflow.VariableReflection.Descriptor, global::Tensorflow.VersionsReflection.Descriptor, global::Tensorflow.StructReflection.Descriptor, global::Tensorflow.TrackableObjectGraphReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedObjectGraph), global::Tensorflow.SavedObjectGraph.Parser, new[]{ "Nodes", "ConcreteFunctions" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedObject), global::Tensorflow.SavedObject.Parser, new[]{ "Children", "SlotVariables", "UserObject", "Asset", "Function", "Variable", "BareConcreteFunction", "Constant", "Resource", "SaveableObjects" }, new[]{ "Kind" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedObject), global::Tensorflow.SavedObject.Parser, new[]{ "Children", "SlotVariables", "UserObject", "Asset", "Function", "Variable", "BareConcreteFunction", "Constant", "Resource", "CapturedTensor", "SaveableObjects" }, new[]{ "Kind" }, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedUserObject), global::Tensorflow.SavedUserObject.Parser, new[]{ "Identifier", "Version", "Metadata" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedAsset), global::Tensorflow.SavedAsset.Parser, new[]{ "AssetFileDefIndex" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedFunction), global::Tensorflow.SavedFunction.Parser, new[]{ "ConcreteFunctions", "FunctionSpec" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.CapturedTensor), global::Tensorflow.CapturedTensor.Parser, new[]{ "Name", "ConcreteFunction" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedConcreteFunction), global::Tensorflow.SavedConcreteFunction.Parser, new[]{ "BoundInputs", "CanonicalizedInputSignature", "OutputSignature" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedBareConcreteFunction), global::Tensorflow.SavedBareConcreteFunction.Parser, new[]{ "ConcreteFunctionName", "ArgumentKeywords", "AllowedPositionalArguments", "FunctionSpec" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tensorflow.SavedConstant), global::Tensorflow.SavedConstant.Parser, new[]{ "Operation" }, null, null, null, null),
@@ -307,6 +310,9 @@ namespace Tensorflow {
         case KindOneofCase.Resource:
           Resource = other.Resource.Clone();
           break;
+        case KindOneofCase.CapturedTensor:
+          CapturedTensor = other.CapturedTensor.Clone();
+          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -427,6 +433,17 @@ namespace Tensorflow {
       }
     }
 
+    /// <summary>Field number for the "captured_tensor" field.</summary>
+    public const int CapturedTensorFieldNumber = 12;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::Tensorflow.CapturedTensor CapturedTensor {
+      get { return kindCase_ == KindOneofCase.CapturedTensor ? (global::Tensorflow.CapturedTensor) kind_ : null; }
+      set {
+        kind_ = value;
+        kindCase_ = value == null ? KindOneofCase.None : KindOneofCase.CapturedTensor;
+      }
+    }
+
     /// <summary>Field number for the "saveable_objects" field.</summary>
     public const int SaveableObjectsFieldNumber = 11;
     private static readonly pbc::MapField<string, global::Tensorflow.SaveableObject>.Codec _map_saveableObjects_codec
@@ -448,6 +465,7 @@ namespace Tensorflow {
       BareConcreteFunction = 8,
       Constant = 9,
       Resource = 10,
+      CapturedTensor = 12,
     }
     private KindOneofCase kindCase_ = KindOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -483,6 +501,7 @@ namespace Tensorflow {
       if (!object.Equals(BareConcreteFunction, other.BareConcreteFunction)) return false;
       if (!object.Equals(Constant, other.Constant)) return false;
       if (!object.Equals(Resource, other.Resource)) return false;
+      if (!object.Equals(CapturedTensor, other.CapturedTensor)) return false;
       if (!SaveableObjects.Equals(other.SaveableObjects)) return false;
       if (KindCase != other.KindCase) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -500,6 +519,7 @@ namespace Tensorflow {
       if (kindCase_ == KindOneofCase.BareConcreteFunction) hash ^= BareConcreteFunction.GetHashCode();
       if (kindCase_ == KindOneofCase.Constant) hash ^= Constant.GetHashCode();
       if (kindCase_ == KindOneofCase.Resource) hash ^= Resource.GetHashCode();
+      if (kindCase_ == KindOneofCase.CapturedTensor) hash ^= CapturedTensor.GetHashCode();
       hash ^= SaveableObjects.GetHashCode();
       hash ^= (int) kindCase_;
       if (_unknownFields != null) {
@@ -546,6 +566,10 @@ namespace Tensorflow {
         output.WriteMessage(Resource);
       }
       saveableObjects_.WriteTo(output, _map_saveableObjects_codec);
+      if (kindCase_ == KindOneofCase.CapturedTensor) {
+        output.WriteRawTag(98);
+        output.WriteMessage(CapturedTensor);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -576,6 +600,9 @@ namespace Tensorflow {
       }
       if (kindCase_ == KindOneofCase.Resource) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Resource);
+      }
+      if (kindCase_ == KindOneofCase.CapturedTensor) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CapturedTensor);
       }
       size += saveableObjects_.CalculateSize(_map_saveableObjects_codec);
       if (_unknownFields != null) {
@@ -634,6 +661,12 @@ namespace Tensorflow {
             Resource = new global::Tensorflow.SavedResource();
           }
           Resource.MergeFrom(other.Resource);
+          break;
+        case KindOneofCase.CapturedTensor:
+          if (CapturedTensor == null) {
+            CapturedTensor = new global::Tensorflow.CapturedTensor();
+          }
+          CapturedTensor.MergeFrom(other.CapturedTensor);
           break;
       }
 
@@ -723,6 +756,15 @@ namespace Tensorflow {
             saveableObjects_.AddEntriesFrom(input, _map_saveableObjects_codec);
             break;
           }
+          case 98: {
+            global::Tensorflow.CapturedTensor subBuilder = new global::Tensorflow.CapturedTensor();
+            if (kindCase_ == KindOneofCase.CapturedTensor) {
+              subBuilder.MergeFrom(CapturedTensor);
+            }
+            input.ReadMessage(subBuilder);
+            CapturedTensor = subBuilder;
+            break;
+          }
         }
       }
     }
@@ -805,11 +847,13 @@ namespace Tensorflow {
     public const int MetadataFieldNumber = 3;
     private string metadata_ = "";
     /// <summary>
+    /// Metadata for deserializing this object.
+    ///
     /// Deprecated! At the time of deprecation, Keras was the only user of this
     /// field, and its saving and loading code will be updated shortly.
-    /// Please save your application-specific metadata to separate file
-    /// Initialization-related metadata.
+    /// Please save your application-specific metadata to a separate file.
     /// </summary>
+    [global::System.ObsoleteAttribute]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Metadata {
       get { return metadata_; }
@@ -1240,6 +1284,169 @@ namespace Tensorflow {
 
   }
 
+  public sealed partial class CapturedTensor : pb::IMessage<CapturedTensor> {
+    private static readonly pb::MessageParser<CapturedTensor> _parser = new pb::MessageParser<CapturedTensor>(() => new CapturedTensor());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CapturedTensor> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CapturedTensor() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CapturedTensor(CapturedTensor other) : this() {
+      name_ = other.name_;
+      concreteFunction_ = other.concreteFunction_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CapturedTensor Clone() {
+      return new CapturedTensor(this);
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 1;
+    private string name_ = "";
+    /// <summary>
+    /// Name of captured tensor
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "concrete_function" field.</summary>
+    public const int ConcreteFunctionFieldNumber = 2;
+    private string concreteFunction_ = "";
+    /// <summary>
+    /// Name of concrete function which contains the computed graph tensor.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string ConcreteFunction {
+      get { return concreteFunction_; }
+      set {
+        concreteFunction_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CapturedTensor);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CapturedTensor other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Name != other.Name) return false;
+      if (ConcreteFunction != other.ConcreteFunction) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (ConcreteFunction.Length != 0) hash ^= ConcreteFunction.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Name.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Name);
+      }
+      if (ConcreteFunction.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(ConcreteFunction);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (ConcreteFunction.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ConcreteFunction);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CapturedTensor other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.ConcreteFunction.Length != 0) {
+        ConcreteFunction = other.ConcreteFunction;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Name = input.ReadString();
+            break;
+          }
+          case 18: {
+            ConcreteFunction = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   /// Stores low-level information about a concrete function. Referenced in either
   /// a SavedFunction or a SavedBareConcreteFunction.
@@ -1252,7 +1459,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1285,12 +1492,6 @@ namespace Tensorflow {
     private static readonly pb::FieldCodec<int> _repeated_boundInputs_codec
         = pb::FieldCodec.ForInt32(18);
     private readonly pbc::RepeatedField<int> boundInputs_ = new pbc::RepeatedField<int>();
-    /// <summary>
-    /// Bound inputs to the function. The SavedObjects identified by the node ids
-    /// given here are appended as extra inputs to the caller-supplied inputs.
-    /// The only types of SavedObjects valid here are SavedVariable, SavedResource
-    /// and SavedAsset.
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<int> BoundInputs {
       get { return boundInputs_; }
@@ -1457,7 +1658,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1685,7 +1886,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1821,7 +2022,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2156,7 +2357,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2418,7 +2619,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2552,7 +2753,7 @@ namespace Tensorflow {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[11]; }
+      get { return global::Tensorflow.SavedObjectGraphReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

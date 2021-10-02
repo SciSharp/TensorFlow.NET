@@ -842,8 +842,8 @@ namespace Tensorflow {
     private long metaOptimizerTimeoutMs_;
     /// <summary>
     /// Maximum number of milliseconds to spend optimizing a single graph before
-    /// timing out. If equal to 0 the system picks a default (currently 5 minutes).
-    /// If less than 0 the optimizer will never time out.
+    /// timing out. If less than or equal to 0 (default value) the optimizer will
+    /// never time out.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long MetaOptimizerTimeoutMs {
