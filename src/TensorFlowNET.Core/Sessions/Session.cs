@@ -39,7 +39,7 @@ namespace Tensorflow
 
         public static Session LoadFromSavedModel(string path)
         {
-            using var graph = new Graph();
+            var graph = new Graph();
             using var status = new Status();
             using var opt = c_api.TF_NewSessionOptions();
 
