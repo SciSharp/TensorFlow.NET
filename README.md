@@ -9,7 +9,7 @@
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
-*master branch is based on tensorflow v2.4, v0.3x branch is based on tensorflow v2.3, v0.15-tensorflow1.15 is from tensorflow1.15.*
+*master branch is based on tensorflow v2.x, v0.6x branch is based on tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
@@ -248,10 +248,6 @@ git pull upstream master
 Follow us on [Twitter](https://twitter.com/ScisharpStack), [Facebook](https://www.facebook.com/scisharp.stack.9), [Medium](https://medium.com/scisharp), [LinkedIn](https://www.linkedin.com/company/scisharp-stack/).
 
 Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
-
-Scan QR code to join Tencent TIM group:
-
-![SciSharp STACK](docs/TIM.jpg)
 
 WeChat Sponsor 微信打赏:
 
