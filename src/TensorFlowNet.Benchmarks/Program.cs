@@ -14,8 +14,8 @@ namespace TensorFlowBenchmark
         {
             print(tf.VERSION);
 
-            new SavedModelCleanup().Run();
-            /*new RepeatDataSetCrash().Run();
+            /*new SavedModelCleanup().Run();
+            new RepeatDataSetCrash().Run();
             new GpuLeakByCNN().Run();*/
 
             if (args?.Length > 0)
