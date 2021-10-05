@@ -11,7 +11,9 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Benchmark.Leak
 {
-	
+	/// <summary>
+	/// https://github.com/SciSharp/TensorFlow.NET/issues/418
+	/// </summary>
 	public class SavedModelCleanup
 	{
 		[Benchmark]
