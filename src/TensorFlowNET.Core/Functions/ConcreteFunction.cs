@@ -13,6 +13,7 @@ namespace Tensorflow.Functions
     public class ConcreteFunction
     {
         FuncGraph func_graph;
+        ForwardBackwardCall forward_backward;
         public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
 
@@ -151,7 +152,8 @@ namespace Tensorflow.Functions
                 return tf.Runner.Execute(tf.Context, func_graph.FuncName, func_graph.Outputs.Length, args, attrs);
             }
 
-            var forward_backward = SelectForwardAndBackwardFunctions(args, possible_gradient_type, executing_eagerly);
+            if (forward_backward == null)
+                forward_backward = SelectForwardAndBackwardFunctions(args, possible_gradient_type, executing_eagerly);
             var (forward_function, args_with_tangents) = forward_backward.Forward();
             Tensors flat_outputs = null;
             if (executing_eagerly)

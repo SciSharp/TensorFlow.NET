@@ -13,6 +13,7 @@ namespace Tensorflow.Functions
         Tensors _inference_args;
         Tensors _input_tangents;
         bool _tape_watching;
+        EagerDefinedFunction forward_function;
 
         public ForwardBackwardCall(TapeGradientFunctions functions, 
             Tensors inference_args, 
@@ -22,10 +23,11 @@ namespace Tensorflow.Functions
             _inference_args = inference_args;
             _tape_watching = tape_watching;
         }
-
+        
         public (EagerDefinedFunction, Tensors) Forward()
         {
-            var forward_function = _functions.Forward(_inference_args);
+            if (forward_function == null)
+                forward_function = _functions.Forward(_inference_args);
             return (forward_function, _inference_args);
         }
 

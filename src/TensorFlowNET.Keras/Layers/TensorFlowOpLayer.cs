@@ -8,6 +8,7 @@ using Tensorflow.Graphs;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
+using Tensorflow.Functions;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -35,8 +36,37 @@ namespace Tensorflow.Keras.Layers
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
             if (tf.Context.executing_eagerly())
-                return _defun_call(inputs);
+                return DeFunCall(inputs);
             return MakOp(inputs);
+        }
+
+        ConcreteFunction function;
+        Tensors DeFunCall(Tensors inputs)
+        {
+            if(function == null)
+            {
+                function = new ConcreteFunction(name);
+                function.Enter();
+
+                int i = 0;
+                var graph_inputs = inputs.Select(x => tf.placeholder(x.dtype, shape: x.shape, name: $"defun_inputs_{i++}")).ToArray();
+                var graph_outputs = MakOp(graph_inputs);
+                graph_outputs = mark_as_return(graph_outputs);
+
+                function.ToGraph(graph_inputs, graph_outputs);
+                function.Exit();
+            }
+
+            var outputs = function.FilteredCall(inputs);
+            return outputs;
+        }
+
+        Tensors mark_as_return(Tensors tensors)
+        {
+            var result = new Tensors();
+            foreach (var tensor in tensors)
+                result.Add(array_ops.identity(tensor));
+            return result;
         }
 
         [AutoGraph]

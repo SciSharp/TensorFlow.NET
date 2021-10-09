@@ -66,6 +66,8 @@ namespace Tensorflow.Keras.Engine
         protected List<IVariableV1> non_trainable_weights;
         public List<IVariableV1> non_trainable_variables => non_trainable_weights;
 
+        protected int id;
+        public int Id => id;
         protected string name;
         protected string base_name;
         public string Name => name;
@@ -96,6 +98,7 @@ namespace Tensorflow.Keras.Engine
             built = false;
             SupportsMasking = false;
 
+            id = ops.uid_layer();
             _init_set_name(args.Name);
             trainable_weights = new List<IVariableV1>();
             non_trainable_weights = new List<IVariableV1>();

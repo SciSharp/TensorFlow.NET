@@ -376,6 +376,10 @@ namespace Tensorflow
         public static int uid_function()
             => Interlocked.Increment(ref uid_number_for_function);
 
+        static int uid_number_for_layer = 0;
+        public static int uid_layer()
+            => Interlocked.Increment(ref uid_number_for_layer);
+
         public static void reset_uid()
         {
             uid_number = -1;
