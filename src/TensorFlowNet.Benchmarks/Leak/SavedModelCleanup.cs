@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Benchmark.Leak
@@ -23,9 +24,15 @@ namespace Tensorflow.Benchmark.Leak
 
 			for (var i = 0; i < 1024; i++)
             {
-				using var sess = Session.LoadFromSavedModel(ClassifierModelPath);
-				// destory graph
-				using var g = sess.graph;
+				using (var sess = Session.LoadFromSavedModel(ClassifierModelPath)) {
+					using (var g = sess.graph.as_default()) {
+						var inputOp = g.OperationByName("inference_input");
+						var outputOp = g.OperationByName("StatefulPartitionedCall");
+
+						var inp = np.zeros(new Shape(new int[] { 1, 2, 96 }), TF_DataType.TF_FLOAT);
+						sess.run(outputOp.outputs[0], new FeedItem(inputOp.outputs[0], inp));
+					}
+				}
 			}
 		}
 	}
