@@ -4,18 +4,18 @@ namespace Tensorflow.Gradients
 {
     public class TapeTensor
     {
-        long id;
-        TF_DataType dtype;
-        Shape shape;
+        Tensor tensor;
+        long id => tensor.Id;
+        TF_DataType dtype => tensor.dtype;
+        Shape shape => tensor.shape;
 
-        public TapeTensor(long id, TF_DataType dtype, Shape shape)
+        public TapeTensor(Tensor tensor)
         {
-            this.id = id;
-            this.dtype = dtype;
-            this.shape = shape;
+            this.tensor = tensor;
         }
 
-        public long GetID() => id;
+        public long GetID() => tensor.Id;
+        public Tensor GetTensor() => tensor;
 
         public Tensor ZerosLike()
             => tf.zeros(shape: shape, dtype: dtype);

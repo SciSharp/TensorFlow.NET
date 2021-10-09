@@ -66,7 +66,7 @@ namespace Tensorflow
             var inputptr = (TF_Input*)handle;
             for (int i = 0; i < num; i++)
                 consumers[i] = *(inputptr + i);
-
+            Marshal.FreeHGlobal(handle);
             return consumers;
         }
 
@@ -83,6 +83,7 @@ namespace Tensorflow
                     var handle = control_output_handle + Marshal.SizeOf<IntPtr>() * i;
                     control_outputs[i] = new Operation(*(IntPtr*)handle);
                 }
+                Marshal.FreeHGlobal(control_output_handle);
             }
 
             return control_outputs;

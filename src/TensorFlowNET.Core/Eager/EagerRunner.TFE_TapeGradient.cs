@@ -14,18 +14,16 @@ namespace Tensorflow.Eager
             Tensor[] sources,
             Tensor[] output_gradients)
         {
-            var target_vec = MakeTensorIDList(target);
-            var sources_vec = MakeTensorIDList(sources);
+            var target_vec = target;
+            var sources_vec = sources;
             var sources_set = sources_vec;
 
             var seq_array = target;
-            var source_tensors_that_are_targets = new UnorderedMap<long, TapeTensor>();
+            var source_tensors_that_are_targets = new UnorderedMap<Tensor, TapeTensor>();
 
             for (int i = 0; i < target.Length; ++i)
             {
-                var target_id = target_vec[i];
-                var tensor = seq_array[i];
-                source_tensors_that_are_targets.Add(target_id, TapeTensorFromTensor(tensor));
+                source_tensors_that_are_targets.Add(target_vec[i], new TapeTensor(seq_array[i]));
             }
 
             if (output_gradients != null)

@@ -4,7 +4,7 @@ namespace Tensorflow
 {
     public static partial class Binding
     {
-        public static tensorflow tf { get; } = New<tensorflow>();
+        public static tensorflow tf { get; } = new tensorflow();
 
         /// <summary>
         ///     Alias to null, similar to python's None.

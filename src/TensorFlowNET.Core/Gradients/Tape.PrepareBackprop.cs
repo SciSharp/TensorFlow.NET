@@ -6,14 +6,14 @@ namespace Tensorflow.Gradients
 {
     public partial class Tape
     {
-        public BackpropInitialState PrepareBackprop(long[] target,
+        public BackpropInitialState PrepareBackprop(Tensor[] target,
             TensorTape tensor_tape,
             OpTape<BackwardFunction, TapeTensor> op_tape,
-            UnorderedSet<long> sources_set,
+            UnorderedSet<Tensor> sources_set,
             bool persistent_tape)
         {
             BackpropInitialState result = new BackpropInitialState();
-            var tensor_stack = new Queue<long>(target);
+            var tensor_stack = new Queue<Tensor>(target);
             while (tensor_stack.Count > 0)
             {
                 var tensor_id = tensor_stack.Dequeue();
@@ -21,7 +21,7 @@ namespace Tensorflow.Gradients
                 if (!tensor_tape.find(tensor_id, out var op_id))
                     continue;
 
-                if (op_id == -1 ||
+                if (op_id == null ||
                     !op_tape.find(op_id, out var op_it) ||
                     result.op_tape.find(op_id, out var result_op_it))
                     continue;
@@ -46,7 +46,7 @@ namespace Tensorflow.Gradients
 
             foreach (var pair in result.tensor_usage_counts)
             {
-                if (tensor_tape.find(pair.Key, out var it) && it != -1)
+                if (tensor_tape.find(pair.Key, out var it) && it != null)
                     result.op_missing_tensor[it] += 1;
             }
 

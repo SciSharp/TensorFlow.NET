@@ -16,9 +16,9 @@ namespace TensorFlowNET.UnitTest.Gradient
         {
             // Calcute the gradient of w * w 
             // by Automatic Differentiation in Eager mode
-            // in tensorflow.net 2.x that is in development intensively
             var w = tf.constant(1.5f);
             using var tape = tf.GradientTape();
+            // w is defined before tape is recording
             tape.watch(w);
             var loss = w * w;
             var grad = tape.gradient(loss, w);
@@ -56,8 +56,6 @@ namespace TensorFlowNET.UnitTest.Gradient
             }
         }
 
-
-        [Ignore]
         [TestMethod]
         public void SquaredDifference_1D()
         {
@@ -66,14 +64,15 @@ namespace TensorFlowNET.UnitTest.Gradient
             // Expected is 2*(abs(x1-x2))
             Tensor x1 = new NDArray( new float[] { 1, 3, 5, 21, 19, 17 });
             Tensor x2 = new NDArray(new float[] { 29, 27, 23, 7, 11, 13 });
-            float[] expected = new float[] {
+            float[] expected = new float[]
+            {
                 (29-1) * 2,
                 (27-3) * 2,
                 (23-5) * 2,
                 (7-21) * 2,
                 (11-19) * 2,
                 (13-17) * 2
-                };
+            };
 
             // Sanity check
             using (var tape = tf.GradientTape())
@@ -100,7 +99,7 @@ namespace TensorFlowNET.UnitTest.Gradient
 
 
         /// <summary>
-        /// Calcute the gradient of w * w * w
+        /// Calcute the higher derivative gradient of w * w * w
         /// 高阶梯度
         /// </summary>
         [TestMethod]
@@ -110,10 +109,8 @@ namespace TensorFlowNET.UnitTest.Gradient
             using var tape1 = tf.GradientTape();
             using var tape2 = tf.GradientTape();
             var y = x * x * x;
-            tape2.Dispose();
             var dy_dx = tape2.gradient(y, x);
             Assert.AreEqual((float)dy_dx, 3.0f);
-            tape1.Dispose();
             var d2y_d2x = tape1.gradient(dy_dx, x);
             Assert.AreEqual((float)d2y_d2x, 6.0f);
         }
@@ -140,8 +137,6 @@ namespace TensorFlowNET.UnitTest.Gradient
             tape.watch(x);
             var y = tf.reduce_sum(x);
             var z = tf.multiply(y, y);
-            tape.Dispose();
-
             var dz_dx = tape.gradient(z, x);
 
             var expected = new float[] { 8.0f, 8.0f, 8.0f, 8.0f };

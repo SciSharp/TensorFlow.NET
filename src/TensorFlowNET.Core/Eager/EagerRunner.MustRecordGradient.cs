@@ -11,5 +11,19 @@ namespace Tensorflow.Eager
         {
             return HasGradientTape();
         }
+
+        private bool ShouldRecord(Tensor[] inputs)
+        {
+            bool should_record = false;
+            foreach (var tape in tf.GetTapeSet())
+            {
+                if (tape.ShouldRecord(inputs))
+                {
+                    should_record = true;
+                    break;
+                }
+            }
+            return should_record;
+        }
     }
 }

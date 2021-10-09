@@ -6,6 +6,7 @@ using static Tensorflow.Binding;
 namespace Tensorflow.Gradients
 {
     /// <summary>
+    /// Gradient Tape Set
     /// Record operations for automatic differentiation.
     /// 
     /// Operations are recorded if they are executed within this context manager and
@@ -18,54 +19,35 @@ namespace Tensorflow.Gradients
     /// </summary>
     public class GradientTape : IDisposable
     {
-        bool _recording;
-        public bool Recording => _recording;
-        bool _persistent;
-        bool _watch_accessed_variables;
-        ResourceVariable[] _watched_variables;
-        bool _created_eagerly;
-        ITape _tape;
+        int _nextTapeId;
+        ITape _tape => _tapeSet.Peek();
+        Stack<ITape> _tapeSet;
 
-        public GradientTape(bool persistent = false,
-            bool watch_accessed_variables = true)
+        public GradientTape()
         {
-            _persistent = persistent;
-            _watch_accessed_variables = watch_accessed_variables;
-            _created_eagerly = tf.Context.executing_eagerly();
-            _recording = false;
-            _created_eagerly = tf.Context.executing_eagerly();
-            // Enters a context inside which operations are recorded on this tape.
-            if (_created_eagerly)
-            {
-                tf.Context.ensure_initialized();
-                tf.Context.start_step();
-            }
-            _push_tape();
+            _tapeSet = new Stack<ITape>();
         }
 
         /// <summary>
-        /// Pushes a new tape onto the tape stack.
+        /// New tape onto the tape stack.
         /// </summary>
-        private void _push_tape()
+        public ITape PushTape(bool persistent = false,
+            bool watch_accessed_variables = true)
         {
-            if (_recording)
-                throw new ValueError("Tape is still recording, This can happen if you try to " +
-                    "re-enter an already-active tape.");
+            // Enters a context inside which operations are recorded on this tape.
+            if (tf.Context.executing_eagerly())
+                tf.Context.ensure_initialized();
 
-            if (_tape == null)
-                _tape = new Tape(_persistent, _watch_accessed_variables);
-            else
-                tf.GetTapeSet().Add(_tape);
-
-            _recording = true;
+            var tape = new Tape(persistent, watch_accessed_variables);
+            tape.SetTapeId(_nextTapeId++);
+            _tapeSet.Push(tape);
+            return tape;
         }
 
-        private void _pop_tape()
+        ITape PopTape()
         {
-            if (!_recording)
-                throw new ValueError("Tape is not recording.");
-            _tape.PopTape(_tape);
-            _recording = false;
+            _tape.StopRecord();
+            return _tapeSet.Pop();
         }
 
         /// <summary>
@@ -74,7 +56,9 @@ namespace Tensorflow.Gradients
         /// <param name="x"></param>
         public void watch(Tensor x)
         {
-            _tape.Watch(x.Id);
+            if (!_tapeSet.Any())
+                return;
+            _tape.Watch(x);
         }
 
         /// <summary>
@@ -85,13 +69,9 @@ namespace Tensorflow.Gradients
         /// <returns></returns>
         public Tensor gradient(Tensor target, Tensor source)
         {
-            if (_recording)
-            {
-                if (!_persistent)
-                    _pop_tape();
-            }
+            ITape tape = stop_recording();
 
-            var results = tf.Runner.TFE_TapeGradient(_tape,
+            var results = tf.Runner.TFE_TapeGradient(tape,
                 new[] { target },
                 new[] { source },
                 null);
@@ -115,22 +95,17 @@ namespace Tensorflow.Gradients
 
         public Tensor[] gradient(Tensor target, IEnumerable<IVariableV1> sources)
         {
-            if (_recording)
-            {
-                if (!_persistent)
-                    _pop_tape();
-            }
+            var tape = stop_recording();
 
-            var results = tf.Runner.TFE_TapeGradient(_tape,
+            var results = tf.Runner.TFE_TapeGradient(tape,
                 new[] { target },
                 sources.Select(x => x.Handle).ToArray(),
                 null);
 
-            if (!_persistent)
+            if (!tape.Persistent)
             {
                 // Keep track of watched variables before setting tape to None
-                _watched_variables = _tape.WatchedVariables();
-                _tape = null;
+                // _watched_variables = _tape.WatchedVariables();
             }
 
             return results;
@@ -139,18 +114,20 @@ namespace Tensorflow.Gradients
         /// <summary>
         /// Temporarily stops recording operations on this tape.
         /// </summary>
-        public void stop_recording()
+        public ITape stop_recording()
         {
-            _pop_tape();
+            var tape = _tape;
+            if (!tape.Persistent)
+                tape = PopTape();
+            return tape;
         }
+
+        public Stack<ITape> GetTapeSet()
+            => _tapeSet;
 
         public void Dispose()
         {
-            if (_recording)
-                _pop_tape();
-
-            if (_created_eagerly)
-                tf.Context.end_step();
+            _tapeSet.Clear();
         }
     }
 }

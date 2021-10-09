@@ -98,6 +98,7 @@ namespace Tensorflow
                     var handle = control_input_handle + Marshal.SizeOf<IntPtr>() * i;
                     control_inputs[i] = new Operation(*(IntPtr*)handle);
                 }
+                Marshal.FreeHGlobal(control_input_handle);
             }
 
             return control_inputs;

@@ -543,22 +543,12 @@ namespace Tensorflow
                     {
                         if (_IsBackpropagatable(output))
                         {
-                            var c = _Consumers(output, func_graphs).ToList();
+                            var c = output.consumers().ToList();
                             c.ForEach(x => queue.Enqueue(x));
                         }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Returns the consumers of t, crossing closure boundaries where necessary.
-        /// </summary>
-        /// <param name="t"></param>
-        /// <param name="func_graphs"></param>
-        private static Operation[] _Consumers(Tensor t, List<FuncGraph> func_graphs)
-        {
-            return t.consumers();
         }
 
         private static bool _IsBackpropagatable(Tensor tensor)

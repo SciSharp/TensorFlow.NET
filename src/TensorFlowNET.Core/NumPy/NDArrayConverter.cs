@@ -12,6 +12,7 @@ namespace Tensorflow.NumPy
             {
                 TF_DataType.TF_UINT8 => Scalar<T>(*(byte*)nd.data),
                 TF_DataType.TF_FLOAT => Scalar<T>(*(float*)nd.data),
+                TF_DataType.TF_INT32 => Scalar<T>(*(int*)nd.data),
                 TF_DataType.TF_INT64 => Scalar<T>(*(long*)nd.data),
                 _ => throw new NotImplementedException("")
             };
@@ -30,6 +31,15 @@ namespace Tensorflow.NumPy
             {
                 TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
+                TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
+                _ => throw new NotImplementedException("")
+            };
+
+        static T Scalar<T>(int input)
+            => Type.GetTypeCode(typeof(T)) switch
+            {
+                TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
+                TypeCode.Int64 => (T)Convert.ChangeType(input, TypeCode.Int64),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
                 _ => throw new NotImplementedException("")
             };

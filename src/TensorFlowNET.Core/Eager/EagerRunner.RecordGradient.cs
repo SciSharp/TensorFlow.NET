@@ -2,7 +2,6 @@
 using System.Linq;
 using Tensorflow.Gradients;
 using static Tensorflow.Binding;
-using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Eager
 {
@@ -14,18 +13,7 @@ namespace Tensorflow.Eager
             Tensor[] results,
             Func<BackwardFunction> getBackwardFunction = null)
         {
-            var input_ids = MakeTensorIDList(inputs);
-            var input_dtypes = MakeTensorDtypeList(inputs);
-
-            bool should_record = false;
-            foreach (var tape in tf.GetTapeSet())
-            {
-                if (tape.ShouldRecord(input_ids, input_dtypes))
-                {
-                    should_record = true;
-                    break;
-                }
-            }
+            bool should_record = ShouldRecord(inputs);
 
             if (!should_record)
             {
@@ -43,9 +31,6 @@ namespace Tensorflow.Eager
             tf.Logger.Debug($"RecordGradient: op_name={op_name}");
 
             Tensor[] op_outputs;
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-            bool op_outputs_tuple_created = false;
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
             var unused_output_indices = gradient_exclustions.OpGradientUnusedOutputIndices(op_name);
             if (unused_output_indices != null)
             {
@@ -53,7 +38,6 @@ namespace Tensorflow.Eager
                     op_outputs = new Tensor[0];
                 else
                 {
-                    op_outputs_tuple_created = true;
                     // op_outputs = CopySequenceSettingIndicesToNull(results, *unused_output_indices);
                 }
             }
@@ -61,9 +45,6 @@ namespace Tensorflow.Eager
                 op_outputs = results;
 
             Tensor[] op_inputs;
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-            bool op_inputs_tuple_created = false;
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
             var unused_input_indices = gradient_exclustions.OpGradientUnusedInputIndices(op_name);
             if (unused_input_indices != null)
             {
@@ -71,7 +52,6 @@ namespace Tensorflow.Eager
                     op_inputs = new Tensor[0];
                 else
                 {
-                    op_inputs_tuple_created = true;
                     // op_inputs = CopySequenceSettingIndicesToNull(inputs, *unused_input_indices);
                 }
             }
@@ -123,11 +103,6 @@ namespace Tensorflow.Eager
         bool CouldBackprop()
         {
             return HasGradientTape();
-        }
-
-        long[] MakeTensorIDList(Tensor[] tensors)
-        {
-            return tensors.Select(x => x.Id).ToArray();
         }
 
         TF_DataType[] MakeTensorDtypeList(Tensor[] tensors)

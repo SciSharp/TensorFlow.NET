@@ -36,7 +36,7 @@ namespace Tensorflow
                     consumers[i] = Marshal.PtrToStringAnsi(TF_OperationName(oper));
                 }
             }
-
+            Marshal.FreeHGlobal(handle);
             return consumers;
         }
     }

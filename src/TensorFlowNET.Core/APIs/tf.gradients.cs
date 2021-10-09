@@ -14,22 +14,32 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
 using Tensorflow.Gradients;
 
 namespace Tensorflow
 {
     public partial class tensorflow
     {
+        GradientTape _tapeSet;
+
         /// <summary>
         /// Record operations for automatic differentiation.
         /// </summary>
         /// <param name="persistent"></param>
         /// <param name="watch_accessed_variables"></param>
-        /// <returns></returns>
+        /// <returns>Tape set</returns>
         public GradientTape GradientTape(bool persistent = false,
             bool watch_accessed_variables = true)
-            => new GradientTape(persistent: persistent,
+        {
+            var tape = _tapeSet.PushTape(persistent: persistent,
                 watch_accessed_variables: watch_accessed_variables);
+            tape.StartRecord();
+            return _tapeSet;
+        }
+
+        public Stack<ITape> GetTapeSet()
+            => _tapeSet.GetTapeSet();
 
         public Tensor[] gradients(Tensor[] ys,
             Tensor[] xs,

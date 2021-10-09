@@ -310,7 +310,7 @@ namespace Tensorflow.Eager
                 for (int i = 0; i < num_values; ++i)
                 {
                     dims[i] = Marshal.AllocHGlobal(sizeof(long) * values1[i].ndim);
-                    tf.memcpy(dims[i], values1[i].dims.Select(x => (long)x).ToArray(), values1[i].ndim * sizeof(long));
+                    tf.memcpy(dims[i], values1[i].dims, values1[i].ndim * sizeof(long));
                 }
 
                 c_api.TFE_OpSetAttrShapeList(op, key, dims, num_dims, num_values, status.Handle);

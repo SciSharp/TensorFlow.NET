@@ -8,7 +8,7 @@ namespace Tensorflow.Gradients
     /// <typeparam name="BackwardFunction"></typeparam>
     /// <typeparam name="TapeTensor"></typeparam>
     public class OpTape<BackwardFunction, TapeTensor> :
-        UnorderedMap<long, OpTapeEntry<BackwardFunction, TapeTensor>>
+        UnorderedMap<Tensor, OpTapeEntry<BackwardFunction, TapeTensor>>
     {
 
     }

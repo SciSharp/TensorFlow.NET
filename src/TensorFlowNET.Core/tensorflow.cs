@@ -25,7 +25,7 @@ namespace Tensorflow
 {
     public delegate Tensor[] BackwardFunction(Tensor[] grads, long[] unneeded_gradients);
 
-    public partial class tensorflow : ITensorFlowObject
+    public partial class tensorflow
     {
         public TF_DataType byte8 = TF_DataType.TF_UINT8;
         public TF_DataType int8 = TF_DataType.TF_INT8;
@@ -64,6 +64,7 @@ namespace Tensorflow
 
         private void InitGradientEnvironment()
         {
+            _tapeSet = new GradientTape();
             ops.RegisterFromAssembly();
         }
 
@@ -105,42 +106,6 @@ namespace Tensorflow
         public Session Session(ConfigProto config)
         {
             return new Session(null, config).as_default();
-        }
-
-        List<ITape> tape_set;
-        public List<ITape> GetTapeSet()
-        {
-            if (tape_set == null)
-            {
-                tape_set = new List<ITape>();
-            }
-
-            return tape_set;
-        }
-
-        public void __init__()
-        {
-
-        }
-
-        public void __enter__()
-        {
-
-        }
-
-        public void __exit__()
-        {
-
-        }
-
-        public void __del__()
-        {
-
-        }
-
-        public void Dispose()
-        {
-
         }
     }
 }

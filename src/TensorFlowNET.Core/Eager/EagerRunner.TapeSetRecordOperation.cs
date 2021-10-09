@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.Gradients;
-using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Eager
 {
@@ -12,16 +12,13 @@ namespace Tensorflow.Eager
             Tensor[] output_tensors,
             Func<BackwardFunction> backward_function_getter)
         {
-            var output_info = new List<TapeTensor>();
+            var output_info = output_tensors.Select(x => new TapeTensor(x)).ToArray();
 
-            if (!TapeTensorsFromTensorSequence(output_tensors, output_info))
-                return false;
-
-            if (!TapeSetRecordForwardprop(op_type, input_tensors, output_info.ToArray(),
+            if (!TapeSetRecordForwardprop(op_type, input_tensors, output_info,
                     backward_function_getter))
                 return false;
 
-            TapeSetRecordBackprop(op_type, input_tensors, output_info.ToArray(),
+            TapeSetRecordBackprop(op_type, input_tensors, output_info,
                 backward_function_getter);
 
             return true;
