@@ -109,9 +109,6 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void TensorCreation()
         {
-            //lock (Locks.ProcessWide)
-            //    tf.Session(); //create one to increase next id to 1.
-
             MultiThreadedUnitTestExecuter.Run(8, Core);
 
             //the core method
@@ -131,9 +128,6 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void TensorCreation_Array()
         {
-            //lock (Locks.ProcessWide)
-            //    tf.Session(); //create one to increase next id to 1.
-
             MultiThreadedUnitTestExecuter.Run(8, Core);
 
             //the core method
@@ -145,33 +139,6 @@ namespace TensorFlowNET.UnitTest
                     for (int i = 0; i < 100; i++)
                     {
                         var t = new Tensor(new int[] { 1, 2, 3 });
-                    }
-                }
-            }
-        }
-
-        [TestMethod]
-        public void TensorCreation_Undressed()
-        {
-            //lock (Locks.ProcessWide)
-            //    tf.Session(); //create one to increase next id to 1.
-
-            MultiThreadedUnitTestExecuter.Run(8, Core);
-
-            //the core method
-            unsafe void Core(int tid)
-            {
-                using (var sess = tf.Session())
-                {
-                    for (int i = 0; i < 100; i++)
-                    {
-                        var v = (int*)Marshal.AllocHGlobal(sizeof(int));
-                        c_api.DeallocatorArgs _deallocatorArgs = new c_api.DeallocatorArgs();
-                        var handle = c_api.TF_NewTensor(typeof(int).as_tf_dtype(), dims: new long[0], num_dims: 0,
-                            data: (IntPtr)v, len: (UIntPtr)sizeof(int),
-                            deallocator: (IntPtr data, IntPtr size, ref c_api.DeallocatorArgs args) => Marshal.FreeHGlobal(data),
-                            ref _deallocatorArgs);
-                        c_api.TF_DeleteTensor(handle);
                     }
                 }
             }
