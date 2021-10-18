@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static Tensorflow.Binding;
+using System.Linq;
 
 namespace Tensorflow
 {
@@ -62,5 +63,8 @@ namespace Tensorflow
                 });
             }
         }
+
+        public Tensor this[params string[] slices]
+            => this[slices.Select(x => new Slice(x)).ToArray()];
     }
 }

@@ -42,9 +42,10 @@ namespace Tensorflow.Keras.Engine
                 _ => throw new NotImplementedException("")
             };
 
-            var _loss = loss switch
+            ILossFunc _loss = loss switch
             {
                 "mse" => new MeanSquaredError(),
+                "mae" => new MeanAbsoluteError(),
                 _ => throw new NotImplementedException("")
             };
 

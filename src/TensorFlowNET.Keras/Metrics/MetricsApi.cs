@@ -46,5 +46,12 @@ namespace Tensorflow.Keras.Metrics
             y_true = math_ops.cast(y_true, y_pred.dtype);
             return keras.backend.mean(math_ops.abs(y_pred - y_true), axis: -1);
         }
+
+        public Tensor mean_absolute_percentage_error(Tensor y_true, Tensor y_pred)
+        {
+            y_true = math_ops.cast(y_true, y_pred.dtype);
+            var diff = (y_true - y_pred) / math_ops.maximum(math_ops.abs(y_true), keras.backend.epsilon());
+            return 100f * keras.backend.mean(math_ops.abs(diff), axis: -1);
+        }
     }
 }

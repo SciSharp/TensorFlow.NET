@@ -77,9 +77,9 @@ namespace Tensorflow.Keras.Engine
                     metric_obj = keras.metrics.categorical_accuracy;
             }
             else if(metric == "mean_absolute_error" || metric == "mae")
-            {
                 metric_obj = keras.metrics.mean_absolute_error;
-            }
+            else if (metric == "mean_absolute_percentage_error" || metric == "mape")
+                metric_obj = keras.metrics.mean_absolute_percentage_error;
             else
                 throw new NotImplementedException("");
 
