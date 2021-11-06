@@ -30,10 +30,6 @@ namespace Tensorflow
     public class BaseSession : DisposableObject
     {
         protected Graph _graph;
-        protected bool _opened;
-        protected bool _closed;
-        protected int _current_version;
-        protected byte[] _target;
         public Graph graph => _graph;
 
         public BaseSession(IntPtr handle, Graph g)
@@ -46,18 +42,15 @@ namespace Tensorflow
         {
             _graph = g ?? ops.get_default_graph();
             if (!_graph.building_function)
-                _graph.as_default();
-            _target = Encoding.UTF8.GetBytes(target);
-
-            using (var opts = new SessionOptions(target, config))
             {
-                lock (Locks.ProcessWide)
-                {
-                    status = status ?? new Status();
-                    _handle = c_api.TF_NewSession(_graph, opts.Handle, status.Handle);
-                    status.Check(true);
-                }
+                if (ops.get_default_graph() != _graph)
+                    _graph.as_default();
             }
+            
+            using var opts = new SessionOptions(target, config);
+            status = status ?? tf.Status;
+            _handle = c_api.TF_NewSession(_graph, opts.Handle, status.Handle);
+            status.Check(true);
         }
 
         public virtual void run(Operation op, params FeedItem[] feed_dict)

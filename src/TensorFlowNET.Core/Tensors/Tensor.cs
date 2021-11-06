@@ -17,11 +17,8 @@
 using Tensorflow.NumPy;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Tensorflow.Eager;
-using Tensorflow.Framework;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 
@@ -97,12 +94,9 @@ namespace Tensorflow
         /// </summary>
         public SafeTensorHandleHandle EagerTensorHandle => _eagerTensorHandle;
 
-        protected bool isCreatedInGraphMode;
+        protected bool _isCreatedInGraphMode;
         
-        public bool IsCreatedInGraphMode => isCreatedInGraphMode;
-        public bool IsSparseTensor => this is SparseTensor;
-
-        public Tensor TensorShape => tf.shape(this);
+        public bool IsCreatedInGraphMode => _isCreatedInGraphMode;
 
         /// <summary>
         ///     Returns the shape of a tensor.
@@ -157,7 +151,6 @@ namespace Tensorflow
         /// Keras History: (Layer, (node_index, tensor_index))
         /// </summary>
         public KerasHistory KerasHistory { get; set; }
-        public Tensor KerasMask { get; set; }
 
         /// <summary>
         ///     Updates the shape of this tensor.

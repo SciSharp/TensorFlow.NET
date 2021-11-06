@@ -383,6 +383,9 @@ namespace Tensorflow
         public static void reset_uid()
         {
             uid_number = -1;
+            graph_uid_number = -1;
+            uid_number_for_function = 0;
+            uid_number_for_layer = 0;
         }
 
         public static void colocate_with(bool ignore_existing = false)

@@ -39,5 +39,7 @@ namespace Tensorflow.Eager
         bool MustRecordGradient();
 
         int TapeSetPossibleGradientTypes(params Tensor[] args);
+
+        void ClearEagerOperationMap();
     }
 }

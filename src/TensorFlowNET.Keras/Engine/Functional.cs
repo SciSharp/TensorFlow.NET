@@ -12,11 +12,6 @@ namespace Tensorflow.Keras.Engine
     /// </summary>
     public partial class Functional : Model
     {
-        Shape _build_input_shape;
-        bool _compute_output_and_mask_jointly;
-        bool _expects_training_arg;
-        bool _expects_mask_arg;
-        bool _autocast;
         List<ILayer> _output_layers;
         List<ILayer> _input_layers;
         List<KerasHistory> _input_coordinates;
@@ -49,12 +44,6 @@ namespace Tensorflow.Keras.Engine
             this.inputs = inputs;
             this.outputs = outputs;
             built = true;
-            _build_input_shape = inputs.shape;
-            _compute_output_and_mask_jointly = true;
-            _expects_training_arg = true;
-            _expects_mask_arg = true;
-            // A graph network does not autocast inputs, as its layers will cast them instead.
-            _autocast = false;
 
             if (outputs.Any(x => x.KerasHistory == null))
                 base_layer_utils.create_keras_history(outputs);
@@ -303,23 +292,11 @@ namespace Tensorflow.Keras.Engine
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            return run_internal_graph(inputs, training.Value);
-        }
-
-        Tensors run_internal_graph(Tensors inputs, bool training = false, Tensors mask = null)
-        {
-            if (mask == null)
-            {
-                Tensor[] masks = new Tensor[inputs.Count()];
-                foreach (var (i, input_t) in enumerate(inputs))
-                    input_t.KerasMask = masks[i];
-            }
-
             var tensor_dict = new Dictionary<long, Queue<Tensor>>();
+            // map input values
             foreach (var (x, y) in zip(this.inputs, inputs))
             {
-                var y1 = conform_to_reference_input(y, x);
-                tensor_dict[x.Id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x.Id]).Select(x => y1));
+                tensor_dict[x.Id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x.Id]).Select(x => y));
             }
 
             var depth_keys = NodesByDepth.Keys.OrderBy(x => x).Reverse().ToArray();
@@ -336,11 +313,11 @@ namespace Tensorflow.Keras.Engine
                     var layer_inputs = node.MapArguments(tensor_dict);
 
                     tf.Logger.Debug($"Depth {depth}: {node.Layer}: {node.Layer.Name}");
-                    var outputs = node.Layer.Apply(layer_inputs, is_training: training);
+                    var outputs = node.Layer.Apply(layer_inputs, is_training: training ?? false);
                     foreach (var output in outputs.Where(x => x != null))
                         tf.Logger.Information($"Depth {depth}: {node.Layer}: {node.Layer.Name} {output.shape}");
                     // Update tensor_dict for next input
-                    foreach (var (x_id, y) in zip(node.FlatOutputIds, outputs))
+                    foreach (var (x_id, y) in zip(node.Outputs.Select(x => x.Id), outputs))
                         tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y));
                 }
             }
@@ -351,11 +328,6 @@ namespace Tensorflow.Keras.Engine
                 output_tensors.Add(tensor_dict[x.Id].Dequeue());
 
             return output_tensors;
-        }
-
-        Tensor conform_to_reference_input(Tensor tensor, Tensor ref_input)
-        {
-            return tensor;
         }
     }
 }

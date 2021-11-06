@@ -33,20 +33,13 @@ namespace Tensorflow.Keras.Engine
     {
         NodeArgs args;
 
-        public int[] node_indices;
-        public int[] tensor_indices;
         public Tensors input_tensors => is_input ? Outputs : args.InputTensors;
         public Tensors Outputs => args.Outputs;
-        public Shape[] input_shapes;
-        public Shape[] output_shapes;
         public List<Tensor> KerasInputs { get; set; } = new List<Tensor>();
         ILayer _layer;
         public ILayer Layer => _layer;
         public bool is_input => args.InputTensors == null;
-        public long[] FlatInputIds { get; set; }
-        public long[] FlatOutputIds { get; set; }
-        bool _single_positional_tensor_passed => KerasInputs.Count() == 1;
-        Dictionary<int, long> _keras_inputs_ids_and_indices = new Dictionary<int, long>();
+
         public INode[] ParentNodes
         {
             get
@@ -74,9 +67,6 @@ namespace Tensorflow.Keras.Engine
             if (args.InputTensors != null)
                 KerasInputs.AddRange(args.InputTensors);
             
-            foreach (var (i, ele) in enumerate(KerasInputs))
-                _keras_inputs_ids_and_indices[i] = ele.Id;
-
             // Wire up Node to Layers.
             layer.InboundNodes.Add(this);
             
@@ -93,10 +83,6 @@ namespace Tensorflow.Keras.Engine
             var node_index = layer.InboundNodes.Count - 1;
             foreach (var (i, tensor) in enumerate(Outputs))
                 tensor.KerasHistory = new KerasHistory(layer, node_index, i);
-
-            // Cached for performance.
-            FlatInputIds = KerasInputs.Select(x => x.Id).ToArray();
-            FlatOutputIds = Outputs.Select(x => x.Id).ToArray();
         }
 
         /// <summary>
@@ -106,16 +92,16 @@ namespace Tensorflow.Keras.Engine
         /// <returns></returns>
         public Tensors MapArguments(Dictionary<long, Queue<Tensor>> tensor_dict)
         {
-            if (_single_positional_tensor_passed)
+            if (KerasInputs.Count() == 1)
             {
-                var kt_id = _keras_inputs_ids_and_indices[0];
+                var kt_id = KerasInputs[0].Id;
                 return tensor_dict[kt_id].Dequeue();
             }
             else
             {
                 var flat_arguments = KerasInputs.Select(x => x).ToArray();
-                foreach (var (kt_index, kt_id) in enumerate(_keras_inputs_ids_and_indices))
-                    flat_arguments[kt_index] = tensor_dict[kt_id].Dequeue();
+                foreach (var (kt_index, kt) in enumerate(KerasInputs))
+                    flat_arguments[kt_index] = tensor_dict[kt.Id].Dequeue();
 
                 return flat_arguments;
             }

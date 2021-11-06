@@ -44,14 +44,14 @@ namespace Tensorflow.Framework
                 return true;
             }
 
-            if (other.IsSparseTensor)
+            if (other is SparseTensor)
             {
                 return self.dtype.is_compatible_with(other.dtype);
             }
 
             return self.dtype.is_compatible_with(other.dtype) &&
                    _shape_is_compatible_0dim(self.shape, other.shape) &&
-                   !self.IsSparseTensor;
+                   !(self is SparseTensor);
         }
 
         public static Dimension dimension_at_index(Shape shape, int index)

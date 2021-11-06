@@ -13,10 +13,8 @@ namespace Tensorflow
         private const string TEST_IMAGES = "t10k-images-idx3-ubyte.gz";
         private const string TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
 
-        public static async Task<Datasets<MnistDataSet>> LoadAsync(string trainDir, bool oneHot = false, int? trainSize = null, int? validationSize = null, int? testSize = null, bool showProgressInConsole = false)
+        public async Task<Datasets<MnistDataSet>> LoadAsync(string trainDir, bool oneHot = false, int? trainSize = null, int? validationSize = null, int? testSize = null, bool showProgressInConsole = false)
         {
-            var loader = new MnistModelLoader();
-
             var setting = new ModelLoadSetting
             {
                 TrainDir = trainDir,
@@ -33,7 +31,7 @@ namespace Tensorflow
             if (testSize.HasValue)
                 setting.TestSize = testSize.Value;
 
-            return await loader.LoadAsync(setting);
+            return await LoadAsync(setting);
         }
 
         public async Task<Datasets<MnistDataSet>> LoadAsync(ModelLoadSetting setting)

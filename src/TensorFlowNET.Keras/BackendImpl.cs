@@ -126,9 +126,10 @@ namespace Tensorflow.Keras
             PER_GRAPH_LAYER_NAME_UIDS.Clear();
             _CURRENT_SCRATCH_GRAPH = null;
             _GRAPH = null;
-            
+
             ops.set_default_session(tf.Session(ops.get_default_graph()));
             tf.enable_eager_execution();
+            tf.Runner.ClearEagerOperationMap();
 
             GC.Collect();
             GC.WaitForPendingFinalizers();

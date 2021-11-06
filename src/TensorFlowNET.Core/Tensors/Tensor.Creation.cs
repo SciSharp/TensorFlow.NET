@@ -32,7 +32,7 @@ namespace Tensorflow
 
         public Tensor()
         {
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Tensorflow
             if (clone && handle != null)
                 _handle = TF_NewTensor(shape, dtype, data: TensorDataPointer.ToPointer());
                 
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         /// <summary>
@@ -59,13 +59,13 @@ namespace Tensorflow
         public unsafe Tensor(IntPtr data_ptr, Shape shape, TF_DataType dtype)
         {
             _handle = TF_NewTensor(shape, dtype, data: data_ptr.ToPointer());
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         public unsafe Tensor(NDArray nd)
         {
             _handle = TF_NewTensor(nd.shape, nd.dtype, nd.data.ToPointer());
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         #region scala
@@ -107,13 +107,13 @@ namespace Tensorflow
             _value_index = value_index;
             _override_dtype = dtype;
             _id = ops.uid();
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         protected unsafe void InitTensor(Shape shape, TF_DataType dtype)
         {
             _handle = TF_NewTensor(shape, dtype, null);
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         protected unsafe void InitTensor(Shape shape, byte[] bytes, TF_DataType dtype)
@@ -122,12 +122,12 @@ namespace Tensorflow
                 _handle = StringTensor(new byte[][] { bytes }, Shape.Scalar);
             else
                 _handle = TF_NewTensor(bytes, shape, dtype);
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
         }
 
         protected unsafe void InitTensor(Array array, Shape? shape = null)
         {
-            isCreatedInGraphMode = !tf.executing_eagerly();
+            _isCreatedInGraphMode = !tf.executing_eagerly();
 
             shape = shape ?? array.GetShape();
             var dtype = array.GetDataType();

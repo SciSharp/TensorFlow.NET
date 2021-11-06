@@ -15,7 +15,9 @@ namespace Tensorflow.Eager
     /// </summary>
     public partial class EagerRunner
     {
-        UnorderedMap<Context, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<Context, SafeOpHandle>();
+        UnorderedMap<string, SafeOpHandle> thread_local_eager_operation_map = new UnorderedMap<string, SafeOpHandle>();
+        public void ClearEagerOperationMap()
+            => thread_local_eager_operation_map.Clear();
 
         public Tensor[] TFE_FastPathExecute(FastPathOpExecInfo op_exec_info)
         {
@@ -31,7 +33,7 @@ namespace Tensorflow.Eager
             op_exec_info.run_callbacks = op_exec_info.run_gradient_callback || op_exec_info.run_post_exec_callbacks;
 
             var status = tf.Status;
-            using var op = GetOp(op_exec_info.ctx, op_exec_info.op_name, status);
+            var op = GetOp(op_exec_info.ctx, op_exec_info.op_name, status);
 
             var op_def = tf.get_default_graph().GetOpDef(op_exec_info.op_name);
 
@@ -56,8 +58,8 @@ namespace Tensorflow.Eager
                 }
             }
 
-            c_api.TFE_OpSetDevice(op, op_exec_info.device_name, status.Handle);
-            status.Check(true);
+            // c_api.TFE_OpSetDevice(op, op_exec_info.device_name, status.Handle);
+            // status.Check(true);
 
             // Add inferred attrs and inputs.
             for (int i = 0; i < op_def.InputArg.Count; i++)
@@ -145,7 +147,6 @@ namespace Tensorflow.Eager
 
             var flat_result = retVals.Select(x => new EagerTensor(x)).ToArray();
 
-
             if (op_exec_info.run_callbacks)
             {
                 RunCallbacks(op_exec_info,
@@ -158,19 +159,19 @@ namespace Tensorflow.Eager
 
         SafeOpHandle GetOp(Context ctx, string op_or_function_name, Status status)
         {
-            /*if (thread_local_eager_operation_map.find(ctx, out var op))
+            if (thread_local_eager_operation_map.find(op_or_function_name, out var op))
                 c_api.TFE_OpReset(op, op_or_function_name, ctx.DeviceName, status.Handle);
             else
             {
                 op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
-                thread_local_eager_operation_map[ctx] = op;
+                thread_local_eager_operation_map[op_or_function_name] = op;
             }
 
             status.Check(true);
-            return op;*/
-            var op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
-            status.Check(true);
             return op;
+            /*var op = c_api.TFE_NewOp(ctx.Handle, op_or_function_name, status.Handle);
+            status.Check(true);
+            return op;*/
         }
 
         bool HasAccumulator()
@@ -268,16 +269,7 @@ namespace Tensorflow.Eager
 
             if (attr_value == null)
             {
-                if (is_list != 0)
-#pragma warning disable CS0642 // Possible mistaken empty statement
-                    ;
-#pragma warning restore CS0642 // Possible mistaken empty statement
-                //SetOpAttrListDefault
-                else
-#pragma warning disable CS0642 // Possible mistaken empty statement
-                    ;
-#pragma warning restore CS0642 // Possible mistaken empty statement
-                //SetOpAttrScalarDefault
+
             }
             else
             {

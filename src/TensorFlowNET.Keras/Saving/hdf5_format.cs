@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using HDF.PInvoke;
 using Tensorflow.NumPy;
-using Tensorflow.Keras.Engine;
 using HDF5CSharp;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 using System.Linq;
-using Tensorflow.Util;
 namespace Tensorflow.Keras.Saving
 {
     public class hdf5_format
@@ -82,7 +80,7 @@ namespace Tensorflow.Keras.Saving
 
         }
 
-        public static List<(IVariableV1, NDArray)> load_weights_from_hdf5_group(long f, List<ILayer> layers)
+        public static void load_weights_from_hdf5_group(long f, List<ILayer> layers)
         {
             string original_keras_version = "2.5.0";
             string original_backend = null;
@@ -158,7 +156,6 @@ namespace Tensorflow.Keras.Saving
             }
 
             keras.backend.batch_set_value(weight_value_tuples);
-            return weight_value_tuples;
         }
 
         public static void toarrayf4(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
