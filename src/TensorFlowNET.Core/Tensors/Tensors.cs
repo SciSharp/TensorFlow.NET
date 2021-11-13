@@ -27,17 +27,8 @@ namespace Tensorflow
 
         public Tensor this[int index]
         {
-            get
-            {
-                if (Length == 1)
-                    return items[0][index];
-                return items[index];
-            }
-
-            set
-            {
-                items[index] = value;
-            }
+            get => items[index];
+            set => items[index] = value;
         }
 
         public Tensor this[params string[] slices]

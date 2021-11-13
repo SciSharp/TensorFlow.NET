@@ -52,7 +52,7 @@ namespace Tensorflow
 
                                 var results = m.Name switch
                                 {
-                                    "_AddGrad" => math_grad._AddGrad(oper, out_grads),
+                                    /*"_AddGrad" => math_grad._AddGrad(oper, out_grads),
                                     "_AddV2Grad" => math_grad._AddV2Grad(oper, out_grads),
                                     "_BiasAddGrad" => nn_grad._BiasAddGrad(oper, out_grads),
                                     "_CastGrad" => math_grad._CastGrad(oper, out_grads),
@@ -79,7 +79,7 @@ namespace Tensorflow
                                     "_SigmoidGrad" => math_grad._SigmoidGrad(oper, out_grads),
                                     "_SumGrad" => math_grad._SumGrad(oper, out_grads),
                                     "_SubGrad" => math_grad._SubGrad(oper, out_grads),
-                                    "_StridedSliceGrad" => array_grad._StridedSliceGrad(oper, out_grads),
+                                    "_StridedSliceGrad" => array_grad._StridedSliceGrad(oper, out_grads),*/
                                     _ => g.InvokeMember(m.Name,
                                            BindingFlags.InvokeMethod,
                                            null,

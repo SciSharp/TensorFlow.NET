@@ -159,7 +159,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var inputs = tf.constant(np.arange(10).reshape((5, 2)) * 10, dtype: tf.float32);
             var layer = keras.layers.LayerNormalization(axis: 1);
-            var output = layer.Apply(inputs);
+            Tensor output = layer.Apply(inputs);
             Assert.AreEqual((5, 2), output.shape);
             Assert.IsTrue(output[0].numpy().Equals(new[] { -0.99998f, 0.99998f }));
         }
