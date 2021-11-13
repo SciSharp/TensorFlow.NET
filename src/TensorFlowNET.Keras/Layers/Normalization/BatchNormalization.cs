@@ -214,10 +214,10 @@ namespace Tensorflow.Keras.Layers
             {
                 return tf.nn.fused_batch_norm(
                   inputs,
-                  gamma,
-                  beta,
-                  mean: moving_mean,
-                  variance: moving_variance,
+                  gamma.AsTensor(),
+                  beta.AsTensor(),
+                  mean: moving_mean.AsTensor(),
+                  variance: moving_variance.AsTensor(),
                   epsilon: epsilon, 
                   is_training: true,
                   data_format: _data_format,
@@ -228,10 +228,10 @@ namespace Tensorflow.Keras.Layers
             {
                 return tf.nn.fused_batch_norm(
                   inputs,
-                  gamma,
-                  beta,
-                  mean: moving_mean,
-                  variance: moving_variance,
+                  gamma.AsTensor(),
+                  beta.AsTensor(),
+                  mean: moving_mean.AsTensor(),
+                  variance: moving_variance.AsTensor(),
                   epsilon: epsilon,
                   is_training: false,
                   data_format: _data_format);

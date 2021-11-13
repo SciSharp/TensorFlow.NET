@@ -124,10 +124,10 @@ namespace Tensorflow
                 => gen_nn_ops.relu(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
-                IVariableV1 scale,
-                IVariableV1 offset,
-                IVariableV1 mean = null,
-                IVariableV1 variance = null,
+                Tensor scale,
+                Tensor offset,
+                Tensor mean = null,
+                Tensor variance = null,
                 float epsilon = 0.001f,
                 string data_format = "NHWC",
                 bool is_training = true,

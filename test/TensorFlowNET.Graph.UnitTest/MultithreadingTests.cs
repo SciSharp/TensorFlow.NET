@@ -152,7 +152,6 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                Assert.IsNull(tf.peak_default_graph());
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });

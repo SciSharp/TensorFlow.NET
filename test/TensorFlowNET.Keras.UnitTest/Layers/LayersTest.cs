@@ -5,6 +5,7 @@ using Tensorflow;
 using Tensorflow.Keras;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
+using System.Linq;
 
 namespace TensorFlowNET.Keras.UnitTest
 {
@@ -86,7 +87,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var emb = keras.layers.Embedding(256, 12, input_length: 4);
             var input_array = np.arange(12).reshape((3, 4)).astype(np.float32);
             var output = emb.Apply(input_array);
-            Assert.AreEqual(new Shape(3, 4, 12), output.shape);
+            Assert.AreEqual((3, 4, 12), output.shape);
         }
 
         /// <summary>
@@ -159,7 +160,8 @@ namespace TensorFlowNET.Keras.UnitTest
             var inputs = tf.constant(np.arange(10).reshape((5, 2)) * 10, dtype: tf.float32);
             var layer = keras.layers.LayerNormalization(axis: 1);
             var output = layer.Apply(inputs);
-            // Assert.AreEqual((10, 16, 16, 3), output.shape);
+            Assert.AreEqual((5, 2), output.shape);
+            Assert.IsTrue(output[0].numpy().Equals(new[] { -0.99998f, 0.99998f }));
         }
     }
 }

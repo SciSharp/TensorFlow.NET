@@ -191,10 +191,10 @@ namespace Tensorflow.Operations
         }
 
         public static Tensors fused_batch_norm_v3(Tensor x,
-            IVariableV1 scale,
-            IVariableV1 offset,
-            IVariableV1 mean,
-            IVariableV1 variance,
+            Tensor scale,
+            Tensor offset,
+            Tensor mean,
+            Tensor variance,
             float epsilon = 0.0001f,
             float exponential_avg_factor = 1.0f,
             string data_format = "NHWC",

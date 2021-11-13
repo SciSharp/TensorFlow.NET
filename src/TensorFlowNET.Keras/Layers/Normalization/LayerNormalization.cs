@@ -101,13 +101,20 @@ namespace Tensorflow.Keras.Layers
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            Tensors outputs = null;
+            Tensor outputs = null;
             var inputs_dtype = inputs.dtype.as_base_dtype();
             var input_shape = inputs.shape;
             var ndims = len(input_shape);
             var broadcast_shape = range(ndims).Select(x => 1).ToArray();
             foreach (var dim in axis)
                 broadcast_shape[dim] = input_shape.as_int_list()[dim];
+
+            Func<IVariableV1, Tensor> _broadcast = v =>
+            {
+                if (v.shape.ndim != ndims && !axis.SequenceEqual(new int[] { ndims - 1 }))
+                    return tf.reshape(v.AsTensor(), broadcast_shape);
+                return v.AsTensor();
+            };
 
             if (_fused)
             {
@@ -127,17 +134,27 @@ namespace Tensorflow.Keras.Layers
                 var scale = tf.ones(new Shape((int)pre_dim), dtype: DType);
                 var offset = tf.zeros(new Shape((int)pre_dim), dtype: DType);
 
-                /*outputs = tf.nn.fused_batch_norm(
+                outputs = tf.nn.fused_batch_norm(
                   inputs,
                   scale: scale,
                   offset: offset,
                   epsilon: epsilon,
-                  data_format: "NCHW");*/
+                  data_format: "NCHW")[0];
+
+                outputs = tf.reshape(outputs, tensor_shape);
+
+                (scale, offset) = (_broadcast(gamma), _broadcast(beta));
+
+                outputs = outputs * tf.cast(scale, outputs.dtype);
+                outputs = outputs + tf.cast(offset, outputs.dtype);
             }
             else
             {
 
             }
+
+            // If some components of the shape got lost due to adjustments, fix that.
+            outputs.shape = input_shape;
 
             return outputs;
         }

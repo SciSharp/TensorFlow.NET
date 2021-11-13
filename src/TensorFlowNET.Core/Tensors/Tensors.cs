@@ -29,6 +29,8 @@ namespace Tensorflow
         {
             get
             {
+                if (Length == 1)
+                    return items[0][index];
                 return items[index];
             }
 

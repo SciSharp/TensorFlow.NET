@@ -150,20 +150,18 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor[] fused_batch_norm(Tensor x,
-            IVariableV1 scale,
-            IVariableV1 offset,
-            IVariableV1 mean,
-            IVariableV1 variance,
+            Tensor scale,
+            Tensor offset,
+            Tensor mean = null,
+            Tensor variance = null,
             float epsilon = 0.001f,
             string data_format = "NHWC",
             bool is_training = true,
             string name = null,
             float exponential_avg_factor = 1.0f)
         {
-            /*if (mean == null)
-                mean = constant_op.constant(new float[0]);
-            if (variance == null)
-                variance = constant_op.constant(new float[0]);*/
+            mean = mean ?? constant_op.constant(new float[0]);
+            variance = variance ?? constant_op.constant(new float[0]);
             var min_epsilon = 1.001e-5f;
             epsilon = epsilon > min_epsilon ? epsilon : min_epsilon;
 
