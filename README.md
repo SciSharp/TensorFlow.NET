@@ -63,7 +63,7 @@ Import TF.NET and Keras API in your project.
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 using Tensorflow;
-using NumSharp;
+using Tensorflow.NumPy;
 ```
 
 Linear Regression in `Eager` mode:
@@ -162,10 +162,9 @@ Linear Regression in `Eager` mode:
 #r "nuget: TensorFlow.Net"
 #r "nuget: TensorFlow.Keras"
 #r "nuget: SciSharp.TensorFlow.Redist"
-#r "nuget: NumSharp"
 
-open NumSharp
 open Tensorflow
+open Tensorflow.NumPy
 open type Tensorflow.Binding
 open type Tensorflow.KerasApi
 

@@ -20,15 +20,8 @@ namespace Tensorflow
 {
     public interface ITensorFlowObject : IDisposable
     {
-        /// <summary>
-        /// Called when the instance is created.
-        /// </summary>
-        void __init__();
-
         void __enter__();
 
         void __exit__();
-
-        void __del__();
     }
 }

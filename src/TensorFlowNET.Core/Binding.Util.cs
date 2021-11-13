@@ -203,13 +203,6 @@ namespace Tensorflow
                 yield return values[i];
         }
 
-        public static T New<T>() where T : ITensorFlowObject, new()
-        {
-            var instance = new T();
-            instance.__init__();
-            return instance;
-        }
-
         [DebuggerStepThrough]
         public static void tf_with(ITensorFlowObject py, Action<ITensorFlowObject> action)
         {

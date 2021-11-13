@@ -316,7 +316,7 @@ namespace Tensorflow.Keras.Engine
                     var outputs = node.Layer.Apply(layer_inputs, is_training: training ?? false);
                     foreach (var output in outputs.Where(x => x != null))
                         tf.Logger.Information($"Depth {depth}: {node.Layer}: {node.Layer.Name} {output.shape}");
-                    // Update tensor_dict for next input
+                    // Update tensor_dict for next or later input
                     foreach (var (x_id, y) in zip(node.Outputs.Select(x => x.Id), outputs))
                         tensor_dict[x_id] = new Queue<Tensor>(Enumerable.Range(0, tensor_usage_count[x_id]).Select(x => y));
                 }

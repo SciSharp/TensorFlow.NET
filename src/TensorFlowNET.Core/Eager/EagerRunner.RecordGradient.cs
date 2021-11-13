@@ -81,7 +81,7 @@ namespace Tensorflow.Eager
                 if (ops.gradientFunctions[op_name] == null)
                     return new Tensor[op_inputs.Length];
 
-                var gradients = ops.gradientFunctions[op_name](new EagerOperation
+                var op = new EagerOperation
                 {
                     Name = op_name,
                     NumInputs = op_inputs.Length,
@@ -90,9 +90,9 @@ namespace Tensorflow.Eager
                     Outputs = op_outputs,
                     SkipInputIndices = unneeded_gradients,
                     Attrs = attrs
-                }, output_grads);
+                };
 
-                return gradients;
+                return ops.gradientFunctions[op_name](op, output_grads);
             };
 
         bool CouldForwardprop()

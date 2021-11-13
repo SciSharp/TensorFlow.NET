@@ -635,6 +635,21 @@ namespace Tensorflow.Keras.Layers
             return layer.Apply(inputs);
         }
 
+        public Layer LayerNormalization(Axis? axis,
+               float epsilon = 1e-3f,
+               bool center = true,
+               bool scale = true,
+               IInitializer beta_initializer = null,
+               IInitializer gamma_initializer = null)
+            => new LayerNormalization(new LayerNormalizationArgs
+            {
+                Axis = axis ?? -1,
+                Epsilon = epsilon,
+                Center = center,
+                Scale = scale,
+                BetaInitializer = beta_initializer ?? tf.zeros_initializer
+            });
+
         /// <summary>
         /// Leaky version of a Rectified Linear Unit.
         /// </summary>

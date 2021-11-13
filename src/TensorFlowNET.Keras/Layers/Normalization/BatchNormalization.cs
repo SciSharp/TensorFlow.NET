@@ -218,7 +218,8 @@ namespace Tensorflow.Keras.Layers
                   beta,
                   mean: moving_mean,
                   variance: moving_variance,
-                  epsilon: epsilon, is_training: true,
+                  epsilon: epsilon, 
+                  is_training: true,
                   data_format: _data_format,
                   exponential_avg_factor: exponential_avg_factor);
             };
