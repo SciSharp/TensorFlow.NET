@@ -1,7 +1,6 @@
 ﻿using System;
 using Tensorflow.Gradients;
 using static Tensorflow.Binding;
-using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Eager
 {
@@ -10,7 +9,7 @@ namespace Tensorflow.Eager
         void TapeSetRecordBackprop(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            Func<BackwardFunction> backward_function_getter)
+            BackwardFunction backward_function)
         {
             if (!CouldBackprop())
             {
@@ -19,8 +18,7 @@ namespace Tensorflow.Eager
 
             foreach (var tape in tf.GetTapeSet())
             {
-                tape.RecordOperation(op_type, input_tensors, output_tensors,
-                    backward_function_getter);
+                tape.RecordOperation(op_type, input_tensors, output_tensors, backward_function);
             }
         }
     }

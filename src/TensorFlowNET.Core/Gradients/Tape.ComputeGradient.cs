@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Util;
-using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Gradients
 {
     public partial class Tape
     {
-        int kMinAggregateCount = 4;
-        int kMinAggregateBytes = 128 * 1024 * 1024;
+        // int kMinAggregateCount = 4;
+        // int kMinAggregateBytes = 128 * 1024 * 1024;
 
         public Tensor[] ComputeGradient(Tensor[] target_tensor_ids,
             Tensor[] source_tensor_ids,
             UnorderedMap<Tensor, TapeTensor> sources_that_are_targets,
             Tensor[] output_gradients)
         {
-            var result = new List<Tensor>(source_tensor_ids.Length);
             var sources_set = new UnorderedSet<Tensor>(source_tensor_ids);
-            var gradients_size = new UnorderedMap<Tensor, long>();
-
+            // var gradients_size = new UnorderedMap<Tensor, long>();
+            var functionsAcceptingNoneForIndicesMap = FunctionsAcceptingNoneForIndicesMap();
             var state = PrepareBackprop(
                 target_tensor_ids, tensor_tape_, op_tape_, sources_set, _persistent);
             var op_stack = InitialStack(state.op_tape, state.op_missing_tensor);
@@ -54,7 +52,7 @@ namespace Tensorflow.Gradients
                     var id = trace.output_tensor_info[i].GetTensor();
                     if (!gradients.find(id, out var grad_it))
                     {
-                        if (FunctionsAcceptingNoneForIndicesMap().find(trace.op_type, out var func_name_it) &&
+                        if (functionsAcceptingNoneForIndicesMap.find(trace.op_type, out var func_name_it) &&
                             func_name_it.find(i))
                         {
                             out_gradients.Add(null);
@@ -76,8 +74,8 @@ namespace Tensorflow.Gradients
                             gradients.Remove(id);
                         else
                         {
-                            grad_it.Clear();
-                            grad_it.Add(new_gradients);
+                            // grad_it.Clear();
+                            // grad_it.Add(new_gradients);
                             // vspace.MarkAsResult(new_gradients);
                         }
                         out_gradients.Add(new_gradients);
@@ -87,18 +85,17 @@ namespace Tensorflow.Gradients
                 Tensor[] in_gradients;
                 if (any_gradient_nonzero)
                 {
-                    foreach (var i in zero_indices)
-                        out_gradients[i] = trace.output_tensor_info[i].ZerosLike();
+                    // foreach (var i in zero_indices)
+                    //     out_gradients[i] = trace.output_tensor_info[i].ZerosLike();
 
-                    in_gradients = CallBackwardFunction(trace.backward_function,
-                        unneeded_gradients,
-                        out_gradients);
+                    in_gradients = trace.backward_function(out_gradients.ToArray(), unneeded_gradients.ToArray());
 
                     if (in_gradients.Count() != trace.input_tensor_id.Count())
                         throw new RuntimeError($"Recorded operation '{trace.op_type}' returned too few gradients. Expected {trace.input_tensor_id.Length} but received {in_gradients.Count()}");
                     if (!_persistent)
                     {
                         // trace.backward_function_deleter(trace.backward_function);
+                        trace.backward_function = null;
                     }
                 }
                 else
@@ -113,7 +110,7 @@ namespace Tensorflow.Gradients
                     {
                         var unaggregated_grads = gradients[id];
                         unaggregated_grads.Add(in_gradients[i]);
-                        if (unaggregated_grads.Count > kMinAggregateCount)
+                        /*if (unaggregated_grads.Count > kMinAggregateCount)
                         {
                             if (!gradients_size.find(id, out var size))
                             {
@@ -125,7 +122,7 @@ namespace Tensorflow.Gradients
                             {
                                 throw new NotImplementedException("");
                             }
-                        }
+                        }*/
                     }
 
                     if (!state.tensor_usage_counts.find(id))
@@ -162,36 +159,21 @@ namespace Tensorflow.Gradients
             if (state.op_tape.Count > 0)
                 throw new RuntimeError("Invalid tape state.");
 
-            var used_gradient_ids = new List<Tensor>(source_tensor_ids.Length);
+            var result = new Tensor[source_tensor_ids.Length];
+            var j = 0;
             foreach (var id in source_tensor_ids)
             {
-                if (!gradients.find(id, out var grad_it))
-                    result.Add(null);
-                else
+                if (gradients.find(id, out var grad_it))
                 {
                     if (grad_it.Count > 1)
-                    {
-                        var grad = gen_math_ops.add_n(grad_it.ToArray());
-                        grad_it.Clear();
-                        grad_it.Add(grad);
-                    }
-                    result.Add(grad_it[0]);
-                    used_gradient_ids.Add(id);
+                        result[j] = gen_math_ops.add_n(grad_it.ToArray());
+                    else
+                        result[j] = grad_it[0];
                 }
+                j++;
             }
 
-            /*foreach(var grad_pair in gradients)
-            {
-                if(!used_gradient_ids.Contains(grad_pair.Key))
-                {
-                    foreach(var g in grad_pair.Value)
-                    {
-                        vspace.DeleteGradient(g);
-                    }
-                }
-            }*/
-
-            return result.ToArray();
+            return result;
         }
 
         UnorderedMap<string, UnorderedSet<int>> FunctionsAcceptingNoneForIndicesMap()
@@ -207,7 +189,7 @@ namespace Tensorflow.Gradients
             UnorderedMap<Tensor, TapeTensor> sources_that_are_targets,
             Tensor[] output_gradients,
             TensorTape tensor_tape,
-            OpTape<BackwardFunction, TapeTensor> op_tape)
+            OpTape op_tape)
         {
             var result = new UnorderedMapEnumerable<Tensor, List<Tensor>>();
             for (int i = 0; i < target_tensor_ids.Length; ++i)
@@ -253,7 +235,7 @@ namespace Tensorflow.Gradients
             return result;
         }
 
-        Queue<Tensor> InitialStack(OpTape<BackwardFunction, TapeTensor> op_tape,
+        Queue<Tensor> InitialStack(OpTape op_tape,
             UnorderedMap<Tensor, long> op_missing_tensor)
         {
             var result = new Queue<Tensor>();

@@ -8,7 +8,7 @@ namespace Tensorflow.Gradients
     {
         public BackpropInitialState PrepareBackprop(Tensor[] target,
             TensorTape tensor_tape,
-            OpTape<BackwardFunction, TapeTensor> op_tape,
+            OpTape op_tape,
             UnorderedSet<Tensor> sources_set,
             bool persistent_tape)
         {

@@ -10,16 +10,16 @@ namespace Tensorflow.Eager
         public bool TapeSetRecordOperation(string op_type,
             Tensor[] input_tensors,
             Tensor[] output_tensors,
-            Func<BackwardFunction> backward_function_getter)
+            BackwardFunction backward_function)
         {
             var output_info = output_tensors.Select(x => new TapeTensor(x)).ToArray();
 
             if (!TapeSetRecordForwardprop(op_type, input_tensors, output_info,
-                    backward_function_getter))
+                    backward_function))
                 return false;
 
             TapeSetRecordBackprop(op_type, input_tensors, output_info,
-                backward_function_getter);
+                backward_function);
 
             return true;
         }

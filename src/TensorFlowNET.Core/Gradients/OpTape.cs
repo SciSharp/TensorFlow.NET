@@ -5,10 +5,7 @@ namespace Tensorflow.Gradients
     /// <summary>
     /// Map from operation-id to tape entry.
     /// </summary>
-    /// <typeparam name="BackwardFunction"></typeparam>
-    /// <typeparam name="TapeTensor"></typeparam>
-    public class OpTape<BackwardFunction, TapeTensor> :
-        UnorderedMap<Tensor, OpTapeEntry<BackwardFunction, TapeTensor>>
+    public class OpTape : UnorderedMap<Tensor, OpTapeEntry>
     {
 
     }

@@ -16,7 +16,7 @@ namespace Tensorflow.Gradients
         public void RecordOperation(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            Func<BackwardFunction> backward_function_getter)
+            BackwardFunction backward_function)
         {
             if (!ShouldRecord(input_tensors))
                 return;
@@ -32,12 +32,12 @@ namespace Tensorflow.Gradients
                 tensor_usage_[o.GetTensor()] = 1;
             }
 
-            op_tape_[op_id] = new OpTapeEntry<BackwardFunction, TapeTensor>
+            op_tape_[op_id] = new OpTapeEntry
             {
                 op_type = op_type,
                 output_tensor_info = output_tensors,
                 input_tensor_id = input_tensors,
-                backward_function = backward_function_getter()
+                backward_function = backward_function
             };
         }
     }

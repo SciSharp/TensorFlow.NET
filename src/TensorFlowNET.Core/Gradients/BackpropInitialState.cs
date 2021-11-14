@@ -5,7 +5,7 @@ namespace Tensorflow.Gradients
 {
     public class BackpropInitialState
     {
-        public OpTape<BackwardFunction, TapeTensor> op_tape { get; set; }
+        public OpTape op_tape { get; set; }
         /// <summary>
         /// Map from tensor to how many references still exist for this tensor in
         /// the tape.
@@ -19,7 +19,7 @@ namespace Tensorflow.Gradients
 
         public BackpropInitialState()
         {
-            op_tape = new OpTape<BackwardFunction, TapeTensor>();
+            op_tape = new OpTape();
             tensor_usage_counts = new UnorderedMap<Tensor, long>();
             op_missing_tensor = new UnorderedMap<Tensor, long>();
         }

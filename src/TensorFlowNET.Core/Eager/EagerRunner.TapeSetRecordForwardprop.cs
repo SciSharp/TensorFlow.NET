@@ -9,7 +9,7 @@ namespace Tensorflow.Eager
         bool TapeSetRecordForwardprop(string op_type,
             Tensor[] input_tensors,
             TapeTensor[] output_tensors,
-            Func<BackwardFunction> backward_function_getter)
+            BackwardFunction backward_function_getter)
         {
             if (!CouldForwardprop())
             {

@@ -11,7 +11,7 @@ namespace Tensorflow.Eager
             Tensor[] inputs,
             object[] attrs,
             Tensor[] results,
-            Func<BackwardFunction> getBackwardFunction = null)
+            BackwardFunction backwardFunction = null)
         {
             bool should_record = ShouldRecord(inputs);
 
@@ -28,9 +28,9 @@ namespace Tensorflow.Eager
             }
             
             if (!should_record) return should_record;
-            tf.Logger.Debug($"RecordGradient: op_name={op_name}");
+            // tf.Logger.Debug($"RecordGradient: op_name={op_name}");
 
-            Tensor[] op_outputs;
+            /*Tensor[] op_outputs = null;
             var unused_output_indices = gradient_exclustions.OpGradientUnusedOutputIndices(op_name);
             if (unused_output_indices != null)
             {
@@ -44,7 +44,7 @@ namespace Tensorflow.Eager
             else
                 op_outputs = results;
 
-            Tensor[] op_inputs;
+            Tensor[] op_inputs = null;
             var unused_input_indices = gradient_exclustions.OpGradientUnusedInputIndices(op_name);
             if (unused_input_indices != null)
             {
@@ -56,20 +56,12 @@ namespace Tensorflow.Eager
                 }
             }
             else
-                op_inputs = inputs;
+                op_inputs = inputs;*/
 
-            TapeSetRecordOperation(op_name, inputs, results,
-                getBackwardFunction ?? GetBackwradFunction(op_name, inputs, attrs, results));
+            backwardFunction = backwardFunction ?? GetGradientFunction(op_name, inputs, attrs, results);
+            TapeSetRecordOperation(op_name, inputs, results, backwardFunction);
 
             return true;
-        }
-
-        Func<BackwardFunction> GetBackwradFunction(string op_name,
-                     Tensor[] op_inputs,
-                     object[] attrs,
-                     Tensor[] op_outputs)
-        {
-            return () => GetGradientFunction(op_name, op_inputs, attrs, op_outputs);
         }
 
         BackwardFunction GetGradientFunction(string op_name,

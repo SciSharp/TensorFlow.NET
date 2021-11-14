@@ -9,7 +9,8 @@ namespace Tensorflow.Eager
     {
         Tensor[] Execute(Context ctx, string op_name,
             int num_outputs,
-            Tensor[] inputs, object[] attrs,
+            Tensor[] inputs, 
+            object[] attrs,
             string name = null);
 
         (TF_DataType, Tensor[]) ArgsToMatchingEager(Context ctx,
@@ -34,7 +35,7 @@ namespace Tensorflow.Eager
             Tensor[] inputs,
             object[] attrs,
             Tensor[] results,
-            Func<BackwardFunction> getBackwardFunction = null);
+            BackwardFunction getBackwardFunction = null);
 
         bool MustRecordGradient();
 

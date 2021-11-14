@@ -161,7 +161,7 @@ namespace Tensorflow.Graphs
             tf.Runner.RecordGradient("captured_value",
                 new[] { graph_const }, null,
                 new[] { tensor },
-                getBackwardFunction: () => _backward_function_wrapper
+                getBackwardFunction: _backward_function_wrapper
                 /*getForwardFunction: forward_function*/);
 
             return graph_const;
@@ -191,7 +191,7 @@ namespace Tensorflow.Graphs
             tf.Runner.RecordGradient("captured_value",
                 new[] { placeholder }, null,
                 new[] { tensor },
-                getBackwardFunction: () => _backward_function_wrapper
+                getBackwardFunction: _backward_function_wrapper
                 /*getForwardFunction: forward_function*/);
 
             return placeholder;

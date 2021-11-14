@@ -14,7 +14,6 @@
    limitations under the License.
 ******************************************************************************/
 
-using System.Collections.Generic;
 using Serilog;
 using Serilog.Core;
 using Tensorflow.Contexts;

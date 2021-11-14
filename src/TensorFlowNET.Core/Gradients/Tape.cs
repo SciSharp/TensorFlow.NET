@@ -15,7 +15,7 @@ namespace Tensorflow.Gradients
         bool _recording;
         bool _created_eagerly;
         TensorTape tensor_tape_;
-        OpTape<BackwardFunction, TapeTensor> op_tape_;
+        OpTape op_tape_;
         
         /// <summary>
         /// A deque-backed stack, whose element references are not invalidated by
@@ -28,7 +28,7 @@ namespace Tensorflow.Gradients
             _persistent = persistent;
             _created_eagerly = tf.Context.executing_eagerly();
             tensor_tape_ = new TensorTape();
-            op_tape_ = new OpTape<BackwardFunction, TapeTensor>();
+            op_tape_ = new OpTape();
             tensor_usage_ = new UnorderedMap<Tensor, long>();
             if(_created_eagerly)
                 tf.Context.start_step();

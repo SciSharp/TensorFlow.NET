@@ -5,9 +5,7 @@ namespace Tensorflow.Gradients
     /// <summary>
     /// Represents an entry in the tape.
     /// </summary>
-    /// <typeparam name="BackwardFunction"></typeparam>
-    /// <typeparam name="TapeTensor"></typeparam>
-    public class OpTapeEntry<BackwardFunction, TapeTensor>
+    public class OpTapeEntry
     {
         public string op_type { get; set; }
         public TapeTensor[] output_tensor_info { get; set; }

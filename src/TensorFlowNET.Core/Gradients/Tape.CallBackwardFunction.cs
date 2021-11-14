@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using static Tensorflow.tensorflow;
 
 namespace Tensorflow.Gradients
 {
@@ -9,7 +8,7 @@ namespace Tensorflow.Gradients
             List<long> unneeded_gradients,
             List<Tensor> output_gradients)
         {
-            var grads = new Tensor[output_gradients.Count];
+            // var grads = new Tensor[output_gradients.Count];
             var result = backward_function(output_gradients.ToArray(),
                 unneeded_gradients.ToArray());
 

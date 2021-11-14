@@ -47,7 +47,7 @@ namespace Tensorflow.Functions
         {
             var (backward_function, to_record) = _wrap_backward_function(_forward_graph, _backward, flat_outputs);
             tf.Runner.RecordGradient(_forward.Name, inference_args, new object[0], to_record,
-                getBackwardFunction: () => backward_function);
+                getBackwardFunction: backward_function);
         }
 
         /// <summary>

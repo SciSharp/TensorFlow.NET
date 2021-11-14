@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Contexts;
 using static Tensorflow.Binding;
