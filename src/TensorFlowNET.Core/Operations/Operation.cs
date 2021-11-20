@@ -46,7 +46,6 @@ namespace Tensorflow
         private readonly IntPtr _handle; // _c_op in python
 
         private readonly Graph _graph;
-        private NodeDef _node_def;
 
         public string type => OpType;
 
@@ -57,24 +56,14 @@ namespace Tensorflow
         public int _id_value { get; set; }
         public Operation op => this;
         public TF_DataType dtype => TF_DataType.DtInvalid;
-        public virtual string name => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationName(_handle));
-        public string OpType => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
+        public virtual string name => _handle == IntPtr.Zero ? "" : c_api.StringPiece(c_api.TF_OperationName(_handle));
+        public string OpType => _handle == IntPtr.Zero ? "" : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
 
-        public string Device => _handle == IntPtr.Zero ? null : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
+        public string Device => _handle == IntPtr.Zero ? "" : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
-        bool _is_stateful;
-        public OperationDescription OpDesc { get; set; }
+        // OperationDescription _opDesc;
 
-        public NodeDef node_def
-        {
-            get
-            {
-                if (_node_def == null)
-                    _node_def = GetNodeDef();
-
-                return _node_def;
-            }
-        }
+        public NodeDef node_def => GetNodeDef();
 
         public Operation(IntPtr handle, Graph g = null)
         {
@@ -168,8 +157,7 @@ namespace Tensorflow
             if (op_def == null)
                 op_def = g.GetOpDef(node_def.Op);
 
-            (_handle, OpDesc) = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray(), op_def);
-            _is_stateful = op_def.IsStateful;
+            (_handle, _) = ops._create_c_op(g, node_def, inputs, control_input_ops.ToArray(), op_def);
 
             // Initialize self._outputs.
             output_types = new TF_DataType[NumOutputs];
@@ -199,16 +187,11 @@ namespace Tensorflow
             if (tf.executing_eagerly())
                 return (T[])get_attr(name);
 
-            AttrValue x = null;
+            using var buf = new Buffer();
+            c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
+            tf.Status.Check(true);
 
-            lock (Locks.ProcessWide)
-            {
-                using var buf = new Buffer();
-                c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
-                tf.Status.Check(true);
-
-                x = AttrValue.Parser.ParseFrom(buf.ToArray());
-            }
+            var x = AttrValue.Parser.ParseFrom(buf.ToArray());
 
             string oneof_value = x.ValueCase.ToString();
             if (string.IsNullOrEmpty(oneof_value))
@@ -227,16 +210,11 @@ namespace Tensorflow
 
         public virtual object get_attr(string name)
         {
-            AttrValue x = null;
+            using var buf = new Buffer();
+            c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
+            tf.Status.Check(true);
 
-            lock (Locks.ProcessWide)
-            {
-                using var buf = new Buffer();
-                c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
-                tf.Status.Check(true);
-
-                x = AttrValue.Parser.ParseFrom(buf.ToArray());
-            }
+            var x = AttrValue.Parser.ParseFrom(buf.ToArray());
 
             string oneof_value = x.ValueCase.ToString();
             if (string.IsNullOrEmpty(oneof_value))
@@ -262,15 +240,10 @@ namespace Tensorflow
 
         private NodeDef GetNodeDef()
         {
-            lock (Locks.ProcessWide)
-                using (var s = new Status())
-                using (var buffer = new Buffer())
-                {
-                    c_api.TF_OperationToNodeDef(_handle, buffer.Handle, s.Handle);
-                    s.Check();
-
-                    return NodeDef.Parser.ParseFrom(buffer.ToArray());
-                }
+            using var buffer = new Buffer();
+            c_api.TF_OperationToNodeDef(_handle, buffer.Handle, tf.Status.Handle);
+            tf.Status.Check(throwException: true);
+            return NodeDef.Parser.ParseFrom(buffer.ToArray());
         }
 
         /// <summary>
@@ -284,21 +257,21 @@ namespace Tensorflow
         {
             _assert_same_graph(tensor);
 
-            var input = _tf_input(index);
-            var output = tensor._as_tf_output();
+            // var input = _tf_input(index);
+            // var output = tensor._as_tf_output();
 
             // Reset cached inputs.
             _inputs_val = null;
-            _node_def = null;
+            // _node_def = null;
             // after the c_api call next time _inputs is accessed 
             // the updated inputs are reloaded from the c_api
-            lock (Locks.ProcessWide)
-            {
+            // lock (Locks.ProcessWide)
+            // {
                 // disable
                 // c_api.TF_UpdateEdge(_graph, output, input, tf.Status.Handle);
                 //var updated_inputs = inputs;
-                tf.Status.Check();
-            }
+                // tf.Status.Check();
+            // }
         }
 
         private void _assert_same_graph(Tensor tensor)
@@ -311,7 +284,7 @@ namespace Tensorflow
         /// </summary>
         public TF_Output _tf_output(int output_idx)
         {
-            return new TF_Output(op, output_idx);
+            return new TF_Output(_handle, output_idx);
         }
 
         /// <summary>
@@ -319,7 +292,7 @@ namespace Tensorflow
         /// </summary>
         public TF_Input _tf_input(int input_idx)
         {
-            return new TF_Input(op, input_idx);
+            return new TF_Input(_handle, input_idx);
         }
 
         public NDArray numpy() => throw new NotImplementedException("");

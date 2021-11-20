@@ -2086,8 +2086,7 @@ new_height, new_width");
                                     gather_idx),
                     new[] { batch_size, -1 });
             }
-            var invalid_index = array_ops.fill(ops.convert_to_tensor(new object[] { batch_size, max_output_size }),
-                                                                    tf.constant(0));
+            var invalid_index = array_ops.fill(new Shape((int)batch_size, (int)max_output_size), 0);
             var idx_index = array_ops.expand_dims(math_ops.range(max_output_size), 0);
             var num_valid_expanded = array_ops.expand_dims(num_valid, 1);
             idx = array_ops.where(idx_index < num_valid_expanded,

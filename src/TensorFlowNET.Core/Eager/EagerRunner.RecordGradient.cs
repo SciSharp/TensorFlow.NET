@@ -68,12 +68,12 @@ namespace Tensorflow.Eager
                      Tensor[] op_inputs,
                      object[] attrs,
                      Tensor[] op_outputs)
-            => (output_grads, unneeded_gradients) =>
+            => (out_grads, unneeded_gradients) =>
             {
                 if (ops.gradientFunctions[op_name] == null)
                     return new Tensor[op_inputs.Length];
 
-                var op = new EagerOperation
+                var oper = new EagerOperation
                 {
                     Name = op_name,
                     NumInputs = op_inputs.Length,
@@ -84,7 +84,40 @@ namespace Tensorflow.Eager
                     Attrs = attrs
                 };
 
-                return ops.gradientFunctions[op_name](op, output_grads);
+                /*return op_name switch
+                {
+                    "Add" => math_grad._AddGrad(oper, out_grads),
+                    "AddV2" => math_grad._AddV2Grad(oper, out_grads),
+                    "BiasAdd" => nn_grad._BiasAddGrad(oper, out_grads),
+                    "Cast" => math_grad._CastGrad(oper, out_grads),
+                    "ConcatV2" => array_grad._ConcatV2Grad(oper, out_grads),
+                    "Conv2D" => nn_grad._Conv2DGrad(oper, out_grads),
+                    "ExpandDims" => array_grad._ExpandDimsGrad(oper, out_grads),
+                    "Exp" => math_grad._ExpGrad(oper, out_grads),
+                    "FusedBatchNormV3" => nn_grad._FusedBatchNormV3Grad(oper, out_grads),
+                    "Id" => math_grad._IdGrad(oper, out_grads),
+                    "LeakyRelu" => nn_grad._LeakyReluGrad(oper, out_grads),
+                    "Log1p" => math_grad._Log1pGrad(oper, out_grads),
+                    "Maximum" => math_grad._MaximumGrad(oper, out_grads),
+                    "Mean" => math_grad._MeanGrad(oper, out_grads),
+                    "Minimum" => math_grad._MinimumGrad(oper, out_grads),
+                    "Mul" => math_grad._MulGrad(oper, out_grads),
+                    "Neg" => math_grad._NegGrad(oper, out_grads),
+                    "Pad" => array_grad._PadGrad(oper, out_grads),
+                    "Pow" => math_grad._PowGrad(oper, out_grads),
+                    "RealDiv" => math_grad._RealDivGrad(oper, out_grads),
+                    "Read" => resource_variable_grad._ReadGrad(oper, out_grads),
+                    "Reshape" => array_grad._ReshapeGrad(oper, out_grads),
+                    "ResizeNearestNeighbor" => image_grad._ResizeNearestNeighborGrad(oper, out_grads),
+                    "Select" => math_grad._SelectGrad(oper, out_grads),
+                    "Sigmoid" => math_grad._SigmoidGrad(oper, out_grads),
+                    "Sum" => math_grad._SumGrad(oper, out_grads),
+                    "Sub" => math_grad._SubGrad(oper, out_grads),
+                    "StridedSlice" => array_grad._StridedSliceGrad(oper, out_grads),
+                    _ => ops.gradientFunctions[op_name](oper, out_grads)
+                };*/
+
+                return ops.gradientFunctions[op_name](oper, out_grads);
             };
 
         bool CouldForwardprop()

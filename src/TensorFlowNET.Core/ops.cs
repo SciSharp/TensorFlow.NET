@@ -223,42 +223,39 @@ namespace Tensorflow
 
             var input_tensors = _reconstruct_sequence_inputs(op_def, inputs, node_def.Attr);
 
-            lock (Locks.ProcessWide)
+            var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
+
+            if (!string.IsNullOrEmpty(node_def.Device))
+                c_api.TF_SetDevice(op_desc, node_def.Device);
+
+            // Add inputs
+            foreach (var op_input in input_tensors)
             {
-                var op_desc = graph.NewOperation(node_def.Op, node_def.Name);
-
-                if (!string.IsNullOrEmpty(node_def.Device))
-                    c_api.TF_SetDevice(op_desc, node_def.Device);
-
-                // Add inputs
-                foreach (var op_input in input_tensors)
-                {
-                    if (op_input.IsList)
-                        c_api.TF_AddInputList(op_desc, op_input.Select(x => x._as_tf_output()).ToArray(), op_input.Count());
-                    else if (op_input.Count() == 1)
-                        c_api.TF_AddInput(op_desc, op_input[0]._as_tf_output());
-                }
-
-                var status = tf.Status;
-
-                // Add control inputs
-                foreach (var control_input in control_inputs)
-                    c_api.TF_AddControlInput(op_desc, control_input);
-
-                // Add attrs
-                foreach (var attr in node_def.Attr)
-                {
-                    var bytes = attr.Value.ToByteArray();
-                    c_api.TF_SetAttrValueProto(op_desc, attr.Key, bytes, proto_len: bytes.Length, status: status.Handle);
-                    status.Check(true);
-                }
-
-                var c_op = c_api.TF_FinishOperation(op_desc, status.Handle);
-
-                status.Check(true);
-
-                return (c_op, op_desc);
+                if (op_input.IsList)
+                    c_api.TF_AddInputList(op_desc, op_input.Select(x => x._as_tf_output()).ToArray(), op_input.Count());
+                else if (op_input.Count() == 1)
+                    c_api.TF_AddInput(op_desc, op_input[0]._as_tf_output());
             }
+
+            var status = tf.Status;
+
+            // Add control inputs
+            foreach (var control_input in control_inputs)
+                c_api.TF_AddControlInput(op_desc, control_input);
+
+            // Add attrs
+            foreach (var attr in node_def.Attr)
+            {
+                var bytes = attr.Value.ToByteArray();
+                c_api.TF_SetAttrValueProto(op_desc, attr.Key, bytes, proto_len: bytes.Length, status: status.Handle);
+                status.Check(true);
+            }
+
+            var c_op = op_desc.FinishOperation(status);
+
+            status.Check(true);
+
+            return (c_op, op_desc);
         }
 
         public static Tensors[] _reconstruct_sequence_inputs(OpDef op_def, Tensor[] inputs, MapField<string, AttrValue> attrs)

@@ -16,18 +16,17 @@
 
 using System;
 using Tensorflow.Util;
-using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
-    public sealed class SafeOpHandle : SafeTensorflowHandle
+    public sealed class SafeEagerOpHandle : SafeTensorflowHandle
     {
-        private SafeOpHandle()
+        private SafeEagerOpHandle()
         {
 
         }
 
-        public SafeOpHandle(IntPtr handle)
+        public SafeEagerOpHandle(IntPtr handle)
             : base(handle)
         {
 

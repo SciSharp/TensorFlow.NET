@@ -59,7 +59,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TF_AttrType TFE_OpGetAttrType(SafeOpHandle op, string attr_name, ref byte is_list, SafeStatusHandle status);
+        public static extern TF_AttrType TFE_OpGetAttrType(SafeEagerOpHandle op, string attr_name, ref byte is_list, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
         public static extern TF_AttrType TFE_OpNameGetAttrType(SafeContextHandle ctx, string op_or_function_name, string attr_name, ref byte is_list, SafeStatusHandle status);
@@ -72,7 +72,7 @@ namespace Tensorflow
         /// <param name="input_name">const char*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpGetInputLength(SafeOpHandle op, string input_name, SafeStatusHandle status);
+        public static extern int TFE_OpGetInputLength(SafeEagerOpHandle op, string input_name, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the length (number of tensors) of the output argument `output_name`
@@ -83,7 +83,7 @@ namespace Tensorflow
         /// <param name="status"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpGetOutputLength(SafeOpHandle op, string input_name, SafeStatusHandle status);
+        public static extern int TFE_OpGetOutputLength(SafeEagerOpHandle op, string input_name, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -94,7 +94,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpAddInputList(SafeOpHandle op, [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeHandleArrayMarshaler))] SafeTensorHandleHandle[] inputs, int num_inputs, SafeStatusHandle status);
+        public static extern int TFE_OpAddInputList(SafeEagerOpHandle op, [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeHandleArrayMarshaler))] SafeTensorHandleHandle[] inputs, int num_inputs, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -161,7 +161,7 @@ namespace Tensorflow
         /// <param name="retvals"></param>
         /// <param name="num_retvals"></param>
         /// <param name="status"></param>
-        public static void TFE_Execute(SafeOpHandle op, SafeTensorHandleHandle[] retvals, out int num_retvals, SafeStatusHandle status)
+        public static void TFE_Execute(SafeEagerOpHandle op, SafeTensorHandleHandle[] retvals, out int num_retvals, SafeStatusHandle status)
         {
             unsafe
             {
@@ -187,7 +187,7 @@ namespace Tensorflow
         /// <param name="num_retvals">int*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        private static unsafe extern void TFE_Execute(SafeOpHandle op, IntPtr* retvals, ref int num_retvals, SafeStatusHandle status);
+        private static unsafe extern void TFE_Execute(SafeEagerOpHandle op, IntPtr* retvals, ref int num_retvals, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -197,7 +197,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeOpHandle TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status);
+        public static extern SafeEagerOpHandle TFE_NewOp(SafeContextHandle ctx, string op_or_function_name, SafeStatusHandle status);
 
         /// <summary>
         /// Resets `op_to_reset` with `op_or_function_name` and `raw_device_name`. This
@@ -213,7 +213,7 @@ namespace Tensorflow
         /// <param name="raw_device_name">const char*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpReset(SafeOpHandle op_to_reset, string op_or_function_name, string raw_device_name, SafeStatusHandle status);
+        public static extern void TFE_OpReset(SafeEagerOpHandle op_to_reset, string op_or_function_name, string raw_device_name, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -229,13 +229,13 @@ namespace Tensorflow
         /// <param name="attr_name">const char*</param>
         /// <param name="value">TF_DataType</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrType(SafeOpHandle op, string attr_name, TF_DataType value);
+        public static extern void TFE_OpSetAttrType(SafeEagerOpHandle op, string attr_name, TF_DataType value);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrInt(SafeOpHandle op, string attr_name, long value);
+        public static extern void TFE_OpSetAttrInt(SafeEagerOpHandle op, string attr_name, long value);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrFloat(SafeOpHandle op, string attr_name, float value);
+        public static extern void TFE_OpSetAttrFloat(SafeEagerOpHandle op, string attr_name, float value);
 
         /// <summary>
         /// 
@@ -246,19 +246,19 @@ namespace Tensorflow
         /// <param name="num_dims">const int</param>
         /// <param name="out_status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrShape(SafeOpHandle op, string attr_name, long[] dims, int num_dims, SafeStatusHandle out_status);
+        public static extern void TFE_OpSetAttrShape(SafeEagerOpHandle op, string attr_name, long[] dims, int num_dims, SafeStatusHandle out_status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrShapeList(SafeOpHandle op, string attr_name, IntPtr[] dims, int[] num_dims, int num_values, SafeStatusHandle out_status);
+        public static extern void TFE_OpSetAttrShapeList(SafeEagerOpHandle op, string attr_name, IntPtr[] dims, int[] num_dims, int num_values, SafeStatusHandle out_status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrStringList(SafeOpHandle op, string attr_name, string[] values, ulong[] lengths, int num_values);
+        public static extern void TFE_OpSetAttrStringList(SafeEagerOpHandle op, string attr_name, string[] values, ulong[] lengths, int num_values);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrBool(SafeOpHandle op, string attr_name, bool value);
+        public static extern void TFE_OpSetAttrBool(SafeEagerOpHandle op, string attr_name, bool value);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrFunctionName(SafeOpHandle op, string attr_name, string data, int length);
+        public static extern void TFE_OpSetAttrFunctionName(SafeEagerOpHandle op, string attr_name, string data, int length);
 
         /// <summary>
         /// 
@@ -268,16 +268,16 @@ namespace Tensorflow
         /// <param name="value">const void*</param>
         /// <param name="length">size_t</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrString(SafeOpHandle op, string attr_name, string value, ulong length);
+        public static extern void TFE_OpSetAttrString(SafeEagerOpHandle op, string attr_name, string value, ulong length);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrTypeList(SafeOpHandle op, string attr_name, TF_DataType[] values, int num_values);
+        public static extern void TFE_OpSetAttrTypeList(SafeEagerOpHandle op, string attr_name, TF_DataType[] values, int num_values);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrIntList(SafeOpHandle op, string attr_name, long[] values, int num_values);
+        public static extern void TFE_OpSetAttrIntList(SafeEagerOpHandle op, string attr_name, long[] values, int num_values);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrValueProto(SafeOpHandle op, string attr_name, IMessage[] proto, int proto_len, SafeStatusHandle status);
+        public static extern void TFE_OpSetAttrValueProto(SafeEagerOpHandle op, string attr_name, IMessage[] proto, int proto_len, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -286,7 +286,7 @@ namespace Tensorflow
         /// <param name="device_name"></param>
         /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetDevice(SafeOpHandle op, string device_name, SafeStatusHandle status);
+        public static extern void TFE_OpSetDevice(SafeEagerOpHandle op, string device_name, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -295,7 +295,7 @@ namespace Tensorflow
         /// <param name="h">TFE_TensorHandle*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpAddInput(SafeOpHandle op, SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern void TFE_OpAddInput(SafeEagerOpHandle op, SafeTensorHandleHandle h, SafeStatusHandle status);
 
         /// <summary>
         /// 

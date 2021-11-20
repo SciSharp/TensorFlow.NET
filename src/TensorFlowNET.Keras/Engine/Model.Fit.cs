@@ -101,9 +101,9 @@ namespace Tensorflow.Keras.Engine
                         var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
                         Binding.tf_output_redirect.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}");
                     }
-                }
 
-                GC.Collect();
+                    GC.Collect();
+                }
                 GC.WaitForPendingFinalizers();
             }
         }

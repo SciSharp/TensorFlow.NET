@@ -116,6 +116,9 @@ namespace Tensorflow
         public Tensor fill<T>(Tensor dims, T value, string name = null)
             => gen_array_ops.fill(dims, value, name: name);
 
+        public Tensor fill<T>(Shape dims, T value, string name = null)
+            => array_ops.fill(dims, value, name: name);
+
         /// <summary>
         /// Return a tensor with the same shape and contents as input.
         /// </summary>

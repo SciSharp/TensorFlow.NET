@@ -25,7 +25,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             return th;
         }
 
-        SafeOpHandle MatMulOp(SafeContextHandle ctx, SafeTensorHandleHandle a, SafeTensorHandleHandle b)
+        SafeEagerOpHandle MatMulOp(SafeContextHandle ctx, SafeTensorHandleHandle a, SafeTensorHandleHandle b)
         {
             using var status = TF_NewStatus();
 
@@ -63,7 +63,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             return false;
         }
 
-        SafeOpHandle ShapeOp(SafeContextHandle ctx, SafeTensorHandleHandle a)
+        SafeEagerOpHandle ShapeOp(SafeContextHandle ctx, SafeTensorHandleHandle a)
         {
             using var status = TF_NewStatus();
 

@@ -51,7 +51,7 @@ namespace Tensorflow.Gradients
         }
 
         [RegisterGradient("ConcatV2")]
-        public static Tensor[] _ConcatGradV2(Operation op, Tensor[] grads)
+        public static Tensor[] _ConcatV2Grad(Operation op, Tensor[] grads)
         {
             var grad = grads[0];
             return _ConcatGradHelper(op, grad, start_value_index: 0, end_value_index: -1, dim_index: -1);
