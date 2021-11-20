@@ -39,7 +39,7 @@ namespace Tensorflow.Native.UnitTest.Eager
                     using var hgpu = TFE_TensorHandleCopyToDevice(hcpu, ctx, gpu_device_name, status);
                     ASSERT_TRUE(TF_GetCode(status) == TF_OK, TF_Message(status));
 
-                    var retvals = new SafeTensorHandleHandle[1];
+                    var retvals = new SafeEagerTensorHandle[1];
                     using (var shape_op = ShapeOp(ctx, hgpu))
                     {
                         TFE_OpSetDevice(shape_op, gpu_device_name, status);

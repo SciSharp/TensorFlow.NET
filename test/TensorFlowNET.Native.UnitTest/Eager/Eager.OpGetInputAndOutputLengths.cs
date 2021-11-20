@@ -25,7 +25,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             using var input1 = TestMatrixTensorHandle();
             using var input2 = TestMatrixTensorHandle();
 
-            var retvals = new SafeTensorHandleHandle[2];
+            var retvals = new SafeEagerTensorHandle[2];
             using (var identityOp = TFE_NewOp(ctx, "IdentityN", status))
             {
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
@@ -36,7 +36,7 @@ namespace Tensorflow.Native.UnitTest.Eager
                 EXPECT_EQ(-1, TFE_OpGetOutputLength(identityOp, "output", status));
                 CHECK_NE(TF_OK, TF_GetCode(status), TF_Message(status));
 
-                var inputs = new SafeTensorHandleHandle[] { input1, input2 };
+                var inputs = new SafeEagerTensorHandle[] { input1, input2 };
                 TFE_OpAddInputList(identityOp, inputs, 2, status);
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 

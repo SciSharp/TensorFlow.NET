@@ -6,16 +6,18 @@ namespace Tensorflow.Eager
 {
     public partial class EagerTensor : Tensor
     {
-        public override string Device
-        {
-            get
-            {
-                using var _ = EagerTensorHandle.Lease();
-                return c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(EagerTensorHandle, tf.Status.Handle));
-            }
-        }
+        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(_eagerTensorHandle, tf.Status.Handle));
+        public override TF_DataType dtype => c_api.TFE_TensorHandleDataType(_eagerTensorHandle);
 
         public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, tf.Status.Handle);
+
+        protected override Shape GetShapeInternal()
+        {
+            var dims = new int[c_api.TFE_TensorHandleNumDims(_eagerTensorHandle, tf.Status.Handle)];
+            for (int i = 0; i < dims.Length; i++)
+                dims[i] = c_api.TFE_TensorHandleDim(_eagerTensorHandle, i, tf.Status.Handle);
+            return dims;
+        }
 
         public static int GetRank(IntPtr handle)
         {

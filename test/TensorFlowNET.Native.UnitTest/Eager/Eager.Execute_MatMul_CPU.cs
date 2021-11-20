@@ -32,7 +32,7 @@ namespace Tensorflow.Native.UnitTest.Eager
             {
                 CHECK_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
-                var retvals = new SafeTensorHandleHandle[2];
+                var retvals = new SafeEagerTensorHandle[2];
                 using (var m = TestMatrixTensorHandle())
                 using (var matmul = MatMulOp(ctx, m, m))
                 {

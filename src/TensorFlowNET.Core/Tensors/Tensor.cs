@@ -67,9 +67,9 @@ namespace Tensorflow
         /// <summary>
         ///     The DType of elements in this tensor.
         /// </summary>
-        public TF_DataType dtype => _handle == null ? _override_dtype : c_api.TF_TensorType(_handle);
+        public virtual TF_DataType dtype => _handle == null ? _override_dtype : c_api.TF_TensorType(_handle);
         public ulong bytesize => _handle == null ? 0 : c_api.TF_TensorByteSize(_handle);
-        public ulong dtypesize => _handle == null ? 0 : c_api.TF_DataTypeSize(dtype);
+        public ulong dtypesize => (ulong)dtype.get_datatype_size();
         public ulong size => _handle == null ? 0 : bytesize / dtypesize;
         public IntPtr buffer => _handle == null ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == null ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
@@ -88,11 +88,11 @@ namespace Tensorflow
         protected new SafeTensorHandle _handle;
         public SafeTensorHandle Handle => _handle;
 
-        protected SafeTensorHandleHandle _eagerTensorHandle;
+        protected SafeEagerTensorHandle _eagerTensorHandle;
         /// <summary>
         /// TFE_TensorHandle
         /// </summary>
-        public SafeTensorHandleHandle EagerTensorHandle => _eagerTensorHandle;
+        public SafeEagerTensorHandle EagerTensorHandle => _eagerTensorHandle;
 
         protected bool _isCreatedInGraphMode;
         
@@ -109,19 +109,7 @@ namespace Tensorflow
                 if (rank < 0)
                     return Shape.Null;
 
-                var dims = new Shape(new long[rank]);
-
-                if (_handle == null)
-                {
-                    c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.Status.Handle);
-                }
-                else
-                {
-                    for (int i = 0; i < rank; i++)
-                        dims[i] = c_api.TF_Dim(_handle, i);
-                }
-
-                return dims;
+                return GetShapeInternal();
             }
 
             set
@@ -140,6 +128,23 @@ namespace Tensorflow
 
                 tf.Status.Check(true);
             }
+        }
+
+        protected virtual Shape GetShapeInternal()
+        {
+            var dims = new Shape(new long[rank]);
+
+            if (_handle == null)
+            {
+                c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.Status.Handle);
+            }
+            else
+            {
+                for (int i = 0; i < rank; i++)
+                    dims[i] = c_api.TF_Dim(_handle, i);
+            }
+
+            return dims;
         }
 
         public int[] _shape_tuple()

@@ -94,7 +94,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_OpAddInputList(SafeEagerOpHandle op, [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeHandleArrayMarshaler))] SafeTensorHandleHandle[] inputs, int num_inputs, SafeStatusHandle status);
+        public static extern int TFE_OpAddInputList(SafeEagerOpHandle op, [In, MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(SafeHandleArrayMarshaler))] SafeEagerTensorHandle[] inputs, int num_inputs, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -161,7 +161,7 @@ namespace Tensorflow
         /// <param name="retvals"></param>
         /// <param name="num_retvals"></param>
         /// <param name="status"></param>
-        public static void TFE_Execute(SafeEagerOpHandle op, SafeTensorHandleHandle[] retvals, out int num_retvals, SafeStatusHandle status)
+        public static void TFE_Execute(SafeEagerOpHandle op, SafeEagerTensorHandle[] retvals, out int num_retvals, SafeStatusHandle status)
         {
             unsafe
             {
@@ -173,7 +173,7 @@ namespace Tensorflow
                     // A handle is created for every return, even if rawReturns[i] is null. The resulting handle will be
                     // non-null but invalid, which is the same behavior P/Invoke gives for non-array SafeHandle return
                     // values.
-                    retvals[i] = new SafeTensorHandleHandle(rawReturns[i]);
+                    retvals[i] = new SafeEagerTensorHandle(rawReturns[i]);
                 }
             }
         }
@@ -295,7 +295,7 @@ namespace Tensorflow
         /// <param name="h">TFE_TensorHandle*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpAddInput(SafeEagerOpHandle op, SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern void TFE_OpAddInput(SafeEagerOpHandle op, SafeEagerTensorHandle h, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -303,10 +303,10 @@ namespace Tensorflow
         /// <param name="t">const tensorflow::Tensor&amp;</param>
         /// <returns>TFE_TensorHandle*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeTensorHandleHandle TFE_NewTensorHandle(SafeTensorHandle t, SafeStatusHandle status);
+        public static extern SafeEagerTensorHandle TFE_NewTensorHandle(SafeTensorHandle t, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern SafeTensorHandleHandle TFE_EagerTensorHandle(IntPtr t);
+        public static extern SafeEagerTensorHandle TFE_EagerTensorHandle(IntPtr t);
 
         /// <summary>
         /// Sets the default execution mode (sync/async). Note that this can be
@@ -323,7 +323,7 @@ namespace Tensorflow
         /// <param name="h">TFE_TensorHandle*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern TF_DataType TFE_TensorHandleDataType(SafeTensorHandleHandle h);
+        public static extern TF_DataType TFE_TensorHandleDataType(SafeEagerTensorHandle h);
 
         /// <summary>
         /// This function will block till the operation that produces `h` has
@@ -334,7 +334,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeTensorHandle TFE_TensorHandleResolve(SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern SafeTensorHandle TFE_TensorHandleResolve(SafeEagerTensorHandle h, SafeStatusHandle status);
 
 
         /// <summary>
@@ -344,10 +344,10 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_TensorHandleNumDims(SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern int TFE_TensorHandleNumDims(SafeEagerTensorHandle h, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern int TFE_TensorHandleDim(SafeTensorHandleHandle h, int dim, SafeStatusHandle status);
+        public static extern int TFE_TensorHandleDim(SafeEagerTensorHandle h, int dim, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the device of the operation that produced `h`. If `h` was produced by
@@ -360,7 +360,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleDeviceName(SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern IntPtr TFE_TensorHandleDeviceName(SafeEagerTensorHandle h, SafeStatusHandle status);
 
         /// <summary>
         /// Returns the name of the device in whose memory `h` resides.
@@ -369,7 +369,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TFE_TensorHandleBackingDeviceName(SafeTensorHandleHandle h, SafeStatusHandle status);
+        public static extern IntPtr TFE_TensorHandleBackingDeviceName(SafeEagerTensorHandle h, SafeStatusHandle status);
 
         /// <summary>
         /// 

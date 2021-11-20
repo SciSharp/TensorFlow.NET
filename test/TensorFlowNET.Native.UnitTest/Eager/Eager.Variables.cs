@@ -28,7 +28,7 @@ namespace Tensorflow.Native.UnitTest.Eager
                 ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));
 
                 int num_retvals = 1;
-                var value_handle = new SafeTensorHandleHandle[1];
+                var value_handle = new SafeEagerTensorHandle[1];
                 using (var op = TFE_NewOp(ctx, "ReadVariableOp", status))
                 {
                     ASSERT_EQ(TF_OK, TF_GetCode(status), TF_Message(status));

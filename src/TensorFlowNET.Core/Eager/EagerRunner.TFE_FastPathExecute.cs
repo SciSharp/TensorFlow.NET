@@ -141,7 +141,7 @@ namespace Tensorflow.Eager
                 num_retvals += (int)delta;
             }
 
-            var retVals = new SafeTensorHandleHandle[num_retvals];
+            var retVals = new SafeEagerTensorHandle[num_retvals];
             c_api.TFE_Execute(op, retVals, out num_retvals, status.Handle);
             status.Check(true);
 

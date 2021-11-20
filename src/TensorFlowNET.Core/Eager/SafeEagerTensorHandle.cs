@@ -20,13 +20,13 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
-    public sealed class SafeTensorHandleHandle : SafeTensorflowHandle
+    public sealed class SafeEagerTensorHandle : SafeTensorflowHandle
     {
-        private SafeTensorHandleHandle()
+        private SafeEagerTensorHandle()
         {
         }
 
-        public SafeTensorHandleHandle(IntPtr handle)
+        public SafeEagerTensorHandle(IntPtr handle)
             : base(handle)
         {
         }

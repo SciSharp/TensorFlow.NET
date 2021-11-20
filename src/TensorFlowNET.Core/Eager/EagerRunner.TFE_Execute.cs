@@ -48,7 +48,7 @@ namespace Tensorflow.Eager
             {
                 for (int i = 0; i < inputs.Length; ++i)
                 {
-                    SafeTensorHandleHandle tensor_handle = inputs[i] switch
+                    SafeEagerTensorHandle tensor_handle = inputs[i] switch
                     {
                         EagerTensor et => et.EagerTensorHandle,
                         Tensor nd => nd.EagerTensorHandle,
@@ -61,7 +61,7 @@ namespace Tensorflow.Eager
             if (status.ok() && attrs != null)
                 SetOpAttrs(op, attrs);
 
-            var outputs = new SafeTensorHandleHandle[num_outputs];
+            var outputs = new SafeEagerTensorHandle[num_outputs];
             if (status.ok())
             {
                 c_api.TFE_Execute(op, outputs, out num_outputs, status.Handle);

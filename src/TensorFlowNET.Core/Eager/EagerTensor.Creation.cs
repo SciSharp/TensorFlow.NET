@@ -12,7 +12,7 @@ namespace Tensorflow.Eager
             NewEagerTensorHandle(handle);
         }
 
-        public EagerTensor(SafeTensorHandleHandle handle)
+        public EagerTensor(SafeEagerTensorHandle handle)
         {
             _id = ops.uid();
             _eagerTensorHandle = handle;
