@@ -7,16 +7,10 @@ namespace Tensorflow.Eager
 {
     public partial class EagerTensor
     {
-        public EagerTensor(SafeTensorHandle handle)
-        {
-            NewEagerTensorHandle(handle);
-        }
-
         public EagerTensor(SafeEagerTensorHandle handle)
         {
             _id = ops.uid();
             _eagerTensorHandle = handle;
-            Resolve();
         }
 
         #region scalar eager tensor
@@ -67,8 +61,10 @@ namespace Tensorflow.Eager
             tf.Status.Check(true);
         }
 
-        private void Resolve()
+        public void Resolve()
         {
+            if (_handle != null)
+                return;
             _handle = c_api.TFE_TensorHandleResolve(_eagerTensorHandle, tf.Status.Handle);
             tf.Status.Check(true);
         }

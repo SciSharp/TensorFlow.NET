@@ -12,7 +12,7 @@ namespace Tensorflow
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public unsafe T[] ToArray<T>() where T : unmanaged
+        public virtual unsafe T[] ToArray<T>() where T : unmanaged
         {
             //Are the types matching?
             if (typeof(T).as_tf_dtype() != dtype)

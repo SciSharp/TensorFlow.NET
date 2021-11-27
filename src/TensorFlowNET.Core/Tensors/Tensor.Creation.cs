@@ -28,7 +28,7 @@ namespace Tensorflow
     [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
     public partial class Tensor
     {
-        public IntPtr TensorDataPointer => _handle == null ? IntPtr.Zero : TF_TensorData(_handle);
+        public virtual IntPtr TensorDataPointer => _handle == null ? IntPtr.Zero : TF_TensorData(_handle);
 
         public Tensor()
         {

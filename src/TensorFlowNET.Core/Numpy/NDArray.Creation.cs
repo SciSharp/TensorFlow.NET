@@ -38,8 +38,8 @@ namespace Tensorflow.NumPy
                 tensor = tf.defaultSession.eval(tensor);
                 _handle = tensor.Handle;
             }
-                
-            NewEagerTensorHandle(); 
+
+            NewEagerTensorHandle();
         }
 
         public static NDArray Scalar<T>(T value) where T : unmanaged
@@ -57,7 +57,9 @@ namespace Tensorflow.NumPy
         void NewEagerTensorHandle()
         {
             if (_handle is not null)
-                _eagerTensorHandle = new EagerTensor(_handle).EagerTensorHandle;
+            {
+                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+            }
         }
     }
 }

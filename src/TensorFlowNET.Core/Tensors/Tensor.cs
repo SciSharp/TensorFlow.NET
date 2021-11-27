@@ -68,10 +68,10 @@ namespace Tensorflow
         ///     The DType of elements in this tensor.
         /// </summary>
         public virtual TF_DataType dtype => _handle == null ? _override_dtype : c_api.TF_TensorType(_handle);
-        public ulong bytesize => _handle == null ? 0 : c_api.TF_TensorByteSize(_handle);
+        public virtual ulong bytesize => _handle == null ? 0 : c_api.TF_TensorByteSize(_handle);
         public ulong dtypesize => (ulong)dtype.get_datatype_size();
         public ulong size => _handle == null ? 0 : bytesize / dtypesize;
-        public IntPtr buffer => _handle == null ? IntPtr.Zero : c_api.TF_TensorData(_handle);
+        public virtual IntPtr buffer => _handle == null ? IntPtr.Zero : c_api.TF_TensorData(_handle);
         public int num_consumers(TF_Output oper_out) => _handle == null ? 0 : c_api.TF_OperationOutputNumConsumers(oper_out);
         public int ndim => rank;
 
@@ -86,7 +86,7 @@ namespace Tensorflow
         /// </summary>
         public object Tag { get; set; }
         protected new SafeTensorHandle _handle;
-        public SafeTensorHandle Handle => _handle;
+        public virtual SafeTensorHandle Handle => _handle;
 
         protected SafeEagerTensorHandle _eagerTensorHandle;
         /// <summary>
@@ -114,18 +114,7 @@ namespace Tensorflow
 
             set
             {
-                if (this is EagerTensor)
-                {
-                    if(!shape.is_compatible_with(value))
-                        throw new ValueError($"Tensor's shape is not compatible.");
-                    return;
-                }
-
-                if (value == null)
-                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status.Handle);
-                else
-                    c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.dims, value.ndim, tf.Status.Handle);
-
+                SetShapeInternal(value);
                 tf.Status.Check(true);
             }
         }
@@ -145,6 +134,14 @@ namespace Tensorflow
             }
 
             return dims;
+        }
+
+        protected virtual void SetShapeInternal(Shape value)
+        {
+            if (value == null)
+                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status.Handle);
+            else
+                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.dims, value.ndim, tf.Status.Handle);
         }
 
         public int[] _shape_tuple()

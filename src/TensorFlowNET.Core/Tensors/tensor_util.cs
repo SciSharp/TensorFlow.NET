@@ -233,9 +233,9 @@ namespace Tensorflow
                 return false;
             }
 
-            if (tensor.GetType() == typeof(EagerTensor))
+            if (tensor is EagerTensor eagerTensor)
             {
-                if(tensor.dtype == TF_DataType.TF_INT64)
+                if(tensor.dtype == tf.int64)
                     return new Shape(tensor.ToArray<long>());
                 else
                     return new Shape(tensor.ToArray<int>());

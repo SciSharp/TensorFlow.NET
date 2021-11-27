@@ -213,7 +213,7 @@ namespace Tensorflow.Eager
 
             if (add_type_attr && !string.IsNullOrEmpty(input_arg.TypeAttr))
             {
-                var dtype = c_api.TFE_TensorHandleDataType(tensor.EagerTensorHandle);
+                var dtype = tensor.dtype;
                 c_api.TFE_OpSetAttrType(op, input_arg.TypeAttr, dtype);
                 flattened_attrs.Add(input_arg.TypeAttr);
                 flattened_attrs.Add(dtype);
