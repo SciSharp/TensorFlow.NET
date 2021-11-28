@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Eager;
 using Tensorflow.Graphs;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;
 
@@ -148,7 +150,7 @@ namespace Tensorflow.Functions
                 src_graph: _func_graph);
 
             var captures_from_forward = backwards_graph.external_captures
-                .Where(x => x.IsCreatedInGraphMode && x.graph == _func_graph)
+                .Where(x => x is not EagerTensor && x is not NDArray && x.graph == _func_graph)
                 .ToArray();
             foreach(var capture in captures_from_forward)
             {

@@ -94,10 +94,6 @@ namespace Tensorflow
         /// </summary>
         public SafeEagerTensorHandle EagerTensorHandle => _eagerTensorHandle;
 
-        protected bool _isCreatedInGraphMode;
-        
-        public bool IsCreatedInGraphMode => _isCreatedInGraphMode;
-
         /// <summary>
         ///     Returns the shape of a tensor.
         /// </summary>

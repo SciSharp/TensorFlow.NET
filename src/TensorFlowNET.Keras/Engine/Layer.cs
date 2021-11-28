@@ -18,9 +18,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Tensorflow.Eager;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
+using Tensorflow.NumPy;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 
@@ -118,7 +120,7 @@ namespace Tensorflow.Keras.Engine
         bool _in_functional_construction_mode(Tensors inputs)
         {
             return tf.Context.executing_eagerly()
-                && inputs.Count(x => x.IsCreatedInGraphMode) == inputs.Count();
+                && inputs.Count(x => x is not EagerTensor && x is not NDArray) == inputs.Count();
         }
 
         public void SetConnectivityMetadata(Tensors inputs, Tensors outputs)
@@ -180,7 +182,7 @@ namespace Tensorflow.Keras.Engine
             tf.init_scope();
 
             bool need_restore_mode = false;
-            if (!inputs.IsCreatedInGraphMode || tf.Context.is_build_function())
+            if (inputs.Any(x => x is EagerTensor) || tf.Context.is_build_function())
             {
                 need_restore_mode = true;
                 tf.Context.eager_mode(isFunc: tf.Context.is_build_function());

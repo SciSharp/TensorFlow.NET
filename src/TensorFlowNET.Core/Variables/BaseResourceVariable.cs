@@ -68,7 +68,7 @@ namespace Tensorflow
             // when this object is garbage collected the deleter will be too. This
             // means ResourceVariables can be part of reference cycles without those
             // cycles being uncollectable.
-            if (!handle.IsCreatedInGraphMode)
+            if (handle is EagerTensor)
             {
                 _handle = handle.EagerTensorHandle.DangerousGetHandle();
                 eager_resource_deleter = new EagerResourceDeleter(handle, handle.Device);

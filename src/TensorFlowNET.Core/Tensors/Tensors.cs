@@ -21,7 +21,6 @@ namespace Tensorflow
         public Shape shape => items.First().shape;
         public int rank => items.First().rank;
         public Graph graph => items.First().graph;
-        public bool IsCreatedInGraphMode => items.First().IsCreatedInGraphMode;
         public bool IsList { get; set; }
         public int Length => items.Count();
 
