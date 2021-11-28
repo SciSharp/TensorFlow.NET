@@ -6,7 +6,7 @@
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
     <Version>0.60.5</Version>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>

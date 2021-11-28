@@ -656,9 +656,6 @@ namespace Tensorflow
             }
             else
             {
-                if (x.rank > -1 && tf.executing_eagerly())
-                    return constant_op.constant(np.arange(x.rank));
-
                 var rank = array_ops.rank(x);
                 return range(0, rank, 1);
             }
@@ -677,11 +674,6 @@ namespace Tensorflow
 
                 // we rely on Range and Rank to do the right thing at run-time.
                 if (rank == -1) return range(0, array_ops.rank(x));
-
-                if (rank.HasValue && rank.Value > -1)
-                {
-                    return constant_op.constant(np.arange(rank.Value), TF_DataType.TF_INT32);
-                }
 
                 return range(0, rank, 1);
             }

@@ -42,7 +42,7 @@ namespace Tensorflow.Gradients
         public void Watch(Tensor x)
         {
             tf.Logger.Debug($"Watch tensor id={x.Id}, name={x.name}");
-            tensor_tape_.emplace(x, null);
+            tensor_tape_.emplace(x, -1);
         }
 
         public bool ShouldRecord(Tensor[] tensors)

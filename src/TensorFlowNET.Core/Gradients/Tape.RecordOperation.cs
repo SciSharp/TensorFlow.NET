@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Tensorflow.Util;
-using static Tensorflow.tensorflow;
 using static Tensorflow.Binding;
-using System.Linq;
-using Tensorflow.Eager;
 
 namespace Tensorflow.Gradients
 {
@@ -21,7 +18,7 @@ namespace Tensorflow.Gradients
             if (!ShouldRecord(input_tensors))
                 return;
 
-            var op_id = new EagerTensor(next_op_id_++);
+            var op_id = next_op_id_++;
             foreach (var i in input_tensors)
                 tensor_usage_[i]++;
 

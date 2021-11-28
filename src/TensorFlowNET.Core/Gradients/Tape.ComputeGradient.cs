@@ -144,7 +144,7 @@ namespace Tensorflow.Gradients
                     }
 
                     var op_id = tape_it;
-                    if (op_id == null)
+                    if (op_id == -1)
                         continue;
 
                     if (state.op_missing_tensor.find(op_id, out var missing_it))
@@ -235,10 +235,10 @@ namespace Tensorflow.Gradients
             return result;
         }
 
-        Queue<Tensor> InitialStack(OpTape op_tape,
-            UnorderedMap<Tensor, long> op_missing_tensor)
+        Queue<long> InitialStack(OpTape op_tape,
+            UnorderedMap<long, long> op_missing_tensor)
         {
-            var result = new Queue<Tensor>();
+            var result = new Queue<long>();
             foreach (var op_entry in op_tape)
             {
                 if (!op_missing_tensor.find(op_entry.Key))

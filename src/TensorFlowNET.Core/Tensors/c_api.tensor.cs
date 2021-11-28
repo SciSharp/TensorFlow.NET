@@ -71,38 +71,7 @@ namespace Tensorflow
         /// <param name="deallocator_arg"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, UIntPtr len, Deallocator deallocator, ref DeallocatorArgs deallocator_arg);
-
-        [DllImport(TensorFlowLibName)]
-        public static extern TF_Tensor TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, long len, DeallocatorV2 deallocator, IntPtr args);
-
-        /// <summary>
-        /// Return a new tensor that holds the bytes data[0,len-1]
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="dims"></param>
-        /// <param name="num_dims"></param>
-        /// <param name="data"></param>
-        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
-        /// <param name="deallocator"></param>
-        /// <param name="deallocator_arg"></param>
-        /// <returns></returns>
-        [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len, Deallocator deallocator, IntPtr deallocator_arg);
-
-        /// <summary>
-        /// Return a new tensor that holds the bytes data[0,len-1]
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="dims"></param>
-        /// <param name="num_dims"></param>
-        /// <param name="data"></param>
-        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len)
-        {
-            return TF_NewTensor(dataType, dims, num_dims, data, len, EmptyDeallocator, DeallocatorArgs.Empty);
-        }
+        public static extern SafeTensorHandle TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len, Deallocator deallocator, IntPtr deallocator_arg);
 
         public static unsafe SafeTensorHandle TF_NewTensor(byte[] data, Shape shape, TF_DataType dtype)
         {
@@ -135,20 +104,6 @@ namespace Tensorflow
             var handle = TF_AllocateTensor(dtype, new long[0], 0, (ulong)dtype.get_datatype_size());
             *(T*)TF_TensorData(handle) = value;
             return handle;
-        }
-
-        /// <summary>
-        /// Return a new tensor that holds the bytes data[0,len-1]
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="dims"></param>
-        /// <param name="num_dims"></param>
-        /// <param name="data"></param>
-        /// <param name="len">num_bytes, ex: 6 * sizeof(float)</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe IntPtr TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, void* data, ulong len)
-        {
-            return TF_NewTensor(dataType, dims, num_dims, new IntPtr(data), len);
         }
 
         /// <summary>

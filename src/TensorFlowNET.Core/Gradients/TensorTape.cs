@@ -7,7 +7,7 @@ namespace Tensorflow.Gradients
     /// produced this tensor. A value of -1 means that the tensor was directly
     /// watched and not the result of any operation in the tape.
     /// </summary>
-    public class TensorTape : UnorderedMap<Tensor, Tensor>
+    public class TensorTape : UnorderedMap<Tensor, long>
     {
 
     }
