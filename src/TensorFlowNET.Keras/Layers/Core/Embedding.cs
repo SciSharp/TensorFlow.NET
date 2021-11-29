@@ -38,7 +38,9 @@ namespace Tensorflow.Keras.Layers
             : base(new LayerArgs // copy args
             {
                 DType = args.DType,
-                Name = args.Name
+                Name = args.Name,
+                InputShape = args.InputShape,
+                BatchSize = args.BatchSize
             })
         {
             this.args = args;

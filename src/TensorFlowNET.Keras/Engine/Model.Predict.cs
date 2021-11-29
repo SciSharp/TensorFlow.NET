@@ -60,7 +60,6 @@ namespace Tensorflow.Keras.Engine
                     // callbacks.on_predict_batch_end(end_step, {'outputs': batch_outputs})
                 }
                 GC.Collect();
-                GC.WaitForPendingFinalizers();
             }
             // callbacks.on_predict_end()
             return outputs;

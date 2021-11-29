@@ -82,37 +82,13 @@ namespace TensorFlowNET.Keras.UnitTest
         /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
         /// </summary>
         [TestMethod]
-        public void Embedding_Simple()
-        {
-            var emb = keras.layers.Embedding(256, 12, input_length: 4);
-            var input_array = np.arange(12).reshape((3, 4)).astype(np.float32);
-            var output = emb.Apply(input_array);
-            Assert.AreEqual((3, 4, 12), output.shape);
-        }
-
-        /// <summary>
-        /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Embedding
-        /// </summary>
-        [TestMethod]
-        [Ignore]
         public void Embedding()
         {
             var model = keras.Sequential();
-            var layer = keras.layers.Embedding(7, 2, input_length: 4);
+            var layer = keras.layers.Embedding(1000, 64, input_length: 10);
             model.add(layer);
-            // the model will take as input an integer matrix of size (batch,
-            // input_length).
-            // the largest integer (i.e. word index) in the input should be no larger
-            // than 999 (vocabulary size).
-            // now model.output_shape == (None, 10, 64), where None is the batch
-            // dimension.
-            var input_array = np.array(new int[,]
-            {
-                { 1, 2, 3, 4 },
-                { 2, 3, 4, 5 },
-                { 3, 4, 5, 6 }
-            });
-            // model.compile("rmsprop", "mse");
+            var input_array = np.random.randint(1000, size: (32, 10));
+            model.compile("rmsprop", "mse", new[] { "accuracy" });
             var output_array = model.predict(input_array);
             Assert.AreEqual((32, 10, 64), output_array.shape);
         }
