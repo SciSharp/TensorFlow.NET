@@ -26,6 +26,9 @@ namespace Tensorflow
         {
             linalg_ops ops = new linalg_ops();
 
+            public Tensor einsum(string equation, Tensors inputs, string name = null)
+                => math_ops.einsum(equation, inputs, name: name);
+
             public Tensor eye(int num_rows,
                 int num_columns = -1,
                 Shape batch_shape = null,

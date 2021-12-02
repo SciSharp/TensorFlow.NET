@@ -11,7 +11,11 @@ namespace Tensorflow
         public Func<Operation, object> GetGradientAttrs { get; set; }
         public object[] OpInputArgs { get; set; }
         public Dictionary<string, object> OpAttrs { get; set; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputArgs">For array: OpInputArgs = new object[]{ }</param>
         [DebuggerStepThrough]
         public ExecuteOpArgs(params object[] inputArgs)
         {

@@ -45,5 +45,14 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(x_under_reg.shape, (4, 1));
             AssetSequenceEqual(x_under_reg.ToArray<float>(), new float[] { -0.04763567f, -1.214508f, 0.62748903f, 1.299031f });*/
         }
+
+        [TestMethod]
+        public void Einsum()
+        {
+            var m0 = tf.random.normal((2, 3));
+            var m1 = tf.random.normal((3, 5));
+            var e = tf.linalg.einsum("ij,jk->ik", (m0, m1));
+            Assert.AreEqual(e.shape, (2, 5));
+        }
     }
 }

@@ -230,6 +230,27 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor einsum(string equation, Tensors inputs, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "einsum", inputs), scope =>
+            {
+                name = scope;
+                return tf.Context.ExecuteOp("Einsum", name, new ExecuteOpArgs
+                {
+                    OpInputArgs = new object[] { inputs.ToArray() },
+                    GetGradientAttrs = (op) => new
+                    {
+                        equation = op.get_attr<string>("equation"),
+                        N = op.get_attr<int>("N"),
+                        T = op.get_attr<TF_DataType>("T")
+                    }
+                }.SetAttributes(new
+                {
+                    equation = equation
+                }));
+            });
+        }
+
         public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.greater_equal<Tx, Ty>(x, y, name: name);
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
