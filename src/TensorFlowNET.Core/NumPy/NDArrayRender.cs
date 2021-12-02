@@ -88,7 +88,7 @@ namespace Tensorflow.NumPy
             {
                 if (array.rank == 0)
                     return "'" + string.Join(string.Empty, array.StringBytes()[0]
-                        .Take(25)
+                        .Take(256)
                         .Select(x => x < 32 || x > 127 ? "\\x" + x.ToString("x") : Convert.ToChar(x).ToString())) + "'";
                 else
                     return $"'{string.Join("', '", array.StringData().Take(25))}'";

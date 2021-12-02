@@ -405,7 +405,7 @@ would not be rank 1.", tensor.op.get_attr("axis")));
 
             var ret = tensor.shape.unknown_shape((int)shape.dims[0]);
             var value = constant_value(tensor);
-            if (!(value is null))
+            if (value is not null)
             {
                 var d_ = new int[value.size];
                 foreach (var (index, d) in enumerate(value.ToArray<int>()))

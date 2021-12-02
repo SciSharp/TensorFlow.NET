@@ -20,7 +20,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.60.4.0</AssemblyVersion>
+    <AssemblyVersion>0.60.5.0</AssemblyVersion>
     <PackageReleaseNotes>tf.net 0.60.x and above are based on tensorflow native 2.6.0
 
 * Eager Mode is added finally.
@@ -35,7 +35,7 @@ Keras API is a separate package released as TensorFlow.Keras.
 tf.net 0.4x.x aligns with TensorFlow v2.4.1 native library.
 tf.net 0.5x.x aligns with TensorFlow v2.5.x native library.
 tf.net 0.6x.x aligns with TensorFlow v2.6.x native library.</PackageReleaseNotes>
-    <FileVersion>0.60.4.0</FileVersion>
+    <FileVersion>0.60.5.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
