@@ -14,7 +14,7 @@ namespace Tensorflow.Keras.Engine
         /// <returns></returns>
         public Tensors Apply(Tensors inputs, Tensor state = null, bool training = false)
         {
-            callContext = callContext ?? new ThreadLocal<CallContext>()
+            callContext = callContext?.Value != null ? callContext : new ThreadLocal<CallContext>()
             {
                 Value = new CallContext()
             };
