@@ -47,5 +47,14 @@ namespace Tensorflow
                 trainable: trainable,
                 collections: collections);
         }
+
+        public Operation global_variables_initializer()
+        {
+            var g = variables.global_variables();
+            return variables.variables_initializer(g.ToArray());
+        }
+
+        public Session Session()
+            => new Session().as_default();
     }
 }

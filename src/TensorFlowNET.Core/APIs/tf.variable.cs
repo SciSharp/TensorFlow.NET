@@ -37,10 +37,7 @@ namespace Tensorflow
             => variables.variables_initializer(var_list, name: name);
 
         public Operation global_variables_initializer()
-        {
-            var g = variables.global_variables();
-            return variables.variables_initializer(g.ToArray());
-        }
+            => tf.compat.v1.global_variables_initializer();
 
         /// <summary>
         /// Returns all variables created with `trainable=True`.
