@@ -93,9 +93,7 @@ namespace Tensorflow
             => ops.get_default_session();
 
         public Session Session()
-        {
-            return new Session().as_default();
-        }
+            => compat.v1.Session();
 
         public Session Session(Graph graph, ConfigProto config = null)
         {

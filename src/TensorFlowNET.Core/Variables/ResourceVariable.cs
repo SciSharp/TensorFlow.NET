@@ -17,6 +17,7 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -228,6 +229,11 @@ namespace Tensorflow
             }
 
             throw new NotImplementedException("to_proto RefVariable");
+        }
+
+        public NDArray eval(Session session = null)
+        {
+            return _graph_element.eval(session);
         }
     }
 }
