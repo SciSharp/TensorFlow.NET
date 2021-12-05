@@ -194,6 +194,9 @@ namespace Tensorflow
                     case Axis val:
                         tensor_proto.IntVal.AddRange(val.axis);
                         break;
+                    case Shape val:
+                        tensor_proto.Int64Val.AddRange(val.dims);
+                        break;
                     case bool val:
                         tensor_proto.BoolVal.AddRange(new[] { val });
                         break;

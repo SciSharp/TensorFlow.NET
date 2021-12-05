@@ -507,13 +507,12 @@ namespace Tensorflow
         {
             if (data is NDArray nd)
                 return nd.shape;
-
             else if (data is Tensor tensor)
                 return tensor.shape;
-
             else if (data is Axis axis)
                 return axis.IsScalar ? Shape.Scalar : new Shape(axis.axis.Length);
-
+            else if (data is Shape shape)
+                return new Shape(shape.rank);
             else if (!data.GetType().IsArray)
                 return Shape.Scalar;
 
