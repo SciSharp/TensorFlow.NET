@@ -532,6 +532,26 @@ namespace Tensorflow.Keras.Layers
             });
 
         /// <summary>
+        /// Average pooling operation for spatial data.
+        /// </summary>
+        /// <param name="pool_size"></param>
+        /// <param name="strides"></param>
+        /// <param name="padding"></param>
+        /// <param name="data_format"></param>
+        /// <returns></returns>
+        public AveragePooling2D AveragePooling2D(Shape pool_size = null,
+            Shape strides = null,
+            string padding = "valid",
+            string data_format = null)
+                => new AveragePooling2D(new AveragePooling2DArgs
+                {
+                    PoolSize = pool_size ?? (2, 2),
+                    Strides = strides,
+                    Padding = padding,
+                    DataFormat = data_format
+                });
+
+        /// <summary>
         /// Max pooling operation for 1D temporal data.
         /// </summary>
         /// <param name="pool_size">Integer, size of the max pooling window.</param>

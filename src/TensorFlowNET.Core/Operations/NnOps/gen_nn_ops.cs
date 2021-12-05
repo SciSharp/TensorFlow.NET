@@ -255,6 +255,21 @@ namespace Tensorflow.Operations
             => tf.Context.ExecuteOp("LeakyRelu", name,
                 new ExecuteOpArgs(features).SetAttributes(new { alpha }));
 
+        public static Tensor average_pool(Tensor input,
+            int[] ksize,
+            int[] strides,
+            string padding,
+            string data_format = "NHWC",
+            string name = null)
+                => tf.Context.ExecuteOp("AvgPool", name, new ExecuteOpArgs(input)
+                    .SetAttributes(new
+                    {
+                        ksize,
+                        strides,
+                        padding,
+                        data_format
+                    }));
+
         public static Tensor max_pool(Tensor input,
             int[] ksize,
             int[] strides,
