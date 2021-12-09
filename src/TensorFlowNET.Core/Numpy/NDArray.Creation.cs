@@ -38,7 +38,7 @@ namespace Tensorflow.NumPy
         {
             if (_handle is null)
             {
-                tensor = tf.defaultSession.eval(tensor);
+                tensor = tf.get_default_session().eval(tensor);
                 _handle = tensor.Handle;
             }
 

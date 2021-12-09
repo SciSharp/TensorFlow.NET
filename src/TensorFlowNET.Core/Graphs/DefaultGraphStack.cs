@@ -14,9 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -25,19 +24,14 @@ namespace Tensorflow
     /// </summary>
     public class DefaultGraphStack
     {
-        private readonly Stack<Graph> _stack = new Stack<Graph>();
-        Graph _global_default_graph;
+        Stack<Graph> _stack = new Stack<Graph>();
 
         public Graph get_default()
         {
-            if (_stack.Count > 0)
-                return _stack.Peek();
-            else if (_global_default_graph != null)
-                return _global_default_graph;
-            else
-                _global_default_graph = new Graph();
+            if (_stack.Count == 0)
+                _stack.Push(new Graph());
 
-            return _global_default_graph;
+            return _stack.Peek();
         }
 
         public Graph get_controller(Graph g)
@@ -61,7 +55,6 @@ namespace Tensorflow
         public void reset()
         {
             _stack.Clear();
-            _global_default_graph = null;
         }
     }
 }

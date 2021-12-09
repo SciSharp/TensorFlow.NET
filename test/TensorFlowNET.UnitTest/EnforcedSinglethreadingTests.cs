@@ -16,7 +16,6 @@ namespace TensorFlowNET.UnitTest
         /// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
         public EnforcedSinglethreadingTests()
         {
-            ops.IsSingleThreaded = true;
         }
 
         [TestMethod, Ignore("Has to be tested manually.")]
@@ -24,8 +23,6 @@ namespace TensorFlowNET.UnitTest
         {
             lock (_singlethreadLocker)
             {
-                ops.IsSingleThreaded.Should().BeTrue();
-
                 ops.uid(); //increment id by one
 
                 //the core method

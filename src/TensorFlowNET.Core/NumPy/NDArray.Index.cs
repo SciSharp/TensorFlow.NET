@@ -107,7 +107,7 @@ namespace Tensorflow.NumPy
             if (tensor.Handle == null)
             {
                 if (tf.executing_eagerly())
-                    tensor = tf.defaultSession.eval(tensor);
+                    tensor = tf.get_default_session().eval(tensor);
             }
 
             return new NDArray(tensor, tf.executing_eagerly());

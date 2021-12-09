@@ -24,14 +24,12 @@ namespace TensorFlowNET.UnitTest
             {
                 Assert.IsNull(tf.peak_default_graph());
 
-                using (var sess = tf.Session())
-                {
-                    var default_graph = tf.get_default_graph();
-                    var sess_graph = sess.graph;
-                    Assert.IsNotNull(default_graph);
-                    Assert.IsNotNull(sess_graph);
-                    Assert.AreEqual(default_graph, sess_graph);
-                }
+                using var sess = tf.Session();
+                var default_graph = tf.get_default_graph();
+                var sess_graph = sess.graph;
+                Assert.IsNotNull(default_graph);
+                Assert.IsNotNull(sess_graph);
+                Assert.AreEqual(default_graph, sess_graph);
             }
         }
 
@@ -47,14 +45,12 @@ namespace TensorFlowNET.UnitTest
             {
                 Assert.IsNull(tf.peak_default_graph());
                 //tf.Session created an other graph
-                using (var sess = tf.Session())
-                {
-                    var default_graph = tf.get_default_graph();
-                    var sess_graph = sess.graph;
-                    Assert.IsNotNull(default_graph);
-                    Assert.IsNotNull(sess_graph);
-                    Assert.AreEqual(default_graph, sess_graph);
-                }
+                using var sess = tf.Session();
+                var default_graph = tf.get_default_graph();
+                var sess_graph = sess.graph;
+                Assert.IsNotNull(default_graph);
+                Assert.IsNotNull(sess_graph);
+                Assert.AreEqual(default_graph, sess_graph);
             }
         }
 
@@ -73,20 +69,12 @@ namespace TensorFlowNET.UnitTest
                 beforehand.as_default();
                 Assert.IsNotNull(tf.peak_default_graph());
 
-                using (var sess = tf.Session())
-                {
-                    var default_graph = tf.peak_default_graph();
-                    var sess_graph = sess.graph;
-                    Assert.IsNotNull(default_graph);
-                    Assert.IsNotNull(sess_graph);
-                    Assert.AreEqual(default_graph, sess_graph);
-
-                    Console.WriteLine($"{tid}-{default_graph.graph_key}");
-
-                    //var result = sess.run(new object[] {g, a});
-                    //var actualDeriv = result[0].GetData<float>()[0];
-                    //var actual = result[1].GetData<float>()[0];
-                }
+                using var sess = tf.Session();
+                var default_graph = tf.peak_default_graph();
+                var sess_graph = sess.graph;
+                Assert.IsNotNull(default_graph);
+                Assert.IsNotNull(sess_graph);
+                Assert.AreEqual(default_graph, sess_graph);
             }
         }
 
@@ -114,13 +102,10 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                using (var sess = tf.Session())
+                using var sess = tf.Session();
+                for (int i = 0; i < 100; i++)
                 {
-                    Tensor t = null;
-                    for (int i = 0; i < 100; i++)
-                    {
-                        t = new Tensor(1);
-                    }
+                    var t = new Tensor(1);
                 }
             }
         }
@@ -134,12 +119,10 @@ namespace TensorFlowNET.UnitTest
             void Core(int tid)
             {
                 //tf.Session created an other graph
-                using (var sess = tf.Session())
+                using var sess = tf.Session();
+                for (int i = 0; i < 100; i++)
                 {
-                    for (int i = 0; i < 100; i++)
-                    {
-                        var t = new Tensor(new int[] { 1, 2, 3 });
-                    }
+                    var t = new Tensor(new int[] { 1, 2, 3 });
                 }
             }
         }
@@ -147,23 +130,23 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void SessionRun()
         {
-            MultiThreadedUnitTestExecuter.Run(8, Core);
+            MultiThreadedUnitTestExecuter.Run(2, Core);
 
             //the core method
             void Core(int tid)
             {
+                tf.compat.v1.disable_eager_execution();
+                var graph = tf.Graph().as_default();
+
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                 var math = a1 + a2;
+                using var sess = tf.Session(graph);
                 for (int i = 0; i < 100; i++)
                 {
-                    var graph = tf.get_default_graph();
-                    using (var sess = tf.Session(graph))
-                    {
-                        var result = sess.run(math);
-                        Assert.AreEqual(result[0], 5f);
-                    }
+                    var result = sess.run(math);
+                    Assert.AreEqual(result[0], 5f);
                 }
             }
         }
@@ -176,17 +159,18 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                using (var sess = tf.Session())
-                {
-                    Assert.IsNotNull(tf.get_default_graph());
-                    //graph is created automatically to perform create these operations
-                    var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
-                    var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
-                    var math = a1 + a2;
+                tf.compat.v1.disable_eager_execution();
+                var graph = tf.Graph().as_default();
 
-                    var result = sess.run(math);
-                    Assert.AreEqual(result[0], 5f);
-                }
+                using var sess = tf.Session(graph);
+                Assert.IsNotNull(tf.get_default_graph());
+                //graph is created automatically to perform create these operations
+                var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
+                var math = a1 + a2;
+
+                var result = sess.run(math);
+                Assert.AreEqual(result[0], 5f);
             }
         }
 
@@ -198,14 +182,12 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                using (var sess = tf.Session())
-                {
-                    Assert.IsNotNull(tf.get_default_graph());
-                    //graph is created automatically to perform create these operations
-                    var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
-                    var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
-                    var math = a1 + a2;
-                }
+                using var sess = tf.Session();
+                Assert.IsNotNull(tf.get_default_graph());
+                //graph is created automatically to perform create these operations
+                var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
+                var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
+                var math = a1 + a2;
             }
         }
 
@@ -234,6 +216,10 @@ namespace TensorFlowNET.UnitTest
             void Core(int tid)
             {
                 Assert.IsNull(tf.peak_default_graph());
+
+                tf.compat.v1.disable_eager_execution();
+                var graph = tf.Graph().as_default();
+
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 }, name: "ConstantK");
@@ -248,7 +234,6 @@ namespace TensorFlowNET.UnitTest
         private static readonly string modelPath = Path.GetFullPath("./Utilities/models/example1/");
 
         [Ignore]
-        [TestMethod]
         public void TF_GraphOperationByName_FromModel()
         {
             MultiThreadedUnitTestExecuter.Run(8, Core);

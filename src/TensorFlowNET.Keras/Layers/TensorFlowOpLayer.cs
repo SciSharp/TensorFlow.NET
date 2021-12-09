@@ -9,6 +9,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 using Tensorflow.Functions;
+using System.Threading;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -40,24 +41,24 @@ namespace Tensorflow.Keras.Layers
             return MakOp(inputs);
         }
 
-        ConcreteFunction function;
+        ThreadLocal<ConcreteFunction> function = new ThreadLocal<ConcreteFunction>();
         Tensors DeFunCall(Tensors inputs)
         {
-            if(function == null)
+            if (function.Value == null)
             {
-                function = new ConcreteFunction(name);
-                function.Enter();
+                function.Value = new ConcreteFunction(name);
+                function.Value.Enter();
 
                 int i = 0;
                 var graph_inputs = inputs.Select(x => tf.placeholder(x.dtype, shape: x.shape, name: $"defun_inputs_{i++}")).ToArray();
                 var graph_outputs = MakOp(graph_inputs);
                 graph_outputs = mark_as_return(graph_outputs);
 
-                function.ToGraph(graph_inputs, graph_outputs);
-                function.Exit();
+                function.Value.ToGraph(graph_inputs, graph_outputs);
+                function.Value.Exit();
             }
 
-            var outputs = function.FilteredCall(inputs);
+            var outputs = function.Value.FilteredCall(inputs);
             return outputs;
         }
 

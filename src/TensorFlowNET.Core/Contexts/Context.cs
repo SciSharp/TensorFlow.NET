@@ -171,7 +171,7 @@ namespace Tensorflow.Contexts
 
         public void reset_context()
         {
-            ops.reset_uid();
+            // ops.reset_uid();
             // tf.defaultSession = null;
             ops.reset_default_graph();
             context_switches.Clear();
