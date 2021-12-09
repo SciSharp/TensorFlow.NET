@@ -60,9 +60,9 @@ namespace TensorFlowNET.Keras.UnitTest
 
             //act
             ParallelOptions parallelOptions = new ParallelOptions();
-            parallelOptions.MaxDegreeOfParallelism = 1;
+            parallelOptions.MaxDegreeOfParallelism = 8;
             var input = np.array(new float[,] { { 0, 0 } });
-            Parallel.For(0, 1, parallelOptions, i =>
+            Parallel.For(0, 8, parallelOptions, i =>
             {
                 var clone = BuildModel();
                 clone.load_weights(savefile);

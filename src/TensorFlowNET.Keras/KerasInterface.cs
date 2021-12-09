@@ -25,7 +25,8 @@ namespace Tensorflow.Keras
         public LossesApi losses { get; } = new LossesApi();
         public Activations activations { get; } = new Activations();
         public Preprocessing preprocessing { get; } = new Preprocessing();
-        public BackendImpl backend { get; } = new BackendImpl();
+        ThreadLocal<BackendImpl> _backend = new ThreadLocal<BackendImpl>(() => new BackendImpl());
+        public BackendImpl backend => _backend.Value;
         public OptimizerApi optimizers { get; } = new OptimizerApi();
         public MetricsApi metrics { get; } = new MetricsApi();
         public ModelsApi models { get; } = new ModelsApi();
