@@ -38,6 +38,14 @@ namespace TensorFlowNET.UnitTest.NumPy
         }
 
         [TestMethod]
+        public void slice_newaxis()
+        {
+            var x = np.arange(20).reshape((4, 5));
+            var y = x[np.newaxis, ":2"];
+            Assert.AreEqual(y.shape, (1, 2, 5));
+        }
+
+        [TestMethod]
         public void slice_params()
         {
             var x = np.arange(12).reshape((3, 4));
@@ -142,6 +150,30 @@ namespace TensorFlowNET.UnitTest.NumPy
             Assert.AreEqual(array[1], new[] { 8, 9, 100, 11, 200, 13, 14, 15 });
             Assert.AreEqual(array[2], new[] { 16, 17, 100, 19, 200, 21, 22, 23 });
             Assert.AreEqual(array[3], new[] { 24, 25, 100, 27, 200, 29, 30, 31 });
+        }
+
+        [TestMethod]
+        public void mask_2d_get_value()
+        {
+            var x = np.arange(25).reshape((5, 5));
+            var y = np.array(new[] { true, false, true, false, true });
+            var z = x[y];
+            Assert.AreEqual(z.shape, (3, 5));
+            Assert.AreEqual(z[0], new[] { 0, 1, 2, 3, 4 });
+            Assert.AreEqual(z[1], new[] { 10, 11, 12, 13, 14 });
+            Assert.AreEqual(z[2], new[] { 20, 21, 22, 23, 24 });
+        }
+
+        [TestMethod]
+        public void mask_2d_set_value()
+        {
+            var x = np.arange(25).reshape((5, 5));
+            var y = np.array(new[] {true, false, true, false, false});
+            x[y] = 0;
+            Assert.AreEqual(x[0], new[] { 0, 0, 0, 0, 0 });
+            Assert.AreEqual(x[1], new[] { 5, 6, 7, 8, 9 });
+            Assert.AreEqual(x[2], new[] { 0, 0, 0, 0, 0 });
+            Assert.AreEqual(x[3], new[] { 15, 16, 17, 18, 19 });
         }
     }
 }

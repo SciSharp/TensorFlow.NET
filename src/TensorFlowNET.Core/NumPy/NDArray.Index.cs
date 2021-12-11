@@ -43,7 +43,9 @@ namespace Tensorflow.NumPy
         {
             get
             {
-                if(mask.dtype == TF_DataType.TF_INT32)
+                if (mask.dtype == TF_DataType.TF_BOOL)
+                    return GetData(enumerate(mask.ToArray<bool>()).Where(x => x.Item2).Select(x => x.Item1).ToArray());
+                else if (mask.dtype == TF_DataType.TF_INT32)
                     return GetData(mask.ToArray<int>());
                 else if (mask.dtype == TF_DataType.TF_INT64)
                     return GetData(mask.ToArray<long>().Select(x => Convert.ToInt32(x)).ToArray());
@@ -55,7 +57,10 @@ namespace Tensorflow.NumPy
 
             set
             {
-                throw new NotImplementedException("");
+                if (mask.dtype == TF_DataType.TF_BOOL)
+                    MaskData(mask, value);
+                else
+                    throw new NotImplementedException("");
             }
         }
 
@@ -265,6 +270,18 @@ namespace Tensorflow.NumPy
 
             // reset indices
             indices[currentNDim] = 0;
+        }
+
+        unsafe void MaskData(NDArray mask, NDArray value)
+        {
+            var masks = mask.ToArray<bool>();
+            var s1 = new Shape(dims.Skip(mask.rank).ToArray());
+            var val = tf.fill(s1, value).numpy();
+            for (int i = 0; i < masks.Length; i++)
+            {
+                if (masks[i])
+                    this[i] = val;
+            }
         }
     }
 }

@@ -1,18 +1,15 @@
-﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.NumPy;
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest
+namespace TensorFlowNET.UnitTest.Basics
 {
-    [TestClass, Ignore]
-    public class TensorTest
+    [TestClass]
+    public class TensorTest : GraphModeTestBase
     {
-        [TestMethod]
+        [TestMethod, Ignore]
         public void sparse_to_dense()
         {
             var indices = tf.reshape(tf.range(0, 5), new int[] { 5, 1 });
@@ -30,7 +27,7 @@ namespace TensorFlowNET.UnitTest
             };
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void sparse_tensor_to_dense()
         {
             var decoded_list = tf.SparseTensor(new[,]
