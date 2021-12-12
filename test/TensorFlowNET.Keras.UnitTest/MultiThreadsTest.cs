@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TensorFlowNET.Keras.UnitTest
 {
-    [TestClass]
+    [TestClass, Ignore]
     public class MultiThreads
     {
         [TestMethod]

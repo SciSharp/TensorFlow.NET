@@ -16,10 +16,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.6.0" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist-Windows-GPU" Version="2.7.0" />
   </ItemGroup>
 
   <ItemGroup>
