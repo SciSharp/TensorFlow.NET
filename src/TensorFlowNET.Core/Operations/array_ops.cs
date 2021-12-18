@@ -792,6 +792,26 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor moveaxis(NDArray array, Axis source, Axis destination)
+        {
+            List<int> perm = null;
+            source = source.axis.Select(x => x < 0 ? array.rank + x : x).ToArray();
+            destination = destination.axis.Select(x => x < 0 ? array.rank + x : x).ToArray();
+
+            if (array.shape.rank > -1)
+            {
+                perm = range(0, array.rank).Where(i => !source.axis.Contains(i)).ToList();
+                foreach (var (dest, src) in zip(destination.axis, source.axis).OrderBy(x => x.Item1))
+                {
+                    perm.Insert(dest, src);
+                }
+            }
+            else
+                throw new NotImplementedException("");
+
+            return array_ops.transpose(array, perm.ToArray());
+        }
+
         /// <summary>
         /// Computes the shape of a broadcast given symbolic shapes.
         /// When shape_x and shape_y are Tensors representing shapes(i.e.the result of

@@ -25,5 +25,8 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public static NDArray stack(params NDArray[] arrays) => new NDArray(array_ops.stack(arrays));
+
+        [AutoNumPy]
+        public static NDArray moveaxis(NDArray array, Axis source, Axis destination) => new NDArray(array_ops.moveaxis(array, source, destination));
     }
 }
