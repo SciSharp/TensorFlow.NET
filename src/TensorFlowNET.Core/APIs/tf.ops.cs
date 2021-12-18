@@ -27,6 +27,9 @@ namespace Tensorflow
         public void add_to_collections<T>(List<string> names, T value)
             => get_default_graph().add_to_collections(names, value);
 
+        public (Tensors, Tensor) clip_by_global_norm(Tensor[] t_list, float clip_norm, Tensor use_norm = null, string name = null)
+            => clip_ops.clip_by_global_norm(t_list, clip_norm, use_norm: use_norm, name: name);
+
         public Tensor assign(IVariableV1 @ref, object value, bool validate_shape = true, bool use_locking = true, string name = null)
             => state_ops.assign(@ref, value, validate_shape, use_locking, name);
 
