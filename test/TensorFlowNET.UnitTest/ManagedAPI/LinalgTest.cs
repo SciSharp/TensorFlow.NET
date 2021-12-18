@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tensorflow;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ManagedAPI
@@ -53,6 +54,14 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var m1 = tf.random.normal((3, 5));
             var e = tf.linalg.einsum("ij,jk->ik", (m0, m1));
             Assert.AreEqual(e.shape, (2, 5));
+        }
+
+        [TestMethod]
+        public void GlobalNorm()
+        {
+            var t_list = new Tensors(tf.constant(new float[] { 1, 2, 3, 4 }), tf.constant(new float[] { 5, 6, 7, 8 }));
+            var norm = tf.linalg.global_norm(t_list);
+            Assert.AreEqual(norm.numpy(), 14.282857f);
         }
     }
 }

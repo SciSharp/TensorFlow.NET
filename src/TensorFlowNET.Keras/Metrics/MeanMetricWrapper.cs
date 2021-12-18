@@ -4,7 +4,6 @@ namespace Tensorflow.Keras.Metrics
 {
     public class MeanMetricWrapper : Mean
     {
-        string name;
         Func<Tensor, Tensor, Tensor> _fn = null;
 
         public MeanMetricWrapper(Func<Tensor, Tensor, Tensor> fn, string name, TF_DataType dtype = TF_DataType.TF_FLOAT)

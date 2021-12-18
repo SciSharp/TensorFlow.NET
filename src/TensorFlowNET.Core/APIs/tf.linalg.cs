@@ -51,6 +51,9 @@ namespace Tensorflow
             public Tensor inv(Tensor input, bool adjoint = false, string name = null)
                 => ops.matrix_inverse(input, adjoint: adjoint, name: name);
 
+            public Tensor global_norm(Tensor[] t_list, string name = null)
+                => clip_ops.global_norm(t_list, name: name);
+
             public Tensor lstsq(Tensor matrix, Tensor rhs,
                 NDArray l2_regularizer = null, bool fast = true, string name = null)
                 => ops.matrix_solve_ls(matrix, rhs, l2_regularizer: l2_regularizer, fast: fast, name: name);
