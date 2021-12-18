@@ -128,6 +128,9 @@ namespace Tensorflow
             return _softmax(logits, gen_nn_ops.softmax, axis, name);
         }
 
+        public static Tensor l2_loss(Tensor t, string name = null)
+            => tf.Context.ExecuteOp("L2Loss", name, new ExecuteOpArgs(t));
+
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
         {
             return tf_with(ops.name_scope(name, "LeakyRelu", new { features, alpha }), scope =>

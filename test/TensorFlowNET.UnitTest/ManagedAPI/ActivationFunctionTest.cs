@@ -2,7 +2,7 @@
 using Tensorflow;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.UnitTest.nn_test
+namespace TensorFlowNET.UnitTest.NenuralNetwork
 {
     [TestClass]
     public class ActivationFunctionTest : EagerModeTestBase

@@ -157,6 +157,9 @@ namespace Tensorflow
                 });
             }
 
+            public Tensor l2_loss(Tensor t, string name = null)
+                => nn_ops.l2_loss(t, name: name);
+
             /// <summary>
             /// Local Response Normalization.
             /// </summary>
