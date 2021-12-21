@@ -203,7 +203,7 @@ namespace Tensorflow.Keras.Engine
 
         protected virtual void add_loss(Func<Tensor> losses)
         {
-
+            
         }
 
         /// <summary>
@@ -214,10 +214,13 @@ namespace Tensorflow.Keras.Engine
         /// <param name="regularizer"></param>
         void _handle_weight_regularization(string name, IVariableV1 variable, IRegularizer regularizer)
         {
-            add_loss(() => regularizer.Apply(new RegularizerArgs
-            {
 
-            }));
+            add_loss(() => tf_with(ops.name_scope(name + "/Regularizer"), scope => 
+                regularizer.Apply(new RegularizerArgs(variable.AsTensor())
+                {
+
+                }) 
+            ));
         }
 
         /*protected virtual void add_update(Tensor[] updates, bool inputs = false)
