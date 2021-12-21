@@ -33,12 +33,12 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// <summary>
         /// Regularizer function applied to the `kernel` weights matrix.
         /// </summary>
-        public IInitializer KernelRegularizer { get; set; }
+        public IRegularizer KernelRegularizer { get; set; }
 
         /// <summary>
         /// Regularizer function applied to the bias vector.
         /// </summary>
-        public IInitializer BiasRegularizer { get; set; }
+        public IRegularizer BiasRegularizer { get; set; }
 
         /// <summary>
         /// Constraint function applied to the `kernel` weights matrix.
