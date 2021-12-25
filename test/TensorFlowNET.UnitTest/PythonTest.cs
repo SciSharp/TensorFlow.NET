@@ -266,33 +266,8 @@ namespace TensorFlowNET.UnitTest
             //else 
             //{
             s = self._create_session(graph, config, force_gpu);
-            self._constrain_devices_and_set_default(s, use_gpu, force_gpu);
             //}
             return s.as_default();
-        }
-
-        private ITensorFlowObject _constrain_devices_and_set_default(Session sess, bool useGpu, bool forceGpu)
-        {
-            //def _constrain_devices_and_set_default(self, sess, use_gpu, force_gpu):
-            //"""Set the session and its graph to global default and constrain devices."""
-            //if context.executing_eagerly():
-            //  yield None
-            //else:
-            //  with sess.graph.as_default(), sess.as_default():
-            //    if force_gpu:
-            //      # Use the name of an actual device if one is detected, or
-            //      # '/device:GPU:0' otherwise
-            //      gpu_name = gpu_device_name()
-            //      if not gpu_name:
-            //            gpu_name = "/device:GPU:0"
-            //      with sess.graph.device(gpu_name):
-            //        yield sess
-            //    elif use_gpu:
-            //      yield sess
-            //    else:
-            //      with sess.graph.device("/device:CPU:0"):
-            //        yield sess
-            return sess;
         }
 
         // See session() for details.

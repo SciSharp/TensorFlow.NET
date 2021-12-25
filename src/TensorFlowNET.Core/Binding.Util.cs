@@ -204,48 +204,20 @@ namespace Tensorflow
         }
 
         [DebuggerStepThrough]
-        public static void tf_with(ITensorFlowObject py, Action<ITensorFlowObject> action)
-        {
-            try
-            {
-                py.__enter__();
-                action(py);
-            }
-            finally
-            {
-                py.__exit__();
-                py.Dispose();
-            }
-        }
-
-        [DebuggerStepThrough]
         public static void tf_with<T>(T py, Action<T> action) where T : ITensorFlowObject
         {
-            try
-            {
-                py.__enter__();
-                action(py);
-            }
-            finally
-            {
-                py.__exit__();
-                py.Dispose();
-            }
+            py.__enter__();
+            action(py);
+            py.__exit__();
         }
 
         [DebuggerStepThrough]
         public static TOut tf_with<TIn, TOut>(TIn py, Func<TIn, TOut> action) where TIn : ITensorFlowObject
         {
-            try
-            {
-                py.__enter__();
-                return action(py);
-            }
-            finally
-            {
-                py.__exit__();
-                py.Dispose();
-            }
+            py.__enter__();
+            var result = action(py);
+            py.__exit__();
+            return result;
         }
 
         public static float time()

@@ -21,7 +21,7 @@ using Tensorflow.Util;
 
 namespace Tensorflow
 {
-    public class Session : BaseSession, ITensorFlowObject
+    public class Session : BaseSession
     {
         public Session(string target = "", Graph g = null) : base(target, g, null)
         { }

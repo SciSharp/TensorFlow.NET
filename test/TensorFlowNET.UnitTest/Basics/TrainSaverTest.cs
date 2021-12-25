@@ -42,10 +42,7 @@ namespace TensorFlowNET.UnitTest.Basics
 
         public void ImportSavedModel()
         {
-            tf_with(Session.LoadFromSavedModel("mobilenet"), sess =>
-            {
-
-            });
+            Session.LoadFromSavedModel("mobilenet");
         }
 
         public void ImportGraphDefFromPbFile()

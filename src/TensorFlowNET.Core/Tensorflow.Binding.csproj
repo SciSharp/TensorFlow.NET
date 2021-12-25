@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>TensorFlow.NET</AssemblyName>
+    <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
     <Version>0.70.0</Version>

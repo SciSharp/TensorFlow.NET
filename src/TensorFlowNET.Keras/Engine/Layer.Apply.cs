@@ -33,18 +33,20 @@ namespace Tensorflow.Keras.Engine
             else
                 nameScope = _name_scope();
 
-            tf_with(ops.name_scope(nameScope), scope =>
-            {
-                if (!built)
-                    MaybeBuild(inputs);
+            var scope = ops.name_scope(nameScope);
+            scope.__enter__();
 
-                outputs = Call(inputs, state: state, training: training);
+            if (!built)
+                MaybeBuild(inputs);
 
-                // memory leak
-                // _set_connectivity_metadata_(inputs, outputs);
-                _handle_activity_regularization(inputs, outputs);
-                _set_mask_metadata(inputs, outputs, null);
-            });
+            outputs = Call(inputs, state: state, training: training);
+
+            // memory leak
+            // _set_connectivity_metadata_(inputs, outputs);
+            _handle_activity_regularization(inputs, outputs);
+            _set_mask_metadata(inputs, outputs, null);
+
+            scope.__exit__();
 
             return outputs;
         }
