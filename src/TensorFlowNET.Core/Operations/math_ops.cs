@@ -929,6 +929,72 @@ namespace Tensorflow
             throw new NotImplementedException("tensordot");
         }
 
+        public static Tensor tensordot(Tensor x, Tensor y, Tensor axes, string name = null)
+        {
+            Tensor _tensordot_reshape(Tensor a, int[] axes, bool flipped = false)
+            {
+                if (a.shape.IsFullyDefined && isinstance(axes, (typeof(List<object>), typeof(Tuple))))
+                {
+                    var shape_a = a.shape.dims;
+
+                    // axes
+                    int iter = 0;
+                    foreach (int i in axes)
+                    {
+                        if (i >= 0)
+                            axes[0 + iter] = i;
+                        else
+                            axes[0 + iter] = i + len(shape_a);
+                        iter++;
+                    }
+
+                    // free
+                    int[] free = { };
+                    iter = 0;
+                    foreach (int i in Enumerable.Range(0, len(axes)))
+                        if (!Array.Exists(axes, i => i == i))
+                            free[free.Length] = i;
+
+                    // free_dims
+                    int[] free_dims = { };
+                    foreach (int i in free)
+                        free_dims[free_dims.Length] = (int)shape_a[i];
+
+                    int prod_free = (int)np.prod(free_dims);
+
+                    // prod_axes
+                    int[] prod_axes_pre = { };
+                    foreach (int i in axes)
+                        prod_axes_pre[prod_axes_pre.Length] = (int)shape_a[i];
+                    int prod_axes = (int)np.prod(prod_axes_pre);
+
+                    // perm
+                    Tensor perm;
+                    if (flipped)
+                        perm = ops.convert_to_tensor(list(free)) + ops.convert_to_tensor(free);
+                    else
+                        perm = ops.convert_to_tensor(list(free)) + ops.convert_to_tensor(free)
+                                                                 + ops.convert_to_tensor(list(axes));
+
+                    // new_shape
+                    Shape new_shape;
+                    if (flipped)
+                        new_shape = new Shape(new int[] { prod_axes, prod_free });
+                    else
+                        new_shape = new Shape(new int[] { prod_free, prod_axes });
+                }
+
+                throw new NotImplementedException("_tensordot_reshape");
+            }
+
+            return tf_with(ops.name_scope(name, "Tensordot", new { x, y, axes }), scope =>
+            {
+                name = scope;
+                var (a_axes, b_axes) = (axes[0], axes[1]);
+                return x;
+            });
+        }
+
         public static Tensor truediv(Tensor x, Tensor y, string name = null)
             => _truediv_python3(x, y, name);
 

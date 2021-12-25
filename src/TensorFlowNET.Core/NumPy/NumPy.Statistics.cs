@@ -14,5 +14,9 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public static NDArray amax(NDArray x, int axis = 0) => new NDArray(tf.math.argmax(x, axis));
+
+        [AutoNumPy]
+        public static NDArray average(NDArray a, int axis = -1, NDArray? weights = null, bool returned = false)
+            => tf.numpy.average(a, axis: axis, weights: weights, returned: returned);
     }
 }
