@@ -283,7 +283,7 @@ namespace Tensorflow
             // This was causing duplicate graph node name errors, when testing a conv2d autoencoder
             // https://keras.io/guides/functional_api/#:~:text=keras.,graph%20(DAG)%20of%20layers.
             // name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
-            name = name.EndsWith("/") ? unique_name(ops.name_from_scope_name(name)) : unique_name(name);
+            name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, attrs: attrs);
 
             var input_ops = inputs.Select(x => x.op).ToArray();
@@ -386,10 +386,6 @@ namespace Tensorflow
         /// to name the operation being created.</returns>
         public string unique_name(string name, bool mark_as_used = true)
         {
-            if (name.EndsWith("basic_r_n_n_cell"))
-            {
-
-            }
             if (!String.IsNullOrEmpty(_name_stack))
                 name = _name_stack + "/" + name;
             // For the sake of checking for names in use, we treat names as case

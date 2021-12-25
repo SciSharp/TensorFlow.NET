@@ -103,7 +103,7 @@ namespace Tensorflow.Keras.Layers
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = false)
         {
-            var outputs = _convolution_op.Apply(inputs, kernel);
+            var outputs = _convolution_op.Apply(inputs, kernel.AsTensor());
             if (use_bias)
             {
                 if (data_format == "channels_first")

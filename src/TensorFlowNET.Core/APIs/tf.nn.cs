@@ -26,7 +26,7 @@ namespace Tensorflow
 
         public class nn_internal
         {
-            public Tensor conv2d(Tensor input, IVariableV1 filter, int[] strides, string padding, bool use_cudnn_on_gpu = true,
+            public Tensor conv2d(Tensor input, Tensor filter, int[] strides, string padding, bool use_cudnn_on_gpu = true,
                 string data_format = "NHWC", int[] dilations = null, string name = null)
             {
                 var parameters = new Conv2dParams

@@ -36,7 +36,7 @@ namespace Tensorflow.Operations
             name = args.Name;
         }
 
-        public Tensor Apply(Tensors input, IVariableV1 filters)
+        public Tensor Apply(Tensors input, Tensor filters)
         {
             var filters_rank = filters.shape.ndim;
             var inputs_rank = input.shape.ndim;

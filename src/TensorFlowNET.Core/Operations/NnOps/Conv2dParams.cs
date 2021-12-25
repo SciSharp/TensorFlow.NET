@@ -42,7 +42,7 @@ namespace Tensorflow.Operations
         /// <summary>
         /// A 4-D tensor of shape
         /// </summary>
-        public IVariableV1 Filter { get; set; }
+        public Tensor Filter { get; set; }
 
         /// <summary>
         /// An integer vector representing the tensor shape of `filter`

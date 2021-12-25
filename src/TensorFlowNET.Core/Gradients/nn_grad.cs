@@ -133,6 +133,46 @@ namespace Tensorflow.Gradients
                 -x_grad
             };
         }
+
+        /// <summary>
+        /// The derivatives for deconvolution.
+        /// </summary>
+        /// <param name="op">The Deconvolution op.</param>
+        /// <param name="grads">The tensor representing the gradient w.r.t. the output</param>
+        /// <returns>The gradients w.r.t. the input and the filter</returns>
+        [RegisterGradient("Conv2DBackpropInput")]
+        public static Tensor[] _Conv2DBackpropInputGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var dilations = op.get_attr_list<int>("dilations");
+            var strides = op.get_attr_list<int>("strides");
+            var padding = op.get_attr<string>("padding");
+            var explicit_paddings = op.get_attr_list<int>("explicit_paddings");
+            var use_cudnn_on_gpu = op.get_attr<bool>("use_cudnn_on_gpu");
+            var data_format = op.get_attr<string>("data_format");
+
+            return new Tensor[]
+            {
+                gen_nn_ops.conv2d_backprop_filter(grad, array_ops.shape(op.inputs[1]), op.inputs[2],
+                    strides, padding,
+                    use_cudnn_on_gpu: use_cudnn_on_gpu,
+                    explicit_paddings: explicit_paddings,
+                    dilations: dilations,
+                    data_format: data_format),
+                gen_nn_ops.conv2d(new Conv2dParams
+                    {
+                        Input = grad,
+                        Filter = op.inputs[1],
+                        Strides = strides,
+                        Padding = padding,
+                        DataFormat = data_format,
+                        Dilations = dilations,
+                        ExplicitPaddings = explicit_paddings,
+                        UseCudnnOnGpu = use_cudnn_on_gpu
+                    })
+            };
+        }
+
         /// <summary>
         /// Gradient function for Conv2D.
         /// </summary>
