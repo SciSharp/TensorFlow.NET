@@ -280,7 +280,10 @@ namespace Tensorflow
 
             // If a names ends with a '/' it is a "name scope" and we use it as-is,
             // after removing the trailing '/'.
-            name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
+            // This was causing duplicate graph node name errors, when testing a conv2d autoencoder
+            // https://keras.io/guides/functional_api/#:~:text=keras.,graph%20(DAG)%20of%20layers.
+            // name = name.EndsWith("/") ? ops.name_from_scope_name(name) : unique_name(name);
+            name = name.EndsWith("/") ? unique_name(ops.name_from_scope_name(name)) : unique_name(name);
             var node_def = ops._NodeDef(op_type, name, attrs: attrs);
 
             var input_ops = inputs.Select(x => x.op).ToArray();
