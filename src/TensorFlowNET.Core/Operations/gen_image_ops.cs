@@ -62,6 +62,19 @@ namespace Tensorflow
             });
         }
 
+        public static Tensor decode_image(Tensor contents,
+            long channels = 0,
+            TF_DataType dtype = TF_DataType.TF_UINT8,
+            bool expand_animations = true,
+            string name = null)
+                => tf.Context.ExecuteOp("DecodeImage", name,
+                    new ExecuteOpArgs(contents).SetAttributes(new
+                    {
+                        channels,
+                        dtype,
+                        expand_animations
+                    }));
+
         public static Tensor decode_jpeg(Tensor contents,
             long channels = 0,
             long ratio = 1,

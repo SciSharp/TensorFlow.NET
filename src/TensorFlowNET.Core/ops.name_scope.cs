@@ -111,18 +111,6 @@ namespace Tensorflow
                     get_default_graph()._name_stack = old_scope_name;
             }
 
-            [DebuggerNonUserCode]
-            public void __init__()
-            {
-
-            }
-
-            [DebuggerNonUserCode]
-            public void __del__()
-            {
-
-            }
-
             /// <summary>
             /// __enter__()
             /// </summary>
