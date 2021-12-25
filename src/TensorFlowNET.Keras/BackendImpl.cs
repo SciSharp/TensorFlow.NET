@@ -354,7 +354,7 @@ namespace Tensorflow.Keras
             var tf_data_format = "NHWC";
             padding = padding.ToUpper();
             strides = new Shape(1, strides[0], strides[1], 1);
-            if (dilation_rate.Equals(new[] { 1, 1 }))
+            if (dilation_rate.Equals(new long[] { 1, 1 }))
                 x = nn_impl.conv2d_transpose(x, kernel, output_shape, strides,
                     padding: padding,
                     data_format: tf_data_format);
