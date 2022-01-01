@@ -57,6 +57,9 @@ namespace Tensorflow
             public Tensor lstsq(Tensor matrix, Tensor rhs,
                 NDArray l2_regularizer = null, bool fast = true, string name = null)
                 => ops.matrix_solve_ls(matrix, rhs, l2_regularizer: l2_regularizer, fast: fast, name: name);
+
+            public Tensor tensordot(Tensor x, Tensor y, NDArray axes, string name = null)
+                => math_ops.tensordot(x, y, axes, name: name);
         }
 
         public Tensor diag(Tensor diagonal, string name = null)

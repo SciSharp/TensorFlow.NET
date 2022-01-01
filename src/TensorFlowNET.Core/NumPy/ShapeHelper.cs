@@ -104,6 +104,14 @@ namespace Tensorflow.NumPy
                     if (shape.ndim != shape3.Length)
                         return false;
                       return Enumerable.SequenceEqual(shape.as_int_list(), shape3);
+                case List<long> shape4:
+                    if (shape.ndim != shape4.Count)
+                        return false;
+                    return Enumerable.SequenceEqual(shape.dims, shape4);
+                case List<int> shape5:
+                    if (shape.ndim != shape5.Count)
+                        return false;
+                    return Enumerable.SequenceEqual(shape.as_int_list(), shape5);
                 default:
                     return false;
             }

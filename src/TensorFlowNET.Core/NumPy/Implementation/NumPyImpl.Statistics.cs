@@ -20,7 +20,7 @@ namespace Tensorflow.NumPy
                 if(a.rank != weights.rank)
                 {
                     var weights_sum = math_ops.reduce_sum(tensorW);
-                    var axes = ops.convert_to_tensor(new[,] { { axis }, { 0 } });
+                    var axes = np.array(new[,] { { axis }, { 0 } });
                     var avg = math_ops.tensordot(a, weights, axes) / weights_sum;
                 }
                 

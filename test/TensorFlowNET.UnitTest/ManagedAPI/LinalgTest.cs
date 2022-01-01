@@ -63,5 +63,19 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var norm = tf.linalg.global_norm(t_list);
             Assert.AreEqual(norm.numpy(), 14.282857f);
         }
+
+        [TestMethod]
+        public void Tensordot()
+        {
+            var a = tf.constant(new[] { 1, 2 });
+            var b = tf.constant(new[] { 2, 3 });
+            var c = tf.linalg.tensordot(a, b, 0);
+            Assert.AreEqual(c.shape, (2, 2));
+            AssetSequenceEqual(c.ToArray<int>(), new[] { 2, 3, 4, 6 });
+
+            c = tf.linalg.tensordot(a, b, new[] { 0, 0 });
+            Assert.AreEqual(c.shape.ndim, 0);
+            Assert.AreEqual(c.numpy(), 8);
+        }
     }
 }
