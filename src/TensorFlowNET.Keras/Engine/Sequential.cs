@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
@@ -35,8 +36,9 @@ namespace Tensorflow.Keras.Engine
         bool _auto_track_sub_layers;
         Shape _inferred_input_shape;
         bool _has_explicit_input_shape;
-        
+        bool _graph_initialized;
         public Shape output_shape => outputs[0].shape;
+        List<INode> _created_nodes;
 
         public Sequential(SequentialArgs args)
             : base(args.Inputs, args.Outputs, name: args.Name)
@@ -49,12 +51,13 @@ namespace Tensorflow.Keras.Engine
             _auto_track_sub_layers = false;
             _has_explicit_input_shape = false;
             _is_graph_network = false;
+            _created_nodes = new List<INode>();
 
             // Add to the model any layers passed to the constructor.
             if (args.Layers != null)
             {
                 foreach (var layer in args.Layers)
-                    add(layer as Layer);
+                    add(layer);
             }
         }
 
@@ -118,7 +121,69 @@ namespace Tensorflow.Keras.Engine
             }
             else
             {
+                _self_tracked_trackables.add(layer);
+                _handle_deferred_layer_dependencies(layer);
+            }
+        }
 
+        void _handle_deferred_layer_dependencies(params ILayer[] layers)
+        {
+            _layers.AddRange(layers);
+        }
+
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        {
+            if (!_has_explicit_input_shape)
+            {
+                _build_graph_network_for_inferred_shape(inputs.shape, inputs.dtype);
+            }
+
+            if(_graph_initialized)
+            {
+                if (!built)
+                    _init_graph_network(this.inputs, outputs);
+                return base.Call(inputs, state, training);
+            }
+
+            return base.Call(inputs, state, training);
+        }
+
+        void _build_graph_network_for_inferred_shape(Shape input_shape, TF_DataType input_dtype)
+        {
+            ops.init_scope();
+            var inputs = keras.Input(batch_input_shape: input_shape,
+                dtype: input_dtype,
+                name: $"{_layers[0].Name}_input");
+            Tensors layer_input = inputs;
+            Tensors layer_output = null;
+            Tensors outputs = null;
+            
+            foreach (var layer in _layers)
+            {
+                clear_previously_created_nodes(layer, _created_nodes);
+                layer_output = layer.Apply(layer_input);
+                // Keep track of nodes just created above
+                track_nodes_created_by_last_call(layer, _created_nodes);
+                layer_input = layer_output;
+                outputs = layer_output;
+            }
+            _init_graph_network(inputs, outputs);
+            _graph_initialized = true;
+            _inferred_input_shape = input_shape;
+        }
+
+        void clear_previously_created_nodes(ILayer layer, List<INode> created_nodes)
+        {
+
+        }
+
+        void track_nodes_created_by_last_call(ILayer layer, List<INode> created_nodes)
+        {
+            var node = layer.InboundNodes.Last();
+            created_nodes.Add(node);
+            foreach(var prev_layer in node.iterate_inbound())
+            {
+                created_nodes.add(prev_layer.Item1.OutboundNodes.Last());
             }
         }
     }

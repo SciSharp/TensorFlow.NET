@@ -98,35 +98,23 @@ namespace Tensorflow
                 default:
                     return obj?.ToString() ?? "null";
             }
-
-            object[] toObjectArray(Array arr)
-            {
-                var len = arr.LongLength;
-                var ret = new object[len];
-                for (long i = 0; i < len; i++)
-                {
-                    ret[i] = arr.GetValue(i);
-                }
-
-                return ret;
-            }
         }
 
-        private static TextWriter writer = null;
+        private static TextWriter _writer = Console.Out;
 
         public static TextWriter tf_output_redirect { 
             set
             {
-                var originWriter = writer ?? Console.Out;
-                originWriter.Flush();
-                if (originWriter is StringWriter)
-                    (originWriter as StringWriter).GetStringBuilder().Clear();
-                writer = value;
+                if(_writer != null)
+                {
+                    _writer.Flush();
+                    if (_writer is StringWriter sw)
+                        sw.GetStringBuilder().Clear();
+                }
+
+                _writer = value;
             }
-            get
-            {
-                return writer ?? Console.Out;
-            }
+            get => _writer ?? Console.Out;
         }
 
         public static void print(object obj)

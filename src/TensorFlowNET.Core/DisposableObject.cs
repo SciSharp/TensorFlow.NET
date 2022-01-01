@@ -48,7 +48,7 @@ namespace Tensorflow
             }
 
             // free unmanaged memory
-            // if (_handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
             {
                 // Call the appropriate methods to clean up
                 // unmanaged resources here.

@@ -71,7 +71,7 @@ namespace Tensorflow.Keras.Layers
             var rank = inputs.rank;
             if (rank > 2)
             {
-                throw new NotImplementedException("call rank > 2");
+                outputs = tf.linalg.tensordot(inputs, kernel.AsTensor(), new[,] { { rank - 1 }, { 0 } });
             }
             else
             {
