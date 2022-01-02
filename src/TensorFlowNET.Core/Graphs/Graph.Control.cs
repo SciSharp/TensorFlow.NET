@@ -81,10 +81,7 @@ namespace Tensorflow
         /// </summary>
         public _ControlDependenciesController control_dependencies(object[] control_inputs)
         {
-            if (tf.Context.executing_eagerly())
-                return new _ControlDependenciesController(this, null);
-
-            if (control_inputs == null)
+            if (control_inputs == null || tf.Context.executing_eagerly())
                 return new _ControlDependenciesController(this, null);
 
             var control_ops = new List<ITensorOrOperation>();
