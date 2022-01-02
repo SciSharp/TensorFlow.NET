@@ -253,5 +253,11 @@ namespace Tensorflow
         public override bool Equals(object obj) => ShapeHelper.Equals(this, obj);
 
         public override string ToString() => ShapeHelper.ToString(this);
+
+        public static bool operator ==(Shape a, Shape b) 
+            => ShapeHelper.Equals(a, b);
+
+        public static bool operator !=(Shape a, Shape b) 
+            => !ShapeHelper.Equals(a, b);
     }
 }

@@ -88,6 +88,13 @@ namespace Tensorflow.NumPy
 
         public static bool Equals(Shape shape, object target)
         {
+            if (shape is null && target is null)
+                return true;
+            else if (shape is null && target is not null)
+                return false;
+            else if (shape is not null && target is null)
+                return false;
+
             switch (target)
             {
                 case Shape shape1:

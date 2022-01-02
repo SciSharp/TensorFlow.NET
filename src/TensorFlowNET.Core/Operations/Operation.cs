@@ -55,7 +55,7 @@ namespace Tensorflow
 
         public int _id_value { get; set; }
         public Operation op => this;
-        public TF_DataType dtype => TF_DataType.DtInvalid;
+        public TF_DataType dtype => output.dtype;
         public virtual string name => _handle == IntPtr.Zero ? "" : c_api.StringPiece(c_api.TF_OperationName(_handle));
         public string OpType => _handle == IntPtr.Zero ? "" : c_api.StringPiece(c_api.TF_OperationOpType(_handle));
 

@@ -69,7 +69,8 @@ namespace Tensorflow.Keras.Engine
 
             NetworkNodes = nodes;
             NodesByDepth = nodes_by_depth;
-            _layers = layers;
+            if (_layers.Count == 0)
+                _layers = layers;
 
             // Build self.input_names and self.output_names.
             _set_output_names();

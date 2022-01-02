@@ -78,7 +78,7 @@ namespace Tensorflow.Contexts
                         if (args.GetGradientAttrs == null)
                         {
                             attrs = new Dictionary<string, object>();
-                            attrs["T"] = op.get_attr<TF_DataType>("T");
+                            attrs["T"] = op.dtype;
                         }
                         else
                         {
