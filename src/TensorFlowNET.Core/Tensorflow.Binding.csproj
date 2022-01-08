@@ -42,6 +42,7 @@ https://tensorflownet.readthedocs.io</Description>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
     <Platforms>AnyCPU;x64</Platforms>
+    <PackageId>TensorFlow.NET</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
