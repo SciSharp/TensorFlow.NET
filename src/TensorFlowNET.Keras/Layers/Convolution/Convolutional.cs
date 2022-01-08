@@ -48,11 +48,11 @@ namespace Tensorflow.Keras.Layers
         public Convolutional(ConvolutionalArgs args) : base(args)
         {
             this.args = args;
-            args.KernelSize = conv_utils.normalize_tuple(args.KernelSize.dims.Select(x => (int)x).ToArray(), args.Rank, "kernel_size");
-            args.Strides = conv_utils.normalize_tuple(args.Strides.dims.Select(x => (int)x).ToArray(), args.Rank, "strides");
+            args.KernelSize = conv_utils.normalize_tuple(args.KernelSize.as_int_list(), args.Rank, "kernel_size");
+            args.Strides = conv_utils.normalize_tuple(args.Strides.as_int_list(), args.Rank, "strides");
             args.Padding = conv_utils.normalize_padding(args.Padding);
             args.DataFormat = conv_utils.normalize_data_format(args.DataFormat);
-            args.DilationRate = conv_utils.normalize_tuple(args.DilationRate.dims.Select(x => (int)x).ToArray(), args.Rank, "dilation_rate");
+            args.DilationRate = conv_utils.normalize_tuple(args.DilationRate.as_int_list(), args.Rank, "dilation_rate");
             inputSpec = new InputSpec(ndim: rank + 2);
             _tf_data_format = conv_utils.convert_data_format(data_format, rank + 2);
         }

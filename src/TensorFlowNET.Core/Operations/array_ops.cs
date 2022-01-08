@@ -730,7 +730,7 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `input`.
         /// Contains the same data as `input`, but has one or more dimensions of
         /// size 1 removed.</returns>
-        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null, int[] squeeze_dims = null)
+        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
             => gen_array_ops.squeeze(input, axis, name);
 
         public static Tensor identity(Tensor input, string name = null)

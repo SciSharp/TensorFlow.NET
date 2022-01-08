@@ -210,19 +210,19 @@ namespace Tensorflow.Keras.Saving
             }
         }
 
-        private static void save_attributes_to_hdf5_group(long f,string name ,Array data)
+        private static void save_attributes_to_hdf5_group(long f, string name, Array data)
         {
             int num_chunks = 1;
-           
+
             var chunked_data = Split(data, num_chunks);
-            int getSize= 0;
-           
-            string getType = data.Length>0?data.GetValue(0).GetType().Name.ToLower():"string";
+            int getSize = 0;
+
+            string getType = data.Length > 0 ? data.GetValue(0).GetType().Name.ToLower() : "string";
 
             switch (getType)
             {
                 case "single":
-                    getSize=sizeof(float);
+                    getSize = sizeof(float);
                     break;
                 case "double":
                     getSize = sizeof(double);
@@ -237,30 +237,25 @@ namespace Tensorflow.Keras.Saving
                     getSize = sizeof(long);
                     break;
                 default:
-                    getSize=-1;
+                    getSize = -1;
                     break;
             }
             int getCount = chunked_data.Count;
-       
-            if (getSize != -1) {
-                num_chunks = (int)Math.Ceiling((double)(getCount * getSize) / (double)HDF5_OBJECT_HEADER_LIMIT);
+
+            if (getSize != -1)
+            {
+                num_chunks = (int)Math.Ceiling((double)(getCount * getSize) / HDF5_OBJECT_HEADER_LIMIT);
                 if (num_chunks > 1) chunked_data = Split(data, num_chunks);
             }
-            
+
             if (num_chunks > 1)
             {
                 foreach (var (chunk_id, chunk_data) in enumerate(chunked_data))
-                {
-                    
                     WriteAttrs(f, getType, $"{name}{chunk_id}", chunk_data.ToArray());
-              
-                }
-
             }
-            else {
-        
-                WriteAttrs(f, getType,name, data);
-              
+            else
+            {
+                WriteAttrs(f, getType, name, data);
             }
         }
 

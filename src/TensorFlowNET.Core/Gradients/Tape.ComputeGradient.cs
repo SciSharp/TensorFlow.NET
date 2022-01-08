@@ -26,7 +26,6 @@ namespace Tensorflow.Gradients
                 tensor_tape_,
                 state.op_tape);
 
-            int gcCollectFlag = 0;
             while (!op_stack.empty())
             {
                 var op = op_stack.Dequeue();
@@ -155,9 +154,6 @@ namespace Tensorflow.Gradients
                             op_stack.Enqueue(op_id);
                     }
                 }
-
-                if (gcCollectFlag++ % 10 == 0)
-                    GC.Collect();
             }
 
             if (state.op_tape.Count > 0)
