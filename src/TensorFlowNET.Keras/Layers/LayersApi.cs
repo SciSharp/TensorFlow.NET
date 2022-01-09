@@ -86,35 +86,30 @@ namespace Tensorflow.Keras.Layers
         /// <returns>A tensor of rank 3 representing activation(conv1d(inputs, kernel) + bias).</returns>
         public Conv1D Conv1D(int filters,
             Shape kernel_size,
-            int? strides = null,
+            int strides = 1,
             string padding = "valid",
-            string data_format = null,
-            int? dilation_rate = null,
+            string data_format = "channels_last",
+            int dilation_rate = 1,
             int groups = 1,
             string activation = null,
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
             string bias_initializer = "zeros")
-        {
-            // Special case: Conv1D will be implemented as Conv2D with H=1, so we need to add a 1-sized dimension to the kernel.
-            // Lower-level logic handles the stride and dilation_rate, but the kernel_size needs to be set properly here.
-
-            return new Conv1D(new Conv1DArgs
+            => new Conv1D(new Conv1DArgs
             {
                 Rank = 1,
                 Filters = filters,
                 KernelSize = kernel_size ?? new Shape(1, 5),
-                Strides = strides == null ? 1 : strides,
+                Strides = strides,
                 Padding = padding,
                 DataFormat = data_format,
-                DilationRate = dilation_rate == null ? 1 : dilation_rate,
+                DilationRate = dilation_rate,
                 Groups = groups,
                 UseBias = use_bias,
                 Activation = GetActivationByName(activation),
                 KernelInitializer = GetInitializerByName(kernel_initializer),
                 BiasInitializer = GetInitializerByName(bias_initializer)
             });
-        }
 
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
