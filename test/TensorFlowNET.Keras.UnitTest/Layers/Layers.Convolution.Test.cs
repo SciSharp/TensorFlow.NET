@@ -14,14 +14,12 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var filters = 8;
 
-            var conv = keras.layers.Conv1D(filters, activation: "linear");
+            var conv = keras.layers.Conv1D(filters, kernel_size: 3,  activation: "linear");
 
             var x = np.arange(256.0f).reshape((8, 8, 4));
             var y = conv.Apply(x);
 
-            Assert.AreEqual(3, y.shape.ndim);
-            Assert.AreEqual(x.dims[0], y.shape[0]);
-            Assert.AreEqual(x.dims[1] - 4, y.shape[1]);
+            Assert.AreEqual(y.shape, (8, 6, 8));
             Assert.AreEqual(filters, y.shape[2]);
         }
 

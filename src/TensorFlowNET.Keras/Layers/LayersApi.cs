@@ -85,7 +85,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="bias_initializer">Initializer for the bias vector (see keras.initializers).</param>
         /// <returns>A tensor of rank 3 representing activation(conv1d(inputs, kernel) + bias).</returns>
         public Conv1D Conv1D(int filters,
-            Shape? kernel_size = null,
+            Shape kernel_size,
             int? strides = null,
             string padding = "valid",
             string data_format = null,
