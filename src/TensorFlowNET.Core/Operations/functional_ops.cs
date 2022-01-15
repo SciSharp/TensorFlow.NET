@@ -87,9 +87,9 @@ namespace Tensorflow
                 //    n = array_ops.shape(elems_flat[0])[0];
                 //}
 
-                var elems_ta = elems_flat.Select(elem => new TensorArray(
+                var elems_ta = elems_flat.Select(elem => tf.TensorArray(
                     elem.dtype,
-                    size: tf.constant(n),
+                    size: n,
                     dynamic_size: false,
                     element_shape: elem.shape.dims.Skip(1).ToArray(),
                     infer_shape: true)).ToList();
@@ -113,9 +113,9 @@ namespace Tensorflow
                     i = 0;
                 }
 
-                var accs_ta = a_flat.Select(init => new TensorArray(
+                var accs_ta = a_flat.Select(init => tf.TensorArray(
                     dtype: init.dtype,
-                    size: tf.constant(n),
+                    size: n,
                     element_shape: infer_shape ? init.shape : null,
                     dynamic_size: false,
                     infer_shape: infer_shape)).ToArray();
@@ -124,7 +124,7 @@ namespace Tensorflow
                 {
                     for (int index = 0; index < accs_ta.Length; index++)
                     {
-                        accs_ta[index].write(tf.constant(reverse ? n - 1 : 0), a_flat[index]);
+                        accs_ta[index].write(reverse ? n - 1 : 0, a_flat[index]);
                     }
                 }
 

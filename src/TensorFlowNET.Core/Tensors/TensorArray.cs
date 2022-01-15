@@ -27,42 +27,22 @@ namespace Tensorflow
     /// `while_loop` and `map_fn`.  It supports gradient back-propagation via special
     /// "flow" control flow dependencies.
     /// </summary>
-    public class TensorArray : ITensorOrTensorArray
+    public abstract class TensorArray : ITensorOrTensorArray
     {
-        internal _GraphTensorArray _implementation;
+        public virtual TF_DataType dtype { get; }
+        public virtual Tensor handle { get; }
+        public virtual Tensor flow { get; }
+        public virtual bool infer_shape { get; }
+        public virtual bool colocate_with_first_write_call { get; }
 
-        public TF_DataType dtype => _implementation._dtype;
-        public Tensor handle => _implementation._handle;
-        public Tensor flow => _implementation._flow;
+        public abstract TensorArray unstack(Tensor value, string name = null);
 
-        public TensorArray(TF_DataType dtype, Tensor size = default, bool? clear_after_read = null, bool? dynamic_size = null,
-            string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
-            bool infer_shape = true, Shape element_shape = null,
-            bool colocate_with_first_write_call = true, string name = null)
-        {
-            _implementation = new _GraphTensorArray(dtype,
-                size: size,
-                dynamic_size: dynamic_size,
-                clear_after_read: clear_after_read,
-                tensor_array_name: tensor_array_name,
-                handle: handle,
-                flow: flow,
-                infer_shape: infer_shape,
-                element_shape: element_shape,
-                colocate_with_first_write_call: colocate_with_first_write_call,
-                name: name);
-        }
+        public abstract Tensor read<T>(T index, string name = null);
 
-        public TensorArray unstack(Tensor value, string name = null)
-            => _implementation.unstack(value, name: name);
+        public abstract TensorArray write<T>(int index, T value, string name = null);
+        public abstract TensorArray write(Tensor index, Tensor value, string name = null);
 
-        public Tensor read(Tensor index, string name = null)
-            => _implementation.read(index, name: name);
-
-        public TensorArray write(Tensor index, Tensor value, string name = null)
-            => _implementation.write(index, value, name: name);
-
-        public Tensor stack(string name = null)
-            => _implementation.stack(name: name);
+        public abstract Tensor stack(string name = null);
+        public abstract Tensor gather(Tensor indices, string name = null);
     }
 }

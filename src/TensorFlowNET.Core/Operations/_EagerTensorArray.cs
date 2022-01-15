@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2022 Haiping Chen. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,14 +17,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
 {
-    public class _GraphTensorArray : TensorArray
+    public class _EagerTensorArray : TensorArray
     {
-        internal TF_DataType _dtype;
-        public TF_DataType dtype => _dtype;
+        TF_DataType _dtype;
+        public override TF_DataType dtype => _dtype;
 
         /// <summary>
         /// Used to keep track of what tensors the TensorArray should be
@@ -32,80 +33,35 @@ namespace Tensorflow.Operations
         /// first tensor written to it.
         /// </summary>
         bool _colocate_with_first_write_call;
-        public bool colocate_with_first_write_call => _colocate_with_first_write_call;
+        public override bool colocate_with_first_write_call => _colocate_with_first_write_call;
 
         bool _infer_shape;
-        public bool infer_shape => _infer_shape;
+        public override bool infer_shape => _infer_shape;
         public bool _dynamic_size;
-        public List<Shape> _element_shape;
+        public Shape _element_shape;
 
         public List<Tensor> _colocate_with;
 
-        internal Tensor _handle;
-        public Tensor handle => _handle;
-        internal Tensor _flow;
+        Tensor _handle;
+        public override Tensor handle => _handle;
+        Tensor _flow;
+        public override Tensor flow => _flow;
+        bool _clear_after_read;
+        List<Tensor> _tensor_array;
 
-        public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
-            bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
+        public _EagerTensorArray(TF_DataType dtype, Tensor size, bool dynamic_size = false,
+            bool clear_after_read = true, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
             bool infer_shape = true, Shape? element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
-            clear_after_read = clear_after_read ?? true;
-            dynamic_size = dynamic_size ?? false;
-            _dynamic_size = dynamic_size.Value;
-            _dtype = dtype;
-
+            _flow = constant_op.constant(0);
+            _infer_shape = infer_shape;
+            _element_shape = element_shape ?? Shape.Null;
             _colocate_with_first_write_call = colocate_with_first_write_call;
-            if (colocate_with_first_write_call)
-                _colocate_with = new List<Tensor>();
-
-            // Record the current static shape for the array elements. The element
-            // shape is defined either by `element_shape` or the shape of the tensor
-            // of the first write. If `infer_shape` is true, all writes checks for
-            // shape equality.
-            if (element_shape == null)
-            {
-                _infer_shape = infer_shape;
-                _element_shape = new List<Shape> { };
-            }
-            else
-            {
-                _infer_shape = true;
-                _element_shape = new List<Shape> { element_shape };
-            }
-
-            tf_with(ops.name_scope(name, "TensorArray", new { handle, size, flow }), scope =>
-            {
-                if (handle != null)
-                {
-                    _handle = handle;
-                    _flow = flow;
-                }
-                else
-                {
-                    Func<(Tensor, Tensor)> create = () => gen_data_flow_ops.tensor_array_v3(size,
-                        dtype: dtype,
-                        element_shape: element_shape,
-                        identical_element_shapes: infer_shape,
-                        dynamic_size: dynamic_size.Value,
-                        clear_after_read: clear_after_read.Value,
-                        tensor_array_name: tensor_array_name,
-                        name: scope);
-
-                    // Construct the TensorArray with an empty device.  The first
-                    // write into the TensorArray from a Tensor with a set device
-                    // will retroactively set the device value of this op.
-                    if (colocate_with_first_write_call)
-                    {
-                        ops.colocate_with(ignore_existing: true);
-                        (_handle, _flow) = create();
-                    }
-                    else
-                    {
-                        (_handle, _flow) = create();
-                    }
-                }
-            });
+            _dtype = dtype.as_base_dtype();
+            _dynamic_size = dynamic_size;
+            _clear_after_read = clear_after_read;
+            _tensor_array = new List<Tensor>();
         }
 
         public override TensorArray unstack(Tensor value, string name = null)
@@ -136,13 +92,14 @@ namespace Tensorflow.Operations
                     flow_in: _flow,
                     name: name);
 
-                var ta = new _GraphTensorArray(_dtype,
+                var ta = new _EagerTensorArray(_dtype,
                     infer_shape: _infer_shape,
                     element_shape: _element_shape[0],
                     dynamic_size: _dynamic_size,
                     handle: _handle,
                     flow: flow_out,
                     colocate_with_first_write_call: _colocate_with_first_write_call);
+
 
                 return ta;
             });*/
@@ -151,7 +108,7 @@ namespace Tensorflow.Operations
 
         public void _merge_element_shape(Shape shape)
         {
-            _element_shape.Add(shape);
+            _element_shape.concatenate(shape);
         }
 
         public void _maybe_colocate_with(Tensor value)
@@ -161,40 +118,35 @@ namespace Tensorflow.Operations
 
         public override Tensor read<T>(T index, string name = null)
         {
-            var value = gen_data_flow_ops.tensor_array_read_v3(
-                handle: _handle,
-                index: constant_op.constant(index),
-                flow_in: _flow,
-                dtype: _dtype,
-                name: name);
+            int index_int = -1;
+            if (index is int int_index)
+                index_int = int_index;
+            else if (index is Tensor tensor_index)
+                index_int = tensor_index.numpy();
+            else
+                throw new ValueError("");
 
-            if (_element_shape != null)
-                value.shape = _element_shape[0].dims;
+            if (_clear_after_read)
+            {
+                _tensor_array[index_int] = null;
+            }
 
-            return value;
+            return _tensor_array[index_int];
         }
 
         public override TensorArray write(Tensor index, Tensor value, string name = null)
         {
-            return tf_with(ops.name_scope(name, "TensorArrayWrite", new { _handle, index, value }), delegate
-            {
-                _maybe_colocate_with(value);
-                var flow_out = gen_data_flow_ops.tensor_array_write_v3(
-                    handle: _handle,
-                    index: index,
-                    value: value,
-                    flow_in: _flow,
-                    name: name);
-
-                return tensor_array_ops.build_ta_with_new_flow(this, flow_out);
-            });
+            if (_infer_shape)
+                _element_shape = _element_shape.merge_with(value.shape);
+            _tensor_array.add(value);
+            return this;
         }
 
         public override TensorArray write<T>(int index, T value, string name = null)
         {
             var value_tensor = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
             var index_tensor = ops.convert_to_tensor(index, name: "index");
-            return write(index_tensor, value_tensor);
+            return write(index_tensor, value_tensor, name: name);
         }
 
         private Tensor size(string name = null)
@@ -214,9 +166,6 @@ namespace Tensorflow.Operations
         public override Tensor gather(Tensor indices, string name = null)
         {
             var element_shape = Shape.Null;
-
-            if (_element_shape.Count > 0)
-                element_shape = _element_shape[0];
 
             var value = gen_data_flow_ops.tensor_array_gather_v3(
                 handle: _handle,

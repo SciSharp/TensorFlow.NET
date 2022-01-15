@@ -78,8 +78,8 @@ namespace Tensorflow
                 var n = static_shape[0];
 
                 // TensorArrays are always flat
-                var elems_ta = elems_flat.Select(elem => new TensorArray(dtype: elem.dtype,
-                        size: ops.convert_to_tensor(n),
+                var elems_ta = elems_flat.Select(elem => tf.TensorArray(dtype: elem.dtype,
+                        size: Convert.ToInt32(n),
                         dynamic_size: false,
                         infer_shape: true)).ToArray();
 
@@ -92,8 +92,8 @@ namespace Tensorflow
 
                 var i = constant_op.constant(0);
 
-                var accs_ta = dtype_flat.Select(dt => new TensorArray(dtype: dt,
-                        size: ops.convert_to_tensor(n),
+                var accs_ta = dtype_flat.Select(dt => tf.TensorArray(dtype: dt,
+                        size: Convert.ToInt32(n),
                         dynamic_size: false,
                         infer_shape: infer_shape)).ToArray();
 

@@ -77,5 +77,20 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var r3 = tf.gather(p2, i2, axis: 1);
             Assert.AreEqual(new Shape(4,1,2), r3.shape);
         }
+
+        /// <summary>
+        /// https://www.tensorflow.org/api_docs/python/tf/TensorArray
+        /// </summary>
+        [TestMethod]
+        public void TensorArray()
+        {
+            var ta = tf.TensorArray(tf.float32, size: 0, dynamic_size: true, clear_after_read: false);
+            ta.write(0, 10);
+            ta.write(1, 20);
+            ta.write(2, 30);
+            Assert.AreEqual(ta.read(0).numpy(), 10f);
+            Assert.AreEqual(ta.read(1).numpy(), 20f);
+            Assert.AreEqual(ta.read(2).numpy(), 30f);
+        }
     }
 }

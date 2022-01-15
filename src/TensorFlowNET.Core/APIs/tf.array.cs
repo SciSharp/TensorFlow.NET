@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using static Tensorflow.Binding;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -309,5 +310,27 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor stop_gradient(Tensor x, string name = null)
             => gen_array_ops.stop_gradient(x, name: name);
+
+        public TensorArray TensorArray(TF_DataType dtype, int size = 0, bool dynamic_size = false,
+            bool clear_after_read = true, Shape? element_shape = null, bool colocate_with_first_write_call = true, 
+            bool infer_shape = true)
+            => tf.executing_eagerly() ?
+               new _EagerTensorArray(dtype, size: constant_op.constant(size), dynamic_size: dynamic_size,
+                   clear_after_read: clear_after_read, element_shape: element_shape, infer_shape: infer_shape,
+                   colocate_with_first_write_call: colocate_with_first_write_call) :
+               new _GraphTensorArray(dtype, size: constant_op.constant(size), dynamic_size: dynamic_size,
+                   clear_after_read: clear_after_read, element_shape: element_shape, infer_shape: infer_shape,
+                   colocate_with_first_write_call: colocate_with_first_write_call);
+
+        public TensorArray TensorArray(TF_DataType dtype, Tensor size, bool dynamic_size = false,
+            bool clear_after_read = true, Shape? element_shape = null, bool colocate_with_first_write_call = true, 
+            bool infer_shape = true)
+            => tf.executing_eagerly() ?
+               new _EagerTensorArray(dtype, size: size, dynamic_size: dynamic_size,
+                   clear_after_read: clear_after_read, element_shape: element_shape, infer_shape: infer_shape,
+                   colocate_with_first_write_call: colocate_with_first_write_call) :
+               new _GraphTensorArray(dtype, size: size, dynamic_size: dynamic_size,
+                   clear_after_read: clear_after_read, element_shape: element_shape, infer_shape: infer_shape,
+                   colocate_with_first_write_call: colocate_with_first_write_call);
     }
 }

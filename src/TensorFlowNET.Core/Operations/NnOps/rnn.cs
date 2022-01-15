@@ -294,10 +294,9 @@ namespace Tensorflow.Operations
 
             Func<string, Shape, TF_DataType, TensorArray> _create_ta = (name, element_shape, dtype_) =>
             {
-                var ta = new TensorArray(dtype: dtype_,
+                var ta = tf.TensorArray(dtype: dtype_,
                                         size: time_steps,
-                                        element_shape: element_shape,
-                                        tensor_array_name: base_name + name);
+                                        element_shape: element_shape);
                 return ta;
             };
 
