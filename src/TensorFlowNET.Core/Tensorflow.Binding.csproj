@@ -5,7 +5,7 @@
     <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.70.0</Version>
+    <Version>0.70.1</Version>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
@@ -20,7 +20,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.70.0.0</AssemblyVersion>
+    <AssemblyVersion>0.70.1.0</AssemblyVersion>
     <PackageReleaseNotes>
 		tf.net 0.70.x and above are based on tensorflow native 2.7.0
 
@@ -36,7 +36,7 @@ https://tensorflownet.readthedocs.io</Description>
 		tf.net 0.4x.x aligns with TensorFlow v2.4.1 native library.
 		tf.net 0.6x.x aligns with TensorFlow v2.6.x native library.
 		tf.net 0.7x.x aligns with TensorFlow v2.7.x native library.</PackageReleaseNotes>
-    <FileVersion>0.70.0.0</FileVersion>
+    <FileVersion>0.70.1.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
