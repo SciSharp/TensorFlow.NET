@@ -68,12 +68,11 @@ namespace Tensorflow
             if (handle == IntPtr.Zero)
                 throw new ValueError($"Could not find operation \"{operName}\" inside graph \"{_graph_key}\".");
 
-            var defaultKey = tf.get_default_graph().graph_key;
+            /*var defaultKey = tf.get_default_graph().graph_key;
             if (tf.get_default_graph().GetType().Name == "Graph" && graph_key != defaultKey)
             {
-                //Console.WriteLine($"Current graph is not default graph.");
                 throw new RuntimeError($"Current graph is not default graph. Default Graph Key: {defaultKey}, Current Graph Key: {graph_key}");
-            }
+            }*/
 
             return new Operation(handle, g: this);
         }
