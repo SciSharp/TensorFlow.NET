@@ -176,6 +176,24 @@ namespace TensorFlowNET.UnitTest.Gradient
         }
 
         [TestMethod]
+        public void testReduceSumGradients()
+        {
+            var x = tf.placeholder(tf.float64, shape: new Shape(1, 1));
+            var m = tf.broadcast_to(x, new Shape(2, 3));
+            var g0 = tf.gradients(tf.reduce_sum(m), x)[0];
+            var g1 = tf.gradients(tf.reduce_sum(m, axis: 0), x)[0];
+            var g2 = tf.gradients(tf.reduce_sum(m, axis: 1), x)[0];
+
+            using (var session = tf.Session())
+            {
+                var (r0, r1, r2) = session.run((g0, g1, g2), new FeedItem(x, 1.0));
+                self.assertFloat64Equal(6.0, r0[0], $"tf.reduce_sum(...)");
+                self.assertFloat64Equal(2.0, r1[0], $"tf.reduce_sum(..., axis = 0)");
+                self.assertFloat64Equal(3.0, r2[0], $"tf.reduce_sum(..., axis = 1)");
+            }
+        }
+
+        [TestMethod]
         public void testTanhGradient()
         {
             var a = tf.constant(1f);
