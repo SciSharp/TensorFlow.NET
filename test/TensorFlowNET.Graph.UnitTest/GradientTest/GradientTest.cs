@@ -178,6 +178,19 @@ namespace TensorFlowNET.UnitTest.Gradient
         [TestMethod]
         public void testReduceSumGradients()
         {
+            /* python code
+            import tensorflow.compat.v1 as tf
+            tf.disable_v2_behavior() 
+
+            x = tf.placeholder(tf.float64, shape = (1, 1))
+            m = tf.broadcast_to(x, (2, 3))
+            g0 = tf.gradients(tf.reduce_sum(m), x)[0]
+            g1 = tf.gradients(tf.reduce_sum(m, axis = 0), x)[0]
+            g2 = tf.gradients(tf.reduce_sum(m, axis = 1), x)[0]
+            with tf.compat.v1.Session() as sess:
+                (r0, r1, r2) = sess.run((g0, g1, g2), {x: [[1.0]]})
+            */
+
             var x = tf.placeholder(tf.float64, shape: new Shape(1, 1));
             var m = tf.broadcast_to(x, new Shape(2, 3));
             var g0 = tf.gradients(tf.reduce_sum(m), x)[0];
@@ -186,10 +199,10 @@ namespace TensorFlowNET.UnitTest.Gradient
 
             using (var session = tf.Session())
             {
-                var (r0, r1, r2) = session.run((g0, g1, g2), new FeedItem(x, 1.0));
+                var (r0, r1, r2) = session.run((g0, g1, g2), new FeedItem(x, new[,] { { 1.0 } }));
                 self.assertFloat64Equal(6.0, r0[0], $"tf.reduce_sum(...)");
-                self.assertFloat64Equal(2.0, r1[0], $"tf.reduce_sum(..., axis = 0)");
-                self.assertFloat64Equal(3.0, r2[0], $"tf.reduce_sum(..., axis = 1)");
+                self.assertFloat64Equal(6.0, r1[0], $"tf.reduce_sum(..., axis = 0)");
+                self.assertFloat64Equal(6.0, r2[0], $"tf.reduce_sum(..., axis = 1)");
             }
         }
 

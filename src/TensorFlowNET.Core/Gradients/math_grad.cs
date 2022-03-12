@@ -529,7 +529,12 @@ namespace Tensorflow.Gradients
                     }
                     else if (!input_0_shape.Contains(-1) && !tf.Context.executing_eagerly())
                     {
-                        throw new NotImplementedException("");
+                        axes = axes.reshape(new Shape(-1));
+                        var shape_tensor = tf.constant(op.inputs[0].shape.as_int_list());
+                        var output_shape_kept_dims = math_ops.reduced_shape(shape_tensor, axes);
+                        var tile_scaling = _safe_shape_div(shape_tensor, output_shape_kept_dims);
+                        grad = array_ops.reshape(grad, output_shape_kept_dims);
+                        return new Tensor[] { array_ops.tile(grad, tile_scaling), null };
                     }
                 }
             }
