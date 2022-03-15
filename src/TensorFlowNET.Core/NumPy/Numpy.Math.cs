@@ -52,5 +52,8 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public static NDArray sum(NDArray x1, Axis? axis = null) => new NDArray(tf.math.sum(x1, axis));
+
+        [AutoNumPy]
+        public static NDArray add(NDArray x, NDArray y) => new NDArray(math_ops.add(x, y));
     }
 }

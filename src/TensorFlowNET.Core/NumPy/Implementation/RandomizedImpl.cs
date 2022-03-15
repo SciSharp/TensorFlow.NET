@@ -43,5 +43,9 @@ namespace Tensorflow.NumPy
         [AutoNumPy]
         public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape size = null)
             => new NDArray(random_ops.random_normal(size ?? Shape.Scalar, mean: loc, stddev: scale));
+
+        [AutoNumPy]
+        public NDArray uniform(float low = 0.0f, float high = 1.0f, Shape size = null)
+            => new NDArray(random_ops.random_uniform(size ?? Shape.Scalar, low, high));
     }
 }
