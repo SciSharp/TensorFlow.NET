@@ -7,7 +7,6 @@ using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
 using Tensorflow;
 using Tensorflow.Keras.Datasets;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace TensorFlowNET.Keras.UnitTest
 {
