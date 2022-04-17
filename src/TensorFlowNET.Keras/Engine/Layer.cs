@@ -272,6 +272,15 @@ namespace Tensorflow.Keras.Engine
                 weights.AddRange(non_trainable_weights);
                 return weights;
             }
+            set
+            {
+                if (weights.Count() != value.Count()) throw new ValueError(
+                                            $"You called `set_weights` on layer \"{this.name}\"" +
+                                            $"with a weight list of length {len(value)}, but the layer was " +
+                                            $"expecting {len(weights)} weights.");
+                foreach (var (this_w, v_w) in zip(weights, value))
+                    this_w.assign(v_w, read_value: true);
+            }
         }
 
         public virtual LayerArgs get_config()
