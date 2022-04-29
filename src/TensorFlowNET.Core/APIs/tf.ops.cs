@@ -44,7 +44,7 @@ namespace Tensorflow
         /// When eager execution is enabled, code inside an init_scope block runs with
         /// eager execution enabled even when tracing a `tf.function`. 
         /// </summary>
-        public void init_scope()
+        public ops.NameScope init_scope()
             => ops.init_scope();
 
         /// <summary>

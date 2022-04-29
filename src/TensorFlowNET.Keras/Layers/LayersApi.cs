@@ -363,6 +363,33 @@ namespace Tensorflow.Keras.Layers
             return layer.Apply(inputs);
         }
 
+
+        public EinsumDense EinsumDense(string equation,
+                Shape output_shape,
+                string bias_axes,
+                Activation activation = null,
+                IInitializer kernel_initializer= null,
+                IInitializer bias_initializer= null,
+                IRegularizer kernel_regularizer= null,
+                IRegularizer bias_regularizer= null,
+                IRegularizer activity_regularizer= null,
+                Action kernel_constraint= null,
+                Action bias_constraint= null) =>
+            new EinsumDense(new EinsumDenseArgs()
+            {
+                Equation = equation,
+                OutputShape = output_shape,
+                BiasAxes = bias_axes,
+                Activation = activation,
+                KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                KernelConstraint = kernel_constraint,
+                BiasConstraint = bias_constraint
+            });
+
         /// <summary>
         /// Applies Dropout to the input.
         /// The Dropout layer randomly sets input units to 0 with a frequency of rate at each step during training time, 
