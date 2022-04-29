@@ -131,6 +131,23 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
+        public void EinsumDense()
+        {
+            var ed = keras.layers.EinsumDense(
+                equation: "...b,bc->...c",
+                output_shape: (-1, 4),
+                bias_axes: "c",
+                bias_initializer: tf.constant_initializer(0.03),
+                kernel_initializer: tf.constant_initializer(0.5)
+            );
+            var inp = np.array(new[,] { { 1f, 2f }, { 3f, 4f } });
+            var expected_output = np.array(new[,] {{1.53f, 1.53f, 1.53f, 1.53f },
+                                { 3.53f, 3.53f, 3.53f, 3.53f }});
+            var actual_output = ed.Apply(inp)[0].numpy();
+            Assert.AreEqual(expected_output, actual_output);
+        }
+
+        [TestMethod]
         [Ignore]
         public void SimpleRNN()
         {
