@@ -40,6 +40,12 @@ Troubleshooting of running example or installation, please  refer [here](tensorf
 
 There are many examples reside at [TensorFlow.NET Examples](https://github.com/SciSharp/TensorFlow.NET-Examples) written in C# and F#.
 
+#### TensorFlow.net Version
+` tf.net 0.4x -> tf native 2.4`  
+`tf.net 0.6x -> tf native 2.6`       
+`tf.net 0.7x -> tf native 2.7`   
+`...`
+
 #### C# Example
 
 Install TF.NET and TensorFlow binary through NuGet.
