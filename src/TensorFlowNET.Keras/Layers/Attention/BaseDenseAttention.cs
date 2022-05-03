@@ -120,7 +120,7 @@ namespace Tensorflow.Keras.Layers
 
             int count = inputs.Count();
             if (count < 2 || count > 6) throw new ValueError(
-                    $"{ this.name } layer accepts inputs list of length from 2 to 5, " +
+                    $"{ this.name } layer accepts inputs list of length from 2 to 6, " +
                     $"namely [query, value, (key), (query_mask), (value_mask), (return_attention_scores)]." +
                     $"Received length: {count}.");
 
