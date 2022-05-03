@@ -12,7 +12,8 @@ namespace Tensorflow.Keras.Layers {
                   axis = args.axis;
             }
             protected override Tensors Call ( Tensors inputs, Tensor state = null, bool? training = null ) {
-                  Tensor x = inputs;
+                  Tensor x = inputs.Length == 2 ? inputs + ((1.0 - tf.cast(inputs[1], inputs.dtype)) * 1e-9)
+                                                : inputs;
                   Tensor e = tf.exp(tf.sub(x, tf.reduce_max(x, axis: this.axis, keepdims: true)));
                   Tensor s = tf.reduce_sum(e, axis: this.axis, keepdims: true);
                   return tf.div(e, s);
