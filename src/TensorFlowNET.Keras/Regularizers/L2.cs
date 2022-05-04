@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Tensorflow.Keras
+﻿namespace Tensorflow.Keras
 {
     public class L2 : IRegularizer
     {
@@ -13,7 +11,7 @@ namespace Tensorflow.Keras
 
         public Tensor Apply(RegularizerArgs args)
         {
-            throw new NotImplementedException();
+            return l2 * math_ops.reduce_sum(math_ops.square(args.X));
         }
     }
 }
