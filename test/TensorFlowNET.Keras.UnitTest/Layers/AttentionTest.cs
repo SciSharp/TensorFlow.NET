@@ -151,19 +151,21 @@ namespace TensorFlowNET.Keras.UnitTest
         [TestMethod]
         public void test_masked_attention()
         {
+            var batch_size = 3;
+
             var query = keras.Input(shape: (4, 8));
             var value = keras.Input(shape: (2, 8));
             var mask_tensor = keras.Input(shape:(4, 2));
             var attention_layer = keras.layers.MultiHeadAttention(num_heads: 2, key_dim: 2);
             attention_layer.Apply(new[] { query, value, mask_tensor });
 
-            var from_data = 10 * np.random.randn(3, 4, 8);
-            var to_data = 10 * np.random.randn(3, 2, 8);
+            var from_data = 10 * np.random.randn(batch_size, 4, 8);
+            var to_data = 10 * np.random.randn(batch_size, 2, 8);
 
-            var mask_data = np.random.randint(2, size: (3, 4, 2));
+            var mask_data = np.random.randint(2, size: (batch_size, 4, 2));
             var masked_output_data = attention_layer.Apply(new[] { from_data, to_data, mask_data });
 
-            var null_mask_data = np.ones((3, 4, 2));
+            var null_mask_data = np.ones((batch_size, 4, 2));
             var unmasked_output_data = attention_layer.Apply(new[] { from_data, to_data, null_mask_data });
 
             Assert.AreNotEqual(masked_output_data, unmasked_output_data);

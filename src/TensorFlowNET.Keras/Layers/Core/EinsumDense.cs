@@ -228,7 +228,7 @@ namespace Tensorflow.Keras.Layers
                                                            Shape output_shape,
                                                            bool left_elided = false)
         {
-            List<long> bias_shape;
+            List<int> bias_shape;
             Dictionary<char, int> output_dim_map;
             Dictionary<char, int> input_dim_map;
 
@@ -275,8 +275,8 @@ namespace Tensorflow.Keras.Layers
                 var input_shape_at_dim = input_shape[input_dim_map[dim]];
                 if (output_dim_map.TryGetValue(dim, out int index))
                 {
-                    var output_shape_at_dim = output_shape[index];
-                    if (output_shape_at_dim != input_shape_at_dim)
+                    var output_shape_at_dim = _output_shape[index];
+                    if (output_shape_at_dim != -1 && output_shape_at_dim != input_shape_at_dim)
                         throw new ValueError($"Input shape and output shape do not match at shared dimension '{dim}'. " +
                                              $"Input shape is {input_shape_at_dim}, " +
                                              $"and output shape is {output_shape[output_dim_map[dim]]}.");
@@ -299,7 +299,7 @@ namespace Tensorflow.Keras.Layers
                 if (input_dim_map.ContainsKey(dim))
                     weight_shape.append(input_shape[input_dim_map[dim]]);
                 else if (output_dim_map.ContainsKey(dim))
-                    weight_shape.append(output_shape[output_dim_map[dim]]);
+                    weight_shape.append(_output_shape[output_dim_map[dim]]);
                 else throw new ValueError($"Weight dimension '{dim}' did not have a match in " +
                                           $"either the input spec '{input_spec}' " +
                                           $"or the output spec '{output_spec}'. " +
@@ -310,7 +310,7 @@ namespace Tensorflow.Keras.Layers
             {
                 var num_left_elided = left_elided ? elided : 0;
                 var idx_map = output_spec.Select((_char, i) => (i, _char))
-                                         .ToDictionary(_ => _._char, _ => output_shape[_.i + num_left_elided]);
+                                         .ToDictionary(_ => _._char, _ => _output_shape[_.i + num_left_elided]);
                 foreach (var _char in bias_axes)
                     if (!output_spec.Contains(_char))
                         throw new ValueError($"Bias dimension '{_char}' was requested," +
@@ -327,7 +327,7 @@ namespace Tensorflow.Keras.Layers
             else bias_shape = null;
 
             return (weight_shape.ToArray(),
-                   (bias_shape ?? new List<long>()).ToArray(),
+                   (bias_shape ?? new List<int>()).ToArray(),
                     _output_shape.ToArray());
         }
     }

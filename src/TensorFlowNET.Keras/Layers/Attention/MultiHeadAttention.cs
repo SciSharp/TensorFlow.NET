@@ -55,6 +55,9 @@ namespace Tensorflow.Keras.Layers
         {
             var target_notation = _CHR_IDX.Substring(0, rank);
             // `batch_dims` includes the head dim.
+            // batch_dims = tuple(np.delete(range(rank), attn_axes + (rank - 1,)))
+            // Since range(rank) is an IEnumerable like (0, 1, 2 ...) whose index is equal to its value
+            // use IEnumerable.Except instead of np.delete which is unavailable
             var batch_dims = range(rank).Except(attn_axes.as_int_list().concat(new[] { rank - 1 }));
             var letter_offset = rank;
             var source_notation = "";
@@ -68,14 +71,14 @@ namespace Tensorflow.Keras.Layers
                     letter_offset += 1;
                 }
             }
-            var product_notation = "".Insert(0, new string((from i in batch_dims
-                                                            select (char)(int)target_notation[i]).Concat(
-                                                            
-                                                            from i in attn_axes.as_int_list()
-                                                            select (char)(int)target_notation[i]).Concat(
-                                                            
-                                                            from i in attn_axes.as_int_list()
-                                                            select source_notation[i]).ToArray()));
+            var product_notation = new string((from i in batch_dims
+                                               select target_notation[i]).Concat(
+                                               
+                                               from i in attn_axes.as_int_list()
+                                               select target_notation[i]).Concat(
+                                               
+                                               from i in attn_axes.as_int_list()
+                                               select source_notation[i]).ToArray());
             var dot_product_equation = $"{source_notation},{target_notation}->{product_notation}";
             var attn_scores_rank = product_notation.Count();
             var combine_equation = $"{product_notation},{source_notation}->{target_notation}";
@@ -163,7 +166,7 @@ namespace Tensorflow.Keras.Layers
                     this._value_shape.rank - 1, bound_dims: 1, output_dims: 2);
                 this._value_dense = _get_dense(einsum_equation,
                                                _get_output_shape(output_rank - 1,
-                                                                (this.args.NumHeads, this.args.ValueDim ?? -1)),
+                                                                (this.args.NumHeads, this.args.ValueDim ?? this.args.KeyDim)),
                                                this.args.UseBias ? bias_axes : null,
                                                "value");
                 // Builds the attention computations for multi-head dot product attention.
@@ -235,7 +238,7 @@ namespace Tensorflow.Keras.Layers
             // Note: Applying scalar multiply at the smaller end of einsum improves
             // XLA performance, but may introduce slight numeric differences in
             // the Transformer attention head.
-            query = tf.multiply(query, 1d / Math.Sqrt(this.args.KeyDim));
+            query = tf.multiply(query, 1f / tf.sqrt(tf.convert_to_tensor((float)this.args.KeyDim)));
             // Take the dot product between "query" and "key" to get the raw
             // attention scores.
             var attention_scores = tf.linalg.einsum(this._dot_product_equation, (key, query));
@@ -273,7 +276,7 @@ namespace Tensorflow.Keras.Layers
                     _inp = (inputs[0], inputs[1]);
                     break;
                 case 3:
-                    if (inputs[2].shape[-1] != inputs[0].shape[-1])
+                    if (inputs[2].shape[-1] == inputs[1].shape[-1])
                         _inp = new[] { inputs[0], inputs[1], inputs[2] };
                     else
                     {
