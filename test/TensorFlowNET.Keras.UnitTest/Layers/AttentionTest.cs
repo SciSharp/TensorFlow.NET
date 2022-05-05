@@ -15,45 +15,6 @@ namespace TensorFlowNET.Keras.UnitTest
     public class AttentionTest : EagerModeTestBase
     {
         #region BaseDenseAttention
-        [TestMethod]
-        public void test_one_dim_with_mask()
-        {
-            // Scores tensor of shape [1, 1, 1]
-            var scores = np.array(new[, ,] { { { 1.1f } } }, dtype: np.float32);
-            // Value tensor of shape [1, 1, 1]
-            var v = np.array(new[, ,] { { { 1.6f } } }, dtype: np.float32);
-            // Scores mask tensor of shape [1, 1, 1]
-            var scores_mask = np.array(new[, ,] { { { true } } }, dtype: np.@bool);
-            var _tup_1 = new BaseDenseAttention(new())._apply_scores(scores: scores, value: v, scores_mask: scores_mask);
-            var actual = _tup_1.Item1;
-            var actual_scores = _tup_1.Item2;
-            // Expected softmax_scores = [[[1]]]
-            var expected_scores = np.array(new[, ,] { { { 1f } } }, dtype: np.float32);
-            Assert.AreEqual(expected_scores, actual_scores.numpy());
-            // Expected tensor of shape [1, 1, 1].
-            // expected000 = softmax_scores[0, 0] * 1.6 = 1.6
-            var expected = np.array(new[, ,] { { { 1.6f } } }, dtype: np.float32);
-            Assert.AreEqual(expected, actual.numpy());
-        }
-
-        [TestMethod]
-        public void test_one_dim_no_mask()
-        {
-            // Scores tensor of shape [1, 1, 1]
-            var scores = np.array(new[, ,] { { { 1.1f } } }, dtype: np.float32);
-            // Value tensor of shape [1, 1, 1]
-            var v = np.array(new[, ,] { { { 1.6f } } }, dtype: np.float32);
-            var _tup_1 = new BaseDenseAttention(new())._apply_scores(scores: scores, value: v);
-            var actual = _tup_1.Item1;
-            var actual_scores = _tup_1.Item2;
-            // Expected softmax_scores = [[[1]]]
-            var expected_scores = np.array(new[, ,] { { { 1f } } }, dtype: np.float32);
-            Assert.AreEqual(expected_scores, actual_scores.numpy());
-            // Expected tensor of shape [1, 1, 1].
-            // expected000 = softmax_scores[0, 0] * 1.6 = 1.6
-            var expected = np.array(new[, ,] { { { 1.6f } } }, dtype: np.float32);
-            Assert.AreEqual(expected, actual.numpy());
-        }
 
         [TestMethod]
         public void test_multi_dim_with_mask()
@@ -81,35 +42,6 @@ namespace TensorFlowNET.Keras.UnitTest
             var expected = np.array(new[, ,] { { { 1.3579528f } } }, dtype: np.float32);
             Assert.AreEqual(expected, actual.numpy());
         }
-        
-        [TestMethod]
-        public void test_multi_dim_no_mask()
-        {
-            // Scores tensor of shape [1, 1, 3]
-            var scores = np.array(new[, ,] { { { 1f, 0f, 1f } } }, dtype: np.float32);
-            // Value tensor of shape [1, 3, 1]
-            var v = np.array(new[, ,] { { { 1.6f }, { 0.7f }, { -0.8f } } }, dtype: np.float32);
-            var _tup_1 = new BaseDenseAttention(new())._apply_scores(scores: scores, value: v);
-            var actual = _tup_1.Item1;
-            var actual_scores = _tup_1.Item2;
-            // Expected softmax_scores = softmax(scores).
-            // => softmax_scores000 = exp(1)/(exp(1) + exp(0) + exp(1))
-            //                      = 0.42231879825
-            //    softmax_scores001 = exp(0)/(exp(1) + exp(0) + exp(1))
-            //                      = 0.15536240349
-            //    softmax_scores002 = exp(1)/(exp(1) + exp(0) + exp(1))
-            //                      = 0.42231879825
-            //Actually the output is 0.42231882, 0.15536241, 0.42231882
-            var expected_scores = np.array(new[, ,] { { { 0.42231882f, 0.15536241f, 0.42231882f } } }, dtype: np.float32);
-            Assert.AreEqual(expected_scores, actual_scores.numpy());
-            // Expected tensor of shape [1, 1, 1].
-            // expected000 = 0.42231879825 * 1.6 + 0.15536240349 * 0.7
-            //               - 0.42231879825 * 0.8
-            //             = 0.44660872104
-            //Actually the output is 0.44660875
-            var expected = np.array(new[, ,] { { { 0.44660875f } } }, dtype: np.float32);
-            Assert.AreEqual(expected, actual.numpy());
-        }
 
         [TestMethod]
         public void test_one_dim_batch_size_two()
@@ -132,101 +64,10 @@ namespace TensorFlowNET.Keras.UnitTest
             var expected = np.array(new[, ,] { { { 1.6f } }, { { 2.6f } } }, dtype: np.float32);
             Assert.AreEqual(expected, actual.numpy());
         }
-
-        [TestMethod]
-        public void test_shape_with_dropout()
-        {
-            // scores: Scores float tensor of shape `[batch_size, tq, tv]`.
-            // value: Value tensor of shape `[batch_size, tv, dim]`.
-            var batch_size = 4;
-            var tq = 5;
-            var tv = 6;
-            var dim = 7;
-            var scores = np.ones((batch_size, tq, tv));
-            var value = np.ones((batch_size, tv, dim));
-            var _tup_1 = new BaseDenseAttention(new BaseDenseAttentionArgs { dropout = 0.1f })
-                                ._apply_scores(scores: scores, value: value, training: false);
-            var actual = _tup_1.Item1;
-            var actual_scores = _tup_1.Item2;
-            // Expected Tensor of shape `[batch_size, tq, tv]`.
-            var expected_scores_shape = new[] {
-                batch_size,
-                tq,
-                tv
-            };
-            Assert.AreEqual(expected_scores_shape, tf.shape(actual_scores).numpy());
-            // Expected Tensor of shape `[batch_size, tq, dim]`.
-            var expected_shape = new[] {
-                batch_size,
-                tq,
-                dim
-            };
-            Assert.AreEqual(expected_shape, tf.shape(actual).numpy());
-        }
         #endregion
         // ------------------------------------------------------------------
         #region Attention
-        [TestMethod]
-        public void test_example()
-        {
-            //Variable-length int sequences.
-            var query_input = keras.Input((1000), dtype: TF_DataType.TF_INT32);
-            var value_input = keras.Input((1000), dtype: TF_DataType.TF_INT32);
-            // Embedding lookup.
-            var token_embedding = keras.layers.Embedding(input_dim: 1000, output_dim: 64);
-            // Query embeddings of shape [batch_size, Tq, dimension].
-            var query_embeddings = token_embedding.Apply(query_input);
-            // Value embeddings of shape [batch_size, Tv, dimension].
-            var value_embeddings = token_embedding.Apply(value_input);
-            // CNN layer.
-            var cnn_layer = keras.layers.Conv1D(
-                filters: 100,
-                kernel_size: 4,
-                // Use 'same' padding so outputs have the same shape as inputs.
-                padding: "same",
-                activation: "relu");
-            var cnn_layer2 = keras.layers.Conv1D(
-                filters: 100,
-                kernel_size: 4,
-                // Use 'same' padding so outputs have the same shape as inputs.
-                padding: "same",
-                activation: "relu");
-            // Query encoding of shape [batch_size, Tq, filters].
-            var query_seq_encoding = cnn_layer.Apply(query_embeddings);
-            // Value encoding of shape [batch_size, Tv, filters].
-            var value_seq_encoding = cnn_layer2.Apply(value_embeddings);
-            // Query-value attention of shape [batch_size, Tq, filters].
-            var query_value_attention_seq = keras.layers.Attention().Apply(
-               (query_seq_encoding, value_seq_encoding));
-            // Reduce over the sequence axis to produce encodings of shape
-            // [batch_size, filters].
-            var query_encoding = keras.layers.GlobalAveragePooling1D().Apply(
-                query_seq_encoding);
-            var query_value_attention = keras.layers.GlobalAveragePooling1D().Apply(
-                query_value_attention_seq);
-            // Concatenate query and document encodings to produce a DNN input layer.
-            var input_layer = keras.layers.Concatenate().Apply(
-                (query_encoding, query_value_attention));
-            // Add DNN layers, and create Model.
-            // ...
-        }
 
-        [TestMethod]
-        public void test_calculate_scores_one_dim()
-        {
-            // Query tensor of shape [1, 1, 1]
-            var q = np.array(new[,,] { { { 1.1f } } }, dtype: np.float32);
-            // Key tensor of shape [1, 1, 1]
-            var k = np.array(new[,,] { { { 1.6f } } }, dtype: np.float32);
-            var attention_layer = keras.layers.Attention();
-            //attention_layer.build((1));
-            var actual = attention_layer._calculate_scores(query: q, key: k);
-            // Expected tensor of shape [1, 1, 1].
-            // expected000 = 1.1*1.6 = 1.76
-            // Actually the output is 1.7600001
-            var expected = np.array(new[,,] { { { 1.7600001f } } }, dtype: np.float32);
-            Assert.AreEqual(expected, actual.numpy());
-        }
 
         [TestMethod]
         public void test_calculate_scores_multi_dim()
@@ -303,6 +144,31 @@ namespace TensorFlowNET.Keras.UnitTest
                 { 3.99558784825f, 3.99940254147f, 3.9999194f }
             } }, dtype: np.float32);
             Assert.AreEqual(expected, actual.numpy());
+        }
+        #endregion
+        // ------------------------------------------------------------------
+        #region MultiHeadAttention
+        [TestMethod]
+        public void test_masked_attention()
+        {
+            var batch_size = 3;
+
+            var query = keras.Input(shape: (4, 8));
+            var value = keras.Input(shape: (2, 8));
+            var mask_tensor = keras.Input(shape:(4, 2));
+            var attention_layer = keras.layers.MultiHeadAttention(num_heads: 2, key_dim: 2);
+            attention_layer.Apply(new[] { query, value, mask_tensor });
+
+            var from_data = 10 * np.random.randn(batch_size, 4, 8);
+            var to_data = 10 * np.random.randn(batch_size, 2, 8);
+
+            var mask_data = np.random.randint(2, size: (batch_size, 4, 2));
+            var masked_output_data = attention_layer.Apply(new[] { from_data, to_data, mask_data });
+
+            var null_mask_data = np.ones((batch_size, 4, 2));
+            var unmasked_output_data = attention_layer.Apply(new[] { from_data, to_data, null_mask_data });
+
+            Assert.AreNotEqual(masked_output_data, unmasked_output_data);
         }
         #endregion
     }
