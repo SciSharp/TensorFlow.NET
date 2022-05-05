@@ -135,7 +135,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var ed = keras.layers.EinsumDense(
                 equation: "...b,bc->...c",
-                output_shape: (-1, 4),
+                output_shape: 4,
                 bias_axes: "c",
                 bias_initializer: tf.constant_initializer(0.03),
                 kernel_initializer: tf.constant_initializer(0.5)
