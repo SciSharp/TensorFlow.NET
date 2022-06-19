@@ -235,7 +235,7 @@ namespace Tensorflow.Keras.Layers
             string data_format = null,
             Shape dilation_rate = null,
             string activation = null,
-            bool use_bias = true,
+            bool use_bias = false,
             string kernel_initializer = null,
             string bias_initializer = null,
             string kernel_regularizer = null,
