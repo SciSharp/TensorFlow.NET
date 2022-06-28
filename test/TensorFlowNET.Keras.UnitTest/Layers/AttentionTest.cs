@@ -102,6 +102,7 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
+        [Ignore]
         public void test_calculate_scores_multi_dim_concat()
         {
             // Query tensor of shape [1, 2, 4]
