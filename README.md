@@ -247,16 +247,19 @@ Please make sure you keep your fork up to date by regularly pulling from upstrea
 ```git
 git pull upstream master
 ```
+### Support
+Buy our book to make open source project be sustainable [TensorFlow.NET实战](https://item.jd.com/13441549.html)
+<p float="left">
+<img src="https://user-images.githubusercontent.com/1705364/198852429-91741881-c196-401e-8e9e-2f8656196613.png" width="250" />
+<img src="https://user-images.githubusercontent.com/1705364/198852521-2f842043-3ace-49d2-8533-039c6a043a3f.png" width="260" />
+<img src="https://user-images.githubusercontent.com/1705364/198852721-54cd9e7e-9210-4931-a86c-77584b25b8e1.png" width="260" />
+</p>
 
 ### Contact
 
 Follow us on [Twitter](https://twitter.com/ScisharpStack), [Facebook](https://www.facebook.com/scisharp.stack.9), [Medium](https://medium.com/scisharp), [LinkedIn](https://www.linkedin.com/company/scisharp-stack/).
 
 Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
-
-WeChat Sponsor 微信打赏:
-
-![SciSharp STACK](docs/assets/WeChatCollection.jpg)
 
 TensorFlow.NET is a part of [SciSharp STACK](https://scisharp.github.io/SciSharp/)
 <br>
