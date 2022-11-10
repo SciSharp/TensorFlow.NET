@@ -5,7 +5,7 @@
     <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.2.0</TargetTensorFlow>
-    <Version>0.70.1</Version>
+    <Version>0.70.2</Version>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>

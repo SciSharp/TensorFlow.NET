@@ -77,5 +77,16 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(c.shape.ndim, 0);
             Assert.AreEqual(c.numpy(), 8);
         }
+
+        [TestMethod]
+        public void Matmul()
+        {
+            var a = tf.constant(new[] { 1, 2, 3, 4, 5, 6 }, shape: (2, 3));
+            var b = tf.constant(new[] { 7, 8, 9, 10, 11, 12 }, shape: (3, 2));
+            var c = tf.linalg.matmul(a, b);
+
+            Assert.AreEqual(c.shape, (2, 2));
+            AssetSequenceEqual(c.ToArray<int>(), new[] { 58, 64, 139, 154 });
+        }
     }
 }

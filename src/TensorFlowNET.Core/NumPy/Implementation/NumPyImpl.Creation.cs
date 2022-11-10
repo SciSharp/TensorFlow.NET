@@ -90,9 +90,8 @@ namespace Tensorflow.NumPy
             int total = 1;
             for (int i = 0; i < shape.Length; i++)
                 total *= shape[i];
-            var buffer = new byte[bytes * total];
-
-            reader.Read(buffer, 0, buffer.Length);
+            
+            var buffer = reader.ReadBytes(bytes * total);
             System.Buffer.BlockCopy(buffer, 0, matrix, 0, buffer.Length);
 
             return matrix;
