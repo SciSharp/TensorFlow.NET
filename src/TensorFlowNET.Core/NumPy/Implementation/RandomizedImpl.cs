@@ -20,11 +20,11 @@ namespace Tensorflow.NumPy
             Marshal.Copy(y.BufferToArray(), 0, x.TensorDataPointer, (int)x.bytesize);
         }
 
-        public NDArray rand(params int[] shape)
-            => throw new NotImplementedException("");
+        public NDArray random(Shape size)
+            => uniform(low: 0, high: 1, size: size);
 
         [AutoNumPy]
-        public NDArray randint(int low, int? high = null, Shape size = null, TF_DataType dtype = TF_DataType.TF_INT32)
+        public NDArray randint(int low, int? high = null, Shape? size = null, TF_DataType dtype = TF_DataType.TF_INT32)
         {
             if(high == null)
             {
@@ -41,11 +41,11 @@ namespace Tensorflow.NumPy
             => new NDArray(random_ops.random_normal(shape ?? Shape.Scalar));
 
         [AutoNumPy]
-        public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape size = null)
+        public NDArray normal(float loc = 0.0f, float scale = 1.0f, Shape? size = null)
             => new NDArray(random_ops.random_normal(size ?? Shape.Scalar, mean: loc, stddev: scale));
 
         [AutoNumPy]
-        public NDArray uniform(float low = 0.0f, float high = 1.0f, Shape size = null)
+        public NDArray uniform(float low = 0.0f, float high = 1.0f, Shape? size = null)
             => new NDArray(random_ops.random_uniform(size ?? Shape.Scalar, low, high));
     }
 }

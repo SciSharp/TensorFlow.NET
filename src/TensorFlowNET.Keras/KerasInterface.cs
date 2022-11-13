@@ -10,18 +10,17 @@ using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Models;
 using Tensorflow.Keras.Optimizers;
-using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using System.Threading;
 
 namespace Tensorflow.Keras
 {
-    public class KerasInterface
+    public class KerasInterface : IKerasApi
     {
         public KerasDataset datasets { get; } = new KerasDataset();
         public Initializers initializers { get; } = new Initializers();
         public Regularizers regularizers { get; } = new Regularizers();
-        public LayersApi layers { get; } = new LayersApi();
+        public ILayersApi layers { get; } = new LayersApi();
         public LossesApi losses { get; } = new LossesApi();
         public Activations activations { get; } = new Activations();
         public Preprocessing preprocessing { get; } = new Preprocessing();

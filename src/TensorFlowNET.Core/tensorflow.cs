@@ -20,6 +20,7 @@ using System.Threading;
 using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using Tensorflow.Gradients;
+using Tensorflow.Keras;
 
 namespace Tensorflow
 {
@@ -50,6 +51,8 @@ namespace Tensorflow
 
         ThreadLocal<IEagerRunner> _runner = new ThreadLocal<IEagerRunner>(() => new EagerRunner());
         public IEagerRunner Runner => _runner.Value;
+
+        public IKerasApi keras { get; set; }
 
         public tensorflow()
         {

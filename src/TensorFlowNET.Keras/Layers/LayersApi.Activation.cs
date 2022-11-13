@@ -7,16 +7,16 @@ using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Layers {
       public partial class LayersApi {
-            public ELU ELU ( float alpha = 0.1f )
+            public ILayer ELU ( float alpha = 0.1f )
                   => new ELU(new ELUArgs { Alpha = alpha });
-            public SELU SELU ()
+            public ILayer SELU ()
                   => new SELU(new LayerArgs { });
-            public Softmax Softmax ( Axis axis ) => new Softmax(new SoftmaxArgs { axis = axis });
-            public Softplus Softplus () => new Softplus(new LayerArgs { });
-            public HardSigmoid HardSigmoid () => new HardSigmoid(new LayerArgs { });
-            public Softsign Softsign () => new Softsign(new LayerArgs { });
-            public Swish Swish () => new Swish(new LayerArgs { });
-            public Tanh Tanh () => new Tanh(new LayerArgs { });
-            public Exponential Exponential () => new Exponential(new LayerArgs { });
+            public ILayer Softmax ( Axis axis ) => new Softmax(new SoftmaxArgs { axis = axis });
+            public ILayer Softplus () => new Softplus(new LayerArgs { });
+            public ILayer HardSigmoid () => new HardSigmoid(new LayerArgs { });
+            public ILayer Softsign () => new Softsign(new LayerArgs { });
+            public ILayer Swish () => new Swish(new LayerArgs { });
+            public ILayer Tanh () => new Tanh(new LayerArgs { });
+            public ILayer Exponential () => new Exponential(new LayerArgs { });
       }
 }

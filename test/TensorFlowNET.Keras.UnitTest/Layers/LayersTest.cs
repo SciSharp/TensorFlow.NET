@@ -148,10 +148,9 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
-        [Ignore]
         public void SimpleRNN()
         {
-            var inputs = np.random.rand(32, 10, 8).astype(np.float32);
+            var inputs = np.random.random((32, 10, 8)).astype(np.float32);
             var simple_rnn = keras.layers.SimpleRNN(4);
             var output = simple_rnn.Apply(inputs);
             Assert.AreEqual((32, 4), output.shape);

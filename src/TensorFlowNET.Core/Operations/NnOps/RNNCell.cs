@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations;
 using Tensorflow.Util;

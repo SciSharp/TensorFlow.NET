@@ -11,7 +11,7 @@
 
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
 
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
 
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>

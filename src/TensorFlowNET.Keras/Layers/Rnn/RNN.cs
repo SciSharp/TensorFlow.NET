@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Layers.Lstm;
 // from tensorflow.python.distribute import distribution_strategy_context as ds_context;
 
-namespace Tensorflow.Keras.Layers
+namespace Tensorflow.Keras.Layers.Rnn
 {
     public class RNN : Layer
     {
@@ -14,6 +16,8 @@ namespace Tensorflow.Keras.Layers
         private object _states = null;
         private object constants_spec = null;
         private int _num_constants = 0;
+        protected IVariableV1 kernel;
+        protected IVariableV1 bias;
 
         public RNN(RNNArgs args) : base(PreConstruct(args))
         {

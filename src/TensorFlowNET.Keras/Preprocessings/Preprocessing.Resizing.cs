@@ -15,7 +15,7 @@ namespace Tensorflow.Keras
         /// <param name="width"></param>
         /// <param name="interpolation"></param>
         /// <returns></returns>
-        public Resizing Resizing(int height, int width, string interpolation = "bilinear")
+        public ILayer Resizing(int height, int width, string interpolation = "bilinear")
             => new Resizing(new ResizingArgs
             {
                 Height = height,

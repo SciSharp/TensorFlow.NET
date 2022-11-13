@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 
-namespace Tensorflow.Keras.Layers
+namespace Tensorflow.Keras.Layers.Rnn
 {
     public class StackedRNNCells : Layer, RNNArgs.IRnnArgCell
     {

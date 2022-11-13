@@ -11,7 +11,7 @@ namespace Tensorflow.Keras.Layers {
             /// </summary>
             /// <param name="padding"></param>
             /// <returns></returns>
-            public ZeroPadding2D ZeroPadding2D ( NDArray padding )
+            public ILayer ZeroPadding2D ( NDArray padding )
                 => new ZeroPadding2D(new ZeroPadding2DArgs {
                       Padding = padding
                 });
@@ -24,7 +24,7 @@ namespace Tensorflow.Keras.Layers {
             /// <param name="data_format"></param>
             /// <param name="interpolation"></param>
             /// <returns></returns>
-            public UpSampling2D UpSampling2D ( Shape size = null,
+            public ILayer UpSampling2D ( Shape size = null,
                 string data_format = null,
                 string interpolation = "nearest" )
                 => new UpSampling2D(new UpSampling2DArgs {
@@ -34,7 +34,7 @@ namespace Tensorflow.Keras.Layers {
             /// <summary>
             /// Permutes the dimensions of the input according to a given pattern.
             /// </summary>
-            public Permute Permute ( int[] dims )
+            public ILayer Permute ( int[] dims )
                   => new Permute(new PermuteArgs {
                         dims = dims
                   });
@@ -44,12 +44,12 @@ namespace Tensorflow.Keras.Layers {
             /// </summary>
             /// <param name="target_shape"></param>
             /// <returns></returns>
-            public Reshape Reshape ( Shape target_shape )
-            => new Reshape(new ReshapeArgs {
-                  TargetShape = target_shape
-            });
+            public ILayer Reshape ( Shape target_shape )
+                => new Reshape(new ReshapeArgs {
+                      TargetShape = target_shape
+                });
 
-            public Reshape Reshape ( object[] target_shape )
+            public ILayer Reshape ( object[] target_shape )
                 => new Reshape(new ReshapeArgs {
                       TargetShapeObjects = target_shape
                 });

@@ -83,7 +83,7 @@ namespace TensorFlowNET.Keras.UnitTest
                 { 2.5f, 2.6f, 2.7f, 2.8f },
                 { 3.5f, 3.6f, 3.7f, 3.8f }
             } }, dtype: np.float32);
-            var attention_layer = keras.layers.Attention();
+            var attention_layer = (Attention)keras.layers.Attention();
             //attention_layer.build(((1, 2, 4), (1, 3, 4)));
             var actual = attention_layer._calculate_scores(query: q, key: k);
             // Expected tensor of shape [1, 2, 3].
@@ -116,7 +116,7 @@ namespace TensorFlowNET.Keras.UnitTest
                 { 2.5f, 2.6f, 2.7f, 2.8f },
                 { 3.5f, 3.6f, 3.7f, 3.8f }
             } }, dtype: np.float32);
-            var attention_layer = keras.layers.Attention(score_mode: "concat");
+            var attention_layer = (Attention)keras.layers.Attention(score_mode: "concat");
             //attention_layer.concat_score_weight = 1;
             attention_layer.concat_score_weight = base_layer_utils.make_variable(new VariableArgs() {
                 Name = "concat_score_weight",

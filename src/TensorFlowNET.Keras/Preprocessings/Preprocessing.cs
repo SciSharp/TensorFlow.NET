@@ -5,7 +5,7 @@ using Tensorflow.Keras.Preprocessings;
 
 namespace Tensorflow.Keras
 {
-    public partial class Preprocessing
+    public partial class Preprocessing : IPreprocessing
     {
         public Sequence sequence => new Sequence();
         public DatasetUtils dataset_utils => new DatasetUtils();
@@ -14,7 +14,7 @@ namespace Tensorflow.Keras
 
         private static TextApi _text = new TextApi();
 
-        public TextVectorization TextVectorization(Func<Tensor, Tensor> standardize = null,
+        public ILayer TextVectorization(Func<Tensor, Tensor> standardize = null,
             string split = "whitespace",
             int max_tokens = -1,
             string output_mode = "int",

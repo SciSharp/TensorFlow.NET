@@ -10,6 +10,9 @@ namespace Tensorflow
             var diag = new Diagnostician();
             // diag.Diagnose(@"D:\memory.txt");
 
+            var rnn = new SimpleRnnTest();
+            rnn.Run();
+
             // this class is used explor new features.
             var exploring = new Exploring();
             // exploring.Run();

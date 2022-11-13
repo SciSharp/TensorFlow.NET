@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Layers
 {
     public partial class LayersApi
     {
-        public Attention Attention(bool use_scale = false,
+        public ILayer Attention(bool use_scale = false,
                                    string score_mode = "dot",
                                    bool causal = false,
                                    float dropout = 0f) =>
@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Layers
                 causal = causal,
                 dropout = dropout
             });
-        public MultiHeadAttention MultiHeadAttention(int num_heads,
+        public ILayer MultiHeadAttention(int num_heads,
                                                      int key_dim,
                                                      int? value_dim = null,
                                                      float dropout = 0f,

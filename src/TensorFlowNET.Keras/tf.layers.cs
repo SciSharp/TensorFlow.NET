@@ -134,7 +134,7 @@ namespace Tensorflow.Keras
             /// <param name="data_format"></param>
             /// <param name="name"></param>
             /// <returns></returns>
-            public Tensor max_pooling2d(Tensor inputs,
+            public Tensor MaxPooling2D(Tensor inputs,
                 int[] pool_size,
                 int[] strides,
                 string padding = "valid",

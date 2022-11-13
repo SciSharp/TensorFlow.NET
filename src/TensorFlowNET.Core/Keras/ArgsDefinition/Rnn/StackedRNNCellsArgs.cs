@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tensorflow.Keras.ArgsDefinition
+namespace Tensorflow.Keras.ArgsDefinition.Rnn
 {
     public class StackedRNNCellsArgs : LayerArgs
     {

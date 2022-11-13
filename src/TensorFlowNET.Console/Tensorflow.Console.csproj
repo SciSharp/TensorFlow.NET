@@ -6,7 +6,7 @@
     <RootNamespace>Tensorflow</RootNamespace>
     <AssemblyName>Tensorflow</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SciSharp.TensorFlow.Redist-Windows-GPU" Version="2.7.0" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.10.0" />
   </ItemGroup>
 
   <ItemGroup>
