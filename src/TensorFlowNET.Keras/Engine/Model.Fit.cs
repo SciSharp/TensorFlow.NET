@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
+using System.Diagnostics;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -87,24 +88,56 @@ namespace Tensorflow.Keras.Engine
         {
             stop_training = false;
             _train_counter.assign(0);
+            Stopwatch sw = new Stopwatch();
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 reset_metrics();
-                // callbacks.on_epoch_begin(epoch)
+                on_epoch_begin(epoch, epochs);
                 // data_handler.catch_stop_iteration();
                 foreach (var step in data_handler.steps())
                 {
-                    // callbacks.on_train_batch_begin(step)
+                    sw.Start();
                     var results = train_step_function(iterator);
-                    if (verbose == 1)
-                    {
-                        var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
-                        Binding.tf_output_redirect.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}, Step: {step + 1:D4}/{data_handler.Inferredsteps:D4}, {result_pairs}");
-                    }
+                    sw.Stop();
+                    on_train_batch_begin(verbose, step, sw.ElapsedMilliseconds, results);
 
-                    GC.Collect();
+                    // recycle memory more frequency
+                    if (sw.ElapsedMilliseconds > 100)
+                    {
+                        GC.Collect();
+                    }
+                    sw.Reset();
                 }
+                Console.WriteLine();
+
+                GC.Collect();
                 GC.WaitForPendingFinalizers();
+            }
+        }
+
+        void on_epoch_begin(int epoch, int epochs)
+        {
+            Binding.tf_output_redirect.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}");
+        }
+
+        void on_train_batch_begin(int verbose, long step, long elapse, IEnumerable<(string, Tensor)> results)
+        {
+            if (verbose == 1)
+            {
+                var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
+
+                var progress = "";
+                for (int i = 0; i < step + 1; i++)
+                    for (int j = 0; j < 30 / data_handler.Inferredsteps; j++)
+                        progress += "=";
+                progress += ">";
+
+                var remaining = "";
+                for (int i = 1; i < 30 - progress.Length; i++)
+                    remaining += ".";
+
+                Binding.tf_output_redirect.Write($"{step + 1:D4}/{data_handler.Inferredsteps:D4} [{progress}{remaining}] - {elapse}ms/step {result_pairs}");
+                Console.CursorLeft = 0;
             }
         }
     }

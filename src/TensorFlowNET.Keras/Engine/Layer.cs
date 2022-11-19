@@ -61,12 +61,12 @@ namespace Tensorflow.Keras.Engine
         protected InputSpec inputSpec;
         bool dynamic = true;
         public bool SupportsMasking { get; set; }
-        protected List<IVariableV1> trainable_weights;
+        protected List<IVariableV1> _trainable_weights;
 
-        public virtual List<IVariableV1> trainable_variables => trainable_weights;
+        public virtual List<IVariableV1> trainable_variables => _trainable_weights;
 
-        protected List<IVariableV1> non_trainable_weights;
-        public List<IVariableV1> non_trainable_variables => non_trainable_weights;
+        protected List<IVariableV1> _non_trainable_weights;
+        public List<IVariableV1> non_trainable_variables => _non_trainable_weights;
 
         protected int id;
         public int Id => id;
@@ -104,8 +104,8 @@ namespace Tensorflow.Keras.Engine
 
             id = ops.uid_layer();
             _init_set_name(args.Name);
-            trainable_weights = new List<IVariableV1>();
-            non_trainable_weights = new List<IVariableV1>();
+            _trainable_weights = new List<IVariableV1>();
+            _non_trainable_weights = new List<IVariableV1>();
             computePreviousMask = false;
             updates = new List<Operation>();
             _self_tracked_trackables = new List<ILayer>();
@@ -254,7 +254,7 @@ namespace Tensorflow.Keras.Engine
         {
             get
             {
-                return trainable_weights;
+                return _trainable_weights;
             }
         }
 
@@ -262,7 +262,7 @@ namespace Tensorflow.Keras.Engine
         {
             get
             {
-                return non_trainable_weights;
+                return _non_trainable_weights;
             }
         }
 
@@ -271,8 +271,8 @@ namespace Tensorflow.Keras.Engine
             get
             {
                 var weights = new List<IVariableV1>();
-                weights.AddRange(trainable_weights);
-                weights.AddRange(non_trainable_weights);
+                weights.AddRange(_trainable_weights);
+                weights.AddRange(_non_trainable_weights);
                 return weights;
             }
             set

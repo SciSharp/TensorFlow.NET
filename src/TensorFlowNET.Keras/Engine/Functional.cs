@@ -71,7 +71,7 @@ namespace Tensorflow.Keras.Engine
             NodesByDepth = nodes_by_depth;
             if (_layers.Count == 0)
                 _layers = layers;
-
+            _self_tracked_trackables = layers;
             // Build self.input_names and self.output_names.
             _set_output_names();
 

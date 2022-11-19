@@ -75,11 +75,26 @@ namespace Tensorflow.Keras.Engine
             get
             {
                 var variables = new List<IVariableV1>();
+
+                if (!Trainable)
+                {
+                    return variables;
+                }
+
+                foreach (var trackable_obj in _self_tracked_trackables)
+                {
+                    if (trackable_obj.Trainable)
+                        variables.AddRange(trackable_obj.trainable_variables);
+                }
+
                 foreach (var layer in _layers)
                 {
                     if (layer.Trainable)
                         variables.AddRange(layer.trainable_variables);
                 }
+
+                // variables.AddRange(_trainable_weights);
+
                 return variables;
             }
         }

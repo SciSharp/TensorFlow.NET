@@ -8,7 +8,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "${workspaceFolder}/xor_keras.py",
             "console": "integratedTerminal",
             "justMyCode": false
         }
