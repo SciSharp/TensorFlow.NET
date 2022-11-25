@@ -137,7 +137,10 @@ namespace Tensorflow.Keras.Engine
                     remaining += ".";
 
                 Binding.tf_output_redirect.Write($"{step + 1:D4}/{data_handler.Inferredsteps:D4} [{progress}{remaining}] - {elapse}ms/step {result_pairs}");
-                Console.CursorLeft = 0;
+                if (!Console.IsOutputRedirected)
+                {
+                    Console.CursorLeft = 0;
+                }
             }
         }
     }
