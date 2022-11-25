@@ -84,23 +84,18 @@ namespace Tensorflow.Keras.Saving
         {
             string original_keras_version = "2.5.0";
             string original_backend = null;
-            if (Hdf5.AttributeExists(f, "keras_version"))
-            {
-                var (success, attr) = Hdf5.ReadStringAttributes(f, "keras_version", "");
-                if (success)
-                    original_keras_version = attr.First();
-                // keras version should be 2.5.0+
-                var ver_major = int.Parse(original_keras_version.Split('.')[0]);
-                var ver_minor = int.Parse(original_keras_version.Split('.')[1]);
-                if (ver_major < 2 || (ver_major == 2 && ver_minor < 5))
-                    throw new ValueError("keras version should be 2.5.0 or later.");
-            }
-            if (Hdf5.AttributeExists(f, "backend"))
-            {
-                var (success, attr) = Hdf5.ReadStringAttributes(f, "backend", "");
-                if (success)
-                    original_backend = attr.First();
-            }
+            var (success, attr) = Hdf5.ReadStringAttributes(f, "keras_version", "", true);
+            if (success)
+                original_keras_version = attr.First();
+            // keras version should be 2.5.0+
+            var ver_major = int.Parse(original_keras_version.Split('.')[0]);
+            var ver_minor = int.Parse(original_keras_version.Split('.')[1]);
+            if (ver_major < 2 || (ver_major == 2 && ver_minor < 5))
+                throw new ValueError("keras version should be 2.5.0 or later.");
+            
+            (success, attr) = Hdf5.ReadStringAttributes(f, "backend", "", true);
+            if (success)
+                original_backend = attr.First();
 
             var filtered_layers = new List<ILayer>();
             foreach (var layer in layers)
@@ -137,7 +132,7 @@ namespace Tensorflow.Keras.Saving
                 var weight_names = load_attributes_from_hdf5_group(g, "weight_names");
                 foreach (var i_ in weight_names)
                 {
-                    (bool success, Array result) = Hdf5.ReadDataset<float>(g, i_);
+                    (success, Array result) = Hdf5.ReadDataset<float>(g, i_);
                     if (success)
                         weight_values.Add(np.array(result));
                 }
@@ -329,12 +324,10 @@ namespace Tensorflow.Keras.Saving
 
         public static string[] load_attributes_from_hdf5_group(long group, string name)
         {
-            if (Hdf5.AttributeExists(group, name))
-            {
-                var (success, attr) = Hdf5.ReadStringAttributes(group, name, "");
-                if (success)
-                    return attr.ToArray();
-            }
+            var (success, attr) = Hdf5.ReadStringAttributes(group, name, "", true);
+            if (success)
+                return attr.ToArray();
+            
             return null;
         }
 
