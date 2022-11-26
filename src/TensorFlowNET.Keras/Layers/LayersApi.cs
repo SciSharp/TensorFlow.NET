@@ -469,6 +469,7 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <returns>A tensor.</returns>
         public Tensors Input(Shape shape,
+            int batch_size = -1,
             string name = null,
             bool sparse = false,
             bool ragged = false)
@@ -476,6 +477,7 @@ namespace Tensorflow.Keras.Layers
             var input_layer = new InputLayer(new InputLayerArgs
             {
                 InputShape = shape,
+                BatchSize= batch_size,
                 Name = name,
                 Sparse = sparse,
                 Ragged = ragged

@@ -108,6 +108,7 @@ namespace Tensorflow.Keras.Layers
         public ILayer GlobalMaxPooling2D(string data_format = "channels_last");
 
         public Tensors Input(Shape shape,
+            int batch_size = -1,
             string name = null,
             bool sparse = false,
             bool ragged = false);

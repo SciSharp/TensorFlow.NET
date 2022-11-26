@@ -4,6 +4,7 @@ import tensorflow as tf
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 print(tf.__version__)
+# https://playground.tensorflow.org/
 # tf.compat.v1.enable_eager_execution()
 # tf.debugging.set_log_device_placement(True);
 tf.config.run_functions_eagerly(True)
