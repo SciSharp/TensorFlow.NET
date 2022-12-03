@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Engine
                 yield return this;
 
             var seen_object_ids = new List<int>();
-            var deque = new Queue<ILayer>(_layers);
+            var deque = new Queue<ILayer>(_self_tracked_trackables);
             while (!deque.empty())
             {
                 var layer_or_container = deque.Dequeue();

@@ -202,5 +202,8 @@ namespace Tensorflow.Keras.Engine
                 created_nodes.add(prev_layer.OutboundNodes.Last());
             }
         }
+
+        public override List<ILayer> Layers
+            => base.Layers.Where(x => x is not InputLayer).ToList();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
@@ -69,6 +70,9 @@ namespace Tensorflow.Keras.Engine
                 dtype: TF_DataType.TF_INT64,
                 aggregation: VariableAggregation.OnlyFirstReplica);
         }
+
+        public override List<ILayer> Layers
+            => _flatten_layers(recursive: false, include_self: false).ToList();
 
         public override List<IVariableV1> trainable_variables
         {
