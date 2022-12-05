@@ -13,7 +13,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
             
         }

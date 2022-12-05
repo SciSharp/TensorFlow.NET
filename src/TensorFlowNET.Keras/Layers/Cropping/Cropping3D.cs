@@ -11,7 +11,7 @@ namespace Tensorflow.Keras.Layers {
                   this.args = args;
             }
 
-            protected override void build ( Tensors inputs ) {
+            public override void build(Shape input_shape) {
                   built = true;
             }
 

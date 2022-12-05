@@ -15,9 +15,8 @@ namespace Tensorflow.Keras.Layers.Rnn
             this.args = args;
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
-            var input_shape = inputs.shape;
             var input_dim = input_shape[-1];
 
             kernel = add_weight("kernel", (input_shape[-1], args.Units),

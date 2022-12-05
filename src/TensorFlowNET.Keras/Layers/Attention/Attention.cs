@@ -90,9 +90,10 @@ namespace Tensorflow.Keras.Layers
             }.Contains(this.score_mode))
                 throw new ValueError("Received: score_mode={score_mode}. Acceptable values are: [\"dot\", \"concat\"]");
         }
-        
+
         // Creates variable when `use_scale` is True or `score_mode` is `concat`.
-        protected override void build(Tensors inputs) {
+        public override void build(Shape input_shape)
+        {
             if (this.use_scale)
                 this.scale = this.add_weight(name: "scale",
                                              shape: 1,
@@ -110,7 +111,7 @@ namespace Tensorflow.Keras.Layers
                                                            trainable: true);
             else
                 this.concat_score_weight = null;
-            base.build(inputs);
+            base.build(input_shape);
         }
 
         /// <summary>

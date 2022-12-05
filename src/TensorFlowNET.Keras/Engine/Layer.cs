@@ -191,7 +191,7 @@ namespace Tensorflow.Keras.Engine
                 tf.Context.eager_mode(isFunc: tf.Context.is_build_function());
             }
                
-            build(inputs);
+            build(inputs.shape);
 
             if (need_restore_mode)
                 tf.Context.restore_mode();
@@ -199,7 +199,7 @@ namespace Tensorflow.Keras.Engine
             built = true;
         }
 
-        protected virtual void build(Tensors inputs)
+        public virtual void build(Shape input_shape)
         {
             built = true;
         }

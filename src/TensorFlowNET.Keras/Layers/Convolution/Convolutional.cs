@@ -57,9 +57,8 @@ namespace Tensorflow.Keras.Layers
             _tf_data_format = conv_utils.convert_data_format(data_format, rank + 2);
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
-            Shape input_shape = inputs.shape;
             int channel_axis = data_format == "channels_first" ? 1 : -1;
             var input_channel = channel_axis < 0 ?
                 input_shape.dims[input_shape.ndim + channel_axis] :

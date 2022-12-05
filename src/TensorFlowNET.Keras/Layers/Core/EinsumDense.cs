@@ -119,9 +119,8 @@ namespace Tensorflow.Keras.Layers
             this.bias_constraint = args.BiasConstraint;
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
-            var input_shape = inputs.shape;
             var shape_data = _analyze_einsum_string(this.equation, this.bias_axes, input_shape, this.partial_output_shape);
             var kernel_shape = shape_data.Item1;
             var bias_shape = shape_data.Item2;
@@ -141,7 +140,7 @@ namespace Tensorflow.Keras.Layers
                                             trainable: true);
             else
                 this.bias = null;
-            base.build(inputs);
+            base.build(input_shape);
         }
 
         public override Shape ComputeOutputShape(Shape input_shape)

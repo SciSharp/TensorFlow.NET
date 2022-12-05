@@ -54,7 +54,7 @@ namespace Tensorflow.Keras.Layers
             SupportsMasking = mask_zero;
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
             tf.Context.eager_mode();
             embeddings = add_weight(shape: (input_dim, output_dim),

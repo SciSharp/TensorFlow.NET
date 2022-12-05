@@ -35,14 +35,14 @@ namespace Tensorflow.Keras.Layers
             var shape = data.output_shapes[0];
             if (shape.ndim == 1)
                 data = data.map(tensor => array_ops.expand_dims(tensor, -1));
-            build(data.variant_tensor);
+            build(data.variant_tensor.shape);
             var preprocessed_inputs = data.map(_preprocess);
             _index_lookup_layer.adapt(preprocessed_inputs);
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
-            base.build(inputs);
+            base.build(input_shape);
         }
 
         Tensors _preprocess(Tensors inputs)

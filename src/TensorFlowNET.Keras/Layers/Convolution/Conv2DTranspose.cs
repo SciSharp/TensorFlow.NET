@@ -29,9 +29,8 @@ namespace Tensorflow.Keras.Layers
 
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
-            var input_shape = inputs.shape;
             if (len(input_shape) != 4)
                 throw new ValueError($"Inputs should have rank 4. Received input shape: {input_shape}");
 
@@ -43,14 +42,12 @@ namespace Tensorflow.Keras.Layers
                 shape: kernel_shape,
                 initializer: kernel_initializer,
                 regularizer: kernel_regularizer,
-                trainable: true,
-                dtype: inputs.dtype);
+                trainable: true);
             if (use_bias)
                 bias = add_weight(name: "bias",
                 shape: filters,
                 initializer: bias_initializer,
-                trainable: true,
-                dtype: inputs.dtype);
+                trainable: true);
             built = true;
         }
 

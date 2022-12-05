@@ -12,7 +12,7 @@ namespace Tensorflow.Keras.Layers {
             public Cropping2D ( Cropping2DArgs args ) : base(args) {
                   this.args = args;
             }
-            protected override void build ( Tensors inputs ) {
+            public override void build(Shape input_shape) {
                   built = true;
             }
             protected override Tensors Call ( Tensors inputs, Tensor state = null, bool? training = null ) {

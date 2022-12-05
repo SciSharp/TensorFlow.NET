@@ -23,7 +23,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override void build(Tensors inputs)
+        public override void build(Shape input_shape)
         {
             /*var shape_set = new HashSet<Shape>();
             var reduced_inputs_shapes = inputs.Select(x => x.shape).ToArray();
