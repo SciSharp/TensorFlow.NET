@@ -27,7 +27,7 @@ namespace Tensorflow.Keras.Engine
             };
 
             var node_conversion_map = new Dictionary<string, int>();
-            foreach (var layer in _layers)
+            foreach (var layer in _self_tracked_trackables)
             {
                 var kept_nodes = _should_skip_first_node(layer) ? 1 : 0;
                 foreach (var (original_node_index, node) in enumerate(layer.InboundNodes))
@@ -42,7 +42,7 @@ namespace Tensorflow.Keras.Engine
             }
 
             var layer_configs = new List<LayerConfig>();
-            foreach (var layer in _layers)
+            foreach (var layer in _self_tracked_trackables)
             {
                 var filtered_inbound_nodes = new List<NodeConfig>();
                 foreach (var (original_node_index, node) in enumerate(layer.InboundNodes))

@@ -34,7 +34,7 @@ namespace Tensorflow.Keras.Engine
             // self.optimizer.apply_gradients(zip(gradients, trainable_variables))
             // The _minimize call does a few extra steps unnecessary in most cases,
             // such as loss scaling and gradient clipping.
-            _minimize(tape, optimizer, loss, trainable_variables);
+            _minimize(tape, optimizer, loss, TrainableVariables);
             compiled_metrics.update_state(y, y_pred);
 
             return metrics.Select(x => (x.Name, x.result())).ToList();

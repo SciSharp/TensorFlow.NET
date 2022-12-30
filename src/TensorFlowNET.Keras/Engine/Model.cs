@@ -74,7 +74,7 @@ namespace Tensorflow.Keras.Engine
         public override List<ILayer> Layers
             => _flatten_layers(recursive: false, include_self: false).ToList();
 
-        public override List<IVariableV1> trainable_variables
+        public override List<IVariableV1> TrainableVariables
         {
             get
             {
@@ -88,13 +88,13 @@ namespace Tensorflow.Keras.Engine
                 foreach (var trackable_obj in _self_tracked_trackables)
                 {
                     if (trackable_obj.Trainable)
-                        variables.AddRange(trackable_obj.trainable_variables);
+                        variables.AddRange(trackable_obj.TrainableVariables);
                 }
 
-                foreach (var layer in _layers)
+                foreach (var layer in _self_tracked_trackables)
                 {
                     if (layer.Trainable)
-                        variables.AddRange(layer.trainable_variables);
+                        variables.AddRange(layer.TrainableVariables);
                 }
 
                 // variables.AddRange(_trainable_weights);

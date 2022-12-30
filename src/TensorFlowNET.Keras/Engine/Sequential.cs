@@ -75,7 +75,7 @@ namespace Tensorflow.Keras.Engine
         {
             built = false;
             var set_inputs = false;
-            if (_layers.Count == 0)
+            if (_self_tracked_trackables.Count == 0)
             {
                 if (layer is InputLayer)
                 {
@@ -128,7 +128,7 @@ namespace Tensorflow.Keras.Engine
 
         void _handle_deferred_layer_dependencies(params ILayer[] layers)
         {
-            _layers.AddRange(layers);
+            _self_tracked_trackables.AddRange(layers);
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
@@ -156,12 +156,12 @@ namespace Tensorflow.Keras.Engine
             ops.init_scope();
             var inputs = keras.Input(batch_input_shape: input_shape,
                 dtype: input_dtype,
-                name: $"{_layers[0].Name}_input");
+                name: $"{_self_tracked_trackables[0].Name}_input");
             Tensors layer_input = inputs;
             Tensors layer_output = null;
             Tensors outputs = null;
             List<INode> created_nodes = new List<INode>();
-            foreach (var layer in _layers)
+            foreach (var layer in _self_tracked_trackables)
             {
                 clear_previously_created_nodes(layer, _created_nodes);
                 layer_output = layer.Apply(layer_input);

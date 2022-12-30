@@ -63,7 +63,7 @@ namespace Tensorflow.Keras.Engine
         public bool SupportsMasking { get; set; }
         protected List<IVariableV1> _trainable_weights;
 
-        public virtual List<IVariableV1> trainable_variables => _trainable_weights;
+        public virtual List<IVariableV1> TrainableVariables => _trainable_weights;
 
         protected List<IVariableV1> _non_trainable_weights;
         public List<IVariableV1> non_trainable_variables => _non_trainable_weights;
@@ -88,7 +88,7 @@ namespace Tensorflow.Keras.Engine
         public CallContext CallContext => callContext.Value;
         public Tensor[] input => inboundNodes[0].input_tensors;
         public Dictionary<int, List<INode>> NodesByDepth { get; set; }
-        public Shape output_shape => inboundNodes[0].Outputs.shape;
+        public Shape OutputShape => inboundNodes[0].Outputs.shape;
         protected List<ILayer> _self_tracked_trackables;
 
         public Layer(LayerArgs args)
@@ -250,7 +250,7 @@ namespace Tensorflow.Keras.Engine
                 return layer_utils.count_params(this, weights);
             return 0;
         }
-        List<IVariableV1> ILayer.trainable_weights
+        List<IVariableV1> ILayer.TrainableWeights
         {
             get
             {
@@ -258,7 +258,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        List<IVariableV1> ILayer.non_trainable_weights
+        List<IVariableV1> ILayer.NonTrainableWeights
         {
             get
             {

@@ -103,7 +103,7 @@ namespace Tensorflow.Keras.Utils
                     print(string.Join("", range(line_length).Select(x => "_")));
             }
 
-            var trainable_count = count_params(model, model.trainable_variables);
+            var trainable_count = count_params(model, model.TrainableVariables);
             var non_trainable_count = count_params(model, model.non_trainable_variables);
 
             print($"Total params: {trainable_count + non_trainable_count}");
@@ -137,7 +137,7 @@ namespace Tensorflow.Keras.Utils
             var fields = new string[]
             {
                 $"{name} ({layer.GetType().Name})",
-                $"{layer.output_shape}",
+                $"{layer.OutputShape}",
                 $"{layer.count_params()}"
             };
 
@@ -164,7 +164,7 @@ namespace Tensorflow.Keras.Utils
             var fields = new string[]
             {
                 $"{name}({layer.GetType().Name})",
-                $"{layer.output_shape}",
+                $"{layer.OutputShape}",
                 $"{layer.count_params()}",
                 first_connection
             };

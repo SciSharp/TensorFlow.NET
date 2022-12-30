@@ -5,8 +5,7 @@ namespace Tensorflow.Keras.Engine
 {
     public partial class Layer
     {
-        protected List<ILayer> _layers = new List<ILayer>();
-        public virtual List<ILayer> Layers => _layers;
+        public virtual List<ILayer> Layers => _self_tracked_trackables;
 
         protected void StackLayers(params ILayer[] layers)
         {

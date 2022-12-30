@@ -338,8 +338,8 @@ namespace Tensorflow.Keras.Saving
 
         public static List<IVariableV1> _legacy_weights(ILayer layer)
         {
-            var weights = layer.trainable_weights.Select(x => x).ToList();
-            weights.AddRange(layer.non_trainable_weights);
+            var weights = layer.TrainableWeights.Select(x => x).ToList();
+            weights.AddRange(layer.NonTrainableWeights);
             return weights;
         }
     }
