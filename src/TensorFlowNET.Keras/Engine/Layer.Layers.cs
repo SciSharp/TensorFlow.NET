@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Engine
 
         protected void StackLayers(params ILayer[] layers)
         {
-            _layers.AddRange(layers);
+            _self_tracked_trackables.AddRange(layers);
         }
 
         public virtual Shape ComputeOutputShape(Shape input_shape)
