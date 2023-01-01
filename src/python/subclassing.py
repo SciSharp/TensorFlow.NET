@@ -65,7 +65,7 @@ class ConvNet(Model):
         x = self.maxpool2(x)
         x = self.flatten(x)
         x = self.fc1(x)
-        x = self.dropout(x, training=is_training)
+        x = self.dropout(x)
         x = self.out(x)
         if not is_training:
             # tf cross entropy expect logits without softmax, so only
