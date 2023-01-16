@@ -18,7 +18,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         private int _num_constants = 0;
         protected IVariableV1 kernel;
         protected IVariableV1 bias;
-
+        protected ILayer cell;
         public RNN(RNNArgs args) : base(PreConstruct(args))
         {
             this.args = args;
@@ -35,6 +35,14 @@ namespace Tensorflow.Keras.Layers.Rnn
             //        throw new Exception("RNNs with stateful=True not yet supported with tf.distribute.Strategy");
             //    }
             //}
+        }
+
+        public override void build(Shape input_shape)
+        {
+            if (!cell.Built)
+            {
+                cell.build(input_shape);
+            }
         }
 
         private static RNNArgs PreConstruct(RNNArgs args)

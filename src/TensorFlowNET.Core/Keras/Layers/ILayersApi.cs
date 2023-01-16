@@ -163,7 +163,9 @@ namespace Tensorflow.Keras.Layers
             string activation = "tanh",
             string kernel_initializer = "glorot_uniform",
             string recurrent_initializer = "orthogonal",
-            string bias_initializer = "zeros");
+            string bias_initializer = "zeros",
+            bool return_sequences = false,
+            bool return_state = false);
 
         public ILayer Subtract();
     }

@@ -147,5 +147,10 @@ namespace Tensorflow
         {
             throw new NotImplementedException();
         }
+
+        public void build(Shape input_shape)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

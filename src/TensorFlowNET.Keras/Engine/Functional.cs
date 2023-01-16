@@ -65,7 +65,12 @@ namespace Tensorflow.Keras.Engine
             }
 
             // Keep track of the network's nodes and layers.
-            (NetworkNodes, NodesByDepth, _self_tracked_trackables, _) = MapGraphNetwork(inputs, outputs);
+            (NetworkNodes, NodesByDepth, var layers, _) = MapGraphNetwork(inputs, outputs);
+
+            if (!_self_tracked_trackables.Any())
+            {
+                _self_tracked_trackables = layers;
+            }
 
             // Build self.input_names and self.output_names.
             _set_output_names();

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Tensorflow.Graphs;
-using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Losses;
-using Tensorflow.Keras.Optimizers;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -13,6 +10,12 @@ namespace Tensorflow.Keras.Engine
     {
         public override void build(Shape input_shape)
         {
+            if (this is Functional || this is Sequential)
+            {
+                base.build(input_shape);
+                return;
+            }
+
             var graph = tf.executing_eagerly() ? new FuncGraph("build_graph") : keras.backend.get_graph();
 
             graph.as_default();

@@ -9,6 +9,7 @@ namespace Tensorflow.Keras
         string Name { get; }
         bool Trainable { get; }
         bool Built { get; }
+        void build(Shape input_shape);
         List<ILayer> Layers { get; }
         List<INode> InboundNodes { get; }
         List<INode> OutboundNodes { get; }

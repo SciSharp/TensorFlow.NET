@@ -658,14 +658,18 @@ namespace Tensorflow.Keras.Layers
             string activation = "tanh",
             string kernel_initializer = "glorot_uniform",
             string recurrent_initializer = "orthogonal",
-            string bias_initializer = "zeros")
+            string bias_initializer = "zeros",
+            bool return_sequences = false,
+            bool return_state = false)
                 => new SimpleRNN(new SimpleRNNArgs
                 {
                     Units = units,
                     Activation = GetActivationByName(activation),
                     KernelInitializer = GetInitializerByName(kernel_initializer),
-                    RecurrentInitializer= GetInitializerByName(recurrent_initializer),
-                    BiasInitializer= GetInitializerByName(bias_initializer)
+                    RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    ReturnSequences = return_sequences,
+                    ReturnState = return_state
                 });
 
         /// <summary>

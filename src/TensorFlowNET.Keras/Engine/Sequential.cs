@@ -122,13 +122,7 @@ namespace Tensorflow.Keras.Engine
             else
             {
                 _self_tracked_trackables.add(layer);
-                _handle_deferred_layer_dependencies(layer);
             }
-        }
-
-        void _handle_deferred_layer_dependencies(params ILayer[] layers)
-        {
-            _self_tracked_trackables.AddRange(layers);
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
@@ -156,7 +150,7 @@ namespace Tensorflow.Keras.Engine
             ops.init_scope();
             var inputs = keras.Input(batch_input_shape: input_shape,
                 dtype: input_dtype,
-                name: $"{_self_tracked_trackables[0].Name}_input");
+                name: _self_tracked_trackables[0].Name.EndsWith("_input") ? _self_tracked_trackables[0].Name : $"{_self_tracked_trackables[0].Name}_input");
             Tensors layer_input = inputs;
             Tensors layer_output = null;
             Tensors outputs = null;
