@@ -67,7 +67,10 @@ namespace Tensorflow
 
         public void UseKeras<T>() where T : IKerasApi, new()
         {
-            keras = new T();
+            if (keras == null)
+            {
+                keras = new T();
+            }
         }
 
         public string VERSION => c_api.StringPiece(c_api.TF_Version());

@@ -18,7 +18,7 @@ namespace Tensorflow.Keras
     public class KerasInterface : IKerasApi
     {
         public KerasDataset datasets { get; } = new KerasDataset();
-        public Initializers initializers { get; } = new Initializers();
+        public IInitializersApi initializers { get; } = new InitializersApi();
         public Regularizers regularizers { get; } = new Regularizers();
         public ILayersApi layers { get; } = new LayersApi();
         public LossesApi losses { get; } = new LossesApi();

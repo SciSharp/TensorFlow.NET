@@ -113,6 +113,9 @@ namespace Tensorflow
         public static Tensor diag(Tensor diagonal, string name = null)
             => tf.Context.ExecuteOp("Diag", name, new ExecuteOpArgs(diagonal));
 
+        public static Tensor diag_part(Tensor diagonal, string name = null)
+            => tf.Context.ExecuteOp("DiagPart", name, new ExecuteOpArgs(diagonal));
+
         public static Tensor expand_dims(Tensor input, int axis, string name = null)
             => tf.Context.ExecuteOp("ExpandDims", name, new ExecuteOpArgs(input, axis)
                 .SetAttributes(new { dim = axis }));

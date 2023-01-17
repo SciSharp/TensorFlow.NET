@@ -129,5 +129,12 @@ namespace Tensorflow
                     lower,
                     adjoint
                 }));
+
+        public Tensors qr(Tensor input, bool full_matrices = false, string name = null)
+            => tf.Context.ExecuteOp("Qr", name,
+                new ExecuteOpArgs(input).SetAttributes(new
+                {
+                    full_matrices
+                }));
     }
 }

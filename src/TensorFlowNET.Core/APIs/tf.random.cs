@@ -39,6 +39,12 @@ namespace Tensorflow
                 int? seed = null,
                 string name = null) => random_ops.random_normal(shape, mean, stddev, dtype, seed, name);
 
+            public Tensor stateless_normal(Shape shape,
+                float mean = 0.0f,
+                float stddev = 1.0f,
+                TF_DataType dtype = TF_DataType.TF_FLOAT,
+                string name = null) => stateless_random_ops.stateless_random_normal(shape, mean, stddev, dtype, name: name);
+
             /// <summary>
             /// Outputs random values from a truncated normal distribution.
             /// </summary>

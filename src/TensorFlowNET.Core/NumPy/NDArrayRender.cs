@@ -109,6 +109,7 @@ namespace Tensorflow.NumPy
                     TF_DataType.TF_INT8 => Render(array.ToArray<sbyte>(), array.shape),
                     TF_DataType.TF_INT32 => Render(array.ToArray<int>(), array.shape),
                     TF_DataType.TF_INT64 => Render(array.ToArray<long>(), array.shape),
+                    TF_DataType.TF_UINT64 => Render(array.ToArray<ulong>(), array.shape),
                     TF_DataType.TF_FLOAT => Render(array.ToArray<float>(), array.shape),
                     TF_DataType.TF_DOUBLE => Render(array.ToArray<double>(), array.shape),
                     _ => Render(array.ToArray<byte>(), array.shape)

@@ -8,5 +8,6 @@ namespace Tensorflow.Keras
     public interface IKerasApi
     {
         public ILayersApi layers { get; }
+        public IInitializersApi initializers { get; }
     }
 }

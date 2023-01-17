@@ -13,7 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 ******************************************************************************/
+using static Tensorflow.ApiDef.Types;
+using System.Reflection;
 using static Tensorflow.Binding;
+using System.Xml.Linq;
 
 namespace Tensorflow
 {
@@ -85,6 +88,15 @@ namespace Tensorflow
             int? seed2 = 0, string name = null)
                 => tf.Context.ExecuteOp("TruncatedNormal", name, new ExecuteOpArgs(shape)
                     .SetAttributes(new { dtype, seed = seed ?? 0, seed2 = seed2 ?? 0 }));
+        public static Tensor stateless_random_normal_v2(Tensor shape, Tensor key, Tensor counter, 
+            int alg, TF_DataType dtype, string name = null)
+                => tf.Context.ExecuteOp("StatelessRandomNormalV2", name, 
+                        new ExecuteOpArgs(shape, key, counter, alg)
+                    .SetAttributes(new { dtype }));
+        
+        public static Tensors stateless_random_get_key_counter(int[] seed, string name = null)
+            => tf.Context.ExecuteOp("StatelessRandomGetKeyCounter", name,
+                        new ExecuteOpArgs(seed));
 
         public static Tensor multinomial(Tensor logits, int num_samples, int? seed = 0,
             int? seed2 = 0, TF_DataType output_dtype = TF_DataType.TF_INT64, string name = null)

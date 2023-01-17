@@ -1,4 +1,5 @@
 ﻿using System;
+using Tensorflow.Keras;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -7,6 +8,8 @@ namespace Tensorflow
     {
         static void Main(string[] args)
         {
+            tf.UseKeras<KerasInterface>();
+
             var diag = new Diagnostician();
             // diag.Diagnose(@"D:\memory.txt");
 

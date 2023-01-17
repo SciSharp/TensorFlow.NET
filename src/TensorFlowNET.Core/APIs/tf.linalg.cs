@@ -58,6 +58,12 @@ namespace Tensorflow
                 NDArray l2_regularizer = null, bool fast = true, string name = null)
                 => ops.matrix_solve_ls(matrix, rhs, l2_regularizer: l2_regularizer, fast: fast, name: name);
 
+            public Tensors qr(Tensor input, bool full_matrices = true, string name = null)
+                => ops.qr(input, full_matrices: full_matrices, name: name);
+
+            public Tensor tensor_diag_part(Tensor input, string name = null)
+                => gen_array_ops.diag_part(input, name: name);
+
             public Tensor tensordot(Tensor x, Tensor y, NDArray axes, string name = null)
                 => math_ops.tensordot(x, y, axes, name: name);
         }

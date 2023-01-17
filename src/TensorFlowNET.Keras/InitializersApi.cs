@@ -16,18 +16,20 @@
 
 using Tensorflow.Operations.Initializers;
 
-namespace Tensorflow.Keras
+namespace Tensorflow.Keras;
+
+public partial class InitializersApi : IInitializersApi
 {
-    public class Initializers
+    /// <summary>
+    /// He normal initializer.
+    /// </summary>
+    /// <param name="seed"></param>
+    /// <returns></returns>
+    public IInitializer he_normal(int? seed = null)
     {
-        /// <summary>
-        /// He normal initializer.
-        /// </summary>
-        /// <param name="seed"></param>
-        /// <returns></returns>
-        public IInitializer he_normal(int? seed = null)
-        {
-            return new VarianceScaling(factor: 2.0f, mode: "fan_in", seed: seed);
-        }
+        return new VarianceScaling(factor: 2.0f, mode: "fan_in", seed: seed);
     }
+
+    public IInitializer Orthogonal(float gain = 1.0f, int? seed = null)
+        => new Orthogonal(gain: gain, seed: seed);
 }
