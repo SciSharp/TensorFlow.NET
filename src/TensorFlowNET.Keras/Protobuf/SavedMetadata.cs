@@ -194,6 +194,18 @@ namespace ThirdParty.Tensorflow.Python.Keras.Protobuf {
       OnConstruction();
     }
 
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SavedObject(int nodeId, string nodePath,
+      global::ThirdParty.Tensorflow.Python.Keras.Protobuf.VersionDef version, string identifier, string metadata)
+    {
+      OnConstruction();
+      nodeId_ = nodeId;
+      nodePath_ = nodePath;
+      identifier_ = identifier;
+      metadata_ = metadata;
+      version_ = version;
+    }
+
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

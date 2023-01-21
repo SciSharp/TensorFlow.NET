@@ -48,4 +48,18 @@ namespace Tensorflow
                 validate_shape: restored_shapes == null && op.shape.IsFullyDefined);
         }
     }
+
+    public class NoRestoreSaveable: MySaveableObject
+    {
+        public NoRestoreSaveable(Tensor tensor, string name, TF_DataType dtype = TF_DataType.DtInvalid, string? device = null) : base(tensor,
+            new SaveSpec[] { new SaveSpec(tensor, "", name, dtype) }, name)
+        {
+            
+        }
+
+        public override Operation restore(Tensor[] restored_tensors, Shape[] restored_shapes = null)
+        {
+            return control_flow_ops.no_op();
+        }
+    }
 }

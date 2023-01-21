@@ -17,12 +17,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class saveable_object_util
+    public static class saveable_object_util
     {
+        public class TrackableSaveable: MySaveableObject
+        {
+            
+        }
         /// <summary>
         /// Returns the variables and names that will be used for a Saver.
         /// </summary>
@@ -120,6 +125,18 @@ namespace Tensorflow
             }
 
             return names_to_saveables;
+        }
+
+        public static IDictionary<string, ResourceVariable> saveable_objects_from_trackable(Trackable obj)
+        {
+            // TODO: complete the implementation.
+            return obj.gather_saveables_for_checkpoint();
+        }
+
+        public static bool trackable_has_serialize_to_tensor(Trackable obj)
+        {
+            // TODO: implement it.
+            return false;
         }
     }
 }

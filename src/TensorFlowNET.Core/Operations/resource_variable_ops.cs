@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Framework;
+using Tensorflow.Train;
 using static Tensorflow.CppShapeInferenceResult.Types;
 
 namespace Tensorflow
@@ -37,6 +38,11 @@ namespace Tensorflow
         public static bool is_resource_variable(IVariableV1 var)
         {
             return var is ResourceVariable;
+        }
+        
+        public static bool is_resource_variable(Trackable var)
+        {
+            return var is BaseResourceVariable;
         }
 
         /// <summary>

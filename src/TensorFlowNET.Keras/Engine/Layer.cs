@@ -49,6 +49,8 @@ namespace Tensorflow.Keras.Engine
         public bool Built => built;
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
+        public bool AutoCast => args.Autocast;
+        public IRegularizer ActivityRegularizer => args.ActivityRegularizer;
 
         /// <summary>
         /// A stateful layer is a layer whose updates are run during inference too,
@@ -162,7 +164,7 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="inputs"></param>
         /// <param name="state"></param>
-        /// <param name="is_training"></param>
+        /// <param name="training"></param>
         /// <returns></returns>
         protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {

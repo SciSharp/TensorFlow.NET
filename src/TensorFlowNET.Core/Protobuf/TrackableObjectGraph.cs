@@ -198,6 +198,12 @@ namespace Tensorflow {
         public TrackableObject() {
           OnConstruction();
         }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public TrackableObject(pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.SlotVariableReference> slot) {
+          OnConstruction();
+          slotVariables_ = slot;
+        }
 
         partial void OnConstruction();
 

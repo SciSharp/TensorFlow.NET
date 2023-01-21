@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework.Models;
 using Tensorflow.Graphs;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Functions
@@ -10,7 +11,7 @@ namespace Tensorflow.Functions
     /// <summary>
     /// 
     /// </summary>
-    public class ConcreteFunction
+    public class ConcreteFunction: Trackable
     {
         FuncGraph func_graph;
         ForwardBackwardCall forward_backward;

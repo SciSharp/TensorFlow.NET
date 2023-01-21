@@ -35,6 +35,12 @@ namespace Tensorflow.Keras.Engine
         bool _base_model_initialized;
         bool stop_training;
         DataHandler data_handler;
+        
+        public OptimizerV2 Optimizer
+        {
+            get => optimizer;
+            set => optimizer = value;
+        }
 
         public Model(ModelArgs args)
             : base(args)

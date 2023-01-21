@@ -2,6 +2,7 @@
 using System;
 using Tensorflow.Eager;
 using Tensorflow.Variables;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow

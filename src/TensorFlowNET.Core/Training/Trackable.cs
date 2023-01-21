@@ -14,14 +14,38 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Tensorflow.ModelSaving;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
     public abstract class Trackable
     {
+        /// <summary>
+        /// Corresponding to tensorflow/python/trackable/constants.py
+        /// </summary>
+        public static class Constants
+        {
+            public static readonly string OBJECT_GRAPH_PROTO_KEY = "_CHECKPOINTABLE_OBJECT_GRAPH";
+            public static readonly string VARIABLE_VALUE_KEY = "VARIABLE_VALUE";
+            public static readonly string OBJECT_CONFIG_JSON_KEY = "OBJECT_CONFIG_JSON";
+        }
         protected int _self_update_uid;
+        protected IDictionary<string, Trackable> _unconditional_dependency_names = 
+            new Dictionary<string, Trackable>();
 
+        protected IList<TrackableReference> _unconditional_checkpoint_dependencies = new List<TrackableReference>();
+
+        protected IDictionary<string, ResourceVariable> _self_saveable_object_factories =
+            new Dictionary<string, ResourceVariable>();
+        public virtual string ObjectIdentifier
+        {
+            get => "_generic_user_object";
+        }
+        
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
         /// </summary>
@@ -73,10 +97,63 @@ namespace Tensorflow.Train
         /// <summary>
         /// Initialize dependency management.
         /// </summary>
-        protected void _maybe_initialize_trackable()
+        public void _maybe_initialize_trackable()
         {
             // _self_unconditional_checkpoint_dependencies = []
             _self_update_uid = -1;
         }
+
+        // TODO: cache
+        public virtual IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, object>? cache = null)
+        {
+            _maybe_initialize_trackable();
+            return _unconditional_checkpoint_dependencies.ToDictionary(x => x.Name, x => x.Refer);
+        }
+
+        public static Trackable convert_to_trackable(object obj, object? parent = null)
+        {
+            if (obj is Trackable)
+            {
+                return (Trackable)obj;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public virtual IDictionary<string, Trackable> deserialization_dependencies(IDictionary<string, Trackable> children)
+        {
+            return new Dictionary<string, Trackable>();
+        }
+
+        public virtual (IDictionary<Trackable, Trackable>, IDictionary<Tensor, Tensor>) map_resources(
+            SaveOptions? save_options)
+        {
+            return (new Dictionary<Trackable, Trackable>(), new Dictionary<Tensor, Tensor>());
+        }
+
+        public virtual List<Tensor> export_to_saved_model_graph(IDictionary<Trackable, Trackable>? object_map = null,
+            IDictionary<Tensor, Tensor>? tensor_map = null, SaveOptions? options = null)
+        {
+            var (self_object_map, self_tensor_map) = map_resources(options);
+            foreach (var pair in self_object_map)
+            {
+                object_map.Add(pair);
+            }
+            foreach (var pair in self_tensor_map)
+            {
+                tensor_map.Add(pair);
+            }
+
+            return self_tensor_map.Keys.ToList();
+        }
+
+        public virtual IDictionary<string, ResourceVariable> gather_saveables_for_checkpoint()
+        {
+            return _self_saveable_object_factories;
+        }
     }
+
+    public record class TrackableReference(string Name, Trackable Refer);
 }
