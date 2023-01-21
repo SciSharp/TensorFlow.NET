@@ -47,6 +47,31 @@ namespace Tensorflow
             return indices;
         }
 
+        public static Tensor sort(Tensor values, Axis axis, string direction = "ASCENDING", string? name = null)
+        {
+            var k = array_ops.shape(values)[axis];
+            values = -values;
+            var static_rank = values.shape.ndim;
+            var top_k_input = values;
+            if (axis == -1 || axis + 1 == values.shape.ndim)
+            {
+            }
+            else
+            {
+                if (axis == 0 && static_rank == 2)
+                    top_k_input = array_ops.transpose(values, new[] { 1, 0 });
+                else
+                    throw new NotImplementedException("");
+            }
+
+            (values, _) = tf.Context.ExecuteOp("TopKV2", name,
+                new ExecuteOpArgs(top_k_input, k).SetAttributes(new
+                {
+                    sorted = true
+                }));
+            return -values;
+        }
+
         public Tensor matrix_inverse(Tensor input, bool adjoint = false, string name = null)
             => tf.Context.ExecuteOp("MatrixInverse", name,
                 new ExecuteOpArgs(input).SetAttributes(new
