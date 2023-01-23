@@ -134,35 +134,33 @@ public static partial class SavedModelUtils
         Dictionary<Trackable, Trackable> object_map;
         Dictionary<Tensor, Tensor> tensor_map;
         AssetInfo asset_info;
-        using (var g = exported_graph.as_default())
+        exported_graph.as_default();
+        (object_map, tensor_map, asset_info) = saveable_view.map_resources();
+        // TODO: deal with signatures.
+        if (save_custom_gradients)
         {
-            (object_map, tensor_map, asset_info) = saveable_view.map_resources();
-            // TODO: deal with signatures.
-            if (save_custom_gradients)
-            {
-                // TODO: trace gradient functions.
-            }
-
-            foreach (var resource_initializer_function in resource_initializers)
-            {
-                // List<Trackable> asset_dependencies = new();
-                // TODO: deal with initializers
-            }
-            
-            // using(ops.control_dependencies(...))
-            var init_op = control_flow_ops.no_op();
-            if (meta_graph_def.CollectionDef.ContainsKey(Tensorflow.Constants.MAIN_OP_KEY))
-            {
-                meta_graph_def.CollectionDef[Tensorflow.Constants.MAIN_OP_KEY].NodeList.Value.Append(init_op.name);
-            }
-            else
-            {
-                meta_graph_def.CollectionDef[Tensorflow.Constants.MAIN_OP_KEY] = new CollectionDef();
-            }
-            // Lack `CopyFrom` API
-            // meta_graph_def.SignatureDef[Tensorflow.Constants.INIT_OP_SIGNATURE_KEY]
+            // TODO: trace gradient functions.
         }
-        
+
+        foreach (var resource_initializer_function in resource_initializers)
+        {
+            // List<Trackable> asset_dependencies = new();
+            // TODO: deal with initializers
+        }
+
+        // using(ops.control_dependencies(...))
+        var init_op = control_flow_ops.no_op();
+        if (meta_graph_def.CollectionDef.ContainsKey(Tensorflow.Constants.MAIN_OP_KEY))
+        {
+            meta_graph_def.CollectionDef[Tensorflow.Constants.MAIN_OP_KEY].NodeList.Value.Append(init_op.name);
+        }
+        else
+        {
+            meta_graph_def.CollectionDef[Tensorflow.Constants.MAIN_OP_KEY] = new CollectionDef();
+        }
+        // Lack `CopyFrom` API
+        // meta_graph_def.SignatureDef[Tensorflow.Constants.INIT_OP_SIGNATURE_KEY]
+
         foreach (var obj in object_map.Values)
         {
             obj._maybe_initialize_trackable();
@@ -180,11 +178,13 @@ public static partial class SavedModelUtils
         verify_ops(graph_def, namespace_whitelist);
 
         meta_graph_def.GraphDef = new GraphDef(graph_def);
+        meta_graph_def.MetaInfoDef = new();
         meta_graph_def.MetaInfoDef.Tags.Add(TagConstants.SERVING);
         meta_graph_def.MetaInfoDef.TensorflowVersion = tf.VERSION;
         // TODO: add git version.
         meta_graph_def.MetaInfoDef.TensorflowGitVersion = "";
         meta_graph_def.MetaInfoDef.StrippedDefaultAttrs = true;
+        meta_graph_def.MetaInfoDef.StrippedOpList = new();
         meta_graph_def.MetaInfoDef.StrippedOpList.MergeFrom(meta_graph.stripped_op_list_for_graph(meta_graph_def.GraphDef));
         meta_graph_def.AssetFileDef.AddRange(asset_info.asset_defs);
         

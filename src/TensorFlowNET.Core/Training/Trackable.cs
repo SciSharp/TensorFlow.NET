@@ -34,18 +34,35 @@ namespace Tensorflow.Train
             public static readonly string OBJECT_CONFIG_JSON_KEY = "OBJECT_CONFIG_JSON";
         }
         protected int _self_update_uid;
-        protected IDictionary<string, Trackable> _unconditional_dependency_names = 
-            new Dictionary<string, Trackable>();
+        protected IDictionary<string, Trackable> _unconditional_dependency_names;
 
-        protected IList<TrackableReference> _unconditional_checkpoint_dependencies = new List<TrackableReference>();
+        protected IList<TrackableReference> _unconditional_checkpoint_dependencies;
 
         protected IDictionary<string, ResourceVariable> _self_saveable_object_factories =
             new Dictionary<string, ResourceVariable>();
+
+        private static Trackable _none = new Function();
+        /// <summary>
+        /// This is a trick for that CSharp does not allow the key of `Dictionary` to be null.
+        /// The `None` can be any object that inherits `Trackable`.
+        /// This Property is supposed to be used only internal.
+        /// </summary>
+        public static Trackable None
+        {
+            get
+            {
+                return _none;
+            }
+        }
         public virtual string ObjectIdentifier
         {
             get => "_generic_user_object";
         }
-        
+        public int UpdateUid { get => _self_update_uid; set => _self_update_uid = value; }
+        public IList<TrackableReference> UnconditionalCheckpointDependencies { get => _unconditional_checkpoint_dependencies; }
+        public IDictionary<string, Trackable> UnconditionalDependencyNames { get => _unconditional_dependency_names; }
+        public IList<TrackableReference> CheckpointDependencies { get => UnconditionalCheckpointDependencies; }
+
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
         /// </summary>
@@ -99,8 +116,9 @@ namespace Tensorflow.Train
         /// </summary>
         public void _maybe_initialize_trackable()
         {
-            // _self_unconditional_checkpoint_dependencies = []
             _self_update_uid = -1;
+            _unconditional_checkpoint_dependencies = new List<TrackableReference>();
+            _unconditional_dependency_names = new Dictionary<string, Trackable>();
         }
 
         // TODO: cache
@@ -152,6 +170,20 @@ namespace Tensorflow.Train
         public virtual IDictionary<string, ResourceVariable> gather_saveables_for_checkpoint()
         {
             return _self_saveable_object_factories;
+        }
+
+        /// <summary>
+        /// Gathers tensors to save to the checkpoint. You should only override `serialize_to_tensors` and `restore_from_tensors`
+        /// if you are defining a custom resource or variable with custom ops.
+        /// Otherwise, please store the state of your trackable in `tf.Variable` objects
+        /// and add them to Trackable object hierarchy using `setattr` (for subclasses
+        /// of `AutoTrackable`) or overriding the `_trackable_children` method.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public virtual IDictionary<string, object> serialize_to_tensors()
+        {
+            throw new NotImplementedException();
         }
     }
 

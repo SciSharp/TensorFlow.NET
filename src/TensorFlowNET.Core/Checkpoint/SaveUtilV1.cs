@@ -7,6 +7,7 @@ using Tensorflow.Train;
 using Tensorflow.Training;
 using pbc = global::Google.Protobuf.Collections;
 using static Tensorflow.Binding;
+using Google.Protobuf;
 
 namespace Tensorflow.Checkpoint;
 
@@ -47,19 +48,16 @@ public static class SaveUtilV1
         IDictionary<Trackable, Trackable> object_map, Graph? to_graph, bool call_with_mapped_captures,
         object? saveables_cache = null)
     {
-
-        Graph target_context;
         if (to_graph is not null)
         {
-            using (to_graph.as_default())
-            {
-                var (named_saveable_objects, graph_proto, _, registered_savers) = serialize_gathered_objects(graph_view,
+            to_graph.as_default();
+            var (named_saveable_objects, graph_proto, _, registered_savers) = serialize_gathered_objects(graph_view,
                     object_map, call_with_mapped_captures, saveables_cache);
-                // tensorflow python: `with ops.device("/cpu:0")`
-                var object_graph_tensor = constant_op.constant(graph_proto.ToString(), TF_DataType.TF_STRING);
-                named_saveable_objects.Add(new NoRestoreSaveable(object_graph_tensor, Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
-                return (named_saveable_objects, registered_savers);
-            }
+            // tensorflow python: `with ops.device("/cpu:0")`
+            var serialized = graph_proto.ToByteString().ToString();
+            var object_graph_tensor = constant_op.constant("aaaa", TF_DataType.TF_STRING);
+            named_saveable_objects.Add(new NoRestoreSaveable(object_graph_tensor, Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
+            return (named_saveable_objects, registered_savers);
         }
         else
         {

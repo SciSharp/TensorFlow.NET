@@ -138,5 +138,55 @@ namespace Tensorflow
             // TODO: implement it.
             return false;
         }
+
+        internal static string convert_to_string(string x)
+        {
+            return tf.compat.as_str(x);
+        }
+    }
+
+    public class SaveableCompatibilityConverter: Trackable
+    {
+        private Trackable _obj;
+        private IList<MySaveableObject> _saveables;
+        public SaveableCompatibilityConverter(Trackable obj, IList<MySaveableObject> saveables)
+        {
+            _obj= obj;
+            _saveables= saveables;
+        }
+
+        public Trackable Obj => _obj;
+        public IList<MySaveableObject> mySaveables=> _saveables;
+
+        public override IDictionary<string, object> serialize_to_tensors()
+        {
+            return saveable_objects_to_tensor_dict(_saveables);
+        }
+
+        /// <summary>
+        /// Converts a list of SaveableObjects to a tensor dictionary.
+        /// </summary>
+        /// <param name="saveables"></param>
+        public static Dictionary<string, object> saveable_objects_to_tensor_dict(IList<MySaveableObject> saveables)
+        {
+            Dictionary<string, object> tensor_dict = new();
+            foreach (var saveable in saveables)
+            {
+                foreach(var spec in saveable.specs)
+                {
+                    var name = saveable_object_util.convert_to_string(spec.name);
+                    var slice_spec = saveable_object_util.convert_to_string(spec.slice_spec);
+                    if (!string.IsNullOrEmpty(slice_spec))
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        tensor_dict[name] = spec.tensor;
+                    }
+                }
+            }
+            return tensor_dict;
+        }
     }
 }

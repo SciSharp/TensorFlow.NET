@@ -21,9 +21,14 @@ public class TrackableView
     public virtual IDictionary<string, Trackable> children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT)
     {
         obj._maybe_initialize_trackable();
+        Dictionary<string, Trackable> children = new();
         // Note: in python the return type of `Trackable._trackable_children` is not fixed.
         // Therefore it uses `convert_to_trackable` to have an extra process.
-        return obj._trackable_children(save_type);
+        foreach(var pair in obj._trackable_children(save_type))
+        {
+            children[pair.Key] = pair.Value;
+        }
+        return children;
     }
     
     public Trackable Root
@@ -50,6 +55,7 @@ public class TrackableView
     {
         List<Trackable> bfs_sorted = new();
         Queue<Trackable> to_visit = new();
+        to_visit.Enqueue(Root);
         Dictionary<Trackable, IEnumerable<TrackableReference>> node_paths = new();
         node_paths[this.Root] = new List<TrackableReference>();
         while (!to_visit.empty())
