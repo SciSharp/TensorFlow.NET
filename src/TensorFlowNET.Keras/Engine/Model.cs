@@ -4,6 +4,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -107,6 +108,16 @@ namespace Tensorflow.Keras.Engine
 
                 return variables;
             }
+        }
+
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, object>? cache = null)
+        {
+            if(save_type == SaveType.SAVEDMODEL)
+            {
+                //TODO: deal with `train_function`, `test_function`, `predict_function`, `train_tf_function`.
+            }
+            var children = base._trackable_children(save_type, cache);
+            return children;
         }
     }
 }

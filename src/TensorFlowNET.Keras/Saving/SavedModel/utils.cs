@@ -4,7 +4,7 @@ namespace Tensorflow.Keras.Saving.SavedModel;
 
 public partial class KerasSavedModelUtils
 {
-    public static bool ShouldHaveTraces { get; internal set; }
+    public static bool ShouldHaveTraces { get; internal set; } = true;
 
     public static SaveOptionsContext keras_option_scope(bool save_traces)
     {
@@ -23,7 +23,7 @@ public class SaveOptionsContext: IDisposable
     public bool _old_value;
     public SaveOptionsContext(bool old_value)
     {
-        _old_value = true;
+        _old_value = old_value;
     }
 
     public void Dispose()

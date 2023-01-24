@@ -18,11 +18,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.ModelSaving;
+using Tensorflow.Training;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
-    public abstract class Trackable
+    public abstract class Trackable: ITrackable
     {
         /// <summary>
         /// Corresponding to tensorflow/python/trackable/constants.py
@@ -40,6 +41,7 @@ namespace Tensorflow.Train
 
         protected IDictionary<string, ResourceVariable> _self_saveable_object_factories =
             new Dictionary<string, ResourceVariable>();
+        private bool _manual_tracking = true;
 
         private static Trackable _none = new Function();
         /// <summary>
@@ -53,6 +55,10 @@ namespace Tensorflow.Train
             {
                 return _none;
             }
+        }
+        public Trackable GetTrackable()
+        {
+            return this;
         }
         public virtual string ObjectIdentifier
         {
@@ -126,6 +132,48 @@ namespace Tensorflow.Train
         {
             _maybe_initialize_trackable();
             return _unconditional_checkpoint_dependencies.ToDictionary(x => x.Name, x => x.Refer);
+        }
+
+        public virtual Trackable _track_trackable(Trackable trackable, string name, bool overwrite = false)
+        {
+            _maybe_initialize_trackable();
+            if (!_manual_tracking) return trackable;
+            var new_reference = new TrackableReference(name, trackable);
+            var current_object = _lookupup_dependency(name);
+            
+            if(current_object is null)
+            {
+                _unconditional_checkpoint_dependencies.Add(new_reference);
+                _handle_deferred_dependencies(name, trackable);
+            }
+            _unconditional_dependency_names[name] = trackable;
+            return trackable;
+        }
+
+        /// <summary>
+        /// Pop and load any deferred checkpoint restores into `trackable`.
+        /// This method does not add a new dependency on `trackable`, but it does check if any outstanding/deferred dependencies have been queued waiting for
+        /// this dependency to be added (matched based on `name`). If so, `trackable` and its dependencies are restored. The restorations are 
+        /// considered fulfilled and so are deleted.
+        /// `_track_trackable` is more appropriate for adding a normal/unconditional dependency, and includes handling for deferred restorations. 
+        /// This method allows objects such as `Optimizer` to use the same restoration logic while managing conditional dependencies themselves,
+        /// by overriding `_checkpoint_dependencies` and `_lookup_dependency` to change the object's dependencies based on the context
+        /// it is saved/restored in (a single optimizer instance can have state associated with multiple graphs).
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="trackable"></param>
+        public virtual void _handle_deferred_dependencies(string name, Trackable trackable)
+        {
+            //_maybe_initialize_trackable();
+            //trackable._maybe_initialize_trackable();
+            
+            // TODO: complete the implementation.
+        }
+
+        public virtual Trackable? _lookupup_dependency(string name)
+        {
+            if (_unconditional_dependency_names.TryGetValue(name, out var dependency)) return dependency;
+            else return null;
         }
 
         public static Trackable convert_to_trackable(object obj, object? parent = null)

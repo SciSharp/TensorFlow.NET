@@ -22,7 +22,7 @@ namespace Tensorflow
         protected bool _in_graph_mode;
 
         protected bool _trainable;
-        public bool trainable => _trainable;
+        public bool Trainable => _trainable;
 
         protected Tensor _initial_value;
 
@@ -166,7 +166,7 @@ namespace Tensorflow
         /// </summary>
         void variable_accessed(BaseResourceVariable variable)
         {
-            if (variable.trainable)
+            if (variable.Trainable)
             {
                 foreach (var tape in tf.GetTapeSet())
                     tape.VariableAccessed(variable as ResourceVariable);

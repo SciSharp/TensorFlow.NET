@@ -56,6 +56,7 @@ namespace Tensorflow
         public string Name => _variable.name;
 
         public Tensor eval() => _variable;
+        public bool Trainable => _trainable;
 
         public RefVariable(object initial_value = null,
             bool trainable = true,

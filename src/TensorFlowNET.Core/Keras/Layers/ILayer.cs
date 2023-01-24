@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Training;
 
 namespace Tensorflow.Keras
 {
-    public interface ILayer
+    public interface ILayer: ITrackable
     {
         string Name { get; }
         bool Trainable { get; }

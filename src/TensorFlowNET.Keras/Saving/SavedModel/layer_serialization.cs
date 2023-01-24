@@ -29,6 +29,18 @@ public class LayerSavedModelSaver: SavedModelSaver
         throw new System.NotImplementedException();
     }
 
+    /// <summary>
+    /// Generates or retrieves serialized attributes from cache.
+    /// </summary>
+    /// <param name="serialization_cache"></param>
+    protected void get_serialized_attributes(IDictionary<string, object> serialization_cache)
+    {
+        // TODO: deal with cache.
+        Layer a;
+        
+
+    }
+
     public override string TrackingMetadata
     {
         get

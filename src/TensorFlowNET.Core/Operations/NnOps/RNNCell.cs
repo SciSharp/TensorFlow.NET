@@ -21,6 +21,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Operations;
+using Tensorflow.Train;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -147,5 +148,7 @@ namespace Tensorflow
         {
             throw new NotImplementedException();
         }
+
+        public Trackable GetTrackable() { throw new NotImplementedException(); }
     }
 }
