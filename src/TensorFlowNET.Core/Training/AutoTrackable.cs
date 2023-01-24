@@ -6,7 +6,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
-    public abstract class AutoTrackable : Trackable
+    public class AutoTrackable : Trackable
     {
         public void _delete_tracking(string name)
         {
