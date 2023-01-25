@@ -19,26 +19,51 @@ public class LayerSavedModelSaver: SavedModelSaver
         get => Constants.LAYER_IDENTIFIER;
     }
 
-    public override IDictionary<string, CheckpointableBase> objects_to_serialize(IDictionary<string, object> serialization_cache)
+    public override IDictionary<string, Trackable> objects_to_serialize(IDictionary<string, object> serialization_cache)
     {
-        throw new System.NotImplementedException();
+        return get_serialized_attributes(serialization_cache).ObjectsToSerialize;
     }
 
-    public override IDictionary<string, Function> functions_to_serialize(IDictionary<string, object> serialization_cache)
+    public override IDictionary<string, Trackable> functions_to_serialize(IDictionary<string, object> serialization_cache)
     {
-        throw new System.NotImplementedException();
+        return get_serialized_attributes(serialization_cache).FunctionsToSerialize;
     }
 
     /// <summary>
     /// Generates or retrieves serialized attributes from cache.
     /// </summary>
     /// <param name="serialization_cache"></param>
-    protected void get_serialized_attributes(IDictionary<string, object> serialization_cache)
+    protected SerializedAttributes get_serialized_attributes(IDictionary<string, object> serialization_cache)
     {
         // TODO: deal with cache.
-        Layer a;
-        
 
+        var serialized_attr = SerializedAttributes.Create(_obj);
+
+        // TODO: complete the statement. Currently the `Layer` lacks member `_must_restore_from_config`.
+        if (KerasSavedModelUtils.should_skip_serialization(_obj))
+        {
+            return serialized_attr;
+        }
+
+        var (object_dict, function_dict) = get_serialized_attributes_internal(serialization_cache);
+
+        serialized_attr.set_and_validate_objects(object_dict);
+        serialized_attr.set_and_validate_functions(function_dict);
+        return serialized_attr;
+    }
+
+    /// <summary>
+    /// Returns dictionary of serialized attributes.
+    /// </summary>
+    /// <param name="serialization_cache"></param>
+    private (IDictionary<string, Trackable>, IDictionary<string, Trackable>) get_serialized_attributes_internal(IDictionary<string, object> serialization_cache)
+    {
+        var objects = KerasSavedModelUtils.wrap_layer_objects(_obj, serialization_cache);
+        var functions = KerasSavedModelUtils.wrap_layer_functions(_obj, serialization_cache);
+
+        functions["_default_save_signature"] = null;
+
+        return (objects, functions);
     }
 
     public override string TrackingMetadata

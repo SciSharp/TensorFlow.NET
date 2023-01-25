@@ -7,7 +7,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
-    public class BaseResourceVariable : DisposableObject
+    public class BaseResourceVariable : DisposableTrackableObject
     {
         protected string _name;
         public virtual string Name => _handle_name;

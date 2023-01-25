@@ -24,7 +24,7 @@ public class TrackableView
         Dictionary<string, Trackable> children = new();
         // Note: in python the return type of `Trackable._trackable_children` is not fixed.
         // Therefore it uses `convert_to_trackable` to have an extra process.
-        foreach(var pair in obj._trackable_children(save_type))
+        foreach (var pair in obj._trackable_children(save_type))
         {
             children[pair.Key] = pair.Value;
         }

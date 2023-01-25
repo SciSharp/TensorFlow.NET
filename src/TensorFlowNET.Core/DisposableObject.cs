@@ -17,6 +17,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Tensorflow.Train;
 
 namespace Tensorflow
 {
@@ -86,6 +87,73 @@ namespace Tensorflow
         }
 
         ~DisposableObject()
+        {
+            Dispose(false);
+        }
+    }
+
+    public abstract class DisposableTrackableObject: Trackable, IDisposable
+    {
+        protected IntPtr _handle;
+        protected bool _disposed;
+
+        protected DisposableTrackableObject()
+        { }
+
+        protected DisposableTrackableObject(IntPtr handle)
+            => _handle = handle;
+
+        private void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            //first handle managed, they might use the unmanaged resources.
+            if (disposing)
+            {
+                // dispose managed state (managed objects).
+                DisposeManagedResources();
+            }
+
+            // free unmanaged memory
+            if (_handle != IntPtr.Zero)
+            {
+                // Call the appropriate methods to clean up
+                // unmanaged resources here.
+                // If disposing is false,
+                // only the following code is executed.
+                DisposeUnmanagedResources(_handle);
+                _handle = IntPtr.Zero;
+            }
+
+            // Note disposing has been done.
+            _disposed = true;
+        }
+
+        /// <summary>
+        ///     Dispose any managed resources.
+        /// </summary>
+        /// <remarks>Equivalent to what you would perform inside <see cref="Dispose()"/></remarks>
+        protected virtual void DisposeManagedResources()
+        { }
+
+        /// <summary>
+        ///     Dispose any unmanaged resources related to given <paramref name="handle"/>.
+        /// </summary>
+        protected abstract void DisposeUnmanagedResources(IntPtr handle);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            // This object will be cleaned up by the Dispose method.
+            // Therefore, you should call GC.SupressFinalize to
+            // take this object off the finalization queue
+            // and prevent finalization code for this object
+            // from executing a second time.
+            GC.SuppressFinalize(this);
+        }
+
+        ~DisposableTrackableObject()
         {
             Dispose(false);
         }

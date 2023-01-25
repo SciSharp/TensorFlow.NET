@@ -17,15 +17,15 @@ namespace Tensorflow.Keras.Saving.SavedModel
     public abstract class SerializedAttributes
     {
         protected IDictionary<string, Trackable?> _object_dict;
-        protected IDictionary<string, Function?> _function_dict;
+        protected IDictionary<string, Trackable?> _function_dict;
         protected AutoTrackable _keras_trackable;
         protected HashSet<string> _all_functions;
         protected HashSet<string> _all_checkpointable_objects;
 
-        protected SerializedAttributes()
+        private SerializedAttributes()
         {
             _object_dict= new Dictionary<string, Trackable?>();
-            _function_dict= new Dictionary<string, Function?>();
+            _function_dict= new Dictionary<string, Trackable?>();
             _keras_trackable= new AutoTrackable();
             _all_functions= new HashSet<string>();
             _all_checkpointable_objects= new HashSet<string>();
@@ -34,25 +34,35 @@ namespace Tensorflow.Keras.Saving.SavedModel
         protected SerializedAttributes(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions)
         {
             _object_dict = new Dictionary<string, Trackable?>();
-            _function_dict = new Dictionary<string, Function?>();
+            _function_dict = new Dictionary<string, Trackable?>();
             _keras_trackable = new AutoTrackable();
 
             _all_checkpointable_objects = new HashSet<string>(checkpointable_objects);
             _all_functions = new HashSet<string>(functions);
         }
 
-        public IDictionary<string, Function> Functions => _function_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
+        protected SerializedAttributes((IEnumerable<string>, IEnumerable<string>) objects_and_functions)
+        {
+            _object_dict = new Dictionary<string, Trackable?>();
+            _function_dict = new Dictionary<string, Trackable?>();
+            _keras_trackable = new AutoTrackable();
+
+            _all_checkpointable_objects = new HashSet<string>(objects_and_functions.Item1);
+            _all_functions = new HashSet<string>(objects_and_functions.Item2);
+        }
+
+        public IDictionary<string, Trackable> Functions => _function_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
 
         public IDictionary<string, Trackable> CheckpointableObjects => _object_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
 
         /// <summary>
         /// Returns functions to attach to the root object during serialization.
         /// </summary>
-        public IDictionary<string, Function> FunctionsToSerialize
+        public IDictionary<string, Trackable> FunctionsToSerialize
         {
             get
             {
-                Dictionary<string, Function> functions = new();
+                Dictionary<string, Trackable> functions = new();
                 foreach(var pair in Functions)
                 {
                     if (_all_functions.Contains(pair.Key))
@@ -82,7 +92,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
         /// Saves function dictionary, and validates dictionary values.
         /// </summary>
         /// <param name="function_dict"></param>
-        public IDictionary<string, Function> set_and_validate_functions(IDictionary<string, Function> function_dict)
+        public IDictionary<string, Trackable> set_and_validate_functions(IDictionary<string, Trackable> function_dict)
         {
             foreach(var key in _all_functions)
             {
@@ -186,94 +196,87 @@ namespace Tensorflow.Keras.Saving.SavedModel
     // However, currently it's just a normal class.
     public class CommonEndPoints: SerializedAttributes
     {
-        protected override (IEnumerable<string>, IEnumerable<string>) get_objects_and_functions_recursively(IEnumerable<string>? checkpointable_objects, IEnumerable<string>? functions)
+        public CommonEndPoints(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions) :
+            //base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables", "regularization_losses" }),
+            //    functions.Concat(new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" }))
+            base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables"}),
+                functions.Concat(new string[] { }))
         {
-            if(checkpointable_objects is null)
-            {
-                checkpointable_objects = new List<string>();
-            }
-            if(functions is null)
-            {
-                functions = new List<string>();
-            }
-            return base.get_objects_and_functions_recursively(
-                checkpointable_objects.Concat(new string[] { "variables", "trainable_variables", "regularization_losses" }),
-                // TODO: remove the `__call__`.
-                functions.Concat(new string[] {"__call__", "call_and_return_all_conditional_losses", "_default_save_signature" })
-            );
+
+        }
+
+        public CommonEndPoints() :
+            //base(new string[] { "variables", "trainable_variables", "regularization_losses" },
+            //    new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" })
+            base(new string[] { "variables", "trainable_variables"},
+                new string[] {})
+        {
+
         }
     }
 
     public class LayerAttributes: CommonEndPoints
     {
-        protected override (IEnumerable<string>, IEnumerable<string>) get_objects_and_functions_recursively(IEnumerable<string>? checkpointable_objects, IEnumerable<string>? functions)
+        public LayerAttributes(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions) :
+            //base(checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers", "metrics", "layer_regularization_losses", "layer_metrics" }),
+            //    functions.Concat(new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" })
+            base(checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers"}),
+                functions.Concat(new string[] { }))
         {
-            if (checkpointable_objects is null)
-            {
-                checkpointable_objects = new List<string>();
-            }
-            if (functions is null)
-            {
-                functions = new List<string>();
-            }
-            return base.get_objects_and_functions_recursively(
-                checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers", "metrics", "layer_regularization_losses", "layer_metrics" }),
-                functions.Concat(new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" })
-            );
+
+        }
+
+        public LayerAttributes() :
+            //base(new string[] { "non_trainable_variables", "layers", "metrics", "layer_regularization_losses", "layer_metrics" },
+            //    new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" })
+            base(new string[] { "non_trainable_variables", "layers" },
+                new string[] {  })
+        {
+
         }
     }
 
     public class ModelAttributes: LayerAttributes
     {
-        protected override (IEnumerable<string>, IEnumerable<string>) get_objects_and_functions_recursively(IEnumerable<string>? checkpointable_objects, IEnumerable<string>? functions)
+        public ModelAttributes(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions):
+            base(checkpointable_objects, functions)
         {
-            if (checkpointable_objects is null)
-            {
-                checkpointable_objects = new List<string>();
-            }
-            if (functions is null)
-            {
-                functions = new List<string>();
-            }
-            return base.get_objects_and_functions_recursively(checkpointable_objects,functions);
+
+        }
+
+        public ModelAttributes(): base()
+        { 
+
         }
     }
 
     public class MetricAttributes : SerializedAttributes
     {
-        protected override (IEnumerable<string>, IEnumerable<string>) get_objects_and_functions_recursively(IEnumerable<string>? checkpointable_objects, IEnumerable<string>? functions)
+        public MetricAttributes(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions) :
+            base(checkpointable_objects.Concat(new string[] { "variables" }), functions)
         {
-            if (checkpointable_objects is null)
-            {
-                checkpointable_objects = new List<string>();
-            }
-            if (functions is null)
-            {
-                functions = new List<string>();
-            }
-            return base.get_objects_and_functions_recursively(
-                checkpointable_objects.Concat(new string[] { "variables" }),
-                functions
-            );
+
+        }
+
+        public MetricAttributes() :
+            base(new string[] { "variables" }, new string[] {})
+        {
+
         }
     }
 
     public class RNNAttributes: LayerAttributes
     {
-        protected override (IEnumerable<string>, IEnumerable<string>) get_objects_and_functions_recursively(IEnumerable<string>? checkpointable_objects, IEnumerable<string>? functions)
+        public RNNAttributes(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions) :
+            base(checkpointable_objects, functions.Concat(new string[] {"states"}))
         {
-            if (checkpointable_objects is null)
-            {
-                checkpointable_objects = new List<string>();
-            }
-            if (functions is null)
-            {
-                functions = new List<string>();
-            }
-            return base.get_objects_and_functions_recursively(
-                checkpointable_objects.Concat(new string[] { "states" }),
-                functions
-            );
+
+        }
+
+        public RNNAttributes() :
+            base(new string[] { }, new string[] { "states" })
+        {
+
         }
     }
 }

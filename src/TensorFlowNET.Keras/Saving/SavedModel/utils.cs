@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Keras.Saving.SavedModel;
 
@@ -11,6 +13,18 @@ public partial class KerasSavedModelUtils
         var res = new SaveOptionsContext(ShouldHaveTraces);
         ShouldHaveTraces = save_traces;
         return res;
+    }
+
+    public static IEnumerable<ILayer> list_all_layers(Layer layer)
+    {
+        if(layer is Model)
+        {
+            return (layer as Model).Layers;
+        }
+        else
+        {
+            return new List<ILayer>(layer._flatten_layers(false, false));
+        }
     }
 }
 

@@ -17,10 +17,10 @@ public abstract class SavedModelSaver
     public abstract string ObjectIdentifier { get; }
     public abstract string TrackingMetadata { get; }
 
-    public abstract IDictionary<string, CheckpointableBase> objects_to_serialize(
+    public abstract IDictionary<string, Trackable> objects_to_serialize(
         IDictionary<string, object> serialization_cache);
 
-    public abstract IDictionary<string, Function> functions_to_serialize(
+    public abstract IDictionary<string, Trackable> functions_to_serialize(
         IDictionary<string, object> serialization_cache);
 
     public IDictionary<string, Trackable> trackable_children(IDictionary<string, object>? serialization_cache)
@@ -32,8 +32,7 @@ public abstract class SavedModelSaver
 
         var children = objects_to_serialize(serialization_cache);
 
-        return children.ToDictionary(x => x.Key, x => (Trackable)x.Value)
-            .Concat(functions_to_serialize(serialization_cache).ToDictionary(x => x.Key, x => (Trackable)x.Value))
+        return children.Concat(functions_to_serialize(serialization_cache).ToDictionary(x => x.Key, x => (Trackable)x.Value))
             .ToDictionary(x => x.Key, x => x.Value);
     }
     

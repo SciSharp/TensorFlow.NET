@@ -288,6 +288,8 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
+        public List<IVariableV1> Variables => weights;
+
         public virtual LayerArgs get_config()
             => args;
     }

@@ -142,19 +142,24 @@ namespace Tensorflow.Training
             return value;
         }
 
-        protected static Trackable wrap_or_unwrap(NoDependency value)
+        public static Trackable wrap_or_unwrap(NoDependency value)
         {
             return value.Value;
         }
 
-        protected static Trackable wrap_or_unwrap(Trackable value)
+        public static Trackable wrap_or_unwrap(Trackable value)
         {
             return value;
         }
 
-        protected static Trackable wrap_or_unwrap(IList<Trackable> value)
+        public static Trackable wrap_or_unwrap(IList<Trackable> value)
         {
             return new ListWrapper(value);
+        }
+
+        public static Trackable wrap_or_unwrap(IEnumerable<Trackable> value)
+        {
+            return new ListWrapper(value.ToList());
         }
 
         protected static Trackable sticky_attribute_assignment(Trackable trackable, string name, Trackable value)

@@ -23,10 +23,10 @@ public class AugmentedGraphView: ObjectGraphView
         list_children(Root);
     }
     
-    public override List<TrackableReference> list_children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT)
+    public override List<TrackableReference> list_children(Trackable obj, SaveType save_type = SaveType.SAVEDMODEL)
     {
         Dictionary<string, Trackable> children = new();
-        foreach (var pair in base.list_children(obj, save_type))
+        foreach (var pair in base.list_children(obj, SaveType.SAVEDMODEL))
         {
             var name = pair.Name;
             var child = pair.Refer;
