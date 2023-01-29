@@ -4,6 +4,7 @@ using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
+using Microsoft.VisualBasic;
 
 namespace TensorFlowNET.Keras.UnitTest
 {
@@ -226,7 +227,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(expected, y[0].numpy());
         }
 
-        [TestMethod, Ignore("There's an error generated from TF complaining about the shape of the pool. Needs further investigation.")]
+        [TestMethod]
         public void Max1DPoolingChannelsLast()
         {
             var x = input_array_1D;
@@ -239,7 +240,7 @@ namespace TensorFlowNET.Keras.UnitTest
 
             var expected = np.array(new float[,,]
             {
-                {{2.0f, 2.0f, 3.0f, 3.0f, 3.0f},
+                {{1.0f, 2.0f, 3.0f, 3.0f, 3.0f},
                  { 1.0f, 2.0f, 3.0f, 3.0f, 3.0f}},
 
                 {{4.0f, 5.0f, 6.0f, 3.0f, 3.0f},

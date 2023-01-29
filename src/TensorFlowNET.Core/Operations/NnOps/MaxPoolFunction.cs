@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Linq;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
@@ -24,7 +25,7 @@ namespace Tensorflow.Operations
     public class MaxPoolFunction : IPoolFunction
     {
         public Tensor Apply(Tensor value,
-            int[] ksize,
+            int[] pool_size,
             int[] strides,
             string padding,
             string data_format = "NHWC",
@@ -33,10 +34,9 @@ namespace Tensorflow.Operations
             return tf_with(ops.name_scope(name, "MaxPool", value), scope =>
             {
                 name = scope;
-                value = ops.convert_to_tensor(value, name: "input");
                 return gen_nn_ops.max_pool(
                     value,
-                    ksize: ksize,
+                    ksize: pool_size,
                     strides: strides,
                     padding: padding,
                     data_format: data_format,

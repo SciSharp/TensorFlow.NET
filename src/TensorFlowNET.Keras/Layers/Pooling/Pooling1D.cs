@@ -14,9 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -36,17 +38,21 @@ namespace Tensorflow.Keras.Layers
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
-            int[] pool_shape;
-            int[] strides;
+            int pad_axis = args.DataFormat == "channels_first" ? 2 : 3;
+            inputs = tf.expand_dims(inputs, pad_axis);
+            int[] pool_shape = new int[] { args.PoolSize, 1 };
+            int[] strides = new int[] { args.Strides, 1 };
+            var ndim = inputs[0].ndim;
+
             if (args.DataFormat == "channels_last")
             {
-                pool_shape = new int[] { 1, args.PoolSize, 1 };
-                strides = new int[] { 1, args.Strides, 1 };
+                pool_shape = new int[] { 1 }.Concat(pool_shape).Concat(new int[] { 1 }).ToArray();
+                strides = new int[] { 1 }.Concat(strides).Concat(new int[] { 1 }).ToArray();
             }
             else
             {
-                pool_shape = new int[] { 1, 1, args.PoolSize };
-                strides = new int[] { 1, 1, args.Strides };
+                pool_shape = new int[] { 1, 1 }.Concat(pool_shape).ToArray();
+                strides = new int[] { 1, 1 }.Concat(strides).ToArray();
             }
 
             var outputs = args.PoolFunction.Apply(
@@ -54,9 +60,9 @@ namespace Tensorflow.Keras.Layers
                 ksize: pool_shape,
                 strides: strides,
                 padding: args.Padding.ToUpper(),
-                data_format: conv_utils.convert_data_format(args.DataFormat, 3));
+                data_format: conv_utils.convert_data_format(args.DataFormat, ndim));
 
-            return outputs;
+            return tf.squeeze(outputs, pad_axis);
         }
     }
 }

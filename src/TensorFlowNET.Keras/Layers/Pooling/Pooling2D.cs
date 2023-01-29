@@ -42,7 +42,7 @@ namespace Tensorflow.Keras.Layers
             int[] strides;
             if (args.DataFormat == "channels_last")
             {
-                pool_shape = new int[] { 1, (int)args.PoolSize.dims[0], (int)args.PoolSize.dims[1], 1 };
+                pool_shape =  new int[] { 1, (int)args.PoolSize.dims[0], (int)args.PoolSize.dims[1], 1 };
                 strides = new int[] { 1, (int)args.Strides.dims[0], (int)args.Strides.dims[1], 1 };
             }
             else
