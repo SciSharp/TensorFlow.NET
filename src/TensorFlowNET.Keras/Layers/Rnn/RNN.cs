@@ -45,6 +45,11 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        {
+            return base.Call(inputs, state, training);
+        }
+
         private static RNNArgs PreConstruct(RNNArgs args)
         {
             if (args.Kwargs == null)

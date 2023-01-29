@@ -110,6 +110,8 @@ namespace Tensorflow.Keras.Engine
             }
             else if (outputs != null)
             {
+                // If the model is being built continuously on top of an input layer:
+                // refresh its output.
                 outputs = layer.Apply(outputs);
                 built = true;
             }
@@ -155,7 +157,7 @@ namespace Tensorflow.Keras.Engine
             Tensors layer_output = null;
             Tensors outputs = null;
             List<INode> created_nodes = new List<INode>();
-            foreach (var layer in _self_tracked_trackables)
+            foreach (var layer in args.Layers)
             {
                 clear_previously_created_nodes(layer, _created_nodes);
                 layer_output = layer.Apply(layer_input);

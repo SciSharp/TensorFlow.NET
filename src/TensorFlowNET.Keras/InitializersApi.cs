@@ -25,7 +25,7 @@ public partial class InitializersApi : IInitializersApi
     /// </summary>
     /// <param name="seed"></param>
     /// <returns></returns>
-    public IInitializer he_normal(int? seed = null)
+    public IInitializer HeNormal(int? seed = null)
     {
         return new VarianceScaling(factor: 2.0f, mode: "fan_in", seed: seed);
     }

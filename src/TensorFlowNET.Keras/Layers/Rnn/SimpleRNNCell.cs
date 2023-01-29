@@ -33,11 +33,16 @@ namespace Tensorflow.Keras.Layers.Rnn
             if (args.UseBias)
             {
                 bias = add_weight("bias", (args.Units),
-                    initializer: args.RecurrentInitializer
+                    initializer: args.BiasInitializer
                 );
             }
 
             built = true;
+        }
+
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        {
+            return base.Call(inputs, state, training);
         }
     }
 }
