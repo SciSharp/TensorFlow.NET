@@ -88,9 +88,29 @@ namespace Tensorflow.Keras.Engine
 
         ThreadLocal<CallContext> callContext = new ThreadLocal<CallContext>();
         public CallContext CallContext => callContext.Value;
-        public Tensor[] input => inboundNodes[0].input_tensors;
+        public Tensor[] input
+        {
+            get
+            {
+                if(inboundNodes is not null && inboundNodes.Count > 0)
+                {
+                    return inboundNodes[0].input_tensors;
+                }
+                return null;
+            }
+        }
         public Dictionary<int, List<INode>> NodesByDepth { get; set; }
-        public Shape OutputShape => inboundNodes[0].Outputs.shape;
+        public Shape OutputShape
+        {
+            get
+            {
+                if(inboundNodes is not null && inboundNodes.Count > 0)
+                {
+                    return inboundNodes[0].Outputs.shape;
+                }
+                return null;
+            }
+        }
         protected List<ILayer> _self_tracked_trackables;
 
         public Layer(LayerArgs args)

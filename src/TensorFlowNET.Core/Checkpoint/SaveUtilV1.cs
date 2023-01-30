@@ -174,25 +174,20 @@ public static class SaveUtilV1
             {
                 var name = factory_data.name;
                 var key = factory_data.checkpoint_key;
-                var saveable_factory = factory_data.factory;
-                
+                var maybe_saveable = factory_data.factory;
+
                 // TODO: oneflow python has a process with callable `saveable_factory`.
-                var maybe_saveable = saveable_factory;
-                IEnumerable<MySaveableObject> savesbles;
-                if (maybe_saveable is MySaveableObject)
+                List<MySaveableObject> saveables = new();
+                if (maybe_saveable.DataType == typeof(MySaveableObject))
                 {
-                    savesbles = new List<MySaveableObject>() { (MySaveableObject)maybe_saveable };
-                }
-                else if (maybe_saveable is Tensor)
-                {
-                    savesbles = saveable_object_util.saveable_objects_for_op((Tensor)maybe_saveable, key);
+                    saveables.Add(maybe_saveable.GetValueB());
                 }
                 else
                 {
-                    throw new TypeError("Unexpected type.");
+                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(maybe_saveable.GetValueA() as Trackable, key));
                 }
 
-                foreach (var saveable in savesbles)
+                foreach (var saveable in saveables)
                 {
                     if (!saveable.name.Contains(key))
                     {
@@ -204,11 +199,11 @@ public static class SaveUtilV1
                 
                 // skip the process of PythonState
                 
-                named_saveable_objects.AddRange(savesbles);
+                named_saveable_objects.AddRange(saveables);
                 
                 if(!fill_object_proto) continue;
-                
-                // skip the process of TrackableSaveable
+
+                // skip the process of `TrackableSaveable` because of lack of APIs.
 
                 object_proto!.Attributes.Add(new TrackableObjectGraph.Types.TrackableObject.Types.SerializedTensor()
                     { Name = name, CheckpointKey = key, FullName = CheckPointUtils.get_full_name(object_to_save) });
@@ -221,7 +216,7 @@ public static class SaveUtilV1
 
 public record class CheckpointFactoryData
 (
-    object factory,
+    Maybe<ResourceVariable, MySaveableObject> factory,
     string name,
     string checkpoint_key
 );

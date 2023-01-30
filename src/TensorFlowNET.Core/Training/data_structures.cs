@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Tensorflow.Functions;
 using Tensorflow.Keras;
+using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Operations.Activation;
 using Tensorflow.Train;
 using static Tensorflow.ApiDef.Types;
@@ -243,7 +244,7 @@ namespace Tensorflow.Training
             _last_wrapped_list_snapshot = new List<Trackable>(_storage);
         }
 
-        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, object>? cache = null)
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
         {
             check_external_modification();
             if (_non_append_mutation_value)

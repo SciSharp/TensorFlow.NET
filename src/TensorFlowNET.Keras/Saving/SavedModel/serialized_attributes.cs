@@ -14,7 +14,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
     /// <summary>
     /// Class that tracks and validates all serialization attributes.
     /// </summary>
-    public abstract class SerializedAttributes
+    public abstract class SerializedAttributes: ISerializedAttributes
     {
         protected IDictionary<string, Trackable?> _object_dict;
         protected IDictionary<string, Trackable?> _function_dict;

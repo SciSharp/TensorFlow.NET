@@ -2,6 +2,7 @@
 using Tensorflow.Train;
 using System.Collections.Generic;
 using System.IO;
+using Tensorflow.Keras.Saving.SavedModel;
 
 namespace Tensorflow.Checkpoint;
 
@@ -18,13 +19,13 @@ public class TrackableView
         _root_ref = obj;
     }
     
-    public virtual IDictionary<string, Trackable> children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT)
+    public virtual IDictionary<string, Trackable> children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
     {
         obj._maybe_initialize_trackable();
         Dictionary<string, Trackable> children = new();
         // Note: in python the return type of `Trackable._trackable_children` is not fixed.
         // Therefore it uses `convert_to_trackable` to have an extra process.
-        foreach (var pair in obj._trackable_children(save_type))
+        foreach (var pair in obj._trackable_children(save_type, cache))
         {
             children[pair.Key] = pair.Value;
         }

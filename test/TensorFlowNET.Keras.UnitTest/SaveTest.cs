@@ -50,11 +50,11 @@ public class SaveTest
         {
             TrainDir = "mnist",
             OneHot = false,
-            ValidationSize = 50000,
+            ValidationSize = 0,
         }).Result;
         
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
         
-        model.save("", save_format:"pb");
+        model.save("C:\\Work\\tf.net\\tf_test\\tf.net.model", save_format:"pb");
     }
 }

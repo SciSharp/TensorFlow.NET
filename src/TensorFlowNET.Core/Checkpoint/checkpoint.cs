@@ -33,7 +33,7 @@ public class TrackableSaver
         
     }
 
-    private (IDictionary<Trackable, IDictionary<string, object>>, IDictionary<Tensor, string>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
+    private (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, string>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
         gather_serialized_tensors(Tensor? object_graph_tensor = null)
     {
         var (serialized_tensors, feed_additions, registered_savers, graph_proto) = SaveUtil.serialize_graph_view(_graph_view, _object_map, cache:_cache);
@@ -125,7 +125,7 @@ public class TrackableSaver
         }
 
         Dictionary<Tensor, string> feed_dict = new();
-        bool use_session = (!new Context().executing_eagerly() && !ops.inside_function());
+        bool use_session = (!tf.Context.executing_eagerly() && !ops.inside_function());
         if (checkpoint_number is not null)
         {
             file_prefix = $"{file_prefix}-{checkpoint_number?.ToString()}";
@@ -133,6 +133,7 @@ public class TrackableSaver
 
         Tensor file_prefix_tensor;
         Tensor object_graph_tensor;
+        string file_prefix_to_save;
         if (use_session)
         {
             if (_object_graph_feed_tensor is null)
@@ -145,16 +146,18 @@ public class TrackableSaver
             object_graph_tensor = _object_graph_feed_tensor;
             file_prefix_tensor = _file_prefix_feed_tensor;
             feed_dict[file_prefix_tensor] = file_prefix;
+            file_prefix_to_save = "";
         }
         else
         {
             // In python there is `with ops.device("/cpu:0")`.
             file_prefix_tensor = ops.convert_to_tensor(file_prefix, TF_DataType.TF_STRING);
             object_graph_tensor = null;
+            file_prefix_to_save = file_prefix;
         }
 
         var (save_path, new_feed_additions) =
-            save_cached_when_graph_building(file_prefix_tensor, object_graph_tensor, options);
+            save_cached_when_graph_building(file_prefix_to_save, object_graph_tensor, options);
 
         if (new_feed_additions is not null)
         {

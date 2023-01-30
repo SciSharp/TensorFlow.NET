@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
@@ -351,7 +352,7 @@ namespace Tensorflow.Keras.Engine
             return output_tensors;
         }
 
-        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, object>? cache = null)
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
         {
             return LayerCheckpointDependencies.ToDictionary(x => x.Key, x => x.Value.GetTrackable()).Concat(base._trackable_children(save_type, cache))
                 .ToDictionary(x => x.Key, x => x.Value);

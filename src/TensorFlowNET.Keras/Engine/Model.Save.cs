@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Engine
             bool include_optimizer = true,
             string save_format = "tf",
             SaveOptions? options = null,
-            IDictionary<string, ConcreteFunction>? signatures = null,
+            ConcreteFunction? signatures = null,
             bool save_traces = true)
         {
             if (save_format != "pb")

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Functions;
+using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
 
@@ -24,7 +25,7 @@ namespace Tensorflow.Train
             }
         }
 
-        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, object>? cache = null)
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
         {
             if(save_type != SaveType.SAVEDMODEL)
             {

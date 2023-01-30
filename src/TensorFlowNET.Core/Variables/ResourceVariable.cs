@@ -17,7 +17,9 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using Tensorflow.Checkpoint;
 using Tensorflow.NumPy;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -234,6 +236,13 @@ namespace Tensorflow
         public NDArray eval(Session session = null)
         {
             return _graph_element.eval(session);
+        }
+
+        public override IDictionary<string, Maybe<ResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
+        {
+            var res = new Dictionary<string, Maybe<ResourceVariable, MySaveableObject>>();
+            res[Trackable.Constants.VARIABLE_VALUE_KEY] = this;
+            return res;
         }
     }
 }

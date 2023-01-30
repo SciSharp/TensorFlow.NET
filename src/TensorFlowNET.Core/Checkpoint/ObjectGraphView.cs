@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Serilog.Debugging;
+using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Train;
 
 namespace Tensorflow.Checkpoint;
@@ -21,9 +22,9 @@ public class ObjectGraphView: TrackableView, ICloneable
         return new ObjectGraphView(Root, _attached_dependencies);
     }
 
-    public virtual List<TrackableReference> list_children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT)
+    public virtual List<TrackableReference> list_children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? serialization_cache = null)
     {
-        List<TrackableReference> res = base.children(obj, save_type)
+        List<TrackableReference> res = base.children(obj, save_type, serialization_cache)
             .Select(x => new TrackableReference(x.Key, x.Value)).ToList();
         // Check the reference, not value.
         if (obj == Root && _attached_dependencies is not null)
@@ -34,9 +35,9 @@ public class ObjectGraphView: TrackableView, ICloneable
         return res;
     }
     
-    public override IDictionary<string, Trackable> children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT)
+    public override IDictionary<string, Trackable> children(Trackable obj, SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? serialization_cache = null)
     {
-        return list_children(obj, save_type).ToDictionary(x => x.Name, x => x.Refer);
+        return list_children(obj, save_type, serialization_cache).ToDictionary(x => x.Name, x => x.Refer);
     }
     
     public IEnumerable<TrackableReference>? AttachedDependencies

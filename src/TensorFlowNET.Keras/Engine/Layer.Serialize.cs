@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Train;
@@ -9,16 +10,16 @@ public abstract partial class Layer
 {
     public LayerSavedModelSaver TrackableSavedModelSaver => new LayerSavedModelSaver(this);
 
-    public string ObjectIdentifier => TrackableSavedModelSaver.ObjectIdentifier;
+    public override string ObjectIdentifier => TrackableSavedModelSaver.ObjectIdentifier;
 
     public string TrackingMetadata => TrackableSavedModelSaver.TrackingMetadata;
 
-    public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, object>? cache = null)
+    public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
     {
         IDictionary<string, Trackable> children;
         if (save_type == SaveType.SAVEDMODEL)
         {
-            // TODO: deal with cache.
+            Debug.Assert(cache is not null);
             children = TrackableSavedModelSaver.trackable_children(cache);
         }
         else

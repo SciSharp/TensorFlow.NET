@@ -28,7 +28,7 @@ namespace Tensorflow.Checkpoint
     );
     public static class SaveUtil
     {
-        public static (IDictionary<Trackable, IDictionary<string, object>>, IDictionary<Tensor, string>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
+        public static (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, string>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
             serialize_graph_view(ObjectGraphView graph_view, IDictionary<Trackable, Trackable>? object_map = null, bool call_with_mapped_captures = false, object? cache = null)
         {
             var (trackable_data, node_ids) = gather_trackable_data(graph_view, object_map);
@@ -117,16 +117,16 @@ namespace Tensorflow.Checkpoint
         /// <param name="call_with_mapped_captures"></param>
         /// <param name="cache"></param>
         /// <param name="object_graph_proto"></param>
-        private static IDictionary<Trackable, IDictionary<string, object>> get_and_write_tensors_to_serialize(IList<TrackableData> tensor_trackables, IDictionary<Trackable, int> node_ids,
+        private static IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>> get_and_write_tensors_to_serialize(IList<TrackableData> tensor_trackables, IDictionary<Trackable, int> node_ids,
             bool call_with_mapped_captures, object? cache, TrackableObjectGraph object_graph_proto)
         {
-            Dictionary<Trackable, IDictionary<string, object>> serialized_tensors = new();
+            Dictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>> serialized_tensors = new();
             foreach(var td in tensor_trackables)
             {
                 // TODO: deal with cache.
                 var legacy_name = SaveableCompat.get_saveable_name(td.object_to_save) ?? "";
                 var trackable = td.object_to_save;
-                IDictionary<string, object> tensor_dict;
+                IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> tensor_dict;
                 if(!saveable_object_util.trackable_has_serialize_to_tensor(td.object_to_save) || legacy_name.Length > 0)
                 {
                     (trackable, tensor_dict) = get_tensors_from_legacy_saveable(td, node_ids, call_with_mapped_captures, object_graph_proto);
@@ -147,12 +147,12 @@ namespace Tensorflow.Checkpoint
             return serialized_tensors;
         }
 
-        private static IDictionary<string, object> get_tensors_from_trackable(TrackableData trackable_data, bool call_with_mapped_captures, TrackableObjectGraph object_graph_proto)
+        private static IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> get_tensors_from_trackable(TrackableData trackable_data, bool call_with_mapped_captures, TrackableObjectGraph object_graph_proto)
         {
             var trackable = trackable_data.object_to_save;
 
             // TODO: complete it. Note that actually `call_with_mapped_captures` is of function type.
-            IDictionary<string, object> ret_tensor_dict;
+            IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> ret_tensor_dict;
             if (call_with_mapped_captures)
             {
                 throw new NotImplementedException();
@@ -162,8 +162,8 @@ namespace Tensorflow.Checkpoint
                 ret_tensor_dict = trackable.serialize_to_tensors();
             }
 
-            // TODO: revise the types and complete it
-            Dictionary<string, object> tensor_dict = new();
+            // TODO: deal with the type `SaveSpce` (currently it will never be it).
+            Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> tensor_dict = new();
             foreach(var pair in ret_tensor_dict)
             {
                 var local_name = TrackableUtils.escape_local_name(pair.Key);
@@ -172,9 +172,10 @@ namespace Tensorflow.Checkpoint
 
                 tensor_dict[checkpoint_key] = maybe_tensor;
 
-                if(maybe_tensor is SaveSpec)
+                if(maybe_tensor.GetValueA() is SaveSpec)
                 {
-                    ((SaveSpec)maybe_tensor).name = local_name + ((SaveSpec)maybe_tensor).name;
+                    throw new NotImplementedException();
+                    //((SaveSpec)maybe_tensor).name = local_name + ((SaveSpec)maybe_tensor).name;
                 }
 
                 if(object_graph_proto is not null)
@@ -198,7 +199,7 @@ namespace Tensorflow.Checkpoint
         /// <param name="call_with_mapped_captures"></param>
         /// <param name="object_graph_proto"></param>
         /// <returns></returns>
-        private static (Trackable, IDictionary<string, object>) get_tensors_from_legacy_saveable(TrackableData trackable_data, IDictionary<Trackable, int> node_ids, 
+        private static (Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>) get_tensors_from_legacy_saveable(TrackableData trackable_data, IDictionary<Trackable, int> node_ids, 
             bool call_with_mapped_captures, TrackableObjectGraph object_graph_proto)
         {
             Dictionary<Trackable, string> object_names = new();

@@ -141,16 +141,16 @@ public class SaveableView
         foreach (var node in _nodes)
         {
             var node_id = _node_ids[node];
-            List<int> deps = new();
+            List<int> deps = new List<int>();
+            dependency_map.Add(node_id, deps);
             
             // TODO: deal with captured tensor.
 
-            string node_path;
             foreach (var (_, dep) in _augmented_graph_view.list_dependencies(node))
             {
                 if (!_node_ids.ContainsKey(dep))
                 {
-                    node_path = TrackableUtils.pretty_print_node_path(_node_paths[node]);
+                    var node_path = TrackableUtils.pretty_print_node_path(_node_paths[node]);
                     throw new ValueError(
                         $"Found an untracked dependency. Object {node_path} depends on {dep}, " +
                         $"but this dependency isn't listed as a child. Please track this child by " +

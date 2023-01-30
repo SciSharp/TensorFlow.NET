@@ -19,7 +19,7 @@ public partial class KerasSavedModelUtils
     /// <param name="layer"></param>
     /// <param name="serialization_cache"></param>
     /// <returns></returns>
-    public static IDictionary<string, Trackable> wrap_layer_objects(Layer layer, IDictionary<string, object> serialization_cache)
+    public static IDictionary<string, Trackable> wrap_layer_objects(Layer layer, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
     {
         // TODO: deal with losses and metrics. Currently, `Layer` lacks these two APIs.
 
@@ -55,7 +55,7 @@ public partial class KerasSavedModelUtils
     /// <param name="layer"></param>
     /// <param name="serialization_cache"></param>
     /// <returns></returns>
-    public static IDictionary<string, Trackable> wrap_layer_functions(Layer layer, IDictionary<string, object> serialization_cache)
+    public static IDictionary<string, Trackable> wrap_layer_functions(Layer layer, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
     {
         // TODO: deal with type `RevivedLayer` and `Sequential`.
 

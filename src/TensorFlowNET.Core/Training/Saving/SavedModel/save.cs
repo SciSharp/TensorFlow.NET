@@ -24,7 +24,7 @@ public static partial class SavedModelUtils
     }.Select(x => (int)x);
     
     public static (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>) save_and_return_nodes(Trackable obj, 
-        string export_dir, IDictionary<string, ConcreteFunction>? signatures, SaveOptions? options = null, bool experimental_skip_checkpoint = false)
+        string export_dir, ConcreteFunction? signatures, SaveOptions? options = null, bool experimental_skip_checkpoint = false)
     {
         if (options is null)
         {
@@ -41,9 +41,9 @@ public static partial class SavedModelUtils
 
         if (!experimental_skip_checkpoint)
         {
-            Tensorflow.SavedModelUtils.get_or_create_variables_dir(export_dir);
+            SavedModelUtils.get_or_create_variables_dir(export_dir);
             CheckpointOptions ckpt_options = new(options.experimental_io_device);
-            object_saver.save(Tensorflow.SavedModelUtils.get_variables_dir(export_dir), options:ckpt_options);
+            object_saver.save(SavedModelUtils.get_variables_dir(export_dir), options:ckpt_options);
         }
         BuilderUtils.copy_assets_to_destination_dir(asset_info.asset_filename_map, export_dir);
 
@@ -67,7 +67,7 @@ public static partial class SavedModelUtils
         }
 
         var path = Path.Combine(tf.compat.as_str(export_dir), tf.compat.as_str(Constants.SAVED_MODEL_FILENAME_PB));
-        File.WriteAllText(path, saved_model.ToString());
+        File.WriteAllBytes(path, saved_model.ToByteArray());
 
         if (options.save_debug_info)
         {
@@ -81,7 +81,7 @@ public static partial class SavedModelUtils
 
     private static (MetaGraphDef, Graph, TrackableSaver, AssetInfo, List<Trackable>,
         Dictionary<Trackable, IEnumerable<TrackableReference>>) _build_meta_graph(Trackable obj,
-            IDictionary<string, ConcreteFunction>? signatures, SaveOptions options, MetaGraphDef? meta_graph_def = null)
+            ConcreteFunction? signatures, SaveOptions options, MetaGraphDef? meta_graph_def = null)
     {
         if (ops.inside_function())
         {
@@ -95,9 +95,9 @@ public static partial class SavedModelUtils
         }
 
         AugmentedGraphView augmented_graph_view = new AugmentedGraphView(obj);
-        if (signatures is not null)
+        if (signatures is null)
         {
-            throw new NotImplementedException();
+            signatures = SignatureSerializationUtils.find_function_to_export(augmented_graph_view);
         }
         
         // TODO: process of aignatures and wrapped_functions
@@ -125,7 +125,7 @@ public static partial class SavedModelUtils
     }
 
     private static (AssetInfo, Graph) _fill_meta_graph_def(MetaGraphDef meta_graph_def, SaveableView saveable_view,
-        IDictionary<string, ConcreteFunction> signatures, IEnumerable<string> namespace_whitelist,
+        ConcreteFunction signatures, IEnumerable<string> namespace_whitelist,
         bool save_custom_gradients)
     {
         var resource_initializers = saveable_view.get_concrete_resource_initializers();

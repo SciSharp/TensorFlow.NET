@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Exceptions;
 using Tensorflow.Train;
@@ -22,7 +23,7 @@ public static class TrackableUtils
     private static string _ESCAPE_CHAR = ".";
     private static string _OPTIMIZER_SLOTS_NAME = _ESCAPE_CHAR + "OPTIMIZER_SLOT";
     private static string OBJECT_ATTRIBUTES_NAME = _ESCAPE_CHAR + "ATTRIBUTES";
-    private static string SERIALIZE_TO_TENSORS_NAME = _ESCAPE_CHAR + "TENSORS";
+    internal static string SERIALIZE_TO_TENSORS_NAME = _ESCAPE_CHAR + "TENSORS";
     public static string object_path_to_string(IEnumerable<TrackableReference> node_path_arr)
     {
         return string.Join("/", node_path_arr.Select(x => escape_local_name(x.Name)));
@@ -143,6 +144,29 @@ public static class TrackableUtils
         else
         {
             return $"root.{string.Join(".", paths.Select(x => x.Name))}";
+        }
+    }
+
+    /// <summary>
+    /// Returns the substring after the "/.ATTIBUTES/" in the checkpoint key.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="prefix"></param>
+    /// <returns></returns>
+    public static string extract_local_name(string key, string? prefix = null)
+    {
+        if(prefix is null)
+        {
+            prefix = "";
+        }
+        var search_key = OBJECT_ATTRIBUTES_NAME + "/" + prefix;
+        try
+        {
+            return key.Substring(key.IndexOf(search_key) + search_key.Length);
+        }
+        catch(ArgumentOutOfRangeException)
+        {
+            return key;
         }
     }
 }

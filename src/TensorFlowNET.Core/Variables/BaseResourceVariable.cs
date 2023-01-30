@@ -4,6 +4,8 @@ using Tensorflow.Eager;
 using Tensorflow.Variables;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
+using System.Collections.Generic;
+using Tensorflow.ModelSaving;
 
 namespace Tensorflow
 {
@@ -20,6 +22,7 @@ namespace Tensorflow
         public string UniqueId => _unique_id;
 
         protected bool _in_graph_mode;
+        internal bool InGraphMode => _in_graph_mode;
 
         protected bool _trainable;
         public bool Trainable => _trainable;

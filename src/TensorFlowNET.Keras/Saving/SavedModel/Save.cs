@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Saving.SavedModel;
 
 public partial class KerasSavedModelUtils
 {
-    public static void Save(Model model, string filepath, bool overwrite, bool include_optimizer, IDictionary<string, ConcreteFunction>? signatures,
+    public static void Save(Model model, string filepath, bool overwrite, bool include_optimizer, ConcreteFunction? signatures,
         SaveOptions? options, bool save_traces = true)
     {
         if (!overwrite && File.Exists(filepath))
@@ -54,12 +54,7 @@ public partial class KerasSavedModelUtils
         }
 
         var metadata = generate_keras_metadata(saved_nodes, node_paths);
-        using (var f = new FileStream(Path.Combine(filepath, Constants.SAVED_METADATA_PATH), FileMode.OpenOrCreate,
-                   FileAccess.Write))
-        {
-            var writer = new StreamWriter(f);
-            writer.Write(metadata.ToString());
-        }
+        File.WriteAllBytes(Path.Combine(filepath, Constants.SAVED_METADATA_PATH), metadata.ToByteArray());
 
         if (!include_optimizer)
         {

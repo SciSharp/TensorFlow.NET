@@ -4,6 +4,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
+using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -110,7 +111,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, object>? cache = null)
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
         {
             if(save_type == SaveType.SAVEDMODEL)
             {

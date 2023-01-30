@@ -18,12 +18,12 @@ public abstract class SavedModelSaver
     public abstract string TrackingMetadata { get; }
 
     public abstract IDictionary<string, Trackable> objects_to_serialize(
-        IDictionary<string, object> serialization_cache);
+        IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache);
 
     public abstract IDictionary<string, Trackable> functions_to_serialize(
-        IDictionary<string, object> serialization_cache);
+        IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache);
 
-    public IDictionary<string, Trackable> trackable_children(IDictionary<string, object>? serialization_cache)
+    public IDictionary<string, Trackable> trackable_children(IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
     {
         if (!KerasSavedModelUtils.ShouldHaveTraces)
         {
@@ -31,7 +31,6 @@ public abstract class SavedModelSaver
         }
 
         var children = objects_to_serialize(serialization_cache);
-
         return children.Concat(functions_to_serialize(serialization_cache).ToDictionary(x => x.Key, x => (Trackable)x.Value))
             .ToDictionary(x => x.Key, x => x.Value);
     }
