@@ -9,6 +9,10 @@ namespace Tensorflow.NumPy
     public partial class np
     {
         [AutoNumPy]
+        public static NDArray concatenate((NDArray, NDArray) tuple, int axis = 0)
+            => new NDArray(array_ops.concat(new[] { tuple.Item1, tuple.Item2 }, axis));
+
+        [AutoNumPy]
         public static NDArray concatenate(NDArray[] arrays, int axis = 0) => new NDArray(array_ops.concat(arrays, axis));
 
         [AutoNumPy]

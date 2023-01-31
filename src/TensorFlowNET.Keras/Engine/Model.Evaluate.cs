@@ -31,7 +31,7 @@ namespace Tensorflow.Keras.Engine
             bool use_multiprocessing = false,
             bool return_dict = false)
         {
-            data_handler = new DataHandler(new DataHandlerArgs
+            var data_handler = new DataHandler(new DataHandlerArgs
             {
                 X = x,
                 Y = y,
@@ -46,7 +46,6 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            Binding.tf_output_redirect.WriteLine($"Testing...");
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 reset_metrics();
@@ -56,22 +55,20 @@ namespace Tensorflow.Keras.Engine
                 foreach (var step in data_handler.steps())
                 {
                     // callbacks.on_train_batch_begin(step)
-                    results = test_function(iterator);
+                    results = test_function(data_handler, iterator);
                 }
-                Binding.tf_output_redirect.WriteLine($"iterator: {epoch + 1}, " + string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2}")));
             }
         }
 
         public KeyValuePair<string, float>[] evaluate(IDatasetV2 x)
         {
-            data_handler = new DataHandler(new DataHandlerArgs
+            var data_handler = new DataHandler(new DataHandlerArgs
             {
                 Dataset = x,
                 Model = this,
                 StepsPerExecution = _steps_per_execution
             });
 
-            Binding.tf_output_redirect.WriteLine($"Testing...");
             IEnumerable<(string, Tensor)> logs = null;
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
@@ -82,22 +79,21 @@ namespace Tensorflow.Keras.Engine
                 foreach (var step in data_handler.steps())
                 {
                     // callbacks.on_train_batch_begin(step)
-                    logs = test_function(iterator);
+                    logs = test_function(data_handler, iterator);
                 }
-                Binding.tf_output_redirect.WriteLine($"iterator: {epoch + 1}, " + string.Join(", ", logs.Select(x => $"{x.Item1}: {(float)x.Item2}")));
             }
             return logs.Select(x => new KeyValuePair<string, float>(x.Item1, (float)x.Item2)).ToArray();
         }
 
-        IEnumerable<(string, Tensor)> test_function(OwnedIterator iterator)
+        IEnumerable<(string, Tensor)> test_function(DataHandler data_handler, OwnedIterator iterator)
         {
             var data = iterator.next();
-            var outputs = test_step(data[0], data[1]);
+            var outputs = test_step(data_handler, data[0], data[1]);
             tf_with(ops.control_dependencies(new object[0]), ctl => _test_counter.assign_add(1));
             return outputs;
         }
 
-        List<(string, Tensor)> test_step(Tensor x, Tensor y)
+        List<(string, Tensor)> test_step(DataHandler data_handler, Tensor x, Tensor y)
         {
             (x, y) = data_handler.DataAdapter.Expand1d(x, y);
             var y_pred = Apply(x, training: false);

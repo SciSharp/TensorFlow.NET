@@ -5,6 +5,8 @@ using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using System.Diagnostics;
+using Tensorflow.Keras.Callbacks;
+using System.Data;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -20,7 +22,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="verbose"></param>
         /// <param name="validation_split"></param>
         /// <param name="shuffle"></param>
-        public void fit(NDArray x, NDArray y,
+        public History fit(NDArray x, NDArray y,
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
@@ -37,7 +39,7 @@ namespace Tensorflow.Keras.Engine
             var val_x = x[new Slice(train_count)];
             var val_y = y[new Slice(train_count)];
 
-            data_handler = new DataHandler(new DataHandlerArgs
+            var data_handler = new DataHandler(new DataHandlerArgs
             {
                 X = train_x,
                 Y = train_y,
@@ -52,10 +54,10 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            FitInternal(epochs, verbose);
+            return FitInternal(data_handler, epochs, verbose);
         }
 
-        public void fit(IDatasetV2 dataset, 
+        public History fit(IDatasetV2 dataset, 
             IDatasetV2 validation_data = null,
             int batch_size = -1,
             int epochs = 1,
@@ -67,7 +69,7 @@ namespace Tensorflow.Keras.Engine
             int workers = 1,
             bool use_multiprocessing = false)
         {
-            data_handler = new DataHandler(new DataHandlerArgs
+            var data_handler = new DataHandler(new DataHandlerArgs
             {
                 Dataset = dataset,
                 BatchSize = batch_size,
@@ -81,67 +83,52 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            FitInternal(epochs, verbose);
+            return FitInternal(data_handler, epochs, verbose, validation_data: validation_data);
         }
 
-        void FitInternal(int epochs, int verbose)
+        History FitInternal(DataHandler data_handler, int epochs, int verbose, IDatasetV2 validation_data = null)
         {
             stop_training = false;
             _train_counter.assign(0);
-            Stopwatch sw = new Stopwatch();
+            var callbacks = new CallbackList(new CallbackParams
+            {
+                Model = this,
+                Verbose = verbose,
+                Epochs = epochs,
+                Steps = data_handler.Inferredsteps
+            });
+            callbacks.on_train_begin();
+
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 reset_metrics();
-                on_epoch_begin(epoch, epochs);
+                callbacks.on_epoch_begin(epoch);
                 // data_handler.catch_stop_iteration();
+                var logs = new Dictionary<string, float>();
                 foreach (var step in data_handler.steps())
                 {
-                    sw.Start();
-                    var results = train_step_function(iterator);
-                    sw.Stop();
-                    on_train_batch_begin(verbose, step, sw.ElapsedMilliseconds, results);
-
-                    // recycle memory more frequency
-                    if (sw.ElapsedMilliseconds > 100)
-                    {
-                        GC.Collect();
-                    }
-                    sw.Reset();
+                    callbacks.on_train_batch_begin(step);
+                    logs = train_step_function(data_handler, iterator);
+                    var end_step = step + data_handler.StepIncrement;
+                    callbacks.on_train_batch_end(end_step, logs);
                 }
-                Console.WriteLine();
+
+                if (validation_data != null)
+                {
+                    var val_logs = evaluate(validation_data);
+                    foreach(var log in val_logs)
+                    {
+                        logs["val_" + log.Key] = log.Value;
+                    }
+                }
+
+                callbacks.on_epoch_end(epoch, logs);
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
-        }
 
-        void on_epoch_begin(int epoch, int epochs)
-        {
-            Binding.tf_output_redirect.WriteLine($"Epoch: {epoch + 1:D3}/{epochs:D3}");
-        }
-
-        void on_train_batch_begin(int verbose, long step, long elapse, IEnumerable<(string, Tensor)> results)
-        {
-            if (verbose == 1)
-            {
-                var result_pairs = string.Join(", ", results.Select(x => $"{x.Item1}: {(float)x.Item2:F6}"));
-
-                var progress = "";
-                for (int i = 0; i < step + 1; i++)
-                    for (int j = 0; j < 30 / data_handler.Inferredsteps; j++)
-                        progress += "=";
-                progress += ">";
-
-                var remaining = "";
-                for (int i = 1; i < 30 - progress.Length; i++)
-                    remaining += ".";
-
-                Binding.tf_output_redirect.Write($"{step + 1:D4}/{data_handler.Inferredsteps:D4} [{progress}{remaining}] - {elapse}ms/step {result_pairs}");
-                if (!Console.IsOutputRedirected)
-                {
-                    Console.CursorLeft = 0;
-                }
-            }
+            return callbacks.History;
         }
     }
 }

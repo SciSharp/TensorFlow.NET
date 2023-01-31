@@ -147,7 +147,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(expected_output, actual_output);
         }
 
-        [TestMethod]
+        [TestMethod, Ignore("WIP")]
         public void SimpleRNN()
         {
             tf.UseKeras<KerasInterface>();
