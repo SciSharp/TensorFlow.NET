@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Checkpoint;
+using Tensorflow.Operations.Activation;
 using Tensorflow.Train;
 using Tensorflow.Training;
 using static Tensorflow.Binding;
@@ -117,8 +118,7 @@ namespace Tensorflow
                 }
                 else
                 {
-                    Debug.Assert(variable is ResourceVariable);
-                    yield return new ResourceVariableSaveable((ResourceVariable)variable, "", name);
+                    yield return new ResourceVariableSaveable(variable, "", name);
                 }
             }
             else
@@ -215,7 +215,7 @@ namespace Tensorflow
             return names_to_saveables;
         }
 
-        public static IDictionary<string, Maybe<ResourceVariable, MySaveableObject>> saveable_objects_from_trackable(Trackable obj)
+        public static IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> saveable_objects_from_trackable(Trackable obj)
         {
             // skip the process of type `PythonState`
 
@@ -251,7 +251,7 @@ namespace Tensorflow
                         specs.Add(new SaveSpec(item.Value, item.Key, spec_name));
                     }
                 }
-                Dictionary<string, Maybe<ResourceVariable, MySaveableObject>> res = new();
+                Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> res = new();
                 res[name] = new TrackableSaveable(obj, specs, name, local_names, prefix);
                 return res;
             }
@@ -270,25 +270,6 @@ namespace Tensorflow
         {
             return tf.compat.as_str(x);
         }
-    }
-
-    public class SaveableCompatibilityConverter: Trackable
-    {
-        private Trackable _obj;
-        private IList<MySaveableObject> _saveables;
-        public SaveableCompatibilityConverter(Trackable obj, IList<MySaveableObject> saveables)
-        {
-            _obj= obj;
-            _saveables= saveables;
-        }
-
-        public Trackable Obj => _obj;
-        public IList<MySaveableObject> mySaveables=> _saveables;
-
-        public override IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
-        {
-            return saveable_object_to_tensor_dict(_saveables);
-        }
 
         /// <summary>
         /// Converts a list of SaveableObjects to a tensor dictionary.
@@ -299,11 +280,11 @@ namespace Tensorflow
             Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> tensor_dict = new();
             foreach (var saveable in saveables)
             {
-                foreach(var spec in saveable.specs)
+                foreach (var spec in saveable.specs)
                 {
                     // skip the check that if `spec` is callable.
-                    var name = saveable_object_util.convert_to_string(spec.name);
-                    var slice_spec = saveable_object_util.convert_to_string(spec.slice_spec);
+                    var name = convert_to_string(spec.name);
+                    var slice_spec = convert_to_string(spec.slice_spec);
                     if (!string.IsNullOrEmpty(slice_spec))
                     {
                         tensor_dict.SetDefault(name, new Dictionary<string, Tensor>()).GetValueB()[slice_spec] = spec.tensor;
@@ -315,6 +296,82 @@ namespace Tensorflow
                 }
             }
             return tensor_dict;
+        }
+
+        /// <summary>
+        /// Generates `Trackable._restore_from_tensors` from SaveableObjects.
+        /// </summary>
+        /// <returns></returns>
+        public static Func<IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>, IDictionary<string, Operation>> saveable_object_to_restore_fn(IList<MySaveableObject> saveables)
+        {
+            return (restored_tensors) =>
+            {
+                Dictionary<string, Operation> restored_ops = new();
+
+                foreach(var saveable in saveables)
+                {
+                    List<Tensor> saveable_restored_tensors = new();
+                    foreach(var spec in saveable.specs)
+                    {
+                        var name = TrackableUtils.extract_local_name(saveable_object_util.convert_to_string(spec.name));
+                        var slice_spec = saveable_object_util.convert_to_string(spec.slice_spec);
+
+                        var maybe_tensor = restored_tensors[name];
+                        IDictionary<string, Tensor> dict;
+                        if(maybe_tensor.DataType == typeof(Tensor))
+                        {
+                            dict = new Dictionary<string, Tensor>();
+                            dict[""] = maybe_tensor.GetValueA();
+                        }
+                        else
+                        {
+                            dict = maybe_tensor.GetValueB();
+                        }
+                        saveable_restored_tensors.Add(dict[slice_spec]);
+                    }
+                    restored_ops[saveable.name] = saveable.restore(saveable_restored_tensors.ToArray(), null);
+                }
+                return restored_ops;
+            };
+        }
+    }
+
+    public class SaveableCompatibilityConverter: Trackable
+    {
+        private object _obj;
+        private IList<MySaveableObject> _saveables;
+        public SaveableCompatibilityConverter(object obj, IList<MySaveableObject> saveables)
+        {
+            _obj= obj;
+            _saveables= saveables;
+        }
+
+        public object Obj => _obj;
+        public IList<MySaveableObject> mySaveables=> _saveables;
+
+        public override IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        {
+            return saveable_object_util.saveable_object_to_tensor_dict(_saveables);
+        }
+
+        /// <summary>
+        /// Returns the restore ops defined in the Saveables.
+        /// </summary>
+        /// <param name="restored_tensors"></param>
+        /// <returns></returns>
+        public override IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors)
+        {
+            List<string> expected_keys = new();
+            foreach(var saveable in _saveables)
+            {
+                expected_keys.AddRange(saveable.specs.Select(x => TrackableUtils.extract_local_name(saveable_object_util.convert_to_string(x.name))));
+            }
+            if (!expected_keys.Distinct().SequenceEqual(restored_tensors.Keys))
+            {
+                throw new ValueError($"Could not restore object {_obj} because not all expected tensors were in the checkpoint." +
+                    $"\n\tExpected: {expected_keys} \n\tGot: {list(restored_tensors.Keys)}");
+            }
+            return saveable_object_util.saveable_object_to_restore_fn(_saveables).Invoke(restored_tensors);
         }
     }
 }

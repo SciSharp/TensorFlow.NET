@@ -8,7 +8,7 @@ namespace Tensorflow.Keras.Saving.SavedModel;
 
 public abstract class SavedModelSaver
 {
-    private Trackable _obj;
+    protected Trackable _obj;
     public SavedModelSaver(Trackable obj)
     {
         _obj = obj;

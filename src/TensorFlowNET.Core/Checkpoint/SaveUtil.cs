@@ -28,7 +28,7 @@ namespace Tensorflow.Checkpoint
     );
     public static class SaveUtil
     {
-        public static (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, string>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
+        public static (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, object>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
             serialize_graph_view(ObjectGraphView graph_view, IDictionary<Trackable, Trackable>? object_map = null, bool call_with_mapped_captures = false, object? cache = null)
         {
             var (trackable_data, node_ids) = gather_trackable_data(graph_view, object_map);
@@ -39,7 +39,7 @@ namespace Tensorflow.Checkpoint
             var serialized_tensors = get_and_write_tensors_to_serialize(tensor_trackables, node_ids, call_with_mapped_captures, cache, object_graph_proto);
             var registered_savers = get_and_write_registered_savers(registered_trackables, object_graph_proto);
 
-            Dictionary<Tensor, string> feed_additions;
+            Dictionary<Tensor, object> feed_additions;
             if(cache is null)
             {
                 feed_additions = null;
@@ -125,7 +125,7 @@ namespace Tensorflow.Checkpoint
             {
                 // TODO: deal with cache.
                 var legacy_name = SaveableCompat.get_saveable_name(td.object_to_save) ?? "";
-                var trackable = td.object_to_save;
+                Trackable trackable = null;
                 IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> tensor_dict;
                 if(!saveable_object_util.trackable_has_serialize_to_tensor(td.object_to_save) || legacy_name.Length > 0)
                 {
@@ -134,6 +134,7 @@ namespace Tensorflow.Checkpoint
                 else
                 {
                     tensor_dict = get_tensors_from_trackable(td, call_with_mapped_captures, object_graph_proto);
+                    trackable = td.object_to_save;
                 }
                 if(trackable is not null)
                 {

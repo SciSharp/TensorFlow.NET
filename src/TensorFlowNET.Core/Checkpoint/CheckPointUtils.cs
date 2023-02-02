@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Tensorflow.Train;
@@ -85,17 +86,18 @@ public static class CheckPointUtils
         }
     }
 
-    public static string get_full_name(Trackable var)
+    public static string get_full_name(Trackable variable)
     {
         // TODO: This state is not correct, the whole framework need to be updated in the future.
-        if (!(var is IVariableV1 || resource_variable_ops.is_resource_variable(var)))
+        if (!(variable is IVariableV1 || resource_variable_ops.is_resource_variable(variable)))
         {
             return "";
         }
         // skip the check of attribute `_save_slice_info` .
-        
+
         // TODO: Need to be revised!!!
-        return ((ResourceVariable)(object)var).Name;
+        Debug.Assert(variable is BaseResourceVariable);
+        return ((BaseResourceVariable)variable).Name;
     }
 
     public static void add_checkpoint_values_check(TrackableObjectGraph object_graph_proto)

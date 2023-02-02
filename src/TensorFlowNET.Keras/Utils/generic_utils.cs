@@ -15,6 +15,8 @@
 ******************************************************************************/
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.Saving;
 
@@ -22,7 +24,12 @@ namespace Tensorflow.Keras.Utils
 {
     public class generic_utils
     {
-        public static LayerConfig serialize_keras_object(ILayer instance)
+        /// <summary>
+        /// This method does not have corresponding method in python. It's close to `serialize_keras_object`.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        public static LayerConfig serialize_layer_to_config(ILayer instance)
         {
             var config = instance.get_config();
             return new LayerConfig

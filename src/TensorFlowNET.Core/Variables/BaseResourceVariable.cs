@@ -6,6 +6,8 @@ using Tensorflow.Train;
 using static Tensorflow.Binding;
 using System.Collections.Generic;
 using Tensorflow.ModelSaving;
+using System.Diagnostics;
+using Tensorflow.Checkpoint;
 
 namespace Tensorflow
 {
@@ -13,6 +15,7 @@ namespace Tensorflow
     {
         protected string _name;
         public virtual string Name => _handle_name;
+        public virtual string SharedName => _name;
         protected TF_DataType _dtype;
         public TF_DataType dtype => _dtype;
         protected string _handle_name;
@@ -50,6 +53,7 @@ namespace Tensorflow
         public Graph Graph => handle.graph;
         public string Device => handle.Device;
         EagerResourceDeleter eager_resource_deleter;
+        public VariableAggregation Aggregation { get; protected set; } = VariableAggregation.None;
 
         public BaseResourceVariable()
         {
@@ -76,6 +80,11 @@ namespace Tensorflow
             {
                 _handle = handle.EagerTensorHandle.DangerousGetHandle();
                 eager_resource_deleter = new EagerResourceDeleter(handle, handle.Device);
+            }
+            else if(handle is null)
+            {
+                // TODO: fix this dangerous change.
+                _handle = IntPtr.Zero;
             }
             else
             {
@@ -246,6 +255,61 @@ namespace Tensorflow
                 return read_value().op.inputs[0];
             else
                 return value();
+        }
+
+        public override (IDictionary<Trackable, Trackable>, IDictionary<Tensor, Tensor>) map_resources(SaveOptions save_options)
+        {
+            BaseResourceVariable new_variable;
+            if (save_options.experimental_variable_policy.save_variable_devices())
+            {
+                tf.device(this.Device);
+                Debug.Assert(this is ResourceVariable);
+                new_variable = resource_variable_ops.copy_to_graph_uninitialized((ResourceVariable)this);
+            }
+            else
+            {
+                new_variable = resource_variable_ops.copy_to_graph_uninitialized((ResourceVariable)this);
+            }
+            Dictionary<Trackable, Trackable> obj_map = new();
+            Dictionary<Tensor, Tensor> resource_map = new();
+            obj_map[this] = new_variable;
+            resource_map[this.handle] = new_variable.handle;
+            return (obj_map, resource_map);
+        }
+
+        /// <summary>
+        /// Writes additional information of the variable into the SavedObject proto.
+        /// ubclasses of ResourceVariables could choose to override this method to
+        /// customize extra information to provide when saving a SavedModel.
+        /// </summary>
+        /// <param name="proto"></param>
+        /// <param name="options"></param>
+        public virtual void write_object_proto(SavedObject proto, SaveOptions options)
+        {
+            resource_variable_ops.write_object_proto_for_resource_variable(this, proto, options);
+        }
+
+        public override IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
+        {
+            var res = new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>();
+            res[Trackable.Constants.VARIABLE_VALUE_KEY] = this;
+            return res;
+        }
+
+        public Tensor is_initialized(string name = null)
+        {
+            return gen_resource_variable_ops.var_is_initialized_op(this.handle, name);
+        }
+
+        public Tensor read_value_no_copy()
+        {
+            Tensor value = null;
+            tf_with(ops.name_scope("Read"), _ =>
+            {
+                // TODO: `no_copy = true`.
+                value = _read_variable_op();
+            });
+            return array_ops.identity(value);
         }
     }
 }

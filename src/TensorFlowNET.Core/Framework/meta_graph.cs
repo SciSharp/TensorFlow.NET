@@ -406,5 +406,28 @@ namespace Tensorflow
 
             meta_graph_def.MetaInfoDef.StrippedDefaultAttrs = true;
         }
+
+        /// <summary>
+        /// Extract the Op name from a Tensor name.
+        /// </summary>
+        /// <param name="tensor_name"></param>
+        /// <returns></returns>
+        public static string op_name(string tensor_name)
+        {
+            if (string.IsNullOrEmpty(tensor_name))
+            {
+                throw new ValueError($"Tensor name cannot be empty or None. Received: {tensor_name}.");
+            }
+
+            if (tensor_name.StartsWith("^"))
+            {
+                tensor_name = tensor_name.Substring(1);
+            }
+            if (tensor_name.Contains(":"))
+            {
+                return tensor_name.Split(':')[0];
+            }
+            return tensor_name;
+        }
     }
 }

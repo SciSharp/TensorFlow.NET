@@ -42,11 +42,11 @@ namespace Tensorflow.Train
 
         protected IList<TrackableReference> _unconditional_checkpoint_dependencies;
 
-        protected IDictionary<string, Maybe<ResourceVariable, MySaveableObject>> _self_saveable_object_factories =
-            new Dictionary<string, Maybe<ResourceVariable, MySaveableObject>>();
+        protected IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> _self_saveable_object_factories =
+            new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>();
         private bool _manual_tracking = true;
 
-        private static Trackable _none = new Function();
+        private static Trackable _none = new AutoTrackable();
         /// <summary>
         /// This is a trick for that CSharp does not allow the key of `Dictionary` to be null.
         /// The `None` can be any object that inherits `Trackable`.
@@ -225,7 +225,7 @@ namespace Tensorflow.Train
             return self_tensor_map.Keys.ToList();
         }
 
-        public virtual IDictionary<string, Maybe<ResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
+        public virtual IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
         {
             if (saveable_object_util.trackable_has_serialize_to_tensor(this))
             {
@@ -248,6 +248,11 @@ namespace Tensorflow.Train
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public virtual IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors)
         {
             throw new NotImplementedException();
         }

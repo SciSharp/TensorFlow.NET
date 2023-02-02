@@ -28,6 +28,11 @@ public static partial class SavedModelUtils
         return Path.Combine(tf.compat.as_text(export_dir), tf.compat.as_text(Constants.VARIABLES_DIRECTORY));
     }
 
+    public static string get_variables_path(string export_dir)
+    {
+        return Path.Combine(tf.compat.as_text(get_variables_dir(export_dir)), tf.compat.as_text(Constants.VARIABLES_FILENAME));
+    }
+
     /// <summary>
     /// Return assets sub-directory, or create one if it doesn't exist.
     /// </summary>

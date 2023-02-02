@@ -24,26 +24,26 @@ public partial class KerasSavedModelUtils
         // TODO: deal with losses and metrics. Currently, `Layer` lacks these two APIs.
 
         // TODO: change the inherits of `Variable` and revise the implmentation.
-        var variables = layer.Variables.Select(x =>
+        var variables = TrackableDataStructure.wrap_or_unwrap(layer.Variables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        });
-        var trainable_variables = layer.TrainableVariables.Select(x =>
+        }));
+        var trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.TrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        });
-        var non_trainable_variables = layer.non_trainable_variables.Select(x =>
-        {
-            if (x is ResourceVariable or RefVariable) return (Trackable)x;
-            else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        });
+        }));
+        var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.non_trainable_variables.Select(x => 
+        { 
+            if (x is ResourceVariable or RefVariable) return (Trackable)x; 
+            else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer."); 
+        }));
 
         Dictionary<string, Trackable> res = new();
-        res["variables"] = TrackableDataStructure.wrap_or_unwrap(variables);
-        res["trainable_variables"] = TrackableDataStructure.wrap_or_unwrap(trainable_variables);
-        res["non_trainable_variables"] = TrackableDataStructure.wrap_or_unwrap(non_trainable_variables);
+        res["variables"] = variables;
+        res["trainable_variables"] = trainable_variables;
+        res["non_trainable_variables"] = non_trainable_variables;
         res["layers"] = TrackableDataStructure.wrap_or_unwrap(KerasSavedModelUtils.list_all_layers(layer).Select(x => x.GetTrackable()));
 
         return res;

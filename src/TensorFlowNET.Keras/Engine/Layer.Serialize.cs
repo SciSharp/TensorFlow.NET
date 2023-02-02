@@ -8,7 +8,7 @@ namespace Tensorflow.Keras.Engine;
 
 public abstract partial class Layer
 {
-    public LayerSavedModelSaver TrackableSavedModelSaver => new LayerSavedModelSaver(this);
+    public virtual SavedModelSaver TrackableSavedModelSaver => new LayerSavedModelSaver(this);
 
     public override string ObjectIdentifier => TrackableSavedModelSaver.ObjectIdentifier;
 

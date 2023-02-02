@@ -55,6 +55,7 @@ public partial class KerasSavedModelUtils
 
         var metadata = generate_keras_metadata(saved_nodes, node_paths);
         File.WriteAllBytes(Path.Combine(filepath, Constants.SAVED_METADATA_PATH), metadata.ToByteArray());
+        //File.WriteAllText(Path.Combine(filepath, Constants.SAVED_METADATA_PATH), metadata.ToString());
 
         if (!include_optimizer)
         {
@@ -100,7 +101,8 @@ public partial class KerasSavedModelUtils
                 Identifier = layer.ObjectIdentifier,
                 Metadata = layer.TrackingMetadata
             };
-            
+
+            metadata.Nodes.Add(saved_object);
         }
 
         return metadata;

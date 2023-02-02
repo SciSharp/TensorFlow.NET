@@ -12,6 +12,8 @@ using System.Linq;
 using Tensorflow.Operations;
 using Tensorflow.Training;
 using Tensorflow.Graphs;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace Tensorflow.Checkpoint
 {
@@ -30,6 +32,10 @@ namespace Tensorflow.Checkpoint
         public object DynamicInvoke(params object[] args)
         {
             return Func.DynamicInvoke(args);
+        }
+        public TR Invoke()
+        {
+            return Func.Invoke();
         }
     }
     internal record class FunctionHolder<TA1, TR>(Func<TA1, TR> Func) : IFunctionHolder
@@ -164,7 +170,6 @@ namespace Tensorflow.Checkpoint
                 {
                     var slice_spec = slice.Key;
                     var maybe_tensor = slice.Value;
-                    // TODO: deal with other types. Currently only `SaveSpec` is allowed.
                     if(maybe_tensor.DataType == typeof(SaveSpec))
                     {
                         var spec = maybe_tensor.GetValueB();
@@ -284,14 +289,16 @@ namespace Tensorflow.Checkpoint
                 var obj = pair.Key;
                 var tensor_dict = pair.Value;
                 IFunctionHolder restore_fn;
-                if(obj is null)
+                if(obj == Trackable.None)
                 {
                     restore_fn = new FunctionHolder<object?>(() => null);
                 }
                 else
                 {
-                    restore_fn = null;
-                    // TODO: implement obj._restore_from_tensors
+                    restore_fn = new FunctionHolder<IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>, IDictionary<string, Operation>>(x =>
+                    {
+                        return obj._restore_from_tensors(x);
+                    });
                 }
 
                 foreach(var item in tensor_dict)
@@ -343,7 +350,7 @@ namespace Tensorflow.Checkpoint
             }
         }
 
-        public Operation save(string file_prefix, CheckpointOptions? options= null)
+        public Operation save(Tensor file_prefix, CheckpointOptions? options= null)
         {
             if(options is null)
             {
@@ -351,9 +358,9 @@ namespace Tensorflow.Checkpoint
             }
 
             tf.device("CPU"); // may be risky.
-            // TODO: optimize the implementation with new APIs adding to `string_ops`.
-            string sharded_suffix = Regex.Match(file_prefix, "^s3://.*").Success ? ".part" : "_temp/part";
-            var tmp_checkpoint_prefix = tf.constant(file_prefix + sharded_suffix);
+            var sharded_suffix = array_ops.where(gen_ops.regex_full_match(file_prefix, tf.constant(@"^s3://.*")),
+                constant_op.constant(".part"), constant_op.constant("_temp/part"));
+            var tmp_checkpoint_prefix = gen_ops.string_join(new Tensor[] { file_prefix, sharded_suffix });
             IDictionary<string, Tensor> registered_paths = _registered_savers.Keys.ToDictionary(x => x, x => registered_saver_filename(file_prefix, x));
 
             Operation save_fn()
@@ -385,7 +392,7 @@ namespace Tensorflow.Checkpoint
                 {
                     string merge_device = string.IsNullOrEmpty(options.experimental_io_device) ? last_device : options.experimental_io_device;
                     tf.device(merge_device);
-                    return gen_ops.merge_v2checkpoints(tf.concat(saved_prefixes, 0), tf.constant(file_prefix), delete_old_dirs: true);
+                    return gen_ops.merge_v2_checkpoints(saved_prefixes.ToArray(), tf.constant(file_prefix), delete_old_dirs: true);
                 }
             }
 
@@ -400,9 +407,9 @@ namespace Tensorflow.Checkpoint
             }
         }
 
-        public Operation save(Tensor file_prefix, CheckpointOptions? options = null) => save(file_prefix.numpy().StringData()[0], options);
+        public Operation save(string file_prefix, CheckpointOptions? options = null) => save(tf.constant(file_prefix), options);
 
-        public IDictionary<string, Operation> restore(string file_prefix, CheckpointOptions? options = null)
+        public IDictionary<string, Operation> restore(Tensor file_prefix, CheckpointOptions? options = null)
         {
             if(options is null)
             {
@@ -496,8 +503,10 @@ namespace Tensorflow.Checkpoint
         public SaverDef to_proto()
         {
             var filename_tensor = array_ops.placeholder(TF_DataType.TF_STRING, new int[] { }, "saver_filename");
-            var save_tensor = _traced_save(filename_tensor);
-            var restore_op = _traced_restore(filename_tensor).op;
+            var traced_save_func = tf.autograph.to_graph(_traced_save, TF_DataType.TF_STRING);
+            var traced_restore_func = tf.autograph.to_graph(_traced_restore, TF_DataType.TF_STRING);
+            var save_tensor = traced_save_func(filename_tensor);
+            var restore_op = traced_restore_func(filename_tensor).op;
             return new SaverDef()
             {
                 FilenameTensorName = filename_tensor.name,
@@ -507,10 +516,9 @@ namespace Tensorflow.Checkpoint
             };
         }
 
-        [AutoGraph]
         private Tensor _traced_save(Tensor file_prefix)
         {
-            var save_op = save(file_prefix.StringData()[0]);
+            var save_op = save(file_prefix);
             tf.device("cpu:0");
             using (ops.control_dependencies(new object[]{ save_op }))
             {
@@ -518,24 +526,34 @@ namespace Tensorflow.Checkpoint
             }
         }
 
-        [AutoGraph]
         private Tensor _traced_restore(Tensor file_prefix)
         {
-            var restore_op = restore(file_prefix.StringData()[0]);
+            var restore_op = restore(file_prefix);
             tf.device("cpu:0");
-            using (ops.control_dependencies(new object[] { restore_op }))
+            using (ops.control_dependencies(restore_op.Values.ToArray()))
             {
                 return array_ops.identity(file_prefix);
             }
         }
 
-        private static Tensor registered_saver_filename(string filename, string saver_name)
+        public static MultiDeviceSaver from_saveables(IEnumerable<MySaveableObject> saveables, IDictionary<string, IDictionary<string, Trackable>>? registered_savers = null, bool call_with_mapped_captures = false)
         {
-            return tf.constant($"{filename}-{saver_name}");
+            Dictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>> serialized_tensors = new();
+            foreach (var saveable in saveables)
+            {
+                var trackable = new SaveableCompatibilityConverter(saveable, new List<MySaveableObject>() { saveable });
+                serialized_tensors[trackable] = trackable.serialize_to_tensors();
+            }
+            return new MultiDeviceSaver(serialized_tensors, registered_savers, call_with_mapped_captures);
+        }
+
+        private static Tensor registered_saver_filename(Tensor filename_tensor, string saver_name)
+        {
+            return gen_ops.string_join(new Tensor[] { filename_tensor, constant_op.constant($"-{saver_name}") });
         }
         private static Tensor sharded_filename(Tensor filename_tensor, int shard, Tensor num_shards)
         {
-            return filename_tensor;
+            return gen_ops.sharded_filename(filename_tensor, tf.constant(shard), num_shards);
         }
     }
 }

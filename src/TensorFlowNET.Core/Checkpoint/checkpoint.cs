@@ -33,7 +33,7 @@ public class TrackableSaver
         
     }
 
-    private (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, string>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
+    private (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, object>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
         gather_serialized_tensors(Tensor? object_graph_tensor = null)
     {
         var (serialized_tensors, feed_additions, registered_savers, graph_proto) = SaveUtil.serialize_graph_view(_graph_view, _object_map, cache:_cache);
@@ -42,26 +42,27 @@ public class TrackableSaver
 
         if(object_graph_tensor is null)
         {
-            // tensorflow python: `with ops.device("/cpu:0"):`
-            object_graph_tensor = constant_op.constant(graph_proto.ToString(), TF_DataType.TF_STRING);
+            tf.device("/cpu:0");
+            object_graph_tensor = constant_op.constant(graph_proto.ToByteArray());
         }
         else
         {
-            feed_additions[object_graph_tensor] = graph_proto.ToString();
+            feed_additions[object_graph_tensor] = graph_proto.ToByteArray();
         }
         Debug.Assert(!serialized_tensors.ContainsKey(Trackable.None) || !serialized_tensors[Trackable.None].ContainsKey(Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
-        if (serialized_tensors.ContainsKey(Trackable.None))
+        if (!serialized_tensors.ContainsKey(Trackable.None))
         {
-            serialized_tensors[Trackable.None][Trackable.Constants.OBJECT_GRAPH_PROTO_KEY] = object_graph_tensor;
+            serialized_tensors[Trackable.None] = new Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>();
         }
+        serialized_tensors[Trackable.None][Trackable.Constants.OBJECT_GRAPH_PROTO_KEY] = object_graph_tensor;
         return (serialized_tensors, feed_additions, registered_savers, graph_proto);
     }
 
-    private (Tensor, IDictionary<Tensor, string>) save_cached_when_graph_building(Tensor file_prefix, Tensor object_graph_tensor, CheckpointOptions options)
+    private (Tensor, IDictionary<Tensor, object>) save_cached_when_graph_building(Tensor file_prefix, Tensor object_graph_tensor, CheckpointOptions options)
     {
         var (serialized_tensors, feed_additions, registered_savers, graph_proto) = gather_serialized_tensors(object_graph_tensor);
 
-        Func<(Tensor, IDictionary<Tensor, string>)> run_save = () =>
+        Func<(Tensor, IDictionary<Tensor, object>)> run_save = () =>
         {
             if (_last_save_object_graph != graph_proto || tf.Context.executing_eagerly() || ops.inside_function())
             {
@@ -86,11 +87,11 @@ public class TrackableSaver
         return run_save();
     }
 
-    private (Tensor, IDictionary<Tensor, string>) save_cached_when_graph_building(string file_prefix, Tensor object_graph_tensor, CheckpointOptions options)
+    private (Tensor, IDictionary<Tensor, object>) save_cached_when_graph_building(string file_prefix, Tensor object_graph_tensor, CheckpointOptions options)
     {
         var (serialized_tensors, feed_additions, registered_savers, graph_proto) = gather_serialized_tensors(object_graph_tensor);
 
-        Func<(Tensor, IDictionary<Tensor, string>)> run_save = () =>
+        Func<(Tensor, IDictionary<Tensor, object>)> run_save = () =>
         {
             if (_last_save_object_graph != graph_proto || tf.Context.executing_eagerly() || ops.inside_function())
             {
@@ -124,7 +125,7 @@ public class TrackableSaver
             options = new CheckpointOptions();
         }
 
-        Dictionary<Tensor, string> feed_dict = new();
+        Dictionary<Tensor, object> feed_dict = new();
         bool use_session = (!tf.Context.executing_eagerly() && !ops.inside_function());
         if (checkpoint_number is not null)
         {

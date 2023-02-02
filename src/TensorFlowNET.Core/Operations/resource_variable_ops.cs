@@ -17,7 +17,9 @@
 using System;
 using System.Linq;
 using Tensorflow.Framework;
+using Tensorflow.ModelSaving;
 using Tensorflow.Train;
+using Tensorflow.Variables;
 using static Tensorflow.CppShapeInferenceResult.Types;
 
 namespace Tensorflow
@@ -175,6 +177,58 @@ namespace Tensorflow
             else
             {
                 return HandleData.Parser.ParseFrom(handle.BufferToArray());
+            }
+        }
+
+        /// <summary>
+        /// Copies an existing variable to a new graph, with no initializer.
+        /// </summary>
+        /// <param name="variable"></param>
+        public static UninitializedVariable copy_to_graph_uninitialized(ResourceVariable variable)
+        {
+            var new_variable = new UninitializedVariable(
+                trainable: variable.Trainable,
+                shape: variable.shape,
+                dtype: variable.dtype,
+                name: variable.SharedName,
+                aggregation: variable.Aggregation,
+                extra_handle_data: null);
+            new_variable._maybe_initialize_trackable();
+            return new_variable;
+        }
+
+        /// <summary>
+        /// Writes additional information of the variable into the SavedObject proto.
+        /// </summary>
+        /// <param name="resource_variable"></param>
+        /// <param name="proto"></param>
+        /// <param name="options"></param>
+        /// <param name="enforcing_naming"></param>
+        public static void write_object_proto_for_resource_variable(BaseResourceVariable resource_variable, SavedObject proto, SaveOptions options, bool enforcing_naming = true)
+        {
+            // lack of API: `proto.Variable.SetInParent()`.
+            if(enforcing_naming && !resource_variable.Name.EndsWith(":0"))
+            {
+                throw new ValueError($"Cowardly refusing to save variable {resource_variable.Name} because of " +
+                    $"unexpected suffix in the name (expected ':0') which won't be restored.");
+            }
+            if(proto.Variable is null)
+            {
+                proto.Variable = new SavedVariable();
+            }
+            proto.Variable.Name = meta_graph.op_name(resource_variable.Name);
+            proto.Variable.Trainable = resource_variable.Trainable;
+            proto.Variable.Dtype = resource_variable.dtype.as_datatype_enum();
+            // TODO: lack of API `proto.Variable.Synchronization = resource_variable.synchronization.value`.
+            proto.Variable.Aggregation = resource_variable.Aggregation;
+            proto.Variable.Shape = resource_variable.shape.as_proto();
+
+            if (options.experimental_variable_policy.save_variable_devices())
+            {
+                if (!string.IsNullOrEmpty(resource_variable.Device))
+                {
+                    proto.Variable.Device = resource_variable.Device;
+                }
             }
         }
     }

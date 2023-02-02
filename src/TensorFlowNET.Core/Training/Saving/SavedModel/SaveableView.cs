@@ -10,6 +10,7 @@ using Tensorflow.Train;
 using Tensorflow.Training;
 using pbc = global::Google.Protobuf.Collections;
 using static Tensorflow.Binding;
+using Tensorflow.Training.Saving.SavedModel;
 
 namespace Tensorflow;
 
@@ -75,7 +76,7 @@ public class SaveableView
     private void initialize_save_and_restore_functions()
     {
         // TODO: deal with the return value of `get_checkpoint_factories_and_keys`.
-        SaveUtilV1.get_checkpoint_factories_and_keys(_object_names);
+        var (checkpoint_factory_map, registered_savers) = SaveUtilV1.get_checkpoint_factories_and_keys(_object_names);
         // skip the process of registered savers and the generation of saveable_objects_map and _obj_to_registered_saver.
         _obj_to_registered_saver = new();
         _saveable_objects_map = new();
@@ -191,7 +192,7 @@ public class SaveableView
     /// </summary>
     /// <param name="asset_index"></param>
     /// <returns></returns>
-    public SavedObjectGraph serialize_object_graph(IDictionary<object, object> asset_file_def_index, SaveOptions options)
+    public SavedObjectGraph serialize_object_graph(IDictionary<object, object> asset_file_def_index)
     {
         SavedObjectGraph proto = new();
         fill_object_graph_proto(proto);
@@ -203,21 +204,20 @@ public class SaveableView
         {
             var obj = _nodes[i];
             var obj_proto = proto.Nodes[i];
-            write_object_proto(obj, obj_proto, asset_file_def_index, x => _augmented_graph_view.list_children(x),
-                options);
+            write_object_proto(obj, obj_proto, asset_file_def_index, x => _augmented_graph_view.list_children(x));
         }
 
         return proto;
     }
 
     private static void write_object_proto(Trackable obj, SavedObject proto,
-        IDictionary<object, object> asset_file_def_index, Func<Trackable, List<TrackableReference>> list_children_fn, SaveOptions options)
+        IDictionary<object, object> asset_file_def_index, Func<Trackable, List<TrackableReference>> list_children_fn)
     {
         // skip the process of type Asset
         if (resource_variable_ops.is_resource_variable(obj))
         {
-            // TODO: complete it.
-            throw new NotImplementedException();
+            var options = SaveContext.get_save_options();
+            (obj as BaseResourceVariable).write_object_proto(proto, options);
         }
         else if (obj is Function)
         {

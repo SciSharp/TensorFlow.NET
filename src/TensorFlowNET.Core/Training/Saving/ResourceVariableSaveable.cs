@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using static Tensorflow.Binding;
+
 namespace Tensorflow
 {
     public class ResourceVariableSaveable : MySaveableObject
@@ -31,6 +33,32 @@ namespace Tensorflow
             var spec = new SaveSpec(tensor, slice_spec, name, dtype: var.dtype);
 
             op = var;
+            specs = new SaveSpec[] { spec };
+            this.name = name;
+        }
+
+        public ResourceVariableSaveable(BaseResourceVariable var, string slice_spec, string name)
+        {
+            _var_device = var.Device;
+            _var_shape = var.shape;
+
+            Tensor _read_variable_closure(BaseResourceVariable v)
+            {
+                tf.device(v.Device);
+                if(tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                {
+                    return null;
+                }
+                var x = v.read_value_no_copy();
+                tf.device("/device:CPU:0");
+                return array_ops.identity(x);
+            }
+
+            this.handle_op = var.Handle;
+            var tensor = _read_variable_closure(var);
+
+            var spec = new SaveSpec(tensor, slice_spec, name, dtype: var.dtype);
+            _op = var;
             specs = new SaveSpec[] { spec };
             this.name = name;
         }

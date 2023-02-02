@@ -44,19 +44,19 @@ public static class SaveUtilV1
         return (checkpoint_factory_map, null);
     }
 
-    public static (List<MySaveableObject>, object?) frozen_saveables_and_savers(ObjectGraphView graph_view,
+    public static (List<MySaveableObject>, IDictionary<string, IDictionary<string, Trackable>>?) frozen_saveables_and_savers(ObjectGraphView graph_view,
         IDictionary<Trackable, Trackable> object_map, Graph? to_graph, bool call_with_mapped_captures,
         object? saveables_cache = null)
     {
         if (to_graph is not null)
         {
-            to_graph.as_default();
+            var g = to_graph.as_default();
             var (named_saveable_objects, graph_proto, _, registered_savers) = serialize_gathered_objects(graph_view,
                     object_map, call_with_mapped_captures, saveables_cache);
-            // tensorflow python: `with ops.device("/cpu:0")`
-            var serialized = graph_proto.ToByteString().ToString();
-            var object_graph_tensor = constant_op.constant("aaaa", TF_DataType.TF_STRING);
+            tf.device("/cpu:0");
+            var object_graph_tensor = constant_op.constant(graph_proto.ToByteArray());
             named_saveable_objects.Add(new NoRestoreSaveable(object_graph_tensor, Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
+            g.Exit();
             return (named_saveable_objects, registered_savers);
         }
         else
@@ -65,7 +65,7 @@ public static class SaveUtilV1
             {
                 var (named_saveable_objects, graph_proto, _, registered_savers) = serialize_gathered_objects(graph_view,
                     object_map, call_with_mapped_captures, saveables_cache);
-                // tensorflow python: `with ops.device("/cpu:0")`
+                tf.device("/cpu:0");
                 var object_graph_tensor = constant_op.constant(graph_proto.ToString(), TF_DataType.TF_STRING);
                 named_saveable_objects.Add(new NoRestoreSaveable(object_graph_tensor, Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
                 return (named_saveable_objects, registered_savers);
@@ -73,7 +73,7 @@ public static class SaveUtilV1
         }
     }
 
-    public static (List<MySaveableObject>, TrackableObjectGraph, object?, object?) serialize_gathered_objects(ObjectGraphView graph_view,
+    public static (List<MySaveableObject>, TrackableObjectGraph, object?, IDictionary<string, IDictionary<string, Trackable>>?) serialize_gathered_objects(ObjectGraphView graph_view,
         IDictionary<Trackable, Trackable> object_map, bool call_with_mapped_captures, object? saveables_cache = null)
     {
         var (trackable_objects, node_paths) = graph_view.breadth_first_traversal();
@@ -129,7 +129,7 @@ public static class SaveUtilV1
         return object_graph_proto;
     }
 
-    private static (List<MySaveableObject>, object?, object?) add_attributes_to_object_graph(IList<Trackable> trackable_objects,
+    private static (List<MySaveableObject>, object?, IDictionary<string, IDictionary<string, Trackable>>?) add_attributes_to_object_graph(IList<Trackable> trackable_objects,
         TrackableObjectGraph object_graph_proto, IDictionary<Trackable, int> node_ids,
         IDictionary<Trackable, string> object_names, IDictionary<Trackable, Trackable> object_map,
         bool call_with_mapped_captures, object? saveables_cache = null)
@@ -216,7 +216,7 @@ public static class SaveUtilV1
 
 public record class CheckpointFactoryData
 (
-    Maybe<ResourceVariable, MySaveableObject> factory,
+    Maybe<BaseResourceVariable, MySaveableObject> factory,
     string name,
     string checkpoint_key
 );

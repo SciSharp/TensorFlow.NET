@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 
@@ -9,10 +10,11 @@ namespace Tensorflow.Keras.Saving.SavedModel;
 
 public class LayerSavedModelSaver: SavedModelSaver
 {
-    private Layer _obj;
+    private Layer _layer;
     public LayerSavedModelSaver(Layer obj): base(obj)
     {
         _obj = obj;
+        _layer = obj;
     }
     public override string ObjectIdentifier
     {
@@ -68,8 +70,8 @@ public class LayerSavedModelSaver: SavedModelSaver
     /// <param name="serialization_cache"></param>
     private (IDictionary<string, Trackable>, IDictionary<string, Trackable>) get_serialized_attributes_internal(IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
     {
-        var objects = KerasSavedModelUtils.wrap_layer_objects(_obj, serialization_cache);
-        var functions = KerasSavedModelUtils.wrap_layer_functions(_obj, serialization_cache);
+        var objects = KerasSavedModelUtils.wrap_layer_objects(_layer, serialization_cache);
+        var functions = KerasSavedModelUtils.wrap_layer_functions(_layer, serialization_cache);
 
         functions["_default_save_signature"] = null;
 
@@ -81,17 +83,18 @@ public class LayerSavedModelSaver: SavedModelSaver
         get
         {
             JObject metadata = new JObject();
-            metadata["name"] = _obj.Name;
-            metadata["trainable"] = _obj.Trainable;
+            metadata["name"] = _layer.Name;
+            metadata["trainable"] = _layer.Trainable;
             // metadata["expects_training_arg"] = _obj._expects_training_arg;
             // metadata["dtype"] = policy.serialize(_obj._dtype_policy)
-            metadata["batch_input_shape"] = _obj.BatchInputShape is null ? null : JToken.FromObject(_obj.BatchInputShape);
+            metadata["batch_input_shape"] = _layer.BatchInputShape is null ? null : JToken.FromObject(_layer.BatchInputShape);
             // metadata["stateful"] = _obj.stateful;
             // metadata["must_restore_from_config"] = _obj.must_restore_from_config;
             // metadata["preserve_input_structure_in_config"] = _obj.preserve_input_structure_in_config;
-            metadata["autocast"] = _obj.AutoCast;
-            
-            metadata.Merge(JObject.FromObject(get_serialized(_obj)), new JsonMergeSettings
+            metadata["autocast"] = _layer.AutoCast;
+
+            var temp = JObject.FromObject(get_serialized(_layer));
+            metadata.Merge(temp, new JsonMergeSettings
             {
                 // Handle conflicts by using values from obj2
                 MergeArrayHandling = MergeArrayHandling.Merge
@@ -107,5 +110,47 @@ public class LayerSavedModelSaver: SavedModelSaver
         // TODO: complete the implmentation (need to revise `get_config`).
         return new Dictionary<string, object>();
         //return generic_utils.serialize_keras_object(obj);
+    }
+}
+
+public class InputLayerSavedModelSaver: SavedModelSaver
+{
+    public InputLayerSavedModelSaver(Layer obj) : base(obj)
+    {
+        
+    }
+    public override string ObjectIdentifier => Constants.INPUT_LAYER_IDENTIFIER;
+
+    public override IDictionary<string, Trackable> functions_to_serialize(IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
+    {
+        return new Dictionary<string, Trackable>();
+    }
+
+    public override IDictionary<string, Trackable> objects_to_serialize(IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
+    {
+        return new Dictionary<string, Trackable>();
+    }
+
+    public override string TrackingMetadata
+    {
+        get
+        {
+            if(_obj is not Layer)
+            {
+                throw new TypeError($"The type {_obj.GetType()} cannot be recognized as an input layer.");
+            }
+            var layer = (Layer)_obj;
+            var info = new
+            {
+                class_name = layer.GetType().Name,
+                name = layer.Name,
+                dtype = layer.DType,
+                //sparse = layer.sparse,
+                //ragged = layer.ragged,
+                batch_input_shape = layer.BatchInputShape,
+                config = layer.get_config()
+            };
+            return JsonConvert.SerializeObject(info);
+        }
     }
 }

@@ -10,6 +10,7 @@ using Tensorflow.ModelSaving;
 using Tensorflow.Train;
 using Tensorflow.Exceptions;
 using static Tensorflow.Binding;
+using Tensorflow.Training.Saving.SavedModel;
 
 namespace Tensorflow;
 
@@ -43,7 +44,7 @@ public static partial class SavedModelUtils
         {
             SavedModelUtils.get_or_create_variables_dir(export_dir);
             CheckpointOptions ckpt_options = new(options.experimental_io_device);
-            object_saver.save(SavedModelUtils.get_variables_dir(export_dir), options:ckpt_options);
+            object_saver.save(SavedModelUtils.get_variables_path(export_dir), options:ckpt_options);
         }
         BuilderUtils.copy_assets_to_destination_dir(asset_info.asset_filename_map, export_dir);
 
@@ -68,6 +69,7 @@ public static partial class SavedModelUtils
 
         var path = Path.Combine(tf.compat.as_str(export_dir), tf.compat.as_str(Constants.SAVED_MODEL_FILENAME_PB));
         File.WriteAllBytes(path, saved_model.ToByteArray());
+        //File.WriteAllText(path, saved_model.ToString());
 
         if (options.save_debug_info)
         {
@@ -83,45 +85,48 @@ public static partial class SavedModelUtils
         Dictionary<Trackable, IEnumerable<TrackableReference>>) _build_meta_graph(Trackable obj,
             ConcreteFunction? signatures, SaveOptions options, MetaGraphDef? meta_graph_def = null)
     {
-        if (ops.inside_function())
+        using (SaveContext.save_context(options))
         {
-            throw new AssertionError("`tf.saved_model.save` is not supported inside a traced @tf.function. " +
-                                     "Move the call to the outer eagerly-executed context.");
-        }
-
-        if (meta_graph_def is null)
-        {
-            meta_graph_def = new MetaGraphDef();
-        }
-
-        AugmentedGraphView augmented_graph_view = new AugmentedGraphView(obj);
-        if (signatures is null)
-        {
-            signatures = SignatureSerializationUtils.find_function_to_export(augmented_graph_view);
-        }
-        
-        // TODO: process of aignatures and wrapped_functions
-
-        SaveableView saveable_view = new SaveableView(augmented_graph_view, options);
-        TrackableSaver object_saver = new TrackableSaver(augmented_graph_view);
-        var (asset_info, exported_graph) = _fill_meta_graph_def(meta_graph_def, saveable_view, signatures,
-            options.namespace_white_list, options.experimental_custom_gradients);
-        if (options.function_aliases is not null)
-        {
-            var function_aliases = meta_graph_def.MetaInfoDef.FunctionAliases;
-            foreach (var pair in options.function_aliases)
+            if (ops.inside_function())
             {
-                var alias = pair.Key;
-                var func = pair.Value;
-                // TODO: complete it.
-                throw new NotImplementedException();
+                throw new AssertionError("`tf.saved_model.save` is not supported inside a traced @tf.function. " +
+                                         "Move the call to the outer eagerly-executed context.");
             }
+
+            if (meta_graph_def is null)
+            {
+                meta_graph_def = new MetaGraphDef();
+            }
+
+            AugmentedGraphView augmented_graph_view = new AugmentedGraphView(obj);
+            if (signatures is null)
+            {
+                signatures = SignatureSerializationUtils.find_function_to_export(augmented_graph_view);
+            }
+
+            // TODO: process of aignatures and wrapped_functions
+
+            SaveableView saveable_view = new SaveableView(augmented_graph_view, options);
+            TrackableSaver object_saver = new TrackableSaver(augmented_graph_view);
+            var (asset_info, exported_graph) = _fill_meta_graph_def(meta_graph_def, saveable_view, signatures,
+                options.namespace_white_list, options.experimental_custom_gradients);
+            if (options.function_aliases is not null)
+            {
+                var function_aliases = meta_graph_def.MetaInfoDef.FunctionAliases;
+                foreach (var pair in options.function_aliases)
+                {
+                    var alias = pair.Key;
+                    var func = pair.Value;
+                    // TODO: complete it.
+                    throw new NotImplementedException();
+                }
+            }
+
+            var object_graph_proto = saveable_view.serialize_object_graph(asset_info.asset_index);
+            meta_graph_def.ObjectGraphDef = new SavedObjectGraph(object_graph_proto);
+
+            return (meta_graph_def, exported_graph, object_saver, asset_info, saveable_view.Nodes, saveable_view.NodePaths);
         }
-
-        var object_graph_proto = saveable_view.serialize_object_graph(asset_info.asset_index, options);
-        meta_graph_def.ObjectGraphDef = new SavedObjectGraph(object_graph_proto);
-
-        return (meta_graph_def, exported_graph, object_saver, asset_info, saveable_view.Nodes, saveable_view.NodePaths);
     }
 
     private static (AssetInfo, Graph) _fill_meta_graph_def(MetaGraphDef meta_graph_def, SaveableView saveable_view,
@@ -134,7 +139,7 @@ public static partial class SavedModelUtils
         Dictionary<Trackable, Trackable> object_map;
         Dictionary<Tensor, Tensor> tensor_map;
         AssetInfo asset_info;
-        exported_graph.as_default();
+        var g = exported_graph.as_default();
         (object_map, tensor_map, asset_info) = saveable_view.map_resources();
         // TODO: deal with signatures.
         if (save_custom_gradients)
@@ -161,15 +166,23 @@ public static partial class SavedModelUtils
         // Lack `CopyFrom` API
         // meta_graph_def.SignatureDef[Tensorflow.Constants.INIT_OP_SIGNATURE_KEY]
 
+        g.Exit();
+
         foreach (var obj in object_map.Values)
         {
             obj._maybe_initialize_trackable();
         }
 
+        // TODO: add the implementation of `call_with_mapped_functions`.
         var (named_saveable_objects, registered_savers) =
             SaveUtilV1.frozen_saveables_and_savers(saveable_view.AugmentedGraphView, object_map, exported_graph, false);
-        
-        // TODO: complete the save of checkpoints with `MultiDeviceSaver`.
+        var saver = MultiDeviceSaver.from_saveables(named_saveable_objects, registered_savers, false);
+
+        var eg = exported_graph.as_default();
+        var saver_def = saver.to_proto();
+        meta_graph_def.SaverDef = saver_def;
+        eg.Exit();
+
 
         saveable_view.dependency_sorted_node_ids();
 

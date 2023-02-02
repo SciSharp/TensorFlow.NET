@@ -41,6 +41,7 @@ namespace Tensorflow
             VariableAggregation aggregation = VariableAggregation.None,
             Shape shape = null)
         {
+            Aggregation = aggregation;
             if (variable_def != null)
             {
                 if (initial_value != null)
@@ -236,13 +237,6 @@ namespace Tensorflow
         public NDArray eval(Session session = null)
         {
             return _graph_element.eval(session);
-        }
-
-        public override IDictionary<string, Maybe<ResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
-        {
-            var res = new Dictionary<string, Maybe<ResourceVariable, MySaveableObject>>();
-            res[Trackable.Constants.VARIABLE_VALUE_KEY] = this;
-            return res;
         }
     }
 }

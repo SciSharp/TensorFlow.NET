@@ -55,7 +55,7 @@ namespace Tensorflow.Keras.Engine
                     }
                 }
 
-                var layer_config = generic_utils.serialize_keras_object(layer);
+                var layer_config = generic_utils.serialize_layer_to_config(layer);
                 layer_config.Name = layer.Name;
                 layer_config.InboundNodes = filtered_inbound_nodes;
                 layer_configs.Add(layer_config);

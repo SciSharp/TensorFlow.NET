@@ -14,7 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Linq;
 using Tensorflow.Contexts;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -23,9 +25,39 @@ namespace Tensorflow
     {
         public Operation save_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, Tensor[] tensors, string name = null)
         {
+            var ctx = tf.Context;
+            if (ctx.executing_eagerly())
+            {
+                try
+                {
+                    var result = tf.Runner.TFE_FastPathExecute(
+                        new FastPathOpExecInfo("SaveV2", name, new object[] { prefix, tensor_names, shape_and_slices, tensors }));
+                    result = null;
+                    return null;
+                }
+                catch (System.Exception)
+                {
+                    return save_v2_eager_fallback(prefix, tensor_names, shape_and_slices, tensors, name, ctx);
+                }
+            }
             var _op = tf.OpDefLib._apply_op_helper("SaveV2", name: name, args: new { prefix, tensor_names, shape_and_slices, tensors });
 
             return _op;
+        }
+
+        public Operation save_v2_eager_fallback(Tensor prefix, string[] tensor_names, string[] shape_and_slices, Tensor[] tensors, string name, Context ctx)
+        {
+            DataType[] attr_dtypes;
+            (attr_dtypes, tensors) = execute.onvert_to_mixed_eager_tensors(tensors, ctx);
+            prefix = ops.convert_to_tensor(prefix, TF_DataType.TF_STRING);
+            var tensor_names_tensor = ops.convert_to_tensor(tensor_names, TF_DataType.TF_STRING);
+            var shape_and_slices_tensor = ops.convert_to_tensor(shape_and_slices, TF_DataType.TF_STRING);
+            var inputs_flat = tensors.Concat(new Tensor[] { prefix, tensor_names_tensor, shape_and_slices_tensor }).ToArray();
+            var attrs = new object[] { "dtypes", attr_dtypes };
+
+            var result = execute.quick_execute("SaveV2", 0, inputs_flat, attrs, ctx, name);
+            result = null;
+            return null;
         }
 
         public Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
