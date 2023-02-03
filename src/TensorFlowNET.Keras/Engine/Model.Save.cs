@@ -25,7 +25,7 @@ namespace Tensorflow.Keras.Engine
             ConcreteFunction? signatures = null,
             bool save_traces = true)
         {
-            if (save_format != "pb")
+            if (save_format != "tf")
             {
                 saver.save(this, filepath);
             }
