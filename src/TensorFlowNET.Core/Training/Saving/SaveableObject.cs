@@ -14,11 +14,31 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Checkpoint;
+
 namespace Tensorflow
 {
     public class MySaveableObject
     {
-        public Tensor op;
+        protected Maybe<Tensor, BaseResourceVariable> _op;
+        public Tensor op
+        {
+            get
+            {
+                if(_op.DataType == typeof(Tensor))
+                {
+                    return _op.GetValueA();
+                }
+                else
+                {
+                    throw new TypeError("The _op is not a tensor.");
+                }
+            }
+            set
+            {
+                _op = value;
+            }
+        }
         public SaveSpec[] specs;
         public string name;
         public string device;
@@ -35,7 +55,7 @@ namespace Tensorflow
 
         public MySaveableObject(Tensor op, SaveSpec[] specs, string name)
         {
-            this.op = op;
+            this._op = op;
             this.specs = specs;
             this.name = name;
         }
@@ -46,6 +66,20 @@ namespace Tensorflow
             return gen_state_ops.assign(op,
                 restored_tensor,
                 validate_shape: restored_shapes == null && op.shape.IsFullyDefined);
+        }
+    }
+
+    public class NoRestoreSaveable: MySaveableObject
+    {
+        public NoRestoreSaveable(Tensor tensor, string name, TF_DataType dtype = TF_DataType.DtInvalid, string? device = null) : base(tensor,
+            new SaveSpec[] { new SaveSpec(tensor, "", name, dtype) }, name)
+        {
+            
+        }
+
+        public override Operation restore(Tensor[] restored_tensors, Shape[] restored_shapes = null)
+        {
+            return control_flow_ops.no_op();
         }
     }
 }

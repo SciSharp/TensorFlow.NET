@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow.Operations.Initializers
 {
     public class TruncatedNormal : IInitializer
@@ -22,6 +24,11 @@ namespace Tensorflow.Operations.Initializers
         private float stddev;
         private int? seed;
         private TF_DataType dtype;
+
+        private readonly Dictionary<string, object> _config;
+
+        public string ClassName => "TruncatedNormal";
+        public IDictionary<string, object> Config => _config;
 
         public TruncatedNormal(float mean = 0.0f,
             float stddev = 1.0f,
@@ -32,6 +39,10 @@ namespace Tensorflow.Operations.Initializers
             this.stddev = stddev;
             this.seed = seed;
             this.dtype = dtype;
+            _config = new Dictionary<string, object>();
+            _config["mean"] = this.mean;
+            _config["stddev"] = this.stddev;
+            _config["seed"] = this.seed;
         }
 
         public Tensor Apply(InitializerArgs args)

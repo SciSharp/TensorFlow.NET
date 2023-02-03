@@ -24,6 +24,7 @@ namespace Tensorflow.Keras.Layers {
             permute = new int[input_shape.rank];
             dims.CopyTo(permute, 1);
             built = true;
+            _buildInputShape = input_shape;
         }
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {

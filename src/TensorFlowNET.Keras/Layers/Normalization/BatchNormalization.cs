@@ -118,6 +118,7 @@ namespace Tensorflow.Keras.Layers
                 throw new NotImplementedException("build when renorm is true");
 
             built = true;
+            _buildInputShape = input_shape;
         }
 
         public override Shape ComputeOutputShape(Shape input_shape)

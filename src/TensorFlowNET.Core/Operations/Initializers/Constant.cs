@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow.Operations.Initializers
 {
     public class Constant<T> : IInitializer
@@ -22,11 +24,19 @@ namespace Tensorflow.Operations.Initializers
         T value;
         bool _verify_shape;
 
+        private readonly Dictionary<string, object> _config;
+
+        public string ClassName => "Constant";
+        public IDictionary<string, object> Config => _config;
+
         public Constant(T value, TF_DataType dtype = TF_DataType.TF_FLOAT, bool verify_shape = false)
         {
             this.value = value;
             this.dtype = dtype;
             _verify_shape = verify_shape;
+
+            _config = new Dictionary<string, object>();
+            _config["value"] = this.value;
         }
 
         public Tensor Apply(InitializerArgs args)

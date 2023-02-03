@@ -14,19 +14,28 @@
    limitations under the License.
 ******************************************************************************/
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Keras.Common;
 
 namespace Tensorflow
 {
-    public record Axis(params int[] axis)
+    [JsonConverter(typeof(CustomizedAxisJsonConverter))]
+    public class Axis
     {
+        public int[] axis { get; set; }
         public int size => axis == null ? -1 : axis.Length;
         public bool IsScalar { get; init; }
 
         public int this[int index] => axis[index];
+
+        public Axis(params int[] axis)
+        {
+            this.axis = axis;
+        }
 
         public static implicit operator int[]?(Axis axis)
             => axis?.axis;

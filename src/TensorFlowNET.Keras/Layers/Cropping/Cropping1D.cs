@@ -22,6 +22,7 @@ namespace Tensorflow.Keras.Layers {
                 throw new ValueError("The `cropping` argument must be a tuple of 2 integers.");
             }
             built = true;
+            _buildInputShape = input_shape;
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)

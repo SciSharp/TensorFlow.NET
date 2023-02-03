@@ -28,7 +28,7 @@ namespace Tensorflow
         public string slice_spec => _slice_spec;
 
         private string _name;
-        public string name => _name;
+        public string name { get => _name; set => _name = value; }
 
         private TF_DataType _dtype;
         public TF_DataType dtype => _dtype;

@@ -20,7 +20,9 @@ using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Operations;
+using Tensorflow.Train;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -74,6 +76,8 @@ namespace Tensorflow
         public Shape OutputShape => throw new NotImplementedException();
 
         public Shape BatchInputShape => throw new NotImplementedException();
+
+        public TensorShapeConfig BuildInputShape => throw new NotImplementedException();
 
         public TF_DataType DType => throw new NotImplementedException();
         protected bool built = false;
@@ -143,7 +147,7 @@ namespace Tensorflow
             throw new NotImplementedException();
         }
 
-        public LayerArgs get_config()
+        public IKerasConfig get_config()
         {
             throw new NotImplementedException();
         }
@@ -152,5 +156,7 @@ namespace Tensorflow
         {
             throw new NotImplementedException();
         }
+
+        public Trackable GetTrackable() { throw new NotImplementedException(); }
     }
 }

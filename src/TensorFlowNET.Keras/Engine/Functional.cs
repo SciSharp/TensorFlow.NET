@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
@@ -19,6 +21,30 @@ namespace Tensorflow.Keras.Engine
         public string[] NetworkNodes { get; set; }
 
         Dictionary<long, int> tensor_usage_count;
+
+        /// <summary>
+        /// Dictionary of layer dependencies to be included in the checkpoint.
+        /// </summary>
+        public IDictionary<string, ILayer> LayerCheckpointDependencies
+        {
+            get
+            {
+                int weight_layer_index = 0;
+                Dictionary<string, ILayer> dependencies = new();
+                for(int i = 0; i < Layers.Count; i++)
+                {
+                    var layer = Layers[i];
+                    var weights = layer.TrainableWeights.concat(layer.NonTrainableWeights).ToList();
+                    if(weights.Count > 0)
+                    {
+                        dependencies[$"layer_with_weights-{weight_layer_index}"] = layer;
+                        weight_layer_index++;
+                    }
+                    dependencies[$"layer-{i}"] = layer;
+                }
+                return dependencies;
+            }
+        }
 
         public Functional(Tensors inputs, Tensors outputs, string name = null)
             : base(new ModelArgs
@@ -44,6 +70,7 @@ namespace Tensorflow.Keras.Engine
             this.inputs = inputs;
             this.outputs = outputs;
             built = true;
+            _buildInputShape = inputs.shape;
 
             if (outputs.Any(x => x.KerasHistory == null))
                 base_layer_utils.create_keras_history(outputs);
@@ -324,6 +351,29 @@ namespace Tensorflow.Keras.Engine
                 output_tensors.Add(tensor_dict[x.Id].Dequeue());
 
             return output_tensors;
+        }
+
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
+        {
+            return LayerCheckpointDependencies.ToDictionary(x => x.Key, x => x.Value.GetTrackable()).Concat(base._trackable_children(save_type, cache))
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        protected override void _init_set_name(string name, bool zero_based = true)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                string class_name = GetType().Name;
+                if (this.GetType() == typeof(Functional))
+                {
+                    class_name = "Model";
+                }
+                this.name = base_layer_utils.unique_layer_name(generic_utils.to_snake_case(class_name), zero_based: zero_based);
+            }
+            else
+            {
+                this.name = name;
+            }
         }
     }
 }

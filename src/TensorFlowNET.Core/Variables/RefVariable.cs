@@ -20,11 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Tensorflow.Binding;
+using Tensorflow.Train;
 
 namespace Tensorflow
 {
     [Obsolete]
-    public partial class RefVariable : IVariableV1, IProtoBuf<VariableDef, RefVariable>
+    public partial class RefVariable: Trackable, IVariableV1, IProtoBuf<VariableDef, RefVariable>
     {
         protected string _name;
         public string UniqueId => _name;
@@ -56,6 +57,7 @@ namespace Tensorflow
         public string Name => _variable.name;
 
         public Tensor eval() => _variable;
+        public bool Trainable => _trainable;
 
         public RefVariable(object initial_value = null,
             bool trainable = true,

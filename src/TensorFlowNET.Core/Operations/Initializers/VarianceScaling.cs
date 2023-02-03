@@ -15,7 +15,9 @@
 ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Tensorflow.Operations.Initializers
 {
@@ -30,6 +32,11 @@ namespace Tensorflow.Operations.Initializers
         protected int? _seed;
         protected TF_DataType _dtype;
         protected bool _uniform;
+        private readonly Dictionary<string, object> _config;
+
+        public virtual string ClassName => "VarianceScaling";
+
+        public virtual IDictionary<string, object> Config => _config;
 
         public VarianceScaling(float factor = 2.0f,
             string mode = "FAN_IN",
@@ -50,6 +57,12 @@ namespace Tensorflow.Operations.Initializers
             _seed = seed;
             _dtype = dtype;
             _uniform = uniform;
+
+            _config = new();
+            _config["scale"] = _scale;
+            _config["mode"] = _mode;
+            _config["distribution"] = _distribution;
+            _config["seed"] = _seed;
         }
 
         public Tensor Apply(InitializerArgs args)

@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Text;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -23,6 +25,26 @@ namespace Tensorflow
         public class CompatApi
         {
             public CompatV1Api v1 { get; } = new CompatV1Api();
+
+            internal string as_text(string bytes_or_text, Encoding? encoding = null)
+            {
+                if(encoding is null) encoding = Encoding.UTF8;
+                return bytes_or_text;
+            }
+            internal string as_text(byte[] bytes_or_text, Encoding? encoding = null)
+            {
+                if(encoding is null) encoding = Encoding.UTF8;
+                return encoding.GetString(bytes_or_text);
+            }
+            
+            internal string as_str(string bytes_or_text, Encoding? encoding = null)
+            {
+                return as_text(bytes_or_text, encoding);
+            }
+            internal string as_str(byte[] bytes_or_text, Encoding? encoding = null)
+            {
+                return as_text(bytes_or_text, encoding);
+            }
         }
 
         public bool executing_eagerly()

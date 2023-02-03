@@ -16,23 +16,27 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Engine
 {
     /// <summary>
     /// Specifies the ndim, dtype and shape of every input to a layer.
     /// </summary>
-    public class InputSpec
+    public class InputSpec: IKerasConfigable
     {
         public int? ndim;
+        public int? max_ndim;
         public int? min_ndim;
         Dictionary<int, int> axes;
         Shape shape;
+        TF_DataType dtype;
         public int[] AllAxisDim;
 
         public InputSpec(TF_DataType dtype = TF_DataType.DtInvalid,
             int? ndim = null,
             int? min_ndim = null,
+            int? max_ndim = null,
             Dictionary<int, int> axes = null,
             Shape shape = null)
         {
@@ -41,7 +45,9 @@ namespace Tensorflow.Keras.Engine
                 axes = new Dictionary<int, int>();
             this.axes = axes;
             this.min_ndim = min_ndim;
+            this.max_ndim = max_ndim;
             this.shape = shape;
+            this.dtype = dtype;
             if (ndim == null && shape != null)
                 this.ndim = shape.ndim;
 
@@ -49,7 +55,30 @@ namespace Tensorflow.Keras.Engine
                 AllAxisDim = axes.Select(x => x.Value).ToArray();
         }
 
+       public IKerasConfig get_config()
+        {
+            return new Config()
+            {
+                DType = dtype == TF_DataType.DtInvalid ? null : dtype,
+                Shape = shape,
+                Ndim = ndim,
+                MinNdim = min_ndim,
+                MaxNdim = max_ndim,
+                Axes = axes.ToDictionary(x => x.Key.ToString(), x => x.Value)
+            };
+        }
+
         public override string ToString()
             => $"ndim={ndim}, min_ndim={min_ndim}, axes={axes.Count}";
+
+        public class Config: IKerasConfig
+        {
+            public TF_DataType? DType { get; set; }
+            public Shape Shape { get; set; }
+            public int? Ndim { get; set; }
+            public int? MinNdim { get;set; }
+            public int? MaxNdim { get;set; }
+            public IDictionary<string, int> Axes { get; set; }
+        }
     }
 }

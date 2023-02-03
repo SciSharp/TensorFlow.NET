@@ -17,6 +17,7 @@ namespace Tensorflow.Keras.Layers
         public override void build(Shape input_shape)
         {
             // output_shape = input_shape.dims[1^];
+            _buildInputShape = input_shape;
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)

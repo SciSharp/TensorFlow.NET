@@ -566,5 +566,23 @@ namespace Tensorflow
             else
                 throw new NotImplementedException("");
         }
+
+        public static bool inside_function()
+        {
+            return get_default_graph().building_function;
+        }
+
+        public static void dismantle_graph(Graph graph)
+        {
+            
+        }
+
+        public class NullContextManager: IDisposable
+        {
+            public void Dispose()
+            {
+                
+            }
+        }
     }
 }

@@ -81,6 +81,7 @@ namespace Tensorflow.Keras.Layers
             _fused = _fused_can_be_used(ndims);
 
             built = true;
+            _buildInputShape = input_shape;
         }
 
         bool _fused_can_be_used(int ndims)

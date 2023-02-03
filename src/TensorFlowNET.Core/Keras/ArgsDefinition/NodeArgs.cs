@@ -1,6 +1,8 @@
-﻿namespace Tensorflow.Keras.ArgsDefinition
+﻿using Tensorflow.Keras.Saving;
+
+namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class NodeArgs
+    public class NodeArgs: IKerasConfig
     {
         public ILayer[] InboundLayers { get; set; }
         public int[] NodeIndices { get; set; }

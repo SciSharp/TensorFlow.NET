@@ -53,7 +53,7 @@ namespace Tensorflow.Keras.Utils
         }
 
         /// <summary>
-        /// Makes a layer name (or arbitrary string) unique within a TensorFlow graph.
+        /// Makes a layer name (or arbitrary string) unique within a TensorFlow graph. (correponding to `backend.unique_object_name` of python.)
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>

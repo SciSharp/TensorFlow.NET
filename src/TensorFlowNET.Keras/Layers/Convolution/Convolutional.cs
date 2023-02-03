@@ -98,6 +98,7 @@ namespace Tensorflow.Keras.Layers
                 name: tf_op_name);
 
             built = true;
+            _buildInputShape = input_shape;
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = false)
