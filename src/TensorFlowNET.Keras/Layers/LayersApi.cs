@@ -300,7 +300,8 @@ namespace Tensorflow.Keras.Layers
             => new Dense(new DenseArgs
             {
                 Units = units,
-                Activation = GetActivationByName("linear")
+                Activation = GetActivationByName("linear"),
+                ActivationName = "linear"
             });
 
         /// <summary>
@@ -321,6 +322,7 @@ namespace Tensorflow.Keras.Layers
             {
                 Units = units,
                 Activation = GetActivationByName(activation),
+                ActivationName = activation,
                 InputShape = input_shape
             });
 

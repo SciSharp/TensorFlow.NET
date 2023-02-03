@@ -5,6 +5,7 @@ using static Tensorflow.KerasApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Keras.Saving;
 
 /// <summary>
 /// Base class for attention layers that can be used in sequence DNN/CNN models.
@@ -252,6 +253,6 @@ namespace Tensorflow.Keras.Layers
             return tf.logical_and(x, y);
         }
 
-        public override LayerArgs get_config() => this.args;
+        public override IKerasConfig get_config() => this.args;
     }
 }

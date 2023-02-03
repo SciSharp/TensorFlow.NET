@@ -18,6 +18,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         public override void build(Shape input_shape)
         {
             var input_dim = input_shape[-1];
+            _buildInputShape = input_shape;
 
             kernel = add_weight("kernel", (input_shape[-1], args.Units),
                 initializer: args.KernelInitializer

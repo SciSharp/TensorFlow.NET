@@ -61,6 +61,7 @@ namespace Tensorflow.Keras.Engine
         /// Provides information about which inputs are compatible with the layer.
         /// </summary>
         protected InputSpec inputSpec;
+        public InputSpec InputSpec => inputSpec;
         bool dynamic = true;
         public bool SupportsMasking { get; set; }
         protected List<IVariableV1> _trainable_weights;
@@ -79,6 +80,8 @@ namespace Tensorflow.Keras.Engine
         protected bool computePreviousMask;
         protected List<Operation> updates;
         public Shape BatchInputShape => args.BatchInputShape;
+        protected TensorShapeConfig _buildInputShape = null;
+        public TensorShapeConfig BuildInputShape => _buildInputShape;
 
         List<INode> inboundNodes;
         public List<INode> InboundNodes => inboundNodes;
@@ -223,6 +226,7 @@ namespace Tensorflow.Keras.Engine
 
         public virtual void build(Shape input_shape)
         {
+            _buildInputShape = input_shape;
             built = true;
         }
 
@@ -310,7 +314,7 @@ namespace Tensorflow.Keras.Engine
 
         public List<IVariableV1> Variables => weights;
 
-        public virtual LayerArgs get_config()
+        public virtual IKerasConfig get_config()
             => args;
     }
 }

@@ -14,10 +14,17 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow.Operations.Initializers
 {
     public class GlorotUniform : VarianceScaling
     {
+        private readonly Dictionary<string, object> _config;
+
+        public override string ClassName => "GlorotUniform";
+        public override IDictionary<string, object> Config => _config;
+
         public GlorotUniform(float scale = 1.0f,
             string mode = "FAN_AVG",
             bool uniform = true,
@@ -28,7 +35,8 @@ namespace Tensorflow.Operations.Initializers
                 seed: seed,
                 dtype: dtype)
         {
-
+            _config = new Dictionary<string, object>();
+            _config["seed"] = _seed;
         }
     }
 }

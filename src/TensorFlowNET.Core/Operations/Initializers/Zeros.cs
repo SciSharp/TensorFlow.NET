@@ -14,12 +14,17 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow.Operations.Initializers
 {
     public class Zeros : IInitializer
     {
         Shape shape;
         TF_DataType dtype;
+
+        public string ClassName => "Zeros";
+        public IDictionary<string, object> Config => new Dictionary<string, object>();
 
         public Zeros(Shape shape = null, TF_DataType dtype = TF_DataType.TF_FLOAT)
         {

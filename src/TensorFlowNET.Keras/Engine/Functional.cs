@@ -70,6 +70,7 @@ namespace Tensorflow.Keras.Engine
             this.inputs = inputs;
             this.outputs = outputs;
             built = true;
+            _buildInputShape = inputs.shape;
 
             if (outputs.Any(x => x.KerasHistory == null))
                 base_layer_utils.create_keras_history(outputs);
@@ -356,6 +357,23 @@ namespace Tensorflow.Keras.Engine
         {
             return LayerCheckpointDependencies.ToDictionary(x => x.Key, x => x.Value.GetTrackable()).Concat(base._trackable_children(save_type, cache))
                 .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        protected override void _init_set_name(string name, bool zero_based = true)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                string class_name = GetType().Name;
+                if (this.GetType() == typeof(Functional))
+                {
+                    class_name = "Model";
+                }
+                this.name = base_layer_utils.unique_layer_name(generic_utils.to_snake_case(class_name), zero_based: zero_based);
+            }
+            else
+            {
+                this.name = name;
+            }
         }
     }
 }

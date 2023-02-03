@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
@@ -85,31 +86,38 @@ public class LayerSavedModelSaver: SavedModelSaver
             JObject metadata = new JObject();
             metadata["name"] = _layer.Name;
             metadata["trainable"] = _layer.Trainable;
-            // metadata["expects_training_arg"] = _obj._expects_training_arg;
-            // metadata["dtype"] = policy.serialize(_obj._dtype_policy)
+            // TODO: implement `expects_training_arg`.
+            metadata["expects_training_arg"] = false;
+            metadata["dtype"] = _layer.DType.as_python_name();
             metadata["batch_input_shape"] = _layer.BatchInputShape is null ? null : JToken.FromObject(_layer.BatchInputShape);
             // metadata["stateful"] = _obj.stateful;
             // metadata["must_restore_from_config"] = _obj.must_restore_from_config;
             // metadata["preserve_input_structure_in_config"] = _obj.preserve_input_structure_in_config;
             metadata["autocast"] = _layer.AutoCast;
 
-            var temp = JObject.FromObject(get_serialized(_layer));
-            metadata.Merge(temp, new JsonMergeSettings
+            if(_layer.InputSpec is not null)
+            {
+                metadata["input_spec"] = generic_utils.serialize_keras_object(_layer.InputSpec);
+            }
+
+            metadata.Merge(get_serialized(_layer), new JsonMergeSettings
             {
                 // Handle conflicts by using values from obj2
                 MergeArrayHandling = MergeArrayHandling.Merge
             });
             // skip the check of `input_spec` and `build_input_shape` for the lack of members.
             // skip the check of `activity_regularizer` for the type problem.
+            if(_layer.BuildInputShape is not null)
+            {
+                metadata["build_input_shape"] = JToken.FromObject(_layer.BuildInputShape);
+            }
             return metadata.ToString();
         }
     }
 
-    public static IDictionary<string, object> get_serialized(Layer obj)
+    public static JObject get_serialized(Layer obj)
     {
-        // TODO: complete the implmentation (need to revise `get_config`).
-        return new Dictionary<string, object>();
-        //return generic_utils.serialize_keras_object(obj);
+        return generic_utils.serialize_keras_object(obj);
     }
 }
 
@@ -135,18 +143,19 @@ public class InputLayerSavedModelSaver: SavedModelSaver
     {
         get
         {
-            if(_obj is not Layer)
+            if(_obj is not InputLayer)
             {
                 throw new TypeError($"The type {_obj.GetType()} cannot be recognized as an input layer.");
             }
-            var layer = (Layer)_obj;
+            var layer = (InputLayer)_obj;
+            var config = (layer.get_config() as InputLayerArgs)!;
             var info = new
             {
                 class_name = layer.GetType().Name,
                 name = layer.Name,
                 dtype = layer.DType,
-                //sparse = layer.sparse,
-                //ragged = layer.ragged,
+                sparse = config.Sparse,
+                ragged = config.Ragged,
                 batch_input_shape = layer.BatchInputShape,
                 config = layer.get_config()
             };

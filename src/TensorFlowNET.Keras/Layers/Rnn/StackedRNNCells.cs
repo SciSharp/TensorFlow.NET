@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -136,7 +137,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             //    self.built = True
         }
 
-        public override LayerArgs get_config()
+        public override IKerasConfig get_config()
         {
             throw new NotImplementedException();
             //def get_config(self):

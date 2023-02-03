@@ -5,7 +5,7 @@ using Tensorflow.Train;
 
 namespace Tensorflow.Training
 {
-    public interface ITrackable
+    public interface IWithTrackable
     {
         Trackable GetTrackable();
     }

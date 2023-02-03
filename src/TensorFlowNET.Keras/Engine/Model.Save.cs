@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tensorflow.Functions;
 using Tensorflow.Keras.Metrics;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.ModelSaving;
 
@@ -30,7 +31,10 @@ namespace Tensorflow.Keras.Engine
             }
             else
             {
-                KerasSavedModelUtils.Save(this, filepath, overwrite, include_optimizer, signatures, options, save_traces);
+                using (SharedObjectSavingScope.Enter())
+                {
+                    KerasSavedModelUtils.Save(this, filepath, overwrite, include_optimizer, signatures, options, save_traces);
+                }
             }
         }
     }

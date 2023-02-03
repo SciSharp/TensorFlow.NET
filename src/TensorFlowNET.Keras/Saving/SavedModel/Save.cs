@@ -79,7 +79,7 @@ public partial class KerasSavedModelUtils
 
             var path = node_paths[node];
             string node_path;
-            if (path is null)
+            if (path is null || path.Count() == 0)
             {
                 node_path = "root";
             }

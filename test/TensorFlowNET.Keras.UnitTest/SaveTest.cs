@@ -15,17 +15,14 @@ using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Optimizers;
+using Tensorflow.Operations;
 
 namespace TensorFlowNET.Keras.UnitTest;
 
-// class MNISTLoader
-// {
-//     public MNISTLoader()
-//     {
-//         var mnist = new MnistModelLoader()
-//         
-//     }
-// }
+public static class AutoGraphExtension
+{
+    
+}
 
 [TestClass]
 public class SaveTest
@@ -42,6 +39,8 @@ public class SaveTest
         
         model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(), new  string[]{"accuracy"});
 
+        var g = ops.get_default_graph();
+
         var data_loader = new MnistModelLoader();
         var num_epochs = 1;
         var batch_size = 50;
@@ -50,11 +49,34 @@ public class SaveTest
         {
             TrainDir = "mnist",
             OneHot = false,
-            ValidationSize = 0,
+            ValidationSize = 50000,
         }).Result;
         
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
         
         model.save("C:\\Work\\tf.net\\tf_test\\tf.net.model", save_format:"pb");
+    }
+
+    [TestMethod]
+    public void Temp()
+    {
+        var graph = new Graph();
+        var g = graph.as_default();
+        //var input_tensor = array_ops.placeholder(TF_DataType.TF_FLOAT, new int[] { 1 }, "test_string_tensor");
+        var input_tensor = tf.placeholder(tf.int32, new int[] { 1 }, "aa");
+        var wrapped_func = tf.autograph.to_graph(func);
+        var res = wrapped_func(input_tensor);
+        g.Exit();
+    }
+
+    private Tensor func(Tensor tensor)
+    {
+        return gen_ops.neg(tensor);
+        //return array_ops.identity(tensor);
+        //tf.device("cpu:0");
+        //using (ops.control_dependencies(new object[] { res.op }))
+        //{
+        //    return array_ops.identity(tensor);
+        //}
     }
 }

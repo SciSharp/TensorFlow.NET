@@ -26,7 +26,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
-    public abstract class Trackable: ITrackable
+    public abstract class Trackable: IWithTrackable
     {
         /// <summary>
         /// Corresponding to tensorflow/python/trackable/constants.py

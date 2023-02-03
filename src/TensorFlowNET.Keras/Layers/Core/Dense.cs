@@ -43,6 +43,7 @@ namespace Tensorflow.Keras.Layers
 
         public override void build(Shape input_shape)
         {
+            _buildInputShape = input_shape;
             var last_dim = input_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = (int)last_dim;

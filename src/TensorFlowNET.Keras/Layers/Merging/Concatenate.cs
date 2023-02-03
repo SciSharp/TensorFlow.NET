@@ -37,6 +37,7 @@ namespace Tensorflow.Keras.Layers
                 }).ToArray();
                 shape_set.Add(shape);
             }*/
+            _buildInputShape = input_shape;
         }
 
         protected override Tensors _merge_function(Tensors inputs)

@@ -11,7 +11,7 @@ namespace Tensorflow.Keras.Engine
 {
     public partial class Functional
     {
-        public ModelConfig get_config()
+        public override IKerasConfig get_config()
         {
             return get_network_config();
         }
@@ -25,7 +25,7 @@ namespace Tensorflow.Keras.Engine
             {
                 Name = name
             };
-
+            
             var node_conversion_map = new Dictionary<string, int>();
             foreach (var layer in _self_tracked_trackables)
             {
@@ -42,23 +42,26 @@ namespace Tensorflow.Keras.Engine
             }
 
             var layer_configs = new List<LayerConfig>();
-            foreach (var layer in _self_tracked_trackables)
+            using (SharedObjectSavingScope.Enter())
             {
-                var filtered_inbound_nodes = new List<NodeConfig>();
-                foreach (var (original_node_index, node) in enumerate(layer.InboundNodes))
+                foreach (var layer in _self_tracked_trackables)
                 {
-                    var node_key = _make_node_key(layer.Name, original_node_index);
-                    if (NetworkNodes.Contains(node_key) && !node.is_input)
+                    var filtered_inbound_nodes = new List<NodeConfig>();
+                    foreach (var (original_node_index, node) in enumerate(layer.InboundNodes))
                     {
-                        var node_data = node.serialize(_make_node_key, node_conversion_map);
-                        filtered_inbound_nodes.append(node_data);
+                        var node_key = _make_node_key(layer.Name, original_node_index);
+                        if (NetworkNodes.Contains(node_key) && !node.is_input)
+                        {
+                            var node_data = node.serialize(_make_node_key, node_conversion_map);
+                            filtered_inbound_nodes.append(node_data);
+                        }
                     }
-                }
 
-                var layer_config = generic_utils.serialize_layer_to_config(layer);
-                layer_config.Name = layer.Name;
-                layer_config.InboundNodes = filtered_inbound_nodes;
-                layer_configs.Add(layer_config);
+                    var layer_config = generic_utils.serialize_layer_to_config(layer);
+                    layer_config.Name = layer.Name;
+                    layer_config.InboundNodes = filtered_inbound_nodes;
+                    layer_configs.Add(layer_config);
+                }
             }
             config.Layers = layer_configs;
 

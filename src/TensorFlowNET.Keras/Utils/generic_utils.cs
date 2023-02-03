@@ -14,10 +14,14 @@
    limitations under the License.
 ******************************************************************************/
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Utils
@@ -32,11 +36,19 @@ namespace Tensorflow.Keras.Utils
         public static LayerConfig serialize_layer_to_config(ILayer instance)
         {
             var config = instance.get_config();
+            Debug.Assert(config is LayerArgs);
             return new LayerConfig
             {
-                Config = config,
+                Config = config as LayerArgs,
                 ClassName = instance.GetType().Name
             };
+        }
+
+        public static JObject serialize_keras_object(IKerasConfigable instance)
+        {
+            var config = JToken.FromObject(instance.get_config());
+            // TODO: change the class_name to registered name, instead of system class name.
+            return serialize_utils.serialize_keras_class_and_config(instance.GetType().Name, config, instance);
         }
 
         public static string to_snake_case(string name)
