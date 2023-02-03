@@ -6,7 +6,7 @@ using System.Text;
 using TensorFlowNET.Keras.UnitTest;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Keras.UnitTest;
+namespace TensorFlowNET.Keras.UnitTest;
 
 [TestClass]
 public class InitializerTest : EagerModeTestBase
@@ -15,6 +15,6 @@ public class InitializerTest : EagerModeTestBase
     public void Orthogonal()
     {
         var initializer = tf.keras.initializers.Orthogonal();
-        var values = initializer.Apply(new InitializerArgs((2, 2)));
+        var values = initializer.Apply(new Tensorflow.InitializerArgs((2, 2)));
     }
 }

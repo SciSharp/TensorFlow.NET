@@ -32,10 +32,10 @@ public class Orthogonal : IInitializer
         _seed = seed;
     }
 
-        private readonly Dictionary<string, object> _config;
+    private readonly Dictionary<string, object> _config;
 
-        public string ClassName => "Orthogonal";
-        public IDictionary<string, object> Config => throw new NotImplementedException();
+    public string ClassName => "Orthogonal";
+    public IDictionary<string, object> Config => throw new NotImplementedException();
     public Tensor Apply(InitializerArgs args)
     {
         return _generate_init_val(args.Shape, args.DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : args.DType);
