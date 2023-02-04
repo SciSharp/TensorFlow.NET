@@ -1,5 +1,6 @@
 ﻿namespace Tensorflow.Keras.ArgsDefinition
 {
+    // TODO: no corresponding class found in keras python, maybe obselete?
     public class ResizingArgs : PreprocessingLayerArgs
     {
         public int Height { get; set; }

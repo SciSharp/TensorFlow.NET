@@ -4,8 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.ArgsDefinition.Core;
 
 namespace Tensorflow.Keras.Layers
 {

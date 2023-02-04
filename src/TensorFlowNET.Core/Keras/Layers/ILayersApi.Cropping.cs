@@ -1,5 +1,5 @@
 ﻿using System;
-using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.ArgsDefinition.Reshaping;
 using Tensorflow.NumPy;
 
 namespace Tensorflow.Keras.Layers

@@ -1,11 +1,12 @@
-﻿using Tensorflow.Keras.ArgsDefinition;
+﻿using Tensorflow.Keras.ArgsDefinition.Reshaping;
 using Tensorflow.Keras.Engine;
 
-namespace Tensorflow.Keras.Layers {
+namespace Tensorflow.Keras.Layers.Reshaping
+{
     public class Cropping1D : Layer
     {
-        CroppingArgs args;
-        public Cropping1D(CroppingArgs args) : base(args)
+        Cropping1DArgs args;
+        public Cropping1D(Cropping1DArgs args) : base(args)
         {
             this.args = args;
         }
@@ -41,7 +42,7 @@ namespace Tensorflow.Keras.Layers {
             else
             {
                 int crop_start = args.cropping[0], crop_end = args.cropping[1];
-                output = output[new Slice(), new Slice(crop_start, (int)(output.shape[1]) - crop_end), new Slice()];
+                output = output[new Slice(), new Slice(crop_start, (int)output.shape[1] - crop_end), new Slice()];
             }
             return output;
         }
@@ -51,12 +52,12 @@ namespace Tensorflow.Keras.Layers {
             if (args.cropping.shape[0] == 1)
             {
                 int crop = args.cropping[0];
-                return new Shape((int)(input_shape[0]), (int)(input_shape[1] - crop * 2), (int)(input_shape[2]));
+                return new Shape((int)input_shape[0], (int)(input_shape[1] - crop * 2), (int)input_shape[2]);
             }
             else
             {
                 int crop_start = args.cropping[0], crop_end = args.cropping[1];
-                return new Shape((int)(input_shape[0]), (int)(input_shape[1] - crop_start - crop_end), (int)(input_shape[2]));
+                return new Shape((int)input_shape[0], (int)(input_shape[1] - crop_start - crop_end), (int)input_shape[2]);
             }
         }
     }

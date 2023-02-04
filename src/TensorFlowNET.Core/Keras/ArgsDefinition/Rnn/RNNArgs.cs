@@ -1,21 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Tensorflow.Keras.ArgsDefinition.Rnn
 {
-    public class RNNArgs : LayerArgs
+    public class RNNArgs : AutoSerializeLayerArgs
     {
         public interface IRnnArgCell : ILayer
         {
             object state_size { get; }
         }
-
+        [JsonProperty("cell")]
+        // TODO: the cell should be serialized with `serialize_keras_object`.
         public IRnnArgCell Cell { get; set; } = null;
+        [JsonProperty("return_sequences")]
         public bool ReturnSequences { get; set; } = false;
+        [JsonProperty("return_state")]
         public bool ReturnState { get; set; } = false;
+        [JsonProperty("go_backwards")]
         public bool GoBackwards { get; set; } = false;
+        [JsonProperty("stateful")]
         public bool Stateful { get; set; } = false;
+        [JsonProperty("unroll")]
         public bool Unroll { get; set; } = false;
+        [JsonProperty("time_major")]
         public bool TimeMajor { get; set; } = false;
+        // TODO: Add `num_constants` and `zero_output_for_mask`.
         public Dictionary<string, object> Kwargs { get; set; } = null;
 
         public int Units { get; set; }

@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
+
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class BaseDenseAttentionArgs : LayerArgs
+    public class BaseDenseAttentionArgs : AutoSerializeLayerArgs
     {
 
         /// <summary>
@@ -14,6 +16,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// Float between 0 and 1. Fraction of the units to drop for the
         /// attention scores.
         /// </summary>
+        [JsonProperty("dropout")]
         public float dropout { get; set; } = 0f;
 
     }

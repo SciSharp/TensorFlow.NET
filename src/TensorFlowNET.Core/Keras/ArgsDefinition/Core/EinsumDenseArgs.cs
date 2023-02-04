@@ -1,9 +1,10 @@
+using Newtonsoft.Json;
 using System;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Keras.ArgsDefinition
+namespace Tensorflow.Keras.ArgsDefinition.Core
 {
-    public class EinsumDenseArgs : LayerArgs
+    public class EinsumDenseArgs : AutoSerializeLayerArgs
     {
         /// <summary>
         /// An equation describing the einsum to perform. This equation must
@@ -11,6 +12,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// `ab...,bc->ac...` where 'ab', 'bc', and 'ac' can be any valid einsum axis
         /// expression sequence.
         /// </summary>
+        [JsonProperty("equation")]
         public string Equation { get; set; }
 
         /// <summary>
@@ -19,6 +21,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// None for any dimension that is unknown or can be inferred from the input
         /// shape.
         /// </summary>
+        [JsonProperty("output_shape")]
         public Shape OutputShape { get; set; }
 
         /// <summary>
@@ -26,41 +29,70 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// Each character in the `bias_axes` string should correspond to a character
         /// in the output portion of the `equation` string.
         /// </summary>
+        [JsonProperty("bias_axes")]
         public string BiasAxes { get; set; } = null;
 
         /// <summary>
         /// Activation function to use.
         /// </summary>
         public Activation Activation { get; set; }
+        private string _activationName;
+        [JsonProperty("activation")]
+        public string ActivationName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_activationName))
+                {
+                    return Activation.Method.Name;
+                }
+                else
+                {
+                    return _activationName;
+                }
+            }
+            set
+            {
+                _activationName = value;
+            }
+        }
 
         /// <summary>
         /// Initializer for the `kernel` weights matrix.
         /// </summary>
+        [JsonProperty("kernel_initializer")]
         public IInitializer KernelInitializer { get; set; } = tf.glorot_uniform_initializer;
 
         /// <summary>
         /// Initializer for the bias vector.
         /// </summary>
+        [JsonProperty("bias_initializer")]
         public IInitializer BiasInitializer { get; set; } = tf.zeros_initializer;
 
         /// <summary>
         /// Regularizer function applied to the `kernel` weights matrix.
         /// </summary>
+        [JsonProperty("kernel_regularizer")]
         public IRegularizer KernelRegularizer { get; set; }
 
         /// <summary>
         /// Regularizer function applied to the bias vector.
         /// </summary>
+        [JsonProperty("bias_regularizer")]
         public IRegularizer BiasRegularizer { get; set; }
 
         /// <summary>
         /// Constraint function applied to the `kernel` weights matrix.
         /// </summary>
+        [JsonProperty("kernel_constraint")]
         public Action KernelConstraint { get; set; }
 
         /// <summary>
         /// Constraint function applied to the bias vector.
         /// </summary>
+        [JsonProperty("bias_constraint")]
         public Action BiasConstraint { get; set; }
+        [JsonProperty("activity_regularizer")]
+        public override IRegularizer ActivityRegularizer { get => base.ActivityRegularizer; set => base.ActivityRegularizer = value; }
     }
 }

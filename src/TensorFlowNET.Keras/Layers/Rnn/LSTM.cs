@@ -1,9 +1,8 @@
 ﻿using System.Linq;
-using Tensorflow.Keras.ArgsDefinition.Lstm;
+using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers.Rnn;
 
-namespace Tensorflow.Keras.Layers.Lstm
+namespace Tensorflow.Keras.Layers.Rnn
 {
     /// <summary>
     /// Long Short-Term Memory layer - Hochreiter 1997.

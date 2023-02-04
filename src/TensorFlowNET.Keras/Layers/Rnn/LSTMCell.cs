@@ -1,7 +1,7 @@
-﻿using Tensorflow.Keras.ArgsDefinition.Lstm;
+﻿using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 
-namespace Tensorflow.Keras.Layers.Lstm
+namespace Tensorflow.Keras.Layers.Rnn
 {
     public class LSTMCell : Layer
     {
