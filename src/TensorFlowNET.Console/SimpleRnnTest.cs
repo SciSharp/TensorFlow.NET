@@ -12,7 +12,6 @@ namespace Tensorflow
     {
         public void Run()
         {
-            tf.UseKeras<KerasInterface>();
             var inputs = np.random.random((6, 10, 8)).astype(np.float32);
             //var simple_rnn = tf.keras.layers.SimpleRNN(4);
             //var output = simple_rnn.Apply(inputs);  // The output has shape `[32, 4]`.

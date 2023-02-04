@@ -4,7 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
-	<LangVersion>11.0</LangVersion>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 

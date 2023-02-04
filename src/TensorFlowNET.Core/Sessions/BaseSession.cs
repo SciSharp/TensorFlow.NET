@@ -291,7 +291,14 @@ namespace Tensorflow
         protected override void DisposeUnmanagedResources(IntPtr handle)
         {
             // c_api.TF_CloseSession(handle, tf.Status.Handle);
-            c_api.TF_DeleteSession(handle, c_api.TF_NewStatus());
+            if (tf.Status == null || tf.Status.Handle.IsInvalid)
+            {
+                c_api.TF_DeleteSession(handle, c_api.TF_NewStatus());
+            }
+            else
+            {
+                c_api.TF_DeleteSession(handle, tf.Status.Handle);
+            }
         }
     }
 }
