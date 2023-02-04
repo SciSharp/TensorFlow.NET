@@ -202,6 +202,24 @@ namespace Tensorflow
                 _ => type.ToString()
             };
 
+        public static string as_python_name(this TF_DataType type)
+            => type switch
+            {
+                TF_DataType.TF_STRING => "str",
+                TF_DataType.TF_UINT8 => "uint8",
+                TF_DataType.TF_INT8 => "int8",
+                TF_DataType.TF_UINT32 => "uint32",
+                TF_DataType.TF_INT32 => "int32",
+                TF_DataType.TF_UINT64 => "uint64",
+                TF_DataType.TF_INT64 => "int64",
+                TF_DataType.TF_FLOAT => "float32",
+                TF_DataType.TF_DOUBLE => "float64",
+                TF_DataType.TF_BOOL => "bool",
+                TF_DataType.TF_RESOURCE => "resource",
+                TF_DataType.TF_VARIANT => "variant",
+                _ => type.ToString()
+            };
+
         public static int get_datatype_size(this TF_DataType type)
             => type.as_base_dtype() switch
             {

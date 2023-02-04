@@ -62,6 +62,7 @@ namespace Tensorflow.Keras.Layers
                 name: "embeddings");
             tf.Context.graph_mode();
             built = true;
+            _buildInputShape = input_shape;
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)

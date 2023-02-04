@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -146,7 +147,7 @@ namespace Tensorflow.Keras.Layers
             return scores;
         }
 
-        public override LayerArgs get_config() => this.args;
+        public override IKerasConfig get_config() => this.args;
         //var config = new Dictionary<object, object> {
         //    {
         //        "use_scale",

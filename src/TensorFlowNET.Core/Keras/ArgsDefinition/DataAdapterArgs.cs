@@ -1,8 +1,9 @@
 ﻿using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class DataAdapterArgs
+    public class DataAdapterArgs: IKerasConfig
     {
         public Tensor X { get; set; }
         public Tensor Y { get; set; }

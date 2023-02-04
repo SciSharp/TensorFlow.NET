@@ -351,13 +351,18 @@ namespace Tensorflow
         /// <param name="var"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected IVariableV1 get_slot(IVariableV1 var, string name)
+        internal IVariableV1 get_slot(IVariableV1 var, string name)
         {
             var named_slots = _slots.ContainsKey(name) ? _slots[name] : null;
             if (named_slots == null)
                 return null;
 
             return named_slots.ContainsKey(_var_key(var)) ? named_slots[_var_key(var)] : null;
+        }
+
+        internal IEnumerable<string> get_slot_names()
+        {
+            return _slots.Keys;
         }
 
         private string _var_key(IVariableV1 var)

@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow.Operations.Initializers
 {
     public class RandomUniform : IInitializer
@@ -23,12 +25,22 @@ namespace Tensorflow.Operations.Initializers
         private float maxval;
         private TF_DataType dtype;
 
+        private readonly Dictionary<string, object> _config;
+
+        public string ClassName => "RandomUniform";
+        public IDictionary<string, object> Config => _config;
+
         public RandomUniform(TF_DataType dtype = TF_DataType.TF_FLOAT, float minval = -0.05f, float maxval = 0.05f, int? seed = null)
         {
             this.dtype = dtype;
             this.minval = minval;
             this.maxval = maxval;
             this.seed = seed;
+
+            _config = new Dictionary<string, object>();
+            _config["minval"] = this.minval;
+            _config["maxval"] = this.maxval;
+            _config["seed"] = this.seed;
         }
 
         public Tensor Apply(InitializerArgs args)

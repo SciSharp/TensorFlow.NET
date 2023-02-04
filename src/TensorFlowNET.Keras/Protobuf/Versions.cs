@@ -74,6 +74,13 @@ namespace ThirdParty.Tensorflow.Python.Keras.Protobuf {
     public VersionDef() {
       OnConstruction();
     }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public VersionDef(int producer, int minConsumer) {
+      OnConstruction();
+      producer_ = producer;
+      minConsumer_ = minConsumer;
+    }
 
     partial void OnConstruction();
 

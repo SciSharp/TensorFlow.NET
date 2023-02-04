@@ -14,10 +14,17 @@
    limitations under the License.
 ******************************************************************************/
 
+using Newtonsoft.Json;
+using System.Collections.Generic;
+
 namespace Tensorflow
 {
     public interface IInitializer
     {
+        [JsonProperty("class_name")]
+        string ClassName { get; }
+        [JsonProperty("config")]
+        IDictionary<string, object> Config { get; }
         Tensor Apply(InitializerArgs args);
     }
 }

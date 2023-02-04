@@ -17,7 +17,9 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using Tensorflow.Checkpoint;
 using Tensorflow.NumPy;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -39,6 +41,7 @@ namespace Tensorflow
             VariableAggregation aggregation = VariableAggregation.None,
             Shape shape = null)
         {
+            Aggregation = aggregation;
             if (variable_def != null)
             {
                 if (initial_value != null)

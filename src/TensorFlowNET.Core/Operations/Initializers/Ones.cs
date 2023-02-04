@@ -14,11 +14,18 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Collections.Generic;
+
 namespace Tensorflow.Operations.Initializers
 {
     public class Ones : IInitializer
     {
         private TF_DataType dtype;
+
+        private readonly Dictionary<string, object> _config;
+
+        public string ClassName => "Ones";
+        public IDictionary<string, object> Config => new Dictionary<string, object>();
 
         public Ones(TF_DataType dtype = TF_DataType.TF_FLOAT)
         {

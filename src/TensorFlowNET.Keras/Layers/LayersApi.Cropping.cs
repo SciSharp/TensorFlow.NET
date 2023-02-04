@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Layers.Reshaping;
+using Tensorflow.Keras.ArgsDefinition.Reshaping;
 
-namespace Tensorflow.Keras.Layers {
-      public partial class LayersApi {
+namespace Tensorflow.Keras.Layers
+{
+    public partial class LayersApi {
             /// <summary>
             /// Cropping layer for 1D input
             /// </summary>
             /// <param name="cropping">cropping size</param>
             public ILayer Cropping1D ( NDArray cropping )
-                => new Cropping1D(new CroppingArgs {
+                => new Cropping1D(new Cropping1DArgs {
                       cropping = cropping
                 });
 

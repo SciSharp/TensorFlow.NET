@@ -304,7 +304,7 @@ namespace Tensorflow
             }
         }
 
-        private static OpList stripped_op_list_for_graph(GraphDef graph_def)
+        public static OpList stripped_op_list_for_graph(GraphDef graph_def)
         {
             var used_ops = ops_used_by_graph_def(graph_def);
 
@@ -344,6 +344,90 @@ namespace Tensorflow
             }
 
             return used_ops.ToArray();
+        }
+
+        private static bool is_default_attr_value(OpDef op_def, string attr_name, AttrValue attr_value)
+        {
+            foreach (var attr_def in op_def.Attr)
+            {
+                if (attr_def.Name == attr_name)
+                {
+                    if (attr_def.DefaultValue is null) return false;
+                    // TODO: add new c_api `EqualAttrValueWrapper` and complete the check.
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static void strip_graph_default_valued_attrs(MetaGraphDef meta_graph_def)
+        {
+            Dictionary<string, FunctionDef> op_name_to_function = new();
+            foreach (var function_def in meta_graph_def.GraphDef.Library.Function)
+            {
+                op_name_to_function[function_def.Signature.Name] = function_def;
+            }
+
+            Action<NodeDef> _strip_node_default_valued_attrs = (node_def) =>
+            {
+                if (op_name_to_function.ContainsKey(node_def.Op)) return;
+
+                var op_def = op_def_registry.GetOpDef(node_def.Op);
+                if(op_def is null) return;
+
+                HashSet<string> attrs_to_strip = new();
+                foreach (var attr in node_def.Attr)
+                {
+                    if (is_default_attr_value(op_def, attr.Key, attr.Value))
+                    {
+                        attrs_to_strip.Add(attr.Key);
+                    }
+                }
+
+                foreach (var attr in attrs_to_strip)
+                {
+                    node_def.Attr.Remove(attr);
+                }
+            };
+
+            foreach (var node_def in meta_graph_def.GraphDef.Node)
+            {
+                _strip_node_default_valued_attrs(node_def);
+            }
+
+            foreach (var function_def in meta_graph_def.GraphDef.Library.Function)
+            {
+                foreach (var function_node_def in function_def.NodeDef)
+                {
+                    _strip_node_default_valued_attrs(function_node_def);
+                }
+            }
+
+            meta_graph_def.MetaInfoDef.StrippedDefaultAttrs = true;
+        }
+
+        /// <summary>
+        /// Extract the Op name from a Tensor name.
+        /// </summary>
+        /// <param name="tensor_name"></param>
+        /// <returns></returns>
+        public static string op_name(string tensor_name)
+        {
+            if (string.IsNullOrEmpty(tensor_name))
+            {
+                throw new ValueError($"Tensor name cannot be empty or None. Received: {tensor_name}.");
+            }
+
+            if (tensor_name.StartsWith("^"))
+            {
+                tensor_name = tensor_name.Substring(1);
+            }
+            if (tensor_name.Contains(":"))
+            {
+                return tensor_name.Split(':')[0];
+            }
+            return tensor_name;
         }
     }
 }

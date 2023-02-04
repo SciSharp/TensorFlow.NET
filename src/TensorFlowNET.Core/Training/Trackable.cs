@@ -14,13 +14,63 @@
    limitations under the License.
 ******************************************************************************/
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Tensorflow.Checkpoint;
+using Tensorflow.Keras.Saving.SavedModel;
+using Tensorflow.ModelSaving;
+using Tensorflow.Training;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
 {
-    public abstract class Trackable
+    public abstract class Trackable: IWithTrackable
     {
+        /// <summary>
+        /// Corresponding to tensorflow/python/trackable/constants.py
+        /// </summary>
+        public static class Constants
+        {
+            public static readonly string OBJECT_GRAPH_PROTO_KEY = "_CHECKPOINTABLE_OBJECT_GRAPH";
+            public static readonly string VARIABLE_VALUE_KEY = "VARIABLE_VALUE";
+            public static readonly string OBJECT_CONFIG_JSON_KEY = "OBJECT_CONFIG_JSON";
+        }
         protected int _self_update_uid;
+        protected IDictionary<string, Trackable> _unconditional_dependency_names;
+
+        protected IList<TrackableReference> _unconditional_checkpoint_dependencies;
+
+        protected IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> _self_saveable_object_factories =
+            new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>();
+        private bool _manual_tracking = true;
+
+        private static Trackable _none = new AutoTrackable();
+        /// <summary>
+        /// This is a trick for that CSharp does not allow the key of `Dictionary` to be null.
+        /// The `None` can be any object that inherits `Trackable`.
+        /// This Property is supposed to be used only internal.
+        /// </summary>
+        public static Trackable None
+        {
+            get
+            {
+                return _none;
+            }
+        }
+        public Trackable GetTrackable()
+        {
+            return this;
+        }
+        public virtual string ObjectIdentifier
+        {
+            get => "_generic_user_object";
+        }
+        public int UpdateUid { get => _self_update_uid; set => _self_update_uid = value; }
+        public IList<TrackableReference> UnconditionalCheckpointDependencies { get => _unconditional_checkpoint_dependencies; }
+        public IDictionary<string, Trackable> UnconditionalDependencyNames { get => _unconditional_dependency_names; }
+        public IList<TrackableReference> CheckpointDependencies { get => UnconditionalCheckpointDependencies; }
 
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
@@ -47,9 +97,13 @@ namespace Tensorflow.Train
             // assign again. It will add this variable to our dependencies, and if there
             // is a non-trivial restoration queued, it will handle that. This also
             // handles slot variables.
-            if (!args.Overwrite || new_variable is RefVariable)
-                return _track_checkpointable(new_variable, name: args.Name,
-                                        overwrite: args.Overwrite);
+            if (!args.Overwrite || new_variable is RefVariable || new_variable is Trackable)
+            {
+                var temp = new_variable as Trackable;
+                var res = _track_trackable(temp, args.Name, args.Overwrite);
+                Debug.Assert(res is IVariableV1);
+                return res as IVariableV1;
+            }
             else
                 return new_variable;
         }
@@ -73,10 +127,136 @@ namespace Tensorflow.Train
         /// <summary>
         /// Initialize dependency management.
         /// </summary>
-        protected void _maybe_initialize_trackable()
+        public void _maybe_initialize_trackable()
         {
-            // _self_unconditional_checkpoint_dependencies = []
+            if(_unconditional_checkpoint_dependencies is not null)
+            {
+                return;
+            }
             _self_update_uid = -1;
+            _unconditional_checkpoint_dependencies = new List<TrackableReference>();
+            _unconditional_dependency_names = new Dictionary<string, Trackable>();
+        }
+
+        public virtual IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache)
+        {
+            _maybe_initialize_trackable();
+            return _unconditional_checkpoint_dependencies.ToDictionary(x => x.Name, x => x.Refer);
+        }
+
+        public virtual Trackable _track_trackable(Trackable trackable, string name, bool overwrite = false)
+        {
+            _maybe_initialize_trackable();
+            if (!_manual_tracking) return trackable;
+            var new_reference = new TrackableReference(name, trackable);
+            var current_object = _lookup_dependency(name);
+
+            if(current_object is null)
+            {
+                _unconditional_checkpoint_dependencies.Add(new_reference);
+                _handle_deferred_dependencies(name, trackable);
+            }
+            _unconditional_dependency_names[name] = trackable;
+            return trackable;
+        }
+
+        /// <summary>
+        /// Pop and load any deferred checkpoint restores into `trackable`.
+        /// This method does not add a new dependency on `trackable`, but it does check if any outstanding/deferred dependencies have been queued waiting for
+        /// this dependency to be added (matched based on `name`). If so, `trackable` and its dependencies are restored. The restorations are 
+        /// considered fulfilled and so are deleted.
+        /// `_track_trackable` is more appropriate for adding a normal/unconditional dependency, and includes handling for deferred restorations. 
+        /// This method allows objects such as `Optimizer` to use the same restoration logic while managing conditional dependencies themselves,
+        /// by overriding `_checkpoint_dependencies` and `_lookup_dependency` to change the object's dependencies based on the context
+        /// it is saved/restored in (a single optimizer instance can have state associated with multiple graphs).
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="trackable"></param>
+        public virtual void _handle_deferred_dependencies(string name, Trackable trackable)
+        {
+            //_maybe_initialize_trackable();
+            //trackable._maybe_initialize_trackable();
+            
+            // TODO: complete the implementation.
+        }
+
+        public virtual Trackable? _lookup_dependency(string name)
+        {
+            if (_unconditional_dependency_names.TryGetValue(name, out var dependency)) return dependency;
+            else return null;
+        }
+
+        public static Trackable convert_to_trackable(object obj, object? parent = null)
+        {
+            if (obj is Trackable)
+            {
+                return (Trackable)obj;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public virtual IDictionary<string, Trackable> deserialization_dependencies(IDictionary<string, Trackable> children)
+        {
+            return new Dictionary<string, Trackable>();
+        }
+
+        public virtual (IDictionary<Trackable, Trackable>, IDictionary<Tensor, Tensor>) map_resources(
+            SaveOptions? save_options)
+        {
+            return (new Dictionary<Trackable, Trackable>(), new Dictionary<Tensor, Tensor>());
+        }
+
+        public virtual List<Tensor> export_to_saved_model_graph(IDictionary<Trackable, Trackable> object_map,
+            IDictionary<Tensor, Tensor> tensor_map, SaveOptions? options = null)
+        {
+            var (self_object_map, self_tensor_map) = map_resources(options);
+            foreach (var pair in self_object_map)
+            {
+                object_map.Add(pair);
+            }
+            foreach (var pair in self_tensor_map)
+            {
+                tensor_map.Add(pair);
+            }
+
+            return self_tensor_map.Keys.ToList();
+        }
+
+        public virtual IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
+        {
+            if (saveable_object_util.trackable_has_serialize_to_tensor(this))
+            {
+                // TODO: complete the implementation (need to complete the class `saveable_object_util.TrackableSaveable`).
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return _self_saveable_object_factories;
+            }
+        }
+
+        /// <summary>
+        /// Gathers tensors to save to the checkpoint. You should only override `serialize_to_tensors` and `restore_from_tensors`
+        /// if you are defining a custom resource or variable with custom ops.
+        /// Otherwise, please store the state of your trackable in `tf.Variable` objects
+        /// and add them to Trackable object hierarchy using `setattr` (for subclasses
+        /// of `AutoTrackable`) or overriding the `_trackable_children` method.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public virtual IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors)
+        {
+            throw new NotImplementedException();
         }
     }
+
+    public record class TrackableReference(string Name, Trackable Refer);
 }

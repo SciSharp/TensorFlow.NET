@@ -1,6 +1,8 @@
-﻿namespace Tensorflow.Keras.ArgsDefinition
+﻿using Tensorflow.Keras.Saving;
+
+namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class OptimizerV2Args
+    public class OptimizerV2Args: IKerasConfig
     {
         public string Name { get; set; }
         public float LearningRate { get; set; } = 0.001f;

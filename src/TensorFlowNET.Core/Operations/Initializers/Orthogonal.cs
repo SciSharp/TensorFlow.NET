@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
    Copyright 2023 Haiping Chen. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ using System.Linq;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations.Initializers;
+using System.Collections.Generic;
 
 public class Orthogonal : IInitializer
 {
@@ -31,6 +32,10 @@ public class Orthogonal : IInitializer
         _seed = seed;
     }
 
+    private readonly Dictionary<string, object> _config;
+
+    public string ClassName => "Orthogonal";
+    public IDictionary<string, object> Config => throw new NotImplementedException();
     public Tensor Apply(InitializerArgs args)
     {
         return _generate_init_val(args.Shape, args.DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : args.DType);

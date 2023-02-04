@@ -156,7 +156,7 @@ namespace Tensorflow {
     /// Nodes[0] is considered the root node.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public pbc::RepeatedField<global::Tensorflow.SavedObject> Nodes {
+    public pbc::RepeatedField<global::Tensorflow.SavedObject>  Nodes {
       get { return nodes_; }
     }
 
@@ -286,6 +286,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SavedObject(SavedObject other) : this() {
       children_ = other.children_.Clone();
+      dependencies_ = other.dependencies_.Clone();
       slotVariables_ = other.slotVariables_.Clone();
       saveableObjects_ = other.saveableObjects_.Clone();
       switch (other.KindCase) {
@@ -328,6 +329,7 @@ namespace Tensorflow {
     private static readonly pb::FieldCodec<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> _repeated_children_codec
         = pb::FieldCodec.ForMessage(10, global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference.Parser);
     private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> children_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
+    private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> dependencies_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
     /// <summary>
     /// Objects which this object depends on: named edges in the dependency
     /// graph.
@@ -337,6 +339,11 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> Children {
       get { return children_; }
+    }
+    
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> Dependencies {
+      get { return dependencies_; }
     }
 
     /// <summary>Field number for the "slot_variables" field.</summary>
@@ -617,6 +624,7 @@ namespace Tensorflow {
         return;
       }
       children_.Add(other.children_);
+      dependencies_.Add(other.dependencies_);
       slotVariables_.Add(other.slotVariables_);
       saveableObjects_.Add(other.saveableObjects_);
       switch (other.KindCase) {

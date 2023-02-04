@@ -4,6 +4,8 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
+using Tensorflow.Keras.Saving.SavedModel;
+using Tensorflow.Train;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -34,6 +36,13 @@ namespace Tensorflow.Keras.Engine
         IVariableV1 _predict_counter;
         bool _base_model_initialized;
         bool stop_training;
+        DataHandler data_handler;
+        
+        public OptimizerV2 Optimizer
+        {
+            get => optimizer;
+            set => optimizer = value;
+        }
 
         public Model(ModelArgs args)
             : base(args)
@@ -100,6 +109,16 @@ namespace Tensorflow.Keras.Engine
 
                 return variables;
             }
+        }
+
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
+        {
+            if(save_type == SaveType.SAVEDMODEL)
+            {
+                //TODO: deal with `train_function`, `test_function`, `predict_function`, `train_tf_function`.
+            }
+            var children = base._trackable_children(save_type, cache);
+            return children;
         }
     }
 }

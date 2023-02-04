@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class PreprocessingLayerArgs : LayerArgs
+    public class PreprocessingLayerArgs : AutoSerializeLayerArgs
     {
     }
 }

@@ -1,12 +1,17 @@
-﻿namespace Tensorflow.Keras.ArgsDefinition
+﻿using Newtonsoft.Json;
+
+namespace Tensorflow.Keras.ArgsDefinition
 {
-    public class UpSampling2DArgs : LayerArgs
+    public class UpSampling2DArgs : AutoSerializeLayerArgs
     {
+        [JsonProperty("size")]
         public Shape Size { get; set; }
+        [JsonProperty("data_format")]
         public string DataFormat { get; set; }
         /// <summary>
         /// 'nearest', 'bilinear'
         /// </summary>
+        [JsonProperty("interpolation")]
         public string Interpolation { get; set; } = "nearest";
     }
 }

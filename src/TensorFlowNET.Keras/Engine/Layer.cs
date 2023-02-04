@@ -49,6 +49,8 @@ namespace Tensorflow.Keras.Engine
         public bool Built => built;
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
+        public bool AutoCast => args.Autocast;
+        public IRegularizer ActivityRegularizer => args.ActivityRegularizer;
 
         /// <summary>
         /// A stateful layer is a layer whose updates are run during inference too,
@@ -59,6 +61,7 @@ namespace Tensorflow.Keras.Engine
         /// Provides information about which inputs are compatible with the layer.
         /// </summary>
         protected InputSpec inputSpec;
+        public InputSpec InputSpec => inputSpec;
         bool dynamic = true;
         public bool SupportsMasking { get; set; }
         protected List<IVariableV1> _trainable_weights;
@@ -77,6 +80,8 @@ namespace Tensorflow.Keras.Engine
         protected bool computePreviousMask;
         protected List<Operation> updates;
         public Shape BatchInputShape => args.BatchInputShape;
+        protected TensorShapeConfig _buildInputShape = null;
+        public TensorShapeConfig BuildInputShape => _buildInputShape;
 
         List<INode> inboundNodes;
         public List<INode> InboundNodes => inboundNodes;
@@ -86,9 +91,29 @@ namespace Tensorflow.Keras.Engine
 
         ThreadLocal<CallContext> callContext = new ThreadLocal<CallContext>();
         public CallContext CallContext => callContext.Value;
-        public Tensor[] input => inboundNodes[0].input_tensors;
+        public Tensor[] input
+        {
+            get
+            {
+                if(inboundNodes is not null && inboundNodes.Count > 0)
+                {
+                    return inboundNodes[0].input_tensors;
+                }
+                return null;
+            }
+        }
         public Dictionary<int, List<INode>> NodesByDepth { get; set; }
-        public Shape OutputShape => inboundNodes[0].Outputs.shape;
+        public Shape OutputShape
+        {
+            get
+            {
+                if(inboundNodes is not null && inboundNodes.Count > 0)
+                {
+                    return inboundNodes[0].Outputs.shape;
+                }
+                return null;
+            }
+        }
         protected List<ILayer> _self_tracked_trackables;
 
         public Layer(LayerArgs args)
@@ -162,7 +187,7 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="inputs"></param>
         /// <param name="state"></param>
-        /// <param name="is_training"></param>
+        /// <param name="training"></param>
         /// <returns></returns>
         protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
@@ -201,6 +226,7 @@ namespace Tensorflow.Keras.Engine
 
         public virtual void build(Shape input_shape)
         {
+            _buildInputShape = input_shape;
             built = true;
         }
 
@@ -286,7 +312,9 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        public virtual LayerArgs get_config()
+        public List<IVariableV1> Variables => weights;
+
+        public virtual IKerasConfig get_config()
             => args;
     }
 }

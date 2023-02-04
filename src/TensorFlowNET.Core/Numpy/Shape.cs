@@ -14,14 +14,17 @@
    limitations under the License.
 ******************************************************************************/
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Keras.Common;
 using Tensorflow.NumPy;
 
 namespace Tensorflow
 {
+    [JsonConverter(typeof(CustomizedShapeJsonConverter))]
     public class Shape
     {
         public int ndim => _dims == null ? -1 : _dims.Length;
