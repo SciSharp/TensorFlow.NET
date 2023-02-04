@@ -18,13 +18,13 @@ public class SaveableView
 {
     private AugmentedGraphView _augmented_graph_view;
     private SaveOptions _options;
-    private List<Trackable> _trackable_objects;
+    private IList<Trackable> _trackable_objects;
     private List<Trackable> _nodes;
-    private Dictionary<Trackable, IEnumerable<TrackableReference>> _node_paths;
-    private Dictionary<Trackable, int> _node_ids;
+    private IDictionary<Trackable, IEnumerable<TrackableReference>> _node_paths;
+    private IDictionary<Trackable, int> _node_ids;
     private IDictionary<Trackable, pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.SlotVariableReference>>
         _slot_variables;
-    private Dictionary<Trackable, string> _object_names;
+    private IDictionary<Trackable, string> _object_names;
     private List<object> _gradient_functions; // to be completed
     private List<RegisteredGradient> _gradient_defs; // to be completed
     private List<ConcreteFunction> _concrete_functions;
@@ -45,7 +45,7 @@ public class SaveableView
     {
         get => _nodes;
     }
-    public Dictionary<Trackable, int> NodeIds
+    public IDictionary<Trackable, int> NodeIds
     {
         get => _node_ids;
     }
@@ -53,7 +53,7 @@ public class SaveableView
     {
         get => _gradient_defs;
     }
-    public Dictionary<Trackable, IEnumerable<TrackableReference>> NodePaths
+    public IDictionary<Trackable, IEnumerable<TrackableReference>> NodePaths
     {
         get => _node_paths;
     }
@@ -84,7 +84,7 @@ public class SaveableView
 
     private void initialize_nodes_and_concrete_functions()
     {
-        _nodes = _trackable_objects.ConvertAll(x => x); // deep copy
+        _nodes = _trackable_objects.ToList().ConvertAll(x => x); // deep copy
         _gradient_functions = new();
         _gradient_defs = new();
 

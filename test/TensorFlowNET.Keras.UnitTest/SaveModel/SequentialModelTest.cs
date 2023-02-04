@@ -73,7 +73,7 @@ public class SequentialModelTest
         {
             TrainDir = "mnist",
             OneHot = false,
-            ValidationSize = 10000,
+            ValidationSize = 50000,
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
@@ -119,13 +119,13 @@ public class SequentialModelTest
         model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(from_logits:true), new string[] { "accuracy" });
 
         var num_epochs = 1;
-        var batch_size = 16;
+        var batch_size = 8;
 
         var dataset = new RandomDataSet(new Shape(227, 227, 3), 16);
 
         model.fit(dataset.Data, dataset.Labels, batch_size, num_epochs);
 
-        model.save("./pb_elex_sequential", save_format: "tf");
+        model.save("./pb_alex_sequential", save_format: "tf");
 
         // The saved model can be test with the following python code:
         #region alexnet_python_code
@@ -136,7 +136,7 @@ public class SequentialModelTest
         //    return -a
 
         //if __name__ == '__main__':
-        //    model = tf.keras.models.load_model("./pb_elex_sequential")
+        //    model = tf.keras.models.load_model("./pb_alex_sequential")
         //    model.summary()
 
         //    num_classes = 5

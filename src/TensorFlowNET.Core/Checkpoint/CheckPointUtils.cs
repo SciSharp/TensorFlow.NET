@@ -12,9 +12,9 @@ namespace Tensorflow.Checkpoint;
 public static class CheckPointUtils
 {
     private static string _ESCAPE_CHAR = ".";
-    public static (List<Trackable>, Dictionary<Trackable, IEnumerable<TrackableReference>>, Dictionary<Trackable, int>,
+    public static (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>, IDictionary<Trackable, int>,
         IDictionary<Trackable, pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.SlotVariableReference>>,
-        Dictionary<Trackable, string>) objects_ids_and_slot_variables_and_paths(ObjectGraphView graph_view)
+        IDictionary<Trackable, string>) objects_ids_and_slot_variables_and_paths(ObjectGraphView graph_view)
     {
         var (trackable_objects, node_paths) = graph_view.breadth_first_traversal();
         Dictionary<Trackable, string> object_names = new();

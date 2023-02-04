@@ -52,7 +52,7 @@ public class TrackableView
     /// Returns a list of all nodes and its paths from self.root using a breadth first traversal.
     /// Corresponding to tensorflow/python/checkpoint/trackable_view.Trackable._descendants_with_paths
     /// </summary>
-    protected (List<Trackable>, Dictionary<Trackable, IEnumerable<TrackableReference>>) _descendants_with_paths()
+    protected (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>) _descendants_with_paths()
     {
         List<Trackable> bfs_sorted = new();
         Queue<Trackable> to_visit = new();

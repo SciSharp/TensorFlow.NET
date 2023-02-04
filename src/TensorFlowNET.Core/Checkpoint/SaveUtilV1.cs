@@ -13,7 +13,7 @@ namespace Tensorflow.Checkpoint;
 
 public static class SaveUtilV1
 {
-    public static (Dictionary<Trackable, IEnumerable<CheckpointFactoryData>>, object?) get_checkpoint_factories_and_keys(IDictionary<Trackable, string> object_names,
+    public static (IDictionary<Trackable, IEnumerable<CheckpointFactoryData>>, object?) get_checkpoint_factories_and_keys(IDictionary<Trackable, string> object_names,
         IDictionary<Trackable, Trackable>? object_map = null)
     {
         // According to https://github.com/tensorflow/tensorflow/blob/master/tensorflow/python/saved_model/registration/README.md,
@@ -44,7 +44,7 @@ public static class SaveUtilV1
         return (checkpoint_factory_map, null);
     }
 
-    public static (List<MySaveableObject>, IDictionary<string, IDictionary<string, Trackable>>?) frozen_saveables_and_savers(ObjectGraphView graph_view,
+    public static (IList<MySaveableObject>, IDictionary<string, IDictionary<string, Trackable>>?) frozen_saveables_and_savers(ObjectGraphView graph_view,
         IDictionary<Trackable, Trackable> object_map, Graph? to_graph, bool call_with_mapped_captures,
         object? saveables_cache = null)
     {
@@ -73,7 +73,7 @@ public static class SaveUtilV1
         }
     }
 
-    public static (List<MySaveableObject>, TrackableObjectGraph, object?, IDictionary<string, IDictionary<string, Trackable>>?) serialize_gathered_objects(ObjectGraphView graph_view,
+    public static (IList<MySaveableObject>, TrackableObjectGraph, object?, IDictionary<string, IDictionary<string, Trackable>>?) serialize_gathered_objects(ObjectGraphView graph_view,
         IDictionary<Trackable, Trackable> object_map, bool call_with_mapped_captures, object? saveables_cache = null)
     {
         var (trackable_objects, node_paths) = graph_view.breadth_first_traversal();
@@ -129,7 +129,8 @@ public static class SaveUtilV1
         return object_graph_proto;
     }
 
-    private static (List<MySaveableObject>, object?, IDictionary<string, IDictionary<string, Trackable>>?) add_attributes_to_object_graph(IList<Trackable> trackable_objects,
+    private static (IList<MySaveableObject>, object?, IDictionary<string, IDictionary<string, Trackable>>?) add_attributes_to_object_graph(
+        IList<Trackable> trackable_objects,
         TrackableObjectGraph object_graph_proto, IDictionary<Trackable, int> node_ids,
         IDictionary<Trackable, string> object_names, IDictionary<Trackable, Trackable> object_map,
         bool call_with_mapped_captures, object? saveables_cache = null)
@@ -150,7 +151,7 @@ public static class SaveUtilV1
         return (named_saveable_objects, feed_additions, null);
     }
 
-    public static (List<MySaveableObject>, object?) generate_saveable_objects(
+    public static (IList<MySaveableObject>, object?) generate_saveable_objects(
         IDictionary<Trackable, IEnumerable<CheckpointFactoryData>> checkpoint_factory_map,
         TrackableObjectGraph? object_graph_proto, IDictionary<Trackable, int>? node_ids,
         IDictionary<Trackable, Trackable> object_map, bool call_with_mapped_captures, object? saveables_cache = null)
@@ -178,13 +179,13 @@ public static class SaveUtilV1
 
                 // TODO: oneflow python has a process with callable `saveable_factory`.
                 List<MySaveableObject> saveables = new();
-                if (maybe_saveable.DataType == typeof(MySaveableObject))
+                if (maybe_saveable.TryGet<MySaveableObject>(out var s))
                 {
-                    saveables.Add(maybe_saveable.GetValueB());
+                    saveables.Add(s);
                 }
                 else
                 {
-                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(maybe_saveable.GetValueA() as Trackable, key));
+                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(maybe_saveable.GetValue<BaseResourceVariable>() as Trackable, key));
                 }
 
                 foreach (var saveable in saveables)

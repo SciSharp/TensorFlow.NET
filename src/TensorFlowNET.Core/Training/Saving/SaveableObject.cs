@@ -25,9 +25,9 @@ namespace Tensorflow
         {
             get
             {
-                if(_op.DataType == typeof(Tensor))
+                if(_op.TryGet<Tensor>(out var tensor))
                 {
-                    return _op.GetValueA();
+                    return tensor;
                 }
                 else
                 {

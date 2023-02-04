@@ -86,7 +86,7 @@ public class AugmentedGraphView: ObjectGraphView
         return concrete_function;
     }
 
-    public override (List<Trackable>, Dictionary<Trackable, IEnumerable<TrackableReference>>) breadth_first_traversal()
+    public override (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>) breadth_first_traversal()
     {
         Trackable get_merged_trackable(Trackable x)
         {

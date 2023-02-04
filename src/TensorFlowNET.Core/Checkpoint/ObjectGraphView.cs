@@ -45,7 +45,7 @@ public class ObjectGraphView: TrackableView, ICloneable
         get => _attached_dependencies;
     }
 
-    public virtual (List<Trackable>, Dictionary<Trackable, IEnumerable<TrackableReference>>) breadth_first_traversal()
+    public virtual (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>) breadth_first_traversal()
     {
         return base._descendants_with_paths();
     }

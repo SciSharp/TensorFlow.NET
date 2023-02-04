@@ -37,10 +37,10 @@ namespace Tensorflow.Train
             var properties = this.GetType().GetProperties();
             foreach ( var property in properties )
             {
-                string name = property.Name;
-                object value = property.GetValue(this, null);
-                if(value is Function || value is ConcreteFunction)
+                if(property.PropertyType == typeof(Function) || property.PropertyType == typeof(ConcreteFunction))
                 {
+                    string name = property.Name;
+                    object value = property.GetValue(this, null);
                     functions[name] = (Trackable)value;
                 }
             }

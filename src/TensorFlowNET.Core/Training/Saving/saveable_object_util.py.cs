@@ -136,9 +136,8 @@ namespace Tensorflow
                     {
                         full_name = name + "_" + attr;
                     }
-                    if(factory.DataType == typeof(ResourceVariable))
+                    if(factory.TryGet<BaseResourceVariable>(out var variable))
                     {
-                        var variable = factory.GetValueA();
                         foreach (var op in saveable_objects_for_op(variable as Trackable, variable.Name))
                         {
                             yield return op;
@@ -146,8 +145,8 @@ namespace Tensorflow
                     }
                     else
                     {
-                        var variable = factory.GetValueB();
-                        foreach (var op in saveable_objects_for_op(variable, variable.name))
+                        var saveable = factory.GetValue<MySaveableObject>();
+                        foreach (var op in saveable_objects_for_op(saveable, saveable.name))
                         {
                             yield return op;
                         }
@@ -236,14 +235,14 @@ namespace Tensorflow
                     string spec_name = name + TrackableUtils.escape_local_name(tensor_name);
 
                     IDictionary<string, Tensor> internal_dict;
-                    if(maybe_tensor.DataType == typeof(Tensor))
+                    if(maybe_tensor.TryGet<Tensor>(out var tensor))
                     {
                         internal_dict= new Dictionary<string, Tensor>();
-                        internal_dict[""] = maybe_tensor.GetValueA();
+                        internal_dict[""] = tensor;
                     }
                     else
                     {
-                        internal_dict = maybe_tensor.GetValueB();
+                        internal_dict = maybe_tensor.GetValue<IDictionary<string, Tensor>>();
                     }
 
                     foreach(var item in internal_dict)
@@ -287,7 +286,7 @@ namespace Tensorflow
                     var slice_spec = convert_to_string(spec.slice_spec);
                     if (!string.IsNullOrEmpty(slice_spec))
                     {
-                        tensor_dict.SetDefault(name, new Dictionary<string, Tensor>()).GetValueB()[slice_spec] = spec.tensor;
+                        tensor_dict.SetDefault(name, new Dictionary<string, Tensor>()).GetValue<IDictionary<string, Tensor>>()[slice_spec] = spec.tensor;
                     }
                     else
                     {
@@ -318,14 +317,14 @@ namespace Tensorflow
 
                         var maybe_tensor = restored_tensors[name];
                         IDictionary<string, Tensor> dict;
-                        if(maybe_tensor.DataType == typeof(Tensor))
+                        if(maybe_tensor.TryGet<Tensor>(out var tensor))
                         {
                             dict = new Dictionary<string, Tensor>();
-                            dict[""] = maybe_tensor.GetValueA();
+                            dict[""] = tensor;
                         }
                         else
                         {
-                            dict = maybe_tensor.GetValueB();
+                            dict = maybe_tensor.GetValue<IDictionary<string, Tensor>>();
                         }
                         saveable_restored_tensors.Add(dict[slice_spec]);
                     }

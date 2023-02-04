@@ -58,7 +58,7 @@ namespace Tensorflow.Checkpoint
             return (serialized_tensors, feed_additions, registered_savers, object_graph_proto);
         }
 
-        private static (List<TrackableData>, Dictionary<Trackable, int>) gather_trackable_data(ObjectGraphView graph_view, IDictionary<Trackable, Trackable>? object_map)
+        private static (IList<TrackableData>, IDictionary<Trackable, int>) gather_trackable_data(ObjectGraphView graph_view, IDictionary<Trackable, Trackable>? object_map)
         {
             var (trackable_objects, node_paths) = graph_view.breadth_first_traversal();
             Dictionary<Trackable, string> object_names = new();
@@ -173,7 +173,7 @@ namespace Tensorflow.Checkpoint
 
                 tensor_dict[checkpoint_key] = maybe_tensor;
 
-                if(maybe_tensor.GetValueA() is SaveSpec)
+                if(maybe_tensor.IsTypeOrDeriveFrom<SaveSpec>())
                 {
                     throw new NotImplementedException();
                     //((SaveSpec)maybe_tensor).name = local_name + ((SaveSpec)maybe_tensor).name;

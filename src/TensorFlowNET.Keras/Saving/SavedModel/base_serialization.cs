@@ -34,5 +34,4 @@ public abstract class SavedModelSaver
         return children.Concat(functions_to_serialize(serialization_cache).ToDictionary(x => x.Key, x => (Trackable)x.Value))
             .ToDictionary(x => x.Key, x => x.Value);
     }
-    
 }

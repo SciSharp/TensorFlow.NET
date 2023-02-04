@@ -81,8 +81,8 @@ public static partial class SavedModelUtils
         return (saved_nodes, node_paths);
     }
 
-    private static (MetaGraphDef, Graph, TrackableSaver, AssetInfo, List<Trackable>,
-        Dictionary<Trackable, IEnumerable<TrackableReference>>) _build_meta_graph(Trackable obj,
+    private static (MetaGraphDef, Graph, TrackableSaver, AssetInfo, IList<Trackable>,
+        IDictionary<Trackable, IEnumerable<TrackableReference>>) _build_meta_graph(Trackable obj,
             ConcreteFunction? signatures, SaveOptions options, MetaGraphDef? meta_graph_def = null)
     {
         using (SaveContext.save_context(options))
