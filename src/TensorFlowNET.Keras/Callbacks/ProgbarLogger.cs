@@ -1,5 +1,4 @@
-﻿using PureHDF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -76,6 +75,27 @@ namespace Tensorflow.Keras.Callbacks
         void _maybe_init_progbar()
         {
 
+        }
+
+        public void on_predict_begin()
+        {
+            _reset_progbar();
+            _maybe_init_progbar();
+        }
+
+        public void on_predict_batch_begin(long step)
+        {
+            
+        }
+
+        public void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs)
+        {
+            
+        }
+
+        public void on_predict_end()
+        {
+            
         }
     }
 }

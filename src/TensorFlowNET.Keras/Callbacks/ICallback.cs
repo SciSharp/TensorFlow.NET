@@ -11,5 +11,9 @@ namespace Tensorflow.Keras.Callbacks
         void on_train_batch_begin(long step);
         void on_train_batch_end(long end_step, Dictionary<string, float> logs);
         void on_epoch_end(int epoch, Dictionary<string, float> epoch_logs);
+        void on_predict_begin();
+        void on_predict_batch_begin(long step);
+        void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs);
+        void on_predict_end();
     }
 }

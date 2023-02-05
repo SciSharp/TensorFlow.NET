@@ -48,5 +48,26 @@ namespace Tensorflow.Keras.Callbacks
                 history[log.Key].Add((float)log.Value);
             }
         }
+
+        public void on_predict_begin()
+        {
+            epochs = new List<int>();
+            history = new Dictionary<string, List<float>>();
+        }
+
+        public void on_predict_batch_begin(long step)
+        {
+            
+        }
+
+        public void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs)
+        {
+            
+        }
+
+        public void on_predict_end()
+        {
+            
+        }
     }
 }

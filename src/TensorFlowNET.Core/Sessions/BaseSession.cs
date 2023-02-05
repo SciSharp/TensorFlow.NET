@@ -293,7 +293,8 @@ namespace Tensorflow
             // c_api.TF_CloseSession(handle, tf.Status.Handle);
             if (tf.Status == null || tf.Status.Handle.IsInvalid)
             {
-                c_api.TF_DeleteSession(handle, c_api.TF_NewStatus());
+                using var status = new Status();
+                c_api.TF_DeleteSession(handle, status.Handle);
             }
             else
             {

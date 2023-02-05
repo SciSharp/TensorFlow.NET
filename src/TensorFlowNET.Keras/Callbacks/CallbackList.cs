@@ -39,5 +39,25 @@ namespace Tensorflow.Keras.Callbacks
         {
             callbacks.ForEach(x => x.on_epoch_end(epoch, epoch_logs));
         }
+
+        public void on_predict_begin()
+        {
+            callbacks.ForEach(x => x.on_predict_begin());
+        }
+
+        public void on_predict_batch_begin(long step)
+        {
+            callbacks.ForEach(x => x.on_predict_batch_begin(step));
+        }
+
+        public void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs)
+        {
+            callbacks.ForEach(x => x.on_predict_batch_end(end_step, logs));
+        }
+
+        public void on_predict_end()
+        {
+            callbacks.ForEach(x => x.on_predict_end());
+        }
     }
 }
