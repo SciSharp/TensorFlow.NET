@@ -1,5 +1,4 @@
-﻿using Tensorflow.NumPy;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
@@ -33,40 +32,7 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            var callbacks = new CallbackList(new CallbackParams
-            {
-                Model = this,
-                Verbose = verbose,
-                Epochs = 1,
-                Steps = data_handler.Inferredsteps
-            });
-
-            Tensor batch_outputs = null;
-            _predict_counter.assign(0);
-            callbacks.on_predict_begin();
-            foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
-            {
-                foreach (var step in data_handler.steps())
-                {
-                    callbacks.on_predict_batch_begin(step);
-                    var tmp_batch_outputs = run_predict_step(iterator);
-                    if (batch_outputs == null)
-                    {
-                        batch_outputs = tmp_batch_outputs[0];
-                    }
-                    else
-                    {
-                        batch_outputs = tf.concat(new Tensor[] { batch_outputs, tmp_batch_outputs[0] }, axis: 0);
-                    }
-
-                    var end_step = step + data_handler.StepIncrement;
-                    callbacks.on_predict_batch_end(end_step, new Dictionary<string, Tensors> { { "outputs", batch_outputs } });
-                }
-                GC.Collect();
-            }
-            
-            callbacks.on_predict_end();
-            return batch_outputs;
+            return PredictInternal(data_handler, verbose);
         }
 
         /// <summary>
@@ -105,23 +71,45 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            Tensors outputs = null;
+            return PredictInternal(data_handler, verbose);
+        }
+
+        Tensors PredictInternal(DataHandler data_handler, int verbose)
+        {
+            var callbacks = new CallbackList(new CallbackParams
+            {
+                Model = this,
+                Verbose = verbose,
+                Epochs = 1,
+                Steps = data_handler.Inferredsteps
+            });
+
+            Tensor batch_outputs = null;
             _predict_counter.assign(0);
-            // callbacks.on_predict_begin()
+            callbacks.on_predict_begin();
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
-                foreach(var step in data_handler.steps())
+                foreach (var step in data_handler.steps())
                 {
-                    // callbacks.on_predict_batch_begin(step)
-                    var batch_outputs = run_predict_step(iterator);
-                    outputs = batch_outputs;
+                    callbacks.on_predict_batch_begin(step);
+                    var tmp_batch_outputs = run_predict_step(iterator);
+                    if (batch_outputs == null)
+                    {
+                        batch_outputs = tmp_batch_outputs[0];
+                    }
+                    else
+                    {
+                        batch_outputs = tf.concat(new Tensor[] { batch_outputs, tmp_batch_outputs[0] }, axis: 0);
+                    }
+
                     var end_step = step + data_handler.StepIncrement;
-                    // callbacks.on_predict_batch_end(end_step, {'outputs': batch_outputs})
+                    callbacks.on_predict_batch_end(end_step, new Dictionary<string, Tensors> { { "outputs", batch_outputs } });
                 }
-                GC.Collect();
             }
-            // callbacks.on_predict_end()
-            return outputs;
+
+            callbacks.on_predict_end();
+
+            return batch_outputs;
         }
 
         Tensors run_predict_step(OwnedIterator iterator)

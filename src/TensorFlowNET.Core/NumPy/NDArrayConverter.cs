@@ -14,7 +14,8 @@ namespace Tensorflow.NumPy
                 TF_DataType.TF_FLOAT => Scalar<T>(*(float*)nd.data),
                 TF_DataType.TF_INT32 => Scalar<T>(*(int*)nd.data),
                 TF_DataType.TF_INT64 => Scalar<T>(*(long*)nd.data),
-                _ => throw new NotImplementedException("")
+                TF_DataType.TF_DOUBLE => Scalar<T>(*(double*)nd.data),
+                _ => throw new NotImplementedException(nameof(NDArrayConverter))
             };
 
         static T Scalar<T>(byte input)
@@ -23,7 +24,8 @@ namespace Tensorflow.NumPy
                 TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
-                _ => throw new NotImplementedException("")
+                TypeCode.Double => (T)Convert.ChangeType(input, TypeCode.Double),
+                _ => throw new NotImplementedException(nameof(NDArrayConverter))
             };
 
         static T Scalar<T>(float input)
@@ -32,7 +34,8 @@ namespace Tensorflow.NumPy
                 TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
-                _ => throw new NotImplementedException("")
+                TypeCode.Double => (T)Convert.ChangeType(input, TypeCode.Double),
+                _ => throw new NotImplementedException(nameof(NDArrayConverter))
             };
 
         static T Scalar<T>(int input)
@@ -41,7 +44,8 @@ namespace Tensorflow.NumPy
                 TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int64 => (T)Convert.ChangeType(input, TypeCode.Int64),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
-                _ => throw new NotImplementedException("")
+                TypeCode.Double => (T)Convert.ChangeType(input, TypeCode.Double),
+                _ => throw new NotImplementedException(nameof(NDArrayConverter))
             };
 
         static T Scalar<T>(long input)
@@ -50,7 +54,8 @@ namespace Tensorflow.NumPy
                 TypeCode.Byte => (T)Convert.ChangeType(input, TypeCode.Byte),
                 TypeCode.Int32 => (T)Convert.ChangeType(input, TypeCode.Int32),
                 TypeCode.Single => (T)Convert.ChangeType(input, TypeCode.Single),
-                _ => throw new NotImplementedException("")
+                TypeCode.Double => (T)Convert.ChangeType(input, TypeCode.Double),
+                _ => throw new NotImplementedException(nameof(NDArrayConverter))
             };
 
         public static unsafe Array ToMultiDimArray<T>(NDArray nd) where T : unmanaged
@@ -65,7 +70,7 @@ namespace Tensorflow.NumPy
                 T[,,,] array => Addr(array),
                 T[,,,,] array => Addr(array),
                 T[,,,,,] array => Addr(array),
-                _ => throw new NotImplementedException("")
+                _ => throw new NotImplementedException(nameof(NDArrayConverter))
             };
 
             System.Buffer.MemoryCopy(nd.data.ToPointer(), addr, nd.bytesize, nd.bytesize);

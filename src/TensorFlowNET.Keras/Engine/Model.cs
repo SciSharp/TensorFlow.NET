@@ -36,7 +36,6 @@ namespace Tensorflow.Keras.Engine
         IVariableV1 _predict_counter;
         bool _base_model_initialized;
         bool stop_training;
-        DataHandler data_handler;
         
         public OptimizerV2 Optimizer
         {
