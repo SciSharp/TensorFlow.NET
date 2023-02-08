@@ -55,6 +55,20 @@ namespace Tensorflow.Keras.Layers
             IRegularizer bias_regularizer = null,
             IRegularizer activity_regularizer = null);
 
+        public ILayer Conv2DTranspose(int filters,
+            Shape kernel_size = null,
+            Shape strides = null,
+            string output_padding = "valid",
+            string data_format = null,
+            Shape dilation_rate = null,
+            string activation = null,
+            bool use_bias = true,
+            string kernel_initializer = null,
+            string bias_initializer = null,
+            string kernel_regularizer = null,
+            string bias_regularizer = null,
+            string activity_regularizer = null);
+
         public ILayer Conv2D(int filters,
             Shape kernel_size = null,
             Shape strides = null,

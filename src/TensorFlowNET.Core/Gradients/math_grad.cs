@@ -639,6 +639,20 @@ namespace Tensorflow.Gradients
             });
         }
 
+        [RegisterGradient("Rsqrt")]
+        public static Tensor[] _RsqrtGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var y = op.outputs[0];
+
+            return tf_with(ops.control_dependencies(grads), delegate
+            {
+                y = math_ops.conj(y);
+                var factor = constant_op.constant(-0.5f, dtype: y.dtype);
+                return new Tensor[] { grad * (factor * math_ops.square(y) * y) };
+            });
+        }
+
         [RegisterGradient("Asin")]
         public static Tensor[] _ASinGrad(Operation op, Tensor[] grads)
         {

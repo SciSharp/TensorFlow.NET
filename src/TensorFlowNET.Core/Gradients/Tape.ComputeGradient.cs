@@ -90,7 +90,7 @@ namespace Tensorflow.Gradients
 
                     in_gradients = trace.backward_function(out_gradients.ToArray(), unneeded_gradients.ToArray());
 
-                    if (in_gradients.Count() != trace.input_tensor_id.Count())
+                    if (in_gradients.Length != trace.input_tensor_id.Length && in_gradients.Length + unneeded_gradients.Count != trace.input_tensor_id.Length)
                         throw new RuntimeError($"Recorded operation '{trace.op_type}' returned too few gradients. Expected {trace.input_tensor_id.Length} but received {in_gradients.Count()}");
                     if (!_persistent)
                     {
@@ -103,9 +103,11 @@ namespace Tensorflow.Gradients
                     in_gradients = new Tensor[trace.input_tensor_id.Length];
                 }
 
-                for (int i = 0; i < in_gradients.Length; ++i)
+                bool skip_unneeded_id = trace.input_tensor_id.Length > in_gradients.Length;
+                for (int i = 0, k = 0; i < in_gradients.Length && k < trace.input_tensor_id.Count(); ++i, ++k)
                 {
-                    var id = trace.input_tensor_id[i];
+                    if (skip_unneeded_id && unneeded_gradients.Contains(k)) ++k;
+                    var id = trace.input_tensor_id[k];
                     if (in_gradients[i] != null)
                     {
                         var unaggregated_grads = gradients[id];
