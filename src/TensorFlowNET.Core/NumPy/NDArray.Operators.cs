@@ -25,10 +25,24 @@ namespace Tensorflow.NumPy
         [AutoNumPy] 
         public static NDArray operator -(NDArray lhs) => new NDArray(gen_math_ops.neg(lhs));
         [AutoNumPy]
-        public static NDArray operator ==(NDArray lhs, NDArray rhs) 
-            => rhs is null ? Scalar(false) : new NDArray(math_ops.equal(lhs, rhs));
+        public static NDArray operator ==(NDArray lhs, NDArray rhs)
+        {
+            if(ReferenceEquals(lhs, rhs))
+                return Scalar(true);
+            if(lhs is null)
+                return Scalar(false);
+            if(rhs is null)
+                return Scalar(false);
+            return new NDArray(math_ops.equal(lhs, rhs));
+        }
         [AutoNumPy]
-        public static NDArray operator !=(NDArray lhs, NDArray rhs) 
-            => new NDArray(math_ops.not_equal(lhs, rhs));
+        public static NDArray operator !=(NDArray lhs, NDArray rhs)
+        {
+            if(ReferenceEquals(lhs, rhs))
+                return Scalar(false);
+            if(lhs is null || rhs is null)
+                return Scalar(true);
+            return new NDArray(math_ops.not_equal(lhs, rhs));
+        }
     }
 }
