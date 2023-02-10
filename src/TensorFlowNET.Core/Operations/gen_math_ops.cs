@@ -480,26 +480,27 @@ namespace Tensorflow
             return _op.outputs[0];
         }
 
-        /// <summary>
-        /// Subroutine for Min or Max functions. See _min and _max
-        /// </summary>
-        private static Tensor MinOrMax<Tx, Ty>(Tx input, Ty axis, string methodName, bool keep_dims = false, string name = null)
-            => tf.Context.ExecuteOp(methodName, name, new ExecuteOpArgs(input, axis)
+        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
+            => tf.Context.ExecuteOp("Max", name, new ExecuteOpArgs(input, axis)
             {
                 GetGradientAttrs = (op) => new
                 {
                     T = op.get_attr<TF_DataType>("T"),
-                    align_corners = op.get_attr<bool>("align_corners"),
-                    half_pixel_centers = op.get_attr<bool>("half_pixel_centers")
+                    keep_dims = op.get_attr<bool>("keep_dims"),
+                    Tidx = op.get_attr<TF_DataType>("Tidx")
                 }
             }.SetAttributes(new { keep_dims, reduction_indices = axis }));
 
-        public static Tensor _max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-            => MinOrMax(input, axis, "Max", keep_dims: keep_dims, name: name);
-
         public static Tensor _min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-            => MinOrMax(input, axis, "Min", keep_dims: keep_dims, name: name);
-
+            => tf.Context.ExecuteOp("Min", name, new ExecuteOpArgs(input, axis)
+            {
+                GetGradientAttrs = (op) => new
+                {
+                    T = op.get_attr<TF_DataType>("T"),
+                    keep_dims = op.get_attr<bool>("keep_dims"),
+                    Tidx = op.get_attr<TF_DataType>("Tidx")
+                }
+            }.SetAttributes(new { keep_dims, reduction_indices = axis }));
 
         public static Tensor pow<Tx, Ty>(Tx x, Ty y, string name = null)
             => tf.Context.ExecuteOp("Pow", name, new ExecuteOpArgs(x, y));
