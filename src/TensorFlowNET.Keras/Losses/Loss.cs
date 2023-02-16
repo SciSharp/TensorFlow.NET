@@ -16,7 +16,7 @@ namespace Tensorflow.Keras.Losses
 
         public string Reduction => reduction;
         public string Name => name;
-        public Loss(string reduction = ReductionV2.AUTO, 
+        public Loss(string reduction = ReductionV2.AUTO,
             string name = null,
             bool from_logits = false)
         {
@@ -34,7 +34,17 @@ namespace Tensorflow.Keras.Losses
         public Tensor Call(Tensor y_true, Tensor y_pred, Tensor sample_weight = null)
         {
             var losses = Apply(y_true, y_pred, from_logits: from_logits);
-            return losses_utils.compute_weighted_loss(losses, reduction: this.reduction , sample_weight: sample_weight);
+            var reduction = GetReduction();
+            return losses_utils.compute_weighted_loss(losses, reduction: reduction, sample_weight: sample_weight);
+        }
+
+        string GetReduction()
+        {
+            return reduction switch
+            {
+                ReductionV2.AUTO => ReductionV2.SUM_OVER_BATCH_SIZE,
+                _ => reduction
+            };
         }
 
         void _set_name_scope()

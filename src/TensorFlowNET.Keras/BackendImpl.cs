@@ -276,6 +276,20 @@ namespace Tensorflow.Keras
             return -math_ops.reduce_sum(target * math_ops.log(output), new Axis(axis));
         }
 
+        public Tensor binary_crossentropy(Tensor target, Tensor output, bool from_logits = false)
+        {
+            if (from_logits)
+                return tf.nn.sigmoid_cross_entropy_with_logits(labels: target, logits: output);
+
+            var epsilon_ = constant_op.constant(epsilon(), dtype: output.dtype.as_base_dtype());
+            output = tf.clip_by_value(output, epsilon_, 1.0f - epsilon_);
+
+            // Compute cross entropy from probabilities.
+            var bce = target * tf.math.log(output + epsilon());
+            bce += (1 - target) * tf.math.log(1 - output + epsilon());
+            return -bce;
+        }
+
         /// <summary>
         /// Resizes the images contained in a 4D tensor.
         /// </summary>

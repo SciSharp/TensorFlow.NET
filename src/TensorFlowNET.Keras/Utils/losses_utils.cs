@@ -24,23 +24,17 @@ namespace Tensorflow.Keras.Utils
     {
         public static Tensor compute_weighted_loss(Tensor losses, Tensor sample_weight = null, string reduction = null, string name = null)
         {
-            if (sample_weight == null)
-                sample_weight = losses.dtype == TF_DataType.TF_DOUBLE ? tf.constant(1.0) : tf.constant(1.0f);
-            var weighted_losses = scale_losses_by_sample_weight(losses, sample_weight);
-            // Apply reduction function to the individual weighted losses.
-            var loss = reduce_weighted_loss(weighted_losses, reduction);
-            // Convert the result back to the input type.
-            // loss = math_ops.cast(loss, losses.dtype);
-            return loss;
-        }
-
-        public static Tensor scale_losses_by_sample_weight(Tensor losses, Tensor sample_weight)
-        {
-            // losses = math_ops.cast(losses, dtypes.float32);
-            // sample_weight = math_ops.cast(sample_weight, dtypes.float32);
-            // Update dimensions of `sample_weight` to match with `losses` if possible.
-            // (losses, sample_weight) = squeeze_or_expand_dimensions(losses, sample_weight);
-            return math_ops.multiply(losses, sample_weight);
+            return tf_with(ops.name_scope("weighted_loss"), scope =>
+            {
+                if (sample_weight == null)
+                    sample_weight = losses.dtype == TF_DataType.TF_DOUBLE ? tf.constant(1.0) : tf.constant(1.0f);
+                var weighted_losses = math_ops.multiply(losses, sample_weight);
+                // Apply reduction function to the individual weighted losses.
+                var loss = reduce_weighted_loss(weighted_losses, reduction);
+                // Convert the result back to the input type.
+                // loss = math_ops.cast(loss, losses.dtype);
+                return loss;
+            });
         }
 
         public static (Tensor, Tensor) squeeze_or_expand_dimensions(Tensor y_pred, Tensor sample_weight)
