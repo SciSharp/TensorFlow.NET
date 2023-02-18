@@ -1,4 +1,5 @@
 ﻿using System;
+using Tensorflow.NumPy;
 using static Google.Protobuf.Reflection.FieldDescriptorProto.Types;
 
 namespace Tensorflow.Keras.Layers
@@ -27,6 +28,17 @@ namespace Tensorflow.Keras.Layers
             string name = null,
             bool renorm = false,
             float renorm_momentum = 0.99f);
+
+        /// <summary>
+        /// A preprocessing layer which encodes integer features.
+        /// </summary>
+        /// <param name="num_tokens">The total number of tokens the layer should support.</param>
+        /// <param name="output_mode">Specification for the output of the layer.</param>
+        /// <returns></returns>
+        public ILayer CategoryEncoding(int num_tokens, 
+            string output_mode = "one_hot",
+            bool sparse = false,
+            NDArray count_weights = null);
 
         public ILayer Conv1D(int filters,
             Shape kernel_size,

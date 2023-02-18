@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tensorflow;
 using TensorFlowNET.Keras.UnitTest;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
-namespace Tensorflow.Keras.UnitTest.Losses;
+namespace TensorFlowNET.Keras.UnitTest;
 
 [TestClass]
 public class LossesTest : EagerModeTestBase

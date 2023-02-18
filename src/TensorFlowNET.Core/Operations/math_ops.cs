@@ -839,10 +839,24 @@ namespace Tensorflow
                         output_size = math_ops.maximum(minlength, output_size);
                     if (maxlength != null)
                         output_size = math_ops.minimum(maxlength, output_size);
-                    var weights = constant_op.constant(new long[0], dtype: dtype);
+                    weights = weights ?? constant_op.constant(new int[0], dtype: dtype);
                     return tf.Context.ExecuteOp("Bincount", name, new ExecuteOpArgs(arr, output_size, weights));
                 }
+                else
+                {
+                    var array_is_nonempty = math_ops.reduce_prod(array_ops.shape(arr)) > 0;
+                    var output_size = math_ops.cast(array_is_nonempty, arr.dtype) * (math_ops.reduce_max(arr) + 1);
+                    if (minlength != null)
+                        output_size = math_ops.maximum(minlength, output_size);
+                    if (maxlength != null)
+                        output_size = math_ops.minimum(maxlength, output_size);
+                    weights = weights ?? array_ops.constant(new int[0], dtype: dtype);
 
+                    return tf.Context.ExecuteOp("DenseBincount", name,
+                        new ExecuteOpArgs(arr, output_size, weights, binary_output)
+                            .SetAttributes(new { binary_output }));
+                }
+                
                 throw new NotImplementedException("");
             });
 

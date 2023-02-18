@@ -177,5 +177,60 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual((5, 2), output.shape);
             Assert.IsTrue(output[0].numpy().Equals(new[] { -0.99998f, 0.99998f }));
         }
+
+        /// <summary>
+        /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/CategoryEncoding
+        /// </summary>
+        [TestMethod]
+        public void CategoryEncoding()
+        {
+            // one-hot
+            var inputs = np.array(new[] { 3, 2, 0, 1 });
+            var layer = tf.keras.layers.CategoryEncoding(4);
+            
+            Tensor output = layer.Apply(inputs);
+            Assert.AreEqual((4, 4), output.shape);
+            Assert.IsTrue(output[0].numpy().Equals(new[] { 0, 0, 0, 1f }));
+            Assert.IsTrue(output[1].numpy().Equals(new[] { 0, 0, 1, 0f }));
+            Assert.IsTrue(output[2].numpy().Equals(new[] { 1, 0, 0, 0f }));
+            Assert.IsTrue(output[3].numpy().Equals(new[] { 0, 1, 0, 0f }));
+
+            // multi-hot
+            inputs = np.array(new[,]
+            {
+                { 0, 1 },
+                { 0, 0 },
+                { 1, 2 },
+                { 3, 1 }
+            });
+            layer = tf.keras.layers.CategoryEncoding(4, output_mode: "multi_hot");
+            output = layer.Apply(inputs);
+            Assert.IsTrue(output[0].numpy().Equals(new[] { 1, 1, 0, 0f }));
+            Assert.IsTrue(output[1].numpy().Equals(new[] { 1, 0, 0, 0f }));
+            Assert.IsTrue(output[2].numpy().Equals(new[] { 0, 1, 1, 0f }));
+            Assert.IsTrue(output[3].numpy().Equals(new[] { 0, 1, 0, 1f }));
+
+            // using weighted inputs in "count" mode
+            inputs = np.array(new[,]
+            {
+                { 0, 1 },
+                { 0, 0 },
+                { 1, 2 },
+                { 3, 1 }
+            });
+            var weights = np.array(new[,]
+            {
+                { 0.1f, 0.2f },
+                { 0.1f, 0.1f },
+                { 0.2f, 0.3f },
+                { 0.4f, 0.2f }
+            });
+            layer = tf.keras.layers.CategoryEncoding(4, output_mode: "count", count_weights: weights);
+            output = layer.Apply(inputs);
+            Assert.IsTrue(output[0].numpy().Equals(new[] { 0.1f, 0.2f, 0f, 0f }));
+            Assert.IsTrue(output[1].numpy().Equals(new[] { 0.2f, 0f, 0f, 0f }));
+            Assert.IsTrue(output[2].numpy().Equals(new[] { 0f, 0.2f, 0.3f, 0f }));
+            Assert.IsTrue(output[3].numpy().Equals(new[] { 0f, 0.2f, 0f, 0.4f }));
+        }
     }
 }

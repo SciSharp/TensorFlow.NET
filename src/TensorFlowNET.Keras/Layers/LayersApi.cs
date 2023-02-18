@@ -4,6 +4,7 @@ using Tensorflow.Keras.ArgsDefinition.Core;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers.Rnn;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -829,5 +830,14 @@ namespace Tensorflow.Keras.Layers
                 "orthogonal" => tf.orthogonal_initializer,
                 _ => tf.glorot_uniform_initializer
             };
+
+        public ILayer CategoryEncoding(int num_tokens, string output_mode = "one_hot", bool sparse = false, NDArray count_weights = null)
+            => new CategoryEncoding(new CategoryEncodingArgs
+            {
+                NumTokens = num_tokens,
+                OutputMode = output_mode,
+                Sparse = sparse,
+                CountWeights = count_weights
+            });
     }
 }

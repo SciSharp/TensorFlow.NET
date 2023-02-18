@@ -153,6 +153,10 @@ namespace Tensorflow
             bool allow_broadcast)
         {
             var t = convert_to_eager_tensor(value, tf.Context, dtype: dtype);
+            if (dtype != TF_DataType.DtInvalid && dtype != t.dtype)
+            {
+                t = math_ops.cast(t, dtype);
+            }
             if (shape is null || shape.IsNull)
                 return t;
 
