@@ -26,4 +26,13 @@ public interface IMetricsApi
     /// <param name="k"></param>
     /// <returns></returns>
     Tensor top_k_categorical_accuracy(Tensor y_true, Tensor y_pred, int k = 5);
+
+    /// <summary>
+    /// Computes how often targets are in the top K predictions.
+    /// </summary>
+    /// <param name="y_true"></param>
+    /// <param name="y_pred"></param>
+    /// <param name="k"></param>
+    /// <returns></returns>
+    IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT);
 }

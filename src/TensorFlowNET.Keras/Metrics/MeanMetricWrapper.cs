@@ -1,4 +1,5 @@
 ﻿using System;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Metrics
 {
@@ -16,6 +17,8 @@ namespace Tensorflow.Keras.Metrics
         {
             y_true = math_ops.cast(y_true, _dtype);
             y_pred = math_ops.cast(y_pred, _dtype);
+
+            (y_pred, y_true) = losses_utils.squeeze_or_expand_dimensions(y_pred, y_true: y_true);
 
             var matches = _fn(y_true, y_pred);
             return update_state(matches, sample_weight: sample_weight);

@@ -1,6 +1,4 @@
-﻿using static Tensorflow.KerasApi;
-
-namespace Tensorflow.Keras.Metrics
+﻿namespace Tensorflow.Keras.Metrics
 {
     public class MetricsApi : IMetricsApi
     {
@@ -60,5 +58,8 @@ namespace Tensorflow.Keras.Metrics
                 tf.math.argmax(y_true, axis: -1), y_pred, k
             );
         }
+
+        public IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new TopKCategoricalAccuracy(k: k, name: name, dtype: dtype);
     }
 }

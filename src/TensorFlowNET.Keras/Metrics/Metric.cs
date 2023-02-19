@@ -9,7 +9,7 @@ namespace Tensorflow.Keras.Metrics
     /// <summary>
     /// Encapsulates metric logic and state.
     /// </summary>
-    public class Metric : Layer
+    public class Metric : Layer, IMetricFunc
     {
         protected IVariableV1 total;
         protected IVariableV1 count;

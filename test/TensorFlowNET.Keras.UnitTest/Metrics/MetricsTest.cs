@@ -15,6 +15,26 @@ namespace TensorFlowNET.Keras.UnitTest;
 public class MetricsTest : EagerModeTestBase
 {
     /// <summary>
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/TopKCategoricalAccuracy
+    /// </summary>
+    [TestMethod]
+    public void TopKCategoricalAccuracy()
+    {
+        var y_true = np.array(new[,] { { 0, 0, 1 }, { 0, 1, 0 } });
+        var y_pred = np.array(new[,] { { 0.1f, 0.9f, 0.8f }, { 0.05f, 0.95f, 0f } });
+        var m = tf.keras.metrics.TopKCategoricalAccuracy(k: 1);
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 0.5f);
+
+        m.reset_states();
+        var weights = np.array(new[] { 0.7f, 0.3f });
+        m.update_state(y_true, y_pred, sample_weight: weights);
+        r = m.result().numpy();
+        Assert.AreEqual(r, 0.3f);
+    }
+
+    /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/top_k_categorical_accuracy
     /// </summary>
     [TestMethod]
