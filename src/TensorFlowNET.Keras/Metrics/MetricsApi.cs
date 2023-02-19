@@ -2,7 +2,7 @@
 
 namespace Tensorflow.Keras.Metrics
 {
-    public class MetricsApi
+    public class MetricsApi : IMetricsApi
     {
         public Tensor binary_accuracy(Tensor y_true, Tensor y_pred)
         {
@@ -52,6 +52,13 @@ namespace Tensorflow.Keras.Metrics
             y_true = math_ops.cast(y_true, y_pred.dtype);
             var diff = (y_true - y_pred) / math_ops.maximum(math_ops.abs(y_true), keras.backend.epsilon());
             return 100f * keras.backend.mean(math_ops.abs(diff), axis: -1);
+        }
+
+        public Tensor top_k_categorical_accuracy(Tensor y_true, Tensor y_pred, int k = 5)
+        {
+            return metrics_utils.sparse_top_k_categorical_matches(
+                tf.math.argmax(y_true, axis: -1), y_pred, k
+            );
         }
     }
 }

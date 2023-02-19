@@ -39,6 +39,9 @@ namespace Tensorflow
             public Tensor sum(Tensor x, Axis? axis = null, string name = null)
                 => math_ops.reduce_sum(x, axis: axis, name: name);
 
+            public Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK")
+                => nn_ops.in_top_k(predictions, targets, k, name);
+
             /// <summary>
             /// 
             /// </summary>

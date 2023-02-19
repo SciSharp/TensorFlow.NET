@@ -240,16 +240,8 @@ namespace Tensorflow.Operations
         /// <param name="name"></param>
         /// <returns>A `Tensor` of type `bool`.</returns>
         public static Tensor in_top_kv2(Tensor predictions, Tensor targets, int k, string name = null)
-        {
-            var _op = tf.OpDefLib._apply_op_helper("InTopKV2", name: name, args: new
-            {
-                predictions,
-                targets,
-                k
-            });
-
-            return _op.output;
-        }
+            => tf.Context.ExecuteOp("InTopKV2", name,
+                new ExecuteOpArgs(predictions, targets, k));
 
         public static Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)
             => tf.Context.ExecuteOp("LeakyRelu", name,

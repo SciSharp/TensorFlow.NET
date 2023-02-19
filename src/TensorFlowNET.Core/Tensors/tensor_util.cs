@@ -121,6 +121,11 @@ namespace Tensorflow
                     if (dtype == TF_DataType.TF_INT32)
                         values = long_values.Select(x => (int)Convert.ChangeType(x, new_system_dtype)).ToArray();
                 }
+                else if (values is double[] double_values)
+                {
+                    if (dtype == TF_DataType.TF_FLOAT)
+                        values = double_values.Select(x => (float)Convert.ChangeType(x, new_system_dtype)).ToArray();
+                }
                 else
                     values = Convert.ChangeType(values, new_system_dtype);
 

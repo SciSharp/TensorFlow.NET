@@ -27,7 +27,7 @@ namespace Tensorflow.Keras
         ThreadLocal<BackendImpl> _backend = new ThreadLocal<BackendImpl>(() => new BackendImpl());
         public BackendImpl backend => _backend.Value;
         public OptimizerApi optimizers { get; } = new OptimizerApi();
-        public MetricsApi metrics { get; } = new MetricsApi();
+        public IMetricsApi metrics { get; } = new MetricsApi();
         public ModelsApi models { get; } = new ModelsApi();
         public KerasUtils utils { get; } = new KerasUtils();
 
