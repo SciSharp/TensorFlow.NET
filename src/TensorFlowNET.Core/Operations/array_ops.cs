@@ -221,6 +221,9 @@ namespace Tensorflow
                     case Tensor t:
                         dtype = t.dtype.as_base_dtype();
                         break;
+                    case int t:
+                        dtype = TF_DataType.TF_INT32;
+                        break;
                 }
 
                 if (dtype != TF_DataType.DtInvalid)

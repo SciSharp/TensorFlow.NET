@@ -38,7 +38,7 @@ namespace Tensorflow.Keras.Utils
             });
         }
 
-        public static (Tensor, Tensor) squeeze_or_expand_dimensions(Tensor y_pred, Tensor y_true = null, Tensor sample_weight = null)
+        public static (Tensor, Tensor, Tensor) squeeze_or_expand_dimensions(Tensor y_pred, Tensor y_true = null, Tensor sample_weight = null)
         {
             var y_pred_shape = y_pred.shape;
             var y_pred_rank = y_pred_shape.ndim;
@@ -57,13 +57,13 @@ namespace Tensorflow.Keras.Utils
 
             if (sample_weight == null)
             {
-                return (y_pred, y_true);
+                return (y_pred, y_true, sample_weight);
             }
 
             var weights_shape = sample_weight.shape;
             var weights_rank = weights_shape.ndim;
             if (weights_rank == 0)
-                return (y_pred, sample_weight);
+                return (y_pred, y_true, sample_weight);
 
             if (y_pred_rank > -1 && weights_rank > -1)
             {
@@ -77,7 +77,7 @@ namespace Tensorflow.Keras.Utils
                 }
                 else
                 {
-                    return (y_pred, sample_weight);
+                    return (y_pred, y_true, sample_weight);
                 }
             }
 

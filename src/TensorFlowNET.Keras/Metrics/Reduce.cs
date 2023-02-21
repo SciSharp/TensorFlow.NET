@@ -27,7 +27,7 @@ namespace Tensorflow.Keras.Metrics
         {
             if (sample_weight != null)
             {
-                (values, sample_weight) = losses_utils.squeeze_or_expand_dimensions(
+                (values, _, sample_weight) = losses_utils.squeeze_or_expand_dimensions(
                     values, sample_weight: sample_weight);
 
                 sample_weight = math_ops.cast(sample_weight, dtype: values.dtype);

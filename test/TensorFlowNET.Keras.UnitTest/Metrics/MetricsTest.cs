@@ -45,4 +45,24 @@ public class MetricsTest : EagerModeTestBase
         var m = tf.keras.metrics.top_k_categorical_accuracy(y_true, y_pred, k: 3);
         Assert.AreEqual(m.numpy(), new[] { 1f, 1f });
     }
+
+    /// <summary>
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/Recall
+    /// </summary>
+    [TestMethod]
+    public void Recall()
+    {
+        var y_true = np.array(new[] { 0, 1, 1, 1 });
+        var y_pred = np.array(new[] { 1, 0, 1, 1 });
+        var m = tf.keras.metrics.Recall();
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 0.6666667f);
+
+        m.reset_states();
+        var weights = np.array(new[] { 0f, 0f, 1f, 0f });
+        m.update_state(y_true, y_pred, sample_weight: weights);
+        r = m.result().numpy();
+        Assert.AreEqual(r, 1f);
+    }
 }
