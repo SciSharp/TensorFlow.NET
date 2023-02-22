@@ -4,10 +4,24 @@ namespace Tensorflow.Keras.Metrics;
 
 public class metrics_utils
 {
+    public static Tensor accuracy(Tensor y_true, Tensor y_pred)
+    {
+        if (y_true.dtype != y_pred.dtype)
+            y_pred = tf.cast(y_pred, y_true.dtype);
+        return tf.cast(tf.equal(y_true, y_pred), keras.backend.floatx());
+    }
+
     public static Tensor binary_matches(Tensor y_true, Tensor y_pred, float threshold = 0.5f)
     {
         y_pred = tf.cast(y_pred > threshold, y_pred.dtype);
         return tf.cast(tf.equal(y_true, y_pred), keras.backend.floatx());
+    }
+
+    public static Tensor cosine_similarity(Tensor y_true, Tensor y_pred, Axis? axis = null)
+    {
+        y_true = tf.linalg.l2_normalize(y_true, axis: axis ?? -1);
+        y_pred = tf.linalg.l2_normalize(y_pred, axis: axis ?? -1);
+        return tf.reduce_sum(y_true * y_pred, axis: axis ?? -1);
     }
 
     /// <summary>

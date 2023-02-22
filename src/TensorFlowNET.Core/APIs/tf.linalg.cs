@@ -54,6 +54,12 @@ namespace Tensorflow
             public Tensor global_norm(Tensor[] t_list, string name = null)
                 => clip_ops.global_norm(t_list, name: name);
 
+            public Tensor l2_normalize(Tensor x,
+                    int axis = 0,
+                    float epsilon = 1e-12f,
+                    string name = null)
+                => nn_impl.l2_normalize(x, axis: axis, epsilon: constant_op.constant(epsilon), name: name);
+
             public Tensor lstsq(Tensor matrix, Tensor rhs,
                 NDArray l2_regularizer = null, bool fast = true, string name = null)
                 => ops.matrix_solve_ls(matrix, rhs, l2_regularizer: l2_regularizer, fast: fast, name: name);

@@ -71,6 +71,9 @@
             );
         }
 
+        public IMetricFunc Accuracy(string name = "accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new Accuracy(name: name, dtype: dtype);
+
         public IMetricFunc BinaryAccuracy(string name = "binary_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT, float threshold = 5)
             => new BinaryAccuracy();
 
@@ -79,6 +82,9 @@
 
         public IMetricFunc CategoricalCrossentropy(string name = "categorical_crossentropy", TF_DataType dtype = TF_DataType.TF_FLOAT, bool from_logits = false, float label_smoothing = 0, Axis? axis = null)
             => new CategoricalCrossentropy();
+
+        public IMetricFunc CosineSimilarity(string name = "cosine_similarity", TF_DataType dtype = TF_DataType.TF_FLOAT, Axis? axis = null)
+            => new CosineSimilarity(name: name, dtype: dtype, axis: axis ?? -1);
 
         public IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new TopKCategoricalAccuracy(k: k, name: name, dtype: dtype);

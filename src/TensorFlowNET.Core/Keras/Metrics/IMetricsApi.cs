@@ -32,6 +32,13 @@ public interface IMetricsApi
     Tensor top_k_categorical_accuracy(Tensor y_true, Tensor y_pred, int k = 5);
 
     /// <summary>
+    /// Calculates how often predictions equal labels.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc Accuracy(string name = "accuracy",
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
     /// Calculates how often predictions match binary labels.
     /// </summary>
     /// <returns></returns>
@@ -55,6 +62,14 @@ public interface IMetricsApi
     /// <returns></returns>
     IMetricFunc CategoricalAccuracy(string name = "categorical_accuracy", 
         TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
+    /// Computes the cosine similarity between the labels and predictions.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc CosineSimilarity(string name = "cosine_similarity",
+        TF_DataType dtype = TF_DataType.TF_FLOAT,
+        Axis? axis = null);
 
     /// <summary>
     /// Computes how often targets are in the top K predictions.
