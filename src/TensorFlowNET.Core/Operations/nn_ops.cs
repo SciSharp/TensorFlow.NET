@@ -109,6 +109,10 @@ namespace Tensorflow
                 return noise_shape;
         }
 
+        public static Tensors top_kv2(Tensor input, int k, bool sorted = true, string name = null)
+            => tf.Context.ExecuteOp("TopKV2", name, new ExecuteOpArgs(input, k)
+                .SetAttributes(new { sorted }));
+
         public static Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = null)
         {
             return tf_with(ops.name_scope(name, "in_top_k"), delegate

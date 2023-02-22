@@ -47,6 +47,40 @@ public class MetricsTest : EagerModeTestBase
     }
 
     /// <summary>
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/Precision
+    /// </summary>
+    [TestMethod]
+    public void Precision()
+    {
+        var y_true = np.array(new[] { 0, 1, 1, 1 });
+        var y_pred = np.array(new[] { 1, 0, 1, 1 });
+        var m = tf.keras.metrics.Precision();
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 0.6666667f);
+
+        m.reset_states();
+        var weights = np.array(new[] { 0f, 0f, 1f, 0f });
+        m.update_state(y_true, y_pred, sample_weight: weights);
+        r = m.result().numpy();
+        Assert.AreEqual(r, 1f);
+
+        // With top_k=2, it will calculate precision over y_true[:2]
+        // and y_pred[:2]
+        m = tf.keras.metrics.Precision(top_k: 2);
+        m.update_state(np.array(new[] { 0, 0, 1, 1 }), np.array(new[] { 1, 1, 1, 1 }));
+        r = m.result().numpy();
+        Assert.AreEqual(r, 0f);
+
+        // With top_k=4, it will calculate precision over y_true[:4]
+        // and y_pred[:4]
+        m = tf.keras.metrics.Precision(top_k: 4);
+        m.update_state(np.array(new[] { 0, 0, 1, 1 }), np.array(new[] { 1, 1, 1, 1 }));
+        r = m.result().numpy();
+        Assert.AreEqual(r, 0.5f);
+    }
+
+    /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/Recall
     /// </summary>
     [TestMethod]

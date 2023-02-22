@@ -39,6 +39,17 @@ namespace Tensorflow
             public Tensor sum(Tensor x, Axis? axis = null, string name = null)
                 => math_ops.reduce_sum(x, axis: axis, name: name);
 
+            /// <summary>
+            /// Finds values and indices of the `k` largest entries for the last dimension.
+            /// </summary>
+            /// <param name="input"></param>
+            /// <param name="k"></param>
+            /// <param name="sorted"></param>
+            /// <param name="name"></param>
+            /// <returns></returns>
+            public Tensors top_k(Tensor input, int k, bool sorted = true, string name = null)
+                => nn_ops.top_kv2(input, k, sorted: sorted, name: name);
+
             public Tensor in_top_k(Tensor predictions, Tensor targets, int k, string name = "InTopK")
                 => nn_ops.in_top_k(predictions, targets, k, name);
 

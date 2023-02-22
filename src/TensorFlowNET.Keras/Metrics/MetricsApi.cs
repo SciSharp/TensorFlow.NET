@@ -62,7 +62,10 @@
         public IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new TopKCategoricalAccuracy(k: k, name: name, dtype: dtype);
 
-        public IMetricFunc Recall(float thresholds = 0.5f, int top_k = 1, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT)
+        public IMetricFunc Precision(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "precision", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new Precision(thresholds: thresholds, top_k: top_k, class_id: class_id, name: name, dtype: dtype);
+
+        public IMetricFunc Recall(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new Recall(thresholds: thresholds, top_k: top_k, class_id: class_id, name: name, dtype: dtype);
     }
 }

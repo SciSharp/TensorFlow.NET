@@ -78,6 +78,17 @@ public class metrics_utils
                 sample_weight: sample_weight);
         }
 
+        if (top_k > 0)
+        {
+            y_pred = _filter_top_k(y_pred, top_k);
+        }
+
+        if (class_id > 0)
+        {
+            y_true = y_true[Slice.All, class_id];
+            y_pred = y_pred[Slice.All, class_id];
+        }
+
         if (thresholds_distributed_evenly)
         {
             throw new NotImplementedException();
@@ -204,5 +215,14 @@ public class metrics_utils
 
         tf.group(update_ops.ToArray());
         return null;
-    } 
+    }
+
+    private static Tensor _filter_top_k(Tensor x, int k)
+    {
+        var NEG_INF = -1e10;
+        var (_, top_k_idx) = tf.math.top_k(x, k, sorted: false);
+        var top_k_mask = tf.reduce_sum(
+            tf.one_hot(top_k_idx, (int)x.shape[-1], axis: -1), axis: -2);
+        return x * top_k_mask + NEG_INF * (1 - top_k_mask);
+    }
 }

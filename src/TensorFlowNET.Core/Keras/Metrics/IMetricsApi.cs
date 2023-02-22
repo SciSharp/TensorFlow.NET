@@ -37,6 +37,17 @@ public interface IMetricsApi
     IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT);
 
     /// <summary>
+    /// Computes the precision of the predictions with respect to the labels.
+    /// </summary>
+    /// <param name="thresholds"></param>
+    /// <param name="top_k"></param>
+    /// <param name="class_id"></param>
+    /// <param name="name"></param>
+    /// <param name="dtype"></param>
+    /// <returns></returns>
+    IMetricFunc Precision(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
     /// Computes the recall of the predictions with respect to the labels.
     /// </summary>
     /// <param name="thresholds"></param>
@@ -45,5 +56,5 @@ public interface IMetricsApi
     /// <param name="name"></param>
     /// <param name="dtype"></param>
     /// <returns></returns>
-    IMetricFunc Recall(float thresholds = 0.5f, int top_k = 1, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT);
+    IMetricFunc Recall(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT);
 }
