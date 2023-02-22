@@ -5,6 +5,10 @@ public interface IMetricsApi
     Tensor binary_accuracy(Tensor y_true, Tensor y_pred);
 
     Tensor categorical_accuracy(Tensor y_true, Tensor y_pred);
+    Tensor categorical_crossentropy(Tensor y_true, Tensor y_pred, 
+        bool from_logits = false, 
+        float label_smoothing = 0f,
+        Axis? axis = null);
 
     Tensor mean_absolute_error(Tensor y_true, Tensor y_pred);
 
@@ -28,13 +32,38 @@ public interface IMetricsApi
     Tensor top_k_categorical_accuracy(Tensor y_true, Tensor y_pred, int k = 5);
 
     /// <summary>
+    /// Calculates how often predictions match binary labels.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc BinaryAccuracy(string name = "binary_accuracy",
+        TF_DataType dtype = TF_DataType.TF_FLOAT,
+        float threshold = 05f);
+
+    /// <summary>
+    /// Calculates how often predictions match one-hot labels.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc CategoricalCrossentropy(string name = "categorical_crossentropy", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT,
+        bool from_logits = false,
+        float label_smoothing = 0f,
+        Axis? axis = null);
+
+    /// <summary>
+    /// Computes the crossentropy metric between the labels and predictions.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc CategoricalAccuracy(string name = "categorical_accuracy", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
     /// Computes how often targets are in the top K predictions.
     /// </summary>
-    /// <param name="y_true"></param>
-    /// <param name="y_pred"></param>
     /// <param name="k"></param>
     /// <returns></returns>
-    IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT);
+    IMetricFunc TopKCategoricalAccuracy(int k = 5, 
+        string name = "top_k_categorical_accuracy", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
 
     /// <summary>
     /// Computes the precision of the predictions with respect to the labels.
@@ -45,7 +74,11 @@ public interface IMetricsApi
     /// <param name="name"></param>
     /// <param name="dtype"></param>
     /// <returns></returns>
-    IMetricFunc Precision(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT);
+    IMetricFunc Precision(float thresholds = 0.5f, 
+        int top_k = 0, 
+        int class_id = 0, 
+        string name = "recall", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
 
     /// <summary>
     /// Computes the recall of the predictions with respect to the labels.
@@ -56,5 +89,9 @@ public interface IMetricsApi
     /// <param name="name"></param>
     /// <param name="dtype"></param>
     /// <returns></returns>
-    IMetricFunc Recall(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT);
+    IMetricFunc Recall(float thresholds = 0.5f, 
+        int top_k = 0, 
+        int class_id = 0, 
+        string name = "recall", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
 }

@@ -75,10 +75,8 @@ namespace Tensorflow.Keras.Utils
                 {
                     sample_weight = tf.expand_dims(sample_weight, -1);
                 }
-                else
-                {
-                    return (y_pred, y_true, sample_weight);
-                }
+
+                return (y_pred, y_true, sample_weight);
             }
 
             throw new NotImplementedException("");

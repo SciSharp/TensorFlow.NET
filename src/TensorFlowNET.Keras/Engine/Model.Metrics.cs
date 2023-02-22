@@ -5,11 +5,11 @@ namespace Tensorflow.Keras.Engine
 {
     public partial class Model
     {
-        public IEnumerable<Metric> metrics
+        public IEnumerable<IMetricFunc> metrics
         {
             get
             {
-                var _metrics = new List<Metric>();
+                var _metrics = new List<IMetricFunc>();
 
                 if (_is_compiled)
                 {

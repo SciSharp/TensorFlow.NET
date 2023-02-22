@@ -15,6 +15,18 @@
             return math_ops.cast(eql, TF_DataType.TF_FLOAT);
         }
 
+        public Tensor categorical_crossentropy(Tensor y_true, Tensor y_pred, bool from_logits = false, float label_smoothing = 0, Axis? axis = null)
+        {
+            y_true = tf.cast(y_true, y_pred.dtype);
+            // var label_smoothing_tensor = tf.convert_to_tensor(label_smoothing, dtype: y_pred.dtype);
+            if (label_smoothing > 0)
+            {
+                var num_classes = tf.cast(tf.shape(y_true)[-1], y_pred.dtype);
+                y_true = y_true * (1.0 - label_smoothing) + (label_smoothing / num_classes);
+            }
+            return keras.backend.categorical_crossentropy(y_true, y_pred, from_logits: from_logits, axis: axis);
+        }
+
         /// <summary>
         /// Calculates how often predictions matches integer labels.
         /// </summary>
@@ -58,6 +70,15 @@
                 tf.math.argmax(y_true, axis: -1), y_pred, k
             );
         }
+
+        public IMetricFunc BinaryAccuracy(string name = "binary_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT, float threshold = 5)
+            => new BinaryAccuracy();
+
+        public IMetricFunc CategoricalAccuracy(string name = "categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new CategoricalAccuracy(name: name, dtype: dtype);
+
+        public IMetricFunc CategoricalCrossentropy(string name = "categorical_crossentropy", TF_DataType dtype = TF_DataType.TF_FLOAT, bool from_logits = false, float label_smoothing = 0, Axis? axis = null)
+            => new CategoricalCrossentropy();
 
         public IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new TopKCategoricalAccuracy(k: k, name: name, dtype: dtype);

@@ -9,15 +9,21 @@ namespace Tensorflow.Keras.Engine
 {
     public class MetricsContainer : Container
     {
-        string[] _user_metrics;
-        string[] _metric_names;
-        Metric[] _metrics;
-        List<Metric> _metrics_in_order;
+        IMetricFunc[] _user_metrics = new IMetricFunc[0];
+        string[] _metric_names = new string[0];
+        Metric[] _metrics = new Metric[0];
+        List<IMetricFunc> _metrics_in_order = new List<IMetricFunc>();
+
+        public MetricsContainer(IMetricFunc[] metrics, string[] output_names = null)
+            : base(output_names)
+        {
+            _user_metrics = metrics;
+            _built = false;
+        }
 
         public MetricsContainer(string[] metrics, string[] output_names = null)
             : base(output_names)
         {
-            _user_metrics = metrics;
             _metric_names = metrics;
             _built = false;
         }
@@ -46,8 +52,10 @@ namespace Tensorflow.Keras.Engine
 
         void _create_ordered_metrics()
         {
-            _metrics_in_order = new List<Metric>();
             foreach (var m in _metrics)
+                _metrics_in_order.append(m);
+
+            foreach(var m in _user_metrics)
                 _metrics_in_order.append(m);
         }
 
@@ -56,7 +64,7 @@ namespace Tensorflow.Keras.Engine
             return metrics.Select(x => _get_metric_object(x, y_t, y_p)).ToArray();
         }
 
-        Metric _get_metric_object(string metric, Tensor y_t, Tensor y_p)
+        public Metric _get_metric_object(string metric, Tensor y_t, Tensor y_p)
         {
             Func<Tensor, Tensor, Tensor> metric_obj = null;
             if (metric == "accuracy" || metric == "acc")
@@ -94,7 +102,7 @@ namespace Tensorflow.Keras.Engine
             return new MeanMetricWrapper(metric_obj, metric);
         }
 
-        public IEnumerable<Metric> metrics
+        public IEnumerable<IMetricFunc> metrics
         {
             get
             {

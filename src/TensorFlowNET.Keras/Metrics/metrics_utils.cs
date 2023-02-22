@@ -1,10 +1,48 @@
 ﻿using Tensorflow.Keras.Utils;
-using Tensorflow.NumPy;
 
 namespace Tensorflow.Keras.Metrics;
 
 public class metrics_utils
 {
+    public static Tensor binary_matches(Tensor y_true, Tensor y_pred, float threshold = 0.5f)
+    {
+        y_pred = tf.cast(y_pred > threshold, y_pred.dtype);
+        return tf.cast(tf.equal(y_true, y_pred), keras.backend.floatx());
+    }
+
+    /// <summary>
+    /// Creates float Tensor, 1.0 for label-prediction match, 0.0 for mismatch.
+    /// </summary>
+    /// <param name="y_true"></param>
+    /// <param name="y_pred"></param>
+    /// <returns></returns>
+    public static Tensor sparse_categorical_matches(Tensor y_true, Tensor y_pred)
+    {
+        var reshape_matches = false;
+        var y_true_rank = y_true.shape.ndim;
+        var y_pred_rank = y_pred.shape.ndim;
+        var y_true_org_shape = tf.shape(y_true);
+
+        if (y_true_rank > -1 && y_pred_rank > -1 && y_true.ndim == y_pred.ndim )
+        {
+            reshape_matches = true;
+            y_true = tf.squeeze(y_true, new Shape(-1));
+        }
+        y_pred = tf.math.argmax(y_pred, axis: -1);
+
+        var matches = tf.cast(
+            tf.equal(y_true, y_pred),
+            dtype: keras.backend.floatx()
+        );
+
+        if (reshape_matches)
+        {
+            return tf.reshape(matches, shape: y_true_org_shape);
+        }
+
+        return matches;
+    }
+
     public static Tensor sparse_top_k_categorical_matches(Tensor y_true, Tensor y_pred, int k = 5)
     {
         var reshape_matches = false;

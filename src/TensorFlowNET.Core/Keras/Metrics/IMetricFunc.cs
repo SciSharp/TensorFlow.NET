@@ -2,6 +2,7 @@
 
 public interface IMetricFunc
 {
+    string Name { get; }
     /// <summary>
     /// Accumulates metric statistics.
     /// </summary>
