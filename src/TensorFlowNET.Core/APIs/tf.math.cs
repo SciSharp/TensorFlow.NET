@@ -36,6 +36,15 @@ namespace Tensorflow
             public Tensor erf(Tensor x, string name = null)
                 => math_ops.erf(x, name);
 
+            public Tensor multiply(Tensor x, Tensor y, string name = null)
+                => math_ops.multiply(x, y, name: name);
+
+            public Tensor divide_no_nan(Tensor a, Tensor b, string name = null)
+                => math_ops.div_no_nan(a, b);
+
+            public Tensor square(Tensor x, string name = null)
+                => math_ops.square(x, name: name);
+
             public Tensor sum(Tensor x, Axis? axis = null, string name = null)
                 => math_ops.reduce_sum(x, axis: axis, name: name);
 

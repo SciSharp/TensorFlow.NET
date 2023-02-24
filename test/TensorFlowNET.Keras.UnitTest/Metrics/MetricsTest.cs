@@ -115,6 +115,34 @@ public class MetricsTest : EagerModeTestBase
     }
 
     /// <summary>
+    /// https://www.tensorflow.org/addons/api_docs/python/tfa/metrics/F1Score
+    /// </summary>
+    [TestMethod]
+    public void F1Score()
+    {
+        var y_true = np.array(new[,] { { 1, 1, 1 }, { 1, 0, 0 }, { 1, 1, 0 } });
+        var y_pred = np.array(new[,] { { 0.2f, 0.6f, 0.7f }, { 0.2f, 0.6f, 0.6f }, { 0.6f, 0.8f, 0f } });
+        var m = tf.keras.metrics.F1Score(num_classes: 3, threshold: 0.5f);
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, new[] { 0.5f, 0.8f, 0.6666667f });
+    }
+
+    /// <summary>
+    /// https://www.tensorflow.org/addons/api_docs/python/tfa/metrics/FBetaScore
+    /// </summary>
+    [TestMethod]
+    public void FBetaScore()
+    {
+        var y_true = np.array(new[,] { { 1, 1, 1 }, { 1, 0, 0 }, { 1, 1, 0 } });
+        var y_pred = np.array(new[,] { { 0.2f, 0.6f, 0.7f }, { 0.2f, 0.6f, 0.6f }, { 0.6f, 0.8f, 0f } });
+        var m = tf.keras.metrics.FBetaScore(num_classes: 3, beta: 2.0f, threshold: 0.5f);
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, new[] { 0.3846154f, 0.90909094f, 0.8333334f });
+    }
+
+    /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/TopKCategoricalAccuracy
     /// </summary>
     [TestMethod]

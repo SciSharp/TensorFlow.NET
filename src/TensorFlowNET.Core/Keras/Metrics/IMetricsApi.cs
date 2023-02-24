@@ -72,6 +72,27 @@ public interface IMetricsApi
         Axis? axis = null);
 
     /// <summary>
+    /// Computes F-1 Score.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc F1Score(int num_classes,
+        string? average = null,
+        float threshold = -1f,
+        string name = "fbeta_score",
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
+    /// Computes F-Beta score.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc FBetaScore(int num_classes, 
+        string? average = null,
+        float beta = 0.1f,
+        float threshold = -1f,
+        string name = "fbeta_score",
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+    
+    /// <summary>
     /// Computes how often targets are in the top K predictions.
     /// </summary>
     /// <param name="k"></param>

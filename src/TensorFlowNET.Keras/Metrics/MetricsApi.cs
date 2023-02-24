@@ -86,6 +86,12 @@
         public IMetricFunc CosineSimilarity(string name = "cosine_similarity", TF_DataType dtype = TF_DataType.TF_FLOAT, Axis? axis = null)
             => new CosineSimilarity(name: name, dtype: dtype, axis: axis ?? -1);
 
+        public IMetricFunc F1Score(int num_classes, string? average = null, float threshold = -1, string name = "fbeta_score", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new F1Score(num_classes, average: average, threshold: threshold, name: name, dtype: dtype);
+
+        public IMetricFunc FBetaScore(int num_classes, string? average = null, float beta = 0.1F, float threshold = -1, string name = "fbeta_score", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new FBetaScore(num_classes, average: average,beta: beta, threshold: threshold, name: name, dtype: dtype);
+
         public IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new TopKCategoricalAccuracy(k: k, name: name, dtype: dtype);
 
