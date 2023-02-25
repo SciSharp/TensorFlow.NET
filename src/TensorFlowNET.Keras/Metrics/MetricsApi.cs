@@ -92,6 +92,9 @@
         public IMetricFunc FBetaScore(int num_classes, string? average = null, float beta = 0.1F, float? threshold = null, string name = "fbeta_score", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new FBetaScore(num_classes, average: average,beta: beta, threshold: threshold, name: name, dtype: dtype);
 
+        public IMetricFunc HammingLoss(string mode, float? threshold = null, string name = "hamming_loss", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new HammingLoss(mode, threshold: threshold, name: name, dtype: dtype);
+
         public IMetricFunc TopKCategoricalAccuracy(int k = 5, string name = "top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new TopKCategoricalAccuracy(k: k, name: name, dtype: dtype);
 

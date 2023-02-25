@@ -821,6 +821,18 @@ namespace Tensorflow
                     .SetAttributes(new { adj_x, adj_y }));
             });
 
+        public static Tensor count_nonzero_v2(Tensor input,
+                Axis? axis,
+                bool keepdims = false,
+                string name = null,
+                TF_DataType dtype = TF_DataType.TF_INT64)
+            => tf_with(ops.name_scope(name, "count_nonzero", input), scope =>
+               {
+                   name = scope;
+                   var zero = array_ops.zeros(Shape.Scalar, dtype: input.dtype);
+                   return reduce_sum(cast(gen_math_ops.not_equal(input, zero), dtype), axis: axis, keepdims: keepdims);
+               });
+
         public static Tensor bincount(Tensor arr, Tensor weights = null,
              Tensor minlength = null,
              Tensor maxlength = null,

@@ -143,6 +143,51 @@ public class MetricsTest : EagerModeTestBase
     }
 
     /// <summary>
+    /// https://www.tensorflow.org/addons/api_docs/python/tfa/metrics/HammingLoss
+    /// </summary>
+    [TestMethod]
+    public void HammingLoss()
+    {
+        // multi-class hamming loss
+        var y_true = np.array(new[,] 
+        { 
+            { 1, 0, 0, 0 }, 
+            { 0, 0, 1, 0 }, 
+            { 0, 0, 0, 1 }, 
+            { 0, 1, 0, 0 } 
+        });
+        var y_pred = np.array(new[,] 
+        { 
+            { 0.8f, 0.1f, 0.1f, 0.0f }, 
+            { 0.2f, 0.0f, 0.8f, 0.0f }, 
+            { 0.05f, 0.05f, 0.1f, 0.8f },
+            { 1.0f, 0.0f, 0.0f, 0.0f }
+        });
+        var m = tf.keras.metrics.HammingLoss(mode: "multiclass", threshold: 0.6f);
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 0.25f);
+
+        // multi-label hamming loss
+        y_true = np.array(new[,]
+        {
+            { 1, 0, 1, 0 },
+            { 0, 1, 0, 1 },
+            { 0, 0, 0, 1 }
+        });
+        y_pred = np.array(new[,]
+        {
+            { 0.82f, 0.5f, 0.9f, 0.0f },
+            { 0f, 1f, 0.4f, 0.98f },
+            { 0.89f, 0.79f, 0f, 0.3f }
+        });
+        m = tf.keras.metrics.HammingLoss(mode: "multilabel", threshold: 0.8f);
+        m.update_state(y_true, y_pred);
+        r = m.result().numpy();
+        Assert.AreEqual(r, 0.16666667f);
+    }
+
+    /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/TopKCategoricalAccuracy
     /// </summary>
     [TestMethod]

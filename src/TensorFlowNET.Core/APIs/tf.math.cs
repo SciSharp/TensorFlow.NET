@@ -24,6 +24,8 @@ namespace Tensorflow
             public Tensor argmax(Tensor input, Axis axis = null, string name = null, int? dimension = null, TF_DataType output_type = TF_DataType.TF_INT64)
                 => gen_math_ops.arg_max(input, axis, name: name, output_type: output_type);
 
+            public Tensor count_nonzero(Tensor input, Axis? axis = null, bool? keepdims = null, TF_DataType dtype = TF_DataType.TF_INT64, string name = null)
+                => math_ops.count_nonzero_v2(input, axis: axis, keepdims: keepdims ?? false, dtype: dtype);
             public Tensor log(Tensor x, string name = null)
                 => gen_math_ops.log(x, name);
 

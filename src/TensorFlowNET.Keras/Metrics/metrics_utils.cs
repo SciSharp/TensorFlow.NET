@@ -24,6 +24,36 @@ public class metrics_utils
         return tf.reduce_sum(y_true * y_pred, axis: axis ?? -1);
     }
 
+    public static Tensor hamming_loss_fn(Tensor y_true, Tensor y_pred, Tensor threshold, string mode)
+    {
+        if (threshold == null)
+        {
+            threshold = tf.reduce_max(y_pred, axis: -1, keepdims: true);
+            // make sure [0, 0, 0] doesn't become [1, 1, 1]
+            // Use abs(x) > eps, instead of x != 0 to check for zero
+            y_pred = tf.logical_and(y_pred >= threshold, tf.abs(y_pred) > 1e-12);
+        }
+        else
+        {
+            y_pred = y_pred > threshold;
+        }
+
+
+        y_true = tf.cast(y_true, tf.int32);
+        y_pred = tf.cast(y_pred, tf.int32);
+
+        if (mode == "multiclass")
+        {
+            var nonzero = tf.cast(tf.math.count_nonzero(y_true * y_pred, axis: -1), tf.float32);
+            return 1.0 - nonzero;
+        }
+        else
+        {
+            var nonzero = tf.cast(tf.math.count_nonzero(y_true - y_pred, axis: -1), tf.float32);
+            return nonzero / y_true.shape[-1];
+        }
+    }
+    
     /// <summary>
     /// Creates float Tensor, 1.0 for label-prediction match, 0.0 for mismatch.
     /// </summary>

@@ -91,7 +91,20 @@ public interface IMetricsApi
         float? threshold = null,
         string name = "fbeta_score",
         TF_DataType dtype = TF_DataType.TF_FLOAT);
-    
+
+    /// <summary>
+    /// Computes hamming loss.
+    /// </summary>
+    /// <param name="mode">multiclass or multilabel</param>
+    /// <param name="threshold"></param>
+    /// <param name="name"></param>
+    /// <param name="dtype"></param>
+    /// <returns></returns>
+    IMetricFunc HammingLoss(string mode,
+        float? threshold = null,
+        string name = "hamming_loss",
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+
     /// <summary>
     /// Computes how often targets are in the top K predictions.
     /// </summary>
