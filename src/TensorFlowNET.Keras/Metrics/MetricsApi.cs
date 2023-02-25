@@ -86,7 +86,7 @@
         public IMetricFunc CosineSimilarity(string name = "cosine_similarity", TF_DataType dtype = TF_DataType.TF_FLOAT, Axis? axis = null)
             => new CosineSimilarity(name: name, dtype: dtype, axis: axis ?? -1);
 
-        public IMetricFunc F1Score(int num_classes, string? average = null, float threshold = -1, string name = "fbeta_score", TF_DataType dtype = TF_DataType.TF_FLOAT)
+        public IMetricFunc F1Score(int num_classes, string? average = null, float threshold = -1, string name = "f1_score", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new F1Score(num_classes, average: average, threshold: threshold, name: name, dtype: dtype);
 
         public IMetricFunc FBetaScore(int num_classes, string? average = null, float beta = 0.1F, float threshold = -1, string name = "fbeta_score", TF_DataType dtype = TF_DataType.TF_FLOAT)
