@@ -39,7 +39,15 @@ namespace Tensorflow.Keras.Engine
             compiled_metrics.update_state(y, y_pred);
 
             var dict = new Dictionary<string, float>();
-            metrics.ToList().ForEach(x => dict[x.Name] = (float)x.result());
+            metrics.ToList().ForEach(x =>
+            {
+                var r = x.result();
+                if (r.ndim > 0)
+                {
+                    r = tf.reduce_mean(r);
+                }
+                dict[x.Name] = (float)r;
+            });
             return dict;
         }
 
