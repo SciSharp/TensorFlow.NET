@@ -120,6 +120,16 @@ namespace Tensorflow.Gradients
             };
         }
 
+        [RegisterGradient("Softplus")]
+        public static Tensor[] _SoftplusGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var x = op.inputs[0];
+
+            var softplus = grad * math_ops.sigmoid(x);
+            return new Tensor[] { softplus };
+        }
+
         [RegisterGradient("SquaredDifference")]
         public static Tensor[] _SquaredDifferenceGrad(Operation op, Tensor[] grads)
         {

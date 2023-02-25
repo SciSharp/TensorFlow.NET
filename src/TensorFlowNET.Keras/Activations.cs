@@ -20,12 +20,14 @@ namespace Tensorflow.Keras
                 => tf.Context.ExecuteOp("Softmax", name, new ExecuteOpArgs(features));
         private static Activation _tanh = (features, name)
             => tf.Context.ExecuteOp("Tanh", name, new ExecuteOpArgs(features));
+        private static Activation _mish = (features, name)
+            => features * tf.math.tanh(tf.math.softplus(features));
 
         /// <summary>
         /// Register the name-activation mapping in this static class.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="Activation"></param>
+        /// <param name="activation"></param>
         private static void RegisterActivation(string name, Activation activation)
         {
             _nameActivationMap[name] = activation;
@@ -42,6 +44,7 @@ namespace Tensorflow.Keras
             RegisterActivation("sigmoid", _sigmoid);
             RegisterActivation("softmax", _softmax);
             RegisterActivation("tanh", _tanh);
+            RegisterActivation("mish", _mish);
         }
 
         public Activation Linear => _linear;
@@ -54,6 +57,7 @@ namespace Tensorflow.Keras
 
         public Activation Tanh => _tanh;
 
+        public Activation Mish => _mish;
 
         public static Activation GetActivationByName(string name)
         {

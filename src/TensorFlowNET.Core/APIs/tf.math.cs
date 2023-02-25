@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Operations;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -50,6 +52,12 @@ namespace Tensorflow
             public Tensor sum(Tensor x, Axis? axis = null, string name = null)
                 => math_ops.reduce_sum(x, axis: axis, name: name);
 
+            public Tensor softplus(Tensor features, string name = null)
+                => nn_ops.softplus(features, name: name);
+
+            public Tensor tanh(Tensor x, string name = null)
+                => math_ops.tanh(x, name: name);
+            
             /// <summary>
             /// Finds values and indices of the `k` largest entries for the last dimension.
             /// </summary>

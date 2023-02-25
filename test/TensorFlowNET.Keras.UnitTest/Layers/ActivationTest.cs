@@ -94,5 +94,16 @@ namespace TensorFlowNET.Keras.UnitTest {
             NDArray expected = new NDArray(new float[] { -0.14227762f, -0.23840584f, -0.26894143f, 0f, 0.7310586f, 1.761594f });
             Assert.AreEqual(expected, output.numpy());
         }
+
+        /// <summary>
+        /// https://www.tensorflow.org/addons/api_docs/python/tfa/activations/mish
+        /// </summary>
+        [TestMethod]
+        public void Mish()
+        {
+            var x = tf.constant(new[] { 1.0, 0.0, 1.0 }, dtype: tf.float32);
+            var output = keras.activations.Mish(x);
+            Assert.AreEqual(new[] { 0.86509836f, 0f, 0.86509836f }, output.numpy());
+        }
     }
 }

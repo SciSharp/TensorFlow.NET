@@ -132,6 +132,9 @@ namespace Tensorflow
             return _softmax(logits, gen_nn_ops.softmax, axis, name);
         }
 
+        public static Tensor softplus(Tensor features, string name = null)
+            => tf.Context.ExecuteOp("Softplus", name, new ExecuteOpArgs(features));
+
         public static Tensor l2_loss(Tensor t, string name = null)
             => tf.Context.ExecuteOp("L2Loss", name, new ExecuteOpArgs(t));
 
