@@ -17,7 +17,7 @@ public class FBetaScore : Metric
     public FBetaScore(int num_classes,
         string? average = null,
         float beta = 0.1f,
-        float? threshold = -1f,
+        float? threshold = null,
         string name = "fbeta_score",
         TF_DataType dtype = TF_DataType.TF_FLOAT)
         : base(name: name, dtype: dtype)

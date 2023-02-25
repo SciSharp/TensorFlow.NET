@@ -77,7 +77,7 @@ public interface IMetricsApi
     /// <returns></returns>
     IMetricFunc F1Score(int num_classes,
         string? average = null,
-        float threshold = -1f,
+        float? threshold = null,
         string name = "f1_score",
         TF_DataType dtype = TF_DataType.TF_FLOAT);
 
@@ -88,7 +88,7 @@ public interface IMetricsApi
     IMetricFunc FBetaScore(int num_classes, 
         string? average = null,
         float beta = 0.1f,
-        float threshold = -1f,
+        float? threshold = null,
         string name = "fbeta_score",
         TF_DataType dtype = TF_DataType.TF_FLOAT);
     
