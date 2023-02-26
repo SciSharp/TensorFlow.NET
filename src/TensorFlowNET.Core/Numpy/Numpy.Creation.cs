@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
@@ -65,6 +61,7 @@ namespace Tensorflow.NumPy
         [AutoNumPy]
         public static NDArray load(string file) => tf.numpy.load(file);
 
+        [AutoNumPy]
         public static T Load<T>(string path)
             where T : class, ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
         {
@@ -102,6 +99,7 @@ namespace Tensorflow.NumPy
         public static NDArray ones(Shape shape, TF_DataType dtype = TF_DataType.TF_DOUBLE)
             => new NDArray(tf.ones(shape, dtype: dtype));
 
+        [AutoNumPy]
         public static NDArray ones_like(NDArray a, TF_DataType dtype = TF_DataType.DtInvalid)
             => new NDArray(tf.ones_like(a, dtype: dtype));
 

@@ -1,11 +1,4 @@
-﻿ using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Tensorflow.Util;
+﻿using System.IO;
 
 namespace Tensorflow.NumPy
 {
@@ -15,10 +8,7 @@ namespace Tensorflow.NumPy
         {
             using var stream = new FileStream(file, FileMode.Open);
             using var reader = new BinaryReader(stream, Encoding.ASCII, leaveOpen: true);
-            int bytes;
-            Type type;
-            int[] shape;
-            if (!ParseReader(reader, out bytes, out type, out shape))
+            if (!ParseReader(reader, out var bytes, out var type, out var shape))
                 throw new FormatException();
 
             Array array = Create(type, shape.Aggregate((dims, dim) => dims * dim));
@@ -31,10 +21,7 @@ namespace Tensorflow.NumPy
         {
             using (var reader = new BinaryReader(stream, System.Text.Encoding.ASCII, leaveOpen: true))
             {
-                int bytes;
-                Type type;
-                int[] shape;
-                if (!ParseReader(reader, out bytes, out type, out shape))
+                if (!ParseReader(reader, out var bytes, out var type, out var shape))
                     throw new FormatException();
 
                 Array matrix = Array.CreateInstance(type, shape);
