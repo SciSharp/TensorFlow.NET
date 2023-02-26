@@ -37,5 +37,16 @@
 
         public ILossFunc LogCosh(string reduction = null, string name = null)
             => new LogCosh(reduction: reduction, name: name);
+
+        public ILossFunc SigmoidFocalCrossEntropy(bool from_logits = false, 
+                float alpha = 0.25F, 
+                float gamma = 2, 
+                string reduction = "none", 
+                string name = "sigmoid_focal_crossentropy")
+            => new SigmoidFocalCrossEntropy(from_logits: from_logits, 
+                alpha: alpha, 
+                gamma: gamma, 
+                reduction: reduction, 
+                name: name);
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tensorflow;
+using Tensorflow.NumPy;
 using TensorFlowNET.Keras.UnitTest;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -47,5 +48,18 @@ public class LossesTest : EagerModeTestBase
         bce = tf.keras.losses.BinaryCrossentropy(from_logits: true, reduction: Reduction.NONE);
         loss = bce.Call(y_true, y_pred);
         Assert.AreEqual(new float[] { 0.23515666f, 1.4957594f}, loss.numpy());
+    }
+
+    /// <summary>
+    /// https://www.tensorflow.org/addons/api_docs/python/tfa/losses/SigmoidFocalCrossEntropy
+    /// </summary>
+    [TestMethod]
+    public void SigmoidFocalCrossEntropy()
+    {
+        var y_true = np.expand_dims(np.array(new[] { 1.0f, 1.0f, 0 }));
+        var y_pred = np.expand_dims(np.array(new[] { 0.97f, 0.91f, 0.03f }));
+        var bce = tf.keras.losses.SigmoidFocalCrossEntropy();
+        var loss = bce.Call(y_true, y_pred);
+        Assert.AreEqual(new[] { 6.8532745e-06f, 1.909787e-04f, 2.0559824e-05f }, loss.numpy());
     }
 }

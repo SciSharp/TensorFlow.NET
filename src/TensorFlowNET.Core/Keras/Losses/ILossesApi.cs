@@ -38,4 +38,19 @@ public interface ILossesApi
 
     ILossFunc LogCosh(string reduction = null, 
         string name = null);
+
+    /// <summary>
+    /// Implements the focal loss function.
+    /// </summary>
+    /// <param name="from_logits"></param>
+    /// <param name="alpha"></param>
+    /// <param name="gamma"></param>
+    /// <param name="reduction"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    ILossFunc SigmoidFocalCrossEntropy(bool from_logits = false,
+        float alpha = 0.25f,
+        float gamma = 2.0f,
+        string reduction = "none",
+        string name = "sigmoid_focal_crossentropy");
 }
