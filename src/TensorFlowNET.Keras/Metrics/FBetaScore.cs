@@ -53,7 +53,7 @@ public class FBetaScore : Metric
             _threshold = tf.reduce_max(y_pred, axis: -1, keepdims: true);
             // make sure [0, 0, 0] doesn't become [1, 1, 1]
             // Use abs(x) > eps, instead of x != 0 to check for zero
-            y_pred = tf.logical_and(y_pred >= _threshold, tf.abs(y_pred) > 1e-12);
+            y_pred = tf.logical_and(y_pred >= _threshold, tf.abs(y_pred) > 1e-12f);
         }
         else
         {
