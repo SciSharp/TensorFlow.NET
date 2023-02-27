@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Train;
+using Tensorflow.Training.Saving.SavedModel;
 
 namespace Tensorflow.ModelSaving
 {

@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +76,17 @@ namespace Tensorflow.Keras.Engine
         public int Id => id;
         protected string name;
         protected string base_name;
-        public string Name => name;
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+            }
+        }
 
         protected bool computePreviousMask;
         protected List<Operation> updates;
@@ -88,6 +99,8 @@ namespace Tensorflow.Keras.Engine
 
         List<INode> outboundNodes;
         public List<INode> OutboundNodes => outboundNodes;
+
+        public JObject SerializedAttributes { get; set; }
 
         ThreadLocal<CallContext> callContext = new ThreadLocal<CallContext>();
         public CallContext CallContext => callContext.Value;
@@ -117,6 +130,11 @@ namespace Tensorflow.Keras.Engine
         protected List<ILayer> _self_tracked_trackables;
 
         public Layer(LayerArgs args)
+        {
+            Initialize(args);
+        }
+
+        internal virtual void Initialize(LayerArgs args)
         {
             this.args = args;
             // A stateful layer is a layer whose updates are run during inference too,

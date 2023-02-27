@@ -238,5 +238,23 @@ namespace Tensorflow
         {
             return _graph_element.eval(session);
         }
+
+        public static (VariableSynchronization, VariableAggregation, bool) validate_synchronization_aggregation_trainable(
+            VariableSynchronization? synchronization, VariableAggregation? aggregation, bool? trainable, string name)
+        {
+            if(aggregation is null)
+            {
+                aggregation = VariableAggregation.None;
+            }
+            if(synchronization is null)
+            {
+                synchronization = VariableSynchronization.Auto;
+            }
+            if (trainable is null)
+            {
+                trainable = synchronization != VariableSynchronization.OnRead;
+            }
+            return (synchronization.Value, aggregation.Value, trainable.Value);
+        }
     }
 }

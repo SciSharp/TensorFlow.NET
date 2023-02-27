@@ -54,6 +54,11 @@ namespace Tensorflow.Keras.Engine
                 Outputs = outputs
             })
         {
+            Initialize(inputs, outputs, name);
+        }
+
+        internal void Initialize(Tensors inputs, Tensors outputs, string name = null)
+        {
             _input_layers = new List<ILayer>();
             _output_layers = new List<ILayer>();
             _input_coordinates = new List<KerasHistory>();

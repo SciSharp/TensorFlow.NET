@@ -5,7 +5,6 @@ using System.Linq;
 using Tensorflow.Checkpoint;
 using Tensorflow.Contexts;
 using Tensorflow.Functions;
-using Tensorflow.ModelSaving;
 using Tensorflow.Train;
 using Tensorflow.Training;
 using pbc = global::Google.Protobuf.Collections;

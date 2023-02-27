@@ -17,8 +17,8 @@
 using System;
 using System.Linq;
 using Tensorflow.Framework;
-using Tensorflow.ModelSaving;
 using Tensorflow.Train;
+using Tensorflow.Training.Saving.SavedModel;
 using Tensorflow.Variables;
 using static Tensorflow.CppShapeInferenceResult.Types;
 

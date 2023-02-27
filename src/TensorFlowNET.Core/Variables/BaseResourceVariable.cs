@@ -5,9 +5,9 @@ using Tensorflow.Variables;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 using System.Collections.Generic;
-using Tensorflow.ModelSaving;
 using System.Diagnostics;
 using Tensorflow.Checkpoint;
+using Tensorflow.Training.Saving.SavedModel;
 
 namespace Tensorflow
 {
@@ -19,7 +19,11 @@ namespace Tensorflow
         protected TF_DataType _dtype;
         public TF_DataType dtype => _dtype;
         protected string _handle_name;
-        protected string handle_name => _handle_name;
+        public string handle_name
+        {
+            get { return _handle_name; }
+            set { _handle_name = value; }
+        }
 
         protected string _unique_id;
         public string UniqueId => _unique_id;

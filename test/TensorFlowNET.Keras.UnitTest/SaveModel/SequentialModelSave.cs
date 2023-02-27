@@ -63,6 +63,8 @@ public class SequentialModelTest
             keras.layers.Softmax(1)
         });
 
+        model.summary();
+
         model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();

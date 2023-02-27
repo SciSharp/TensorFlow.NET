@@ -333,6 +333,21 @@ namespace Tensorflow
                 return restored_ops;
             };
         }
+
+        /// <summary>
+        /// Returns a dict of SaveableObject factories generated from loaded fns.
+        /// </summary>
+        /// <param name="saveable_fn_by_name"></param>
+        /// <param name="temp_session"></param>
+        public static IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> recreate_saveable_objects(
+            IDictionary<string, (Trackable, Trackable)> saveable_fn_by_name, IEnumerable<object>? temp_session)
+        {
+            if (saveable_fn_by_name.Count > 0)
+            {
+                throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues");
+            }
+            return new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>();
+        }
     }
 
     public class SaveableCompatibilityConverter: Trackable

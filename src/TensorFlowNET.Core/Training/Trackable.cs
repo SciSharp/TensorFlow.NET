@@ -20,8 +20,8 @@ using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Checkpoint;
 using Tensorflow.Keras.Saving.SavedModel;
-using Tensorflow.ModelSaving;
 using Tensorflow.Training;
+using Tensorflow.Training.Saving.SavedModel;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
@@ -71,6 +71,17 @@ namespace Tensorflow.Train
         public IList<TrackableReference> UnconditionalCheckpointDependencies { get => _unconditional_checkpoint_dependencies; }
         public IDictionary<string, Trackable> UnconditionalDependencyNames { get => _unconditional_dependency_names; }
         public IList<TrackableReference> CheckpointDependencies { get => UnconditionalCheckpointDependencies; }
+        public IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> SelfSaveableObjectFactories
+        {
+            get
+            {
+                return _self_saveable_object_factories;
+            }
+            set
+            {
+                _self_saveable_object_factories = value;
+            }
+        }
 
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
@@ -259,4 +270,6 @@ namespace Tensorflow.Train
     }
 
     public record class TrackableReference(string Name, Trackable Refer);
+
+    public record class SlotVariableRestoration(int OptimizerId, int SlotVariableId, string SlotName);
 }

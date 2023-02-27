@@ -17,7 +17,7 @@ namespace Tensorflow.Keras.Saving.SavedModel;
 
 public partial class KerasSavedModelUtils
 {
-    public static void Save(Model model, string filepath, bool overwrite, bool include_optimizer, ConcreteFunction? signatures,
+    public static void save_model(Model model, string filepath, bool overwrite, bool include_optimizer, ConcreteFunction? signatures,
         SaveOptions? options, bool save_traces = true)
     {
         if (!overwrite && File.Exists(filepath))

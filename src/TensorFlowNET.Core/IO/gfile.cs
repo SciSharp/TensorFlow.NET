@@ -16,8 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.IO
 {
@@ -62,6 +64,16 @@ namespace Tensorflow.IO
             foreach(var dir in Directory.GetDirectories(data_dir))
                 dirs.AddRange(Directory.GetFiles(dir));
             return dirs.ToArray();
+        }
+
+        public string join(params string[] paths)
+        {
+            Debug.Assert(paths.Length >= 1);
+            if (paths[0].Substring(1).Contains("://"))
+            {
+                throw new NotImplementedException("The combination of urls has not been implemented.");
+            }
+            return Path.Combine(paths);
         }
     }
 }

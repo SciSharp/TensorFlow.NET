@@ -149,4 +149,13 @@ public static class CheckPointUtils
         //     object_graph_proto.Nodes[i].has_checkpoint_values.value = checkpointed_trackables.Contains(i);
         // }
     }
+
+    /// <summary>
+    /// Traverse the object graph and list all accessible objects.
+    /// </summary>
+    /// <param name="object_graph_view"></param>
+    public static IList<Trackable> list_objects(ObjectGraphView graph_view)
+    {
+        return objects_ids_and_slot_variables_and_paths(graph_view).Item1;
+    }
 }

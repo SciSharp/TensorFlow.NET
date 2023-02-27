@@ -22,12 +22,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Train;
 
 namespace Tensorflow.Keras.Utils
 {
     public class generic_utils
     {
+        private static readonly string _LAYER_UNDEFINED_CONFIG_KEY = "layer was saved without config";
         /// <summary>
         /// This method does not have corresponding method in python. It's close to `serialize_keras_object`.
         /// </summary>
@@ -51,6 +55,21 @@ namespace Tensorflow.Keras.Utils
             return serialize_utils.serialize_keras_class_and_config(instance.GetType().Name, config, instance);
         }
 
+        public static Layer deserialize_keras_object(string class_name, JObject config)
+        {
+            return class_name switch
+            {
+                "Sequential" => new Sequential(config.ToObject<SequentialArgs>()),
+                "InputLayer" => new InputLayer(config.ToObject<InputLayerArgs>()),
+                "Flatten" => new Flatten(config.ToObject<FlattenArgs>()),
+                "ELU" => new ELU(config.ToObject<ELUArgs>()),
+                "Dense" => new Dense(config.ToObject<DenseArgs>()),
+                "Softmax" => new Softmax(config.ToObject<SoftmaxArgs>()),
+                _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
+                        $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
+            };
+        }
+
         public static string to_snake_case(string name)
         {
             return string.Concat(name.Select((x, i) =>
@@ -59,6 +78,16 @@ namespace Tensorflow.Keras.Utils
                     "_" + x.ToString() :
                     x.ToString();
             })).ToLower();
+        }
+
+        /// <summary>
+        /// Determines whether config appears to be a valid layer config.
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static bool validate_config(JObject config)
+        {
+            return !config.ContainsKey(_LAYER_UNDEFINED_CONFIG_KEY);
         }
     }
 }

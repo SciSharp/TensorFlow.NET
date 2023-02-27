@@ -37,7 +37,7 @@ namespace Tensorflow.Keras.Common
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            var axis = serializer.Deserialize(reader, typeof(long[]));
+            var axis = serializer.Deserialize(reader, typeof(int[]));
             if (axis is null)
             {
                 throw new ValueError("Cannot deserialize 'null' to `Axis`.");

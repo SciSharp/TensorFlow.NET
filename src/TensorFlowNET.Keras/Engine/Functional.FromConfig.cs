@@ -24,7 +24,7 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        static (Tensors, Tensors, Dictionary<string, ILayer>) reconstruct_from_config(ModelConfig config)
+        public static (Tensors, Tensors, Dictionary<string, ILayer>) reconstruct_from_config(ModelConfig config)
         {
             // Layer instances created during the graph reconstruction process.
             var created_layers = new Dictionary<string, ILayer>();

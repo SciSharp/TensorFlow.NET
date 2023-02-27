@@ -36,6 +36,8 @@ namespace Tensorflow.Keras.Engine
         IVariableV1 _predict_counter;
         bool _base_model_initialized;
         bool stop_training;
+
+        public bool IsGraphNetwork => _is_graph_network;
         
         public OptimizerV2 Optimizer
         {
@@ -47,6 +49,12 @@ namespace Tensorflow.Keras.Engine
             : base(args)
         {
             _init_batch_counters();
+        }
+
+        internal override void Initialize(LayerArgs args)
+        {
+            _init_batch_counters();
+            base.Initialize(args);
         }
 
         void _configure_steps_per_execution(int steps_per_execution)

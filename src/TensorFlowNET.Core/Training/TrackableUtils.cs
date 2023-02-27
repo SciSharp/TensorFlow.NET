@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Checkpoint;
 using Tensorflow.Exceptions;
 using Tensorflow.Train;
 
