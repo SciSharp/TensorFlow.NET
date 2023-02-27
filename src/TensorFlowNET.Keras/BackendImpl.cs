@@ -276,6 +276,64 @@ namespace Tensorflow.Keras
             return -math_ops.reduce_sum(target * math_ops.log(output), new Axis(axis));
         }
 
+        public Tensor sparse_categorical_crossentropy(Tensor target, Tensor output, bool from_logits = false, int axis = -1, int? ignore_class = null)
+        {
+            target = tf.cast(target, tf.int64);
+            if (!from_logits)
+            {
+                var epsilon_ = constant_op.constant(epsilon(), output.dtype.as_base_dtype());
+                output = tf.clip_by_value(output, epsilon_, 1 - epsilon_);
+                output = tf.math.log(output);
+            }
+            var output_rank = output.shape.ndim;
+            if (output_rank > -1)
+            {
+                axis = Math.Abs(axis) % output_rank;
+                if (axis != output_rank - 1)
+                {
+                    /*var permutation = list(
+                        itertools.chain(
+                            range(axis), range(axis + 1, output_rank), [axis]
+                        )
+                    );
+                    output = tf.transpose(output, perm: permutation);*/
+                    throw new NotImplementedException("");
+                }
+
+            }
+
+            var output_shape = tf.shape(output);
+            var target_rank = target.shape.ndim;
+            var update_shape = target_rank > -1 && output_rank > -1 && target_rank != output_rank - 1;
+            if (update_shape)
+            {
+                /*var target = flatten(target);
+                output = tf.reshape(output, [-1, output_shape[-1]]);*/
+                throw new NotImplementedException("");
+            }
+
+            if (ignore_class.HasValue)
+            {
+                throw new NotImplementedException("");
+            }
+
+            var res = tf.nn.sparse_softmax_cross_entropy_with_logits(labels: target, logits: output);
+
+            if (ignore_class.HasValue)
+            {
+                throw new NotImplementedException("");
+            }
+
+            if (update_shape && output_rank >= 3)
+            {
+                // If our output includes timesteps or
+                // spatial dimensions we need to reshape
+                res = tf.reshape(res, output_shape[":-1"]);
+            }
+
+            return res;
+        }
+
         public Tensor binary_crossentropy(Tensor target, Tensor output, bool from_logits = false)
         {
             if (from_logits)

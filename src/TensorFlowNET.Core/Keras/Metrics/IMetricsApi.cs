@@ -23,6 +23,20 @@ public interface IMetricsApi
     Tensor sparse_categorical_accuracy(Tensor y_true, Tensor y_pred);
 
     /// <summary>
+    /// Computes the sparse categorical crossentropy loss.
+    /// </summary>
+    /// <param name="y_true"></param>
+    /// <param name="y_pred"></param>
+    /// <param name="from_logits"></param>
+    /// <param name="ignore_class"></param>
+    /// <param name="axis"></param>
+    /// <returns></returns>
+    Tensor sparse_categorical_crossentropy(Tensor y_true, Tensor y_pred, 
+        bool from_logits = false,
+        int? ignore_class = null,
+        Axis? axis = null);
+
+    /// <summary>
     /// Computes how often targets are in the top `K` predictions.
     /// </summary>
     /// <param name="y_true"></param>
@@ -60,7 +74,24 @@ public interface IMetricsApi
     /// Computes the crossentropy metric between the labels and predictions.
     /// </summary>
     /// <returns></returns>
+    IMetricFunc SparseCategoricalCrossentropy(string name = "sparse_categorical_crossentropy",
+        TF_DataType dtype = TF_DataType.TF_FLOAT,
+        bool from_logits = false,
+        int? ignore_class = null,
+        Axis? axis = null);
+
+    /// <summary>
+    /// Computes the crossentropy metric between the labels and predictions.
+    /// </summary>
+    /// <returns></returns>
     IMetricFunc CategoricalAccuracy(string name = "categorical_accuracy", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
+    /// Calculates how often predictions match integer labels.
+    /// </summary>
+    /// <returns></returns>
+    IMetricFunc SparseCategoricalAccuracy(string name = "sparse_categorical_accuracy",
         TF_DataType dtype = TF_DataType.TF_FLOAT);
 
     /// <summary>
@@ -112,6 +143,15 @@ public interface IMetricsApi
     /// <returns></returns>
     IMetricFunc TopKCategoricalAccuracy(int k = 5, 
         string name = "top_k_categorical_accuracy", 
+        TF_DataType dtype = TF_DataType.TF_FLOAT);
+
+    /// <summary>
+    /// Computes how often integer targets are in the top K predictions.
+    /// </summary>
+    /// <param name="k"></param>
+    /// <returns></returns>
+    IMetricFunc SparseTopKCategoricalAccuracy(int k = 5,
+        string name = "sparse_top_k_categorical_accuracy",
         TF_DataType dtype = TF_DataType.TF_FLOAT);
 
     /// <summary>

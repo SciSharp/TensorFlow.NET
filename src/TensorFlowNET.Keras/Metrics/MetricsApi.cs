@@ -27,6 +27,11 @@
             return keras.backend.categorical_crossentropy(y_true, y_pred, from_logits: from_logits, axis: axis);
         }
 
+        public Tensor sparse_categorical_crossentropy(Tensor y_true, Tensor y_pred, bool from_logits = false, int? ignore_class = null, Axis? axis = null)
+        {
+            return keras.backend.sparse_categorical_crossentropy(y_true, y_pred, from_logits: from_logits, axis: axis ?? -1, ignore_class: ignore_class);
+        }
+
         /// <summary>
         /// Calculates how often predictions matches integer labels.
         /// </summary>
@@ -103,5 +108,14 @@
 
         public IMetricFunc Recall(float thresholds = 0.5f, int top_k = 0, int class_id = 0, string name = "recall", TF_DataType dtype = TF_DataType.TF_FLOAT)
             => new Recall(thresholds: thresholds, top_k: top_k, class_id: class_id, name: name, dtype: dtype);
+
+        public IMetricFunc SparseCategoricalCrossentropy(string name = "sparse_categorical_crossentropy", TF_DataType dtype = TF_DataType.TF_FLOAT, bool from_logits = false, int? ignore_class = null, Axis? axis = null)
+            => new SparseCategoricalCrossentropy(name: name, dtype: dtype, from_logits: from_logits, ignore_class: ignore_class, axis: axis ?? -1);
+
+        public IMetricFunc SparseTopKCategoricalAccuracy(int k = 5, string name = "sparse_top_k_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new SparseTopKCategoricalAccuracy(k: k, name: name, dtype: dtype);
+
+        public IMetricFunc SparseCategoricalAccuracy(string name = "sparse_categorical_accuracy", TF_DataType dtype = TF_DataType.TF_FLOAT)
+            => new SparseCategoricalAccuracy(name: name, dtype: dtype);
     }
 }

@@ -73,7 +73,7 @@ public class metrics_utils
             y_true = tf.squeeze(y_true, new Shape(-1));
         }
         y_pred = tf.math.argmax(y_pred, axis: -1);
-
+        y_pred = tf.cast(y_pred, y_true.dtype);
         var matches = tf.cast(
             tf.equal(y_true, y_pred),
             dtype: keras.backend.floatx()

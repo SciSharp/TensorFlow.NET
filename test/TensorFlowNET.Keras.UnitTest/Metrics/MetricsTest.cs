@@ -75,6 +75,26 @@ public class MetricsTest : EagerModeTestBase
     }
 
     /// <summary>
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/SparseCategoricalAccuracy
+    /// </summary>
+    [TestMethod]
+    public void SparseCategoricalAccuracy()
+    {
+        var y_true = np.array(new[] { 2, 1 });
+        var y_pred = np.array(new[,] { { 0.1f, 0.6f, 0.3f }, { 0.05f, 0.95f, 0f } });
+        var m = tf.keras.metrics.SparseCategoricalAccuracy();
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 0.5f);
+
+        m.reset_states();
+        var weights = np.array(new[] { 0.7f, 0.3f });
+        m.update_state(y_true, y_pred, sample_weight: weights);
+        r = m.result().numpy();
+        Assert.AreEqual(r, 0.3f);
+    }
+
+    /// <summary>
     /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/CategoricalCrossentropy
     /// </summary>
     [TestMethod]
@@ -92,6 +112,20 @@ public class MetricsTest : EagerModeTestBase
         m.update_state(y_true, y_pred, sample_weight: weights);
         r = m.result().numpy();
         Assert.AreEqual(r, 1.6271976f);
+    }
+
+    /// <summary>
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/SparseCategoricalCrossentropy
+    /// </summary>
+    [TestMethod]
+    public void SparseCategoricalCrossentropy()
+    {
+        var y_true = np.array(new[] { 1, 2 });
+        var y_pred = np.array(new[,] { { 0.05f, 0.95f, 0f }, { 0.1f, 0.8f, 0.1f } });
+        var m = tf.keras.metrics.SparseCategoricalCrossentropy();
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 1.1769392f);
     }
 
     /// <summary>
@@ -196,6 +230,26 @@ public class MetricsTest : EagerModeTestBase
         var y_true = np.array(new[,] { { 0, 0, 1 }, { 0, 1, 0 } });
         var y_pred = np.array(new[,] { { 0.1f, 0.9f, 0.8f }, { 0.05f, 0.95f, 0f } });
         var m = tf.keras.metrics.TopKCategoricalAccuracy(k: 1);
+        m.update_state(y_true, y_pred);
+        var r = m.result().numpy();
+        Assert.AreEqual(r, 0.5f);
+
+        m.reset_states();
+        var weights = np.array(new[] { 0.7f, 0.3f });
+        m.update_state(y_true, y_pred, sample_weight: weights);
+        r = m.result().numpy();
+        Assert.AreEqual(r, 0.3f);
+    }
+
+    /// <summary>
+    /// https://www.tensorflow.org/api_docs/python/tf/keras/metrics/SparseTopKCategoricalAccuracy
+    /// </summary>
+    [TestMethod]
+    public void SparseTopKCategoricalAccuracy()
+    {
+        var y_true = np.array(new[] { 2, 1 });
+        var y_pred = np.array(new[,] { { 0.1f, 0.9f, 0.8f }, { 0.05f, 0.95f, 0f } });
+        var m = tf.keras.metrics.SparseTopKCategoricalAccuracy(k: 1);
         m.update_state(y_true, y_pred);
         var r = m.result().numpy();
         Assert.AreEqual(r, 0.5f);
