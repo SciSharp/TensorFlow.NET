@@ -24,6 +24,6 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         internal static extern int TF_CheckpointReaderGetVariableNumDims(IntPtr reader, string name);
         [DllImport(TensorFlowLibName)]
-        internal static extern IntPtr TF_CheckpointReaderGetTensor(IntPtr reader, string name, SafeStatusHandle status);
+        internal static extern SafeTensorHandle TF_CheckpointReaderGetTensor(IntPtr reader, string name, SafeStatusHandle status);
     }
 }

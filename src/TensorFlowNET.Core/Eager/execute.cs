@@ -10,7 +10,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager
 {
-    internal class execute
+    internal static class execute
     {
         public static (DataType[], Tensor[]) onvert_to_mixed_eager_tensors(Tensor[] values, Context ctx)
         {
@@ -26,6 +26,10 @@ namespace Tensorflow.Eager
             var tensors = tf.Runner.TFE_Execute(ctx, device_name, op_name, inputs, attrs, num_outputs);
 
             return tensors;
+        }
+        public static bool must_record_gradient()
+        {
+            return false;
         }
     }
 }

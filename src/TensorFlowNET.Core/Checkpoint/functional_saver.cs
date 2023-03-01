@@ -213,7 +213,7 @@ namespace Tensorflow.Checkpoint
 
             // tf python has code `with ops.device(restore_device):` here.
             tf.device(restore_device); // may be risky.
-            var restored_tensors = tf.io.restore_v2(file_prefix, tensor_names.ToArray(), slice_specs.ToArray(), tensor_dtypes.ToArray());
+            var restored_tensors = gen_ops.restore_v2(file_prefix, tensor_names.ToArray(), slice_specs.ToArray(), tensor_dtypes.ToArray());
 
             Dictionary<string, IDictionary<string, Tensor>> restored_tensor_dict = new();
             int idx = 0;

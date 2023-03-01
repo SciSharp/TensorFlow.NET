@@ -158,4 +158,13 @@ public static class CheckPointUtils
     {
         return objects_ids_and_slot_variables_and_paths(graph_view).Item1;
     }
+
+    internal static IEnumerable<Trackable> _objects_with_attributes(IEnumerable<Trackable> full_list)
+    {
+        return full_list.TakeWhile(x =>
+        {
+            var saveables = x.gather_saveables_for_checkpoint();
+            return saveables is not null && saveables.Count > 0;
+        });
+    }
 }

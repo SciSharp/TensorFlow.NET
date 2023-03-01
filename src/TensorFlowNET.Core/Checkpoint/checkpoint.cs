@@ -10,6 +10,8 @@ using Tensorflow.Exceptions;
 using static Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types;
 using static Tensorflow.Binding;
 using Tensorflow.Operations;
+using Newtonsoft.Json;
+using Tensorflow.Training;
 
 namespace Tensorflow.Checkpoint;
 
@@ -259,11 +261,48 @@ public class TrackableSaver
             saveables_cache: null
         );
 
-        throw new NotImplementedException();
+        new CheckpointPosition(checkpoint, 0).restore(_graph_view.Root);
+
+        if(_graph_view.AttachedDependencies is not null)
+        {
+            foreach(var refer in _graph_view.AttachedDependencies)
+            {
+                if(refer.Name == "root")
+                {
+                    continue;
+                }
+                int? proto_id = null;
+                // Find proto ID of attached dependency (if it is in the proto).
+                foreach (var proto_refer in object_graph_proto.Nodes[0].Children)
+                {
+                    if(proto_refer.LocalName == refer.Name)
+                    {
+                        proto_id = proto_refer.NodeId;
+                        break;
+                    }
+                }
+
+                if (proto_id is null)
+                {
+                    continue;
+                }
+
+                // Object has already been restored. This can happen when there's an
+                // indirect connection from the attached object to the root.
+                if (checkpoint.ObjectByProtoId.ContainsKey(proto_id.Value))
+                {
+                    continue;
+                }
+
+                new CheckpointPosition(checkpoint, proto_id.Value).restore(refer.Refer);
+            }
+        }
+
+        return new CheckpointLoadStatus(checkpoint, file_prefix_feed_dict, _graph_view);
     }
 }
 
-internal class CheckpointRestoreCoordinator
+public class CheckpointRestoreCoordinator
 {
     private CheckpointOptions _options;
     private TrackableObjectGraph _object_graph_proto;
@@ -280,6 +319,9 @@ internal class CheckpointRestoreCoordinator
     private List<Operation> _restore_ops;
     private List<Trackable> _all_trackables;
     private Dictionary<int, Trackable> _object_by_proto_id;
+    private Dictionary<string, Operation> _restore_ops_by_name;
+    private Dictionary<int, IList<DeferredSlotVariableRestoration>> _deferred_slot_restorations;
+    private Dictionary<int, IList<string>> _unused_attributes;
 
     public CheckpointRestoreCoordinator(TrackableObjectGraph object_graph_proto, string save_path, Tensor save_path_tensor, 
         CheckpointReader reader, object? restore_op_cache, ObjectGraphView graph_view, CheckpointOptions options, object? saveables_cache)
@@ -299,10 +341,12 @@ internal class CheckpointRestoreCoordinator
         _shape_map = _reader.VariableToShapeMap;
         _graph_view = graph_view;
         _restore_ops = new List<Operation>();
+        _restore_ops_by_name = new Dictionary<string, Operation>();
         _all_trackables = new List<Trackable>();
         _matched_proto_ids = new HashSet<int>();
         _object_by_proto_id = new Dictionary<int, Trackable>();
         _slot_restorations = new Dictionary<int, IList<SlotVariableRestoration>>();
+        _deferred_slot_restorations = new Dictionary<int, IList<DeferredSlotVariableRestoration>>();
 
         _expect_partial_attr = false;
         for(int i = 0; i < _object_graph_proto.Nodes.Count; i++)
@@ -330,10 +374,18 @@ internal class CheckpointRestoreCoordinator
         }
     }
 
+    /// <summary>
+    /// Corresponding to `all_python_objects` of tensorflow python
+    /// </summary>
     public List<Trackable> AllTrackables => _all_trackables;
     public HashSet<int> MatchedProtoIds => _matched_proto_ids;
     public Dictionary<int, Trackable> ObjectByProtoId => _object_by_proto_id;
     public int RestoreUid => _restore_uid;
+    public TrackableObjectGraph ObjectGraphProto => _object_graph_proto;
+    public Dictionary<int, IList<SlotVariableRestoration>> SlotRestorations => _slot_restorations;
+    public Dictionary<int, IList<DeferredSlotVariableRestoration>> DeferredSlotRestorations => _deferred_slot_restorations;
+    public Dictionary<string, Operation> RestoreOpsByName => _restore_ops_by_name;
+    public Dictionary<int, IList<string>> UnusedAttributes => _unused_attributes;
 
     public void new_restore_ops(IEnumerable<Operation> new_ops)
     {
@@ -341,18 +393,52 @@ internal class CheckpointRestoreCoordinator
         // skip the callback.
     }
 
-    public List<Operation> restore_saveables(MySaveableObject tensor_saveables, object? python_positions = null, object? registered_savers = null)
+    public List<Operation> restore_saveables(Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> tensor_saveables, List<CheckpointPosition> positions, object? registered_savers = null)
     {
-        throw new NotImplementedException();
+        List<Operation> restore_ops = new();
+        foreach(var position in positions)
+        {
+            var key = position.ObjectProto.Attributes[0].CheckpointKey;
+            throw new NotImplementedException();
+        }
+
+        Dictionary<string, BaseResourceVariable> variable_dict = new();
+        foreach(var item in tensor_saveables)
+        {
+            if(item.Value.TryGet<BaseResourceVariable>(out var variable))
+            {
+                variable_dict[item.Key] = variable;
+            }
+            else
+            {
+                throw new TypeError();
+            }
+        }
+
+        if (tensor_saveables is not null && tensor_saveables.Count > 0)
+        {
+            var flat_saveables = saveable_object_util.validate_and_slice_inputs(variable_dict);
+            var new_restore_ops = MultiDeviceSaver.from_saveables(flat_saveables).restore(_save_path_tensor, _options);
+            if (!tf.Context.executing_eagerly())
+            {
+                foreach(var item in new_restore_ops)
+                {
+                    restore_ops.Add(item.Value);
+                    Debug.Assert(!_restore_ops_by_name.ContainsKey(item.Key));
+                    _restore_ops_by_name[item.Key] = item.Value;
+                }
+            }
+        }
+        return restore_ops;
     }
 }
 
 public abstract class LoadStatus
 {
-    public abstract void assert_consumed();
-    public abstract void assert_existing_objects_matched();
-    public abstract void assert_nontrivial_match();
-    public abstract void run_restore_ops(Session? session = null);
+    public abstract LoadStatus assert_consumed();
+    public abstract LoadStatus assert_existing_objects_matched();
+    public abstract LoadStatus assert_nontrivial_match();
+    public abstract LoadStatus run_restore_ops(Session? session = null);
     public abstract void initialize_or_restore(Session? session = null);
     public virtual LoadStatus expect_partial()
     {
@@ -371,19 +457,19 @@ public class InitializationOnlyStatus: LoadStatus
         _object_graph_view = object_graph_view;
         _root = object_graph_view.Root;
     }
-    public override void assert_consumed()
+    public override LoadStatus assert_consumed()
     {
         throw new AssertionError("No checkpoint specified (save_path=None); nothing is being restored.");
     }
-    public override void assert_existing_objects_matched()
+    public override LoadStatus assert_existing_objects_matched()
     {
         throw new AssertionError("No checkpoint specified (save_path=None); nothing is being restored.");
     }
-    public override void assert_nontrivial_match()
+    public override LoadStatus assert_nontrivial_match()
     {
         throw new AssertionError("No checkpoint specified (save_path=None); nothing is being restored.");
     }
-    public override void run_restore_ops(Session? session = null)
+    public override LoadStatus run_restore_ops(Session? session = null)
     {
         throw new AssertionError("No checkpoint specified, so no restore ops are available "
         + "(save_path=None to Saver.restore).");
@@ -403,10 +489,78 @@ public class InitializationOnlyStatus: LoadStatus
     }
 }
 
-public class CheckpointLoadStatus
+internal class CheckpointLoadStatus: LoadStatus
 {
-    public CheckpointLoadStatus()
+    private CheckpointRestoreCoordinator _checkpoint;
+    private Dictionary<Tensor, string> _feed_dict;
+    private ObjectGraphView _object_graph_view;
+    private Trackable _root;
+    public CheckpointLoadStatus(CheckpointRestoreCoordinator checkpoint, Dictionary<Tensor, string> feed_dict, ObjectGraphView graph_view):base()
     {
+        _checkpoint = checkpoint;
+        _feed_dict = feed_dict;
+        _object_graph_view = graph_view;
+        _root = graph_view.Root;
+    }
 
+    public CheckpointRestoreCoordinator Checkpoint => _checkpoint;
+
+    public override LoadStatus assert_consumed()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override LoadStatus assert_existing_objects_matched()
+    {
+        for(int i = 0; i < _checkpoint.ObjectGraphProto.Nodes.Count; i++)
+        {
+            var node = _checkpoint.ObjectGraphProto.Nodes[i];
+            if(_checkpoint.ObjectByProtoId.TryGetValue(i, out var trackable) && 
+                trackable.UpdateUid < _checkpoint.RestoreUid)
+            {
+                throw new AssertionError($"Object {node} not assigned a value from checkpoint.");
+            }
+        }
+        foreach(var trackable_object in CheckPointUtils.list_objects(_object_graph_view))
+        {
+            if(trackable_object is TrackableDataStructure && trackable_object._trackable_children().Count == 0)
+            {
+                continue;
+            }
+            _checkpoint.AllTrackables.Add(trackable_object);
+        }
+        var unused_trackables = CheckPointUtils._objects_with_attributes(_checkpoint.AllTrackables)
+            .Except(_checkpoint.ObjectByProtoId.Values);
+        if (unused_trackables.Any())
+        {
+            var num_unused_trackables = unused_trackables.Count();
+            var num_variables_to_show = Math.Min(10, num_unused_trackables);
+            throw new AssertionError($"Found {num_unused_trackables} Python objects that were " +
+                $"not bound to checkpointed values, likely due to changes in the " +
+                $"Python program. Showing {num_variables_to_show} of " +
+                $"{num_unused_trackables} unmatched objects: " +
+                $"{{list(unused_python_objects)[:num_variables_to_show]}}");
+        }
+        return this;
+    }
+
+    public override LoadStatus assert_nontrivial_match()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override LoadStatus expect_partial()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void initialize_or_restore(Session? session = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override LoadStatus run_restore_ops(Session? session = null)
+    {
+        throw new NotImplementedException();
     }
 }

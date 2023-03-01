@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tensorflow.Checkpoint
 {
-    internal class CheckpointReader : IDisposable
+    public class CheckpointReader : IDisposable
     {
         private IntPtr _reader;
         public Dictionary<string, TF_DataType> VariableToDataTypeMap { get; set; }
@@ -61,14 +62,14 @@ namespace Tensorflow.Checkpoint
             return c_api.TF_CheckpointReaderGetVariableNumDims(_reader, name);
         }
 
-        public Tensor GetTensor(string name)
+        public unsafe Tensor GetTensor(string name)
         {
             Status status = new Status();
             var tensor = c_api.TF_CheckpointReaderGetTensor(_reader, name, status.Handle);
             status.Check(true);
             var shape = GetVariableShape(name);
             var dtype = GetVariableDataType(name);
-            return new Tensor(tensor, shape, dtype);
+            return new Tensor(c_api.TF_TensorData(tensor), shape, dtype);
         }
 
         private void ReadAllShapeAndType()

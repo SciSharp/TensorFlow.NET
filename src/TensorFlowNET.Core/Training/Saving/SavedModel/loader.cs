@@ -63,7 +63,7 @@ namespace Tensorflow
 
             if (!save_options.experimental_skip_checkpoint)
             {
-                // TODO: implement it.
+                _restore_checkpoint();
             }
             foreach(var node in _nodes)
             {
@@ -398,13 +398,27 @@ namespace Tensorflow
         /// </summary>
         private void _restore_checkpoint()
         {
-            var variables_path = SavedModelUtils.get_variables_dir(_export_dir);
+            var variables_path = SavedModelUtils.get_variables_path(_export_dir);
             var saver = new TrackableSaver(new ObjectGraphView(get(0)));
             tf.device("CPU");
             saver.FilePrefixPlaceHolder = constant_op.constant(variables_path);
+            LoadStatus load_status;
             if (_save_options.allow_partial_checkpoint)
             {
+                load_status = saver.restore(variables_path, _checkpoint_options).expect_partial();
+                load_status.assert_nontrivial_match();
+            }
+            else
+            {
+                load_status = saver.restore(variables_path, _checkpoint_options);
+                load_status.assert_existing_objects_matched();
+            }
+            var ckpt = (load_status as CheckpointLoadStatus).Checkpoint;
 
+            if (!tf.Context.executing_eagerly())
+            {
+                throw new NotImplementedException("The checkpoint restore has not supported graph mode. " +
+                    "Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues");
             }
         }
 
