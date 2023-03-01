@@ -51,8 +51,26 @@ namespace Tensorflow.Keras.Common
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            var dims = serializer.Deserialize(reader, typeof(long?[])) as long?[];
-            if(dims is null)
+            long?[] dims;
+            try
+            {
+                dims = serializer.Deserialize(reader, typeof(long?[])) as long?[];
+            }
+            catch (JsonSerializationException ex)
+            {
+                if (reader.Value.Equals("class_name"))
+                {
+                    reader.Read();
+                    reader.Read();
+                    reader.Read();
+                    dims = serializer.Deserialize(reader, typeof(long?[])) as long?[];
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            if (dims is null)
             {
                 throw new ValueError("Cannot deserialize 'null' to `Shape`.");
             }

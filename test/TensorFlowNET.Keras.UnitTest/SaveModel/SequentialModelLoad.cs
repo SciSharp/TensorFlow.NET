@@ -21,7 +21,7 @@ public class SequentialModelLoad
     [TestMethod]
     public void SimpleModelFromSequential()
     {
-        var model = KerasLoadModelUtils.load_model(@"D:/development/tf.net/tf_test/tf.net.simple.sequential");
+        var model = KerasLoadModelUtils.load_model(@"D:/development/tf.net/tf_test/model.pb");
         Debug.Assert(model is Model);
         var m = model as Model;
 

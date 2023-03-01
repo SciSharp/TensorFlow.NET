@@ -11,6 +11,7 @@ using pbc = global::Google.Protobuf.Collections;
 using static Tensorflow.Binding;
 using System.Runtime.CompilerServices;
 using Tensorflow.Variables;
+using Tensorflow.Functions;
 
 namespace Tensorflow
 {

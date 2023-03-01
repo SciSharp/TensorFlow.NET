@@ -72,6 +72,10 @@ namespace Tensorflow.Keras.Saving
             {
                 try
                 {
+                    if (node_metadata.Identifier.Equals("_tf_keras_metric"))
+                    {
+                        continue;
+                    }
                     loaded_nodes[node_metadata.NodeId] = _load_layer(node_metadata.NodeId, node_metadata.Identifier,
                         node_metadata.Metadata);
                 }
@@ -324,7 +328,9 @@ namespace Tensorflow.Keras.Saving
             Trackable obj;
             if(identifier == Keras.Saving.SavedModel.Constants.METRIC_IDENTIFIER)
             {
-                throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
+                // TODO(Rinne): implement it.
+                return (null, null);
+                //throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
             }
             else
             {
@@ -343,7 +349,7 @@ namespace Tensorflow.Keras.Saving
 
         private (Trackable, Action<object, object, object>) _revive_custom_object(string identifier, KerasMetaData metadata)
         {
-            // TODO: implement it.
+            // TODO(Rinne): implement it.
             throw new NotImplementedException();
         }
 
@@ -367,15 +373,14 @@ namespace Tensorflow.Keras.Saving
             }
             else if(identifier == Keras.Saving.SavedModel.Constants.SEQUENTIAL_IDENTIFIER)
             {
-                model = model = new Sequential(new SequentialArgs
+                model = new Sequential(new SequentialArgs
                 {
                     Name = class_name
                 });
             }
             else
             {
-                // TODO: implement it.
-                throw new NotImplementedException("Not implemented");
+                model = new Functional(new Tensors(), new Tensors(), config["name"].ToObject<string>());
             }
 
             // Record this model and its layers. This will later be used to reconstruct
