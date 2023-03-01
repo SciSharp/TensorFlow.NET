@@ -164,11 +164,11 @@ namespace Tensorflow.Keras.Saving
                 {
                     if (config["layers"][0]["class_name"].ToObject<string>() == "InputLayer")
                     {
-                        layers.Insert(0, InputLayer.from_config(config["layers"][0]["config"].ToObject<InputLayerArgs>()));
+                        layers.Insert(0, new InputLayer(config["layers"][0]["config"].ToObject<InputLayerArgs>()));
                     }
                     else if (config["layers"][0]["config"]["batch_input_shape"] is not null)
                     {
-                        // TODO: implement it
+                        // TODO(Rinne): implement it
                     }
                 }
                 
@@ -192,7 +192,8 @@ namespace Tensorflow.Keras.Saving
             else
             {
                 // skip the parameter `created_layers`.
-                var (inputs, outputs, created_layers) = Functional.reconstruct_from_config(config.ToObject<ModelConfig>());
+                var (inputs, outputs, created_layers) = Functional.reconstruct_from_config(generic_utils.deserialize_model_config(config), 
+                    layers.ToDictionary(x => x.Name, x => x as ILayer));
                 // skip the `model.__init__`
                 (model as Functional).Initialize(inputs, outputs, config["name"].ToObject<string>());
                 (model as Functional).connect_ancillary_layers(created_layers);
@@ -283,7 +284,6 @@ namespace Tensorflow.Keras.Saving
 
         private (Trackable, Action<object, object, object>) _load_layer(int node_id, string identifier, string metadata_json)
         {
-            metadata_json = metadata_json.Replace("\"dtype\": \"float32\"", "\"dtype\": 1");
             var metadata = JsonConvert.DeserializeObject<KerasMetaData>(metadata_json);
 
             if (loaded_nodes.ContainsKey(node_id))

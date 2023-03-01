@@ -44,7 +44,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             }
         }
 
-        public static Trackable load(string path, bool compile = true, LoadOptions? options = null)
+        private static Trackable load(string path, bool compile = true, LoadOptions? options = null)
         {
             SavedMetadata metadata = new SavedMetadata();
             var meta_graph_def = Loader.parse_saved_model(path).MetaGraphs[0];
@@ -82,12 +82,12 @@ namespace Tensorflow.Keras.Saving.SavedModel
 
             if(model is Model && compile)
             {
-                // TODO: implement it.
+                // TODO(Rinne): implement it.
             }
 
             if (!tf.Context.executing_eagerly())
             {
-                // TODO: implement it.
+                // TODO(Rinne): implement it.
             }
 
             return model;

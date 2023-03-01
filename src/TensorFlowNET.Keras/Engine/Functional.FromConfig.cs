@@ -24,10 +24,10 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static (Tensors, Tensors, Dictionary<string, ILayer>) reconstruct_from_config(ModelConfig config)
+        public static (Tensors, Tensors, Dictionary<string, ILayer>) reconstruct_from_config(ModelConfig config, Dictionary<string, ILayer>? created_layers = null)
         {
             // Layer instances created during the graph reconstruction process.
-            var created_layers = new Dictionary<string, ILayer>();
+            created_layers = created_layers ?? new Dictionary<string, ILayer>();
             var node_index_map = new Dictionary<(string, int), int>();
             var node_count_by_layer = new Dictionary<ILayer, int>();
             var unprocessed_nodes = new Dictionary<ILayer, NodeConfig>();
@@ -88,12 +88,7 @@ namespace Tensorflow.Keras.Engine
                 layer = created_layers[layer_name];
             else
             {
-                layer = layer_data.ClassName switch
-                {
-                    "InputLayer" => InputLayer.from_config(layer_data.Config),
-                    "Dense" => Dense.from_config(layer_data.Config),
-                    _ => throw new NotImplementedException("")
-                };
+                layer = generic_utils.deserialize_keras_object(layer_data.ClassName, layer_data.Config);
 
                 created_layers[layer_name] = layer;
             }

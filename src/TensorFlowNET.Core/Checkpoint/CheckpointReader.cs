@@ -62,14 +62,17 @@ namespace Tensorflow.Checkpoint
             return c_api.TF_CheckpointReaderGetVariableNumDims(_reader, name);
         }
 
-        public unsafe Tensor GetTensor(string name)
+        public unsafe Tensor GetTensor(string name, TF_DataType dtype = TF_DataType.DtInvalid)
         {
             Status status = new Status();
             var tensor = c_api.TF_CheckpointReaderGetTensor(_reader, name, status.Handle);
             status.Check(true);
             var shape = GetVariableShape(name);
-            var dtype = GetVariableDataType(name);
-            return new Tensor(c_api.TF_TensorData(tensor), shape, dtype);
+            if(dtype == TF_DataType.DtInvalid)
+            {
+                dtype = GetVariableDataType(name);
+            }
+            return new Tensor(tensor);
         }
 
         private void ReadAllShapeAndType()

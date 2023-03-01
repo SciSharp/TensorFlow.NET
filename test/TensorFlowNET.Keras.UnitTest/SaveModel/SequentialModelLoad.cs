@@ -21,17 +21,16 @@ public class SequentialModelLoad
     [TestMethod]
     public void SimpleModelFromSequential()
     {
-        var model = KerasLoadModelUtils.load_model(@"D:/development/tf.net/tf_test/model.pb");
-        Debug.Assert(model is Model);
-        var m = model as Model;
+        new SequentialModelSave().SimpleModelFromSequential();
+        var model = keras.models.load_model(@"./pb_simple_sequential");
 
-        m.summary();
+        model.summary();
 
-        m.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+        model.compile(new Adam(0.0001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();
         var num_epochs = 1;
-        var batch_size = 50;
+        var batch_size = 8;
 
         var dataset = data_loader.LoadAsync(new ModelLoadSetting
         {
@@ -40,6 +39,6 @@ public class SequentialModelLoad
             ValidationSize = 50000,
         }).Result;
 
-        m.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
+        model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
     }
 }

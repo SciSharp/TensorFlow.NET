@@ -227,7 +227,7 @@ public class TrackableSaver
         {
             dtype_map = reader.VariableToDataTypeMap;
         }
-        Tensor object_graph_string = reader.GetTensor(Trackable.Constants.OBJECT_GRAPH_PROTO_KEY);
+        Tensor object_graph_string = reader.GetTensor(Trackable.Constants.OBJECT_GRAPH_PROTO_KEY, dtype: TF_DataType.TF_STRING);
 
         Dictionary<Tensor, string> file_prefix_feed_dict;
         Tensor file_prefix_tensor;
@@ -249,7 +249,14 @@ public class TrackableSaver
             file_prefix_feed_dict = null;
         }
         TrackableObjectGraph object_graph_proto = new();
-        object_graph_proto.MergeFrom(object_graph_string.BufferToArray());
+        if(object_graph_string.ndim > 0)
+        {
+            object_graph_proto.MergeFrom(object_graph_string.BufferToArray());
+        }
+        else
+        {
+            object_graph_proto.MergeFrom(object_graph_string.StringBytes()[0]);
+        }
         CheckpointRestoreCoordinator checkpoint = new CheckpointRestoreCoordinator(
             object_graph_proto: object_graph_proto, 
             save_path: save_path, 

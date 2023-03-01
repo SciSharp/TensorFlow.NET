@@ -12,6 +12,7 @@ using static Tensorflow.Binding;
 using System.Runtime.CompilerServices;
 using Tensorflow.Variables;
 using Tensorflow.Functions;
+using Tensorflow.Training.Saving.SavedModel;
 
 namespace Tensorflow
 {
@@ -307,6 +308,11 @@ namespace Tensorflow
             foreach(var (node_id, proto) in _iter_all_nodes())
             {
                 var node = get(node_id);
+                if(node is null)
+                {
+                    // skip it because now we skip the restoration of `Function` and `ConcreteFunction`.
+                    continue;
+                }
                 if(proto.SaveableObjects.Keys.Count == 1 && proto.SaveableObjects.First().Key == TrackableUtils.SERIALIZE_TO_TENSORS_NAME)
                 {
                     // Restore Trackable serialize- and restore-from-tensor functions.
@@ -376,6 +382,13 @@ namespace Tensorflow
                 }
                 else
                 {
+                    // skip the function and concrete function.
+                    if(proto.KindCase == SavedObject.KindOneofCase.BareConcreteFunction || proto.KindCase == SavedObject.KindOneofCase.Function)
+                    {
+                        nodes[node_id] = null;
+                        node_setters[node_id] = null;
+                        continue;
+                    }
                     var (node, setter) = _recreate(proto, node_id, nodes);
                     nodes[node_id] = node;
                     node_setters[node_id] = setter;
@@ -480,6 +493,11 @@ namespace Tensorflow
 
             foreach(var refer in proto.Children)
             {
+                if(obj is null)
+                {
+                    // skip it because now we skip the restoration of `Function` and `ConcreteFunction`.
+                    continue;
+                }
                 setter.Invoke(obj, refer.LocalName, _nodes[refer.NodeId]);
                 // skip the process of "__call__"
             }
@@ -589,6 +607,13 @@ namespace Tensorflow
                     aggregation: aggregation
                 ), setattr);
             }
+        }
+
+        private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
+            Dictionary<Maybe<string, int>, Trackable> dependencies)
+        {
+            throw new NotImplementedException();
+            //var fn = function_deserialization.setup_bare_concrete_function(proto, )
         }
 
         // TODO: remove this to a common class.

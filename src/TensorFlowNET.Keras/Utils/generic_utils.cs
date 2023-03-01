@@ -55,7 +55,7 @@ namespace Tensorflow.Keras.Utils
             return serialize_utils.serialize_keras_class_and_config(instance.GetType().Name, config, instance);
         }
 
-        public static Layer deserialize_keras_object(string class_name, JObject config)
+        public static Layer deserialize_keras_object(string class_name, JToken config)
         {
             return class_name switch
             {
@@ -68,6 +68,58 @@ namespace Tensorflow.Keras.Utils
                 _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
                         $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
             };
+        }
+
+        public static Layer deserialize_keras_object(string class_name, LayerArgs args)
+        {
+            return class_name switch
+            {
+                "Sequential" => new Sequential(args as SequentialArgs),
+                "InputLayer" => new InputLayer(args as InputLayerArgs),
+                "Flatten" => new Flatten(args as FlattenArgs),
+                "ELU" => new ELU(args as ELUArgs),
+                "Dense" => new Dense(args as DenseArgs),
+                "Softmax" => new Softmax(args as SoftmaxArgs),
+                _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
+                        $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
+            };
+        }
+
+        public static LayerArgs? deserialize_layer_args(string class_name, JToken config)
+        {
+            return class_name switch
+            {
+                "Sequential" => config.ToObject<SequentialArgs>(),
+                "InputLayer" => config.ToObject<InputLayerArgs>(),
+                "Flatten" => config.ToObject<FlattenArgs>(),
+                "ELU" => config.ToObject<ELUArgs>(),
+                "Dense" => config.ToObject<DenseArgs>(),
+                "Softmax" => config.ToObject<SoftmaxArgs>(),
+                _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
+                        $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
+            };
+        }
+
+        public static ModelConfig deserialize_model_config(JToken json)
+        {
+            ModelConfig config = new ModelConfig();
+            config.Name = json["name"].ToObject<string>();
+            config.Layers = new List<LayerConfig>();
+            var layersToken = json["layers"];
+            foreach (var token in layersToken)
+            {
+                var args = deserialize_layer_args(token["class_name"].ToObject<string>(), token["config"]);
+                config.Layers.Add(new LayerConfig()
+                {
+                    Config = args, 
+                    Name = token["name"].ToObject<string>(), 
+                    ClassName = token["class_name"].ToObject<string>(), 
+                    InboundNodes = token["inbound_nodes"].ToObject<List<NodeConfig>>()
+                });
+            }
+            config.InputLayers = json["input_layers"].ToObject<List<NodeConfig>>();
+            config.OutputLayers = json["output_layers"].ToObject<List<NodeConfig>>();
+            return config;
         }
 
         public static string to_snake_case(string name)

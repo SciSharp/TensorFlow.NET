@@ -95,7 +95,7 @@ public partial class KerasSavedModelUtils
                     BadConsumers = {  }
                 },
                 Identifier = layer.ObjectIdentifier,
-                Metadata = layer.TrackingMetadata
+                Metadata = layer.GetTrackingMetadata()
             };
 
             metadata.Nodes.Add(saved_object);

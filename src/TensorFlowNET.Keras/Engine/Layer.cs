@@ -96,7 +96,6 @@ namespace Tensorflow.Keras.Engine
 
         List<INode> inboundNodes;
         public List<INode> InboundNodes => inboundNodes;
-
         List<INode> outboundNodes;
         public List<INode> OutboundNodes => outboundNodes;
 

@@ -13,8 +13,8 @@ namespace Tensorflow.Functions
     /// </summary>
     public class ConcreteFunction: Trackable
     {
-        FuncGraph func_graph;
-        ForwardBackwardCall forward_backward;
+        internal FuncGraph func_graph;
+        internal ForwardBackwardCall forward_backward;
         public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
 
@@ -23,6 +23,8 @@ namespace Tensorflow.Functions
         public Tensor[] Outputs;
         public Type ReturnType;
         public TensorSpec[] OutputStructure;
+        public IEnumerable<string> ArgKeywords { get; set; }
+        public long NumPositionArgs { get; set; }
 
         public ConcreteFunction(string name)
         {
@@ -161,6 +163,15 @@ namespace Tensorflow.Functions
                 flat_outputs = forward_function.Call(args_with_tangents);
             forward_backward.Record(flat_outputs);
             return flat_outputs;
+        }
+
+        public void AddTograph(Graph? g = null)
+        {
+            if(!tf.Context.executing_eagerly() && g is null)
+            {
+                g = ops.get_default_graph();
+            }
+            // TODO(Rinne); complete it with `_delayed_rewrite_functions`.
         }
 
         ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)

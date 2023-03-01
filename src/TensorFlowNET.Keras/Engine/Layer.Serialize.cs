@@ -12,7 +12,7 @@ public abstract partial class Layer
 
     public override string ObjectIdentifier => TrackableSavedModelSaver.ObjectIdentifier;
 
-    public string TrackingMetadata => TrackableSavedModelSaver.TrackingMetadata;
+    public string GetTrackingMetadata() => TrackableSavedModelSaver.TrackingMetadata;
 
     public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
     {
