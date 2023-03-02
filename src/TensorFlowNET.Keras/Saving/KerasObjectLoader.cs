@@ -517,7 +517,7 @@ namespace Tensorflow.Keras.Saving
                     if (obj_metrics.TryGetValue(refer.LocalName, out var metric))
                     {
                         var metric_path = $"{Keras.Saving.SavedModel.Constants.KERAS_ATTR}.layer_metrics.{refer.LocalName}";
-                        children.Add((metric, refer.NodeId, metric_path));
+                        children.Add((metric as Metric, refer.NodeId, metric_path));
                     }
                 }
             }
