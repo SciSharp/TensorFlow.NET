@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tensorflow.Keras.Common
 {
@@ -19,7 +16,7 @@ namespace Tensorflow.Keras.Common
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            var token = JToken.FromObject(value);
+            var token = JToken.FromObject(dtypes.as_numpy_name((TF_DataType)value));
             token.WriteTo(writer);
         }
 
