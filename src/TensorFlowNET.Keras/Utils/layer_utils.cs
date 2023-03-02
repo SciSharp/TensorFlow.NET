@@ -104,7 +104,7 @@ namespace Tensorflow.Keras.Utils
             }
 
             var trainable_count = count_params(model, model.TrainableVariables);
-            var non_trainable_count = count_params(model, model.non_trainable_variables);
+            var non_trainable_count = count_params(model, model.NonTrainableVariables);
 
             print($"Total params: {trainable_count + non_trainable_count}");
             print($"Trainable params: {trainable_count}");

@@ -130,7 +130,7 @@ public partial class KerasSavedModelUtils
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
         }));
-        var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.non_trainable_variables.Select(x =>
+        var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.NonTrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");

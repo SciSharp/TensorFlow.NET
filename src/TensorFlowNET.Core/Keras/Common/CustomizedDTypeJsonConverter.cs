@@ -32,7 +32,7 @@ namespace Tensorflow.Keras.Common
             }
             else
             {
-                return (TF_DataType)serializer.Deserialize(reader, typeof(TF_DataType));
+                return (TF_DataType)serializer.Deserialize(reader, typeof(int));
             }
         }
     }

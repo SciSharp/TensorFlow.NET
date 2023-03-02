@@ -19,6 +19,7 @@ namespace Tensorflow.Keras
         List<IVariableV1> TrainableVariables { get; }
         List<IVariableV1> TrainableWeights { get; }
         List<IVariableV1> NonTrainableWeights { get; }
+        List<IVariableV1> Weights { get; }
         Shape OutputShape { get; }
         Shape BatchInputShape { get; }
         TensorShapeConfig BuildInputShape { get; }

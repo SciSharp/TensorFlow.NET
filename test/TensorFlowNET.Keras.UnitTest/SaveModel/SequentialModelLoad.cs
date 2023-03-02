@@ -21,8 +21,8 @@ public class SequentialModelLoad
     [TestMethod]
     public void SimpleModelFromSequential()
     {
-        new SequentialModelSave().SimpleModelFromSequential();
-        var model = keras.models.load_model(@"./pb_simple_sequential");
+        //new SequentialModelSave().SimpleModelFromSequential();
+        var model = keras.models.load_model(@"D:\development\tf.net\tf_test\tf.net.simple.sequential");
 
         model.summary();
 
@@ -40,5 +40,6 @@ public class SequentialModelLoad
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
+        model.summary();
     }
 }
