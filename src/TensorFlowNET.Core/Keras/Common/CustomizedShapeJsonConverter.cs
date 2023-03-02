@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Common
             }
             if (dims is null)
             {
-                throw new ValueError("Cannot deserialize 'null' to `Shape`.");
+                return null;
             }
             long[] convertedDims = new long[dims.Length];
             for(int i = 0; i < dims.Length; i++)

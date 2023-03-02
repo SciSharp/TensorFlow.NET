@@ -19,6 +19,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
@@ -65,6 +66,10 @@ namespace Tensorflow.Keras.Utils
                 "ELU" => new ELU(config.ToObject<ELUArgs>()),
                 "Dense" => new Dense(config.ToObject<DenseArgs>()),
                 "Softmax" => new Softmax(config.ToObject<SoftmaxArgs>()),
+                "Conv2D" => new Conv2D(config.ToObject<Conv2DArgs>()),
+                "BatchNormalization" => new BatchNormalization(config.ToObject<BatchNormalizationArgs>()),
+                "MaxPooling2D" => new MaxPooling2D(config.ToObject<MaxPooling2DArgs>()),
+                "Dropout" => new Dropout(config.ToObject<DropoutArgs>()),
                 _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
                         $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
             };
@@ -80,6 +85,10 @@ namespace Tensorflow.Keras.Utils
                 "ELU" => new ELU(args as ELUArgs),
                 "Dense" => new Dense(args as DenseArgs),
                 "Softmax" => new Softmax(args as SoftmaxArgs),
+                "Conv2D" => new Conv2D(args as Conv2DArgs),
+                "BatchNormalization" => new BatchNormalization(args as BatchNormalizationArgs),
+                "MaxPooling2D" => new MaxPooling2D(args as MaxPooling2DArgs),
+                "Dropout" => new Dropout(args as DropoutArgs),
                 _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
                         $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
             };
@@ -95,6 +104,10 @@ namespace Tensorflow.Keras.Utils
                 "ELU" => config.ToObject<ELUArgs>(),
                 "Dense" => config.ToObject<DenseArgs>(),
                 "Softmax" => config.ToObject<SoftmaxArgs>(),
+                "Conv2D" => config.ToObject<Conv2DArgs>(),
+                "BatchNormalization" => config.ToObject<BatchNormalizationArgs>(),
+                "MaxPooling2D" => config.ToObject<MaxPooling2DArgs>(),
+                "Dropout" => config.ToObject<DropoutArgs>(),
                 _ => throw new NotImplementedException($"The deserialization of <{class_name}> has not been supported. Usually it's a miss during the development. " +
                         $"Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues")
             };

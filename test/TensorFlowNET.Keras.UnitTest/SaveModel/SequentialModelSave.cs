@@ -78,7 +78,7 @@ public class SequentialModelSave
     }
 
     [TestMethod]
-    public void AlexModelFromSequential()
+    public void AlexnetFromSequential()
     {
         Model model = KerasApi.keras.Sequential(new List<ILayer>()
         {
@@ -121,7 +121,7 @@ public class SequentialModelSave
 
         model.fit(dataset.Data, dataset.Labels, batch_size, num_epochs);
 
-        model.save("./pb_alex_sequential", save_format: "tf");
+        model.save("./alexnet_from_sequential", save_format: "tf");
 
         // The saved model can be test with the following python code:
         #region alexnet_python_code
