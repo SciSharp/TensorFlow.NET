@@ -68,6 +68,34 @@ namespace Tensorflow
             return saveables.ToArray();
         }
 
+        public static MySaveableObject[] validate_and_slice_inputs(Dictionary<string, Tensor> names_to_saveables)
+        {
+            var saveables = new List<MySaveableObject>();
+            var seen_ops = new List<Tensor>();
+
+            foreach (var (name, op) in enumerate(names_to_saveables))
+            {
+                foreach (var converted_saveable_object in saveable_objects_for_op(op, name))
+                    _add_saveable(saveables, seen_ops, converted_saveable_object);
+            }
+            return saveables.ToArray();
+        }
+
+        public static MySaveableObject[] validate_and_slice_inputs(Dictionary<string, BaseResourceVariable> names_to_saveables)
+        {
+            var saveables = new List<MySaveableObject>();
+            var seen_ops = new List<BaseResourceVariable>();
+
+            foreach(var item in names_to_saveables.OrderBy(x => x.Key))
+            {
+                foreach(var converted_saveable_object in saveable_objects_for_op(item.Value, item.Key))
+                {
+                    _add_saveable(saveables, seen_ops, converted_saveable_object);
+                }
+            }
+            return saveables.ToArray();
+        }
+
         private static void _add_saveable<T>(List<T> saveables, List<Tensor> seen_ops, T saveable) where T : MySaveableObject
         {
             if (seen_ops.Contains(saveable.op))
@@ -75,6 +103,15 @@ namespace Tensorflow
 
             saveables.Add(saveable);
             seen_ops.Add(saveable.op);
+        }
+
+        private static void _add_saveable(List<MySaveableObject> saveables, List<BaseResourceVariable> seen_ops, MySaveableObject saveable)
+        {
+            if (seen_ops.Contains(saveable.variable))
+                throw new ValueError($"The same saveable will be restored with two names: {saveable.op.OriginalVar.Name}");
+
+            saveables.Add(saveable);
+            seen_ops.Add(saveable.variable);
         }
 
         /// <summary>
@@ -136,19 +173,20 @@ namespace Tensorflow
                     {
                         full_name = name + "_" + attr;
                     }
-                    if(factory.TryGet<BaseResourceVariable>(out var variable))
+                    var op = factory(full_name);
+                    if(op.TryGet<BaseResourceVariable>(out var variable))
                     {
-                        foreach (var op in saveable_objects_for_op(variable as Trackable, variable.Name))
+                        foreach (var v in saveable_objects_for_op(variable as Trackable, variable.Name))
                         {
-                            yield return op;
+                            yield return v;
                         }
                     }
                     else
                     {
-                        var saveable = factory.GetValue<MySaveableObject>();
-                        foreach (var op in saveable_objects_for_op(saveable, saveable.name))
+                        var saveable = op.GetValue<MySaveableObject>();
+                        foreach (var v in saveable_objects_for_op(saveable, saveable.name))
                         {
-                            yield return op;
+                            yield return v;
                         }
                     }
                 }
@@ -214,20 +252,19 @@ namespace Tensorflow
             return names_to_saveables;
         }
 
-        public static IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> saveable_objects_from_trackable(Trackable obj)
+        public static IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> saveable_objects_from_trackable(Trackable obj)
         {
             // skip the process of type `PythonState`
 
-            if (trackable_has_serialize_to_tensor(obj))
+            Maybe<BaseResourceVariable, MySaveableObject> create_saveable(string name = "")
             {
-                var name = TrackableUtils.SERIALIZE_TO_TENSORS_NAME;
                 // skip the case that `obj._serialize_to_tensors` is `ConcreteFunction`.
                 var tensor_dict = obj.serialize_to_tensors();
 
                 List<SaveSpec> specs = new();
                 List<string> local_names = new();
                 string prefix = SaveableCompat.get_saveable_name(obj) ?? "";
-                foreach(var pair in tensor_dict)
+                foreach (var pair in tensor_dict)
                 {
                     var tensor_name = pair.Key;
                     var maybe_tensor = pair.Value;
@@ -235,9 +272,9 @@ namespace Tensorflow
                     string spec_name = name + TrackableUtils.escape_local_name(tensor_name);
 
                     IDictionary<string, Tensor> internal_dict;
-                    if(maybe_tensor.TryGet<Tensor>(out var tensor))
+                    if (maybe_tensor.TryGet<Tensor>(out var tensor))
                     {
-                        internal_dict= new Dictionary<string, Tensor>();
+                        internal_dict = new Dictionary<string, Tensor>();
                         internal_dict[""] = tensor;
                     }
                     else
@@ -245,13 +282,18 @@ namespace Tensorflow
                         internal_dict = maybe_tensor.GetValue<IDictionary<string, Tensor>>();
                     }
 
-                    foreach(var item in internal_dict)
+                    foreach (var item in internal_dict)
                     {
                         specs.Add(new SaveSpec(item.Value, item.Key, spec_name));
                     }
                 }
-                Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> res = new();
-                res[name] = new TrackableSaveable(obj, specs, name, local_names, prefix);
+                return new TrackableSaveable(obj, specs, name, local_names, prefix);
+            }
+
+            if (trackable_has_serialize_to_tensor(obj))
+            {
+                Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> res = new();
+                res[TrackableUtils.SERIALIZE_TO_TENSORS_NAME] = create_saveable;
                 return res;
             }
             else
@@ -332,6 +374,28 @@ namespace Tensorflow
                 }
                 return restored_ops;
             };
+        }
+
+        /// <summary>
+        /// Returns a dict of SaveableObject factories generated from loaded fns.
+        /// </summary>
+        /// <param name="saveable_fn_by_name"></param>
+        /// <param name="temp_session"></param>
+        public static IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> recreate_saveable_objects(
+            IDictionary<string, (Trackable, Trackable)> saveable_fn_by_name, IEnumerable<object>? temp_session)
+        {
+            if (saveable_fn_by_name.Count > 0)
+            {
+                throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues");
+            }
+            var res = new Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>>();
+            return res;
+        }
+
+        public static Maybe<BaseResourceVariable, MySaveableObject> create_saveable_object(string name, string key, Func<string, Maybe<BaseResourceVariable, MySaveableObject>> factory, 
+            bool call_with_mapped_captures = false)
+        {
+            return factory(key);
         }
     }
 

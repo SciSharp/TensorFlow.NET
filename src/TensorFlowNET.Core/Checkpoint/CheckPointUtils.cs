@@ -149,4 +149,22 @@ public static class CheckPointUtils
         //     object_graph_proto.Nodes[i].has_checkpoint_values.value = checkpointed_trackables.Contains(i);
         // }
     }
+
+    /// <summary>
+    /// Traverse the object graph and list all accessible objects.
+    /// </summary>
+    /// <param name="object_graph_view"></param>
+    public static IList<Trackable> list_objects(ObjectGraphView graph_view)
+    {
+        return objects_ids_and_slot_variables_and_paths(graph_view).Item1;
+    }
+
+    internal static IEnumerable<Trackable> _objects_with_attributes(IEnumerable<Trackable> full_list)
+    {
+        return full_list.TakeWhile(x =>
+        {
+            var saveables = x.gather_saveables_for_checkpoint();
+            return saveables is not null && saveables.Count > 0;
+        });
+    }
 }

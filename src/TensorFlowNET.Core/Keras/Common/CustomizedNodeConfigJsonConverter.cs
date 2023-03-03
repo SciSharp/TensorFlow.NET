@@ -46,7 +46,16 @@ namespace Tensorflow.Keras.Common
             {
                 throw new ValueError("Cannot deserialize 'null' to `Shape`.");
             }
-            if(values.Length != 3)
+            if(values.Length == 1)
+            {
+                var array = values[0] as JArray;
+                if(array is null)
+                {
+                    throw new ValueError($"The value ({string.Join(", ", values)}) cannot be deserialized to type `NodeConfig`.");
+                }
+                values = array.ToObject<object[]>();
+            }
+            if (values.Length < 3)
             {
                 throw new ValueError($"The value ({string.Join(", ", values)}) cannot be deserialized to type `NodeConfig`.");
             }
@@ -54,19 +63,37 @@ namespace Tensorflow.Keras.Common
             {
                 throw new TypeError($"The first value of `NodeConfig` is expected to be `string`, but got `{values[0].GetType().Name}`");
             }
-            if (values[1] is not int)
+            int nodeIndex;
+            int tensorIndex;
+            if (values[1] is long)
+            {
+                nodeIndex = (int)(long)values[1];
+            }
+            else if (values[1] is int)
+            {
+                nodeIndex = (int)values[1];
+            }
+            else
             {
                 throw new TypeError($"The first value of `NodeConfig` is expected to be `int`, but got `{values[1].GetType().Name}`");
             }
-            if (values[2] is not int)
+            if (values[2] is long)
+            {
+                tensorIndex = (int)(long)values[2];
+            }
+            else if (values[1] is int)
+            {
+                tensorIndex = (int)values[2];
+            }
+            else
             {
                 throw new TypeError($"The first value of `NodeConfig` is expected to be `int`, but got `{values[2].GetType().Name}`");
             }
             return new NodeConfig()
             {
                 Name = values[0] as string,
-                NodeIndex = (int)values[1],
-                TensorIndex = (int)values[2]
+                NodeIndex = nodeIndex,
+                TensorIndex = tensorIndex
             };
         }
     }

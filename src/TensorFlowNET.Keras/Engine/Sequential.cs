@@ -44,8 +44,6 @@ namespace Tensorflow.Keras.Engine
             : base(args.Inputs, args.Outputs, name: args.Name)
         {
             this.args = args;
-            if (args.Layers == null)
-                args.Layers = new List<ILayer>();
             // SupportsMasking = true;
             _compute_output_and_mask_jointly = true;
             _auto_track_sub_layers = false;
@@ -54,10 +52,17 @@ namespace Tensorflow.Keras.Engine
             _created_nodes = new List<INode>();
 
             // Add to the model any layers passed to the constructor.
-            if (args.Layers != null)
+            if (args.Layers is not null)
             {
-                foreach (var layer in args.Layers)
-                    add(layer);
+                InitLayers(args.Layers);
+            }
+        }
+
+        public void InitLayers(IEnumerable<ILayer> layers)
+        {
+            foreach(var layer in layers)
+            {
+                add(layer);
             }
         }
 

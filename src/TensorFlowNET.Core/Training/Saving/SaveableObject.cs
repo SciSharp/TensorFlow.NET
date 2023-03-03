@@ -39,6 +39,24 @@ namespace Tensorflow
                 _op = value;
             }
         }
+        public BaseResourceVariable variable
+        {
+            get
+            {
+                if (_op.TryGet<BaseResourceVariable>(out var v))
+                {
+                    return v;
+                }
+                else
+                {
+                    throw new TypeError("The _op is not a variable.");
+                }
+            }
+            set
+            {
+                _op = value;
+            }
+        }
         public SaveSpec[] specs;
         public string name;
         public string device;

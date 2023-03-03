@@ -25,8 +25,7 @@ namespace Tensorflow.Keras.Layers {
             {
                 throw new ValueError("Alpha must be a number greater than 0.");
             }
-            _buildInputShape = input_shape;
-            built = true;
+            base.build(input_shape);
         }
 
         protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)

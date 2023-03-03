@@ -62,6 +62,7 @@ namespace Tensorflow
 
         public Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
         {
+            // Note: this implementation is not correct in many cases, please consider using `gen_ops.restore_v2`.
             var _op = tf.OpDefLib._apply_op_helper("RestoreV2", name: name, args: new { prefix, tensor_names, shape_and_slices, dtypes });
 
             return _op.outputs;

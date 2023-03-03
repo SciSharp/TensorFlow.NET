@@ -5,9 +5,9 @@ using Tensorflow.Variables;
 using Tensorflow.Train;
 using static Tensorflow.Binding;
 using System.Collections.Generic;
-using Tensorflow.ModelSaving;
 using System.Diagnostics;
 using Tensorflow.Checkpoint;
+using Tensorflow.Training.Saving.SavedModel;
 
 namespace Tensorflow
 {
@@ -19,7 +19,11 @@ namespace Tensorflow
         protected TF_DataType _dtype;
         public TF_DataType dtype => _dtype;
         protected string _handle_name;
-        protected string handle_name => _handle_name;
+        public string handle_name
+        {
+            get { return _handle_name; }
+            set { _handle_name = value; }
+        }
 
         protected string _unique_id;
         public string UniqueId => _unique_id;
@@ -289,10 +293,10 @@ namespace Tensorflow
             resource_variable_ops.write_object_proto_for_resource_variable(this, proto, options);
         }
 
-        public override IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
+        public override IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> gather_saveables_for_checkpoint()
         {
-            var res = new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>();
-            res[Trackable.Constants.VARIABLE_VALUE_KEY] = this;
+            var res = new Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>>();
+            res[Trackable.Constants.VARIABLE_VALUE_KEY] = x => this;
             return res;
         }
 

@@ -20,8 +20,8 @@ using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Checkpoint;
 using Tensorflow.Keras.Saving.SavedModel;
-using Tensorflow.ModelSaving;
 using Tensorflow.Training;
+using Tensorflow.Training.Saving.SavedModel;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
@@ -41,9 +41,10 @@ namespace Tensorflow.Train
         protected IDictionary<string, Trackable> _unconditional_dependency_names;
 
         protected IList<TrackableReference> _unconditional_checkpoint_dependencies;
+        protected Dictionary<string, IList<CheckpointPosition>> _unconditional_deferred_dependencies;
 
-        protected IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> _self_saveable_object_factories =
-            new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>();
+        protected IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> _self_saveable_object_factories =
+            new Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>>();
         private bool _manual_tracking = true;
 
         private static Trackable _none = new AutoTrackable();
@@ -71,6 +72,18 @@ namespace Tensorflow.Train
         public IList<TrackableReference> UnconditionalCheckpointDependencies { get => _unconditional_checkpoint_dependencies; }
         public IDictionary<string, Trackable> UnconditionalDependencyNames { get => _unconditional_dependency_names; }
         public IList<TrackableReference> CheckpointDependencies { get => UnconditionalCheckpointDependencies; }
+        public Dictionary<string, IList<CheckpointPosition>> DeferredDependencies => _unconditional_deferred_dependencies;
+        public IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> SelfSaveableObjectFactories
+        {
+            get
+            {
+                return _self_saveable_object_factories;
+            }
+            set
+            {
+                _self_saveable_object_factories = value;
+            }
+        }
 
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
@@ -136,9 +149,11 @@ namespace Tensorflow.Train
             _self_update_uid = -1;
             _unconditional_checkpoint_dependencies = new List<TrackableReference>();
             _unconditional_dependency_names = new Dictionary<string, Trackable>();
+            _unconditional_deferred_dependencies = new Dictionary<string, IList<CheckpointPosition>>();
         }
 
-        public virtual IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache)
+        public virtual IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, 
+            IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
         {
             _maybe_initialize_trackable();
             return _unconditional_checkpoint_dependencies.ToDictionary(x => x.Name, x => x.Refer);
@@ -174,10 +189,19 @@ namespace Tensorflow.Train
         /// <param name="trackable"></param>
         public virtual void _handle_deferred_dependencies(string name, Trackable trackable)
         {
-            //_maybe_initialize_trackable();
-            //trackable._maybe_initialize_trackable();
-            
-            // TODO: complete the implementation.
+            _maybe_initialize_trackable();
+            trackable._maybe_initialize_trackable();
+
+            if(_unconditional_deferred_dependencies.TryGetValue(name, out var dependencies))
+            {
+                _unconditional_deferred_dependencies.Remove(name);
+                foreach(var checkpoint_position in dependencies.OrderByDescending(x => x.Checkpoint.RestoreUid))
+                {
+                    checkpoint_position.restore(trackable);
+                }
+            }
+
+            // TODO(Rinne): deal with `_self_name_based_restores`
         }
 
         public virtual Trackable? _lookup_dependency(string name)
@@ -225,12 +249,19 @@ namespace Tensorflow.Train
             return self_tensor_map.Keys.ToList();
         }
 
-        public virtual IDictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> gather_saveables_for_checkpoint()
+        public virtual IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> gather_saveables_for_checkpoint()
         {
+            Maybe<BaseResourceVariable, MySaveableObject> create_saveable(string name = "")
+            {
+                throw new NotImplementedException();
+                //return new TrackableSaveable(this, null, name, null, null);
+            }
             if (saveable_object_util.trackable_has_serialize_to_tensor(this))
             {
                 // TODO: complete the implementation (need to complete the class `saveable_object_util.TrackableSaveable`).
-                throw new NotImplementedException();
+                Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> res = new();
+                res[""] = create_saveable;
+                return res;
             }
             else
             {
@@ -259,4 +290,6 @@ namespace Tensorflow.Train
     }
 
     public record class TrackableReference(string Name, Trackable Refer);
+
+    public record class SlotVariableRestoration(int OptimizerId, int SlotVariableId, string SlotName);
 }

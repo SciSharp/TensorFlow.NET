@@ -102,11 +102,6 @@ namespace Tensorflow.Keras.Layers
                 name: Name);
         }
 
-        public static InputLayer from_config(LayerArgs args)
-        {
-            return new InputLayer(args as InputLayerArgs);
-        }
-
         public override SavedModelSaver TrackableSavedModelSaver => new InputLayerSavedModelSaver(this);
     }
 }

@@ -54,6 +54,11 @@ namespace Tensorflow.Keras.Engine
                 Outputs = outputs
             })
         {
+            Initialize(inputs, outputs, name);
+        }
+
+        internal void Initialize(Tensors inputs, Tensors outputs, string name = null)
+        {
             _input_layers = new List<ILayer>();
             _output_layers = new List<ILayer>();
             _input_coordinates = new List<KerasHistory>();
@@ -70,7 +75,14 @@ namespace Tensorflow.Keras.Engine
             this.inputs = inputs;
             this.outputs = outputs;
             built = true;
-            _buildInputShape = inputs.shape;
+            if(inputs.Length > 0)
+            {
+                _buildInputShape = inputs.shape;
+            }
+            else
+            {
+                _buildInputShape = new Saving.TensorShapeConfig();
+            }
 
             if (outputs.Any(x => x.KerasHistory == null))
                 base_layer_utils.create_keras_history(outputs);

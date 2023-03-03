@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Checkpoint;
 using Tensorflow.Exceptions;
 using Tensorflow.Train;
 
@@ -20,9 +21,9 @@ public static class TrackableUtils
             LeftOverDependencyMap = leftover_dependency_map.ToDictionary(x => x.Key, x => x.Value.AsEnumerable());
         }
     }
-    private static string _ESCAPE_CHAR = ".";
-    private static string _OPTIMIZER_SLOTS_NAME = _ESCAPE_CHAR + "OPTIMIZER_SLOT";
-    private static string OBJECT_ATTRIBUTES_NAME = _ESCAPE_CHAR + "ATTRIBUTES";
+    internal static string _ESCAPE_CHAR = ".";
+    internal static string _OPTIMIZER_SLOTS_NAME = _ESCAPE_CHAR + "OPTIMIZER_SLOT";
+    internal static string OBJECT_ATTRIBUTES_NAME = _ESCAPE_CHAR + "ATTRIBUTES";
     internal static string SERIALIZE_TO_TENSORS_NAME = _ESCAPE_CHAR + "TENSORS";
     public static string object_path_to_string(IEnumerable<TrackableReference> node_path_arr)
     {

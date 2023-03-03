@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.ModelSaving
+namespace Tensorflow
 {
     /// <summary>
     /// Options for saving to SavedModel.
@@ -35,7 +35,7 @@ namespace Tensorflow.ModelSaving
 
         public bool save_variable_devices()
         {
-            return this != VariablePolicy.None;
+            return this != None;
         }
 
         /// <summary>
@@ -45,14 +45,14 @@ namespace Tensorflow.ModelSaving
         /// <returns></returns>
         public static VariablePolicy from_obj(object obj)
         {
-            if (obj is null) return VariablePolicy.None;
+            if (obj is null) return None;
             if (obj is VariablePolicy) return (VariablePolicy)obj;
             var key = obj.ToString().ToLower();
             return key switch
             {
-                null => VariablePolicy.None,
-                "save_variable_devices" => VariablePolicy.SAVE_VARIABLE_DEVICES,
-                "expand_distributed_variables" => VariablePolicy.EXPAND_DISTRIBUTED_VARIABLES,
+                null => None,
+                "save_variable_devices" => SAVE_VARIABLE_DEVICES,
+                "expand_distributed_variables" => EXPAND_DISTRIBUTED_VARIABLES,
                 _ => throw new ValueError($"Received invalid VariablePolicy value: {obj}.")
             };
         }

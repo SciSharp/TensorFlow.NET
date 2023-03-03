@@ -1,27 +1,21 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.NumPy;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using Tensorflow;
-using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
-using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Optimizers;
-using Tensorflow.Operations;
-using System.Diagnostics;
+using Tensorflow.NumPy;
+using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.Keras.UnitTest.SaveModel;
 
 [TestClass]
-public class SequentialModelTest
+public class SequentialModelSave
 {
     [TestMethod]
     public void SimpleModelFromAutoCompile()
@@ -63,6 +57,8 @@ public class SequentialModelTest
             keras.layers.Softmax(1)
         });
 
+        model.summary();
+
         model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();
@@ -82,7 +78,7 @@ public class SequentialModelTest
     }
 
     [TestMethod]
-    public void AlexModelFromSequential()
+    public void AlexnetFromSequential()
     {
         Model model = KerasApi.keras.Sequential(new List<ILayer>()
         {
@@ -116,7 +112,7 @@ public class SequentialModelTest
             keras.layers.Softmax(1)
         });
 
-        model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(from_logits:true), new string[] { "accuracy" });
+        model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
 
         var num_epochs = 1;
         var batch_size = 8;
@@ -125,7 +121,7 @@ public class SequentialModelTest
 
         model.fit(dataset.Data, dataset.Labels, batch_size, num_epochs);
 
-        model.save("./pb_alex_sequential", save_format: "tf");
+        model.save("./alexnet_from_sequential", save_format: "tf");
 
         // The saved model can be test with the following python code:
         #region alexnet_python_code

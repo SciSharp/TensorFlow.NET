@@ -27189,8 +27189,33 @@ namespace Tensorflow.Operations
         ///    
         ///    Callers must ensure all the named tensors are indeed stored in the checkpoint.
         /// </remarks>
-        public static Tensor[] restore_v2(Tensor prefix, Tensor tensor_names, Tensor shape_and_slices, TF_DataType[] dtypes, string name = "RestoreV2")
+        public static Tensor[] restore_v2(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name = "RestoreV2")
         {
+            var ctx = tf.Context;
+            if (ctx.executing_eagerly())
+            {
+                try
+                {
+                    Dictionary<string, object> attrs = new();
+                    attrs["dtypes"] = dtypes;
+                    var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
+                            "RestoreV2", name, prefix, tensor_names, shape_and_slices
+                        )
+                    { attrs = attrs });
+                    return result;
+                }
+                catch (Exception)
+                {
+                    try
+                    {
+                        return restore_v2_eager_fallback(prefix, tensor_names, shape_and_slices, dtypes, name, ctx);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
             var dict = new Dictionary<string, object>();
             dict["prefix"] = prefix;
             dict["tensor_names"] = tensor_names;
@@ -27200,6 +27225,22 @@ namespace Tensorflow.Operations
             int _idx = 0;
             var tensors = Enumerable.Range(0, op.OutputListLength("tensors")).Select(_ => op.outputs[_idx++]).ToArray();
             return (tensors);
+        }
+
+        public static Tensor[] restore_v2_eager_fallback(Tensor prefix, string[] tensor_names, string[] shape_and_slices, TF_DataType[] dtypes, string name, Context ctx)
+        {
+            prefix = ops.convert_to_tensor(prefix, TF_DataType.TF_STRING);
+            var tensor_names_tensor = ops.convert_to_tensor(tensor_names, TF_DataType.TF_STRING);
+            var shape_and_slices_tensor = ops.convert_to_tensor(shape_and_slices, TF_DataType.TF_STRING);
+            object[] attrs = new object[] { "dtypes", dtypes };
+            Tensor[] inputs_flat = new Tensor[] { prefix, tensor_names_tensor, shape_and_slices_tensor };
+            var result = execute.quick_execute("RestoreV2", dtypes.Length, inputs_flat, attrs, ctx, name);
+
+            if (execute.must_record_gradient())
+            {
+                // TODO(Rinne); record the gradient
+            }
+            return result;
         }
 
         /// <summary>

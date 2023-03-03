@@ -71,6 +71,7 @@ namespace Tensorflow
 
         public List<IVariableV1> TrainableVariables => throw new NotImplementedException();
         public List<IVariableV1> TrainableWeights => throw new NotImplementedException();
+        public List<IVariableV1> Weights => throw new NotImplementedException();
         public List<IVariableV1> NonTrainableWeights => throw new NotImplementedException();
 
         public Shape OutputShape => throw new NotImplementedException();

@@ -175,9 +175,9 @@ public static class SaveUtilV1
             {
                 var name = factory_data.name;
                 var key = factory_data.checkpoint_key;
-                var maybe_saveable = factory_data.factory;
+                var maybe_saveable = saveable_object_util.create_saveable_object(name, key, factory_data.factory);
 
-                // TODO: oneflow python has a process with callable `saveable_factory`.
+                // TODO: tensorflow python has a process with callable `saveable_factory`.
                 List<MySaveableObject> saveables = new();
                 if (maybe_saveable.TryGet<MySaveableObject>(out var s))
                 {
@@ -217,7 +217,7 @@ public static class SaveUtilV1
 
 public record class CheckpointFactoryData
 (
-    Maybe<BaseResourceVariable, MySaveableObject> factory,
+    Func<string, Maybe<BaseResourceVariable, MySaveableObject>> factory,
     string name,
     string checkpoint_key
 );

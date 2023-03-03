@@ -56,7 +56,7 @@ namespace Tensorflow.Keras.Metrics
 
         public virtual void reset_states()
         {
-            foreach (var v in weights)
+            foreach (var v in Weights)
                 v.assign(0);
         }
 

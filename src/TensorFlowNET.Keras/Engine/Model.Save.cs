@@ -33,7 +33,7 @@ namespace Tensorflow.Keras.Engine
             {
                 using (SharedObjectSavingScope.Enter())
                 {
-                    KerasSavedModelUtils.Save(this, filepath, overwrite, include_optimizer, signatures, options, save_traces);
+                    KerasSavedModelUtils.save_model(this, filepath, overwrite, include_optimizer, signatures, options, save_traces);
                 }
             }
         }

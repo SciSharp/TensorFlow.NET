@@ -17,7 +17,7 @@ namespace Tensorflow.Keras.Saving.SavedModel;
 
 public partial class KerasSavedModelUtils
 {
-    public static void Save(Model model, string filepath, bool overwrite, bool include_optimizer, ConcreteFunction? signatures,
+    public static void save_model(Model model, string filepath, bool overwrite, bool include_optimizer, ConcreteFunction? signatures,
         SaveOptions? options, bool save_traces = true)
     {
         if (!overwrite && File.Exists(filepath))
@@ -95,7 +95,7 @@ public partial class KerasSavedModelUtils
                     BadConsumers = {  }
                 },
                 Identifier = layer.ObjectIdentifier,
-                Metadata = layer.TrackingMetadata
+                Metadata = layer.GetTrackingMetadata()
             };
 
             metadata.Nodes.Add(saved_object);
@@ -130,7 +130,7 @@ public partial class KerasSavedModelUtils
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
         }));
-        var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.non_trainable_variables.Select(x =>
+        var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.NonTrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
