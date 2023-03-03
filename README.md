@@ -22,7 +22,9 @@
 
 SciSharp's philosophy allows a large number of machine learning code written in Python to be quickly migrated to .NET, enabling .NET developers to use cutting edge machine learning models and access a vast number of TensorFlow resources which would not be possible without this project.
 
-In comparison to other projects, like for instance [TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/) which only provide TensorFlow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET also implements TensorFlow's high level API where all the magic happens. This computation graph building layer is still under active development. Once it is completely implemented you can build new Machine Learning models in C# or F#. 
+In comparison to other projects, like for instance [TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/) which only provide TensorFlow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET makes it possible to build the pipeline of training and inference with pure C# and F#. Besides, Tensorflow.NET provides binding of Tensorflow.Keras to make it easy to transfer your code from python to .NET.
+
+[ML.NET](https://github.com/dotnet/machinelearning) also support using tensorflow as backend to train and infer your model, which provides better integration with .NET.
 
 Go through the online docs [TensorFlow for .NET](https://scisharp.github.io/tensorflow-net-docs) before you get started with Machine Learning in .NET.
 
@@ -43,7 +45,8 @@ There are many examples reside at [TensorFlow.NET Examples](https://github.com/S
 #### TensorFlow.net Version
 ` tf.net 0.4x -> tf native 2.4`  
 `tf.net 0.6x -> tf native 2.6`       
-`tf.net 0.7x -> tf native 2.7`   
+`tf.net 0.7x -> tf native 2.7`
+`tf.net 0.10x -> tf native 2.10`
 `...`
 
 #### C# Example
