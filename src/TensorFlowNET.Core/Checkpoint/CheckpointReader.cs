@@ -15,10 +15,8 @@ namespace Tensorflow.Checkpoint
 
         protected override bool ReleaseHandle()
         {
-            //if (handle != IntPtr.Zero)
-            //{
-            //    c_api.TF_DeleteCheckpointReader(this);
-            //}
+            c_api.TF_DeleteCheckpointReader(handle);
+            SetHandle(IntPtr.Zero);
             return true;
         }
     }
