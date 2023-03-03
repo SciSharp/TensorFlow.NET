@@ -1,4 +1,5 @@
 ﻿using System;
+using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Core;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
@@ -471,20 +472,56 @@ namespace Tensorflow.Keras.Layers
         /// In this case, values of 'None' in the 'shape' argument represent ragged dimensions. For more information about RaggedTensors, see this guide.
         /// </param>
         /// <returns>A tensor.</returns>
-        public Tensors Input(Shape shape,
+        public Tensors Input(Shape shape = null,
             int batch_size = -1,
             string name = null,
+            TF_DataType dtype = TF_DataType.DtInvalid, 
             bool sparse = false,
-            bool ragged = false)
+            Tensor tensor = null, 
+            bool ragged = false, 
+            TypeSpec type_spec = null, 
+            Shape batch_input_shape = null, 
+            Shape batch_shape = null)
         {
-            var input_layer = new InputLayer(new InputLayerArgs
+            if(sparse && ragged)
             {
-                InputShape = shape,
-                BatchSize= batch_size,
+                throw new ValueError("Cannot set both `sparse` and `ragged` to `true` in a Keras `Input`.");
+            }
+
+            InputLayerArgs input_layer_config = new()
+            {
                 Name = name,
+                DType = dtype,
                 Sparse = sparse,
-                Ragged = ragged
-            });
+                Ragged = ragged,
+                InputTensor = tensor,
+                // skip the `type_spec`
+            };
+
+            if(shape is not null && batch_input_shape is not null)
+            {
+                throw new ValueError("Only provide the `shape` OR `batch_input_shape` argument "
+                                    + "to Input, not both at the same time.");
+            }
+
+            if(batch_input_shape is null && shape is null && tensor is null && type_spec is null)
+            {
+                throw new ValueError("Please provide to Input a `shape` or a `tensor` or a `type_spec` argument. Note that " +
+                    "`shape` does not include the batch dimension.");
+            }
+
+            if(batch_input_shape is not null)
+            {
+                shape = batch_input_shape["1:"];
+                input_layer_config.BatchInputShape = batch_input_shape;
+            }
+            else
+            {
+                input_layer_config.BatchSize = batch_size;
+                input_layer_config.InputShape = shape;
+            }
+
+            var input_layer = new InputLayer(input_layer_config);
 
             return input_layer.InboundNodes[0].Outputs;
         }

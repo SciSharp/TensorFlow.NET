@@ -12,6 +12,7 @@ using Tensorflow.Keras.Models;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.Utils;
 using System.Threading;
+using Tensorflow.Framework.Models;
 
 namespace Tensorflow.Keras
 {
@@ -66,33 +67,16 @@ namespace Tensorflow.Keras
         /// If set, the layer will not create a placeholder tensor.
         /// </param>
         /// <returns></returns>
-        public Tensor Input(Shape shape = null,
-                int batch_size = -1,
-                Shape batch_input_shape = null,
-                TF_DataType dtype = TF_DataType.DtInvalid,
-                string name = null,
-                bool sparse = false,
-                bool ragged = false,
-                Tensor tensor = null)
-        {
-            if (batch_input_shape != null)
-                shape = batch_input_shape.dims.Skip(1).ToArray();
-
-            var args = new InputLayerArgs
-            {
-                Name = name,
-                InputShape = shape,
-                BatchInputShape = batch_input_shape,
-                BatchSize = batch_size,
-                DType = dtype,
-                Sparse = sparse,
-                Ragged = ragged,
-                InputTensor = tensor
-            };
-
-            var layer = new InputLayer(args);
-
-            return layer.InboundNodes[0].Outputs;
-        }
+        public Tensors Input(Shape shape = null,
+            int batch_size = -1,
+            string name = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
+            bool sparse = false,
+            Tensor tensor = null,
+            bool ragged = false,
+            TypeSpec type_spec = null,
+            Shape batch_input_shape = null,
+            Shape batch_shape = null) => keras.layers.Input(shape, batch_size, name,
+                dtype, sparse, tensor, ragged, type_spec, batch_input_shape, batch_shape);
     }
 }
