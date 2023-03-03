@@ -20,7 +20,7 @@ Tensorflow.NET并非对于Python的简单封装，而是基于C API的pure C#实
 
 ![tensors_flowing](assets/tensors_flowing.gif)
 
-### Why TensorFlow.NET?
+## Why Tensorflow.NET?
 
 `SciSharp STACK`开源社区的目标是构建.NET平台下易用的科学计算库，而Tensorflow.NET就是其中最具代表性的仓库之一。在深度学习领域Python是主流，无论是初学者还是资深开发者，模型的搭建和训练都常常使用Python写就的AI框架，比如tensorflow。但在实际应用深度学习模型的时候，又可能希望用到.NET生态，亦或只是因为.NET是自己最熟悉的领域，这时候Tensorflow.NET就有显著的优点，因为它不仅可以和.NET生态很好地贴合，其API还使得开发者很容易将Python代码迁移过来。下面的对比就是很好的例子，Python代码和C#代码有着高度相似的API，这会使得迁移的时候无需做过多修改。
 
@@ -31,7 +31,7 @@ Tensorflow.NET并非对于Python的简单封装，而是基于C API的pure C#实
 与其它类似的库比如[TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/)相比，Tensorflow.NET的实现更加完全，提供了更多的高级API，使用起来更为方便，更新也更加迅速。
 
 
-### 文档
+## 文档
 
 基本介绍与简单用例：[Tensorflow.NET Documents](https://scisharp.github.io/tensorflow-net-docs)
 
@@ -41,7 +41,7 @@ Tensorflow.NET并非对于Python的简单封装，而是基于C API的pure C#实
 
 运行例程常见问题：[Tensorflow.NET FAQ](tensorflowlib/README.md)
 
-### 安装与使用
+## 安装与使用
 
 安装可以在NuGet包管理器中搜索包名安装，也可以用下面命令行的方式。
 
@@ -69,7 +69,7 @@ PM> Install-Package SciSharp.TensorFlow.Redist-Linux-GPU
 
 下面给出两个简单的例子，更多例子可以在[TensorFlow.NET Examples]中查看。
 
-#### 简单例子（使用Eager Mode进行线性回归）
+### 简单例子（使用Eager Mode进行线性回归）
 
 ```csharp
 using static Tensorflow.Binding;
@@ -122,7 +122,7 @@ foreach (var step in range(1, training_steps + 1))
 
 这一用例也可以在[Jupyter Notebook Example](https://github.com/SciSharp/SciSharpCube)进行运行.
 
-#### 简单例子（使用Keras搭建Resnet）
+### 简单例子（使用Keras搭建Resnet）
 
 ```csharp
 using static Tensorflow.Binding;
@@ -171,7 +171,7 @@ model.save("./toy_resnet_model");
 
 此外，Tensorflow.NET也支持用F#搭建上述模型进行训练和推理。
 
-### Tensorflow.NET版本对应关系
+## Tensorflow.NET版本对应关系
 
 | TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.10, cuda 11 |
 | -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ |
@@ -186,7 +186,7 @@ model.save("./toy_resnet_model");
 
 请注意Tensorflow.NET与Tensorflow.Keras版本存在一一对应关系，请安装与Tensorflow.NET对应的Tensorflow.Keras版本。
 
-### 参与我们的开发:
+## 参与我们的开发:
 
 我们欢迎任何人的任何形式的贡献！无论是文档中的错误纠正，新特性提议，还是BUG修复等等，都会使得Tensorflow.NET项目越来越好，Tensorflow.NET的全体开发者也会积极帮助解决您提出的问题。
 
@@ -200,7 +200,7 @@ model.save("./toy_resnet_model");
 * 帮助我们完善文档，这也十分重要
 
 
-### 支持我们
+## 支持我们
 我们推出了[TensorFlow.NET实战](https://item.jd.com/13441549.html)这本书，包含了Tensorflow.NET主要开发者编写的讲解与实战例程，欢迎您的购买，希望这本书可以给您带来帮助。
 <p float="left">
 <img src="https://user-images.githubusercontent.com/1705364/198852429-91741881-c196-401e-8e9e-2f8656196613.png" width="250" />
@@ -208,7 +208,7 @@ model.save("./toy_resnet_model");
 <img src="https://user-images.githubusercontent.com/1705364/198852721-54cd9e7e-9210-4931-a86c-77584b25b8e1.png" width="260" />
 </p>
 
-### 联系我们
+## 联系我们
 
 可以在 [Twitter](https://twitter.com/ScisharpStack), [Facebook](https://www.facebook.com/scisharp.stack.9), [Medium](https://medium.com/scisharp), [LinkedIn](https://www.linkedin.com/company/scisharp-stack/)中关注我们，也可以在[Gitter](https://gitter.im/sci-sharp/community)中与项目开发者以及其它使用者进行沟通交流，也欢迎在仓库中提起issue。
 
