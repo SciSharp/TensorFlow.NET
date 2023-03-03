@@ -269,7 +269,7 @@ namespace Tensorflow
 
         public static Tensor[] unpack(Tensor value, int num, int axis = 0, string name = null)
             => tf.Context.ExecuteOp("Unpack", name, new ExecuteOpArgs(value, num)
-                    .SetAttributes(new { axis }));
+                    .SetAttributes(new { axis, num }));
 
         public static Tensor where(Tensor condition, string name = null)
         {
