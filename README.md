@@ -9,12 +9,14 @@
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
+English | [中文](docs/Readme-CN.md)
+
 *master branch is based on tensorflow v2.x, v0.6x branch is based on tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
 
-### Why TensorFlow in C# and F# ?
+### Why TensorFlow.NET ?
 
 `SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Since the APIs are kept as similar as possible you can immediately adapt any existing TensorFlow code in C# or F# with a zero learning curve. Take a look at a comparison picture and see how comfortably a TensorFlow/Python script translates into a C# program with TensorFlow.NET.
 
