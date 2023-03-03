@@ -8,7 +8,7 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         internal static extern SafeCheckpointReaderHandle TF_NewCheckpointReader(string filename, SafeStatusHandle status);
         [DllImport(TensorFlowLibName)]
-        internal static extern void TF_DeleteCheckpointReader(SafeCheckpointReaderHandle reader);
+        internal static extern void TF_DeleteCheckpointReader(IntPtr reader);
         [DllImport(TensorFlowLibName)]
         internal static extern int TF_CheckpointReaderHasTensor(SafeCheckpointReaderHandle reader, string name);
         [DllImport(TensorFlowLibName)]
