@@ -158,7 +158,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var value = keras.Input(shape: (2, 8));
             var mask_tensor = keras.Input(shape:(4, 2));
             var attention_layer = keras.layers.MultiHeadAttention(num_heads: 2, key_dim: 2);
-            attention_layer.Apply(new[] { query, value, mask_tensor });
+            attention_layer.Apply(new Tensor[] { query, value, mask_tensor });
 
             var from_data = 10 * np.random.randn(batch_size, 4, 8);
             var to_data = 10 * np.random.randn(batch_size, 2, 8);
