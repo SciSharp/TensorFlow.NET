@@ -307,9 +307,8 @@ namespace Tensorflow.Keras
             var update_shape = target_rank > -1 && output_rank > -1 && target_rank != output_rank - 1;
             if (update_shape)
             {
-                /*var target = flatten(target);
-                output = tf.reshape(output, [-1, output_shape[-1]]);*/
-                throw new NotImplementedException("");
+                target = tf.reshape(target, -1);
+                output = tf.reshape(output, (-1, output.shape[-1]));
             }
 
             if (ignore_class.HasValue)
