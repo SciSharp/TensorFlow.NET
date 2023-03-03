@@ -37,11 +37,9 @@ namespace Tensorflow.Graphs
                         1);
                     return result[0];
                 }
-                using (var s = tf.Session(input.graph))
-                {
-                    var output = func(input);
-                    return output;
-                }
+                var s = tf.Session(input.graph);
+                var output = func(input);
+                return output;
             };
         }
 
@@ -75,12 +73,10 @@ namespace Tensorflow.Graphs
                     1);
                     return result[0];
                 }
-                using (var s = tf.Session(a.graph))
-                {
-                    Debug.Assert(a.graph == b.graph);
-                    var output = func(a, b);
-                    return output;
-                }
+                var s = tf.Session(a.graph);
+                Debug.Assert(a.graph == b.graph);
+                var output = func(a, b);
+                return output;
             };
         }
     }

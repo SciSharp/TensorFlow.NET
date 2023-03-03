@@ -17,10 +17,8 @@ namespace TensorFlowNET.UnitTest.Basics
 
         public void ImportGraph()
         {
-            using (var sess = tf.Session())
-            {
-                var new_saver = tf.train.import_meta_graph("C:/tmp/my-model.meta");
-            }
+            var sess = tf.Session();
+            var new_saver = tf.train.import_meta_graph("C:/tmp/my-model.meta");
 
             //tf.train.export_meta_graph(filename: "linear_regression.meta.bin");
             // import meta
@@ -60,14 +58,12 @@ namespace TensorFlowNET.UnitTest.Basics
             // Add ops to save and restore all the variables.
             var saver = tf.train.Saver();
 
-            using (var sess = tf.Session())
-            {
-                sess.run(init_op);
+            var sess = tf.Session();
+            sess.run(init_op);
 
-                // Save the variables to disk.
-                var save_path = saver.save(sess, "/tmp/model1.ckpt");
-                Console.WriteLine($"Model saved in path: {save_path}");
-            }
+            // Save the variables to disk.
+            var save_path = saver.save(sess, "/tmp/model1.ckpt");
+            Console.WriteLine($"Model saved in path: {save_path}");
         }
 
         public void Save2()
@@ -84,17 +80,15 @@ namespace TensorFlowNET.UnitTest.Basics
             // Add ops to save and restore all the variables.
             var saver = tf.train.Saver();
 
-            using (var sess = tf.Session())
-            {
-                sess.run(init_op);
-                // o some work with the model.
-                inc_v1.op.run();
-                dec_v2.op.run();
+            var sess = tf.Session();
+            sess.run(init_op);
+            // o some work with the model.
+            inc_v1.op.run();
+            dec_v2.op.run();
 
-                // Save the variables to disk.
-                var save_path = saver.save(sess, "/tmp/model2.ckpt");
-                Console.WriteLine($"Model saved in path: {save_path}");
-            }
+            // Save the variables to disk.
+            var save_path = saver.save(sess, "/tmp/model2.ckpt");
+            Console.WriteLine($"Model saved in path: {save_path}");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Tensorflow.Native.UnitTest
         [TestMethod, Ignore("Waiting to merge https://github.com/tensorflow/tensorflow/pull/43383")]
         public void UpdateEdge()
         {
-            using var graph = new Graph().as_default();
+            var graph = new Graph().as_default();
 
             var one = tf.constant(1, name: "one");
             var two = tf.constant(2, name: "two");

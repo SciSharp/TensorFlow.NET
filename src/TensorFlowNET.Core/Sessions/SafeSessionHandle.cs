@@ -14,21 +14,33 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.Eager;
+using System;
+using System.Net.NetworkInformation;
+using Tensorflow.Util;
 
-namespace Tensorflow.Contexts;
-
-public sealed class ContextOptions
+namespace Tensorflow
 {
-    SafeContextOptionsHandle _handle { get; }
-
-    public ContextOptions()
+    public sealed class SafeSessionHandle : SafeTensorflowHandle
     {
-        _handle = c_api.TFE_NewContextOptions();
-    }
+        private SafeSessionHandle()
+        {
+        }
 
-    public static implicit operator SafeContextOptionsHandle(ContextOptions opt)
-    {
-        return opt._handle;
+        public SafeSessionHandle(IntPtr handle)
+            : base(handle)
+        {
+        }
+
+        public override string ToString()
+            => $"0x{handle:x16}";
+
+        protected override bool ReleaseHandle()
+        {
+            var status = new Status();
+            // c_api.TF_CloseSession(handle, tf.Status.Handle);
+            c_api.TF_DeleteSession(handle, status);
+            SetHandle(IntPtr.Zero);
+            return true;
+        }
     }
 }

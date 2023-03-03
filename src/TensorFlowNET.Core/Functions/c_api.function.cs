@@ -34,10 +34,10 @@ namespace Tensorflow
         /// <param name="output_func_def"></param>
         /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_FunctionToFunctionDef(IntPtr func, SafeBufferHandle output_func_def, SafeStatusHandle status);
+        public static extern void TF_FunctionToFunctionDef(SafeFuncGraphHandle func, SafeBufferHandle output_func_def, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_GraphToFunction(IntPtr fn_body, string fn_name,
+        public static extern SafeFuncGraphHandle TF_GraphToFunction(SafeGraphHandle fn_body, string fn_name,
             bool append_hash_to_fn_name,
             int num_opers, IntPtr[] opers,
             int ninputs, TF_Output[] inputs,
@@ -48,12 +48,12 @@ namespace Tensorflow
             SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_FunctionSetAttrValueProto(IntPtr func, string attr_name, byte[] proto, int proto_len, SafeStatusHandle status);
+        public static extern IntPtr TF_FunctionSetAttrValueProto(SafeFuncGraphHandle func, string attr_name, byte[] proto, int proto_len, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_FunctionName(IntPtr func);
+        public static extern IntPtr TF_FunctionName(SafeFuncGraphHandle func);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphCopyFunction(IntPtr g, IntPtr func, IntPtr grad, SafeStatusHandle status);
+        public static extern void TF_GraphCopyFunction(SafeGraphHandle g, SafeFuncGraphHandle func, IntPtr grad, SafeStatusHandle status);
     }
 }

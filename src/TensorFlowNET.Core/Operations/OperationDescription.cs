@@ -50,7 +50,7 @@ namespace Tensorflow
 
         public Operation FinishOperation(Status status)
         {
-            return c_api.TF_FinishOperation(_handle, status.Handle);
+            return c_api.TF_FinishOperation(_handle, status);
         }
 
         public static implicit operator OperationDescription(IntPtr handle)

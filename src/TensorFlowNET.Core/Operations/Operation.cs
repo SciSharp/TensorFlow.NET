@@ -187,8 +187,8 @@ namespace Tensorflow
             if (tf.executing_eagerly())
                 return (T[])get_attr(name);
 
-            using var buf = new Buffer();
-            c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
+            var buf = new Buffer();
+            c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.Status);
             tf.Status.Check(true);
 
             var x = AttrValue.Parser.ParseFrom(buf.ToArray());
@@ -210,8 +210,8 @@ namespace Tensorflow
 
         public virtual object get_attr(string name)
         {
-            using var buf = new Buffer();
-            c_api.TF_OperationGetAttrValueProto(_handle, name, buf.Handle, tf.Status.Handle);
+            var buf = new Buffer();
+            c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.Status);
             tf.Status.Check(true);
 
             var x = AttrValue.Parser.ParseFrom(buf.ToArray());
@@ -235,13 +235,13 @@ namespace Tensorflow
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)
         {
-            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s.Handle);
+            return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
         }
 
         private NodeDef GetNodeDef()
         {
-            using var buffer = new Buffer();
-            c_api.TF_OperationToNodeDef(_handle, buffer.Handle, tf.Status.Handle);
+            var buffer = new Buffer();
+            c_api.TF_OperationToNodeDef(_handle, buffer, tf.Status);
             tf.Status.Check(throwException: true);
             return NodeDef.Parser.ParseFrom(buffer.ToArray());
         }

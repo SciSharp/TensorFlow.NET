@@ -114,7 +114,7 @@ namespace Tensorflow
         /// <param name="function"></param>
         /// <param name="status"></param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_ContextAddFunction(SafeContextHandle ctx, IntPtr function, SafeStatusHandle status);
+        public static extern void TFE_ContextAddFunction(SafeContextHandle ctx, SafeFuncGraphHandle function, SafeStatusHandle status);
 
         /// <summary>
         /// Removes a function from the context. Once removed, you can no longer

@@ -57,12 +57,10 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var input = tf.placeholder(TF_DataType.TF_FLOAT, new Shape(6));
             var scan = tf.scan(fn, input);
 
-            using (var sess = tf.Session())
-            {
-                sess.run(tf.global_variables_initializer());
-                var result = sess.run(scan, new FeedItem(input, np.array(1, 2, 3, 4, 5, 6)));
-                Assert.AreEqual(new float[] { 1, 3, 6, 10, 15, 21 }, result.ToArray<float>());
-            }
+            var sess = tf.Session();
+            sess.run(tf.global_variables_initializer());
+            var result = sess.run(scan, new FeedItem(input, np.array(1, 2, 3, 4, 5, 6)));
+            Assert.AreEqual(new float[] { 1, 3, 6, 10, 15, 21 }, result.ToArray<float>());
         }
     }
 }

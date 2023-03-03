@@ -18,7 +18,7 @@ namespace Tensorflow.Native.UnitTest
         string func_name_ = "MyFunc";
         string func_node_name_ = "MyFunc_0";
         Status s_;
-        IntPtr func_;
+        SafeFuncGraphHandle func_;
 
         [TestInitialize]
         public void Initialize()
@@ -402,7 +402,7 @@ namespace Tensorflow.Native.UnitTest
                 inputs.Length, inputs.ToArray(),
                 outputs.Length, outputs.ToArray(),
                 output_names == null || output_names.Length == 0 ? null : output_names,
-                IntPtr.Zero, null, s_.Handle);
+                IntPtr.Zero, null, s_);
 
             if (expect_failure)
             {
@@ -413,7 +413,7 @@ namespace Tensorflow.Native.UnitTest
             ASSERT_EQ(TF_OK, s_.Code, s_.Message);
             ASSERT_NE(func_, IntPtr.Zero);
             ASSERT_EQ(func_name_, c_api.StringPiece(c_api.TF_FunctionName(func_)));
-            c_api.TF_GraphCopyFunction(host_graph_, func_, IntPtr.Zero, s_.Handle);
+            c_api.TF_GraphCopyFunction(host_graph_, func_, IntPtr.Zero, s_);
             ASSERT_EQ(TF_OK, s_.Code, s_.Message);
         }
 

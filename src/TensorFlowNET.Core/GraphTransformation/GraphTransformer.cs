@@ -22,21 +22,19 @@ namespace Tensorflow
             var inputs_string = string.Join(",", inputs);
             var outputs_string = string.Join(",", outputs);
             var transforms_string = string.Join(" ", transforms);
-            using (var status = new Status())
-            {
-                var buffer = new Buffer();
-                var len = c_api.TransformGraphWithStringInputs(input_graph_def_string,
-                    input_graph_def_string.Length,
-                    inputs_string,
-                    outputs_string,
-                    transforms_string,
-                    buffer.Handle,
-                    status.Handle);
+            var status = new Status();
+            var buffer = new Buffer();
+            var len = c_api.TransformGraphWithStringInputs(input_graph_def_string,
+                input_graph_def_string.Length,
+                inputs_string,
+                outputs_string,
+                transforms_string,
+                buffer,
+                status);
 
-                status.Check(false);
-                var bytes = buffer.ToArray();
-                return GraphDef.Parser.ParseFrom(bytes);
-            }
+            status.Check(false);
+            var bytes = buffer.ToArray();
+            return GraphDef.Parser.ParseFrom(bytes);
         }
     }
 }

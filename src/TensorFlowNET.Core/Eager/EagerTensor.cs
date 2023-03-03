@@ -24,10 +24,10 @@ namespace Tensorflow.Eager
             }
         }
 
-        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(_eagerTensorHandle, tf.Status.Handle));
+        public override string Device => c_api.StringPiece(c_api.TFE_TensorHandleDeviceName(_eagerTensorHandle, tf.Status));
         public override TF_DataType dtype => c_api.TFE_TensorHandleDataType(_eagerTensorHandle);
 
-        public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, tf.Status.Handle);
+        public override int rank => c_api.TFE_TensorHandleNumDims(EagerTensorHandle, tf.Status);
 
         public override ulong bytesize
         {
@@ -49,9 +49,9 @@ namespace Tensorflow.Eager
 
         protected override Shape GetShapeInternal()
         {
-            var dims = new int[c_api.TFE_TensorHandleNumDims(_eagerTensorHandle, tf.Status.Handle)];
+            var dims = new int[c_api.TFE_TensorHandleNumDims(_eagerTensorHandle, tf.Status)];
             for (int i = 0; i < dims.Length; i++)
-                dims[i] = c_api.TFE_TensorHandleDim(_eagerTensorHandle, i, tf.Status.Handle);
+                dims[i] = c_api.TFE_TensorHandleDim(_eagerTensorHandle, i, tf.Status);
             return dims;
         }
 
@@ -64,15 +64,15 @@ namespace Tensorflow.Eager
         public static int GetRank(IntPtr handle)
         {
             var tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);
-            return c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, tf.Status.Handle);
+            return c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, tf.Status);
         }
 
         public static int[] GetDims(IntPtr handle)
         {
             var tfe_tensor_handle = c_api.TFE_EagerTensorHandle(handle);
-            var dims = new int[c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, tf.Status.Handle)];
+            var dims = new int[c_api.TFE_TensorHandleNumDims(tfe_tensor_handle, tf.Status)];
             for (int i = 0; i < dims.Length; i++)
-                dims[i] = c_api.TFE_TensorHandleDim(tfe_tensor_handle, i, tf.Status.Handle);
+                dims[i] = c_api.TFE_TensorHandleDim(tfe_tensor_handle, i, tf.Status);
             return dims;
         }
 

@@ -56,8 +56,8 @@ namespace Tensorflow.Framework
             if (pred_value is null)
             {
                 var result = range(pred.op.NumOutputs).Select(x => IntPtr.Zero).ToArray();
-                var evaluated = c_api.TF_TryEvaluateConstant(pred.graph, pred._as_tf_output(), result, tf.Status.Handle);
-                if (!evaluated || c_api.TF_GetCode(tf.Status.Handle) != TF_Code.TF_OK)
+                var evaluated = c_api.TF_TryEvaluateConstant(pred.graph, pred._as_tf_output(), result, tf.Status);
+                if (!evaluated || c_api.TF_GetCode(tf.Status) != TF_Code.TF_OK)
                     return null;
                 else
                     throw new NotImplementedException("");

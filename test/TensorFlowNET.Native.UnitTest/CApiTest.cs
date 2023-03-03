@@ -45,10 +45,10 @@ namespace Tensorflow.Native.UnitTest
             => c_api.TF_AddInput(desc, input);
 
         protected Operation TF_FinishOperation(OperationDescription desc, Status s)
-            => c_api.TF_FinishOperation(desc, s.Handle);
+            => c_api.TF_FinishOperation(desc, s);
 
         protected void TF_SetAttrTensor(OperationDescription desc, string attrName, Tensor value, Status s)
-            => c_api.TF_SetAttrTensor(desc, attrName, value, s.Handle);
+            => c_api.TF_SetAttrTensor(desc, attrName, value, s);
 
         protected void TF_SetAttrType(OperationDescription desc, string attrName, TF_DataType dtype)
             => c_api.TF_SetAttrType(desc, attrName, dtype);

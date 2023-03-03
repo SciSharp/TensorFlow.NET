@@ -196,23 +196,21 @@ namespace TensorFlowNET.UnitTest
             //    return self._eval_helper(tensors)
             //  else:
             {
-                using (var sess = tf.Session())
+                var sess = tf.Session();
+                var ndarray = tensor.eval(sess);
+                if (typeof(T) == typeof(double))
                 {
-                    var ndarray = tensor.eval(sess);
-                    if (typeof(T) == typeof(double))
-                    {
-                        double x = ndarray;
-                        result = x;
-                    }
-                    else if (typeof(T) == typeof(int))
-                    {
-                        int x = ndarray;
-                        result = x;
-                    }
-                    else
-                    {
-                        result = ndarray;
-                    }
+                    double x = ndarray;
+                    result = x;
+                }
+                else if (typeof(T) == typeof(int))
+                {
+                    int x = ndarray;
+                    result = x;
+                }
+                else
+                {
+                    result = ndarray;
                 }
 
                 return (T)result;

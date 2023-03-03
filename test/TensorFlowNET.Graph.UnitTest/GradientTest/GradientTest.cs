@@ -18,11 +18,9 @@ namespace TensorFlowNET.UnitTest.Gradient
             var y = tf.broadcast_to(x, (2, 4, 3));
             var grad = tf.gradients(y, x);
 
-            using (var sess = tf.Session(graph))
-            {
-                float result = sess.run(grad[0]);
-                Assert.AreEqual(result, 24.0f);
-            }
+            var sess = tf.Session(graph);
+            float result = sess.run(grad[0]);
+            Assert.AreEqual(result, 24.0f);
         }
 
         [TestMethod]
@@ -33,11 +31,9 @@ namespace TensorFlowNET.UnitTest.Gradient
             var z = tf.cumsum(y, axis: 1);
             var grad = tf.gradients(z, x);
 
-            using (var sess = tf.Session(graph))
-            {
-                float result = sess.run(grad[0]);
-                Assert.AreEqual(result, 60.0f);
-            }
+            var sess = tf.Session(graph);
+            float result = sess.run(grad[0]);
+            Assert.AreEqual(result, 60.0f);
         }
 
         [TestMethod, Ignore]
@@ -78,14 +74,12 @@ namespace TensorFlowNET.UnitTest.Gradient
                 42.0f, 42.0f, 42.0f,
                 45.0f, 45.0f, 45.0f
             };
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(g);
-                var resultList = result[0].ToArray<float>().ToList();
-                resultList.AddRange(result[1].ToArray<float>());
-                Console.WriteLine(result.ToString());
-                CollectionAssert.AreEqual(resultList.ToArray(), checkG);
-            }
+            var sess = tf.Session();
+            var result = sess.run(g);
+            var resultList = result[0].ToArray<float>().ToList();
+            resultList.AddRange(result[1].ToArray<float>());
+            Console.WriteLine(result.ToString());
+            CollectionAssert.AreEqual(resultList.ToArray(), checkG);
         }
 
         [TestMethod]
@@ -97,11 +91,9 @@ namespace TensorFlowNET.UnitTest.Gradient
                 var y = f(x);
                 var g = tf.gradients(y, x);
 
-                using (var session = tf.Session())
-                {
-                    var result = session.run(new[] { y, g[0] });
-                    return (result[0].ToArray<T>()[0], result[1].ToArray<T>()[0]);
-                }
+                var session = tf.Session();
+                var result = session.run(new[] { y, g[0] });
+                return (result[0].ToArray<T>()[0], result[1].ToArray<T>()[0]);
             }
 
             void test(string name, Func<Tensor, Tensor> tfF, Func<double, (double, double)> targetF, double[] values)
@@ -197,13 +189,11 @@ namespace TensorFlowNET.UnitTest.Gradient
             var g1 = tf.gradients(tf.reduce_sum(m, axis: 0)[0], x)[0];
             var g2 = tf.gradients(tf.reduce_sum(m, axis: 1)[0], x)[0];
 
-            using (var session = tf.Session())
-            {
-                var (r0, r1, r2) = session.run((g0, g1, g2), new FeedItem(x, new[,] { { 1.0 } }));
-                self.assertFloat64Equal(6.0, r0[0], $"tf.reduce_sum(...)");
-                self.assertFloat64Equal(2.0, r1[0], $"tf.reduce_sum(..., axis = 0)");
-                self.assertFloat64Equal(3.0, r2[0], $"tf.reduce_sum(..., axis = 1)");
-            }
+            var session = tf.Session();
+            var (r0, r1, r2) = session.run((g0, g1, g2), new FeedItem(x, new[,] { { 1.0 } }));
+            self.assertFloat64Equal(6.0, r0[0], $"tf.reduce_sum(...)");
+            self.assertFloat64Equal(2.0, r1[0], $"tf.reduce_sum(..., axis = 0)");
+            self.assertFloat64Equal(3.0, r2[0], $"tf.reduce_sum(..., axis = 1)");
         }
 
         [TestMethod]
@@ -212,12 +202,10 @@ namespace TensorFlowNET.UnitTest.Gradient
             var a = tf.constant(1f);
             var b = tf.tanh(a);
             var g = tf.gradients(b, a);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(g);
-                var actual = result[0];
-                Assert.AreEqual(actual, 0.41997434127f);
-            }
+            var sess = tf.Session();
+            var result = sess.run(g);
+            var actual = result[0];
+            Assert.AreEqual(actual, 0.41997434127f);
         }
 
 
@@ -227,14 +215,12 @@ namespace TensorFlowNET.UnitTest.Gradient
             var a = tf.constant(5f);
             var b = tf.lgamma(a);
             var g = tf.gradients(b, a);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(new object[] { g, b });
-                var actualDeriv = result[0];
-                var actual = result[1];
-                Assert.AreEqual(actualDeriv, 1.5061177f);
-                Assert.AreEqual(actual, 3.17805386f);
-            }
+            var sess = tf.Session();
+            var result = sess.run(new object[] { g, b });
+            var actualDeriv = result[0];
+            var actual = result[1];
+            Assert.AreEqual(actualDeriv, 1.5061177f);
+            Assert.AreEqual(actual, 3.17805386f);
         }
 
         [TestMethod]
@@ -247,14 +233,12 @@ namespace TensorFlowNET.UnitTest.Gradient
                 tf.constant(new[] { 1 }, tf.int32, new[] { 1 })
             );
             var g = tf.gradients(b, a);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(new object[] { g, b });
-                var actualDeriv = np.squeeze(result[0]);
-                var actual = np.squeeze(result[1]);
-                Assert.AreEqual(actualDeriv, new float[] { 1, 0 });
-                Assert.AreEqual(actual, 0.9640276f);
-            }
+            var sess = tf.Session();
+            var result = sess.run(new object[] { g, b });
+            var actualDeriv = np.squeeze(result[0]);
+            var actual = np.squeeze(result[1]);
+            Assert.AreEqual(actualDeriv, new float[] { 1, 0 });
+            Assert.AreEqual(actual, 0.9640276f);
         }
 
         [TestMethod]
@@ -264,14 +248,12 @@ namespace TensorFlowNET.UnitTest.Gradient
             var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
             var a = tf.concat(new List<Tensor>(new[] { a1, a2 }), 0);
             var g = tf.gradients(a, a1);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(new object[] { g, a });
-                var actualDeriv = result[0][0];
-                var actual = result[1][0];
-                Assert.AreEqual(actualDeriv, 1f);
-                Assert.AreEqual(actual, 2f);
-            }
+            var sess = tf.Session();
+            var result = sess.run(new object[] { g, a });
+            var actualDeriv = result[0][0];
+            var actual = result[1][0];
+            Assert.AreEqual(actualDeriv, 1f);
+            Assert.AreEqual(actual, 2f);
         }
 
         [TestMethod]
@@ -280,13 +262,12 @@ namespace TensorFlowNET.UnitTest.Gradient
             var ap = tf.constant(1f);
             var b = tf.tanh(ap) + gen_array_ops.stop_gradient(ap);
             var g = tf.gradients(b, ap);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(g);
-                var actual = result[0];
-                Assert.AreEqual(actual, 0.41997434127f);
-            }
+            var sess = tf.Session();
+            var result = sess.run(g);
+            var actual = result[0];
+            Assert.AreEqual(actual, 0.41997434127f);
         }
+
         [Ignore("TODO")]
         [TestMethod]
         public void testUnusedOutput()

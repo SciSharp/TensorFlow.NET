@@ -74,23 +74,21 @@ namespace TensorFlowNET.UnitTest
             var cropSize2_2 = tf.Variable(np.array(4, 4));
 
             var init = tf.global_variables_initializer();
-            using (Session sess = tf.Session())
-            {
-                sess.run(init);
+            var sess = tf.Session();
+            sess.run(init);
 
-                var cropped = tf.image.crop_and_resize(image, box, boxInd, cropSize1_1);
+            var cropped = tf.image.crop_and_resize(image, box, boxInd, cropSize1_1);
 
-                var result = sess.run(cropped);
-                // check if cropped to 1x1 center was succesfull
-                Assert.AreEqual(result.size, 1ul);
-                Assert.AreEqual(result[0, 0, 0, 0], 4f);
+            var result = sess.run(cropped);
+            // check if cropped to 1x1 center was succesfull
+            Assert.AreEqual(result.size, 1ul);
+            Assert.AreEqual(result[0, 0, 0, 0], 4f);
 
-                cropped = tf.image.crop_and_resize(image2, box, boxInd, cropSize2_2);
-                result = sess.run(cropped);
-                // check if flipped and no cropping occured
-                Assert.AreEqual(result.size, 16ul);
-                Assert.AreEqual(result[0, 0, 0, 0], 12f);
-            }
+            cropped = tf.image.crop_and_resize(image2, box, boxInd, cropSize2_2);
+            result = sess.run(cropped);
+            // check if flipped and no cropping occured
+            Assert.AreEqual(result.size, 16ul);
+            Assert.AreEqual(result[0, 0, 0, 0], 12f);
         }
     }
 }

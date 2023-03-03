@@ -28,7 +28,6 @@ namespace TensorFlowNET.UnitTest.Basics
         public void DeleteStatus()
         {
             var s = new Status();
-            s.Dispose();
         }
     }
 }

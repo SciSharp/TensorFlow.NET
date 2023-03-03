@@ -14,28 +14,27 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
+namespace Tensorflow;
 
-namespace Tensorflow
+public sealed class ImportGraphDefOptions
 {
-    public sealed class ImportGraphDefOptions : IDisposable
+    SafeImportGraphDefOptionsHandle _handle { get; }
+
+    public int NumReturnOutputs
+        => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(_handle);
+
+    public ImportGraphDefOptions()
     {
-        public SafeImportGraphDefOptionsHandle Handle { get; }
+        _handle = c_api.TF_NewImportGraphDefOptions();
+    }
 
-        public int NumReturnOutputs
-            => c_api.TF_ImportGraphDefOptionsNumReturnOutputs(Handle);
+    public void AddReturnOutput(string name, int index)
+    {
+        c_api.TF_ImportGraphDefOptionsAddReturnOutput(_handle, name, index);
+    }
 
-        public ImportGraphDefOptions()
-        {
-            Handle = c_api.TF_NewImportGraphDefOptions();
-        }
-
-        public void AddReturnOutput(string name, int index)
-        {
-            c_api.TF_ImportGraphDefOptionsAddReturnOutput(Handle, name, index);
-        }
-
-        public void Dispose()
-            => Handle.Dispose();
+    public static implicit operator SafeImportGraphDefOptionsHandle(ImportGraphDefOptions opt)
+    {
+        return opt._handle;
     }
 }

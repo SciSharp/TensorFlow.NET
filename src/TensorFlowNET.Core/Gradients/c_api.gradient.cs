@@ -37,7 +37,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <param name="dy">TF_Output*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_AddGradientsWithPrefix(IntPtr g, string prefix, TF_Output[] y, int ny,
+        public static extern void TF_AddGradientsWithPrefix(SafeGraphHandle g, string prefix, TF_Output[] y, int ny,
             TF_Output[] x, int nx, TF_Output[] dx, SafeStatusHandle status, IntPtr[] dy);
     }
 }

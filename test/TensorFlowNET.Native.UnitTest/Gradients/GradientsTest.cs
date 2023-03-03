@@ -44,18 +44,14 @@ namespace Tensorflow.Native.UnitTest
         private bool GetGraphDef(Graph graph, out GraphDef graph_def)
         {
             graph_def = null;
-            using (var s = new Status())
-            {
-                using (var buffer = new Buffer())
-                {
-                    c_api.TF_GraphToGraphDef(graph, buffer.Handle, s.Handle);
-                    bool ret = TF_GetCode(s) == TF_OK;
-                    EXPECT_EQ(TF_OK, TF_GetCode(s));
-                    if (ret)
-                        graph_def = GraphDef.Parser.ParseFrom(buffer.ToArray());
-                    return ret;
-                }
-            }
+            var s = new Status();
+            var buffer = new Buffer();
+            c_api.TF_GraphToGraphDef(graph, buffer, s);
+            bool ret = TF_GetCode(s) == TF_OK;
+            EXPECT_EQ(TF_OK, TF_GetCode(s));
+            if (ret)
+                graph_def = GraphDef.Parser.ParseFrom(buffer.ToArray());
+            return ret;
         }
 
         private void RunGraphsAndCompareOutputs(TF_Output[] grad_outputs, TF_Output[] expected_grad_outputs)
@@ -111,9 +107,9 @@ namespace Tensorflow.Native.UnitTest
 
                 IntPtr[] handles = new IntPtr[2] { IntPtr.Zero, IntPtr.Zero };
                 c_api.TF_AddGradientsWithPrefix(graph_, prefix, outputs, noutputs, inputs,
-                                      ninputs, grad_inputs, s_.Handle, handles);
+                                      ninputs, grad_inputs, s_, handles);
 
-                var op = new Operation(handles[0]);
+                // var op = new Operation(handles[0]);
             }
             else
             {
@@ -275,9 +271,6 @@ namespace Tensorflow.Native.UnitTest
 
         public void Dispose()
         {
-            graph_.Dispose();
-            expected_graph_.Dispose();
-            s_.Dispose();
         }
     }
 }

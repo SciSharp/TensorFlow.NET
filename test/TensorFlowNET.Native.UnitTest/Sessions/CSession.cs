@@ -11,7 +11,7 @@ namespace Tensorflow.Native.UnitTest
     /// </summary>
     public class CSession
     {
-        private IntPtr session_;
+        private SafeSessionHandle session_;
 
         private List<TF_Output> inputs_ = new List<TF_Output>();
         private List<Tensor> input_values_ = new List<Tensor>();
@@ -22,11 +22,8 @@ namespace Tensorflow.Native.UnitTest
 
         public CSession(Graph graph, Status s, bool user_XLA = false)
         {
-            lock (Locks.ProcessWide)
-            {
-                var config = new ConfigProto { InterOpParallelismThreads = 4 };
-                session_ = new Session(graph, config, s);
-            }
+            var config = new ConfigProto { InterOpParallelismThreads = 4 };
+            session_ = new Session(graph, config, s);
         }
 
         public void SetInputs(Dictionary<Operation, Tensor> inputs)
@@ -85,7 +82,7 @@ namespace Tensorflow.Native.UnitTest
             c_api.TF_SessionRun(session_, null, inputs_ptr, input_values_ptr, inputs_ptr.Length,
                 outputs_ptr, output_values_ptr, outputs_.Count,
                 targets_ptr, targets_.Count,
-                IntPtr.Zero, s.Handle);
+                IntPtr.Zero, s);
 
             s.Check();
 

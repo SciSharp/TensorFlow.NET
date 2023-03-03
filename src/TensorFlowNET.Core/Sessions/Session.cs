@@ -14,75 +14,49 @@
    limitations under the License.
 ******************************************************************************/
 
-using System;
-using System.IO;
-using System.Runtime.CompilerServices;
-using Tensorflow.Util;
+namespace Tensorflow;
 
-namespace Tensorflow
+public class Session : BaseSession
 {
-    public class Session : BaseSession
+    public Session(string target = "", Graph g = null) : base(target, g, null)
+    { }
+
+    public Session(SafeSessionHandle handle, Graph g = null) : base(handle, g)
+    { }
+
+    public Session(Graph g, ConfigProto config = null, Status s = null) : base("", g, config, s)
+    { }
+
+    public Session as_default()
     {
-        public Session(string target = "", Graph g = null) : base(target, g, null)
-        { }
-
-        public Session(IntPtr handle, Graph g = null) : base(handle, g)
-        { }
-
-        public Session(Graph g, ConfigProto config = null, Status s = null) : base("", g, config, s)
-        { }
-
-        public Session as_default()
-        {
-            return ops.set_default_session(this);
-        }
-
-        public static Session LoadFromSavedModel(string path)
-        {
-            var graph = new Graph();
-            using var status = new Status();
-            using var opt = c_api.TF_NewSessionOptions();
-
-            var tags = new string[] { "serve" };
-
-            var sess = c_api.TF_LoadSessionFromSavedModel(opt,
-                    IntPtr.Zero,
-                    path,
-                    tags,
-                    tags.Length,
-                    graph,
-                    IntPtr.Zero,
-                    status.Handle);
-            status.Check(true);
-
-            // load graph bytes
-            // var data = new byte[buffer.length];
-            // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
-            // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
-            return new Session(sess, g: graph);
-        }
-
-        public static implicit operator IntPtr(Session session) => session._handle;
-        public static implicit operator Session(IntPtr handle) => new Session(handle);
-
-        public void __enter__()
-        {
-
-        }
-
-        public void __exit__()
-        {
-
-        }
-
-        public void __init__()
-        {
-
-        }
-
-        public void __del__()
-        {
-
-        }
+        return ops.set_default_session(this);
     }
+
+    public static Session LoadFromSavedModel(string path)
+    {
+        var graph = new Graph();
+        var status = new Status();
+        using var opt = c_api.TF_NewSessionOptions();
+
+        var tags = new string[] { "serve" };
+
+        var sess = c_api.TF_LoadSessionFromSavedModel(opt,
+                IntPtr.Zero,
+                path,
+                tags,
+                tags.Length,
+                graph,
+                IntPtr.Zero,
+                status);
+        status.Check(true);
+
+        // load graph bytes
+        // var data = new byte[buffer.length];
+        // Marshal.Copy(buffer.data, data, 0, (int)buffer.length);
+        // var meta_graph = MetaGraphDef.Parser.ParseFrom(data);*/
+        return new Session(sess, g: graph);
+    }
+
+    public static implicit operator SafeSessionHandle(Session session) => session._handle;
+    public static implicit operator Session(SafeSessionHandle handle) => new Session(handle);
 }

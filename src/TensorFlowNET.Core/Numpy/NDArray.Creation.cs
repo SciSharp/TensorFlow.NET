@@ -61,7 +61,7 @@ namespace Tensorflow.NumPy
         {
             if (_handle is not null)
             {
-                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status.Handle);
+                _eagerTensorHandle = c_api.TFE_NewTensorHandle(_handle, tf.Status);
             }
         }
     }

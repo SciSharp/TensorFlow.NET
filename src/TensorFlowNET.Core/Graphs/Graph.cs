@@ -75,9 +75,9 @@ namespace Tensorflow
     ///     then create a TensorFlow session to run parts of the graph across a set of local and remote devices.
     /// </summary>
     /// <remarks>https://www.tensorflow.org/guide/graphs <br></br>https://www.tensorflow.org/api_docs/python/tf/Graph</remarks>
-    public partial class Graph : DisposableObject
-        , IEnumerable<Operation>
+    public partial class Graph : IEnumerable<Operation>
     {
+        protected new SafeGraphHandle _handle;
         private Dictionary<int, ITensorOrOperation> _nodes_by_id;
         public Dictionary<string, ITensorOrOperation> _nodes_by_name;
         private Dictionary<string, int> _names_in_use;
@@ -128,15 +128,6 @@ namespace Tensorflow
             _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
             _names_in_use = new Dictionary<string, int>();
             _graph_key = $"graph-{ops.GraphUniqueId()}/";
-        }
-
-        public Graph(IntPtr handle)
-        {
-            _handle = handle;
-            _nodes_by_id = new Dictionary<int, ITensorOrOperation>();
-            _nodes_by_name = new Dictionary<string, ITensorOrOperation>();
-            _names_in_use = new Dictionary<string, int>();
-            _graph_key = $"grap-{ops.GraphUniqueId()}/";
         }
 
         public ITensorOrOperation as_graph_element(object obj, bool allow_tensor = true, bool allow_operation = true)
@@ -486,16 +477,6 @@ namespace Tensorflow
             _unfetchable_ops.Add(op);
         }
 
-        protected override void DisposeManagedResources()
-        {
-            
-        }
-
-        protected override void DisposeUnmanagedResources(IntPtr handle)
-        {
-            c_api.TF_DeleteGraph(handle);
-        }
-
         public Tensor get_tensor_by_tf_output(TF_Output tf_output)
         {
             var op = _get_operation_by_tf_operation(tf_output.oper);
@@ -517,14 +498,14 @@ namespace Tensorflow
         public Shape GetTensorShape(TF_Output output)
         {
             var status = tf.Status;
-            var ndim = c_api.TF_GraphGetTensorNumDims(_handle, output, status.Handle);
+            var ndim = c_api.TF_GraphGetTensorNumDims(_handle, output, status);
             status.Check();
 
             if (ndim == -1)
                 return Shape.Null;
 
             var dims = new long[ndim];
-            c_api.TF_GraphGetTensorShape(_handle, output, dims, dims.Length, status.Handle);
+            c_api.TF_GraphGetTensorShape(_handle, output, dims, dims.Length, status);
             status.Check();
 
             return new Shape(dims.Select(x => (int)x).ToArray());
@@ -539,7 +520,7 @@ namespace Tensorflow
         string debugString = string.Empty;
         public override string ToString()
         {
-            return $"{graph_key}, 0x{_handle.ToString("x16")}";
+            return $"{graph_key}, 0x{_handle.DangerousGetHandle().ToString("x16")}";
             /*if (string.IsNullOrEmpty(debugString))
             {
                 int len = 0;
@@ -558,7 +539,7 @@ namespace Tensorflow
         IEnumerator IEnumerable.GetEnumerator()
             => throw new NotImplementedException();
 
-        public static implicit operator IntPtr(Graph graph)
+        public static implicit operator SafeGraphHandle(Graph graph)
         {
             return graph._handle;
         }

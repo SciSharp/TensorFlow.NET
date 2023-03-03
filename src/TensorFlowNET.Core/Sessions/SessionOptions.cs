@@ -19,20 +19,17 @@ using System;
 
 namespace Tensorflow
 {
-    internal sealed class SessionOptions : IDisposable
+    internal sealed class SessionOptions
     {
-        public SafeSessionOptionsHandle Handle { get; }
+        SafeSessionOptionsHandle _handle { get; }
 
         public SessionOptions(string target = "", ConfigProto config = null)
         {
-            Handle = c_api.TF_NewSessionOptions();
-            c_api.TF_SetTarget(Handle, target);
+            _handle = c_api.TF_NewSessionOptions();
+            c_api.TF_SetTarget(_handle, target);
             if (config != null)
                 SetConfig(config);
         }
-
-        public void Dispose()
-            => Handle.Dispose();
 
         private unsafe void SetConfig(ConfigProto config)
         {
@@ -40,12 +37,15 @@ namespace Tensorflow
 
             fixed (byte* proto2 = bytes)
             {
-                using (var status = new Status())
-                {
-                    c_api.TF_SetConfig(Handle, (IntPtr)proto2, (ulong)bytes.Length, status.Handle);
-                    status.Check(false);
-                }
+                var status = new Status();
+                c_api.TF_SetConfig(_handle, (IntPtr)proto2, (ulong)bytes.Length, status);
+                status.Check(false);
             }
+        }
+
+        public static implicit operator SafeSessionOptionsHandle(SessionOptions opt)
+        {
+            return opt._handle;
         }
     }
 }

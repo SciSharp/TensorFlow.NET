@@ -11,7 +11,7 @@ public class CheckpointReader
         Status status = new Status();
         VariableToDataTypeMap = new Dictionary<string, TF_DataType>();
         VariableToShapeMap = new Dictionary<string, Shape>();
-        _handle = c_api.TF_NewCheckpointReader(filename, status.Handle);
+        _handle = c_api.TF_NewCheckpointReader(filename, status);
         status.Check(true);
         ReadAllShapeAndType();
     }
@@ -38,7 +38,7 @@ public class CheckpointReader
         int num_dims = GetVariableNumDims(name);
         long[] dims = new long[num_dims];
         Status status = new Status();
-        c_api.TF_CheckpointReaderGetVariableShape(_handle, name, dims, num_dims, status.Handle);
+        c_api.TF_CheckpointReaderGetVariableShape(_handle, name, dims, num_dims, status);
         status.Check(true);
         return new Shape(dims);
     }
@@ -49,7 +49,7 @@ public class CheckpointReader
     public unsafe Tensor GetTensor(string name, TF_DataType dtype = TF_DataType.DtInvalid)
     {
         Status status = new Status();
-        var tensor = c_api.TF_CheckpointReaderGetTensor(_handle, name, status.Handle);
+        var tensor = c_api.TF_CheckpointReaderGetTensor(_handle, name, status);
         status.Check(true);
         return new Tensor(tensor);
     }

@@ -16,15 +16,13 @@ namespace TensorFlowNET.UnitTest.Basics
             var labels = tf.expand_dims(tf.constant(new[] { 0, 1, 2, 3, 4 }), 1);
             var st = tf.concat(values: new[] { indices, labels }, axis: 1);
             var onehot = tf.sparse_to_dense(st, (5, 5), 1);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(onehot);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0, 0, 0 }, result[0].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 1, 0, 0, 0 }, result[1].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 1, 0, 0 }, result[2].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 1, 0 }, result[3].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 1 }, result[4].ToArray<int>()));
-            };
+            var sess = tf.Session();
+            var result = sess.run(onehot);
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0, 0, 0 }, result[0].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 1, 0, 0, 0 }, result[1].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 1, 0, 0 }, result[2].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 1, 0 }, result[3].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0, 1 }, result[4].ToArray<int>()));
         }
 
         [TestMethod, Ignore]
@@ -39,13 +37,11 @@ namespace TensorFlowNET.UnitTest.Basics
             new[] { 3L, 4L });
 
             var onehot = tf.sparse_tensor_to_dense(decoded_list);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(onehot);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0, 0 }, result[0].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 2, 0 }, result[1].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0 }, result[2].ToArray<int>()));
-            }
+            var sess = tf.Session();
+            var result = sess.run(onehot);
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0, 0 }, result[0].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 2, 0 }, result[1].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 0, 0, 0 }, result[2].ToArray<int>()));
         }
 
         [TestMethod]
@@ -56,14 +52,12 @@ namespace TensorFlowNET.UnitTest.Basics
             int[,] crops = { { 0, 0 }, { 0, 0 } };
             var tensor = tf.batch_to_space_nd(inputs, block_shape, crops);
 
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(tensor);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 6, 1, 7, 2, 8 }, result[0, 0].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 12, 18, 13, 19, 14, 20 }, result[0, 1].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 9, 4, 10, 5, 11 }, result[0, 2].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 15, 21, 16, 22, 17, 23 }, result[0, 3].ToArray<int>()));
-            }
+            var sess = tf.Session();
+            var result = sess.run(tensor);
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 6, 1, 7, 2, 8 }, result[0, 0].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 12, 18, 13, 19, 14, 20 }, result[0, 1].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 9, 4, 10, 5, 11 }, result[0, 2].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 15, 21, 16, 22, 17, 23 }, result[0, 3].ToArray<int>()));
         }
 
         [TestMethod, Ignore]
@@ -72,11 +66,9 @@ namespace TensorFlowNET.UnitTest.Basics
             var tensor = new[] { 0, 1, 2, 3 };
             var mask = np.array(new[] { true, false, true, false });
             var masked = tf.boolean_mask(tensor, mask);
-            using (var sess = tf.Session())
-            {
-                var result = sess.run(masked);
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
-            }
+            var sess = tf.Session();
+            var result = sess.run(masked);
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Tensorflow
                     if (_registered_ops.Count > 0)
                         return _registered_ops;
 
-                    using var buffer = new Buffer(c_api.TF_GetAllOpList());
+                    var buffer = new Buffer(c_api.TF_GetAllOpList());
                     var op_list = OpList.Parser.ParseFrom(buffer.ToArray());
                     foreach (var op_def in op_list.Op)
                         _registered_ops[op_def.Name] = op_def;

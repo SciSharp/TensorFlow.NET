@@ -43,7 +43,7 @@ namespace Tensorflow.Eager
         {
             var status = tf.Status;
             var op = GetOp(ctx, op_name, status);
-            c_api.TFE_OpSetDevice(op, device_name, status.Handle);
+            c_api.TFE_OpSetDevice(op, device_name, status);
             if (status.ok())
             {
                 for (int i = 0; i < inputs.Length; ++i)
@@ -54,7 +54,7 @@ namespace Tensorflow.Eager
                         Tensor nd => nd.EagerTensorHandle,
                         _ => throw new NotImplementedException("Eager tensor handle has not been allocated.")
                     };
-                    c_api.TFE_OpAddInput(op, tensor_handle, status.Handle);
+                    c_api.TFE_OpAddInput(op, tensor_handle, status);
                     status.Check(true);
                 }
             }
@@ -64,7 +64,7 @@ namespace Tensorflow.Eager
             var outputs = new SafeEagerTensorHandle[num_outputs];
             if (status.ok())
             {
-                c_api.TFE_Execute(op, outputs, out num_outputs, status.Handle);
+                c_api.TFE_Execute(op, outputs, out num_outputs, status);
                 status.Check(true);
             }
             return outputs.Select(x => new EagerTensor(x)).ToArray();

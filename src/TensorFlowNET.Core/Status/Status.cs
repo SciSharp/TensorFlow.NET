@@ -26,7 +26,7 @@ namespace Tensorflow
     /// TF_Status holds error information. It either has an OK code, or
     /// else an error code with an associated error message.
     /// </summary>
-    public sealed class Status : IDisposable
+    public sealed class Status
     {
         /// <summary>
         /// Error message
@@ -35,9 +35,9 @@ namespace Tensorflow
         {
             get
             {
-                using (Handle.Lease())
+                using (_handle.Lease())
                 {
-                    return StringPiece(TF_Message(Handle));
+                    return StringPiece(TF_Message(_handle));
                 }
             }
         }
@@ -45,23 +45,23 @@ namespace Tensorflow
         /// <summary>
         /// Error code
         /// </summary>
-        public TF_Code Code => TF_GetCode(Handle);
+        public TF_Code Code => TF_GetCode(_handle);
 
-        public SafeStatusHandle Handle { get; }
+        SafeStatusHandle _handle { get; }
 
         public Status()
         {
-            Handle = TF_NewStatus();
+            _handle = TF_NewStatus();
         }
 
         public Status(SafeStatusHandle handle)
         {
-            Handle = handle ?? throw new ArgumentNullException(nameof(handle));
+            _handle = handle ?? throw new ArgumentNullException(nameof(handle));
         }
 
         public void SetStatus(TF_Code code, string msg)
         {
-            TF_SetStatus(Handle, code, msg);
+            TF_SetStatus(_handle, code, msg);
         }
 
         public bool ok() => Code == TF_Code.TF_OK;
@@ -94,10 +94,12 @@ namespace Tensorflow
             }
         }
 
-        public void Dispose()
-            => Handle.Dispose();
-
         public override string ToString()
-            => $"{Code} 0x{Handle.DangerousGetHandle():x16}";
+            => $"{Code} 0x{_handle.DangerousGetHandle():x16}";
+
+        public static implicit operator SafeStatusHandle(Status status)
+        {
+            return status._handle;
+        }
     }
 }

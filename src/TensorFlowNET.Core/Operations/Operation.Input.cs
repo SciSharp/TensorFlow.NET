@@ -31,7 +31,7 @@ namespace Tensorflow
         public int InputListLength(string name)
         {
             int num = 0;
-            num = c_api.TF_OperationInputListLength(_handle, name, tf.Status.Handle);
+            num = c_api.TF_OperationInputListLength(_handle, name, tf.Status);
             tf.Status.Check(true);
             return num;
         }

@@ -23,16 +23,14 @@ namespace Tensorflow.Benchmark.Leak
 			var ClassifierModelPath = Path.Combine(modelDir, "Leak", "TestModel", "saved_model");
 
 			for (var i = 0; i < 1024; i++)
-            {
-				using (var sess = Session.LoadFromSavedModel(ClassifierModelPath)) {
-					using (var g = sess.graph.as_default()) {
-						var inputOp = g.OperationByName("inference_input");
-						var outputOp = g.OperationByName("StatefulPartitionedCall");
+			{
+				var sess = Session.LoadFromSavedModel(ClassifierModelPath);
+				var g = sess.graph.as_default();
+				var inputOp = g.OperationByName("inference_input");
+				var outputOp = g.OperationByName("StatefulPartitionedCall");
 
-						var inp = np.zeros(new Shape(new int[] { 1, 2, 96 }), TF_DataType.TF_FLOAT);
-						sess.run(outputOp.outputs[0], new FeedItem(inputOp.outputs[0], inp));
-					}
-				}
+				var inp = np.zeros(new Shape(new int[] { 1, 2, 96 }), TF_DataType.TF_FLOAT);
+				sess.run(outputOp.outputs[0], new FeedItem(inputOp.outputs[0], inp));
 			}
 		}
 	}

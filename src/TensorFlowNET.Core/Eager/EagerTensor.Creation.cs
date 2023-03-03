@@ -54,7 +54,7 @@ namespace Tensorflow.Eager
         void NewEagerTensorHandle(SafeTensorHandle h)
         {
             _id = ops.uid();
-            _eagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status.Handle);
+            _eagerTensorHandle = c_api.TFE_NewTensorHandle(h, tf.Status);
 #if TRACK_TENSOR_LIFE
             Console.WriteLine($"New EagerTensor {_eagerTensorHandle}");
 #endif
@@ -65,7 +65,7 @@ namespace Tensorflow.Eager
         {
             if (_handle != null)
                 return;
-            _handle = c_api.TFE_TensorHandleResolve(_eagerTensorHandle, tf.Status.Handle);
+            _handle = c_api.TFE_TensorHandleResolve(_eagerTensorHandle, tf.Status);
             tf.Status.Check(true);
         }
 

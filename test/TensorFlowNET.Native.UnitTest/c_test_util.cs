@@ -23,7 +23,7 @@ namespace Tensorflow.Native.UnitTest
 
                 c_api.TF_AddInputList(desc, inputs, inputs.Length);
 
-                var op = c_api.TF_FinishOperation(desc, s.Handle);
+                var op = c_api.TF_FinishOperation(desc, s);
                 s.Check();
 
                 return op;
@@ -33,37 +33,29 @@ namespace Tensorflow.Native.UnitTest
         [SuppressMessage("ReSharper", "RedundantAssignment")]
         public static bool GetAttrValue(Operation oper, string attr_name, ref AttrValue attr_value, Status s)
         {
-            lock (Locks.ProcessWide)
-            {
-                using (var buffer = new Buffer())
-                {
-                    c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer.Handle, s.Handle);
-                    attr_value = AttrValue.Parser.ParseFrom(buffer.ToArray());
-                }
+            var buffer = new Buffer();
 
-                return s.Code == TF_Code.TF_OK;
-            }
+            c_api.TF_OperationGetAttrValueProto(oper, attr_name, buffer, s);
+            attr_value = AttrValue.Parser.ParseFrom(buffer.ToArray());
+
+            return s.Code == TF_Code.TF_OK;
         }
 
         public static GraphDef GetGraphDef(Graph graph)
         {
-            lock (Locks.ProcessWide)
-            {
-                using (var s = new Status())
-                using (var buffer = new Buffer())
-                {
-                    c_api.TF_GraphToGraphDef(graph, buffer.Handle, s.Handle);
-                    s.Check();
-                    return GraphDef.Parser.ParseFrom(buffer.ToArray());
-                }
-            }
+            var s = new Status();
+            var buffer = new Buffer();
+
+            c_api.TF_GraphToGraphDef(graph, buffer, s);
+            s.Check();
+            return GraphDef.Parser.ParseFrom(buffer.ToArray());
         }
 
-        public static FunctionDef GetFunctionDef(IntPtr func)
+        public static FunctionDef GetFunctionDef(SafeFuncGraphHandle func)
         {
-            using var s = new Status();
-            using var buffer = new Buffer();
-            c_api.TF_FunctionToFunctionDef(func, buffer.Handle, s.Handle);
+            var s = new Status();
+            var buffer = new Buffer();
+            c_api.TF_FunctionToFunctionDef(func, buffer, s);
             s.Check(true);
             var func_def = FunctionDef.Parser.ParseFrom(buffer.ToArray());
             return func_def;
@@ -192,7 +184,7 @@ namespace Tensorflow.Native.UnitTest
                 OperationDescription desc = c_api.TF_NewOperation(graph, "Neg", name);
                 var neg_input = new TF_Output(n, 0);
                 c_api.TF_AddInput(desc, neg_input);
-                var op = c_api.TF_FinishOperation(desc, s.Handle);
+                var op = c_api.TF_FinishOperation(desc, s);
                 s.Check();
 
                 return op;
@@ -210,7 +202,7 @@ namespace Tensorflow.Native.UnitTest
                     c_api.TF_SetAttrShape(desc, "shape", dims, dims.Length);
                 }
 
-                var op = c_api.TF_FinishOperation(desc, s.Handle);
+                var op = c_api.TF_FinishOperation(desc, s);
                 s.Check();
 
                 return op;
@@ -222,10 +214,10 @@ namespace Tensorflow.Native.UnitTest
             lock (Locks.ProcessWide)
             {
                 var desc = c_api.TF_NewOperation(graph, "Const", name);
-                c_api.TF_SetAttrTensor(desc, "value", t, s.Handle);
+                c_api.TF_SetAttrTensor(desc, "value", t, s);
                 s.Check();
                 c_api.TF_SetAttrType(desc, "dtype", t.dtype);
-                var op = c_api.TF_FinishOperation(desc, s.Handle);
+                var op = c_api.TF_FinishOperation(desc, s);
                 s.Check();
 
                 return op;

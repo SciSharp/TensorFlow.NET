@@ -62,7 +62,7 @@ namespace Tensorflow
         /// <param name="status">TF_Status*</param>
         /// <returns>TF_Session*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewSession(IntPtr graph, SafeSessionOptionsHandle opts, SafeStatusHandle status);
+        public static extern SafeSessionHandle TF_NewSession(SafeGraphHandle graph, SafeSessionOptionsHandle opts, SafeStatusHandle status);
 
         /// <summary>
         /// Return a new options object.
@@ -110,7 +110,7 @@ namespace Tensorflow
         /// <param name="run_metadata">TF_Buffer*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern unsafe void TF_SessionRun(IntPtr session, TF_Buffer* run_options,
+        public static extern unsafe void TF_SessionRun(SafeSessionHandle session, TF_Buffer* run_options,
                    TF_Output[] inputs, IntPtr[] input_values, int ninputs,
                    TF_Output[] outputs, IntPtr[] output_values, int noutputs,
                    IntPtr[] target_opers, int ntargets,

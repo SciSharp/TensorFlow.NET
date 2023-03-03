@@ -35,7 +35,7 @@ namespace Tensorflow.Native.UnitTest
             EXPECT_EQ(attr_value.Type, DataType.DtInt32);
 
             // Test not found errors in TF_Operation*() query functions.
-            EXPECT_EQ(-1, c_api.TF_OperationOutputListLength(feed, "bogus", s.Handle));
+            EXPECT_EQ(-1, c_api.TF_OperationOutputListLength(feed, "bogus", s));
             EXPECT_EQ(TF_Code.TF_INVALID_ARGUMENT, s.Code);
             Assert.IsFalse(c_test_util.GetAttrValue(feed, "missing", ref attr_value, s));
             EXPECT_EQ("Operation 'feed' has no attr named 'missing'.", s.Message);
@@ -191,9 +191,6 @@ namespace Tensorflow.Native.UnitTest
             ASSERT_TRUE(found_scalar_const);
             ASSERT_TRUE(found_add);
             ASSERT_TRUE(found_neg);
-
-            graph.Dispose();
-            s.Dispose();
         }
 
         /// <summary>
@@ -213,16 +210,15 @@ namespace Tensorflow.Native.UnitTest
 
             // Export to a GraphDef.
             var graph_def = new Buffer();
-            c_api.TF_GraphToGraphDef(graph, graph_def.Handle, s.Handle);
+            c_api.TF_GraphToGraphDef(graph, graph_def, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Import it, with a prefix, in a fresh graph.
-            graph.Dispose();
             graph = new Graph().as_default();
             using (var opts = c_api.TF_NewImportGraphDefOptions())
             {
                 c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported");
-                c_api.TF_GraphImportGraphDef(graph, graph_def.Handle, opts, s.Handle);
+                c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
                 EXPECT_EQ(TF_Code.TF_OK, s.Code);
             }
 
@@ -265,7 +261,7 @@ namespace Tensorflow.Native.UnitTest
                 EXPECT_EQ(2, c_api.TF_ImportGraphDefOptionsNumReturnOutputs(opts));
                 c_api.TF_ImportGraphDefOptionsAddReturnOperation(opts, "scalar");
                 EXPECT_EQ(1, c_api.TF_ImportGraphDefOptionsNumReturnOperations(opts));
-                var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def.Handle, opts, s.Handle);
+                var results = c_api.TF_GraphImportGraphDefWithResults(graph, graph_def, opts, s);
                 EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
                 return results;
@@ -305,7 +301,7 @@ namespace Tensorflow.Native.UnitTest
                 c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported3");
                 c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed);
                 c_api.TF_ImportGraphDefOptionsAddControlDependency(opts, feed2);
-                c_api.TF_GraphImportGraphDef(graph, graph_def.Handle, opts, s.Handle);
+                c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
                 EXPECT_EQ(TF_Code.TF_OK, s.Code);
             }
 
@@ -330,7 +326,7 @@ namespace Tensorflow.Native.UnitTest
 
             // Export to a graph def so we can import a graph with control dependencies
             graph_def = new Buffer();
-            c_api.TF_GraphToGraphDef(graph, graph_def.Handle, s.Handle);
+            c_api.TF_GraphToGraphDef(graph, graph_def, s);
             EXPECT_EQ(TF_Code.TF_OK, s.Code);
 
             // Import again, with remapped control dependency, into the same graph
@@ -338,7 +334,7 @@ namespace Tensorflow.Native.UnitTest
             {
                 c_api.TF_ImportGraphDefOptionsSetPrefix(opts, "imported4");
                 c_api.TF_ImportGraphDefOptionsRemapControlDependency(opts, "imported/feed", feed);
-                c_api.TF_GraphImportGraphDef(graph, graph_def.Handle, opts, s.Handle);
+                c_api.TF_GraphImportGraphDef(graph, graph_def, opts, s);
                 ASSERT_EQ(TF_Code.TF_OK, s.Code);
             }
 
@@ -380,7 +376,6 @@ namespace Tensorflow.Native.UnitTest
             ASSERT_EQ(TF_Code.TF_OK, s.Code);
 
             // Import it in a fresh graph with return outputs.
-            graph.Dispose();
             graph = new Graph().as_default();
             var opts = new ImportGraphDefOptions();
             opts.AddReturnOutput("feed", 0);
@@ -401,11 +396,6 @@ namespace Tensorflow.Native.UnitTest
             EXPECT_EQ(0, return_outputs[0].index);
             EXPECT_EQ(scalar, return_outputs[1].oper);
             EXPECT_EQ(0, return_outputs[1].index);
-
-            opts.Dispose();
-            graph_def.Dispose();
-            graph.Dispose();
-            s.Dispose();
         }
 
         /// <summary>
@@ -422,16 +412,14 @@ namespace Tensorflow.Native.UnitTest
         public void ImportGraphMeta()
         {
             var dir = "my-save-dir/";
-            using (var sess = tf.Session())
-            {
-                var new_saver = tf.train.import_meta_graph(dir + "my-model-10000.meta");
-                new_saver.restore(sess, dir + "my-model-10000");
-                var labels = tf.constant(0, dtype: tf.int32, shape: new int[] { 100 }, name: "labels");
-                var batch_size = tf.size(labels);
-                var logits = tf.get_collection<ITensorOrOperation>("logits")[0] as Tensor;
-                var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
-                                                logits: logits);
-            }
+            var sess = tf.Session();
+            var new_saver = tf.train.import_meta_graph(dir + "my-model-10000.meta");
+            new_saver.restore(sess, dir + "my-model-10000");
+            var labels = tf.constant(0, dtype: tf.int32, shape: new int[] { 100 }, name: "labels");
+            var batch_size = tf.size(labels);
+            var logits = tf.get_collection<ITensorOrOperation>("logits")[0] as Tensor;
+            var loss = tf.losses.sparse_softmax_cross_entropy(labels: labels,
+                                            logits: logits);
         }
     }
 }

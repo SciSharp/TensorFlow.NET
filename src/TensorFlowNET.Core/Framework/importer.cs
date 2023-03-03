@@ -56,15 +56,14 @@ namespace Tensorflow
 
             TF_ImportGraphDefResults results = null;
             var bytes = graph_def.ToByteString().ToArray();
-            using (var buffer = c_api_util.tf_buffer(bytes))
-            using (var scoped_options = c_api_util.ScopedTFImportGraphDefOptions())
-            using (var status = new Status())
-            {
-                _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
-                // need to create a class ImportGraphDefWithResults with IDisposal
-                results = new TF_ImportGraphDefResults(c_api.TF_GraphImportGraphDefWithResults(graph, buffer.Handle, scoped_options.Handle, status.Handle));
-                status.Check(true);
-            }
+            var buffer = c_api_util.tf_buffer(bytes);
+            var scoped_options = c_api_util.ScopedTFImportGraphDefOptions();
+            var status = new Status();
+            
+            _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
+            // need to create a class ImportGraphDefWithResults with IDisposal
+            results = new TF_ImportGraphDefResults(c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status));
+            status.Check(true);
 
             _ProcessNewOps(graph);
 
@@ -116,13 +115,13 @@ namespace Tensorflow
             Dictionary<string, Tensor> input_map,
             string[] return_elements)
         {
-            c_api.TF_ImportGraphDefOptionsSetPrefix(options.Handle, prefix);
-            c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options.Handle, (char)1);
+            c_api.TF_ImportGraphDefOptionsSetPrefix(options, prefix);
+            c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options, (char)1);
 
             foreach (var input in input_map)
             {
                 var (src_name, src_index) = _ParseTensorName(input.Key);
-                c_api.TF_ImportGraphDefOptionsAddInputMapping(options.Handle, src_name, src_index, input.Value._as_tf_output());
+                c_api.TF_ImportGraphDefOptionsAddInputMapping(options, src_name, src_index, input.Value._as_tf_output());
             }
 
             if (return_elements == null)
@@ -133,11 +132,11 @@ namespace Tensorflow
                 if (name.Contains(":"))
                 {
                     var (op_name, index) = _ParseTensorName(name);
-                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options.Handle, op_name, index);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options, op_name, index);
                 }
                 else
                 {
-                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options.Handle, name);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options, name);
                 }
             }
 

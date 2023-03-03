@@ -16,18 +16,16 @@ namespace TensorFlowNET.UnitTest.Basics
             var enqueue = queue.enqueue(numbers);
             var dequeue_many = queue.dequeue_many(n: 3);
 
-            using (var sess = tf.Session())
-            {
-                sess.run(enqueue, (numbers, new[] { 1 }));
-                sess.run(enqueue, (numbers, new[] { 2, 3 }));
-                sess.run(enqueue, (numbers, new[] { 3, 4, 5 }));
+            var sess = tf.Session();
+            sess.run(enqueue, (numbers, new[] { 1 }));
+            sess.run(enqueue, (numbers, new[] { 2, 3 }));
+            sess.run(enqueue, (numbers, new[] { 3, 4, 5 }));
 
-                var result = sess.run(dequeue_many[0]);
+            var result = sess.run(dequeue_many[0]);
 
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0 }, result[0].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 2, 3, 0 }, result[1].ToArray<int>()));
-                Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 4, 5 }, result[2].ToArray<int>()));
-            }
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 1, 0, 0 }, result[0].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 2, 3, 0 }, result[1].ToArray<int>()));
+            Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 3, 4, 5 }, result[2].ToArray<int>()));
         }
 
         [TestMethod]
@@ -45,27 +43,25 @@ namespace TensorFlowNET.UnitTest.Basics
             // push back into queue
             var inc = queue.enqueue(y);
 
-            using (var sess = tf.Session())
-            {
-                // init queue
-                init.run();
+            var sess = tf.Session();
+            // init queue
+            init.run();
 
-                // pop out first element and push back calculated y
-                (int dequeued, _) = sess.run((x, inc));
-                Assert.AreEqual(10, dequeued);
+            // pop out first element and push back calculated y
+            (int dequeued, _) = sess.run((x, inc));
+            Assert.AreEqual(10, dequeued);
 
-                (dequeued, _) = sess.run((x, inc));
-                Assert.AreEqual(20, dequeued);
+            (dequeued, _) = sess.run((x, inc));
+            Assert.AreEqual(20, dequeued);
 
-                (dequeued, _) = sess.run((x, inc));
-                Assert.AreEqual(11, dequeued);
+            (dequeued, _) = sess.run((x, inc));
+            Assert.AreEqual(11, dequeued);
 
-                (dequeued, _) = sess.run((x, inc));
-                Assert.AreEqual(21, dequeued);
+            (dequeued, _) = sess.run((x, inc));
+            Assert.AreEqual(21, dequeued);
 
-                // thread will hang or block if you run sess.run(x) again
-                // until queue has more element.
-            }
+            // thread will hang or block if you run sess.run(x) again
+            // until queue has more element.
         }
 
         [TestMethod]
@@ -75,19 +71,17 @@ namespace TensorFlowNET.UnitTest.Basics
             var init = queue.enqueue_many(new[] { 2L, 4L, 3L }, new[] { "p1", "p2", "p3" });
             var x = queue.dequeue();
 
-            using (var sess = tf.Session())
-            {
-                init.run();
+            var sess = tf.Session();
+            init.run();
 
-                var result = sess.run(x);
-                Assert.AreEqual(result[0], 2L);
+            var result = sess.run(x);
+            Assert.AreEqual(result[0], 2L);
 
-                result = sess.run(x);
-                Assert.AreEqual(result[0], 3L);
+            result = sess.run(x);
+            Assert.AreEqual(result[0], 3L);
 
-                result = sess.run(x);
-                Assert.AreEqual(result[0], 4L);
-            }
+            result = sess.run(x);
+            Assert.AreEqual(result[0], 4L);
         }
 
         [TestMethod]
@@ -98,16 +92,14 @@ namespace TensorFlowNET.UnitTest.Basics
             var x = queue.dequeue();
 
             string results = "";
-            using (var sess = tf.Session())
-            {
-                init.run();
+            var sess = tf.Session();
+            init.run();
 
-                foreach (var i in range(9))
-                    results += (int)sess.run(x) + ".";
+            foreach (var i in range(9))
+                results += (int)sess.run(x) + ".";
 
-                // output in random order
-                Assert.IsFalse(results == "1.2.3.4.5.6.7.8.9.");
-            }
+            // output in random order
+            Assert.IsFalse(results == "1.2.3.4.5.6.7.8.9.");
         }
     }
 }

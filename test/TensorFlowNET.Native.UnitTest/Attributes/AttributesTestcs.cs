@@ -48,7 +48,7 @@ namespace Tensorflow.Native.UnitTest
 
         private void EXPECT_TF_META(Operation oper, string attr_name, int expected_list_size, TF_AttrType expected_type, uint expected_total_size)
         {
-            var m = c_api.TF_OperationGetAttrMetadata(oper, attr_name, s_.Handle);
+            var m = c_api.TF_OperationGetAttrMetadata(oper, attr_name, s_);
             EXPECT_EQ(TF_Code.TF_OK, s_.Code);
             char e = expected_list_size >= 0 ? (char)1 : (char)0;
             /*EXPECT_EQ(e, m.is_list);
@@ -63,7 +63,7 @@ namespace Tensorflow.Native.UnitTest
             var desc = init("string");
             c_api.TF_SetAttrString(desc, "v", "bunny", 5);
 
-            var oper = c_api.TF_FinishOperation(desc, s_.Handle);
+            var oper = c_api.TF_FinishOperation(desc, s_);
             //ASSERT_EQ(TF_Code.TF_OK, s_.Code);
             //EXPECT_TF_META(oper, "v", -1, TF_AttrType.TF_ATTR_STRING, 5);
             //var value = new char[5];
@@ -86,8 +86,6 @@ namespace Tensorflow.Native.UnitTest
 
         public void Dispose()
         {
-            graph_.Dispose();
-            s_.Dispose();
         }
     }
 }

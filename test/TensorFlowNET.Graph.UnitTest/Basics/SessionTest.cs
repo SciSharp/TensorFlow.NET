@@ -19,11 +19,9 @@ namespace TensorFlowNET.UnitTest.Basics
                 var a = constant_op.constant(np.array(3.0).reshape((1, 1)));
                 var b = constant_op.constant(np.array(2.0).reshape((1, 1)));
                 var c = math_ops.matmul(a, b, name: "matmul");
-                using (var sess = tf.Session())
-                {
-                    var result = c.eval(sess);
-                    Assert.AreEqual(result[0], 6.0);
-                }
+                var sess = tf.Session();
+                var result = c.eval(sess);
+                Assert.AreEqual(result[0], 6.0);
             }
         }
 
@@ -32,11 +30,9 @@ namespace TensorFlowNET.UnitTest.Basics
         {
             var a = constant_op.constant("123 heythere 123 ", TF_DataType.TF_STRING);
             var c = tf.strings.substr(a, 4, 8);
-            using (var sess = tf.Session())
-            {
-                var result = c.eval(sess).StringData();
-                Assert.AreEqual(result[0], "heythere");
-            }
+            var sess = tf.Session();
+            var result = c.eval(sess).StringData();
+            Assert.AreEqual(result[0], "heythere");
         }
 
         [TestMethod]
@@ -47,11 +43,9 @@ namespace TensorFlowNET.UnitTest.Basics
                 const int size = 30_000;
                 var a = constant_op.constant(new string('a', size), TF_DataType.TF_STRING);
                 var c = tf.strings.substr(a, 0, size - 5000);
-                using (var sess = tf.Session())
-                {
-                    var result = UTF8Encoding.UTF8.GetString(c.eval(sess).ToByteArray());
-                    Console.WriteLine(result);
-                }
+                var sess = tf.Session();
+                var result = UTF8Encoding.UTF8.GetString(c.eval(sess).ToByteArray());
+                Console.WriteLine(result);
             }
         }
 

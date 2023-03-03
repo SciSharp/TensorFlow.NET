@@ -14,7 +14,7 @@ namespace TensorFlowNET.UnitTest.Basics
             var v = tf.Variable(new[] { 1, 2 });
             var init = tf.compat.v1.global_variables_initializer();
 
-            using var sess = tf.compat.v1.Session();
+            var sess = tf.compat.v1.Session();
             sess.run(init);
             // Usage passing the session explicitly.
             print(v.eval(sess));

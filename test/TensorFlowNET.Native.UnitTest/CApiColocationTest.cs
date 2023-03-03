@@ -59,7 +59,7 @@ namespace Tensorflow.Native.UnitTest
 
         private void VerifyCollocation(Operation op, string[] expected)
         {
-            var handle = c_api.TF_OperationGetAttrMetadata(op, "_class", s_.Handle);
+            var handle = c_api.TF_OperationGetAttrMetadata(op, "_class", s_);
             TF_AttrMetadata m = new TF_AttrMetadata();
             if (expected.Length == 0)
             {
@@ -98,8 +98,6 @@ namespace Tensorflow.Native.UnitTest
 
         public void Dispose()
         {
-            graph_.Dispose();
-            s_.Dispose();
         }
     }
 }

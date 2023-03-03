@@ -121,7 +121,7 @@ namespace Tensorflow
 
             if (_handle == null)
             {
-                c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.Status.Handle);
+                c_api.TF_GraphGetTensorShape(op.graph, _as_tf_output(), dims, rank, tf.Status);
             }
             else
             {
@@ -135,9 +135,9 @@ namespace Tensorflow
         protected virtual void SetShapeInternal(Shape value)
         {
             if (value == null)
-                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status.Handle);
+                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status);
             else
-                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.dims, value.ndim, tf.Status.Handle);
+                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.dims, value.ndim, tf.Status);
         }
 
         public int[] _shape_tuple()
@@ -176,7 +176,7 @@ namespace Tensorflow
                 if (_handle == null)
                 {
                     var output = _as_tf_output();
-                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.Status.Handle);
+                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.Status);
                     return ndim;
                 }
 

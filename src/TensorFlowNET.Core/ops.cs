@@ -247,7 +247,7 @@ namespace Tensorflow
             foreach (var attr in node_def.Attr)
             {
                 var bytes = attr.Value.ToByteArray();
-                c_api.TF_SetAttrValueProto(op_desc, attr.Key, bytes, proto_len: bytes.Length, status: status.Handle);
+                c_api.TF_SetAttrValueProto(op_desc, attr.Key, bytes, proto_len: bytes.Length, status: status);
                 status.Check(true);
             }
 

@@ -23,11 +23,9 @@ namespace Tensorflow
                 var x = tf.placeholder(tf.float64, shape: (1024, 1024));
                 var log = tf.log(x);
 
-                using (var sess = tf.Session())
-                {
-                    var ones = np.ones((1024, 1024), dtype: np.float64);
-                    var o = sess.run(log, new FeedItem(x, ones));
-                }
+                var sess = tf.Session();
+                var ones = np.ones((1024, 1024), dtype: np.float64);
+                var o = sess.run(log, new FeedItem(x, ones));
                 // Thread.Sleep(1);
             }
 

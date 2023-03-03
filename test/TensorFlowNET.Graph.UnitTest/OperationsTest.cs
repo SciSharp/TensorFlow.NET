@@ -20,7 +20,7 @@ namespace TensorFlowNET.UnitTest.Basics
         public void GetAllOpList()
         {
             var handle = c_api.TF_GetAllOpList();
-            using var buffer = new Buffer(handle);
+            var buffer = new Buffer(handle);
             var op_list = OpList.Parser.ParseFrom(buffer.ToArray());
 
             var _registered_ops = new Dictionary<string, OpDef>();
@@ -39,13 +39,11 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.float32);
             var c = tf.add(a, b);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, 3.0f),
-                    new FeedItem(b, 2.0f));
-                Assert.AreEqual(o, 5.0f);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, 3.0f),
+                new FeedItem(b, 2.0f));
+            Assert.AreEqual(o, 5.0f);
         }
 
         [TestMethod]
@@ -55,11 +53,9 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.constant(5.0f);
             var c = tf.add(a, b);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c);
-                Assert.AreEqual(o, 9.0f);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c);
+            Assert.AreEqual(o, 9.0f);
         }
 
         [TestMethod]
@@ -69,11 +65,9 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.cast(tf.is_finite(a), tf.float32);
             var check = np.array(1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(b);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            var sess = tf.Session();
+            var o = sess.run(b);
+            Assert.IsTrue(np.array_equal(o, check));
         }
 
         [TestMethod]
@@ -83,11 +77,9 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.cast(tf.is_nan(a), tf.float32);
             var check = np.array(0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(b);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            var sess = tf.Session();
+            var o = sess.run(b);
+            Assert.IsTrue(np.array_equal(o, check));
         }
 
         [TestMethod]
@@ -97,38 +89,30 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.cumsum(a);
             var check = np.array(1, 2, 4, 7, 11, 16);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(b);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            var sess = tf.Session();
+            var o = sess.run(b);
+            Assert.IsTrue(np.array_equal(o, check));
 
             b = tf.cumsum(a, exclusive: true);
             check = np.array(0, 1, 2, 4, 7, 11);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(b);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            sess = tf.Session();
+            o = sess.run(b);
+            Assert.IsTrue(np.array_equal(o, check));
 
             b = tf.cumsum(a, reverse: true);
             check = np.array(16, 15, 14, 12, 9, 5);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(b);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            sess = tf.Session();
+            o = sess.run(b);
+            Assert.IsTrue(np.array_equal(o, check));
 
             b = tf.cumsum(a, exclusive: true, reverse: true);
             check = np.array(15, 14, 12, 9, 5, 0);
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(b);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            sess = tf.Session();
+            o = sess.run(b);
+            Assert.IsTrue(np.array_equal(o, check));
         }
 
         [TestMethod]
@@ -140,38 +124,30 @@ namespace TensorFlowNET.UnitTest.Basics
             var d = tf.cast(tf.logical_and(b, c), tf.int32);
             var check = np.array(new[] { 0, 0, 0, 0, 0, 0, 0, 0 });
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(d);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            var sess = tf.Session();
+            var o = sess.run(d);
+            Assert.IsTrue(np.array_equal(o, check));
 
             d = tf.cast(tf.logical_not(b), tf.int32);
             check = np.array(new[] { 1, 1, 1, 1, 0, 0, 0, 0 });
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(d);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            sess = tf.Session();
+            o = sess.run(d);
+            Assert.IsTrue(np.array_equal(o, check));
 
             d = tf.cast(tf.logical_or(b, c), tf.int32);
             check = np.array(new[] { 1, 1, 1, 1, 1, 1, 1, 1 });
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(d);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            sess = tf.Session();
+            o = sess.run(d);
+            Assert.IsTrue(np.array_equal(o, check));
 
             d = tf.cast(tf.logical_xor(b, c), tf.int32);
             check = np.array(new[] { 1, 1, 1, 1, 1, 1, 1, 1 });
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(d);
-                Assert.IsTrue(np.array_equal(o, check));
-            }
+            sess = tf.Session();
+            o = sess.run(d);
+            Assert.IsTrue(np.array_equal(o, check));
         }
 
         [TestMethod]
@@ -192,41 +168,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.add(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, intResult);
 
             // Testing `operator +(Tensor x, Tensor y)`
             c = tf.reduce_sum(tf.reduce_sum(a + b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, intResult);
 
             // Testing `operator +(Tensor x, int y)`
             c = tf.reduce_sum(tf.reduce_sum(a + secondIntVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, intResult);
 
             // Testing `operator +(int x, Tensor y)`
             c = tf.reduce_sum(tf.reduce_sum(secondIntVal + a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, intResult);
             #endregion
 
             #region floatTest
@@ -241,41 +209,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.add(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, floatResult);
 
             // Testing `operator +(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a + b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, floatResult);
 
             // Testing `operator +(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(a + secondFloatVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, floatResult);
 
             // Testing `operator +(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(secondFloatVal + a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, floatResult);
             #endregion
 
             #region doubleTest
@@ -290,41 +250,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.add(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator +(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a + b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, doubleResult);
 
             // Testing `operator +(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(a + secondDoubleVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, doubleResult);
 
             // Testing `operator +(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(secondDoubleVal + a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual(o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual(o, doubleResult);
             #endregion
         }
 
@@ -347,50 +299,40 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.sub(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator -(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a - b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator -(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(a - secondIntVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator -(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(secondIntVal - a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, Math.Abs(intResult));
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, Math.Abs(intResult));
 
             // Testing `operator -(Tensor x)
             c = tf.reduce_sum(tf.reduce_sum(-a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+               new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResultTwo);
             #endregion
 
             #region floatTest
@@ -406,50 +348,40 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.sub(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator -(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a - b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator -(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(a - secondFloatVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator -(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(secondFloatVal - a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, Math.Abs(floatResult));
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, Math.Abs(floatResult));
 
             // Testing `operator -(Tensor x)
             c = tf.reduce_sum(tf.reduce_sum(-a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResultTwo);
             #endregion
 
             #region doubleTest
@@ -465,50 +397,40 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.sub(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator -(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a - b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator -(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(a - secondDoubleVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator -(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(secondDoubleVal - a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, Math.Abs(doubleResult));
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, Math.Abs(doubleResult));
 
             // Testing `operator -(Tensor x)
             c = tf.reduce_sum(tf.reduce_sum(-a, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+               new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResultTwo);
             #endregion
         }
 
@@ -588,41 +510,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.multiply(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator *(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a * b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator *(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(a * secondIntVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator *(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(firstIntVal * b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
             #endregion
 
             #region floatTest
@@ -637,41 +551,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.multiply(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator *(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a * b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator *(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(a * secondFloatVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator *(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(firstFloatVal * b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
             #endregion
 
             #region doubleTest
@@ -686,41 +592,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.multiply(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator *(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a * b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator *(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(a * secondDoubleVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator *(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(firstDoubleVal * b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+               new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
             #endregion
         }
 
@@ -743,41 +641,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(gen_math_ops.floor_div(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator /(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a / b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator /(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(a / secondIntVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator /(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(firstIntVal / b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
             #endregion
 
             #region floatTest
@@ -792,41 +682,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.divide(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator /(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a / b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator /(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(a / secondFloatVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
 
             // Testing `operator /(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(firstFloatVal / b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((float)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((float)o, floatResult);
             #endregion
 
             #region doubleTest
@@ -841,41 +723,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.divide(a, b), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator /(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(a / b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator /(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(a / secondFloatVal, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
 
             // Testing `operator /(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(firstFloatVal / b, 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((double)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((double)o, doubleResult);
             #endregion
         }
 
@@ -897,41 +771,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator >(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a > b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator >(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a > intThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator >(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(intThreshold > a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResultTwo);
             #endregion
 
             #region floatTest
@@ -946,41 +812,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator >(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a > b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator >(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a > floatThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator >(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(floatThreshold > a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResultTwo);
             #endregion
 
             #region doubleTest
@@ -995,41 +853,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator >(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a > b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator >(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a > doubleThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator >(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(doubleThreshold > a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResultTwo);
             #endregion
         }
 
@@ -1051,41 +901,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator <(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a < b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator <(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a < intThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+               new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator <(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(intThreshold < a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResultTwo);
             #endregion
 
             #region floatTest
@@ -1100,41 +942,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator <(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a < b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator <(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a < floatThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator <(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(floatThreshold < a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, floatResultTwo);
             #endregion
 
             #region doubleTest
@@ -1149,41 +983,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator <(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a < b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator <(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a < doubleThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator <(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(doubleThreshold < a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResultTwo);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, doubleResultTwo);
             #endregion
         }
 
@@ -1205,41 +1031,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater_equal(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator >=(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a >= b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            sess = tf.Session();
+            o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator >=(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a >= intThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator >=(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(intThreshold >= a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResultTwo);
-            }
+            Assert.AreEqual((int)o, intResultTwo);
             #endregion
 
             #region floatTest
@@ -1254,41 +1072,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater_equal(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator >=(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a >= b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator >=(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a >= floatThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator >=(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(floatThreshold >= a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResultTwo);
-            }
+            Assert.AreEqual((int)o, floatResultTwo);
             #endregion
 
             #region doubleTest
@@ -1303,41 +1113,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.greater_equal(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator >=(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a >= b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator >=(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a >= doubleThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator >=(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(doubleThreshold >= a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResultTwo);
-            }
+            Assert.AreEqual((int)o, doubleResultTwo);
             #endregion
         }
 
@@ -1359,41 +1161,33 @@ namespace TensorFlowNET.UnitTest.Basics
             var b = tf.placeholder(tf.int32, shape: new Shape(rows, cols));
             var c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less_equal(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
-                    new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
-                    new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            var sess = tf.Session();
+            var o = sess.run(c,
+                new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
+                new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator <=(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a <= b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator <=(Tensor x, int y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a <= intThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResult);
-            }
+            Assert.AreEqual((int)o, intResult);
 
             // Testing `operator <=(int x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(intThreshold <= a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstIntFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, intResultTwo);
-            }
+            Assert.AreEqual((int)o, intResultTwo);
             #endregion
 
             #region floatTest
@@ -1408,41 +1202,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float32, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less_equal(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator <=(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a <= b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator <=(Tensor x, float y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a <= floatThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResult);
-            }
+            Assert.AreEqual((int)o, floatResult);
 
             // Testing `operator <=(float x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(floatThreshold <= a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstFloatFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, floatResultTwo);
-            }
+            Assert.AreEqual((int)o, floatResultTwo);
             #endregion
 
             #region doubleTest
@@ -1457,41 +1243,33 @@ namespace TensorFlowNET.UnitTest.Basics
             b = tf.placeholder(tf.float64, shape: new Shape(rows, cols));
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(tf.less_equal(a, b), tf.int32), 1));
 
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator <=(Tensor x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a <= b, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))),
                     new FeedItem(b, new NDArray(secondDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator <=(Tensor x, double y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(a <= doubleThreshold, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResult);
-            }
+            Assert.AreEqual((int)o, doubleResult);
 
             // Testing `operator <=(double x, Tensor y)
             c = tf.reduce_sum(tf.reduce_sum(tf.cast(doubleThreshold <= a, tf.int32), 1));
-            using (var sess = tf.Session())
-            {
-                var o = sess.run(c,
+            sess = tf.Session();
+            o = sess.run(c,
                     new FeedItem(a, new NDArray(firstDoubleFeed, new Shape(rows, cols))));
-                Assert.AreEqual((int)o, doubleResultTwo);
-            }
+            Assert.AreEqual((int)o, doubleResultTwo);
             #endregion
         }
 

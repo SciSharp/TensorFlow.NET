@@ -28,7 +28,7 @@ namespace Tensorflow.Contexts
     /// <summary>
     /// Environment in which eager operations execute.
     /// </summary>
-    public sealed partial class Context : IDisposable
+    public sealed partial class Context
     {
         public const int GRAPH_MODE = 0;
         public const int EAGER_MODE = 1;
@@ -41,15 +41,7 @@ namespace Tensorflow.Contexts
         public FunctionCallOptions FunctionCallOptions { get; }
 
         SafeContextHandle _handle;
-        public SafeContextHandle Handle
-        {
-            get
-            {
-                if (_handle == null)
-                    ensure_initialized();
-                return _handle;
-            }
-        }
+
         int? _seed;
         Random _rng;
 
@@ -59,6 +51,7 @@ namespace Tensorflow.Contexts
             context_switches = new ContextSwitchStack(defaultExecutionMode == EAGER_MODE, false);
             initialized = false;
             FunctionCallOptions = new FunctionCallOptions();
+            ensure_initialized();
         }
 
         /// <summary>
@@ -72,12 +65,12 @@ namespace Tensorflow.Contexts
             Config = MergeConfig();
             FunctionCallOptions.Config = Config;
             var config_str = Config.ToByteArray();
-            using var opts = new ContextOptions();
-            using var status = new Status();
-            c_api.TFE_ContextOptionsSetConfig(opts.Handle, config_str, (ulong)config_str.Length, status.Handle);
+            var opts = new ContextOptions();
+            var status = new Status();
+            c_api.TFE_ContextOptionsSetConfig(opts, config_str, (ulong)config_str.Length, status);
             status.Check(true);
-            c_api.TFE_ContextOptionsSetDevicePlacementPolicy(opts.Handle, _device_policy);
-            _handle = c_api.TFE_NewContext(opts.Handle, status.Handle);
+            c_api.TFE_ContextOptionsSetDevicePlacementPolicy(opts, _device_policy);
+            _handle = c_api.TFE_NewContext(opts, status);
             status.Check(true);
             initialized = true;
         }
@@ -178,10 +171,14 @@ namespace Tensorflow.Contexts
             tf.Context.ensure_initialized();
 
             if (_handle != null)
+            {
                 c_api.TFE_ContextClearCaches(_handle);
+            }
         }
 
-        public void Dispose()
-            => _handle.Dispose();
+        public static implicit operator SafeContextHandle(Context ctx)
+        {
+            return ctx._handle;
+        }
     }
 }

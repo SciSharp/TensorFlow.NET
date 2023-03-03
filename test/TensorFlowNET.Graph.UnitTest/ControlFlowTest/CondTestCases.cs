@@ -16,18 +16,16 @@ namespace TensorFlowNET.UnitTest.ControlFlowTest
         {
             var graph = tf.Graph().as_default();
 
-            using (var sess = tf.Session(graph))
-            {
-                var x = tf.constant(2, name: "x");
-                var y = tf.constant(5, name: "y");
+            var sess = tf.Session(graph);
+            var x = tf.constant(2, name: "x");
+            var y = tf.constant(5, name: "y");
 
-                var z = control_flow_ops.cond(tf.less(x, y),
-                    () => tf.constant(22, name: "t22"),
-                    () => tf.constant(55, name: "f55"));
+            var z = control_flow_ops.cond(tf.less(x, y),
+                () => tf.constant(22, name: "t22"),
+                () => tf.constant(55, name: "f55"));
 
-                int result = z.eval(sess);
-                assertEquals(result, 22);
-            }
+            int result = z.eval(sess);
+            assertEquals(result, 22);
         }
 
         [TestMethod]
@@ -35,18 +33,16 @@ namespace TensorFlowNET.UnitTest.ControlFlowTest
         {
             var graph = tf.Graph().as_default();
 
-            using (var sess = tf.Session(graph))
-            {
-                var x = tf.constant(2, name: "x");
-                var y = tf.constant(1, name: "y");
+            var sess = tf.Session(graph);
+            var x = tf.constant(2, name: "x");
+            var y = tf.constant(1, name: "y");
 
-                var z = control_flow_ops.cond(tf.less(x, y),
-                    () => tf.constant(22, name: "t22"),
-                    () => tf.constant(11, name: "f11"));
+            var z = control_flow_ops.cond(tf.less(x, y),
+                () => tf.constant(22, name: "t22"),
+                () => tf.constant(11, name: "f11"));
 
-                int result = z.eval(sess);
-                assertEquals(result, 11);
-            }
+            int result = z.eval(sess);
+            assertEquals(result, 11);
         }
 
         [Ignore("Dependent on UpdateEdge")]

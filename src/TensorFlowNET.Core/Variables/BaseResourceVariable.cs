@@ -164,7 +164,7 @@ namespace Tensorflow
                     result._as_tf_output(),
                     shape.dims,
                     shape.ndim,
-                    tf.Status.Handle);
+                    tf.Status);
                 tf.Status.Check(true);
             }
 

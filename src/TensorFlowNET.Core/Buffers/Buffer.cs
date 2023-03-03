@@ -25,15 +25,15 @@ namespace Tensorflow
     /// <summary>
     ///     Represents a TF_Buffer that can be passed to Tensorflow.
     /// </summary>
-    public sealed class Buffer : IDisposable
+    public sealed class Buffer
     {
-        public SafeBufferHandle Handle { get; }
+        SafeBufferHandle _handle;
 
         /// <remarks>
         /// <inheritdoc cref="SafeHandleLease" path="/devdoc/usage"/>
         /// </remarks>
         private unsafe ref readonly TF_Buffer DangerousBuffer
-            => ref Unsafe.AsRef<TF_Buffer>(Handle.DangerousGetHandle().ToPointer());
+            => ref Unsafe.AsRef<TF_Buffer>(_handle.DangerousGetHandle().ToPointer());
 
         /// <summary>
         ///     The memory block representing this buffer.
@@ -59,7 +59,7 @@ namespace Tensorflow
         {
             get
             {
-                using (Handle.Lease())
+                using (_handle.Lease())
                 {
                     return DangerousBuffer.length;
                 }
@@ -67,13 +67,13 @@ namespace Tensorflow
         }
 
         public Buffer()
-            => Handle = TF_NewBuffer();
+            => _handle = TF_NewBuffer();
 
         public Buffer(SafeBufferHandle handle)
-            => Handle = handle;
+            => _handle = handle;
 
         public Buffer(byte[] data)
-            => Handle = _toBuffer(data);
+            => _handle = _toBuffer(data);
 
         private static SafeBufferHandle _toBuffer(byte[] data)
         {
@@ -92,7 +92,7 @@ namespace Tensorflow
         /// </summary>
         public unsafe byte[] ToArray()
         {
-            using (Handle.Lease())
+            using (_handle.Lease())
             {
                 ref readonly TF_Buffer buffer = ref DangerousBuffer;
 
@@ -107,7 +107,12 @@ namespace Tensorflow
             }
         }
 
-        public void Dispose()
-            => Handle.Dispose();
+        public override string ToString()
+            => $"0x{_handle.DangerousGetHandle():x16}";
+
+        public static implicit operator SafeBufferHandle(Buffer buffer)
+        {
+            return buffer._handle;
+        }
     }
 }

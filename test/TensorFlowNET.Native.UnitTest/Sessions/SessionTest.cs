@@ -14,8 +14,8 @@ namespace Tensorflow.Native.UnitTest.Sessions
         [TestMethod]
         public void Session()
         {
-            using var s = new Status();
-            using var graph = new Graph();
+            var s = new Status();
+            var graph = new Graph();
 
             // Make a placeholder operation.
             var feed = c_test_util.Placeholder(graph, s);

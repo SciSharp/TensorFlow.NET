@@ -96,7 +96,7 @@ namespace Tensorflow
         /// <param name="oper_name">const char*</param>
         /// <returns>TF_OperationDescription*</returns>
         [DllImport(TensorFlowLibName)]
-        public static extern IntPtr TF_NewOperation(IntPtr graph, string opType, string oper_name);
+        public static extern IntPtr TF_NewOperation(SafeGraphHandle graph, string opType, string oper_name);
 
         [DllImport(TensorFlowLibName)]
         public static extern IntPtr TF_OperationDevice(IntPtr oper);

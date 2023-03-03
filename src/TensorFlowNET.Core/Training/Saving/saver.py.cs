@@ -94,18 +94,16 @@ namespace Tensorflow
 
             string output_pb = Path.GetFullPath(Path.Combine(checkpoint_dir, "../", $"{output_pb_name}.pb"));
 
-            using (var graph = tf.Graph())
-            using (var sess = tf.Session(graph))
-            {
-                var saver = tf.train.import_meta_graph($"{checkpoint}.meta", clear_devices: true);
-                saver.restore(sess, checkpoint);
-                var output_graph_def = tf.graph_util.convert_variables_to_constants(sess,
-                    graph.as_graph_def(),
-                    output_node_names);
-                Binding.tf_output_redirect.WriteLine($"Froze {output_graph_def.Node.Count} nodes.");
-                File.WriteAllBytes(output_pb, output_graph_def.ToByteArray());
-                return output_pb;
-            }
+            var graph = tf.Graph();
+            var sess = tf.Session(graph);
+            var saver = tf.train.import_meta_graph($"{checkpoint}.meta", clear_devices: true);
+            saver.restore(sess, checkpoint);
+            var output_graph_def = tf.graph_util.convert_variables_to_constants(sess,
+                graph.as_graph_def(),
+                output_node_names);
+            Binding.tf_output_redirect.WriteLine($"Froze {output_graph_def.Node.Count} nodes.");
+            File.WriteAllBytes(output_pb, output_graph_def.ToByteArray());
+            return output_pb;
         }
 
         public static Graph load_graph(string freeze_graph_pb, string name = "")

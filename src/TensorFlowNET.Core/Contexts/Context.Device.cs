@@ -37,7 +37,7 @@ namespace Tensorflow.Contexts
         public void log_device_placement(bool enable)
         {
             if (_handle != null)
-                c_api.TFE_ContextSetLogDevicePlacement(_handle, enable, tf.Status.Handle);
+                c_api.TFE_ContextSetLogDevicePlacement(_handle, enable, tf.Status);
             _log_device_placement = enable;
             // _thread_local_data.function_call_options = null;
         }
@@ -60,15 +60,15 @@ namespace Tensorflow.Contexts
         public PhysicalDevice[] list_physical_devices(string device_type = null)
         {
             using var opts = c_api.TFE_NewContextOptions();
-            using var ctx = c_api.TFE_NewContext(opts, tf.Status.Handle);
-            using var devices = c_api.TFE_ContextListDevices(ctx, tf.Status.Handle);
+            using var ctx = c_api.TFE_NewContext(opts, tf.Status);
+            using var devices = c_api.TFE_ContextListDevices(ctx, tf.Status);
             tf.Status.Check(true);
 
             int num_devices = c_api.TF_DeviceListCount(devices);
             var results = new List<PhysicalDevice>();
             for (int i = 0; i < num_devices; ++i)
             {
-                var dev_type = c_api.StringPiece(c_api.TF_DeviceListType(devices, i, tf.Status.Handle));
+                var dev_type = c_api.StringPiece(c_api.TF_DeviceListType(devices, i, tf.Status));
                 tf.Status.Check(true);
 
                 if (dev_type.StartsWith("XLA"))
@@ -76,7 +76,7 @@ namespace Tensorflow.Contexts
 
                 if (device_type == null || dev_type == device_type)
                 {
-                    var dev_name = c_api.TF_DeviceListName(devices, i, tf.Status.Handle);
+                    var dev_name = c_api.TF_DeviceListName(devices, i, tf.Status);
                     tf.Status.Check(true);
 
                     results.Add(new PhysicalDevice

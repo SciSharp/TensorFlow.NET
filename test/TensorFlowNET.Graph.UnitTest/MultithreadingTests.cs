@@ -24,7 +24,7 @@ namespace TensorFlowNET.UnitTest
             {
                 Assert.IsNull(tf.peak_default_graph());
 
-                using var sess = tf.Session();
+                var sess = tf.Session();
                 var default_graph = tf.get_default_graph();
                 var sess_graph = sess.graph;
                 Assert.IsNotNull(default_graph);
@@ -45,7 +45,7 @@ namespace TensorFlowNET.UnitTest
             {
                 Assert.IsNull(tf.peak_default_graph());
                 //tf.Session created an other graph
-                using var sess = tf.Session();
+                var sess = tf.Session();
                 var default_graph = tf.get_default_graph();
                 var sess_graph = sess.graph;
                 Assert.IsNotNull(default_graph);
@@ -69,7 +69,7 @@ namespace TensorFlowNET.UnitTest
                 beforehand.as_default();
                 Assert.IsNotNull(tf.peak_default_graph());
 
-                using var sess = tf.Session();
+                var sess = tf.Session();
                 var default_graph = tf.peak_default_graph();
                 var sess_graph = sess.graph;
                 Assert.IsNotNull(default_graph);
@@ -102,7 +102,7 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                using var sess = tf.Session();
+                var sess = tf.Session();
                 for (int i = 0; i < 100; i++)
                 {
                     var t = new Tensor(1);
@@ -119,7 +119,7 @@ namespace TensorFlowNET.UnitTest
             void Core(int tid)
             {
                 //tf.Session created an other graph
-                using var sess = tf.Session();
+                var sess = tf.Session();
                 for (int i = 0; i < 100; i++)
                 {
                     var t = new Tensor(new int[] { 1, 2, 3 });
@@ -142,7 +142,7 @@ namespace TensorFlowNET.UnitTest
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
                 var a2 = tf.constant(new[] { 3f }, shape: new[] { 1 });
                 var math = a1 + a2;
-                using var sess = tf.Session(graph);
+                var sess = tf.Session(graph);
                 for (int i = 0; i < 100; i++)
                 {
                     var result = sess.run(math);
@@ -162,7 +162,7 @@ namespace TensorFlowNET.UnitTest
                 tf.compat.v1.disable_eager_execution();
                 var graph = tf.Graph().as_default();
 
-                using var sess = tf.Session(graph);
+                var sess = tf.Session(graph);
                 Assert.IsNotNull(tf.get_default_graph());
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });
@@ -182,7 +182,7 @@ namespace TensorFlowNET.UnitTest
             //the core method
             void Core(int tid)
             {
-                using var sess = tf.Session();
+                var sess = tf.Session();
                 Assert.IsNotNull(tf.get_default_graph());
                 //graph is created automatically to perform create these operations
                 var a1 = tf.constant(new[] { 2f }, shape: new[] { 1 });

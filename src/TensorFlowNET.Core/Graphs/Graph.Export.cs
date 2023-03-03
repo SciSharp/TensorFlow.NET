@@ -24,7 +24,7 @@ namespace Tensorflow
         public Buffer ToGraphDef(Status s)
         {
             var buffer = new Buffer();
-            c_api.TF_GraphToGraphDef(_handle, buffer.Handle, s.Handle);
+            c_api.TF_GraphToGraphDef(_handle, buffer, s);
             s.Check(true);
 
             return buffer;
@@ -33,14 +33,12 @@ namespace Tensorflow
         private GraphDef _as_graph_def(bool add_shapes = false)
         {
             GraphDef def;
-            using (var status = new Status())
-            using (var buffer = ToGraphDef(status))
-            {
-                status.Check(true);
-                // limit size to 250M, recursion to max 100
-                var inputStream = CodedInputStream.CreateWithLimits(buffer.DangerousMemoryBlock, 250 * 1024 * 1024, 100);
-                def = GraphDef.Parser.ParseFrom(inputStream);
-            }
+            var status = new Status();
+            var buffer = ToGraphDef(status);
+            status.Check(true);
+            // limit size to 250M, recursion to max 100
+            var inputStream = CodedInputStream.CreateWithLimits(buffer.DangerousMemoryBlock, 250 * 1024 * 1024, 100);
+            def = GraphDef.Parser.ParseFrom(inputStream);
 
             // Strip the experimental library field iff it's empty.
             // if(def.Library.Function.Count == 0)
