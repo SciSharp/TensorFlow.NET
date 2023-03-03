@@ -61,6 +61,11 @@ public class FuncGraph : Graph, IDisposable
         string[] output_names)
     {
         var status = new Status();
+        if (output_names != null && output_names.Length == 0)
+        {
+            output_names = null;
+        };
+
         _func_graph_handle = c_api.TF_GraphToFunction(_handle,
             _graph_key,
             false,
