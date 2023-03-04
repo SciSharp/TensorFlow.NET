@@ -43,7 +43,7 @@ public class SequentialModelLoad
         {
             TrainDir = "mnist",
             OneHot = false,
-            ValidationSize = 50000,
+            ValidationSize = 58000,
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
