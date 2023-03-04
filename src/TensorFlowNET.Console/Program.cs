@@ -8,8 +8,6 @@ namespace Tensorflow
     {
         static void Main(string[] args)
         {
-            tf.UseKeras<KerasInterface>();
-
             var diag = new Diagnostician();
             // diag.Diagnose(@"D:\memory.txt");
 

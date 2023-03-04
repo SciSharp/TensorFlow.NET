@@ -150,7 +150,6 @@ namespace TensorFlowNET.Keras.UnitTest
         [TestMethod, Ignore("WIP")]
         public void SimpleRNN()
         {
-            tf.UseKeras<KerasInterface>();
             var inputs = np.arange(6 * 10 * 8).reshape((6, 10, 8)).astype(np.float32);
             /*var simple_rnn = keras.layers.SimpleRNN(4);
             var output = simple_rnn.Apply(inputs);

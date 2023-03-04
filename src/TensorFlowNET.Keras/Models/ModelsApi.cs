@@ -9,12 +9,12 @@ using ThirdParty.Tensorflow.Python.Keras.Protobuf;
 
 namespace Tensorflow.Keras.Models
 {
-    public class ModelsApi
+    public class ModelsApi: IModelsApi
     {
         public Functional from_config(ModelConfig config)
             => Functional.from_config(config);
 
-        public Model load_model(string filepath, bool compile = true, LoadOptions? options = null)
+        public IModel load_model(string filepath, bool compile = true, LoadOptions? options = null)
         {
             return KerasLoadModelUtils.load_model(filepath, compile: compile, options: options) as Model;
         }
