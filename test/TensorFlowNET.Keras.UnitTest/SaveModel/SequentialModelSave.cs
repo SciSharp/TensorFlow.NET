@@ -18,15 +18,15 @@ public class SequentialModelSave
     [TestMethod]
     public void SimpleModelFromAutoCompile()
     {
-        var inputs = tf.keras.layers.Input((28, 28, 1));
-        var x = tf.keras.layers.Flatten().Apply(inputs);
-        x = tf.keras.layers.Dense(100, activation: tf.nn.relu).Apply(x);
-        x = tf.keras.layers.Dense(units: 10).Apply(x);
-        var outputs = tf.keras.layers.Softmax(axis: 1).Apply(x);
-        var model = tf.keras.Model(inputs, outputs);
+        var inputs = keras.layers.Input((28, 28, 1));
+        var x = keras.layers.Flatten().Apply(inputs);
+        x = keras.layers.Dense(100, activation: tf.nn.relu).Apply(x);
+        x = keras.layers.Dense(units: 10).Apply(x);
+        var outputs = keras.layers.Softmax(axis: 1).Apply(x);
+        var model = keras.Model(inputs, outputs);
 
         model.compile(new Adam(0.001f), 
-            tf.keras.losses.SparseCategoricalCrossentropy(), 
+            keras.losses.SparseCategoricalCrossentropy(), 
             new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();
@@ -37,7 +37,7 @@ public class SequentialModelSave
         {
             TrainDir = "mnist",
             OneHot = false,
-            ValidationSize = 10000,
+            ValidationSize = 58000,
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
@@ -69,7 +69,7 @@ public class SequentialModelSave
         {
             TrainDir = "mnist",
             OneHot = false,
-            ValidationSize = 50000,
+            ValidationSize = 58000,
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
