@@ -51,7 +51,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //Sanity check without multithreading
             for (int i = 0; i < 2; i++)
             {
-                Functional clone = BuildModel();
+                var clone = BuildModel();
                 clone.load_weights(savefile);
 
                 //Predict something
@@ -71,7 +71,7 @@ namespace TensorFlowNET.Keras.UnitTest
             });
         }
 
-        Functional BuildModel()
+        IModel BuildModel()
         {
             tf.Context.reset_context();
             var inputs = keras.Input(shape: 2);
@@ -81,7 +81,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var outputs = DenseLayer.Apply(inputs);
 
             // build keras model
-            Functional model = keras.Model(inputs, outputs, name: Guid.NewGuid().ToString());
+            var model = tf.keras.Model(inputs, outputs, name: Guid.NewGuid().ToString());
             // show model summary
             model.summary();
 

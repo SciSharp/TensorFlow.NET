@@ -1,13 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Engine.DataAdapters;
+﻿using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Losses;
-using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Train;
-using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -25,7 +19,7 @@ namespace Tensorflow.Keras.Engine
 #pragma warning restore CS0414 // The field 'Model._is_compiled' is assigned but its value is never used
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
         ILossFunc loss;
-        OptimizerV2 optimizer;
+        IOptimizer optimizer;
         IVariableV1 _steps_per_execution;
         protected bool _is_graph_network;
         protected Tensors inputs;
@@ -39,7 +33,7 @@ namespace Tensorflow.Keras.Engine
 
         public bool IsGraphNetwork => _is_graph_network;
         
-        public OptimizerV2 Optimizer
+        public IOptimizer Optimizer
         {
             get => optimizer;
             set => optimizer = value;

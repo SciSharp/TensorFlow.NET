@@ -1,5 +1,4 @@
-﻿using System;
-using Tensorflow.Keras.ArgsDefinition;
+﻿using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Optimizers;
@@ -11,7 +10,7 @@ namespace Tensorflow.Keras.Engine
         LossesContainer compiled_loss;
         MetricsContainer compiled_metrics;
 
-        public void compile(OptimizerV2 optimizer = null, 
+        public void compile(IOptimizer optimizer = null, 
             ILossFunc loss = null, 
             string[] metrics = null)
         {
@@ -32,7 +31,7 @@ namespace Tensorflow.Keras.Engine
             _is_compiled = true;
         }
 
-        public void compile(OptimizerV2 optimizer = null,
+        public void compile(IOptimizer optimizer = null,
             ILossFunc loss = null,
             IMetricFunc[] metrics = null)
         {

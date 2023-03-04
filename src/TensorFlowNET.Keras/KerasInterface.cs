@@ -46,7 +46,7 @@ namespace Tensorflow.Keras
         /// <param name="input"></param>
         /// <param name="output"></param>
         /// <returns></returns>
-        public Functional Model(Tensors inputs, Tensors outputs, string name = null)
+        public IModel Model(Tensors inputs, Tensors outputs, string name = null)
             => new Functional(inputs, outputs, name: name);
 
         /// <summary>

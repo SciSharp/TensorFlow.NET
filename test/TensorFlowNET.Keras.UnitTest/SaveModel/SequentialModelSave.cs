@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tensorflow;
 using Tensorflow.Keras;
-using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.NumPy;
@@ -20,14 +18,16 @@ public class SequentialModelSave
     [TestMethod]
     public void SimpleModelFromAutoCompile()
     {
-        var inputs = new KerasInterface().Input((28, 28, 1));
-        var x = new Flatten(new FlattenArgs()).Apply(inputs);
-        x = new Dense(new DenseArgs() { Units = 100, Activation = tf.nn.relu }).Apply(x);
-        x = new LayersApi().Dense(units: 10).Apply(x);
-        var outputs = new LayersApi().Softmax(axis: 1).Apply(x);
-        var model = new KerasInterface().Model(inputs, outputs);
+        var inputs = tf.keras.layers.Input((28, 28, 1));
+        var x = tf.keras.layers.Flatten().Apply(inputs);
+        x = tf.keras.layers.Dense(100, activation: tf.nn.relu).Apply(x);
+        x = tf.keras.layers.Dense(units: 10).Apply(x);
+        var outputs = tf.keras.layers.Softmax(axis: 1).Apply(x);
+        var model = tf.keras.Model(inputs, outputs);
 
-        model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+        model.compile(new Adam(0.001f), 
+            tf.keras.losses.SparseCategoricalCrossentropy(), 
+            new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();
         var num_epochs = 1;

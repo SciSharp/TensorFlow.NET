@@ -16,7 +16,7 @@ namespace TensorFlowBenchmark.Unmanaged
         }
     }
 
-    [SimpleJob(launchCount: 1, warmupCount: 2, targetCount: 10)]
+    [SimpleJob(launchCount: 1, warmupCount: 2)]
     [MinColumn, MaxColumn, MeanColumn, MedianColumn]
     public unsafe class StructCastBenchmark
     {

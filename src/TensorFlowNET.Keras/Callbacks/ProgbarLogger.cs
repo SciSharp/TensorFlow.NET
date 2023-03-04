@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
+using Tensorflow.Keras.Engine;
 
 namespace Tensorflow.Keras.Callbacks
 {
@@ -12,6 +9,8 @@ namespace Tensorflow.Keras.Callbacks
         int seen = 0;
         CallbackParams _parameters;
         Stopwatch _sw;
+
+        public Dictionary<string, List<float>> history { get; set; }
 
         public ProgbarLogger(CallbackParams parameters)
         {

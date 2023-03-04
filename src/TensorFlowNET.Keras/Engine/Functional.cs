@@ -348,7 +348,7 @@ namespace Tensorflow.Keras.Engine
                     var layer_inputs = node.MapArguments(tensor_dict);
 
                     tf.Logger.Debug($"Depth {depth}: {node.Layer}: {node.Layer.Name}");
-                    var outputs = node.Layer.Apply(layer_inputs, is_training: training ?? false);
+                    var outputs = node.Layer.Apply(layer_inputs, training: training ?? false);
                     foreach (var output in outputs.Where(x => x != null))
                         tf.Logger.Information($"Depth {depth}: {node.Layer}: {node.Layer.Name} {output.shape}");
                     // Update tensor_dict for next or later input

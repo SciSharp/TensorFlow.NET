@@ -1,10 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
-using Tensorflow;
-using Tensorflow.Eager;
 
 namespace TensorFlowBenchmark
 {
-    [SimpleJob(launchCount: 1, warmupCount: 1, targetCount: 10)]
+    [SimpleJob(launchCount: 1, warmupCount: 1)]
     [MinColumn, MaxColumn, MeanColumn, MedianColumn]
     public class TensorBenchmark
     {

@@ -51,11 +51,11 @@ namespace Tensorflow.Keras.Engine
             return dict;
         }
 
-        void _minimize(GradientTape tape, OptimizerV2 optimizer, Tensor loss, List<IVariableV1> trainable_variables)
+        void _minimize(GradientTape tape, IOptimizer optimizer, Tensor loss, List<IVariableV1> trainable_variables)
         {
             var gradients = tape.gradient(loss, trainable_variables);
-            gradients = optimizer._aggregate_gradients(zip(gradients, trainable_variables));
-            gradients = optimizer._clip_gradients(gradients);
+            gradients = optimizer.aggregate_gradients(zip(gradients, trainable_variables));
+            gradients = optimizer.clip_gradients(gradients);
 
             optimizer.apply_gradients(zip(gradients, trainable_variables.Select(x => x as ResourceVariable)),
                 experimental_aggregate_gradients: false);

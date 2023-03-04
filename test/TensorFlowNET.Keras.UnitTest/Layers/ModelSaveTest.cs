@@ -22,7 +22,7 @@ namespace TensorFlowNET.Keras.UnitTest
             Assert.AreEqual(model.Layers.Count, new_model.Layers.Count);
         }
 
-        Functional GetFunctionalModel()
+        IModel GetFunctionalModel()
         {
             // Create a simple model.
             var inputs = keras.Input(shape: 32);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Engine;
+﻿using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Training;
 
@@ -15,7 +13,7 @@ namespace Tensorflow.Keras
         List<ILayer> Layers { get; }
         List<INode> InboundNodes { get; }
         List<INode> OutboundNodes { get; }
-        Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false);
+        Tensors Apply(Tensors inputs, Tensor state = null, bool training = false);
         List<IVariableV1> TrainableVariables { get; }
         List<IVariableV1> TrainableWeights { get; }
         List<IVariableV1> NonTrainableWeights { get; }

@@ -33,7 +33,7 @@ public partial class KerasSavedModelUtils
             }
         }
 
-        OptimizerV2? orig_optimizer = null;
+        IOptimizer? orig_optimizer = null;
         if (!include_optimizer)
         {
             orig_optimizer = model.Optimizer;

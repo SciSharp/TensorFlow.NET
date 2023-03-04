@@ -22,7 +22,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="verbose"></param>
         /// <param name="validation_split"></param>
         /// <param name="shuffle"></param>
-        public History fit(NDArray x, NDArray y,
+        public ICallback fit(NDArray x, NDArray y,
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,

@@ -11,17 +11,17 @@ namespace TensorFlowNET.Keras.UnitTest;
 [TestClass]
 public class GradientTest
 {
-    public Model get_actor(int num_states)
+    public IModel get_actor(int num_states)
     {
-        var inputs = keras.layers.Input(shape: num_states);
-        var outputs = keras.layers.Dense(1, activation: keras.activations.Tanh).Apply(inputs);
+        var inputs = tf.keras.layers.Input(shape: num_states);
+        var outputs = tf.keras.layers.Dense(1, activation: keras.activations.Tanh).Apply(inputs);
 
-        Model model = keras.Model(inputs, outputs);
+        var model = tf.keras.Model(inputs, outputs);
 
         return model;
     }
 
-    public Model get_critic(int num_states, int num_actions)
+    public IModel get_critic(int num_states, int num_actions)
     {
         // State as input
         var state_input = keras.layers.Input(shape: num_states);
@@ -33,7 +33,7 @@ public class GradientTest
 
         var outputs = keras.layers.Dense(1).Apply(concat);
 
-        Model model = keras.Model(new Tensors(state_input, action_input), outputs);
+        var model = tf.keras.Model(new Tensors(state_input, action_input), outputs);
         model.summary();
 
         return model;
