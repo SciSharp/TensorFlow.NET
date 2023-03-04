@@ -20,7 +20,7 @@ namespace TensorFlowNET.UnitTest.Dataset
                 Assert.AreEqual(iStep, step);
                 iStep++;
 
-                Assert.AreEqual(value, (long)item.Item1[0]);
+                Assert.AreEqual(value, (long)item.Item1);
                 value++;
             }
         }
@@ -39,7 +39,7 @@ namespace TensorFlowNET.UnitTest.Dataset
                 Assert.AreEqual(iStep, step);
                 iStep++;
 
-                Assert.AreEqual(value, (long)item.Item1[0]);
+                Assert.AreEqual(value, (long)item.Item1);
                 value += 2;
             }
         }
@@ -54,7 +54,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             int n = 0;
             foreach (var (item_x, item_y) in dataset)
             {
-                print($"x:{item_x[0].numpy()},y:{item_y[0].numpy()}");
+                print($"x:{item_x.numpy()},y:{item_y.numpy()}");
                 n += 1;
             }
             Assert.AreEqual(5, n);
@@ -69,7 +69,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             int n = 0;
             foreach (var x in dataset)
             {
-                Assert.IsTrue(X.SequenceEqual(x.Item1[0].ToArray<int>()));
+                Assert.IsTrue(X.SequenceEqual(x.Item1.ToArray<int>()));
                 n += 1;
             }
             Assert.AreEqual(1, n);
@@ -85,7 +85,7 @@ namespace TensorFlowNET.UnitTest.Dataset
 
             foreach (var item in dataset2)
             {
-                Assert.AreEqual(value, (long)item.Item1[0]);
+                Assert.AreEqual(value, (long)item.Item1);
                 value += 3;
             }
 
@@ -93,7 +93,7 @@ namespace TensorFlowNET.UnitTest.Dataset
             var dataset3 = dataset1.shard(num_shards: 3, index: 1);
             foreach (var item in dataset3)
             {
-                Assert.AreEqual(value, (long)item.Item1[0]);
+                Assert.AreEqual(value, (long)item.Item1);
                 value += 3;
             }
         }
@@ -108,7 +108,7 @@ namespace TensorFlowNET.UnitTest.Dataset
 
             foreach (var item in dataset)
             {
-                Assert.AreEqual(value, (long)item.Item1[0]);
+                Assert.AreEqual(value, (long)item.Item1);
                 value++;
             }
         }
@@ -123,7 +123,7 @@ namespace TensorFlowNET.UnitTest.Dataset
 
             foreach (var item in dataset)
             {
-                Assert.AreEqual(value + 10, (long)item.Item1[0]);
+                Assert.AreEqual(value + 10, (long)item.Item1);
                 value++;
             }
         }
@@ -138,7 +138,7 @@ namespace TensorFlowNET.UnitTest.Dataset
 
             foreach (var item in dataset)
             {
-                Assert.AreEqual(value, (long)item.Item1[0]);
+                Assert.AreEqual(value, (long)item.Item1);
                 value++;
             }
         }
