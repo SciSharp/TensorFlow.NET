@@ -9,6 +9,7 @@ namespace Tensorflow.Keras.Layers
     {
         public ILayer ELU(float alpha = 0.1f);
         public ILayer SELU();
+        public ILayer Softmax(int axis = -1);
         public ILayer Softmax(Axis axis);
         public ILayer Softplus();
         public ILayer HardSigmoid();

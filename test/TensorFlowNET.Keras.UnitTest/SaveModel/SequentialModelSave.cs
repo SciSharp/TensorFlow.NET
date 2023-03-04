@@ -54,7 +54,7 @@ public class SequentialModelSave
             keras.layers.Flatten(),
             keras.layers.Dense(100, "relu"),
             keras.layers.Dense(10),
-            keras.layers.Softmax(1)
+            keras.layers.Softmax()
         });
 
         model.summary();

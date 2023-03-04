@@ -11,6 +11,7 @@ namespace Tensorflow.Keras.Layers {
                   => new ELU(new ELUArgs { Alpha = alpha });
             public ILayer SELU ()
                   => new SELU(new LayerArgs { });
+            public ILayer Softmax(int axis = -1) => new Softmax(new SoftmaxArgs { axis = axis });
             public ILayer Softmax ( Axis axis ) => new Softmax(new SoftmaxArgs { axis = axis });
             public ILayer Softplus () => new Softplus(new LayerArgs { });
             public ILayer HardSigmoid () => new HardSigmoid(new LayerArgs { });
