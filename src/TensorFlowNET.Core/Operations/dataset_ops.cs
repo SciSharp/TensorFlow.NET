@@ -1,6 +1,9 @@
 ﻿using System;
+using Tensorflow.Contexts;
+using Tensorflow.Eager;
 using Tensorflow.Framework.Models;
 using Tensorflow.Functions;
+using Tensorflow.Operations;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -218,6 +221,37 @@ namespace Tensorflow
             var results = tf.Context.ExecuteOp("AnonymousIteratorV2", name, 
                 new ExecuteOpArgs().SetAttributes(new { output_types, output_shapes }));
             return (results[0], results[1]);
+        }
+
+        public Tensor anonymous_iterator_v3(TF_DataType[] output_types, Shape[] output_shapes, string name = null)
+        {
+            var ctx = tf.Context;
+            Dictionary<string, object> attrs = new();
+            attrs["output_types"] = output_types;
+            attrs["output_shapes"] = output_shapes;
+            if (ctx.executing_eagerly())
+            {
+                try
+                {
+                    var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("AnonymousIteratorV3", name)
+                    {
+                        attrs = attrs
+                    });
+                    return result[0];
+                }
+                catch (Exception)
+                {
+                    return anonymous_iterator_v3_eager_fallback(output_types, output_shapes, name, ctx);
+                }
+            }
+            return tf.OpDefLib._apply_op_helper("AnonymousIteratorV3", name, attrs).outputs[0];
+        }
+
+        public Tensor anonymous_iterator_v3_eager_fallback(TF_DataType[] output_types, Shape[] output_shapes, string name, Context ctx)
+        {
+            object[] attrs = new object[] { output_types, output_shapes };
+            var result = execute.quick_execute("AnonymousIteratorV3", 1, new Tensor[] { }, attrs, ctx, name);
+            return result[0];
         }
 
         /// <summary>

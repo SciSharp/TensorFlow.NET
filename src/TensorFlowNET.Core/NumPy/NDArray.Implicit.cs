@@ -14,7 +14,76 @@ namespace Tensorflow.NumPy
             red = data[2];
         }
 
-        public static implicit operator NDArray(Array array)
+        public static implicit operator NDArray(int[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(byte[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(float[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(double[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(long[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(bool[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(uint[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(ulong[] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(int[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(byte[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(float[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(double[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(long[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(bool[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(uint[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(ulong[,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(int[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(byte[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(float[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(double[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(long[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(bool[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(uint[,,] array)
+            => new NDArray(array);
+
+        public static implicit operator NDArray(ulong[,,] array)
             => new NDArray(array);
 
         public unsafe static implicit operator bool(NDArray nd)

@@ -24,6 +24,17 @@ public interface IModel : ILayer
             int workers = 1,
             bool use_multiprocessing = false);
 
+    ICallback fit(IEnumerable<NDArray> x, NDArray y,
+            int batch_size = -1,
+            int epochs = 1,
+            int verbose = 1,
+            float validation_split = 0f,
+            bool shuffle = true,
+            int initial_epoch = 0,
+            int max_queue_size = 10,
+            int workers = 1,
+            bool use_multiprocessing = false);
+
     void save(string filepath,
             bool overwrite = true,
             bool include_optimizer = true,

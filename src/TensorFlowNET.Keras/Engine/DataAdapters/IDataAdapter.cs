@@ -13,10 +13,10 @@
         /// <param name="x">input features</param>
         /// <param name="y">target labels</param>
         /// <returns></returns>
-        bool CanHandle(Tensor x, Tensor y = null);
+        bool CanHandle(Tensors x, Tensors y = null);
         IDatasetV2 GetDataset();
         int GetSize();
-        (Tensor, Tensor) Expand1d(Tensor x, Tensor y);
+        (Tensors, Tensors) Expand1d(Tensors x, Tensors y);
         bool ShouldRecreateIterator();
     }
 }

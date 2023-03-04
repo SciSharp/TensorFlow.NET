@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
@@ -20,7 +21,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         {
             this.args = args;
             _process_tensorlike();
-            num_samples = (int)args.X.shape[0];
+            num_samples = (int)args.X[0].shape[0];
             var batch_size = args.BatchSize == -1 ? 32 : args.BatchSize;
             _batch_size = batch_size;
             _size = Convert.ToInt32(Math.Ceiling(num_samples / (batch_size + 0.0f)));
@@ -33,10 +34,11 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             indices_dataset = indices_dataset.flat_map(slice_batch_indices);
             var inputs = new Tensors();
             if (args.X != null)
-                inputs.Add(args.X);
+                inputs.AddRange(args.X);
             if (args.Y != null)
-                inputs.Add(args.Y);
+                inputs.AddRange(args.Y);
             dataset = slice_inputs(indices_dataset, inputs);
+            dataset.FirstInputTensorCount = args.X.Length;
         }
 
         Tensors permutation(Tensors tensor)
@@ -87,8 +89,9 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             return dataset.with_options(new DatasetOptions { });
         }
 
-        public override int GetSize()
-            => _size;
+        public override int GetSize() => _size;
+
+        public override bool ShouldRecreateIterator() => false;
 
         void _process_tensorlike()
         {
