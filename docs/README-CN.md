@@ -24,7 +24,7 @@ Tensorflow.NET并非对于Python的简单封装，而是基于C API的pure C#实
 
 `SciSharp STACK`开源社区的目标是构建.NET平台下易用的科学计算库，而Tensorflow.NET就是其中最具代表性的仓库之一。在深度学习领域Python是主流，无论是初学者还是资深开发者，模型的搭建和训练都常常使用Python写就的AI框架，比如tensorflow。但在实际应用深度学习模型的时候，又可能希望用到.NET生态，亦或只是因为.NET是自己最熟悉的领域，这时候Tensorflow.NET就有显著的优点，因为它不仅可以和.NET生态很好地贴合，其API还使得开发者很容易将Python代码迁移过来。下面的对比就是很好的例子，Python代码和C#代码有着高度相似的API，这会使得迁移的时候无需做过多修改。
 
-![pythn vs csharp](assets/syntax-comparision.png)
+![python vs csharp](assets/syntax-comparision.png)
 
 除了高度相似的API外，Tensorflow.NET与tensorflow也已经打通数据通道，tensorflow训练并保存的模型可以在Tensorflow.NET中直接读取并继续训练或推理，反之Tensorflow.NET保存的模型也可以在tensorflow中读取，这大大方便了模型的训练和部署。
 
@@ -50,6 +50,7 @@ Tensorflow.NET并非对于Python的简单封装，而是基于C API的pure C#实
 ```sh
 ### 安装Tensorflow.NET
 PM> Install-Package TensorFlow.NET
+
 ### 安装Tensorflow.Keras
 PM> Install-Package TensorFlow.Keras
 ```
@@ -57,13 +58,13 @@ PM> Install-Package TensorFlow.Keras
 第二部分是计算支持部分，只需要根据自己的设备和系统选择下面之一即可：
 
 ```
-### CPU版本
+### CPU版本，支持Windows、Linux和Mac
 PM> Install-Package SciSharp.TensorFlow.Redist
 
-### Windows下的GPU版本（需要安装CUDA和CUDNN）
+### Windows下的GPU版本（需要安装CUDA和cuDNN）
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 
-### Linux下的GPU版本（需要安装CUDA和CUDNN）
+### Linux下的GPU版本（需要安装CUDA和cuDNN）
 PM> Install-Package SciSharp.TensorFlow.Redist-Linux-GPU
 ```
 
@@ -173,14 +174,24 @@ model.save("./toy_resnet_model");
 
 ## Tensorflow.NET版本对应关系
 
-| TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.10, cuda 11 |
-| -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ |
-| tf.net 0.7+, tf.keras 0.7+ |  |  |  |  | x |
-| tf.net 0.4x, tf.keras 0.5 |  |  |  | x |  |
-| tf.net 0.3x, tf.keras 0.4 |               |                | x |  |  |
-| tf.net 0.2x          |               | x | x |              |  |
-| tf.net 0.15          | x | x |               |               |  |
-| tf.net 0.14          | x |                |               |               |  |
+| TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.7, cuda 11 |tensorflow 2.10, cuda 11 |
+| -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ | ------------ |
+| tf.net 0.10x, tf.keras 0.10 |  |  |  |  |  | x |
+| tf.net 0.7x, tf.keras 0.7   |  |  |  |  | x |  |
+| tf.net 0.4x, tf.keras 0.5   |  |  |  | x |  |  |
+| tf.net 0.3x, tf.keras 0.4   |  |  | x |  |  |  |
+| tf.net 0.2x                 |  | x | x |  |  |  |
+| tf.net 0.15                 | x | x |  |  |  |  |
+| tf.net 0.14                 | x |  |  |  |  |  |
+
+
+```
+tf.net 0.4x -> tf native 2.4 
+tf.net 0.6x -> tf native 2.6      
+tf.net 0.7x -> tf native 2.7
+tf.net 0.10x -> tf native 2.10
+...
+```
 
 如果使用过程中发现有缺失的版本，请告知我们，谢谢！
 

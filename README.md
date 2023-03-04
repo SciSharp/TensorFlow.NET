@@ -9,7 +9,7 @@
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
-English | [中文](docs/Readme-CN.md)
+English | [中文](docs/README-CN.md)
 
 *master branch is corresponding to tensorflow v2.10, v0.6x branch is from tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15.*
 
@@ -20,13 +20,13 @@ English | [中文](docs/Readme-CN.md)
 
 `SciSharp STACK`'s mission is to bring popular data science technology into the .NET world and to provide .NET developers with a powerful Machine Learning tool set without reinventing the wheel. Since the APIs are kept as similar as possible you can immediately adapt any existing TensorFlow code in C# or F# with a zero learning curve. Take a look at a comparison picture and see how comfortably a TensorFlow/Python script translates into a C# program with TensorFlow.NET.
 
-![pythn vs csharp](docs/assets/syntax-comparision.png)
+![python vs csharp](docs/assets/syntax-comparision.png)
 
 SciSharp's philosophy allows a large number of machine learning code written in Python to be quickly migrated to .NET, enabling .NET developers to use cutting edge machine learning models and access a vast number of TensorFlow resources which would not be possible without this project.
 
 In comparison to other projects, like for instance [TensorFlowSharp](https://www.nuget.org/packages/TensorFlowSharp/) which only provide TensorFlow's low-level C++ API and can only run models that were built using Python, Tensorflow.NET makes it possible to build the pipeline of training and inference with pure C# and F#. Besides, Tensorflow.NET provides binding of Tensorflow.Keras to make it easy to transfer your code from python to .NET.
 
-[ML.NET](https://github.com/dotnet/machinelearning) also support using tensorflow as backend to train and infer your model, which provides better integration with .NET.
+[ML.NET](https://github.com/dotnet/machinelearning) also take Tensorflow.NET as one of the backends to train and infer your model, which provides better integration with .NET.
 
 ## Documention
 
@@ -42,7 +42,7 @@ Troubleshooting of running example or installation：[Tensorflow.NET FAQ](tensor
 
 ### Installation
 
-You can search the package name in NuGet Manager, or use the commands below in pckage manager console.
+You can search the package name in NuGet Manager, or use the commands below in package manager console.
 
 The installation contains two parts, the first is the main body:
 
@@ -57,13 +57,13 @@ PM> Install-Package TensorFlow.Keras
 The second part is the computing support part. Only one of the following packages is needed, depending on your device and system.
 
 ```
-### Cpu version for Windows, Linux and Mac
+### CPU version for Windows, Linux and Mac
 PM> Install-Package SciSharp.TensorFlow.Redist
 
-### Gpu version for Windows (CUDA and CUDNN are required)
+### GPU version for Windows (CUDA and cuDNN are required)
 PM> Install-Package SciSharp.TensorFlow.Redist-Windows-GPU
 
-### Gpu version for Linux (CUDA and CUDNN are required)
+### GPU version for Linux (CUDA and cuDNN are required)
 PM> Install-Package SciSharp.TensorFlow.Redist-Linux-GPU
 ```
 
