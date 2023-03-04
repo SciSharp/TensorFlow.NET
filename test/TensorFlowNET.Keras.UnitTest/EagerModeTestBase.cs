@@ -10,8 +10,6 @@ namespace TensorFlowNET.Keras.UnitTest
         [TestInitialize]
         public void TestInit()
         {
-            tf.UseKeras<KerasInterface>();
-
             if (!tf.executing_eagerly())
                 tf.enable_eager_execution();
             tf.Context.ensure_initialized();
