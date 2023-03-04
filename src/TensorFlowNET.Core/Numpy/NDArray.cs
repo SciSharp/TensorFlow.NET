@@ -49,5 +49,8 @@ namespace Tensorflow.NumPy
 
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
+
+        public static explicit operator NDArray(Array array)
+            => new NDArray(array);
     }
 }

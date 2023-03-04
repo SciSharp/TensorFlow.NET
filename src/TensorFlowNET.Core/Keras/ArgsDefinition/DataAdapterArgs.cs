@@ -5,8 +5,8 @@ namespace Tensorflow.Keras.ArgsDefinition
 {
     public class DataAdapterArgs: IKerasConfig
     {
-        public Tensor X { get; set; }
-        public Tensor Y { get; set; }
+        public Tensors X { get; set; }
+        public Tensors Y { get; set; }
         public IDatasetV2 Dataset { get; set; }
         public int BatchSize { get; set; } = 32;
         public int Steps { get; set; }

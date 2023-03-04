@@ -19,6 +19,8 @@ namespace Tensorflow
 
         public TensorSpec[] structure { get; set; }
 
+        public int FirstInputTensorCount { get; set; } = 1;
+
         public Shape[] output_shapes => structure.Select(x => x.shape).ToArray();
 
         public TF_DataType[] output_types => structure.Select(x => x.dtype).ToArray();
@@ -131,6 +133,7 @@ namespace Tensorflow
 
             // (4) Apply stats aggregator options
 
+            dataset.FirstInputTensorCount = this.FirstInputTensorCount;
             return dataset;
         }
 
@@ -142,7 +145,7 @@ namespace Tensorflow
             $"types: {string.Join(", ", structure.Select(x => "tf." + x.dtype.as_numpy_name()))}, " +
             $"len: {length}";
 
-        public IEnumerator<(Tensor, Tensor)> GetEnumerator()
+        public IEnumerator<(Tensors, Tensors)> GetEnumerator()
         {
             using var ownedIterator = new OwnedIterator(this);
 
@@ -158,7 +161,8 @@ namespace Tensorflow
                     break;
                 }
 
-                yield return (results[0], results.Length == 1 ? null : results[1]);
+                yield return (new Tensors(results.Take(FirstInputTensorCount)), results.Length == FirstInputTensorCount ? 
+                    null : new Tensors(results.Skip(FirstInputTensorCount)));
             }
         }
 

@@ -25,7 +25,7 @@ public class NpzDictionary
             return array;
 
         using var s = entry.Open();
-        return LoadMatrix(s);
+        return (NDArray)LoadMatrix(s);
     }
 
     public Array LoadMatrix(Stream stream)
