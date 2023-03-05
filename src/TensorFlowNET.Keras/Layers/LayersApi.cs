@@ -109,7 +109,7 @@ namespace Tensorflow.Keras.Layers
                 DilationRate = dilation_rate,
                 Groups = groups,
                 UseBias = use_bias,
-                Activation = Activations.GetActivationByName(activation),
+                Activation = keras.activations.GetActivationFromName(activation),
                 KernelInitializer = GetInitializerByName(kernel_initializer),
                 BiasInitializer = GetInitializerByName(bias_initializer)
             });
@@ -211,8 +211,7 @@ namespace Tensorflow.Keras.Layers
                     UseBias = use_bias,
                     KernelInitializer = GetInitializerByName(kernel_initializer),
                     BiasInitializer = GetInitializerByName(bias_initializer),
-                    Activation = Activations.GetActivationByName(activation),
-                    ActivationName = activation
+                    Activation = keras.activations.GetActivationFromName(activation)
                 });
 
         /// <summary>
@@ -257,7 +256,7 @@ namespace Tensorflow.Keras.Layers
                     UseBias = use_bias,
                     KernelInitializer = GetInitializerByName(kernel_initializer),
                     BiasInitializer = GetInitializerByName(bias_initializer),
-                    Activation = Activations.GetActivationByName(activation)
+                    Activation = keras.activations.GetActivationFromName(activation)
                 });
 
         /// <summary>
@@ -302,8 +301,7 @@ namespace Tensorflow.Keras.Layers
             => new Dense(new DenseArgs
             {
                 Units = units,
-                Activation = Activations.GetActivationByName("linear"),
-                ActivationName = "linear"
+                Activation = keras.activations.GetActivationFromName("linear")
             });
 
         /// <summary>
@@ -323,8 +321,7 @@ namespace Tensorflow.Keras.Layers
             => new Dense(new DenseArgs
             {
                 Units = units,
-                Activation = Activations.GetActivationByName(activation),
-                ActivationName = activation,
+                Activation = keras.activations.GetActivationFromName(activation),
                 InputShape = input_shape
             });
 
@@ -704,7 +701,7 @@ namespace Tensorflow.Keras.Layers
                 => new SimpleRNN(new SimpleRNNArgs
                 {
                     Units = units,
-                    Activation = Activations.GetActivationByName(activation),
+                    Activation = keras.activations.GetActivationFromName(activation),
                     KernelInitializer = GetInitializerByName(kernel_initializer),
                     RecurrentInitializer = GetInitializerByName(recurrent_initializer),
                     BiasInitializer = GetInitializerByName(bias_initializer),
@@ -852,7 +849,6 @@ namespace Tensorflow.Keras.Layers
         public ILayer GlobalMaxPooling2D(string data_format = "channels_last")
             => new GlobalMaxPooling2D(new Pooling2DArgs { DataFormat = data_format });
 
-        Activation GetActivationByName(string name) => Activations.GetActivationByName(name);
         /// <summary>
         /// Get an weights initializer from its name.
         /// </summary>

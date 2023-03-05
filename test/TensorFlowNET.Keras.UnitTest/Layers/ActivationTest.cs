@@ -102,7 +102,7 @@ namespace TensorFlowNET.Keras.UnitTest {
         public void Mish()
         {
             var x = tf.constant(new[] { 1.0, 0.0, 1.0 }, dtype: tf.float32);
-            var output = keras.activations.Mish(x);
+            var output = keras.activations.Mish.Apply(x);
             Assert.AreEqual(new[] { 0.86509836f, 0f, 0.86509836f }, output.numpy());
         }
     }

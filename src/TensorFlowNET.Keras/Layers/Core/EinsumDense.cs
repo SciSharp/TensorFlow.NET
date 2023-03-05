@@ -193,7 +193,7 @@ namespace Tensorflow.Keras.Layers
             if (this.bias != null)
                 ret += this.bias.AsTensor();
             if (this.activation != null)
-                ret = this.activation(ret);
+                ret = this.activation.Apply(ret);
             return ret;
         }
         /// <summary>

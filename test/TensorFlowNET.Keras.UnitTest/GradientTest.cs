@@ -5,6 +5,8 @@ using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 using Tensorflow.NumPy;
+using System;
+using Tensorflow.Keras.Optimizers;
 
 namespace TensorFlowNET.Keras.UnitTest;
 
@@ -40,7 +42,7 @@ public class GradientTest : EagerModeTestBase
     }
 
     [TestMethod]
-    public void GetGradient_Test()
+    public void GetGradientTest()
     {
         var numStates = 3;
         var numActions = 1;

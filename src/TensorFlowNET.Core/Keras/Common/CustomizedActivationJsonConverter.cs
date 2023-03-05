@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Common
 {
@@ -31,20 +32,19 @@ namespace Tensorflow.Keras.Common
             }
             else
             {
-                var token = JToken.FromObject((value as Activation)!.GetType().Name);
+                var token = JToken.FromObject(((Activation)value).Name);
                 token.WriteTo(writer);
             }
         }
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
-            //var dims = serializer.Deserialize(reader, typeof(string));
-            //if (dims is null)
-            //{
-            //    throw new ValueError("Cannot deserialize 'null' to `Activation`.");
-            //}
-            //return new Shape((long[])(dims!));
+            var activationName = serializer.Deserialize<string>(reader);
+            if (tf.keras is null)
+            {
+                throw new RuntimeError("Tensorflow.Keras is not loaded, please install it first.");
+            }
+            return tf.keras.activations.GetActivationFromName(string.IsNullOrEmpty(activationName) ? "linear" : activationName);
         }
     }
 }

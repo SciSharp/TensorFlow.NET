@@ -117,7 +117,7 @@ namespace Tensorflow.Keras.Layers
             }
 
             if (activation != null)
-                outputs = activation(outputs);
+                outputs = activation.Apply(outputs);
 
             return outputs;
         }
