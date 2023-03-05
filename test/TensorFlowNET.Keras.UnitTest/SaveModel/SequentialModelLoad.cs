@@ -1,20 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Saving.SavedModel;
-using Tensorflow.Keras.Losses;
-using Tensorflow.Keras.Metrics;
 using Tensorflow;
 using Tensorflow.Keras.Optimizers;
-using static Tensorflow.KerasApi;
-using Tensorflow.NumPy;
 using Tensorflow.Keras.UnitTest.Helpers;
-using static TensorFlowNET.Keras.UnitTest.SaveModel.SequentialModelSave;
+using Tensorflow.NumPy;
+using static Tensorflow.Binding;
 
 namespace TensorFlowNET.Keras.UnitTest.SaveModel;
 
@@ -24,10 +14,10 @@ public class SequentialModelLoad
     [TestMethod]
     public void SimpleModelFromAutoCompile()
     {
-        var model = keras.models.load_model(@"Assets/simple_model_from_auto_compile");
+        var model = tf.keras.models.load_model(@"Assets/simple_model_from_auto_compile");
         model.summary();
 
-        model.compile(new Adam(0.0001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+        model.compile(new Adam(0.0001f), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
         // check the weights
         var kernel1 = np.load(@"Assets/simple_model_from_auto_compile/kernel1.npy");
@@ -54,10 +44,10 @@ public class SequentialModelLoad
     public void AlexnetFromSequential()
     {
         new SequentialModelSave().AlexnetFromSequential();
-        var model = keras.models.load_model(@"./alexnet_from_sequential");
+        var model = tf.keras.models.load_model(@"./alexnet_from_sequential");
         model.summary();
 
-        model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
+        model.compile(new Adam(0.001f), tf.keras.losses.SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
 
         var num_epochs = 1;
         var batch_size = 8;

@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Tensorflow;
 using Tensorflow.Keras;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using static Tensorflow.Binding;
@@ -18,15 +16,15 @@ public class SequentialModelSave
     [TestMethod]
     public void SimpleModelFromAutoCompile()
     {
-        var inputs = keras.layers.Input((28, 28, 1));
-        var x = keras.layers.Flatten().Apply(inputs);
-        x = keras.layers.Dense(100, activation: tf.nn.relu).Apply(x);
-        x = keras.layers.Dense(units: 10).Apply(x);
-        var outputs = keras.layers.Softmax(axis: 1).Apply(x);
-        var model = keras.Model(inputs, outputs);
+        var inputs = tf.keras.layers.Input((28, 28, 1));
+        var x = tf.keras.layers.Flatten().Apply(inputs);
+        x = tf.keras.layers.Dense(100, activation: tf.nn.relu).Apply(x);
+        x = tf.keras.layers.Dense(units: 10).Apply(x);
+        var outputs = tf.keras.layers.Softmax(axis: 1).Apply(x);
+        var model = tf.keras.Model(inputs, outputs);
 
-        model.compile(new Adam(0.001f), 
-            keras.losses.SparseCategoricalCrossentropy(), 
+        model.compile(new Adam(0.001f),
+            tf.keras.losses.SparseCategoricalCrossentropy(),
             new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();
@@ -48,18 +46,18 @@ public class SequentialModelSave
     [TestMethod]
     public void SimpleModelFromSequential()
     {
-        Model model = KerasApi.keras.Sequential(new List<ILayer>()
+        Model model = keras.Sequential(new List<ILayer>()
         {
-            keras.layers.InputLayer((28, 28, 1)),
-            keras.layers.Flatten(),
-            keras.layers.Dense(100, "relu"),
-            keras.layers.Dense(10),
-            keras.layers.Softmax()
+            tf.keras.layers.InputLayer((28, 28, 1)),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(100, "relu"),
+            tf.keras.layers.Dense(10),
+            tf.keras.layers.Softmax()
         });
 
         model.summary();
 
-        model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+        model.compile(new Adam(0.001f), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
         var data_loader = new MnistModelLoader();
         var num_epochs = 1;
@@ -80,39 +78,39 @@ public class SequentialModelSave
     [TestMethod]
     public void AlexnetFromSequential()
     {
-        Model model = KerasApi.keras.Sequential(new List<ILayer>()
+        Model model = keras.Sequential(new List<ILayer>()
         {
-            keras.layers.InputLayer((227, 227, 3)),
-            keras.layers.Conv2D(96, (11, 11), (4, 4), activation:"relu", padding:"valid"),
-            keras.layers.BatchNormalization(),
-            keras.layers.MaxPooling2D((3, 3), strides:(2, 2)),
+            tf.keras.layers.InputLayer((227, 227, 3)),
+            tf.keras.layers.Conv2D(96, (11, 11), (4, 4), activation:"relu", padding:"valid"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.MaxPooling2D((3, 3), strides:(2, 2)),
 
-            keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: "relu"),
-            keras.layers.BatchNormalization(),
-            keras.layers.MaxPooling2D((3, 3), (2, 2)),
+            tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: "relu"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.MaxPooling2D((3, 3), (2, 2)),
 
-            keras.layers.Conv2D(384, (3, 3), (1, 1), "same", activation: "relu"),
-            keras.layers.BatchNormalization(),
+            tf.keras.layers.Conv2D(384, (3, 3), (1, 1), "same", activation: "relu"),
+            tf.keras.layers.BatchNormalization(),
 
-            keras.layers.Conv2D(384, (3, 3), (1, 1), "same", activation: "relu"),
-            keras.layers.BatchNormalization(),
+            tf.keras.layers.Conv2D(384, (3, 3), (1, 1), "same", activation: "relu"),
+            tf.keras.layers.BatchNormalization(),
 
-            keras.layers.Conv2D(256, (3, 3), (1, 1), "same", activation: "relu"),
-            keras.layers.BatchNormalization(),
-            keras.layers.MaxPooling2D((3, 3), (2, 2)),
+            tf.keras.layers.Conv2D(256, (3, 3), (1, 1), "same", activation: "relu"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.MaxPooling2D((3, 3), (2, 2)),
 
-            keras.layers.Flatten(),
-            keras.layers.Dense(4096, activation: "relu"),
-            keras.layers.Dropout(0.5f),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(4096, activation: "relu"),
+            tf.keras.layers.Dropout(0.5f),
 
-            keras.layers.Dense(4096, activation: "relu"),
-            keras.layers.Dropout(0.5f),
+            tf.keras.layers.Dense(4096, activation: "relu"),
+            tf.keras.layers.Dropout(0.5f),
 
-            keras.layers.Dense(1000, activation: "linear"),
-            keras.layers.Softmax(1)
+            tf.keras.layers.Dense(1000, activation: "linear"),
+            tf.keras.layers.Softmax(1)
         });
 
-        model.compile(new Adam(0.001f), new LossesApi().SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
+        model.compile(new Adam(0.001f), tf.keras.losses.SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
 
         var num_epochs = 1;
         var batch_size = 8;
