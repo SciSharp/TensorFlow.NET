@@ -18,7 +18,7 @@ public class SequentialModelSave
     {
         var inputs = tf.keras.layers.Input((28, 28, 1));
         var x = tf.keras.layers.Flatten().Apply(inputs);
-        x = tf.keras.layers.Dense(100, activation: tf.nn.relu).Apply(x);
+        x = tf.keras.layers.Dense(100, activation: "relu").Apply(x);
         x = tf.keras.layers.Dense(units: 10).Apply(x);
         var outputs = tf.keras.layers.Softmax(axis: 1).Apply(x);
         var model = tf.keras.Model(inputs, outputs);
@@ -110,7 +110,7 @@ public class SequentialModelSave
             tf.keras.layers.Softmax(1)
         });
 
-        model.compile(new Adam(0.001f), tf.keras.losses.SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
+        model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
 
         var num_epochs = 1;
         var batch_size = 8;

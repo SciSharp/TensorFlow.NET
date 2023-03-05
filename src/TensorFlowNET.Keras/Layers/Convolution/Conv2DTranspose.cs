@@ -110,7 +110,7 @@ namespace Tensorflow.Keras.Layers
                 throw new NotImplementedException("");
 
             if (activation != null)
-                return activation(outputs);
+                return activation.Apply(outputs);
 
             return outputs;
         }

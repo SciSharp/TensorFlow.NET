@@ -45,7 +45,7 @@ namespace Tensorflow.Keras
         public Regularizers regularizers { get; } = new Regularizers();
         public ILayersApi layers { get; } = new LayersApi();
         public ILossesApi losses { get; } = new LossesApi();
-        public Activations activations { get; } = new Activations();
+        public IActivationsApi activations { get; } = new Activations();
         public Preprocessing preprocessing { get; } = new Preprocessing();
         ThreadLocal<BackendImpl> _backend = new ThreadLocal<BackendImpl>(() => new BackendImpl());
         public BackendImpl backend => _backend.Value;

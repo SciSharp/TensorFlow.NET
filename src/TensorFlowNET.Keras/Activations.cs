@@ -6,45 +6,61 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras
 {
-    public class Activations
+    public class Activations: IActivationsApi
     {
         private static Dictionary<string, Activation> _nameActivationMap;
-        private static Dictionary<Activation, string> _activationNameMap;
 
-        private static Activation _linear = (features, name) => features;
-        private static Activation _relu = (features, name)
-            => tf.Context.ExecuteOp("Relu", name, new ExecuteOpArgs(features));
-        private static Activation _sigmoid = (features, name)
-            => tf.Context.ExecuteOp("Sigmoid", name, new ExecuteOpArgs(features));
-        private static Activation _softmax = (features, name)
-                => tf.Context.ExecuteOp("Softmax", name, new ExecuteOpArgs(features));
-        private static Activation _tanh = (features, name)
-            => tf.Context.ExecuteOp("Tanh", name, new ExecuteOpArgs(features));
-        private static Activation _mish = (features, name)
-            => features * tf.math.tanh(tf.math.softplus(features));
+        private static Activation _linear = new Activation()
+        {
+            Name = "linear",
+            ActivationFunction = (features, name) => features
+        };
+        private static Activation _relu = new Activation()
+        {
+            Name = "relu",
+            ActivationFunction = (features, name) => tf.Context.ExecuteOp("Relu", name, new ExecuteOpArgs(features))
+        };
+        private static Activation _sigmoid = new Activation()
+        {
+            Name = "sigmoid",
+            ActivationFunction = (features, name) => tf.Context.ExecuteOp("Sigmoid", name, new ExecuteOpArgs(features))
+        };
+        private static Activation _softmax = new Activation()
+        {
+            Name = "softmax",
+            ActivationFunction = (features, name) => tf.Context.ExecuteOp("Softmax", name, new ExecuteOpArgs(features))
+        };
+        private static Activation _tanh = new Activation()
+        {
+            Name = "tanh",
+            ActivationFunction = (features, name) => tf.Context.ExecuteOp("Tanh", name, new ExecuteOpArgs(features))
+        };
+        private static Activation _mish = new Activation()
+        {
+            Name = "mish",
+            ActivationFunction = (features, name) => features * tf.math.tanh(tf.math.softplus(features))
+        };
 
         /// <summary>
         /// Register the name-activation mapping in this static class.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="activation"></param>
-        private static void RegisterActivation(string name, Activation activation)
+        private static void RegisterActivation(Activation activation)
         {
-            _nameActivationMap[name] = activation;
-            _activationNameMap[activation] = name;
+            _nameActivationMap[activation.Name] = activation;
         }
 
         static Activations()
         {
             _nameActivationMap = new Dictionary<string, Activation>();
-            _activationNameMap= new Dictionary<Activation, string>();
 
-            RegisterActivation("relu", _relu);
-            RegisterActivation("linear", _linear);
-            RegisterActivation("sigmoid", _sigmoid);
-            RegisterActivation("softmax", _softmax);
-            RegisterActivation("tanh", _tanh);
-            RegisterActivation("mish", _mish);
+            RegisterActivation(_relu);
+            RegisterActivation(_linear);
+            RegisterActivation(_sigmoid);
+            RegisterActivation(_softmax);
+            RegisterActivation(_tanh);
+            RegisterActivation(_mish);
         }
 
         public Activation Linear => _linear;
@@ -59,7 +75,7 @@ namespace Tensorflow.Keras
 
         public Activation Mish => _mish;
 
-        public static Activation GetActivationByName(string name)
+        public Activation GetActivationFromName(string name)
         {
             if (!_nameActivationMap.TryGetValue(name, out var res))
             {
@@ -68,18 +84,6 @@ namespace Tensorflow.Keras
             else
             {
                 return res;
-            }
-        }
-
-        public static string GetNameByActivation(Activation activation)
-        {
-            if(!_activationNameMap.TryGetValue(activation, out var name))
-            {
-                throw new Exception($"Activation {activation} not found");
-            }
-            else
-            {
-                return name;
             }
         }
     }

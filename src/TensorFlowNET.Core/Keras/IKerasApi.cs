@@ -16,6 +16,7 @@ namespace Tensorflow.Keras
         IInitializersApi initializers { get; }
         ILayersApi layers { get; }
         ILossesApi losses { get; }
+        IActivationsApi activations { get; }
         IOptimizerApi optimizers { get; }
         IMetricsApi metrics { get; }
         IModelsApi models { get; }

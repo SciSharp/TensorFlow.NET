@@ -18,28 +18,8 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// <summary>
         /// Activation function to use.
         /// </summary>
-        public Activation Activation { get; set; }
-
-        private string _activationName;
         [JsonProperty("activation")]
-        public string ActivationName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_activationName))
-                {
-                    return Activation.Method.Name;
-                }
-                else
-                {
-                    return _activationName;
-                }
-            }
-            set
-            {
-                _activationName = value;
-            }
-        }
+        public Activation Activation { get; set; }
 
         /// <summary>
         /// Whether the layer uses a bias vector.

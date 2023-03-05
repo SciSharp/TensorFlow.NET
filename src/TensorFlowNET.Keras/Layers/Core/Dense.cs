@@ -81,7 +81,7 @@ namespace Tensorflow.Keras.Layers
             if (args.UseBias)
                 outputs = tf.nn.bias_add(outputs, bias);
             if (args.Activation != null)
-                outputs = activation(outputs);
+                outputs = activation.Apply(outputs);
 
             return outputs;
         }

@@ -26,27 +26,8 @@ namespace Tensorflow.Keras.ArgsDefinition
         public Shape DilationRate { get; set; } = (1, 1);
         [JsonProperty("groups")]
         public int Groups { get; set; } = 1;
-        public Activation Activation { get; set; }
-        private string _activationName;
         [JsonProperty("activation")]
-        public string ActivationName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_activationName))
-                {
-                    return Activation.Method.Name;
-                }
-                else
-                {
-                    return _activationName;
-                }
-            }
-            set
-            {
-                _activationName = value;
-            }
-        }
+        public Activation Activation { get; set; }
         [JsonProperty("use_bias")]
         public bool UseBias { get; set; }
         [JsonProperty("kernel_initializer")]
