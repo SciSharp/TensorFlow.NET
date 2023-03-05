@@ -1,27 +1,17 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Tensorflow.Operations;
-using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
-using Tensorflow.NumPy;
-using Microsoft.VisualBasic;
-using static HDF.PInvoke.H5T;
-using Tensorflow.Keras.UnitTest.Helpers;
+using Tensorflow;
 using Tensorflow.Keras.Optimizers;
+using Tensorflow.NumPy;
+using static Tensorflow.KerasApi;
 
-namespace Tensorflow.Keras.UnitTest
+namespace TensorFlowNET.Keras.UnitTest
 {
     [TestClass]
     public class MultiInputModelTest
     {
         [TestMethod]
-        public void SimpleModel()
+        public void LeNetModel()
         {
             var inputs = keras.Input((28, 28, 1));
             var conv1 = keras.layers.Conv2D(16, (3, 3), activation: "relu", padding: "same").Apply(inputs);
@@ -40,7 +30,7 @@ namespace Tensorflow.Keras.UnitTest
             var concat = keras.layers.Concatenate().Apply((flat1, flat1_2));
             var dense1 = keras.layers.Dense(512, activation: "relu").Apply(concat);
             var dense2 = keras.layers.Dense(128, activation: "relu").Apply(dense1);
-            var dense3 = keras.layers.Dense(10, activation:  "relu").Apply(dense2);
+            var dense3 = keras.layers.Dense(10, activation: "relu").Apply(dense2);
             var output = keras.layers.Softmax(-1).Apply(dense3);
 
             var model = keras.Model((inputs, inputs_2), output);
@@ -52,7 +42,7 @@ namespace Tensorflow.Keras.UnitTest
             {
                 TrainDir = "mnist",
                 OneHot = false,
-                ValidationSize = 59000,
+                ValidationSize = 59900,
             }).Result;
 
             var loss = keras.losses.SparseCategoricalCrossentropy();
@@ -64,6 +54,11 @@ namespace Tensorflow.Keras.UnitTest
 
             var x = new NDArray[] { x1, x2 };
             model.fit(x, dataset.Train.Labels, batch_size: 8, epochs: 3);
+
+            x1 = np.ones((1, 28, 28, 1), TF_DataType.TF_FLOAT);
+            x2 = np.zeros((1, 28, 28, 1), TF_DataType.TF_FLOAT);
+            var pred = model.predict((x1, x2));
+            Console.WriteLine(pred);
         }
     }
 }
