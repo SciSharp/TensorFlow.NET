@@ -65,6 +65,18 @@ namespace Tensorflow
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
+        public string[] StringData()
+        {
+            EnsureSingleTensor(this, "nnumpy");
+            return this[0].StringData();
+        }
+
+        public string StringData(int index)
+        {
+            EnsureSingleTensor(this, "nnumpy");
+            return this[0].StringData(index);
+        }
+
         public NDArray numpy()
         {
             EnsureSingleTensor(this, "nnumpy");
