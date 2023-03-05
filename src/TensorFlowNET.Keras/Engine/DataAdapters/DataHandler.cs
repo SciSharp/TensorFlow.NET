@@ -93,11 +93,15 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         public IEnumerable<(int, OwnedIterator)> enumerate_epochs()
         {
+            var data_iterator = new OwnedIterator(_dataset);
             foreach (var epoch in range(_initial_epoch, _epochs))
             {
                 if (_insufficient_data)
                     break;
-                using var data_iterator = new OwnedIterator(_dataset);
+                if (_adapter.ShouldRecreateIterator())
+                {
+                    data_iterator = new OwnedIterator(_dataset);
+                }
                 yield return (epoch, data_iterator);
             }
             // _adapter.on_epoch_end()

@@ -9,7 +9,7 @@ using Tensorflow.NumPy;
 namespace TensorFlowNET.Keras.UnitTest;
 
 [TestClass]
-public class GradientTest
+public class GradientTest : EagerModeTestBase
 {
     public IModel get_actor(int num_states)
     {

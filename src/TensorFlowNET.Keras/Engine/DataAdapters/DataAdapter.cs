@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         protected DataAdapterArgs args;
         protected IDatasetV2 dataset;
 
-        public virtual bool CanHandle(Tensor x, Tensor y = null)
+        public virtual bool CanHandle(Tensors x, Tensors y = null)
             => throw new NotImplementedException();
 
         public virtual IDatasetV2 GetDataset()
@@ -19,12 +19,18 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public virtual int GetSize()
             => throw new NotImplementedException("");
 
-        public virtual (Tensor, Tensor) Expand1d(Tensor x, Tensor y)
+        public virtual (Tensors, Tensors) Expand1d(Tensors x, Tensors y)
         {
-            if (x.shape.ndim == 1)
-                x = array_ops.expand_dims(x, axis: -1);
-            if (y.shape.ndim == 1)
-                y = array_ops.expand_dims(y, axis: -1);
+            for(int i = 0; i < x.Length; i++)
+            {
+                if (x[i].shape.ndim == 1)
+                    x[i] = array_ops.expand_dims(x[i], axis: -1);
+            }
+            for (int i = 0; i < y.Length; i++)
+            {
+                if (y[i].shape.ndim == 1)
+                    y[i] = array_ops.expand_dims(y[i], axis: -1);
+            }
             return (x, y);
         }
 

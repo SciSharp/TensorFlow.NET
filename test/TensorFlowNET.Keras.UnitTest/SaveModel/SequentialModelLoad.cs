@@ -13,6 +13,7 @@ using Tensorflow;
 using Tensorflow.Keras.Optimizers;
 using static Tensorflow.KerasApi;
 using Tensorflow.NumPy;
+using Tensorflow.Keras.UnitTest.Helpers;
 using static TensorFlowNET.Keras.UnitTest.SaveModel.SequentialModelSave;
 
 namespace TensorFlowNET.Keras.UnitTest.SaveModel;

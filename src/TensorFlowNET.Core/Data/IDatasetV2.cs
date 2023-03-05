@@ -4,7 +4,7 @@ using Tensorflow.Framework.Models;
 
 namespace Tensorflow
 {
-    public interface IDatasetV2 : IEnumerable<(Tensor, Tensor)>
+    public interface IDatasetV2 : IEnumerable<(Tensors, Tensors)>
     {
         string[] class_names { get; set; }
 
@@ -17,6 +17,8 @@ namespace Tensorflow
         TensorSpec[] element_spec { get; }
 
         TensorSpec[] structure { get; set; }
+
+        int FirstInputTensorCount { get; set; }
 
         /// <summary>
         /// Caches the elements in this dataset.

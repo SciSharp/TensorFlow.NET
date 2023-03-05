@@ -1,9 +1,11 @@
-﻿using Tensorflow.Keras.ArgsDefinition;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Tensorflow.Keras.Engine;
 
-namespace Tensorflow.Keras.Optimizers
+namespace Tensorflow.Keras
 {
-    public class OptimizerApi: IOptimizerApi
+    public interface IOptimizerApi
     {
         /// <summary>
         /// Adam optimization is a stochastic gradient descent method that is based on
@@ -16,18 +18,12 @@ namespace Tensorflow.Keras.Optimizers
         /// <param name="amsgrad"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IOptimizer Adam(float learning_rate = 0.001f,
+        IOptimizer Adam(float learning_rate = 0.001f,
                 float beta_1 = 0.9f,
                 float beta_2 = 0.999f,
                 float epsilon = 1e-7f,
                 bool amsgrad = false,
-                string name = "Adam")
-            => new Adam(learning_rate: learning_rate,
-                beta_1: beta_1,
-                beta_2: beta_2,
-                epsilon: epsilon,
-                amsgrad: amsgrad,
-                name: name);
+                string name = "Adam");
 
         /// <summary>
         /// Construct a new RMSprop optimizer.
@@ -39,23 +35,13 @@ namespace Tensorflow.Keras.Optimizers
         /// <param name="centered"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IOptimizer RMSprop(float learning_rate = 0.001f,
+        IOptimizer RMSprop(float learning_rate = 0.001f,
                 float rho = 0.9f,
                 float momentum = 0.0f,
                 float epsilon = 1e-7f,
                 bool centered = false,
-                string name = "RMSprop")
-            => new RMSprop(new RMSpropArgs
-            {
-                LearningRate = learning_rate,
-                RHO = rho,
-                Momentum = momentum,
-                Epsilon = epsilon,
-                Centered = centered,
-                Name = name
-            });
+                string name = "RMSprop");
 
-        public IOptimizer SGD(float learning_rate)
-            => new SGD(learning_rate);
+        IOptimizer SGD(float learning_rate);
     }
 }

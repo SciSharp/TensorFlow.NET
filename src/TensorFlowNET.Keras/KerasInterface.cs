@@ -18,6 +18,28 @@ namespace Tensorflow.Keras
 {
     public class KerasInterface : IKerasApi
     {
+        private static KerasInterface _instance = null;
+        private static readonly object _lock = new object();  
+        private KerasInterface()
+        {
+            Tensorflow.Binding.tf.keras = this;
+        }
+
+        public static KerasInterface Instance
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance is null)
+                    {
+                        _instance = new KerasInterface();
+                    }
+                    return _instance;
+                }
+            }
+        }
+
         public KerasDataset datasets { get; } = new KerasDataset();
         public IInitializersApi initializers { get; } = new InitializersApi();
         public Regularizers regularizers { get; } = new Regularizers();
@@ -27,9 +49,9 @@ namespace Tensorflow.Keras
         public Preprocessing preprocessing { get; } = new Preprocessing();
         ThreadLocal<BackendImpl> _backend = new ThreadLocal<BackendImpl>(() => new BackendImpl());
         public BackendImpl backend => _backend.Value;
-        public OptimizerApi optimizers { get; } = new OptimizerApi();
+        public IOptimizerApi optimizers { get; } = new OptimizerApi();
         public IMetricsApi metrics { get; } = new MetricsApi();
-        public ModelsApi models { get; } = new ModelsApi();
+        public IModelsApi models { get; } = new ModelsApi();
         public KerasUtils utils { get; } = new KerasUtils();
 
         public Sequential Sequential(List<ILayer> layers = null,
