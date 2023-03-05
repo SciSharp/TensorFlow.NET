@@ -49,7 +49,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="workers"></param>
         /// <param name="use_multiprocessing"></param>
         /// <returns></returns>
-        public Tensors predict(Tensor x,
+        public Tensors predict(Tensors x,
             int batch_size = -1,
             int verbose = 0,
             int steps = -1,
@@ -115,12 +115,12 @@ namespace Tensorflow.Keras.Engine
         Tensors run_predict_step(OwnedIterator iterator)
         {
             var data = iterator.next();
-            var outputs = predict_step(data[0]);
+            var outputs = predict_step(data);
             tf_with(ops.control_dependencies(new object[0]), ctl => _predict_counter.assign_add(1));
             return outputs;
         }
 
-        Tensors predict_step(Tensor data)
+        Tensors predict_step(Tensors data)
         {
             return Apply(data, training: false);
         }

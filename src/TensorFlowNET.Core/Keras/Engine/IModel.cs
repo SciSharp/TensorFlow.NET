@@ -62,7 +62,7 @@ public interface IModel : ILayer
             bool use_multiprocessing = false,
             bool return_dict = false);
 
-    Tensors predict(Tensor x,
+    Tensors predict(Tensors x,
             int batch_size = -1,
             int verbose = 0,
             int steps = -1,
