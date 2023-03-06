@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         We welcome feature proposal/request! This template will help us gather the information we need to implement the new feature.
-  - type: markdown
+  - type: textarea
     id: background
     attributes:
       label: Background and Feature Description
@@ -15,7 +15,7 @@ body:
       placeholder: Purpose
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     id: api-proposal
     attributes:
       label: API Definition and Usage
@@ -26,11 +26,11 @@ body:
         ```cs
         public Tensor NewFunc(Tensor x, int y);
 
-	  var result = NewFunc(input, index);
+        var result = NewFunc(input, index);
         ```
     validations:
       required: false
-  - type: markdown
+  - type: textarea
     id: alternatives
     attributes:
       label: Alternatives
@@ -39,7 +39,7 @@ body:
       placeholder: Alternatives
     validations:
       required: false
-  - type: markdown
+  - type: textarea
     id: risks
     attributes:
       label: Risks
@@ -48,7 +48,3 @@ body:
       placeholder: Risks
     validations:
       required: false
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for your contributing!
