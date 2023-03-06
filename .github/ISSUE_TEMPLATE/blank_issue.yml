@@ -1,0 +1,16 @@
+name: Blank Issue
+description: Submit an issue about Tensorflow.NET.
+labels: [Blank Issue]
+body:
+  - type: markdown
+    id: description
+    attributes:
+      label: Description
+      description: Please describe the issue here.
+      placeholder: Description
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        No matched issue template? Try the blank issue! We welcome submitting issues to Tensorflow.NET!
