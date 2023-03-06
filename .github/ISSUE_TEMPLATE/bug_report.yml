@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         We welcome bug reports! Any unexpected behavior could be a BUG and this template help us gather the information to fix it.
-  - type: markdown
+  - type: textarea
     id: background
     attributes:
       label: Description
@@ -15,7 +15,7 @@ body:
       placeholder: Description
     validations:
       required: true
-  - type: markdown
+  - type: textarea
     id: repro-steps
     attributes:
       label: Reproduction Steps
@@ -24,7 +24,7 @@ body:
       placeholder: Minimal Reproduction
     validations:
       required: false
-  - type: markdown
+  - type: textarea
     id: known-workarounds
     attributes:
       label: Known Workarounds
@@ -33,7 +33,7 @@ body:
       placeholder: Known Workarounds
     validations:
       required: false
-  - type: markdown
+  - type: textarea
     id: configuration
     attributes:
       label: Configuration and Other Information
@@ -46,7 +46,3 @@ body:
       placeholder: Configuration
     validations:
       required: false
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for reporting the problem to us!
