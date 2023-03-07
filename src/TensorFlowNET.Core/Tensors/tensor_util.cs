@@ -80,6 +80,14 @@ namespace Tensorflow
             {
                 return np.array(tensor.IntVal.ToArray()).reshape(shape);
             }
+            else if (new DataType[] { DataType.DtInt64 }.Contains(tensor.Dtype))
+            {
+                return np.array(tensor.Int64Val.ToArray()).reshape(shape);
+            }
+            else if (new DataType[] { DataType.DtUint64 }.Contains(tensor.Dtype))
+            {
+                return np.array(tensor.Uint64Val.ToArray()).reshape(shape);
+            }
             else if (tensor.Dtype == DataType.DtBool)
             {
                 return np.array(tensor.BoolVal.ToArray()).reshape(shape);

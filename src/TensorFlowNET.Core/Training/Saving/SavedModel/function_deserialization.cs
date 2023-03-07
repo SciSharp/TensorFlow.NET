@@ -9,6 +9,19 @@ namespace Tensorflow.Training.Saving.SavedModel
 {
     public static class function_deserialization
     {
+        /// <summary>
+        /// Creates a `Function` from a `SavedFunction`.
+        /// </summary>
+        /// <param name="saved_concrete_function"></param>
+        /// <param name="concrete_functions"></param>
+        /// <returns></returns>
+        public static ConcreteFunction recreate_function(SavedFunction saved_concrete_function,
+            IDictionary<string, ConcreteFunction> concrete_functions)
+        {
+            var function_spec = _deserialize_function_spec_as_nonmethod(saved_concrete_function.FunctionSpec);
+            return null;
+        }
+
         public static ConcreteFunction setup_bare_concrete_function(SavedBareConcreteFunction saved_bare_concrete_function, 
             IDictionary<string, ConcreteFunction> concrete_functions)
         {

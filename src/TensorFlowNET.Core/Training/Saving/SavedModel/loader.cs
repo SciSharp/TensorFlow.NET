@@ -387,13 +387,6 @@ namespace Tensorflow
                 }
                 else
                 {
-                    // skip the function and concrete function.
-                    if(proto.KindCase == SavedObject.KindOneofCase.BareConcreteFunction || proto.KindCase == SavedObject.KindOneofCase.Function)
-                    {
-                        nodes[node_id] = null;
-                        node_setters[node_id] = null;
-                        continue;
-                    }
                     var (node, setter) = _recreate(proto, node_id, nodes);
                     nodes[node_id] = node;
                     node_setters[node_id] = setter;
@@ -471,6 +464,11 @@ namespace Tensorflow
             }
         }
 
+        private void _setup_function_captures()
+        {
+            // TODO: implement it with concrete functions.
+        }
+
         private void _setup_remaining_functions()
         {
            // TODO: implement it with concrete functions.
@@ -542,9 +540,9 @@ namespace Tensorflow
 
             return proto.KindCase switch
             {
-                SavedObject.KindOneofCase.Resource => RestoredResource.deserialize_from_proto(),
-                SavedObject.KindOneofCase.Asset => Asset.deserialize_from_proto(),
-                SavedObject.KindOneofCase.Constant => TrackableConstant.deserialize_from_proto(),
+                SavedObject.KindOneofCase.Resource => RestoredResource.deserialize_from_proto(proto, _operation_attributes),
+                SavedObject.KindOneofCase.Asset => AssetResource.deserialize_from_proto(proto, _export_dir, _asset_file_def, _operation_attributes),
+                SavedObject.KindOneofCase.Constant => TrackableConstant.deserialize_from_proto(proto, _operation_attributes),
                 _ => _recreate_default(proto, node_id, dependencies)
             };
         }
@@ -563,7 +561,8 @@ namespace Tensorflow
                 SavedObject.KindOneofCase.Function => _recreate_function(proto.Function, null),
                 SavedObject.KindOneofCase.BareConcreteFunction => throw new NotImplementedException(),
                 SavedObject.KindOneofCase.Variable => _recreate_variable(proto.Variable),
-                SavedObject.KindOneofCase.CapturedTensor => throw new NotImplementedException()
+                SavedObject.KindOneofCase.CapturedTensor => throw new NotImplementedException(),
+                _ => throw new NotImplementedException()
             };
         }
 
@@ -623,8 +622,12 @@ namespace Tensorflow
         private (ConcreteFunction, Action<object, object, object>) _recreate_function(SavedFunction proto,
             Dictionary<Maybe<string, int>, Trackable> dependencies)
         {
-            throw new NotImplementedException();
-            //var fn = function_deserialization.setup_bare_concrete_function(proto, )
+            var fn = function_deserialization.recreate_function(proto, null);
+            foreach (var name in proto.ConcreteFunctions)
+            {
+                _setup_function_captures();
+            }
+            return (fn, setattr);
         }
 
         private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
