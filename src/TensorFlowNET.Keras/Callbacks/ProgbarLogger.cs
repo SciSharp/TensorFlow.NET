@@ -22,7 +22,10 @@ namespace Tensorflow.Keras.Callbacks
             _called_in_fit = true;
             _sw = new Stopwatch();
         }
-
+        public void on_test_begin()
+        {
+            _sw = new Stopwatch();
+        }
         public void on_epoch_begin(int epoch)
         {
             _reset_progbar();
@@ -44,7 +47,7 @@ namespace Tensorflow.Keras.Callbacks
             var progress = "";
             var length = 30.0 / _parameters.Steps;
             for (int i = 0; i < Math.Floor(end_step * length - 1); i++)
-                    progress += "=";
+                progress += "=";
             if (progress.Length < 28)
                 progress += ">";
             else
@@ -84,17 +87,35 @@ namespace Tensorflow.Keras.Callbacks
 
         public void on_predict_batch_begin(long step)
         {
-            
+
         }
 
         public void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs)
         {
-            
+
         }
 
         public void on_predict_end()
         {
-            
+
         }
+
+        public void on_test_batch_begin(long step)
+        {
+            _sw.Restart();
+        }
+        public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
+        {
+            _sw.Stop();
+            var elapse = _sw.ElapsedMilliseconds;
+            var results = string.Join(" - ", logs.Select(x => $"{x.Item1}: {(float)x.Item2.numpy():F6}"));
+
+            Binding.tf_output_redirect.Write($"{end_step + 1:D4}/{_parameters.Steps:D4} - {elapse}ms/step - {results}");
+            if (!Console.IsOutputRedirected)
+            {
+                Console.CursorLeft = 0;
+            }
+        }
+
     }
 }

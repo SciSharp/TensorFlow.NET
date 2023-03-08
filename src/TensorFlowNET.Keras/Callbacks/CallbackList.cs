@@ -20,7 +20,10 @@ public class CallbackList
     {
         callbacks.ForEach(x => x.on_train_begin());
     }
-
+    public void on_test_begin()
+    {
+        callbacks.ForEach(x => x.on_test_begin());
+    }
     public void on_epoch_begin(int epoch)
     {
         callbacks.ForEach(x => x.on_epoch_begin(epoch));
@@ -59,5 +62,14 @@ public class CallbackList
     public void on_predict_end()
     {
         callbacks.ForEach(x => x.on_predict_end());
+    }
+
+    public void on_test_batch_begin(long step)
+    {
+        callbacks.ForEach(x => x.on_train_batch_begin(step));
+    }
+    public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
+    {
+        callbacks.ForEach(x => x.on_test_batch_end(end_step, logs));
     }
 }

@@ -18,7 +18,11 @@ public class History : ICallback
         epochs = new List<int>();
         history = new Dictionary<string, List<float>>();
     }
-
+    public void on_test_begin()
+    {
+        epochs = new List<int>();
+        history = new Dictionary<string, List<float>>();
+    }
     public void on_epoch_begin(int epoch)
     {
 
@@ -26,7 +30,7 @@ public class History : ICallback
 
     public void on_train_batch_begin(long step)
     {
-        
+
     }
 
     public void on_train_batch_end(long end_step, Dictionary<string, float> logs)
@@ -55,16 +59,25 @@ public class History : ICallback
 
     public void on_predict_batch_begin(long step)
     {
-        
+
     }
 
     public void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs)
     {
-        
+
     }
 
     public void on_predict_end()
     {
-        
+
+    }
+
+    public void on_test_batch_begin(long step)
+    {
+
+    }
+
+    public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
+    {
     }
 }

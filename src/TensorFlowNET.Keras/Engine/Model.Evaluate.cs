@@ -5,6 +5,10 @@ using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine.DataAdapters;
 using static Tensorflow.Binding;
+using Tensorflow.Keras.Layers;
+using Tensorflow.Keras.Utils;
+using Tensorflow;
+using Tensorflow.Keras.Callbacks;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -31,6 +35,11 @@ namespace Tensorflow.Keras.Engine
             bool use_multiprocessing = false,
             bool return_dict = false)
         {
+            if (x.dims[0] != y.dims[0])
+            {
+                throw new InvalidArgumentError(
+                    $"The array x and y should have same value at dim 0, but got {x.dims[0]} and {y.dims[0]}");
+            }
             var data_handler = new DataHandler(new DataHandlerArgs
             {
                 X = x,
@@ -46,18 +55,31 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
+            var callbacks = new CallbackList(new CallbackParams
+            {
+                Model = this,
+                Verbose = verbose,
+                Steps = data_handler.Inferredsteps
+            });
+            callbacks.on_test_begin();
+
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 reset_metrics();
-                // callbacks.on_epoch_begin(epoch)
+                //callbacks.on_epoch_begin(epoch);
                 // data_handler.catch_stop_iteration();
-                IEnumerable<(string, Tensor)> results = null;
+                IEnumerable<(string, Tensor)> logs = null;
+
                 foreach (var step in data_handler.steps())
                 {
-                    // callbacks.on_train_batch_begin(step)
-                    results = test_function(data_handler, iterator);
+                    callbacks.on_train_batch_begin(step);
+                    logs = test_function(data_handler, iterator);
+                    var end_step = step + data_handler.StepIncrement;
+                    callbacks.on_test_batch_end(end_step, logs);
                 }
             }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
 
         public KeyValuePair<string, float>[] evaluate(IDatasetV2 x)
@@ -75,7 +97,8 @@ namespace Tensorflow.Keras.Engine
                 reset_metrics();
                 // callbacks.on_epoch_begin(epoch)
                 // data_handler.catch_stop_iteration();
-                
+
+
                 foreach (var step in data_handler.steps())
                 {
                     // callbacks.on_train_batch_begin(step)
