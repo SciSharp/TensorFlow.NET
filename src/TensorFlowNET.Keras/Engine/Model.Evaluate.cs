@@ -72,12 +72,13 @@ namespace Tensorflow.Keras.Engine
 
                 foreach (var step in data_handler.steps())
                 {
-                    callbacks.on_train_batch_begin(step);
+                    callbacks.on_test_batch_begin(step);
                     logs = test_function(data_handler, iterator);
                     var end_step = step + data_handler.StepIncrement;
                     callbacks.on_test_batch_end(end_step, logs);
                 }
             }
+            Console.WriteLine();
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
