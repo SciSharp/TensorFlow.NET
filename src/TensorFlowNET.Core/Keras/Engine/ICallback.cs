@@ -13,5 +13,6 @@ public interface ICallback
     void on_predict_batch_end(long end_step, Dictionary<string, Tensors> logs);
     void on_predict_end();
     void on_test_begin();
+    void on_test_batch_begin(long step);
     void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs);
 }
