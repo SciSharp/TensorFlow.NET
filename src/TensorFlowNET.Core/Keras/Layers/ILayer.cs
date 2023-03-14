@@ -23,5 +23,6 @@ namespace Tensorflow.Keras
         TensorShapeConfig BuildInputShape { get; }
         TF_DataType DType { get; }
         int count_params();
+        void adapt(Tensor data, int? batch_size = null, int? steps = null);
     }
 }

@@ -178,6 +178,55 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         /// <summary>
+        /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Normalization
+        /// </summary>
+        [TestMethod]
+        public void Normalization()
+        {
+            // Calculate a global mean and variance by analyzing the dataset in adapt().
+            var adapt_data = np.array(new[] { 1f, 2f, 3f, 4f, 5f });
+            var input_data = np.array(new[] { 1f, 2f, 3f });
+            var layer = tf.keras.layers.Normalization(axis: null);
+            layer.adapt(adapt_data);
+            var x = layer.Apply(input_data);
+            Assert.AreEqual(x.numpy(), new[] { -1.4142135f, -0.70710677f, 0f });
+
+            // Calculate a mean and variance for each index on the last axis.
+            adapt_data = np.array(new[,]
+            {
+                { 0, 7, 4 },
+                { 2, 9, 6 },
+                { 0, 7, 4 },
+                { 2, 9, 6 }
+            }, dtype: tf.float32);
+            input_data = np.array(new[,] { { 0, 7, 4 } }, dtype: tf.float32);
+            layer = tf.keras.layers.Normalization(axis: -1);
+            layer.adapt(adapt_data);
+            x = layer.Apply(input_data);
+            Equal(x.numpy().ToArray<float>(), new[] { -1f, -1f, -1f });
+
+            // Pass the mean and variance directly.
+            input_data = np.array(new[,] { { 1f }, { 2f }, { 3f } }, dtype: tf.float32);
+            layer = tf.keras.layers.Normalization(mean: 3f, variance: 2f);
+            x = layer.Apply(input_data);
+            Equal(x.numpy().ToArray<float>(), new[] { -1.4142135f, -0.70710677f, 0f });
+
+            // Use the layer to de-normalize inputs (after adapting the layer).
+            adapt_data = np.array(new[,]
+            {
+                { 0, 7, 4 },
+                { 2, 9, 6 },
+                { 0, 7, 4 },
+                { 2, 9, 6 }
+            }, dtype: tf.float32);
+            input_data = np.array(new[,] { { 1, 2, 3 } }, dtype: tf.float32);
+            layer = tf.keras.layers.Normalization(axis: -1, invert: true);
+            layer.adapt(adapt_data);
+            x = layer.Apply(input_data);
+            Equal(x.numpy().ToArray<float>(), new[] { -2f, -10f, -8f });
+        }
+
+        /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/CategoryEncoding
         /// </summary>
         [TestMethod]

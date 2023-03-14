@@ -344,5 +344,10 @@ namespace Tensorflow.Keras.Engine
 
         public virtual IKerasConfig get_config()
             => args;
+
+        public virtual void adapt(Tensor data, int? batch_size = null, int? steps = null)
+        {
+            
+        }
     }
 }
