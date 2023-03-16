@@ -159,5 +159,10 @@ namespace Tensorflow
         }
 
         public Trackable GetTrackable() { throw new NotImplementedException(); }
+
+        public void adapt(Tensor data, int? batch_size = null, int? steps = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -872,5 +872,14 @@ namespace Tensorflow.Keras.Layers
                 Sparse = sparse,
                 CountWeights = count_weights
             });
+
+        public ILayer Normalization(int? axis = -1, float? mean = null, float? variance = null, bool invert = false)
+            => new Normalization(new NormalizationArgs
+            {
+                Axis = axis,
+                Mean = mean,
+                Variance = variance,
+                Invert = invert
+            });
     }
 }

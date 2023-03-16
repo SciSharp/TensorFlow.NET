@@ -9,6 +9,9 @@ namespace Tensorflow.NumPy
     {
         public static long GetSize(Shape shape)
         {
+            if (shape.IsNull)
+                return 0;
+
             // scalar
             if (shape.ndim == 0)
                 return 1;

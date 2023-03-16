@@ -20,10 +20,6 @@ namespace Tensorflow.Keras
     {
         private static KerasInterface _instance = null;
         private static readonly object _lock = new object();  
-        private KerasInterface()
-        {
-            Tensorflow.Binding.tf.keras = this;
-        }
 
         public static KerasInterface Instance
         {
