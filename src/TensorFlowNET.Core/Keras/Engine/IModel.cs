@@ -17,6 +17,7 @@ public interface IModel : ILayer
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
+            List<ICallback> callbacks = null,
             float validation_split = 0f,
             bool shuffle = true,
             int initial_epoch = 0,
@@ -28,6 +29,7 @@ public interface IModel : ILayer
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
+            List<ICallback> callbacks = null,
             float validation_split = 0f,
             bool shuffle = true,
             int initial_epoch = 0,
@@ -73,4 +75,6 @@ public interface IModel : ILayer
     void summary(int line_length = -1, float[] positions = null);
 
     IKerasConfig get_config();
+
+    void set_stopTraining_true();
 }

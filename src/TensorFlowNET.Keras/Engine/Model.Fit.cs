@@ -19,6 +19,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="y"></param>
         /// <param name="batch_size"></param>
         /// <param name="epochs"></param>
+        /// <param name="callbacks"></param>
         /// <param name="verbose"></param>
         /// <param name="validation_split"></param>
         /// <param name="shuffle"></param>
@@ -26,6 +27,7 @@ namespace Tensorflow.Keras.Engine
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
+            List<ICallback> callbacks = null,
             float validation_split = 0f,
             bool shuffle = true,
             int initial_epoch = 0,
@@ -59,7 +61,7 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            return FitInternal(data_handler, epochs, verbose, validation_data: null,
+            return FitInternal(data_handler, epochs, verbose, callbackList: callbacks, validation_data: null,
                     train_step_func: train_step_function);
         }
 
@@ -67,6 +69,7 @@ namespace Tensorflow.Keras.Engine
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
+            List<ICallback> callbacks = null,
             float validation_split = 0f,
             bool shuffle = true,
             int initial_epoch = 0,
@@ -107,12 +110,12 @@ namespace Tensorflow.Keras.Engine
             if (data_handler.DataAdapter.GetDataset().structure.Length > 2 ||
                 data_handler.DataAdapter.GetDataset().FirstInputTensorCount > 1)
             {
-                return FitInternal(data_handler, epochs, verbose, validation_data: null,
+                return FitInternal(data_handler, epochs, verbose, callbackList: callbacks, validation_data: null,
                     train_step_func: train_step_multi_inputs_function);
             }
             else
             {
-                return FitInternal(data_handler, epochs, verbose, validation_data: null,
+                return FitInternal(data_handler, epochs, verbose, callbackList: callbacks, validation_data: null,
                     train_step_func: train_step_function);
             }
         }
@@ -122,6 +125,7 @@ namespace Tensorflow.Keras.Engine
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
+            List<ICallback> callbacks = null,
             float validation_split = 0f,
             bool shuffle = true,
             int initial_epoch = 0,
@@ -143,11 +147,11 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
-            return FitInternal(data_handler, epochs, verbose, validation_data: validation_data,
+            return FitInternal(data_handler, epochs, verbose, callbacks, validation_data: validation_data,
                     train_step_func: train_step_function);
         }
 
-        History FitInternal(DataHandler data_handler, int epochs, int verbose, IDatasetV2 validation_data, 
+        History FitInternal(DataHandler data_handler, int epochs, int verbose, List<ICallback> callbackList, IDatasetV2 validation_data, 
             Func<DataHandler, OwnedIterator, Dictionary<string, float>> train_step_func)
         {
             stop_training = false;
@@ -159,6 +163,13 @@ namespace Tensorflow.Keras.Engine
                 Epochs = epochs,
                 Steps = data_handler.Inferredsteps
             });
+          
+            if (callbackList != null)
+            {
+                foreach(var callback in callbackList)
+                    callbacks.callbacks.add(callback);
+            }
+            
             callbacks.on_train_begin();
 
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
