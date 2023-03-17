@@ -4,6 +4,7 @@ public interface ICallback
 {
     Dictionary<string, List<float>> history { get; set; }
     void on_train_begin();
+    void on_train_end();
     void on_epoch_begin(int epoch);
     void on_train_batch_begin(long step);
     void on_train_batch_end(long end_step, Dictionary<string, float> logs);

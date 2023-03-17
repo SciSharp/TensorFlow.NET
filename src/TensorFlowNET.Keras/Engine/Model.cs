@@ -144,5 +144,11 @@ namespace Tensorflow.Keras.Engine
             var children = base._trackable_children(save_type, cache);
             return children;
         }
+
+
+        void IModel.set_stopTraining_true()
+        {
+            stop_training = true;
+        }
     }
 }

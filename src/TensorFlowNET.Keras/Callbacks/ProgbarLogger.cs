@@ -22,6 +22,7 @@ namespace Tensorflow.Keras.Callbacks
             _called_in_fit = true;
             _sw = new Stopwatch();
         }
+        public void on_train_end() { }
         public void on_test_begin()
         {
             _sw = new Stopwatch();

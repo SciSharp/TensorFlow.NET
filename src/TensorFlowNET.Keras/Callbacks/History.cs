@@ -23,6 +23,7 @@ public class History : ICallback
         epochs = new List<int>();
         history = new Dictionary<string, List<float>>();
     }
+    public void on_train_end() { }
     public void on_epoch_begin(int epoch)
     {
 

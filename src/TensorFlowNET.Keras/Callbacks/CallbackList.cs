@@ -7,7 +7,8 @@ namespace Tensorflow.Keras.Callbacks;
 
 public class CallbackList
 {
-    List<ICallback> callbacks = new List<ICallback>();
+    // 改成public使得新定义的callback可以加入到callbacks里
+    public List<ICallback> callbacks = new List<ICallback>();
     public History History => callbacks[0] as History;
 
     public CallbackList(CallbackParams parameters)
@@ -66,7 +67,7 @@ public class CallbackList
 
     public void on_test_batch_begin(long step)
     {
-        callbacks.ForEach(x => x.on_train_batch_begin(step));
+        callbacks.ForEach(x => x.on_test_batch_begin(step));
     }
     public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
     {
