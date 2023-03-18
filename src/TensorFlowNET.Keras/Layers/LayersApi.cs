@@ -873,9 +873,10 @@ namespace Tensorflow.Keras.Layers
                 CountWeights = count_weights
             });
 
-        public ILayer Normalization(int? axis = -1, float? mean = null, float? variance = null, bool invert = false)
+        public ILayer Normalization(Shape? input_shape = null, int? axis = -1, float? mean = null, float? variance = null, bool invert = false)
             => new Normalization(new NormalizationArgs
             {
+                InputShape = input_shape,
                 Axis = axis,
                 Mean = mean,
                 Variance = variance,

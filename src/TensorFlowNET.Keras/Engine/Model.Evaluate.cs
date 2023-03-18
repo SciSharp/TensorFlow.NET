@@ -26,7 +26,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="workers"></param>
         /// <param name="use_multiprocessing"></param>
         /// <param name="return_dict"></param>
-        public void evaluate(NDArray x, NDArray y,
+        public Dictionary<string, float> evaluate(NDArray x, NDArray y,
             int batch_size = -1,
             int verbose = 1,
             int steps = -1,
@@ -63,12 +63,12 @@ namespace Tensorflow.Keras.Engine
             });
             callbacks.on_test_begin();
 
+            IEnumerable<(string, Tensor)> logs = null;
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 reset_metrics();
-                //callbacks.on_epoch_begin(epoch);
+                callbacks.on_epoch_begin(epoch);
                 // data_handler.catch_stop_iteration();
-                IEnumerable<(string, Tensor)> logs = null;
 
                 foreach (var step in data_handler.steps())
                 {
@@ -78,12 +78,16 @@ namespace Tensorflow.Keras.Engine
                     callbacks.on_test_batch_end(end_step, logs);
                 }
             }
-            Console.WriteLine();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+
+            var results = new Dictionary<string, float>();
+            foreach (var log in logs)
+            {
+                results[log.Item1] = (float)log.Item2;
+            }
+            return results;
         }
 
-        public KeyValuePair<string, float>[] evaluate(IDatasetV2 x)
+        public Dictionary<string, float> evaluate(IDatasetV2 x, int verbose = 1)
         {
             var data_handler = new DataHandler(new DataHandlerArgs
             {
@@ -92,13 +96,20 @@ namespace Tensorflow.Keras.Engine
                 StepsPerExecution = _steps_per_execution
             });
 
+            var callbacks = new CallbackList(new CallbackParams
+            {
+                Model = this,
+                Verbose = verbose,
+                Steps = data_handler.Inferredsteps
+            });
+            callbacks.on_test_begin();
+
             IEnumerable<(string, Tensor)> logs = null;
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
             {
                 reset_metrics();
-                // callbacks.on_epoch_begin(epoch)
+                callbacks.on_epoch_begin(epoch);
                 // data_handler.catch_stop_iteration();
-
 
                 foreach (var step in data_handler.steps())
                 {
@@ -106,7 +117,13 @@ namespace Tensorflow.Keras.Engine
                     logs = test_function(data_handler, iterator);
                 }
             }
-            return logs.Select(x => new KeyValuePair<string, float>(x.Item1, (float)x.Item2)).ToArray();
+
+            var results = new Dictionary<string, float>();
+            foreach (var log in logs)
+            {
+                results[log.Item1] = (float)log.Item2;
+            }
+            return results;
         }
 
         IEnumerable<(string, Tensor)> test_function(DataHandler data_handler, OwnedIterator iterator)

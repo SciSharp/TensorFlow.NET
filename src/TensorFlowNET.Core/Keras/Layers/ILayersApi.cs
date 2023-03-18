@@ -156,7 +156,7 @@ namespace Tensorflow.Keras.Layers
            IInitializer beta_initializer = null,
            IInitializer gamma_initializer = null);
 
-        public ILayer Normalization(int? axis = -1, float? mean = null, float? variance = null, bool invert = false);
+        public ILayer Normalization(Shape? input_shape = null, int? axis = -1, float? mean = null, float? variance = null, bool invert = false);
         public ILayer LeakyReLU(float alpha = 0.3f);
 
         public ILayer LSTM(int units,

@@ -10,9 +10,8 @@ namespace Tensorflow.Keras.Engine
         LossesContainer compiled_loss;
         MetricsContainer compiled_metrics;
 
-        public void compile(IOptimizer optimizer = null, 
-            ILossFunc loss = null, 
-            string[] metrics = null)
+        public void compile(IOptimizer optimizer,
+            ILossFunc loss)
         {
             this.optimizer = optimizer ?? new RMSprop(new RMSpropArgs
             {
@@ -20,7 +19,28 @@ namespace Tensorflow.Keras.Engine
 
             this.loss = loss ?? new MeanSquaredError();
 
-            compiled_loss = new LossesContainer(loss, output_names: output_names);
+            compiled_loss = new LossesContainer(this.loss, output_names: output_names);
+            compiled_metrics = new MetricsContainer(new string[0], output_names: output_names);
+
+            int experimental_steps_per_execution = 1;
+            _configure_steps_per_execution(experimental_steps_per_execution);
+
+            // Initialize cache attrs.
+            _reset_compile_cache();
+            _is_compiled = true;
+        }
+
+        public void compile(IOptimizer optimizer,
+            ILossFunc loss,
+            string[] metrics)
+        {
+            this.optimizer = optimizer ?? new RMSprop(new RMSpropArgs
+            {
+            });
+
+            this.loss = loss ?? new MeanSquaredError();
+
+            compiled_loss = new LossesContainer(this.loss, output_names: output_names);
             compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
 
             int experimental_steps_per_execution = 1;
@@ -31,46 +51,58 @@ namespace Tensorflow.Keras.Engine
             _is_compiled = true;
         }
 
-        public void compile(IOptimizer optimizer = null,
-            ILossFunc loss = null,
-            IMetricFunc[] metrics = null)
+        public void compile(string optimizer, 
+            string loss, 
+            string[] metrics)
         {
-            this.optimizer = optimizer ?? new RMSprop(new RMSpropArgs
-            {
-            });
-
-            this.loss = loss ?? new MeanSquaredError();
-
-            compiled_loss = new LossesContainer(loss, output_names: output_names);
-            compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
-
-            int experimental_steps_per_execution = 1;
-            _configure_steps_per_execution(experimental_steps_per_execution);
-
-            // Initialize cache attrs.
-            _reset_compile_cache();
-            _is_compiled = true;
-        }
-
-        public void compile(string optimizer, string loss, string[] metrics)
-        {
-            var _optimizer = optimizer switch
+            this.optimizer = optimizer switch
             {
                 "rmsprop" => new RMSprop(new RMSpropArgs
                 {
 
                 }),
-                _ => throw new NotImplementedException("")
+                _ => new RMSprop(new RMSpropArgs
+                {
+                })
             };
 
-            ILossFunc _loss = loss switch
+            this.loss = loss switch
             {
                 "mse" => new MeanSquaredError(),
                 "mae" => new MeanAbsoluteError(),
-                _ => throw new NotImplementedException("")
+                _ => new MeanSquaredError()
             };
 
-            compile(optimizer: _optimizer, loss: _loss, metrics: metrics);
+            compiled_loss = new LossesContainer(this.loss, output_names: output_names);
+            compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
+
+            int experimental_steps_per_execution = 1;
+            _configure_steps_per_execution(experimental_steps_per_execution);
+
+            // Initialize cache attrs.
+            _reset_compile_cache();
+            _is_compiled = true;
+        }
+
+        public void compile(IOptimizer optimizer,
+            ILossFunc loss,
+            IMetricFunc[] metrics)
+        {
+            this.optimizer = optimizer ?? new RMSprop(new RMSpropArgs
+            {
+            });
+
+            this.loss = loss ?? new MeanSquaredError();
+
+            compiled_loss = new LossesContainer(this.loss, output_names: output_names);
+            compiled_metrics = new MetricsContainer(metrics, output_names: output_names);
+
+            int experimental_steps_per_execution = 1;
+            _configure_steps_per_execution(experimental_steps_per_execution);
+
+            // Initialize cache attrs.
+            _reset_compile_cache();
+            _is_compiled = true;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Tensorflow.Functions;
 using Tensorflow.Keras.Losses;
+using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Saving;
 using Tensorflow.NumPy;
 
@@ -7,11 +8,13 @@ namespace Tensorflow.Keras.Engine;
 
 public interface IModel : ILayer
 {
-    void compile(IOptimizer optimizer = null,
-            ILossFunc loss = null,
-            string[] metrics = null);
+    void compile(IOptimizer optimizer, ILossFunc loss);
+
+    void compile(IOptimizer optimizer, ILossFunc loss, string[] metrics);
 
     void compile(string optimizer, string loss, string[] metrics);
+
+    void compile(IOptimizer optimizer, ILossFunc loss, IMetricFunc[] metrics);
 
     ICallback fit(NDArray x, NDArray y,
             int batch_size = -1,
@@ -55,7 +58,7 @@ public interface IModel : ILayer
         bool skip_mismatch = false, 
         object options = null);
 
-    void evaluate(NDArray x, NDArray y,
+    Dictionary<string, float> evaluate(NDArray x, NDArray y,
             int batch_size = -1,
             int verbose = 1,
             int steps = -1,
