@@ -79,5 +79,5 @@ public interface IModel : ILayer
 
     IKerasConfig get_config();
 
-    void set_stopTraining_true();
+    bool Stop_training { get;set; }
 }

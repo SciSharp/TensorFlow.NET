@@ -95,7 +95,7 @@ public class EarlyStopping: ICallback
         if (_wait >= _paitence && epoch > 0)
         {
             _stopped_epoch = epoch;
-            _parameters.Model.set_stopTraining_true();
+            _parameters.Model.Stop_training = true;
             if (_restore_best_weights && _best_weights != null)
             {
                 if (_verbose > 0)
