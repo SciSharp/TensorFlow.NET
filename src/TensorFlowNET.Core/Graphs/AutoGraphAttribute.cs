@@ -1,6 +1,7 @@
 ﻿using MethodBoundaryAspect.Fody.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Tensorflow.Eager;
 using Tensorflow.Functions;
@@ -21,8 +22,9 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
+            File.WriteAllText(@"D:\temp\for_test.txt", "jyfgjyfjhfjhc");
             // TODO: func_name can be cache in FullName + Args
-            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}_{ops.uid_function()}";
+            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}";
 
             if (functions.ContainsKey(func_name))
             {

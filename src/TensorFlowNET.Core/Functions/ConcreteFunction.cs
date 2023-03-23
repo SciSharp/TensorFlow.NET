@@ -13,6 +13,7 @@ namespace Tensorflow.Functions
     /// </summary>
     public class ConcreteFunction: Trackable
     {
+        protected IEnumerable<Tensor> _captured_inputs;
         internal FuncGraph func_graph;
         internal ForwardBackwardCall forward_backward;
         public Tensor[] Inputs => func_graph.Inputs;
@@ -29,11 +30,13 @@ namespace Tensorflow.Functions
         public ConcreteFunction(string name)
         {
             func_graph = new FuncGraph(name);
+            _captured_inputs = func_graph.external_captures;
         }
 
         public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs = null)
         {
             func_graph = graph;
+            _captured_inputs = func_graph.external_captures;
 
             ToGraph(graph.Inputs, graph.Outputs.Where(x => x != null).ToArray());
         }
@@ -53,6 +56,7 @@ namespace Tensorflow.Functions
                 new[] { output },
                 null);
             func_graph.Exit();
+            _captured_inputs = func_graph.external_captures;
         }
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
@@ -73,6 +77,7 @@ namespace Tensorflow.Functions
                 new[] { output.variant_tensor },
                 null);
             func_graph.Exit();
+            _captured_inputs = func_graph.external_captures;
         }
 
         /*public ConcreteFunction(Func<Tensors, Tensors> func,
@@ -172,6 +177,11 @@ namespace Tensorflow.Functions
                 g = ops.get_default_graph();
             }
             // TODO(Rinne); complete it with `_delayed_rewrite_functions`.
+        }
+
+        public void SetExternalCaptures(IEnumerable<Tensor> captures)
+        {
+            _captured_inputs = captures;
         }
 
         ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)

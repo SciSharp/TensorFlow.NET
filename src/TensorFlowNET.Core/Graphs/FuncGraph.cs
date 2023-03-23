@@ -56,6 +56,11 @@ public class FuncGraph : Graph, IDisposable
         _handle = handle;
     }
 
+    public void replace_capture(Tensor tensor, Tensor placeholder)
+    {
+        _captures[tensor.Id] = (tensor, placeholder);
+    }
+
     public void ToGraph(Operation[] opers,
         Tensor[] inputs, Tensor[] outputs,
         string[] output_names)

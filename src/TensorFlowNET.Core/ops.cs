@@ -572,6 +572,11 @@ namespace Tensorflow
             return get_default_graph().building_function;
         }
 
+        public static SafeTensorHandle get_resource_handle_data(Tensor graph_op)
+        {
+            throw new NotImplementedException();
+        }
+
         public static void dismantle_graph(Graph graph)
         {
             

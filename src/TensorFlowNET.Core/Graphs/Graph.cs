@@ -146,6 +146,12 @@ namespace Tensorflow
             return ops.set_default_graph(this);
         }
 
+        public bool IsFunction(string name)
+        {
+            // TODO(Rinne): deal with `_functions`.
+            throw new NotImplementedException();
+        }
+
         private Tensor _as_graph_element(object obj)
         {
             if (obj is RefVariable var)

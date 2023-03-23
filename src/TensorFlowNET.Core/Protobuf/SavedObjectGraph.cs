@@ -5,6 +5,7 @@
 #pragma warning disable 1591, 0612, 3021
 #region Designer generated code
 
+using Tensorflow.Framework.Models;
 using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
@@ -2589,9 +2590,17 @@ namespace Tensorflow {
       }
     }
 
-    #region Nested types
-    /// <summary>Container for nested types declared in the FunctionSpec message type.</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        //public static FunctionSpec from_function_and_signature(string csharp_function, IEnumerable<TensorSpec> input_signature, bool is_pure = false, object jit_compile = null)
+        //{
+        //    // TODO(Rinne): _validate_signature(input_signature)
+        //    // TODO(Rinne): _validate_python_function(python_function, input_signature)
+
+
+        //}
+
+        #region Nested types
+        /// <summary>Container for nested types declared in the FunctionSpec message type.</summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static partial class Types {
       /// <summary>
       /// Whether the function should be compiled by XLA.

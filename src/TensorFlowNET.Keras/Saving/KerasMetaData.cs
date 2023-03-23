@@ -8,9 +8,14 @@ namespace Tensorflow.Keras.Saving
 {
     public class KerasMetaData
     {
+        [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("class_name")]
         public string ClassName { get; set; }
+        [JsonProperty("trainable")]
+        public bool Trainable { get; set; }
+        [JsonProperty("dtype")]
+        public TF_DataType DType { get; set; } = TF_DataType.DtInvalid;
         [JsonProperty("is_graph_network")]
         public bool IsGraphNetwork { get; set; }
         [JsonProperty("shared_object_id")]
@@ -20,5 +25,13 @@ namespace Tensorflow.Keras.Saving
         public JObject Config { get; set; }
         [JsonProperty("build_input_shape")]
         public TensorShapeConfig BuildInputShape { get; set; }
+        [JsonProperty("batch_input_shape")]
+        public TensorShapeConfig BatchInputShape { get; set; }
+        [JsonProperty("activity_regularizer")]
+        public IRegularizer ActivityRegularizer { get; set; }
+        [JsonProperty("input_spec")]
+        public JToken InputSpec { get; set; }
+        [JsonProperty("stateful")]
+        public bool? Stateful { get; set; }
     }
 }

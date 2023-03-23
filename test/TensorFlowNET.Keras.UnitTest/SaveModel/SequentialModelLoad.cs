@@ -1,10 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 using Tensorflow;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.Keras.UnitTest.SaveModel;
 
@@ -55,5 +57,12 @@ public class SequentialModelLoad
         var dataset = new RandomDataSet(new Shape(227, 227, 3), 16);
 
         model.fit(dataset.Data, dataset.Labels, batch_size, num_epochs);
+    }
+
+    [TestMethod]
+    public void Temp()
+    {
+        var model = tf.keras.models.load_model(@"D:\development\tf.net\tf_test\python_func");
+        model.summary();
     }
 }

@@ -26,7 +26,7 @@ namespace Tensorflow.Keras.Saving
 {
     public class KerasObjectLoader
     {
-        private static readonly IDictionary<string, Trackable> PUBLIC_ATTRIBUTES = new CommonEndPoints().CheckpointableObjects;
+        internal static readonly IDictionary<string, Trackable> PUBLIC_ATTRIBUTES = new CommonEndPoints().CheckpointableObjects;
         private SavedMetadata _metadata;
         private SavedObjectGraph _proto;
         private Dictionary<int, string> _node_paths = new Dictionary<int, string>();
@@ -311,6 +311,10 @@ namespace Tensorflow.Keras.Saving
                 {
                     (obj, setter) = _revive_custom_object(identifier, metadata);
                 }
+                if(obj is null)
+                {
+                    throw new ValueError($"Cannot revive {metadata.Name} from the config or customized object.");
+                }
                 Debug.Assert(obj is Layer);
                 _maybe_add_serialized_attributes(obj as Layer, metadata);
                 return (obj, setter);
@@ -349,8 +353,14 @@ namespace Tensorflow.Keras.Saving
 
         private (Trackable, Action<object, object, object>) _revive_custom_object(string identifier, KerasMetaData metadata)
         {
-            // TODO(Rinne): implement it.
-            throw new NotImplementedException();
+            if(identifier == SavedModel.Constants.LAYER_IDENTIFIER)
+            {
+                return RevivedLayer.init_from_metadata(metadata);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         Model _revive_graph_network(string identifier, KerasMetaData metadata, int node_id)
@@ -403,9 +413,13 @@ namespace Tensorflow.Keras.Saving
 
             var obj = generic_utils.deserialize_keras_object(class_name, config);
 
+            if(obj is null)
+            {
+                return null;
+            }
             obj.Name = metadata.Name;
             // TODO(Rinne): add `trainable`, `dtype`, `stateful` and `save_spec`
-           
+
 
             var built = _try_build_layer(obj, node_id, metadata.BuildInputShape);
             if (!built)

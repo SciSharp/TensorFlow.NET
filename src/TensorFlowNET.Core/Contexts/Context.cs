@@ -156,6 +156,12 @@ namespace Tensorflow.Contexts
             return has_graph_arg;
         }
 
+        public bool has_function(string name)
+        {
+            ensure_initialized();
+            return c_api.TFE_ContextHasFunction(_handle, name);
+        }
+
         public void restore_mode()
         {
             context_switches.Pop();

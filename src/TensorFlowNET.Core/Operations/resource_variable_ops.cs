@@ -126,7 +126,7 @@ namespace Tensorflow
         /// <param name="handle"></param>
         /// <param name="handle_data"></param>
         /// <param name="graph_mode"></param>
-        private static void _set_handle_shapes_and_types(Tensor tensor, HandleData handle_data, bool graph_mode)
+        internal static void _set_handle_shapes_and_types(Tensor tensor, HandleData handle_data, bool graph_mode)
         {
             if (!graph_mode)
                 return;

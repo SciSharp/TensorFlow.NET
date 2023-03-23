@@ -1,4 +1,5 @@
 ﻿using System;
+using Tensorflow.Functions;
 using Tensorflow.Train;
 
 namespace Tensorflow

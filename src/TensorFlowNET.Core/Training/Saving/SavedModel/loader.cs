@@ -35,6 +35,8 @@ namespace Tensorflow
         private Dictionary<int, (Trackable, Action<object, object, object>)> _loaded_nodes;
         private List<Trackable> _nodes;
         private Dictionary<int, Action<object, object, object>> _node_setters;
+        private Dictionary<string, ConcreteFunction> _concrete_functions;
+        private HashSet<string> _restored_concrete_functions;
         public Loader(SavedObjectGraph object_graph_proto, SavedModel saved_model_proto, string export_dir, 
             CheckpointOptions ckpt_options, LoadOptions save_options, IDictionary<string, (Trackable, Action<object, object, object>)> filters)
         {
@@ -44,6 +46,9 @@ namespace Tensorflow
             _proto = object_graph_proto;
             _export_dir = export_dir;
             // TODO: `this._concrete_functions` and `this._restored_concrete_functions`
+            _concrete_functions = function_deserialization.load_function_def_library(
+                meta_graph.GraphDef.Library, _proto);
+            _restored_concrete_functions = new HashSet<string>();
             _checkpoint_options = ckpt_options;
             _save_options = save_options;
 
@@ -464,9 +469,17 @@ namespace Tensorflow
             }
         }
 
-        private void _setup_function_captures()
+        private void _setup_function_captures(string concrete_function_name, Dictionary<Maybe<string, int>, Trackable> nodes)
         {
-            // TODO: implement it with concrete functions.
+            if (_restored_concrete_functions.Contains(concrete_function_name))
+            {
+                return;
+            }
+            _restored_concrete_functions.Add(concrete_function_name);
+            var concrete_function = _concrete_functions[concrete_function_name];
+            var proto = _proto.ConcreteFunctions[concrete_function_name];
+            var inputs = proto.BoundInputs.Select(x => nodes[x]);
+            function_saved_model_utils.restore_captures(concrete_function, inputs);
         }
 
         private void _setup_remaining_functions()
@@ -625,7 +638,7 @@ namespace Tensorflow
             var fn = function_deserialization.recreate_function(proto, null);
             foreach (var name in proto.ConcreteFunctions)
             {
-                _setup_function_captures();
+                _setup_function_captures(name, dependencies);
             }
             return (fn, setattr);
         }
@@ -633,8 +646,9 @@ namespace Tensorflow
         private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
             Dictionary<Maybe<string, int>, Trackable> dependencies)
         {
-            throw new NotImplementedException();
-            //var fn = function_deserialization.setup_bare_concrete_function(proto, )
+            var fn = function_deserialization.setup_bare_concrete_function(proto, _concrete_functions);
+            _setup_function_captures(proto.ConcreteFunctionName, dependencies);
+            return (fn, setattr);
         }
 
         // TODO: remove this to a common class.
