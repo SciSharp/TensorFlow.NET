@@ -840,7 +840,7 @@ namespace Tensorflow.Gradients
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        private static (Tensor, Tensor, bool)[] SmartBroadcastGradientArgs(Tensor x, Tensor y, Tensor grad)
+        public static (Tensor, Tensor, bool)[] SmartBroadcastGradientArgs(Tensor x, Tensor y, Tensor grad)
         {
             Tensor sx, sy;
             if (x.shape.IsFullyDefined &&
