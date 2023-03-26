@@ -141,7 +141,6 @@ namespace Tensorflow.Keras.Engine
             int epochs = 1,
             int verbose = 1,
             List<ICallback> callbacks = null,
-            //float validation_split = 0f,
             IDatasetV2 validation_data = null,
             bool shuffle = true,
             int initial_epoch = 0,
@@ -163,10 +162,8 @@ namespace Tensorflow.Keras.Engine
                 Model = this,
                 StepsPerExecution = _steps_per_execution
             });
-            foreach( var (x,y) in dataset)
-            {
 
-            }
+
             return FitInternal(data_handler, epochs, verbose, callbacks, validation_data: validation_data,
                     train_step_func: train_step_function);
         }
