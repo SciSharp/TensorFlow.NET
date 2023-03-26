@@ -730,12 +730,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor angle(Tensor input, TF_DataType? Tout = null, string name = "Angle")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Angle", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Angle", name, new ExecuteOpArgs(new object[] { input }));
         }
 
         /// <summary>
@@ -4978,14 +4973,10 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor complex(Tensor real, Tensor imag, TF_DataType? Tout = null, string name = "Complex")
         {
-            var dict = new Dictionary<string, object>();
-            dict["real"] = real;
-            dict["imag"] = imag;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Complex", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Complex", name, new ExecuteOpArgs(new object[] { real, imag })); // sorry, cannot pass Tout, so it only works with complex64. complex128 is not supported yet
         }
+
+
 
         /// <summary>
         ///    Computes the complex absolute value of a tensor.
@@ -5008,12 +4999,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor complex_abs(Tensor x, TF_DataType? Tout = null, string name = "ComplexAbs")
         {
-            var dict = new Dictionary<string, object>();
-            dict["x"] = x;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("ComplexAbs", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("ComplexAbs", name, new ExecuteOpArgs(new object[] { x }));
         }
 
         /// <summary>
@@ -5313,10 +5299,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor conj(Tensor input, string name = "Conj")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("Conj", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Conj", name, new ExecuteOpArgs(new object[] { input }));
         }
 
         /// <summary>
@@ -13327,12 +13310,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor imag(Tensor input, TF_DataType? Tout = null, string name = "Imag")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Imag", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Imag", name, new ExecuteOpArgs(new object[] { input }));
         }
 
         /// <summary>
@@ -23865,12 +23843,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor real(Tensor input, TF_DataType? Tout = null, string name = "Real")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Real", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Real", name, new ExecuteOpArgs(new object[] {input}));
         }
 
         /// <summary>
