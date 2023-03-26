@@ -48,7 +48,7 @@ public class History : ICallback
             {
                 history[log.Key] = new List<float>();
             }
-            history[log.Key].Add((float)log.Value);
+            history[log.Key].Add(log.Value);
         }
     }
 
@@ -78,7 +78,7 @@ public class History : ICallback
 
     }
 
-    public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
+    public void on_test_batch_end(long end_step, Dictionary<string, float> logs)
     {
     }
 }

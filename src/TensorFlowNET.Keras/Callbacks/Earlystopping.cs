@@ -121,7 +121,7 @@ public class EarlyStopping: ICallback
     public void on_predict_end() { }
     public void on_test_begin() { }
     public void on_test_batch_begin(long step) { }
-    public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs) { }
+    public void on_test_batch_end(long end_step, Dictionary<string, float> logs) { }
 
     float get_monitor_value(Dictionary<string, float> logs)
     {

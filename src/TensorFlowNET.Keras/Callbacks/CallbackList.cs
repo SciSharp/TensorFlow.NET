@@ -69,7 +69,7 @@ public class CallbackList
     {
         callbacks.ForEach(x => x.on_test_batch_begin(step));
     }
-    public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
+    public void on_test_batch_end(long end_step, Dictionary<string, float> logs)
     {
         callbacks.ForEach(x => x.on_test_batch_end(end_step, logs));
     }

@@ -105,11 +105,11 @@ namespace Tensorflow.Keras.Callbacks
         {
             _sw.Restart();
         }
-        public void on_test_batch_end(long end_step, IEnumerable<(string, Tensor)> logs)
+        public void on_test_batch_end(long end_step, Dictionary<string, float> logs)
         {
             _sw.Stop();
             var elapse = _sw.ElapsedMilliseconds;
-            var results = string.Join(" - ", logs.Select(x => $"{x.Item1}: {(float)x.Item2.numpy():F6}"));
+            var results = string.Join(" - ", logs.Select(x => $"{x.Key}: {x.Value:F6}"));
 
             Binding.tf_output_redirect.Write($"{end_step + 1:D4}/{_parameters.Steps:D4} - {elapse}ms/step - {results}");
             if (!Console.IsOutputRedirected)
