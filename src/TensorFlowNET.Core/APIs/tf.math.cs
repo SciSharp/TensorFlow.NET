@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2023 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -595,5 +595,7 @@ namespace Tensorflow
             => gen_math_ops.square(x, name: name);
         public Tensor squared_difference(Tensor x, Tensor y, string name = null)
             => gen_math_ops.squared_difference(x: x, y: y, name: name);
+        public Tensor complex(Tensor real, Tensor imag, Tensorflow.TF_DataType? dtype = null, 
+                string name = null) => gen_ops.complex(real, imag, dtype, name);
     }
 }
