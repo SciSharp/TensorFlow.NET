@@ -22,7 +22,6 @@ namespace Tensorflow.Graphs
 
         public override void OnEntry(MethodExecutionArgs args)
         {
-            File.WriteAllText(@"D:\temp\for_test.txt", "jyfgjyfjhfjhc");
             // TODO: func_name can be cache in FullName + Args
             func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}";
 

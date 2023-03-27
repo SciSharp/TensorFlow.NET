@@ -31,6 +31,9 @@ namespace Tensorflow
         public static extern void TFE_ContextOptionsSetConfig(SafeContextOptionsHandle opts, byte[] proto, ulong proto_len, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextAddFunctionDef(SafeContextHandle ctx, string serialized_function_def, int size);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TFE_ContextOptionsSetDevicePlacementPolicy(SafeContextOptionsHandle opts, ContextDevicePlacementPolicy device_policy);
 
         /// <summary>

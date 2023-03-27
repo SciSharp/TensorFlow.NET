@@ -15,6 +15,7 @@ public class FuncGraph : Graph, IDisposable
 
     public Tensors Inputs { get; set; } = new Tensors();
     public Tensors Outputs { get; set; } = new Tensors();
+    public string Name { get; set; }
     public Dictionary<string, string> Attrs { get; set; }
 
     Dictionary<long, (Tensor, Tensor)> _captures
@@ -39,7 +40,7 @@ public class FuncGraph : Graph, IDisposable
         outer_graph = ops.get_default_graph();
         while (outer_graph.building_function)
             outer_graph = outer_graph.OuterGraph;
-        _graph_key = name;
+        _graph_key = Name = name;
         building_function = true;
     }
 
@@ -48,7 +49,7 @@ public class FuncGraph : Graph, IDisposable
         outer_graph = ops.get_default_graph();
         while (outer_graph.building_function)
             outer_graph = outer_graph.OuterGraph;
-        _graph_key = name;
+        _graph_key = Name = name;
         building_function = true;
         Attrs = attrs;
         // Will to test if FuncGraph has memory leak

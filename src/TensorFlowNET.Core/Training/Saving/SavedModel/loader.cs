@@ -375,6 +375,11 @@ namespace Tensorflow
             // Re-create everything.
             foreach (var (node_id, proto) in _iter_all_nodes())
             {
+                if(node_id == 45)
+                {
+                    // TODelete
+                    Console.WriteLine();
+                }
                 if (nodes.ContainsKey(node_id))
                 {
                     continue;
@@ -469,7 +474,7 @@ namespace Tensorflow
             }
         }
 
-        private void _setup_function_captures(string concrete_function_name, Dictionary<Maybe<string, int>, Trackable> nodes)
+        private void _setup_function_captures(string concrete_function_name, IDictionary<Maybe<string, int>, Trackable> nodes)
         {
             if (_restored_concrete_functions.Contains(concrete_function_name))
             {
@@ -572,7 +577,7 @@ namespace Tensorflow
             {
                 SavedObject.KindOneofCase.UserObject => _recreate_user_object(proto.UserObject, node_id),
                 SavedObject.KindOneofCase.Function => _recreate_function(proto.Function, null),
-                SavedObject.KindOneofCase.BareConcreteFunction => throw new NotImplementedException(),
+                SavedObject.KindOneofCase.BareConcreteFunction => _recreate_bare_concrete_function(proto.BareConcreteFunction, dependencies),
                 SavedObject.KindOneofCase.Variable => _recreate_variable(proto.Variable),
                 SavedObject.KindOneofCase.CapturedTensor => throw new NotImplementedException(),
                 _ => throw new NotImplementedException()
@@ -644,7 +649,7 @@ namespace Tensorflow
         }
 
         private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
-            Dictionary<Maybe<string, int>, Trackable> dependencies)
+            IDictionary<Maybe<string, int>, Trackable> dependencies)
         {
             var fn = function_deserialization.setup_bare_concrete_function(proto, _concrete_functions);
             _setup_function_captures(proto.ConcreteFunctionName, dependencies);

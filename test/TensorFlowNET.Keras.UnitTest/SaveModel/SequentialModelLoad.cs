@@ -62,7 +62,7 @@ public class SequentialModelLoad
     [TestMethod]
     public void Temp()
     {
-        var model = tf.keras.models.load_model(@"D:\development\tf.net\tf_test\python_func");
+        var model = tf.keras.models.load_model(@"C:\Work\tf.net\tf_test\python_func");
         model.summary();
     }
 }

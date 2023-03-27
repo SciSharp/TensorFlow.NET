@@ -15,11 +15,13 @@ namespace Tensorflow.Functions
     {
         protected IEnumerable<Tensor> _captured_inputs;
         internal FuncGraph func_graph;
+        protected DelayedRewriteGradientFunctions _delayed_rewrite_functions;
+        protected Dictionary<string, string> _attrs;
         internal ForwardBackwardCall forward_backward;
         public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
 
-        public string Name => func_graph?.FuncName;
+        public string Name => _delayed_rewrite_functions.forward().Name;
 
         public Tensor[] Outputs;
         public Type ReturnType;
@@ -31,6 +33,8 @@ namespace Tensorflow.Functions
         {
             func_graph = new FuncGraph(name);
             _captured_inputs = func_graph.external_captures;
+            _attrs= new Dictionary<string, string>();
+            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
         }
 
         public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs = null)
@@ -38,7 +42,9 @@ namespace Tensorflow.Functions
             func_graph = graph;
             _captured_inputs = func_graph.external_captures;
 
-            ToGraph(graph.Inputs, graph.Outputs.Where(x => x != null).ToArray());
+            //ToGraph(graph.Inputs, graph.Outputs.Where(x => x != null).ToArray());
+            _attrs = attrs;
+            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
         }
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)
@@ -57,6 +63,8 @@ namespace Tensorflow.Functions
                 null);
             func_graph.Exit();
             _captured_inputs = func_graph.external_captures;
+            _attrs = new Dictionary<string, string>();
+            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
         }
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
@@ -78,6 +86,8 @@ namespace Tensorflow.Functions
                 null);
             func_graph.Exit();
             _captured_inputs = func_graph.external_captures;
+            _attrs = new Dictionary<string, string>();
+            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
         }
 
         /*public ConcreteFunction(Func<Tensors, Tensors> func,
@@ -176,7 +186,7 @@ namespace Tensorflow.Functions
             {
                 g = ops.get_default_graph();
             }
-            // TODO(Rinne); complete it with `_delayed_rewrite_functions`.
+            _delayed_rewrite_functions.forward().AddToGraph(g);
         }
 
         public void SetExternalCaptures(IEnumerable<Tensor> captures)

@@ -77,11 +77,8 @@ namespace Tensorflow.Training.Saving.SavedModel
             }
 
             Dictionary<string, ConcreteFunction> loaded_gradients = new();
-            int aa = 0;
-            var temp = _sort_function_defs(library, function_deps);
-            foreach (var fdef in temp)
+            foreach (var fdef in _sort_function_defs(library, function_deps))
             {
-                aa++;
                 var orig_name = _fix_fdef_in_place(fdef, functions, load_shared_name_suffix, new_gradient_op_types);
 
                 if(saved_object_graph is not null && saved_object_graph.ConcreteFunctions.ContainsKey(orig_name))
@@ -191,7 +188,7 @@ namespace Tensorflow.Training.Saving.SavedModel
             {
                 if(op.op.type == "StatefulPartitionedCall" || op.op.type == "PartitionedCall")
                 {
-                    var function = renamed_functions[tf.compat.as_bytes(op.op.node_def.Attr["f"].Func.Name).ToString()];
+                    var function = renamed_functions[op.op.node_def.Attr["f"].Func.Name];
                     // TODO(Rinne): deal with `op._gradient_function`.
                 }
                 string gradient_op_type = null;

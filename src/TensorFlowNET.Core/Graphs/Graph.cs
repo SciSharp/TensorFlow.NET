@@ -19,6 +19,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Tensorflow.Framework;
+using Tensorflow.Functions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -85,6 +87,12 @@ namespace Tensorflow
         private int _next_id_counter;
         private List<Operation> _unfetchable_ops = new List<Operation>();
         private List<Tensor> _unfeedable_tensors = new List<Tensor>();
+        private Dictionary<string, EagerDefinedFunction> _functions = new();
+        private VersionDef _graph_def_versions = new VersionDef()
+        {
+            Producer = versions.GRAPH_DEF_VERSION,
+            MinConsumer = versions.GRAPH_DEF_VERSION_MIN_CONSUMER
+        };
 
         public string _name_stack = "";
         protected string _graph_key;
@@ -120,6 +128,7 @@ namespace Tensorflow
 
         protected Graph outer_graph;
         public Graph OuterGraph => outer_graph;
+        public Dictionary<string, EagerDefinedFunction> Functions => _functions;
 
         public Graph()
         {
@@ -148,8 +157,23 @@ namespace Tensorflow
 
         public bool IsFunction(string name)
         {
-            // TODO(Rinne): deal with `_functions`.
-            throw new NotImplementedException();
+            return _functions.ContainsKey(tf.compat.as_str(name));
+        }
+
+        public void AddFunction(EagerDefinedFunction function)
+        {
+            _check_not_finalized();
+
+            var name = function.Name;
+
+            // TODO(Rinne): deal with c_graph
+
+            _functions[tf.compat.as_str(name)] = function;
+
+            if(_graph_def_versions.MinConsumer < 12)
+            {
+                _graph_def_versions.MinConsumer = 12;
+            }
         }
 
         private Tensor _as_graph_element(object obj)

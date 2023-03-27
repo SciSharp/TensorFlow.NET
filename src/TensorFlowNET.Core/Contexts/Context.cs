@@ -162,6 +162,13 @@ namespace Tensorflow.Contexts
             return c_api.TFE_ContextHasFunction(_handle, name);
         }
 
+        public void add_function_def(FunctionDef fdef)
+        {
+            ensure_initialized();
+            var fdef_string = fdef.ToString();
+            c_api.TFE_ContextAddFunctionDef(_handle, fdef_string, fdef_string.Length);
+        }
+
         public void restore_mode()
         {
             context_switches.Pop();

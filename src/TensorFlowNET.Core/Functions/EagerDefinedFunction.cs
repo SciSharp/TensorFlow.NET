@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Contexts;
 using Tensorflow.Graphs;
 using static Tensorflow.Binding;
 
@@ -11,9 +12,20 @@ namespace Tensorflow.Functions
     public class EagerDefinedFunction
     {
         public int _num_outputs;
-        public string Name => _func_graph.FuncName;
-
         FuncGraph _func_graph;
+        FunctionDef _definition;
+        public string Name => _func_graph.FuncName;
+        public FunctionDef Definition
+        {
+            get
+            {
+                if(_definition is null)
+                {
+                    _definition = _get_definition();
+                }
+                return _definition;
+            }
+        }
         public EagerDefinedFunction(string name, FuncGraph graph, 
             Tensors inputs, Tensors outputs,
             Dictionary<string, string> attrs)
@@ -45,6 +57,40 @@ namespace Tensorflow.Functions
                 _num_outputs);
 
             return results;
+        }
+
+        public void AddToGraph(Graph g = null)
+        {
+            if(g is null && tf.Context.executing_eagerly())
+            {
+                var ctx = tf.Context;
+                if (!ctx.has_function(this.Name))
+                {
+                    ctx.add_function_def(Definition);
+                }
+            }
+            else
+            {
+                if (!g.IsFunction(Name))
+                {
+                    g.AddFunction(this);
+                }
+                foreach(var f in _func_graph.Functions.Values)
+                {
+                    if (!g.IsFunction(f.Name))
+                    {
+                        g.AddFunction(f);
+                    }
+                }
+            }
+        }
+
+        private FunctionDef _get_definition()
+        {
+            var buffer = c_api_util.tf_buffer();
+            // TODO(Rinne): pywrap_tf_session.TF_FunctionToFunctionDef
+            var proto_data = c_api.TF_GetBuffer(buffer);
+            throw new NotImplementedException();
         }
     }
 }
