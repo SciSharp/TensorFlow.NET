@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using OneOf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -174,7 +175,7 @@ namespace Tensorflow
                         full_name = name + "_" + attr;
                     }
                     var op = factory(full_name);
-                    if(op.TryGet<BaseResourceVariable>(out var variable))
+                    if(op.TryPickT0(out var variable, out var saveable))
                     {
                         foreach (var v in saveable_objects_for_op(variable as Trackable, variable.Name))
                         {
@@ -183,7 +184,6 @@ namespace Tensorflow
                     }
                     else
                     {
-                        var saveable = op.GetValue<MySaveableObject>();
                         foreach (var v in saveable_objects_for_op(saveable, saveable.name))
                         {
                             yield return v;
@@ -252,11 +252,11 @@ namespace Tensorflow
             return names_to_saveables;
         }
 
-        public static IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> saveable_objects_from_trackable(Trackable obj)
+        public static IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> saveable_objects_from_trackable(Trackable obj)
         {
             // skip the process of type `PythonState`
 
-            Maybe<BaseResourceVariable, MySaveableObject> create_saveable(string name = "")
+            OneOf<BaseResourceVariable, MySaveableObject> create_saveable(string name = "")
             {
                 // skip the case that `obj._serialize_to_tensors` is `ConcreteFunction`.
                 var tensor_dict = obj.serialize_to_tensors();
@@ -272,14 +272,14 @@ namespace Tensorflow
                     string spec_name = name + TrackableUtils.escape_local_name(tensor_name);
 
                     IDictionary<string, Tensor> internal_dict;
-                    if (maybe_tensor.TryGet<Tensor>(out var tensor))
+                    if (maybe_tensor.TryPickT0(out var tensor, out var dic))
                     {
                         internal_dict = new Dictionary<string, Tensor>();
                         internal_dict[""] = tensor;
                     }
                     else
                     {
-                        internal_dict = maybe_tensor.GetValue<IDictionary<string, Tensor>>();
+                        internal_dict = dic;
                     }
 
                     foreach (var item in internal_dict)
@@ -292,7 +292,7 @@ namespace Tensorflow
 
             if (trackable_has_serialize_to_tensor(obj))
             {
-                Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> res = new();
+                Dictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> res = new();
                 res[TrackableUtils.SERIALIZE_TO_TENSORS_NAME] = create_saveable;
                 return res;
             }
@@ -316,9 +316,9 @@ namespace Tensorflow
         /// Converts a list of SaveableObjects to a tensor dictionary.
         /// </summary>
         /// <param name="saveables"></param>
-        public static Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> saveable_object_to_tensor_dict(IList<MySaveableObject> saveables)
+        public static Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> saveable_object_to_tensor_dict(IList<MySaveableObject> saveables)
         {
-            Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> tensor_dict = new();
+            Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> tensor_dict = new();
             foreach (var saveable in saveables)
             {
                 foreach (var spec in saveable.specs)
@@ -328,7 +328,7 @@ namespace Tensorflow
                     var slice_spec = convert_to_string(spec.slice_spec);
                     if (!string.IsNullOrEmpty(slice_spec))
                     {
-                        tensor_dict.SetDefault(name, new Dictionary<string, Tensor>()).GetValue<IDictionary<string, Tensor>>()[slice_spec] = spec.tensor;
+                        tensor_dict.SetDefault(name, new Dictionary<string, Tensor>()).AsT1[slice_spec] = spec.tensor;
                     }
                     else
                     {
@@ -343,7 +343,7 @@ namespace Tensorflow
         /// Generates `Trackable._restore_from_tensors` from SaveableObjects.
         /// </summary>
         /// <returns></returns>
-        public static Func<IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>, IDictionary<string, Operation>> saveable_object_to_restore_fn(IList<MySaveableObject> saveables)
+        public static Func<IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>, IDictionary<string, Operation>> saveable_object_to_restore_fn(IList<MySaveableObject> saveables)
         {
             return (restored_tensors) =>
             {
@@ -359,14 +359,14 @@ namespace Tensorflow
 
                         var maybe_tensor = restored_tensors[name];
                         IDictionary<string, Tensor> dict;
-                        if(maybe_tensor.TryGet<Tensor>(out var tensor))
+                        if(maybe_tensor.TryPickT0(out var tensor, out var dic))
                         {
                             dict = new Dictionary<string, Tensor>();
                             dict[""] = tensor;
                         }
                         else
                         {
-                            dict = maybe_tensor.GetValue<IDictionary<string, Tensor>>();
+                            dict = dic;
                         }
                         saveable_restored_tensors.Add(dict[slice_spec]);
                     }
@@ -381,18 +381,18 @@ namespace Tensorflow
         /// </summary>
         /// <param name="saveable_fn_by_name"></param>
         /// <param name="temp_session"></param>
-        public static IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> recreate_saveable_objects(
+        public static IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> recreate_saveable_objects(
             IDictionary<string, (Trackable, Trackable)> saveable_fn_by_name, IEnumerable<object>? temp_session)
         {
             if (saveable_fn_by_name.Count > 0)
             {
                 throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues");
             }
-            var res = new Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>>();
+            var res = new Dictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>();
             return res;
         }
 
-        public static Maybe<BaseResourceVariable, MySaveableObject> create_saveable_object(string name, string key, Func<string, Maybe<BaseResourceVariable, MySaveableObject>> factory, 
+        public static OneOf<BaseResourceVariable, MySaveableObject> create_saveable_object(string name, string key, Func<string, OneOf<BaseResourceVariable, MySaveableObject>> factory, 
             bool call_with_mapped_captures = false)
         {
             return factory(key);
@@ -412,7 +412,7 @@ namespace Tensorflow
         public object Obj => _obj;
         public IList<MySaveableObject> mySaveables=> _saveables;
 
-        public override IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        public override IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
         {
             return saveable_object_util.saveable_object_to_tensor_dict(_saveables);
         }
@@ -422,7 +422,7 @@ namespace Tensorflow
         /// </summary>
         /// <param name="restored_tensors"></param>
         /// <returns></returns>
-        public override IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors)
+        public override IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> restored_tensors)
         {
             List<string> expected_keys = new();
             foreach(var saveable in _saveables)

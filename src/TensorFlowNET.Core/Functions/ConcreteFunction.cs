@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Tensorflow.Eager;
 using Tensorflow.Framework.Models;
 using Tensorflow.Graphs;
 using Tensorflow.Train;
@@ -17,11 +19,13 @@ namespace Tensorflow.Functions
         internal FuncGraph func_graph;
         protected DelayedRewriteGradientFunctions _delayed_rewrite_functions;
         protected Dictionary<string, string> _attrs;
+        protected FunctionSpec _function_spec;
+        protected FunctionSpec _pre_initialized_function_spec = null;
         internal ForwardBackwardCall forward_backward;
         public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
 
-        public string Name => _delayed_rewrite_functions.forward().Name;
+        public string Name => _delayed_rewrite_functions.Forward().Name;
 
         public Tensor[] Outputs;
         public Type ReturnType;
@@ -175,7 +179,13 @@ namespace Tensorflow.Functions
             var (forward_function, args_with_tangents) = forward_backward.Forward();
             Tensors flat_outputs = null;
             if (executing_eagerly)
+            {
                 flat_outputs = forward_function.Call(args_with_tangents);
+            }
+            else
+            {
+                flat_outputs = forward_function.Call(args_with_tangents);
+            }
             forward_backward.Record(flat_outputs);
             return flat_outputs;
         }
@@ -186,7 +196,7 @@ namespace Tensorflow.Functions
             {
                 g = ops.get_default_graph();
             }
-            _delayed_rewrite_functions.forward().AddToGraph(g);
+            _delayed_rewrite_functions.Forward().AddToGraph(g);
         }
 
         public void SetExternalCaptures(IEnumerable<Tensor> captures)
@@ -196,8 +206,60 @@ namespace Tensorflow.Functions
 
         ForwardBackwardCall SelectForwardAndBackwardFunctions(Tensors args, int possible_gradient_type, bool executing_eagerly)
         {
-            var functions = new FirstOrderTapeGradientFunctions(func_graph, false);
-            return new ForwardBackwardCall(functions, args, tape_watching: true);
+            TangentInfo input_tangents;
+            if (executing_eagerly)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                input_tangents = new TangentInfo();
+            }
+            if(possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_FIRST_ORDER)
+            {
+                if(input_tangents.Indices is not null || executing_eagerly)
+                {
+                    var functions = new FirstOrderTapeGradientFunctions(func_graph, false);
+                    return new ForwardBackwardCall(functions, args, tape_watching: true);
+                }
+                else
+                {
+                    return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: true);
+                }
+            }
+            else if(possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_HIGHER_ORDER)
+            {
+                throw new NotImplementedException();
+            }
+
+            // TODO(Rinne): add arg "input_tagents" for ForwardBackwardCall.
+            return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: false);
+        }
+
+        internal void _set_function_spec(FunctionSpec spec)
+        {
+            _function_spec = null;
+            _pre_initialized_function_spec = spec;
+            _initialize_function_spec();
+        }
+
+        internal void _initialize_function_spec()
+        {
+            if(_pre_initialized_function_spec is null)
+            {
+                return;
+            }
+            Debug.Assert(_function_spec is null, "already initialized");
+            var spec = _pre_initialized_function_spec;
+            //var args = spec.Fullargspec.DictValue.Fields["args"];
+            // TODO(Rinne): self.structured_input_signature
+
+            _function_spec = new FunctionSpec()
+            {
+                Fullargspec = spec.Fullargspec,
+                IsMethod = spec.IsMethod,
+                InputSignature = spec.InputSignature
+            };
         }
 
         public override string ToString()

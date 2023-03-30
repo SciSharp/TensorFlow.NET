@@ -26,7 +26,7 @@ namespace Tensorflow.Keras.Saving
 {
     public class KerasObjectLoader
     {
-        internal static readonly IDictionary<string, Trackable> PUBLIC_ATTRIBUTES = new CommonEndPoints().CheckpointableObjects;
+        internal static readonly IDictionary<string, Trackable> PUBLIC_ATTRIBUTES;
         private SavedMetadata _metadata;
         private SavedObjectGraph _proto;
         private Dictionary<int, string> _node_paths = new Dictionary<int, string>();
@@ -39,7 +39,13 @@ namespace Tensorflow.Keras.Saving
 
         static KerasObjectLoader()
         {
-            PUBLIC_ATTRIBUTES[Keras.Saving.SavedModel.Constants.KERAS_ATTR] = null;
+            var endPoints = new CommonEndPoints();
+            PUBLIC_ATTRIBUTES = new Dictionary<string, Trackable>();
+            foreach (var key in endPoints._all_checkpointable_objects.Concat(endPoints._all_functions))
+            {
+                PUBLIC_ATTRIBUTES[key] = null;
+            }
+            PUBLIC_ATTRIBUTES[SavedModel.Constants.KERAS_ATTR] = null;
         }
 
         public KerasObjectLoader(SavedMetadata metadata, SavedObjectGraph object_graph_def)
@@ -125,8 +131,14 @@ namespace Tensorflow.Keras.Saving
                     continue;
                 }
 
-                // TODO: deal with `RevivedLayer` and `RevivedInputLayer`.
-                layers_revived_from_config.Add(node as Layer);
+                if(node is RevivedLayer or RevivedInputLayer)
+                {
+                    layers_revived_from_saved_model.Add(node as Layer);
+                }
+                else
+                {
+                    layers_revived_from_config.Add(node as Layer);
+                }
             }
 
             _finalize_saved_model_layers(layers_revived_from_saved_model);
@@ -171,10 +183,13 @@ namespace Tensorflow.Keras.Saving
                         // TODO(Rinne): implement it
                     }
                 }
-                
-                // `model.__init__(layers, config["name"])`
-                s.InitLayers(layers);
-                s.Name = config["name"].ToObject<string>();
+
+                // `model.__init__(layers, config["name"])`InitLayers(layers);
+                s = new Sequential(new SequentialArgs(){
+                    Layers = layers.Select(x => x as ILayer).ToList(), 
+                    Name = config["name"].ToObject<string>()
+                });
+                //s.Name = config["name"].ToObject<string>();
                 if(s.input is null || s.input.Length == 0)
                 {
                     var first_layer = _get_child_layer_node_ids(model_id)[0];
@@ -205,7 +220,12 @@ namespace Tensorflow.Keras.Saving
 
         private void _set_network_attributes_from_metadata(Model revived_object)
         {
-            // TODO: implement it.
+            var metadata = revived_object.SerializedAttributes["matadata"] as JObject;
+            if (metadata.ContainsKey("dtype"))
+            {
+                // TODO(Rinne): set_dtype_policy.
+            }
+            revived_object.args.Trainable = metadata["trainable"].Value<bool>();
         }
 
         /// <summary>
@@ -330,7 +350,7 @@ namespace Tensorflow.Keras.Saving
         private (Trackable, Action<object, object, object>) _revive_from_config(string identifier, KerasMetaData metadata, int node_id)
         {
             Trackable obj;
-            if(identifier == Keras.Saving.SavedModel.Constants.METRIC_IDENTIFIER)
+            if(identifier == SavedModel.Constants.METRIC_IDENTIFIER)
             {
                 // TODO(Rinne): implement it.
                 return (null, null);
@@ -429,25 +449,26 @@ namespace Tensorflow.Keras.Saving
             return obj;
         }
 
-        private void _revive_setter(object layer, object name, object value)
+        private void _revive_setter(object obj, object name, object value)
         {
             Debug.Assert(name is string);
-            Debug.Assert(layer is Layer);
+            Debug.Assert(obj is Layer);
+            Layer layer = (Layer)obj;
             if(PUBLIC_ATTRIBUTES.ContainsKey(name as string))
             {
                 if(value is Trackable)
                 {
-                    (layer as Layer)._track_trackable(value as Trackable, name as string);
+                    layer._track_trackable(value as Trackable, name as string);
                 }
-                if((layer as Layer).SerializedAttributes is null)
+                if(layer.SerializedAttributes is null)
                 {
-                    (layer as Layer).SerializedAttributes = new JObject();
+                    layer.SerializedAttributes = new Dictionary<string, object>();
                 }
-                (layer as Layer).SerializedAttributes[name as string] = JToken.FromObject(value);
+                layer.SerializedAttributes[name as string] = value;
             }
-            else if(layer is Functional && Regex.Match(name as string, @"^layer(_with_weights)?-[\d+]").Success)
+            else if(layer is Functional functional && Regex.Match(name as string, @"^layer(_with_weights)?-[\d+]").Success)
             {
-                (layer as Functional)._track_trackable(value as Trackable, name as string, overwrite: true);
+                functional._track_trackable(value as Trackable, name as string, overwrite: true);
             }
             else
             {
@@ -521,7 +542,7 @@ namespace Tensorflow.Keras.Saving
             }
 
             var metric_list_node_id = _search_for_child_node(node_id, new string[] { 
-                Keras.Saving.SavedModel.Constants.KERAS_ATTR, "layer_metrics" 
+                SavedModel.Constants.KERAS_ATTR, "layer_metrics" 
             });
             if(metric_list_node_id is not null && obj is Model model && model.metrics is not null)
             {
@@ -547,7 +568,7 @@ namespace Tensorflow.Keras.Saving
                 // skip the check for registered identifier
 
                 Action<object, object, object> setter;
-                if (Keras.Saving.SavedModel.Constants.KERAS_OBJECT_IDENTIFIERS.Contains(obj_child.ObjectIdentifier))
+                if (SavedModel.Constants.KERAS_OBJECT_IDENTIFIERS.Contains(obj_child.ObjectIdentifier))
                 {
                     setter = _revive_setter;
                 }
@@ -659,7 +680,23 @@ namespace Tensorflow.Keras.Saving
 
         private void _maybe_add_serialized_attributes(Layer layer, KerasMetaData metadata)
         {
-            // TODO: deal with `RevivedLayer`
+            if(layer.SerializedAttributes is null || layer.SerializedAttributes.Count == 0)
+            {
+                layer.SerializedAttributes = new Dictionary<string, object>();
+                layer.SerializedAttributes["metadata"] = metadata;
+            }
+        }
+
+        private static object _get_keras_attr(Layer layer)
+        {
+            if((layer.SerializedAttributes ?? new Dictionary<string, object>()).TryGetValue(SavedModel.Constants.KERAS_ATTR, out var value))
+            {
+                return value;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

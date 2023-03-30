@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Tensorflow.Checkpoint;
 using Tensorflow.Training.Saving.SavedModel;
+using OneOf;
 
 namespace Tensorflow
 {
@@ -155,7 +156,7 @@ namespace Tensorflow
         {
             variable_accessed(this);
             var result = gen_resource_variable_ops.read_variable_op(handle, _dtype);
-            // _maybe_set_handle_data(_dtype, _handle, result);
+            resource_variable_ops._maybe_set_handle_data(_dtype, handle, result);
 
             // have to set shape when converting to substituent placeholder
             if (result.shape.ndim == -1)
@@ -293,9 +294,9 @@ namespace Tensorflow
             resource_variable_ops.write_object_proto_for_resource_variable(this, proto, options);
         }
 
-        public override IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> gather_saveables_for_checkpoint()
+        public override IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> gather_saveables_for_checkpoint()
         {
-            var res = new Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>>();
+            var res = new Dictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>();
             res[Trackable.Constants.VARIABLE_VALUE_KEY] = x => this;
             return res;
         }

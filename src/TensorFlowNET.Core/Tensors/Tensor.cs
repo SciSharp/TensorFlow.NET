@@ -87,6 +87,7 @@ namespace Tensorflow
         public object Tag { get; set; }
         protected new SafeTensorHandle _handle;
         public virtual SafeTensorHandle Handle => _handle;
+        public Tensorflow.CppShapeInferenceResult.Types.HandleData HandleData { get; internal set; }
 
         protected SafeEagerTensorHandle _eagerTensorHandle;
         /// <summary>

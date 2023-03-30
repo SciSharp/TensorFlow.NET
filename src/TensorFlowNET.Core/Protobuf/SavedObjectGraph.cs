@@ -277,15 +277,15 @@ namespace Tensorflow {
       get { return Descriptor; }
     }
 
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public SavedObject() {
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public SavedObject() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public SavedObject(SavedObject other) : this() {
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        public SavedObject(SavedObject other) : this() {
       children_ = other.children_.Clone();
       dependencies_ = other.dependencies_.Clone();
       slotVariables_ = other.slotVariables_.Clone();
@@ -329,7 +329,9 @@ namespace Tensorflow {
     public const int ChildrenFieldNumber = 1;
     private static readonly pb::FieldCodec<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> _repeated_children_codec
         = pb::FieldCodec.ForMessage(10, global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference.Parser);
-    private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> children_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
+    private static readonly pb::FieldCodec<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> _repeated_dependencies_codec
+        = pb::FieldCodec.ForMessage(10, global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference.Parser);
+        private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> children_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
     private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> dependencies_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
     /// <summary>
     /// Objects which this object depends on: named edges in the dependency
@@ -501,7 +503,8 @@ namespace Tensorflow {
         return true;
       }
       if(!children_.Equals(other.children_)) return false;
-      if(!slotVariables_.Equals(other.slotVariables_)) return false;
+      if (!dependencies_.Equals(other.dependencies_)) return false;
+      if (!slotVariables_.Equals(other.slotVariables_)) return false;
       if (!object.Equals(UserObject, other.UserObject)) return false;
       if (!object.Equals(Asset, other.Asset)) return false;
       if (!object.Equals(Function, other.Function)) return false;
@@ -519,6 +522,7 @@ namespace Tensorflow {
     public override int GetHashCode() {
       int hash = 1;
       hash ^= children_.GetHashCode();
+      hash ^= dependencies_.GetHashCode();
       hash ^= slotVariables_.GetHashCode();
       if (kindCase_ == KindOneofCase.UserObject) hash ^= UserObject.GetHashCode();
       if (kindCase_ == KindOneofCase.Asset) hash ^= Asset.GetHashCode();
@@ -544,6 +548,7 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       children_.WriteTo(output, _repeated_children_codec);
+      children_.WriteTo(output, _repeated_dependencies_codec);
       slotVariables_.WriteTo(output, _repeated_slotVariables_codec);
       if (kindCase_ == KindOneofCase.UserObject) {
         output.WriteRawTag(34);
@@ -587,6 +592,7 @@ namespace Tensorflow {
     public int CalculateSize() {
       int size = 0;
       size += children_.CalculateSize(_repeated_children_codec);
+      size += children_.CalculateSize(_repeated_dependencies_codec);
       size += slotVariables_.CalculateSize(_repeated_slotVariables_codec);
       if (kindCase_ == KindOneofCase.UserObject) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(UserObject);
@@ -619,7 +625,7 @@ namespace Tensorflow {
       return size;
     }
 
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    //[global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(SavedObject other) {
       if (other == null) {
         return;
@@ -682,7 +688,7 @@ namespace Tensorflow {
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    //[global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
@@ -692,9 +698,10 @@ namespace Tensorflow {
             break;
           case 10: {
             children_.AddEntriesFrom(input, _repeated_children_codec);
+            dependencies_.AddRange(children_.Except(dependencies_));
             break;
           }
-          case 26: {
+        case 26: {
             slotVariables_.AddEntriesFrom(input, _repeated_slotVariables_codec);
             break;
           }

@@ -12,6 +12,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Operations;
 using Newtonsoft.Json;
 using Tensorflow.Training;
+using OneOf;
 
 namespace Tensorflow.Checkpoint;
 
@@ -49,7 +50,7 @@ public class TrackableSaver
         
     }
 
-    private (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, object>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
+    private (IDictionary<Trackable, IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, object>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
         gather_serialized_tensors(Tensor? object_graph_tensor = null)
     {
         var (serialized_tensors, feed_additions, registered_savers, graph_proto) = SaveUtil.serialize_graph_view(_graph_view, _object_map, cache:_cache);
@@ -68,7 +69,7 @@ public class TrackableSaver
         Debug.Assert(!serialized_tensors.ContainsKey(Trackable.None) || !serialized_tensors[Trackable.None].ContainsKey(Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
         if (!serialized_tensors.ContainsKey(Trackable.None))
         {
-            serialized_tensors[Trackable.None] = new Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>();
+            serialized_tensors[Trackable.None] = new Dictionary<string, OneOf.OneOf<Tensor, IDictionary<string, Tensor>>>();
         }
         serialized_tensors[Trackable.None][Trackable.Constants.OBJECT_GRAPH_PROTO_KEY] = object_graph_tensor;
         return (serialized_tensors, feed_additions, registered_savers, graph_proto);
@@ -400,7 +401,7 @@ public class CheckpointRestoreCoordinator
         // skip the callback.
     }
 
-    public List<Operation> restore_saveables(Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> tensor_saveables, List<CheckpointPosition> positions, object? registered_savers = null)
+    public List<Operation> restore_saveables(Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>> tensor_saveables, List<CheckpointPosition> positions, object? registered_savers = null)
     {
         List<Operation> restore_ops = new();
         foreach(var position in positions)
@@ -412,7 +413,7 @@ public class CheckpointRestoreCoordinator
         Dictionary<string, BaseResourceVariable> variable_dict = new();
         foreach(var item in tensor_saveables)
         {
-            if(item.Value.TryGet<BaseResourceVariable>(out var variable))
+            if(item.Value.TryPickT0(out var variable, out var _))
             {
                 variable_dict[item.Key] = variable;
             }

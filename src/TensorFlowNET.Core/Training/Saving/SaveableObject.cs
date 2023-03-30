@@ -14,18 +14,19 @@
    limitations under the License.
 ******************************************************************************/
 
+using OneOf;
 using Tensorflow.Checkpoint;
 
 namespace Tensorflow
 {
     public class MySaveableObject
     {
-        protected Maybe<Tensor, BaseResourceVariable> _op;
+        protected OneOf<Tensor, BaseResourceVariable> _op;
         public Tensor op
         {
             get
             {
-                if(_op.TryGet<Tensor>(out var tensor))
+                if(_op.TryPickT0(out var tensor, out var _))
                 {
                     return tensor;
                 }
@@ -43,7 +44,7 @@ namespace Tensorflow
         {
             get
             {
-                if (_op.TryGet<BaseResourceVariable>(out var v))
+                if (_op.TryPickT1(out var v, out var _))
                 {
                     return v;
                 }

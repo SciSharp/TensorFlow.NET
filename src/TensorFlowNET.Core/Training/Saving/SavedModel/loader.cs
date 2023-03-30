@@ -14,6 +14,7 @@ using Tensorflow.Variables;
 using Tensorflow.Functions;
 using Tensorflow.Training.Saving.SavedModel;
 using Tensorflow.Trackables;
+using OneOf;
 
 namespace Tensorflow
 {
@@ -44,6 +45,8 @@ namespace Tensorflow
             _asset_file_def = meta_graph.AssetFileDef;
             _operation_attributes = meta_graph.GraphDef.Node.ToDictionary(x => x.Name, x => x.Attr);
             _proto = object_graph_proto;
+            // Debug(Rinne)
+            var temp = _proto.ToString();
             _export_dir = export_dir;
             // TODO: `this._concrete_functions` and `this._restored_concrete_functions`
             _concrete_functions = function_deserialization.load_function_def_library(
@@ -259,9 +262,9 @@ namespace Tensorflow
         /// </summary>
         /// <param name="proto"></param>
         /// <returns></returns>
-        private Dictionary<Maybe<string, int>, int> _get_node_dependencies(SavedObject proto)
+        private Dictionary<OneOf<string, int>, int> _get_node_dependencies(SavedObject proto)
         {
-            Dictionary<Maybe<string, int>, int> dependencies = new();
+            Dictionary<OneOf<string, int>, int> dependencies = new();
             foreach(var refer in proto.Dependencies)
             {
                 dependencies[refer.LocalName] = refer.NodeId;
@@ -375,11 +378,6 @@ namespace Tensorflow
             // Re-create everything.
             foreach (var (node_id, proto) in _iter_all_nodes())
             {
-                if(node_id == 45)
-                {
-                    // TODelete
-                    Console.WriteLine();
-                }
                 if (nodes.ContainsKey(node_id))
                 {
                     continue;
@@ -474,7 +472,7 @@ namespace Tensorflow
             }
         }
 
-        private void _setup_function_captures(string concrete_function_name, IDictionary<Maybe<string, int>, Trackable> nodes)
+        private void _setup_function_captures(string concrete_function_name, IDictionary<OneOf<string, int>, Trackable> nodes)
         {
             if (_restored_concrete_functions.Contains(concrete_function_name))
             {
@@ -509,6 +507,11 @@ namespace Tensorflow
         /// <param name="node_id"></param>
         private void _add_object_graph_edges(SavedObject proto, int node_id)
         {
+            // Debug(Rinne)
+            if(node_id == 1)
+            {
+                Console.WriteLine();
+            }
             var obj = _nodes[node_id];
             var setter = _node_setters[node_id];
 
@@ -549,8 +552,13 @@ namespace Tensorflow
         private (Trackable, Action<object, object, object>) _recreate(SavedObject proto, int node_id, IDictionary<int, Trackable> nodes)
         {
             // skip the registered classes.
+            if(node_id == 16)
+            {
+                // Debug(Rinne)
+                Console.WriteLine();
+            }
 
-            Dictionary<Maybe<string, int>, Trackable> dependencies = new();
+            Dictionary<OneOf<string, int>, Trackable> dependencies = new();
             foreach(var item in _get_node_dependencies(proto))
             {
                 dependencies[item.Key] = nodes[item.Value];
@@ -571,7 +579,7 @@ namespace Tensorflow
         /// <param name="proto"></param>
         /// <param name="node_id"></param>
         /// <param name="dependencies"></param>
-        private (Trackable, Action<object, object, object>) _recreate_default(SavedObject proto, int node_id, IDictionary<Maybe<string, int>, Trackable> dependencies)
+        private (Trackable, Action<object, object, object>) _recreate_default(SavedObject proto, int node_id, IDictionary<OneOf<string, int>, Trackable> dependencies)
         {
             return proto.KindCase switch
             {
@@ -637,10 +645,10 @@ namespace Tensorflow
             }
         }
 
-        private (ConcreteFunction, Action<object, object, object>) _recreate_function(SavedFunction proto,
-            Dictionary<Maybe<string, int>, Trackable> dependencies)
+        private (Function, Action<object, object, object>) _recreate_function(SavedFunction proto,
+            Dictionary<OneOf<string, int>, Trackable> dependencies)
         {
-            var fn = function_deserialization.recreate_function(proto, null);
+            var fn = function_deserialization.recreate_function(proto, _concrete_functions);
             foreach (var name in proto.ConcreteFunctions)
             {
                 _setup_function_captures(name, dependencies);
@@ -649,7 +657,7 @@ namespace Tensorflow
         }
 
         private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
-            IDictionary<Maybe<string, int>, Trackable> dependencies)
+            IDictionary<OneOf<string, int>, Trackable> dependencies)
         {
             var fn = function_deserialization.setup_bare_concrete_function(proto, _concrete_functions);
             _setup_function_captures(proto.ConcreteFunctionName, dependencies);

@@ -479,7 +479,7 @@ namespace Tensorflow {
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public pbc::RepeatedField<global::Tensorflow.CppShapeInferenceResult.Types.HandleShapeAndType> ShapeAndType {
-          get { return shapeAndType_; }
+            get { return shapeAndType_; }
         }
 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

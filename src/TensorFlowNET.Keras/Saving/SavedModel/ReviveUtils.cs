@@ -24,17 +24,22 @@ namespace Tensorflow.Keras.Saving.SavedModel
             }
         }
 
-        public static void _revive_setter(object layer, object name, object value)
+        public static void _revive_setter(object obj, object name, object value)
         {
             Debug.Assert(name is string);
-            Debug.Assert(layer is Layer);
+            Debug.Assert(obj is Layer);
+            Layer layer = (Layer)obj;
             if (KerasObjectLoader.PUBLIC_ATTRIBUTES.ContainsKey(name as string))
             {
                 if (value is Trackable trackable)
                 {
-                    (layer as Layer)._track_trackable(trackable, name as string);
+                    layer._track_trackable(trackable, name as string);
                 }
-                (layer as Layer).SerializedAttributes[name] = JToken.FromObject(value);
+                if (layer.SerializedAttributes is null)
+                {
+                    layer.SerializedAttributes = new Dictionary<string, object>();
+                }
+                layer.SerializedAttributes[name as string] = value;
             }
             else if (layer is Functional functional && Regex.Match(name as string, @"^layer(_with_weights)?-[\d+]").Success)
             {

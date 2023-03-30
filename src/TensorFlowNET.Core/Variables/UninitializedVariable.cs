@@ -9,7 +9,7 @@ namespace Tensorflow.Variables
     /// <summary>
     /// A variable with no initializer.
     /// </summary>
-    public sealed class UninitializedVariable: BaseResourceVariable
+    public sealed class UninitializedVariable: BaseResourceVariable, IVariableV1
     {
         // TODO: complete the arg list.
         public UninitializedVariable(
@@ -23,6 +23,7 @@ namespace Tensorflow.Variables
         {
             string unique_id = "";
             string handle_name = "";
+            Tensor created_handle = null;
             tf_with(ops.init_scope(), (x) =>
             {
                 _in_graph_mode = !tf.Context.executing_eagerly();
@@ -40,7 +41,7 @@ namespace Tensorflow.Variables
                         unique_id = $"{handle_name}-{ops.uid()}";
                         shared_name = null;
                     }
-                    var handle = resource_variable_ops.variable_handle_from_shape_and_dtype(
+                    created_handle = resource_variable_ops.variable_handle_from_shape_and_dtype(
                         shape, dtype, shared_name, name, _in_graph_mode, extra_handle_data);
                     // skip the assignment of `handle._parent_trackable` because of lack of API.
                     // skip the assignment of `handle._name` and `handle._unique_id` because of accessability.
@@ -51,7 +52,7 @@ namespace Tensorflow.Variables
                         {
                             tf.device(handle.Device);
                             var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
-                            // _maybe_set_handle_data(dtype, handle, value)
+                            resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
                             _graph_element = value;
                         });
                         ops.add_to_collection(ops.GraphKeys.GLOBAL_VARIABLES_, this);
@@ -64,7 +65,7 @@ namespace Tensorflow.Variables
             });
             _shape = shape;
             _dtype = dtype;
-            base.__init__(trainable, handle, unique_id: unique_id, handle_name: handle_name);
+            base.__init__(trainable, created_handle, unique_id: unique_id, handle_name: handle_name);
         }
     }
 }

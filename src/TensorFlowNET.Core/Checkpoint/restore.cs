@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OneOf;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -61,13 +62,13 @@ public class CheckpointPosition
         }
     }
 
-    public (List<Operation>, Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>, List<CheckpointPosition>, object?) gather_ops_or_named_saveables()
+    public (List<Operation>, Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>, List<CheckpointPosition>, object?) gather_ops_or_named_saveables()
     {
         // skip the registered_saver
 
         if (ObjectProto.Attributes is null || ObjectProto.Attributes.Count == 0)
         {
-            return (new List<Operation>(), new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>(),
+            return (new List<Operation>(), new Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>(),
                 new List<CheckpointPosition>(), null);
         }
 
@@ -75,7 +76,7 @@ public class CheckpointPosition
 
         List<Operation> existing_restore_ops;
         List<CheckpointPosition> positions = new();
-        Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> named_saveables;
+        Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>> named_saveables;
         if (saveable_factories.Keys.Count == 1 && saveable_factories.Keys.First() == TrackableUtils.SERIALIZE_TO_TENSORS_NAME)
         {
             (existing_restore_ops, named_saveables) = _create_serialize_to_tensor_saveable(saveable_factories);
@@ -109,8 +110,8 @@ public class CheckpointPosition
     /// Creates a saveable using the _serialize_to_tensor method.
     /// </summary>
     /// <param name="saveable_factories"></param>
-    private (List<Operation>, Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>) _create_serialize_to_tensor_saveable(
-        IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> saveable_factories)
+    private (List<Operation>, Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>) _create_serialize_to_tensor_saveable(
+        IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> saveable_factories)
     {
         string suffix = SaveableCompat.get_saveable_name(this.Trackable);
         suffix = suffix ?? "";
@@ -124,23 +125,23 @@ public class CheckpointPosition
 
         var saveable = saveable_factories[TrackableUtils.SERIALIZE_TO_TENSORS_NAME](saveable_name);
         // skip the cache.
-        Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> dict = new();
+        Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>> dict = new();
         dict[saveable_name] = saveable;
         return (new List<Operation>(), dict);
     }
 
-    private (List<Operation>, Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>) _create_saveables_by_attribute_name(
-        IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> saveable_factories)
+    private (List<Operation>, Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>) _create_saveables_by_attribute_name(
+        IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> saveable_factories)
     {
         // TODO(Rinne): implement it.
         if(ObjectProto.Attributes is null)
         {
-            return (new List<Operation>(), new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>());
+            return (new List<Operation>(), new Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>());
         }
 
         List<Operation> existing_restore_ops = new();
         HashSet<string> created_compat_names = new();
-        Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> named_saveables = new();
+        Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>> named_saveables = new();
         foreach (var serialized_tensor in ObjectProto.Attributes)
         {
             Operation existing_op;
@@ -172,12 +173,12 @@ public class CheckpointPosition
                 _checkpoint.UnusedAttributes.SetDefault(_proto_id, new List<string>()).Add(serialized_tensor.Name);
                 continue;
             }
-            named_saveables[serialized_tensor.CheckpointKey] = saveable;
+            named_saveables[serialized_tensor.CheckpointKey] = saveable.Value;
         }
         return (existing_restore_ops, named_saveables);
     }
 
-    private Maybe<BaseResourceVariable, MySaveableObject> _get_saveable_from_factory(IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> saveable_factories,
+    private OneOf<BaseResourceVariable, MySaveableObject>? _get_saveable_from_factory(IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> saveable_factories,
         TrackableObjectGraph.Types.TrackableObject.Types.SerializedTensor serialized_tensor, HashSet<string> created_compat_names)
     {
         var expected_factory_name = serialized_tensor.Name;
@@ -221,7 +222,7 @@ public class CheckpointPosition
         Queue<(CheckpointPosition, Trackable)> visit_queue = new();
         visit_queue.Enqueue((this, this.Trackable));
         List<Operation> restore_ops = new();
-        Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> tensor_saveables = new();
+        Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>> tensor_saveables = new();
         List<CheckpointPosition> positions = new();
 
         CheckpointPosition current_position = null;
@@ -306,7 +307,7 @@ public class CheckpointPosition
         }
     }
 
-    private (List<Operation>, Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>, List<CheckpointPosition>, object?) _single_restore()
+    private (List<Operation>, Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>, List<CheckpointPosition>, object?) _single_restore()
     {
         var trackable = this.Trackable;
         trackable._maybe_initialize_trackable();
@@ -318,7 +319,7 @@ public class CheckpointPosition
         }
         else
         {
-            return (new List<Operation>(), new Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>>(),
+            return (new List<Operation>(), new Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>>(),
                 new List<CheckpointPosition>(), null);
         }
     }

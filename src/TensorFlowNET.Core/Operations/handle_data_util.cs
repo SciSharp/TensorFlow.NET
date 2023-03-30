@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Google.Protobuf;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Eager;
+using static Tensorflow.CppShapeInferenceResult.Types;
 
 namespace Tensorflow.Operations
 {
@@ -11,18 +13,31 @@ namespace Tensorflow.Operations
         {
             if(target_t.dtype == dtypes.resource || target_t.dtype == dtypes.variant)
             {
-                SafeTensorHandle handle_data;
+                HandleData handle_data;
                 if(source_t is EagerTensor)
                 {
-                    handle_data = source_t.Handle;
+                    handle_data = source_t.HandleData;
                 }
                 else
                 {
                     handle_data = ops.get_resource_handle_data(source_t);
                 }
-                throw new NotImplementedException();
-                //if(handle_data is not null && handle_data.)
+                if(handle_data is not null && handle_data.IsSet && handle_data.ShapeAndType is not null 
+                    && handle_data.ShapeAndType.Count > 0)
+                {
+                    set_handle_data(target_t, handle_data);
+                }
             }
+        }
+
+        public static void set_handle_data(Tensor target_t, HandleData handle_data)
+        {
+            if(target_t is EagerTensor)
+            {
+                target_t.HandleData = handle_data;
+                return;
+            }
+            c_api.SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), handle_data.ToByteArray());
         }
     }
 }

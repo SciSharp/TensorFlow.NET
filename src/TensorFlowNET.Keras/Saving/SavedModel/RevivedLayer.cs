@@ -55,6 +55,21 @@ namespace Tensorflow.Keras.Saving.SavedModel
 
         private RevivedConfig _config = null;
 
+        public object keras_api
+        {
+            get
+            {
+                if (SerializedAttributes.TryGetValue(SavedModel.Constants.KERAS_ATTR, out var value))
+                {
+                    return value;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
         public RevivedLayer(LayerArgs args): base(args)
         {
 
@@ -68,6 +83,18 @@ namespace Tensorflow.Keras.Saving.SavedModel
         public override IKerasConfig get_config()
         {
             return _config;
+        }
+
+        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        {
+            if(SerializedAttributes is null || !SerializedAttributes.TryGetValue("__call__", out var func) || func is not Function)
+            {
+                return base.Call(inputs, state, training);
+            }
+            else
+            {
+                return (func as Function).Apply(inputs);
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// Arguments initialize layer.
         /// </summary>
-        LayerArgs args;
+        internal LayerArgs args;
 
         /// <summary>
         /// Indicates whether `build` needs to be called upon layer call, to create
@@ -147,7 +147,7 @@ namespace Tensorflow.Keras.Engine
         List<INode> outboundNodes;
         public List<INode> OutboundNodes => outboundNodes;
 
-        public JObject SerializedAttributes { get; set; }
+        public Dictionary<string, object> SerializedAttributes { get; set; }
 
         ThreadLocal<CallContext> callContext = new ThreadLocal<CallContext>();
         public CallContext CallContext => callContext.Value;

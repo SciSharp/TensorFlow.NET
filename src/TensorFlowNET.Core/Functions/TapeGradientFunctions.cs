@@ -15,11 +15,11 @@ namespace Tensorflow.Functions
     /// </summary>
     public abstract class TapeGradientFunctions
     {
-        string FORWARD_FUNCTION_ATTRIBUTE_NAME = "forward_function_name";
-        string BACKWARD_FUNCTION_ATTRIBUTE_NAME = "backward_function_name";
-        string _FORWARD_PREFIX = "__forward_";
-        string _BACKWARD_PREFIX = "__backward_";
-        string _INFERENCE_PREFIX = "__inference_";
+        protected string FORWARD_FUNCTION_ATTRIBUTE_NAME = "forward_function_name";
+        protected string BACKWARD_FUNCTION_ATTRIBUTE_NAME = "backward_function_name";
+        protected string _FORWARD_PREFIX = "__forward_";
+        protected string _BACKWARD_PREFIX = "__backward_";
+        protected string _INFERENCE_PREFIX = "__inference_";
 
         protected FuncGraph _func_graph;
         protected EagerDefinedFunction _forward;
@@ -35,8 +35,9 @@ namespace Tensorflow.Functions
             _func_graph = func_graph;
         }
 
-        public EagerDefinedFunction Forward(Tensors inference_args)
+        public virtual EagerDefinedFunction Forward(Tensors inference_args, Tensors input_tangents = null)
         {
+            // TODO(Rinne): add input_tangents arg.
             return ForwardAndBackwardFunctions(inference_args);
         }
 
@@ -45,8 +46,9 @@ namespace Tensorflow.Functions
         /// </summary>
         /// <param name="flat_outputs"></param>
         /// <param name="inference_args"></param>
-        public void Record(Tensors flat_outputs, Tensors inference_args)
+        public virtual void Record(Tensors flat_outputs, Tensors inference_args)
         {
+            // TODO(Rinne): add arg `input_tagents`.
             var (backward_function, to_record) = _wrap_backward_function(_forward_graph, _backward, flat_outputs);
             tf.Runner.RecordGradient(_forward.Name, inference_args, new object[0], to_record,
                 getBackwardFunction: backward_function);

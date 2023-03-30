@@ -5,16 +5,13 @@ using Tensorflow.Graphs;
 
 namespace Tensorflow.Functions
 {
-    public class DelayedRewriteGradientFunctions
+    public class DelayedRewriteGradientFunctions: TapeGradientFunctions
     {
-        static readonly string _INFERENCE_PREFIX = "__inference_";
-        static readonly string _BACKWARD_PREFIX = "__backward_";
-        static readonly string _FORWARD_PREFIX = "__forward_";
-        FuncGraph _func_graph;
         EagerDefinedFunction _inference_function;
         Dictionary<string, string> _attrs;
         int _num_inference_outputs;
         public DelayedRewriteGradientFunctions(FuncGraph func_graph, Dictionary<string, string> attrs)
+            :base(func_graph, false)
         {
             _func_graph= func_graph;
             _inference_function = new EagerDefinedFunction(_inference_name(_func_graph.Name), 
@@ -23,7 +20,7 @@ namespace Tensorflow.Functions
             _num_inference_outputs = _func_graph.Outputs.Length;
         }
 
-        public EagerDefinedFunction forward(Tensors inference_args = null, Tensors input_tangents = null)
+        public override EagerDefinedFunction Forward(Tensors inference_args = null, Tensors input_tangents = null)
         {
             if(input_tangents is not null)
             {
@@ -33,7 +30,23 @@ namespace Tensorflow.Functions
             return _inference_function;
         }
 
-        private static string _inference_name(string name)
+        public override void Record(Tensors flat_outputs, Tensors inference_args)
+        {
+            // TODO(Rinne): implement it.
+            throw new NotImplementedException();
+            base.Record(flat_outputs, inference_args);
+        }
+
+        //private (BackwardFunction, Tensors) _backward(Tensors outputs)
+        //{
+        //    Tensor[] backward_function(Tensor[] grads, long[] unneeded_gradients)
+        //    {
+        //        var call_op = outputs[0].op;
+
+        //    }
+        //}
+
+        private string _inference_name(string name)
         {
             return $"{_INFERENCE_PREFIX}{name}_{ops.uid()}";
         }

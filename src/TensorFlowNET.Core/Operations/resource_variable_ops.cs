@@ -39,7 +39,7 @@ namespace Tensorflow
 
         public static bool is_resource_variable(IVariableV1 var)
         {
-            return var is ResourceVariable;
+            return var is BaseResourceVariable;
         }
         
         public static bool is_resource_variable(Trackable var)
@@ -228,6 +228,22 @@ namespace Tensorflow
                 if (!string.IsNullOrEmpty(resource_variable.Device))
                 {
                     proto.Variable.Device = resource_variable.Device;
+                }
+            }
+        }
+
+        public static void _maybe_set_handle_data(TF_DataType dtype, Tensor handle, Tensor tensor)
+        {
+            if(dtype == dtypes.variant)
+            {
+                var handle_data = get_eager_safe_handle_data(handle);
+                if(handle_data.IsSet && handle_data.ShapeAndType.Count > 1)
+                {
+                    tensor.HandleData = new HandleData()
+                    {
+                        IsSet = true
+                    };
+                    tensor.HandleData.ShapeAndType.AddRange(handle_data.ShapeAndType.Skip(1));
                 }
             }
         }

@@ -25,6 +25,11 @@ namespace Tensorflow
 {
     public class gradients_util
     {
+        // Represents the output of TFE_Py_TapeSetPossibleGradientTypes. Real enums are
+        // unfortunately too slow to use here.
+        public static int POSSIBLE_GRADIENT_TYPES_NONE = 0;
+        public static int POSSIBLE_GRADIENT_TYPES_FIRST_ORDER = 1;
+        public static int POSSIBLE_GRADIENT_TYPES_HIGHER_ORDER = 2;
         public static Tensor[] _GradientsHelper(Tensor[] ys,
             Tensor[] xs,
             Tensor[] grad_ys = null,

@@ -19,8 +19,8 @@ namespace Tensorflow.Keras.Saving.SavedModel
         protected IDictionary<string, Trackable?> _object_dict;
         protected IDictionary<string, Trackable?> _function_dict;
         protected AutoTrackable _keras_trackable;
-        protected HashSet<string> _all_functions;
-        protected HashSet<string> _all_checkpointable_objects;
+        internal HashSet<string> _all_functions;
+        internal HashSet<string> _all_checkpointable_objects;
 
         private SerializedAttributes()
         {
@@ -197,19 +197,15 @@ namespace Tensorflow.Keras.Saving.SavedModel
     public class CommonEndPoints: SerializedAttributes
     {
         public CommonEndPoints(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions) :
-            //base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables", "regularization_losses" }),
-            //    functions.Concat(new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" }))
-            base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables"}),
-                functions.Concat(new string[] { }))
+            base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables", "regularization_losses" }),
+                functions.Concat(new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" }))
         {
 
         }
 
         public CommonEndPoints() :
-            //base(new string[] { "variables", "trainable_variables", "regularization_losses" },
-            //    new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" })
-            base(new string[] { "variables", "trainable_variables"},
-                new string[] {})
+            base(new string[] { "variables", "trainable_variables", "regularization_losses" },
+                new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" })
         {
 
         }

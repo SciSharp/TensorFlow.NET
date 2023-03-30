@@ -25,11 +25,32 @@ namespace Tensorflow.Training.Saving.SavedModel
         /// <param name="saved_concrete_function"></param>
         /// <param name="concrete_functions"></param>
         /// <returns></returns>
-        public static ConcreteFunction recreate_function(SavedFunction saved_concrete_function,
+        public static Function recreate_function(SavedFunction saved_function,
             IDictionary<string, ConcreteFunction> concrete_functions)
         {
-            var function_spec = _deserialize_function_spec_as_nonmethod(saved_concrete_function.FunctionSpec);
-            return null;
+            var function_spec = _deserialize_function_spec_as_nonmethod(saved_function.FunctionSpec);
+
+            List<ConcreteFunction> concrete_function_objects = new();
+            foreach(var concrete_function_name in saved_function.ConcreteFunctions)
+            {
+                concrete_function_objects.Add(concrete_functions[concrete_function_name]);
+            }
+            foreach(var cf in concrete_function_objects)
+            {
+                cf._set_function_spec(function_spec);
+            }
+
+            foreach(var function_name in saved_function.ConcreteFunctions)
+            {
+                var function = concrete_functions[function_name];
+                if(_concrete_function_callable_with(function, null, false))
+                {
+                    return new RestoredFunction(null, function, "function_from_deserialization");
+                }
+            }
+            return new RestoredFunction(x => x, new ConcreteFunction(x => x, TF_DataType.TF_FLOAT), "function_return_itself");
+            //throw new ValueError("Unexpected runtime behavior, please submit an issue to " +
+            //    "https://github.com/SciSharp/TensorFlow.NET/issues");
         }
 
         public static Dictionary<string, ConcreteFunction> load_function_def_library(FunctionDefLibrary library, 
@@ -384,6 +405,32 @@ namespace Tensorflow.Training.Saving.SavedModel
                 InputSignature = function_spec_proto.InputSignature,
                 JitCompile = function_spec_proto.JitCompile
             };
+        }
+
+        private static Tensors _call_concrete_function(ConcreteFunction function, Tensors inputs)
+        {
+            // TODO(Rinne): var expected_structure = function.func_graph.structured_input_signature
+            return function.CallFlat(inputs, function.CapturedInputs);
+        }
+
+        private static bool _concrete_function_callable_with(ConcreteFunction function, Tensors inputs, bool allow_conversion)
+        {
+            // TODO(Rinne): revise it.
+            return true;
+        }
+    }
+
+    public class RestoredFunction : Function
+    {
+        public RestoredFunction(Func<Tensors, Tensors> function, ConcreteFunction concrete_function,
+            string name, bool auto_graph = true): base(function, name, auto_graph)
+        {
+            _concrete_variable_creation_fn = concrete_function;
+        }
+
+        protected override bool _run_functions_eagerly()
+        {
+            return false;
         }
     }
 }

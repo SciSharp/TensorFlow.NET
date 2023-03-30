@@ -8,6 +8,7 @@ using Tensorflow.Training;
 using pbc = global::Google.Protobuf.Collections;
 using static Tensorflow.Binding;
 using Google.Protobuf;
+using OneOf;
 
 namespace Tensorflow.Checkpoint;
 
@@ -179,13 +180,13 @@ public static class SaveUtilV1
 
                 // TODO: tensorflow python has a process with callable `saveable_factory`.
                 List<MySaveableObject> saveables = new();
-                if (maybe_saveable.TryGet<MySaveableObject>(out var s))
+                if (maybe_saveable.TryPickT1(out var s, out var variable))
                 {
                     saveables.Add(s);
                 }
                 else
                 {
-                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(maybe_saveable.GetValue<BaseResourceVariable>() as Trackable, key));
+                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(variable as Trackable, key));
                 }
 
                 foreach (var saveable in saveables)
@@ -217,7 +218,7 @@ public static class SaveUtilV1
 
 public record class CheckpointFactoryData
 (
-    Func<string, Maybe<BaseResourceVariable, MySaveableObject>> factory,
+    Func<string, OneOf<BaseResourceVariable, MySaveableObject>> factory,
     string name,
     string checkpoint_key
 );

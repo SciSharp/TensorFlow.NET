@@ -124,7 +124,9 @@ namespace Tensorflow
                         initializer_op = gen_state_ops.assign(handle, _initial_value, true).op;
 
                         ops.colocate_with(initializer_op);
-
+                        tf.device(handle.Device);
+                        var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                        resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
                         _graph_element = gen_array_ops.identity(handle, name = "read");
                         ops.add_to_collections<IVariableV1>(collections, this);
                         _dtype = handle.dtype;
@@ -141,6 +143,12 @@ namespace Tensorflow
                         gen_resource_variable_ops.assign_variable_op(handle, _initial_value);
                         initializer_op = null;
                         _graph_element = null;
+                        if (!string.IsNullOrEmpty(caching_device))
+                        {
+                            tf.device(caching_device);
+                            var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                            resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
+                        }
                         _dtype = _initial_value.dtype.as_base_dtype();
                         // initial_value = _in_graph_mode ? initial_value : null;
                     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations;
 using Tensorflow.Train;
+using Tensorflow.Variables;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Functions

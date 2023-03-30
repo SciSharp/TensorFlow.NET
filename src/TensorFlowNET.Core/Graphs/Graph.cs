@@ -129,6 +129,7 @@ namespace Tensorflow
         protected Graph outer_graph;
         public Graph OuterGraph => outer_graph;
         public Dictionary<string, EagerDefinedFunction> Functions => _functions;
+        public SafeGraphHandle c_graph => _handle;
 
         public Graph()
         {
