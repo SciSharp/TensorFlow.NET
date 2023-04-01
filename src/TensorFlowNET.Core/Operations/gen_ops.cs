@@ -730,7 +730,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor angle(Tensor input, TF_DataType? Tout = null, string name = "Angle")
         {
-            return tf.Context.ExecuteOp("Angle", name, new ExecuteOpArgs(new object[] { input }));
+            return tf.Context.ExecuteOp("Angle", name, new ExecuteOpArgs(input).SetAttributes(new { Tout = Tout }));
         }
 
         /// <summary>
@@ -4971,12 +4971,15 @@ namespace Tensorflow.Operations
         ///    tf.complex(real, imag) ==&amp;gt; [[2.25 + 4.75j], [3.25 + 5.75j]]
         ///   </code>
         /// </remarks>
-        public static Tensor complex(Tensor real, Tensor imag, TF_DataType? Tout = null, string name = "Complex")
+        public static Tensor complex(Tensor real, Tensor imag, TF_DataType? a_Tout = null, string name = "Complex")
         {
-            return tf.Context.ExecuteOp("Complex", name, new ExecuteOpArgs(new object[] { real, imag })); // sorry, cannot pass Tout, so it only works with complex64. complex128 is not supported yet
+            TF_DataType Tin = real.GetDataType();
+            if (a_Tout is null)
+            {
+                a_Tout = (Tin == TF_DataType.TF_DOUBLE)? TF_DataType.TF_COMPLEX128: TF_DataType.TF_COMPLEX64;
+            }
+            return tf.Context.ExecuteOp("Complex", name, new ExecuteOpArgs(real, imag).SetAttributes(new { T=Tin,  Tout=a_Tout }));
         }
-
-
 
         /// <summary>
         ///    Computes the complex absolute value of a tensor.
@@ -4999,7 +5002,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor complex_abs(Tensor x, TF_DataType? Tout = null, string name = "ComplexAbs")
         {
-            return tf.Context.ExecuteOp("ComplexAbs", name, new ExecuteOpArgs(new object[] { x }));
+            return tf.Context.ExecuteOp("ComplexAbs", name, new ExecuteOpArgs(x).SetAttributes(new { Tout = Tout }));
         }
 
         /// <summary>
@@ -13308,9 +13311,12 @@ namespace Tensorflow.Operations
         ///    tf.imag(input) ==&amp;gt; [4.75, 5.75]
         ///   </code>
         /// </remarks>
-        public static Tensor imag(Tensor input, TF_DataType? Tout = null, string name = "Imag")
+        public static Tensor imag(Tensor input, TF_DataType? a_Tout = null, string name = "Imag")
         {
-            return tf.Context.ExecuteOp("Imag", name, new ExecuteOpArgs(new object[] { input }));
+            TF_DataType Tin = input.GetDataType();
+            return tf.Context.ExecuteOp("Imag", name, new ExecuteOpArgs(input).SetAttributes(new { T = Tin, Tout = a_Tout }));
+
+            //            return tf.Context.ExecuteOp("Imag", name, new ExecuteOpArgs(new object[] { input }));
         }
 
         /// <summary>
@@ -23841,9 +23847,12 @@ namespace Tensorflow.Operations
         ///    tf.real(input) ==&amp;gt; [-2.25, 3.25]
         ///   </code>
         /// </remarks>
-        public static Tensor real(Tensor input, TF_DataType? Tout = null, string name = "Real")
+        public static Tensor real(Tensor input, TF_DataType? a_Tout = null, string name = "Real")
         {
-            return tf.Context.ExecuteOp("Real", name, new ExecuteOpArgs(new object[] {input}));
+            TF_DataType Tin = input.GetDataType();
+            return tf.Context.ExecuteOp("Real", name, new ExecuteOpArgs(input).SetAttributes(new { T = Tin, Tout = a_Tout }));
+
+//            return tf.Context.ExecuteOp("Real", name, new ExecuteOpArgs(new object[] {input}));
         }
 
         /// <summary>
