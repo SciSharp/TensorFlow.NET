@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -35,8 +36,9 @@ namespace Tensorflow
                 name = scope;
                 x = ops.convert_to_tensor(x, name: "x");
                 if (x.dtype.is_complex())
-                    throw new NotImplementedException("math_ops.abs for dtype.is_complex");
-                //return gen_math_ops.complex_abs(x, Tout: x.dtype.real_dtype, name: name);
+                {
+                    return gen_ops.complex_abs(x, Tout: x.dtype.real_dtype(), name: name);
+                }
                 return gen_math_ops._abs(x, name: name);
             });
         }

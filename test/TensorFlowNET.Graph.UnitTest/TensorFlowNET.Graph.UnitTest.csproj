@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
+    <ProjectReference Include="..\TensorFlowNET.Keras.UnitTest\Tensorflow.Keras.UnitTest.csproj" />
   </ItemGroup>
 
 </Project>

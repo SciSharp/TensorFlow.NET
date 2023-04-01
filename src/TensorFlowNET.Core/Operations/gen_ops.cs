@@ -730,12 +730,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor angle(Tensor input, TF_DataType? Tout = null, string name = "Angle")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Angle", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Angle", name, new ExecuteOpArgs(input).SetAttributes(new { Tout = Tout }));
         }
 
         /// <summary>
@@ -4976,15 +4971,14 @@ namespace Tensorflow.Operations
         ///    tf.complex(real, imag) ==&amp;gt; [[2.25 + 4.75j], [3.25 + 5.75j]]
         ///   </code>
         /// </remarks>
-        public static Tensor complex(Tensor real, Tensor imag, TF_DataType? Tout = null, string name = "Complex")
+        public static Tensor complex(Tensor real, Tensor imag, TF_DataType? a_Tout = null, string name = "Complex")
         {
-            var dict = new Dictionary<string, object>();
-            dict["real"] = real;
-            dict["imag"] = imag;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Complex", name: name, keywords: dict);
-            return op.output;
+            TF_DataType Tin = real.GetDataType();
+            if (a_Tout is null)
+            {
+                a_Tout = (Tin == TF_DataType.TF_DOUBLE)? TF_DataType.TF_COMPLEX128: TF_DataType.TF_COMPLEX64;
+            }
+            return tf.Context.ExecuteOp("Complex", name, new ExecuteOpArgs(real, imag).SetAttributes(new { T=Tin,  Tout=a_Tout }));
         }
 
         /// <summary>
@@ -5008,12 +5002,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor complex_abs(Tensor x, TF_DataType? Tout = null, string name = "ComplexAbs")
         {
-            var dict = new Dictionary<string, object>();
-            dict["x"] = x;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("ComplexAbs", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("ComplexAbs", name, new ExecuteOpArgs(x).SetAttributes(new { Tout = Tout }));
         }
 
         /// <summary>
@@ -5313,10 +5302,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor conj(Tensor input, string name = "Conj")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("Conj", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("Conj", name, new ExecuteOpArgs(new object[] { input }));
         }
 
         /// <summary>
@@ -13325,14 +13311,12 @@ namespace Tensorflow.Operations
         ///    tf.imag(input) ==&amp;gt; [4.75, 5.75]
         ///   </code>
         /// </remarks>
-        public static Tensor imag(Tensor input, TF_DataType? Tout = null, string name = "Imag")
+        public static Tensor imag(Tensor input, TF_DataType? a_Tout = null, string name = "Imag")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Imag", name: name, keywords: dict);
-            return op.output;
+            TF_DataType Tin = input.GetDataType();
+            return tf.Context.ExecuteOp("Imag", name, new ExecuteOpArgs(input).SetAttributes(new { T = Tin, Tout = a_Tout }));
+
+            //            return tf.Context.ExecuteOp("Imag", name, new ExecuteOpArgs(new object[] { input }));
         }
 
         /// <summary>
@@ -23863,14 +23847,12 @@ namespace Tensorflow.Operations
         ///    tf.real(input) ==&amp;gt; [-2.25, 3.25]
         ///   </code>
         /// </remarks>
-        public static Tensor real(Tensor input, TF_DataType? Tout = null, string name = "Real")
+        public static Tensor real(Tensor input, TF_DataType? a_Tout = null, string name = "Real")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            if (Tout.HasValue)
-                dict["Tout"] = Tout.Value;
-            var op = tf.OpDefLib._apply_op_helper("Real", name: name, keywords: dict);
-            return op.output;
+            TF_DataType Tin = input.GetDataType();
+            return tf.Context.ExecuteOp("Real", name, new ExecuteOpArgs(input).SetAttributes(new { T = Tin, Tout = a_Tout }));
+
+//            return tf.Context.ExecuteOp("Real", name, new ExecuteOpArgs(new object[] {input}));
         }
 
         /// <summary>
