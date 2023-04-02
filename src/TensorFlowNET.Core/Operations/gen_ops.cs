@@ -10475,10 +10475,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor f_f_t(Tensor input, string name = "FFT")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("FFT", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("FFT", name, new ExecuteOpArgs(input));
         }
 
         /// <summary>
@@ -10505,10 +10502,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor f_f_t2d(Tensor input, string name = "FFT2D")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("FFT2D", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("FFT2D", name, new ExecuteOpArgs(input));
         }
 
         /// <summary>
@@ -10535,10 +10529,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor f_f_t3d(Tensor input, string name = "FFT3D")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("FFT3D", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("FFT3D", name, new ExecuteOpArgs(input));
         }
 
         /// <summary>
@@ -12861,10 +12852,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor i_f_f_t(Tensor input, string name = "IFFT")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("IFFT", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("IFFT", name, new ExecuteOpArgs(input));
         }
 
         /// <summary>
@@ -12891,10 +12879,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor i_f_f_t2d(Tensor input, string name = "IFFT2D")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("IFFT2D", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("IFFT2D", name, new ExecuteOpArgs(input));
         }
 
         /// <summary>
@@ -12921,10 +12906,7 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor i_f_f_t3d(Tensor input, string name = "IFFT3D")
         {
-            var dict = new Dictionary<string, object>();
-            dict["input"] = input;
-            var op = tf.OpDefLib._apply_op_helper("IFFT3D", name: name, keywords: dict);
-            return op.output;
+            return tf.Context.ExecuteOp("IFFT3D", name, new ExecuteOpArgs(input));
         }
 
         /// <summary>
