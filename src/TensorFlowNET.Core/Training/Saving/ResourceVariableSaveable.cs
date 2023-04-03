@@ -42,22 +42,25 @@ namespace Tensorflow
             _var_device = var.Device;
             _var_shape = var.shape;
 
-            Tensor _read_variable_closure(BaseResourceVariable v)
+            Func<Tensor> _read_variable_closure(BaseResourceVariable v)
             {
-                tf.device(v.Device);
-                if(tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                return () =>
                 {
-                    return null;
-                }
-                var x = v.read_value_no_copy();
-                tf.device("/device:CPU:0");
-                return array_ops.identity(x);
+                    tf.device(v.Device);
+                    if (tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                    {
+                        return null;
+                    }
+                    var x = v.read_value_no_copy();
+                    tf.device("/device:CPU:0");
+                    return array_ops.identity(x);
+                };
             }
 
             this.handle_op = var.Handle;
-            var tensor = _read_variable_closure(var);
+            var tensor_creator = _read_variable_closure(var);
 
-            var spec = new SaveSpec(tensor, slice_spec, name, dtype: var.dtype);
+            var spec = new SaveSpec(tensor_creator, slice_spec, name, dtype: var.dtype, device: var.Device);
             _op = var;
             specs = new SaveSpec[] { spec };
             this.name = name;
@@ -66,6 +69,7 @@ namespace Tensorflow
         public override Operation restore(Tensor[] restored_tensors, Shape[] restored_shapes = null)
         {
             var restored_tensor = restored_tensors[0];
+            tf.device(_var_device);
             restored_tensor = array_ops.identity(restored_tensor);
             return resource_variable_ops.shape_safe_assign_variable_handle(
                 handle_op, _var_shape, restored_tensor);

@@ -330,7 +330,7 @@ namespace Tensorflow {
     private static readonly pb::FieldCodec<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> _repeated_children_codec
         = pb::FieldCodec.ForMessage(10, global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference.Parser);
     private static readonly pb::FieldCodec<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> _repeated_dependencies_codec
-        = pb::FieldCodec.ForMessage(10, global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference.Parser);
+        = pb::FieldCodec.ForMessage(122, global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference.Parser);
         private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> children_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
     private readonly pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference> dependencies_ = new pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.ObjectReference>();
     /// <summary>
@@ -698,9 +698,13 @@ namespace Tensorflow {
             break;
           case 10: {
             children_.AddEntriesFrom(input, _repeated_children_codec);
-            dependencies_.AddRange(children_.Except(dependencies_));
             break;
           }
+        case 122:
+            {
+                dependencies_.AddEntriesFrom(input, _repeated_dependencies_codec);
+                break;
+            }
         case 26: {
             slotVariables_.AddEntriesFrom(input, _repeated_slotVariables_codec);
             break;

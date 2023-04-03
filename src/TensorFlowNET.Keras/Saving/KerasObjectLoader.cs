@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
@@ -17,6 +19,8 @@ using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using Tensorflow.Training;
+using Tensorflow.Training.Saving.SavedModel;
+using Tensorflow.Util;
 using ThirdParty.Tensorflow.Python.Keras.Protobuf;
 using static Tensorflow.ApiDef.Types;
 using static Tensorflow.Binding;
@@ -190,12 +194,13 @@ namespace Tensorflow.Keras.Saving
                     Name = config["name"].ToObject<string>()
                 });
                 //s.Name = config["name"].ToObject<string>();
-                if(s.input is null || s.input.Length == 0)
+                if(s.inputs is null || s.inputs.Length == 0)
                 {
                     var first_layer = _get_child_layer_node_ids(model_id)[0];
                     var input_specs = _infer_inputs(first_layer);
-                    var input_shapes = _infer_inputs(first_layer, true);
+                    var input_shapes = _infer_input_shapes(first_layer);
                     // `model._set_inputs(input_specs)`
+                    s._set_inputs(input_specs);
 
                     // skip the check of input_specs is Dictionary
                     if (!s.Built)
@@ -220,12 +225,12 @@ namespace Tensorflow.Keras.Saving
 
         private void _set_network_attributes_from_metadata(Model revived_object)
         {
-            var metadata = revived_object.SerializedAttributes["matadata"] as JObject;
-            if (metadata.ContainsKey("dtype"))
+            var metadata = revived_object.SerializedAttributes["metadata"] as KerasMetaData;
+            if (metadata.DType != TF_DataType.DtInvalid)
             {
                 // TODO(Rinne): set_dtype_policy.
             }
-            revived_object.args.Trainable = metadata["trainable"].Value<bool>();
+            revived_object.args.Trainable = metadata.Trainable;
         }
 
         /// <summary>
@@ -305,6 +310,11 @@ namespace Tensorflow.Keras.Saving
         private (Trackable, Action<object, object, object>) _load_layer(int node_id, string identifier, string metadata_json)
         {
             var metadata = JsonConvert.DeserializeObject<KerasMetaData>(metadata_json);
+            // Debug(Rinne)
+            if(node_id == 11)
+            {
+                Console.WriteLine();
+            }
 
             if (loaded_nodes.ContainsKey(node_id))
             {
@@ -472,15 +482,7 @@ namespace Tensorflow.Keras.Saving
             }
             else
             {
-                var properties = layer.GetType().GetProperties();
-                foreach(var p in properties)
-                {
-                    if(p.Name == name as string && p.GetValue(layer) is not null)
-                    {
-                        return;
-                    }
-                }
-                Loader.setattr(layer, name, value);
+                layer.SetAttr(name as string, value);
             }
         }
 
@@ -607,7 +609,7 @@ namespace Tensorflow.Keras.Saving
 
             if(build_input_shape is null)
             {
-                build_input_shape = _infer_inputs(node_id, convert_to_shapes: true);
+                build_input_shape = _infer_input_shapes(node_id);
             }
 
             if(build_input_shape is not null)
@@ -633,7 +635,7 @@ namespace Tensorflow.Keras.Saving
         /// <param name="layer_node_id"></param>
         /// <param name="convert_to_shapes"></param>
         /// <returns></returns>
-        private Shape _infer_inputs(int layer_node_id, bool convert_to_shapes = false)
+        private TensorSpec _infer_inputs(int layer_node_id)
         {
             var call_fn_id = _search_for_child_node(layer_node_id, new string[] { "call_and_return_all_conditional_losses" });
             if(call_fn_id is null)
@@ -648,7 +650,22 @@ namespace Tensorflow.Keras.Saving
             }
             var call_fn_name = concrete_functions[0];
             var call_fn_proto = _proto.ConcreteFunctions[call_fn_name];
-            throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
+            var structured_input_signature = nested_structure_coder.decode_proto(call_fn_proto.CanonicalizedInputSignature);
+            Debug.Assert(structured_input_signature is IEnumerable);
+            var first_enumerator = (structured_input_signature as IEnumerable).GetEnumerator();
+            first_enumerator.MoveNext();
+            var first = first_enumerator.Current;
+            Debug.Assert(first is IEnumerable);
+            var inputs_enumerator = (first as IEnumerable).GetEnumerator();
+            inputs_enumerator.MoveNext();
+            var inputs = inputs_enumerator.Current as TensorSpec;
+            return inputs;
+        }
+
+        private Shape _infer_input_shapes(int layer_node_id)
+        {
+            var inputs = _infer_inputs(layer_node_id);
+            return nest.map_structure(x => x.shape, inputs);
         }
 
         private int? _search_for_child_node(int parent_id, IEnumerable<string> path_to_child)

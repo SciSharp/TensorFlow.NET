@@ -48,19 +48,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             }
             else
             {
-                var properties = layer.GetType().GetProperties();
-                foreach (var p in properties)
-                {
-                    if ((string)name == p.Name)
-                    {
-                        if(p.GetValue(layer) is not null)
-                        {
-                            return;
-                        }
-                        p.SetValue(layer, value);
-                        return;
-                    }
-                }
+                layer.SetAttr(name as string, value);
             }
         }
     }

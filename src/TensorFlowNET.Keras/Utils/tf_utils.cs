@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Framework;
+using Tensorflow.Framework.Models;
 
 namespace Tensorflow.Keras.Utils
 {
@@ -68,6 +69,30 @@ namespace Tensorflow.Keras.Utils
                 true_fn: true_fn,
                 false_fn: false_fn,
                 name: name);
+        }
+
+        public static TensorSpec get_tensor_spec(Tensor t, bool dynamic_batch = false, string name = null)
+        {
+            throw new NotImplementedException("The function is waited to be implemented in the future.");
+        }
+
+        public static TensorSpec get_tensor_spec(TensorSpec t, bool dynamic_batch = false, string name = null)
+        {
+            var spec = t;
+            if (!dynamic_batch)
+            {
+                return spec;
+            }
+            var dynamic_batch_spec = new TensorSpec(t.shape, t.dtype, t.name);
+            var shape = dynamic_batch_spec.shape;
+            if(shape.rank > 0)
+            {
+                var shape_list = shape.as_int_list();
+                // TODO(Rinne): check if -1 is equivalent to None in python.
+                shape_list[0] = -1;
+                dynamic_batch_spec.shape = new Shape(shape_list);
+            }
+            return dynamic_batch_spec;
         }
     }
 }

@@ -49,6 +49,7 @@ namespace Tensorflow
             var temp = _proto.ToString();
             _export_dir = export_dir;
             // TODO: `this._concrete_functions` and `this._restored_concrete_functions`
+            // TODO(Rinne): This method is very slow, needs to be accelareted.
             _concrete_functions = function_deserialization.load_function_def_library(
                 meta_graph.GraphDef.Library, _proto);
             _restored_concrete_functions = new HashSet<string>();
@@ -523,7 +524,7 @@ namespace Tensorflow
                     continue;
                 }
                 setter.Invoke(obj, refer.LocalName, _nodes[refer.NodeId]);
-                // skip the process of "__call__"
+                // TODO(Rinne): deal with "__call__"
             }
         }
 
@@ -595,13 +596,12 @@ namespace Tensorflow
         private (Trackable, Action<object, object, object>) _recreate_user_object(SavedUserObject? proto, int node_id)
         {
             // skip the check of proto identifier because of lack of property.
-
-            var looked_up = RevivedTypes.deserialize(proto);
-            if(looked_up is null)
+            var (trackable, setter) = RevivedTypes.deserialize(proto);
+            if(trackable is null)
             {
                 return _recreate_base_user_object(proto, node_id);
             }
-            return (looked_up.Item1, looked_up.Item2);
+            return (trackable, setter);
         }
 
         private (Trackable, Action<object, object, object>) _recreate_base_user_object(SavedUserObject? proto = null, int? node_id = null)
@@ -668,13 +668,20 @@ namespace Tensorflow
         public static Action<object, object, object> setattr = (x, y, z) =>
         {
             Debug.Assert(y is string);
-            var properties = x.GetType().GetProperties();
-            foreach(var p in properties)
+            if(x is Trackable trackable)
             {
-                if((string)y == p.Name)
+                trackable.SetAttr(y as string, z);
+            }
+            else
+            {
+                var properties = x.GetType().GetProperties();
+                foreach (var p in properties)
                 {
-                    p.SetValue(x, z);
-                    return;
+                    if ((string)y == p.Name)
+                    {
+                        p.SetValue(x, z);
+                        return;
+                    }
                 }
             }
             // TODO(Rinne): check if the property has been set successfully.

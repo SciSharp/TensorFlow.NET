@@ -21,10 +21,13 @@ using System.Linq;
 using System.Threading;
 using Tensorflow.Eager;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using Tensorflow.NumPy;
 using Tensorflow.Train;
+using Tensorflow.Training;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
@@ -348,6 +351,60 @@ namespace Tensorflow.Keras.Engine
         public virtual void adapt(Tensor data, int? batch_size = null, int? steps = null)
         {
             
+        }
+
+        public override void SetAttr(string name, object value)
+        {
+            // TODO(Rinne): deal with "_self_setattr_tracking".
+
+            value = TrackableDataStructure.sticky_attribute_assignment(this, name, value);
+            
+            foreach(var val in nest.flatten(value))
+            {
+                if(val is Metric)
+                {
+                    // TODO(Rinne): deal with metrics.
+                }
+            }
+
+            // TODO(Rinne): deal with "_auto_track_sub_layers".
+
+            foreach(var val in nest.flatten(value))
+            {
+                if(val is not IVariableV1 variable)
+                {
+                    continue;
+                }
+                if (variable.Trainable)
+                {
+                    if (_trainable_weights.Contains(variable))
+                    {
+                        continue;
+                    }
+                    _trainable_weights.Add(variable);
+                }
+                else
+                {
+                    if (_non_trainable_weights.Contains(variable))
+                    {
+                        continue;
+                    }
+                    _non_trainable_weights.Add(variable);
+                }
+                keras.backend.track_variable(variable);
+            }
+
+            // Directly use the implementation of `Trackable`.
+            var t = this.GetType();
+            var field_info = t.GetField(name);
+            if (field_info is not null)
+            {
+                field_info.SetValue(this, value);
+            }
+            else
+            {
+                CustomizedFields[name] = value;
+            }
         }
     }
 }

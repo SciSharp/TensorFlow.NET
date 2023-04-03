@@ -50,6 +50,10 @@ namespace Tensorflow
     }
     public static class saveable_object_util
     {
+        public static string NO_SLICE_SPEC_KEY = "";
+        private static HashSet<string> _VARIABLE_OPS = new HashSet<string>(new string[] {
+            "Variable", "VariableV2", "AutoReloadVariable", "VarHandleOp", "ReadVariableOp"
+        });
         /// <summary>
         /// Returns the variables and names that will be used for a Saver.
         /// </summary>
@@ -123,19 +127,12 @@ namespace Tensorflow
         /// <returns></returns>
         public static IEnumerable<MySaveableObject> saveable_objects_for_op(Tensor op, string name)
         {
-            if (false)
-            {
-
-            }
+            ops.init_scope();
+            var variable = ops.convert_to_tensor(op, as_ref: true);
+            if (variable.dtype.is_ref_dtype())
+                yield return new ReferenceVariableSaveable(variable, "", name);
             else
-            {
-                ops.init_scope();
-                var variable = ops.convert_to_tensor(op, as_ref: true);
-                if (variable.dtype.is_ref_dtype())
-                    yield return new ReferenceVariableSaveable(variable, "", name);
-                else
-                    yield return new ResourceVariableSaveable(variable, "", name);
-            }
+                yield return new ResourceVariableSaveable(variable, "", name);
         }
 
         /// <summary>
@@ -159,7 +156,7 @@ namespace Tensorflow
                     yield return new ResourceVariableSaveable(variable, "", name);
                 }
             }
-            else
+            else if(obj is not IVariableV1)
             {
                 foreach(var pair in saveable_objects_from_trackable(obj))
                 {
@@ -189,6 +186,30 @@ namespace Tensorflow
                             yield return v;
                         }
                     }
+                }
+            }
+            else
+            {
+                // Variable
+                if (tf.Context.executing_eagerly())
+                {
+                    throw new ValueError($"Can only save/restore ResourceVariables when " +
+                        $"executing eagerly, got type: {obj.GetType()}.");
+                }
+                var variable = ops.convert_to_tensor(obj, as_ref: true);
+                if (!_tensor_comes_from_variable(variable))
+                {
+                    throw new TypeError($"names_to_saveables must be a dict mapping string " +
+                        $"names to Tensors/Variables. Not a variable: {variable}");
+                }
+                if(variable.op.type == "Variable" || variable.op.type == "VariableV2" ||
+                    variable.op.type == "AutoReloadVariable")
+                {
+                    yield return new ReferenceVariableSaveable(variable, "", name);
+                }
+                else
+                {
+                    yield return new ResourceVariableSaveable(variable, "", name);
                 }
             }
         }
@@ -267,24 +288,14 @@ namespace Tensorflow
                 foreach (var pair in tensor_dict)
                 {
                     var tensor_name = pair.Key;
-                    var maybe_tensor = pair.Value;
+                    var internal_dict = pair.Value;
                     local_names.Add(tensor_name);
                     string spec_name = name + TrackableUtils.escape_local_name(tensor_name);
 
-                    IDictionary<string, Tensor> internal_dict;
-                    if (maybe_tensor.TryPickT0(out var tensor, out var dic))
-                    {
-                        internal_dict = new Dictionary<string, Tensor>();
-                        internal_dict[""] = tensor;
-                    }
-                    else
-                    {
-                        internal_dict = dic;
-                    }
-
                     foreach (var item in internal_dict)
                     {
-                        specs.Add(new SaveSpec(item.Value, item.Key, spec_name));
+                        Debug.Assert(item.Value.IsT0);
+                        specs.Add(new SaveSpec(item.Value.AsT0, item.Key, spec_name));
                     }
                 }
                 return new TrackableSaveable(obj, specs, name, local_names, prefix);
@@ -316,9 +327,9 @@ namespace Tensorflow
         /// Converts a list of SaveableObjects to a tensor dictionary.
         /// </summary>
         /// <param name="saveables"></param>
-        public static Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> saveable_object_to_tensor_dict(IList<MySaveableObject> saveables)
+        public static Dictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> saveable_object_to_tensor_dict(IList<MySaveableObject> saveables)
         {
-            Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> tensor_dict = new();
+            Dictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> tensor_dict = new();
             foreach (var saveable in saveables)
             {
                 foreach (var spec in saveable.specs)
@@ -326,14 +337,11 @@ namespace Tensorflow
                     // skip the check that if `spec` is callable.
                     var name = convert_to_string(spec.name);
                     var slice_spec = convert_to_string(spec.slice_spec);
-                    if (!string.IsNullOrEmpty(slice_spec))
+                    if (string.IsNullOrEmpty(slice_spec))
                     {
-                        tensor_dict.SetDefault(name, new Dictionary<string, Tensor>()).AsT1[slice_spec] = spec.tensor;
+                        slice_spec = NO_SLICE_SPEC_KEY;
                     }
-                    else
-                    {
-                        tensor_dict[name] = spec.tensor;
-                    }
+                    tensor_dict.SetDefault(name, new Dictionary<string, OneOf<Tensor, SaveSpec>>())[slice_spec] = spec.TensorCreator is null ? spec.tensor : spec;
                 }
             }
             return tensor_dict;
@@ -397,6 +405,11 @@ namespace Tensorflow
         {
             return factory(key);
         }
+
+        private static bool _tensor_comes_from_variable(object v)
+        {
+            return v is Tensor tensor && _VARIABLE_OPS.Contains(tensor.op.type);
+        }
     }
 
     public class SaveableCompatibilityConverter: Trackable
@@ -412,7 +425,7 @@ namespace Tensorflow
         public object Obj => _obj;
         public IList<MySaveableObject> mySaveables=> _saveables;
 
-        public override IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        public override IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> serialize_to_tensors()
         {
             return saveable_object_util.saveable_object_to_tensor_dict(_saveables);
         }

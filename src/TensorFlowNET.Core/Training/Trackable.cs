@@ -85,6 +85,72 @@ namespace Tensorflow.Train
                 _self_saveable_object_factories = value;
             }
         }
+        public Dictionary<string, object> CustomizedFields { get; set; } = new Dictionary<string, object>();
+
+        public virtual void SetAttr(string name, object value)
+        {
+            var t = this.GetType();
+            var field_info = t.GetField(name);
+            if(field_info is not null)
+            {
+                field_info.SetValue(this, value);
+            }
+            else
+            {
+                CustomizedFields[name] = value;
+            }
+
+            // On account of performance, we don't use reflection to set the attribute if it exists in `Trackable`.
+            // When adding new members or properties to this class, please add corresponding process to this method.
+            //switch (name)
+            //{
+            //    case "_manual_tracking":
+            //        {
+            //            _manual_tracking = (bool)value;
+            //            break;
+            //        }
+            //    case "_self_saveable_object_factories":
+            //        {
+            //            _self_saveable_object_factories = (IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>)value;
+            //            break;
+            //        }
+            //    case "_self_update_uid":
+            //        {
+            //            _self_update_uid = (int)value;
+            //            break;
+            //        }
+            //    case "_unconditional_checkpoint_dependencies":
+            //        {
+            //            _unconditional_checkpoint_dependencies = (IList<TrackableReference>)value;
+            //            break;
+            //        }
+            //    case "_unconditional_deferred_dependencies":
+            //        {
+            //            _unconditional_deferred_dependencies = (Dictionary<string, IList<CheckpointPosition>>)value;
+            //            break;
+            //        }
+            //    case "_unconditional_dependency_names":
+            //        {
+            //            _unconditional_dependency_names = (IDictionary<string, Trackable>)value;
+            //            break;
+            //        }
+            //    case "SelfSaveableObjectFactories":
+            //        {
+            //            SelfSaveableObjectFactories = (IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>)value;
+            //            break;
+            //        }
+            //    case "UpdateUid":
+            //        {
+            //            UpdateUid = (int)value;
+            //            break;
+            //        }
+            //    default:
+            //        {
+            //            CustomizedAttributes[name] = value;
+            //            break;
+            //        }
+            // }
+        }
 
         /// <summary>
         /// Restore-on-create for a variable be saved with this `Checkpointable`.
@@ -279,7 +345,7 @@ namespace Tensorflow.Train
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public virtual IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        public virtual IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> serialize_to_tensors()
         {
             throw new NotImplementedException();
         }

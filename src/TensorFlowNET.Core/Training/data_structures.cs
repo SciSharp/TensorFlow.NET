@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,6 +27,48 @@ namespace Tensorflow.Training
         }
     }
 
+    static class TrackableWrapperUtils
+    {
+        internal static bool ShouldLoad(ITrackableWrapper wrapper, SavedUserObject proto)
+        {
+            if (proto.Identifier != wrapper.Identifier)
+            {
+                return false;
+            }
+            if (wrapper.Version < proto.Version.MinConsumer)
+            {
+                return false;
+            }
+            if (proto.Version.Producer < wrapper.MinProducerVersion)
+            {
+                return false;
+            }
+            foreach (var bad_version in proto.Version.BadConsumers)
+            {
+                if (bad_version == wrapper.Version)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        internal static bool is_function(Trackable x)
+        {
+            return x is Function or ConcreteFunction;
+        }
+    }
+
+    public interface ITrackableWrapper
+    {
+        void SetValue(object name, object value);
+        String Identifier { get; }
+        int Version { get; }
+        int MinConsumerVersion { get; }
+        int MinProducerVersion { get; }
+        Trackable FromProto(SavedUserObject proto);
+    }
+
     public abstract class TrackableDataStructure : Trackable
     {
         private bool _self_trainable;
@@ -36,7 +80,7 @@ namespace Tensorflow.Training
             _self_extra_variables = new List<IVariableV1>();
         }
 
-        public abstract IEnumerable<Trackable> Values { get; }
+        public abstract ICollection<Trackable> Values { get; }
         public bool Trainable { get => _self_trainable; set => _self_trainable = value; }
         public IEnumerable<ILayer> Layers
         {
@@ -134,7 +178,7 @@ namespace Tensorflow.Training
         /// <param name="name"></param>
         protected virtual Trackable _track_value(Trackable value, string name)
         {
-            value = sticky_attribute_assignment(this, name, value);
+            value = (Trackable)sticky_attribute_assignment(this, name, value);
             if(value is IVariableV1)
             {
                 _self_extra_variables.Add(value as IVariableV1);
@@ -148,44 +192,273 @@ namespace Tensorflow.Training
             return value.Value;
         }
 
-        public static Trackable wrap_or_unwrap(Trackable value)
+        public static object wrap_or_unwrap(object value)
         {
-            return value;
+            if(value is NoDependency dependency)
+            {
+                return dependency.Value;
+            }
+            if(value is Trackable trackable)
+            {
+                return trackable;
+            }
+            else if(value is IDictionary<object, Trackable> obj_dict)
+            {
+                return new DictWrapper(obj_dict);
+            }
+            else if(value is IList<Trackable> list)
+            {
+                return new ListWrapper(list);
+            }
+            else
+            {
+                return value;
+            }
         }
 
-        public static Trackable wrap_or_unwrap(IList<Trackable> value)
+        public static object sticky_attribute_assignment(Trackable trackable, string name, object value)
         {
-            return new ListWrapper(value);
-        }
-
-        public static Trackable wrap_or_unwrap(IEnumerable<Trackable> value)
-        {
-            return new ListWrapper(value.ToList());
-        }
-
-        protected static Trackable sticky_attribute_assignment(Trackable trackable, string name, Trackable value)
-        {
+            bool add_dependency = value is not NoDependency;
             value = wrap_or_unwrap(value);
-            trackable._track_trackable(value, name, true);
+            if (!add_dependency)
+            {
+                return value;
+            }
+            if(value is Trackable trackable_obj)
+            {
+                trackable._track_trackable(trackable_obj, name, true);
+            }
             return value;
-        }
-
-        protected static Trackable sticky_attribute_assignment(Trackable trackable, string name, NoDependency value)
-        {
-            var wrapped_value = wrap_or_unwrap(value);
-            trackable._track_trackable(wrapped_value, name, true);
-            return wrapped_value;
-        }
-
-        protected static Trackable sticky_attribute_assignment(Trackable trackable, string name, IList<Trackable> value)
-        {
-            var wrapped_value = wrap_or_unwrap(value);
-            trackable._track_trackable(wrapped_value, name, true);
-            return wrapped_value;
         }
     }
+    // TODO(Rinne): Add Dict wrapper and Tuple wrapper
 
-    public class ListWrapper : TrackableDataStructure, IList<Trackable>, ICloneable
+    public class DictWrapper : TrackableDataStructure, IDictionary<object, Trackable>, ICloneable, ITrackableWrapper
+    {
+        private IDictionary<object, Trackable> _storage;
+        private bool _non_string_key;
+        private bool _external_modification;
+        private IDictionary<object, Trackable> _last_wrapped_dict_snapshot;
+
+        public DictWrapper(IDictionary<object, Trackable> wrapped_dict = null)
+        {
+            if(wrapped_dict is not null)
+            {
+                _storage = new Dictionary<object, Trackable>(wrapped_dict);
+            }
+            else
+            {
+                _storage = new Dictionary<object, Trackable>();
+            }
+            _update_snapshot();
+        }
+
+        public void SetValue(object name, object value)
+        {
+            Debug.Assert(value is Trackable);
+            this[name] = value as Trackable;
+        }
+        public String Identifier => "trackable_dict_wrapper";
+        public int Version => 1;
+        public int MinConsumerVersion => 1;
+        public int MinProducerVersion => 1;
+        public Trackable FromProto(SavedUserObject proto)
+        {
+            return new DictWrapper(new Dictionary<object, Trackable>());
+        }
+
+        public Trackable this[object key]
+        {
+            get
+            {
+                return _storage[key];
+            }
+            set
+            {
+                _check_self_external_modification();
+                _maybe_initialize_trackable();
+                bool no_dep = value is NoDependency;
+                if(key is string)
+                {
+                    value = _track_value(value, key);
+                }
+                else
+                {
+                    value = (Trackable)wrap_or_unwrap(value);
+                    if(!no_dep && value is Trackable)
+                    {
+                        _non_string_key = true;
+                    }
+                }
+                _storage[key] = value;
+                _update_snapshot();
+            }
+        }
+
+        public ICollection<object> Keys => _storage.Keys;
+
+        public override ICollection<Trackable> Values => _storage.OrderBy(x => x.Key).Select(x => x.Value).ToArray();
+
+        public void Add(object key, Trackable value)
+        {
+            _storage[key] = value;
+        }
+
+        public bool ContainsKey(object key)
+        {
+            return _storage.ContainsKey(key);
+        }
+
+        public bool Remove(object key)
+        {
+            _check_self_external_modification();
+            var res = _storage.Remove(key);
+            _update_snapshot();
+            return res;
+        }
+
+        public bool TryGetValue(object key, out Trackable value)
+        {
+            return _storage.TryGetValue(key, out value);
+        }
+
+        public int Count => _storage.Count;
+
+        public bool IsReadOnly => _storage.IsReadOnly;
+
+        public void Add(KeyValuePair<object, Trackable> item)
+        {
+            Add(item.Key, item.Value);
+        }
+
+        public void Clear()
+        {
+            _storage.Clear();
+            _update_snapshot();
+        }
+
+        public bool Contains(KeyValuePair<object, Trackable> item)
+        {
+            return _storage.Contains(item);
+        }
+
+        public void CopyTo(KeyValuePair<object, Trackable>[] array, int arrayIndex)
+        {
+            _storage.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(KeyValuePair<object, Trackable> item)
+        {
+            _check_self_external_modification();
+            var res = Remove(item);
+            _update_snapshot();
+            return res;
+        }
+
+        public IEnumerator<KeyValuePair<object, Trackable>> GetEnumerator()
+        {
+            return _storage.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => _storage.GetEnumerator();
+
+        public object Clone()
+        {
+            var copied = new DictWrapper(_storage);
+            copied._external_modification = _external_modification;
+            copied._non_string_key = _non_string_key;
+            return copied;
+        }
+
+        public override IDictionary<string, Trackable> _trackable_children(SaveType save_type = SaveType.CHECKPOINT, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
+        {
+            _check_self_external_modification();
+            if (_non_string_key)
+            {
+                throw new ValueError($"Unable to save the object {this} (a dictionary wrapper constructed \"" +
+                    $"automatically on attribute assignment). The wrapped dictionary " +
+                    $"contains a non-string key which maps to a trackable object or " +
+                    $"mutable data structure.\n\nIf you don't need this dictionary " +
+                    $"checkpointed, wrap it in a non-trackable " +
+                    $"object; it will be subsequently ignored.");
+            }
+            if (_external_modification)
+            {
+                throw new ValueError($"Unable to save the object {this} (a dictionary wrapper constructed " +
+                    $"automatically on attribute assignment). The wrapped dictionary was " +
+                    $"modified outside the wrapper (its final value was {this}, its value" +
+                    $" when a checkpoint dependency was added was " +
+                    $"{this._last_wrapped_dict_snapshot}), which breaks " +
+                    $"restoration on object creation.\n\nIf you don't need this " +
+                    $"dictionary checkpointed, wrap it in a " +
+                    $"non-trackable object; it will be subsequently ignored.");
+            }
+            Debug.Assert(!Dirty);
+            var children = base._trackable_children(save_type, cache);
+
+            if(save_type == SaveType.SAVEDMODEL)
+            {
+                foreach(var item in _storage)
+                {
+                    var key = item.Key;
+                    var value = item.Value;
+                    if (TrackableWrapperUtils.is_function(value))
+                    {
+                        Debug.Assert(key is string);
+                        children[key as string] = value;
+                    }
+                }
+            }
+
+            return children;
+        }
+
+        protected Trackable _track_value(Trackable value, object name)
+        {
+            bool string_key = name is string;
+            if (!string_key)
+            {
+                name = "-non_string_key";
+            }
+            try
+            {
+                bool no_dependency = value is NoDependency;
+                value = base._track_value(value, name as string);
+                if(!(string_key || no_dependency))
+                {
+                    _non_string_key = true;
+                }
+                return value;
+            }
+            catch (ValueError)
+            {
+                return (Trackable)sticky_attribute_assignment(this, name as string, value);
+            }
+        }
+
+        private bool Dirty => _external_modification || _non_string_key;
+
+        private void _check_self_external_modification()
+        {
+            if (Dirty)
+            {
+                return;
+            }
+            if(!this._storage.SequenceEqual(_last_wrapped_dict_snapshot))
+            {
+                _external_modification = true;
+                _last_wrapped_dict_snapshot = null;
+            }
+        }
+
+        private void _update_snapshot()
+        {
+            // TODO(Rinne): deal with attribute_sentinel.
+            if (Dirty) return;
+            _last_wrapped_dict_snapshot = new Dictionary<object, Trackable>(_storage);
+        }
+    }
+    public class ListWrapper : TrackableDataStructure, IList<Trackable>, ICloneable, ITrackableWrapper
     {
         private IList<Trackable> _storage;
         private bool _non_append_mutation_value;
@@ -198,9 +471,49 @@ namespace Tensorflow.Training
         /// modified directly after constructing the `ListWrapper`, and if changes are detected the `ListWrapper` will throw an exception on save.</param>
         public ListWrapper(IList<Trackable> wrapped_list)
         {
-            _storage = wrapped_list;
+            _storage = new List<Trackable>(wrapped_list);
             _non_append_mutation_value = _external_modification_value = false;
             _last_wrapped_list_snapshot = new List<Trackable>(_storage);
+        }
+
+        public string Identifier => "trackable_list_wrapper";
+        public int Version => 1;
+        public int MinConsumerVersion => 1;
+        public int MinProducerVersion => 1;
+        public Trackable FromProto(SavedUserObject proto)
+        {
+            if(TrackableWrapperUtils.ShouldLoad(this, proto))
+            {
+                return new ListWrapper(new Trackable[] { });
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public void SetValue(object name, object value)
+        {
+            Debug.Assert(name is string);
+            if(int.TryParse(name as string, out var index))
+            {
+                if(value is not Trackable trackable)
+                {
+                    throw new TypeError("Cannot set an object which is not trackable to ListWrapper.");
+                }
+                if(Count <= index)
+                {
+                    Add(trackable);
+                }
+                else
+                {
+                    this[index] = trackable;
+                }
+            }
+            else
+            {
+                throw new NotImplementedException("Encounter an unexpected behavior in <ListWrapper.SetAttr>, please " +
+                    "submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues");
+            }
         }
 
         protected bool NonAppendMuation { 
@@ -222,7 +535,7 @@ namespace Tensorflow.Training
             }
         }
 
-        public override IEnumerable<Trackable> Values => this;
+        public override ICollection<Trackable> Values => this;
         public bool IsReadOnly { get => _storage.IsReadOnly; }
 
         /// <summary>
@@ -239,7 +552,7 @@ namespace Tensorflow.Training
 
         private void update_snapshot()
         {
-            // TODO: deal with `attribute_sentinel`.
+            // TODO(Rinne): deal with `attribute_sentinel`.
             if (_external_modification_value || _non_append_mutation_value) return;
             _last_wrapped_list_snapshot = new List<Trackable>(_storage);
         }
@@ -286,9 +599,9 @@ namespace Tensorflow.Training
             {
                 base._track_value(value, name);
             }
-            catch(ValueError ex)
+            catch(ValueError)
             {
-                value = sticky_attribute_assignment(this, name, value);
+                value = (Trackable)sticky_attribute_assignment(this, name, value);
             }
             return value;
         }
@@ -343,7 +656,11 @@ namespace Tensorflow.Training
             update_snapshot();
         }
 
-        public void Clear() => _storage.Clear();
+        public void Clear()
+        {
+            _storage.Clear();
+            update_snapshot();
+        }
 
         public bool Contains(Trackable item) => _storage.Contains(item);
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 using System.Text;
 using Tensorflow.Train;
 using Tensorflow.Training;
@@ -50,7 +51,7 @@ public class CheckpointPosition
     {
         _checkpoint.AllTrackables.Add(trackable);
         _checkpoint.MatchedProtoIds.Add(_proto_id);
-        if(_checkpoint.ObjectByProtoId.TryGetValue(_proto_id, out var current_assignment))
+        if(_checkpoint.ObjectByProtoId.TryGetValue(_proto_id, out var current_assignment) && current_assignment is not null)
         {
             // skip the `logging.warning`.
             return false;

@@ -30,6 +30,18 @@ namespace Tensorflow.Operations
             }
         }
 
+        public static HandleData create_handle_data(Shape shape, TF_DataType dtype)
+        {
+            HandleData handle_data = new();
+            handle_data.IsSet = true;
+            handle_data.ShapeAndType.Add(new HandleShapeAndType()
+            {
+                Shape = shape.as_proto(),
+                Dtype = dtype.as_datatype_enum()
+            });
+            return handle_data;
+        }
+
         public static void set_handle_data(Tensor target_t, HandleData handle_data)
         {
             if(target_t is EagerTensor)
@@ -37,7 +49,8 @@ namespace Tensorflow.Operations
                 target_t.HandleData = handle_data;
                 return;
             }
-            c_api.SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), handle_data.ToByteArray());
+            // TODO(Rinne): enable it. (currently the internal c api cannot be invoked.)
+            //c_api.SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), handle_data.ToByteArray());
         }
     }
 }

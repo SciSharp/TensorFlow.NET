@@ -1,7 +1,12 @@
-﻿using Tensorflow.Keras.ArgsDefinition;
+﻿using System.Diagnostics;
+using Tensorflow.Framework.Models;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Losses;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Saving.SavedModel;
+using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
+using Tensorflow.Util;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -22,14 +27,16 @@ namespace Tensorflow.Keras.Engine
         IOptimizer optimizer;
         IVariableV1 _steps_per_execution;
         protected bool _is_graph_network;
-        protected Tensors inputs;
+        public Tensors inputs;
         protected Tensors outputs;
+        protected List<string> input_names;
         public string[] output_names;
         IVariableV1 _train_counter;
         IVariableV1 _test_counter;
         IVariableV1 _predict_counter;
         bool _base_model_initialized;
         bool stop_training;
+        TensorSpec _saved_model_inputs_spec;
 
         public bool IsGraphNetwork => _is_graph_network;
         
@@ -43,6 +50,38 @@ namespace Tensorflow.Keras.Engine
             : base(args)
         {
             _init_batch_counters();
+        }
+
+        public void _set_inputs(TensorSpec inputs)
+        {
+            _set_save_spec(inputs);
+        }
+
+        internal void _set_save_spec(TensorSpec inputs)
+        {
+            if(_saved_model_inputs_spec is not null)
+            {
+                return;
+            }
+            var input_names = this.input_names;
+            if(input_names is null || input_names.Count == 0)
+            {
+                input_names = compile_utils.create_pseudo_input_names(inputs);
+            }
+
+            var flat_inputs = nest.flatten(inputs);
+            List<TensorSpec> specs = new();
+            foreach(var (name, tensor) in zip(input_names, flat_inputs))
+            {
+                specs.Add(tf_utils.get_tensor_spec(tensor, dynamic_batch: false, name: name));
+            }
+            var packed_specs = nest.pack_sequence_as(inputs, specs) as TensorSpec;
+            Debug.Assert(specs is not null);
+            _saved_model_inputs_spec = packed_specs;
+            if(this is Sequential && _buildInputShape is null)
+            {
+                _buildInputShape = nest.map_structure<TensorSpec, TensorShapeConfig>(x => x is null ? null : x.shape, packed_specs);
+            }
         }
 
         internal override void Initialize(LayerArgs args)
@@ -143,6 +182,16 @@ namespace Tensorflow.Keras.Engine
             }
             var children = base._trackable_children(save_type, cache);
             return children;
+        }
+
+        public override void SetAttr(string name, object value)
+        {
+            // TODO(Rinne): deal with "_self_setattr_tracking".
+            //if(nest.flatten(value).All(v => v is Layer or IVariableV1 || base_layer_utils.has_weights(v)))
+            //{
+            //    this._base_model_initialized;
+            //}
+            base.SetAttr(name, value);
         }
 
 

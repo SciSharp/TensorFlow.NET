@@ -21,6 +21,9 @@ using Tensorflow.Train;
 using Tensorflow.Training.Saving.SavedModel;
 using Tensorflow.Variables;
 using static Tensorflow.CppShapeInferenceResult.Types;
+using static Tensorflow.Binding;
+using Tensorflow.Operations;
+using System.Buffers;
 
 namespace Tensorflow
 {
@@ -31,6 +34,7 @@ namespace Tensorflow
     {
         public static Operation shape_safe_assign_variable_handle(Tensor handle, int[] shape, Tensor value, string name = null)
         {
+            // TODO(Rinne): deal with `_handle_graph`.
             var value_tensor = ops.convert_to_tensor(value);
             return gen_resource_variable_ops.assign_variable_op(handle,
                                                       value_tensor,
@@ -78,6 +82,18 @@ namespace Tensorflow
             string shared_name, string name, bool graph_mode, Tensor initial_value = null)
         {
             var container = ops.get_default_graph().Container;
+            if(container is null)
+            {
+                container = "";
+            }
+            if (!graph_mode)
+            {
+                if(shared_name is not null)
+                {
+                    throw new Exception("Using an explicit shared_name is not allowed when executing eagerly.");
+                }
+                shared_name = tf.Context.anonymous_name();
+            }
             var handle = gen_resource_variable_ops.var_handle_op(shape: shape,
                 dtype: dtype,
                 shared_name: shared_name,
@@ -95,26 +111,20 @@ namespace Tensorflow
             }
             else
             {
-                // We do not want two distinct ResourceVariable objects for the same
-                // underlying resource in the runtime.
-                // When in eager mode, explicitly ensure so here. When in graph mode, it's
-                // ensured by always generating different variable names.
-                var exists = gen_resource_variable_ops.var_is_initialized_op(handle);
-
-                // We create an assert Op instead of checking right away in order to be
-                // compatible with ASYNC execution mode. Further, since not all devices
-                // support string tensors, we encode the assertion string in the Op name
-                /*gen_logging_ops.assert(gen_math_ops.logical_not(exists),
-                    new[] { exists },
-                    name: "EagerVariableNameReuse");*/
-
-                var handle_data = new HandleData();
-                handle_data.IsSet = true;
-                handle_data.ShapeAndType.Add(new HandleShapeAndType
+                var handle_data = handle_data_util.create_handle_data(shape, dtype);
+                if (initial_value is not null && initial_value.dtype == dtypes.variant)
                 {
-                    Dtype = dtype.as_datatype_enum(),
-                    Shape = shape.as_proto()
-                });
+                    var extra_handle_data = get_eager_safe_handle_data(initial_value);
+                    if (extra_handle_data is not null && extra_handle_data.IsSet)
+                    {
+                        if (!handle_data.IsSet || handle_data.ShapeAndType.Count != 1)
+                        {
+                            throw new RuntimeError($"Expected VarHandleOp to return a length==1 shape_and_type, " +
+                                $"but saw: '{handle_data}'");
+                        }
+                        handle_data.ShapeAndType.AddRange(extra_handle_data.ShapeAndType);
+                    }
+                }
                 _set_handle_shapes_and_types(handle, handle_data, graph_mode);
                 return handle;
             }
@@ -126,24 +136,48 @@ namespace Tensorflow
         /// <param name="handle"></param>
         /// <param name="handle_data"></param>
         /// <param name="graph_mode"></param>
-        internal static void _set_handle_shapes_and_types(Tensor tensor, HandleData handle_data, bool graph_mode)
+        internal unsafe static void _set_handle_shapes_and_types(Tensor tensor, HandleData handle_data, bool graph_mode)
         {
+            tensor.HandleData = handle_data;
             if (!graph_mode)
                 return;
 
-            var size = handle_data.ShapeAndType.Count;
+            //var shapes = handle_data.ShapeAndType.Select(x => x.Shape);
+            //var types = handle_data.ShapeAndType.Select(x => x.Dtype).ToArray();
+            //var ranks = shapes.Select(s => s.UnknownRank ? -1 : s.Dim.Count).ToArray();
+            //var converted_shapes = shapes.Select<TensorShapeProto, Memory<int>>(s =>
+            //{
+            //    if (!s.UnknownRank)
+            //    {
+            //        return s.Dim.Select(d => (int)d.Size).ToArray();
+            //    }
+            //    else
+            //    {
+            //        return Memory<int>.Empty;
+            //    }
+            //}).ToArray();
 
-            var shapes = new IntPtr[size];
-            var types = new DataType[size];
-            var ranks = new int[size];
+            //List<MemoryHandle> handles = new();
+            //IntPtr[] shapes_with_ptr = new IntPtr[converted_shapes.Length];
+            //foreach(var (i, m) in enumerate(converted_shapes))
+            //{
+            //    if(m.IsEmpty)
+            //    {
+            //        shapes_with_ptr[i] = IntPtr.Zero;
+            //    }
+            //    else
+            //    {
+            //        var handle = m.Pin();
+            //        handles.Add(handle);
+            //        shapes_with_ptr[i] = new IntPtr(handle.Pointer);
+            //    }
+            //}
 
-            for (int i = 0; i < size; i++)
-            {
-                var shapeAndType = handle_data.ShapeAndType[i];
-                types[i] = shapeAndType.Dtype;
-                ranks[i] = shapeAndType.Shape.UnknownRank ? -1 : shapeAndType.Shape.Dim.Count;
-                var dims = shapeAndType.Shape.Dim.Select(x => x.Size).ToArray();
-            }
+            //Status status = new();
+            //// TODO(Rinne): enable it.
+            //c_api.TF_GraphSetOutputHandleShapesAndTypes(tensor.op.graph.c_graph, tensor._as_tf_output(), 
+            //    shapes_with_ptr.Length, shapes_with_ptr, ranks, types, status);
+            //handles = null;
         }
 
         /// <summary>

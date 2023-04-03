@@ -120,6 +120,11 @@ namespace Tensorflow.Contexts
                 name :
                 "cd2c89b7-88b7-44c8-ad83-06c2a9158347";
 
+        public string anonymous_name()
+        {
+            return "cd2c89b7-88b7-44c8-ad83-06c2a9158347";
+        }
+
         public void graph_mode(bool isFunc = false)
             => context_switches.Push(false, isFunc);
 

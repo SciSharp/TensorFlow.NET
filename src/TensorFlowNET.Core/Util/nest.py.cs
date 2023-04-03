@@ -519,6 +519,14 @@ namespace Tensorflow.Util
             return pack_sequence_as(structure, mapped_flat_structure) as Tensor;
         }
 
+        public static T2 map_structure<T1, T2>(Func<T1, T2> func, T1 structure) where T2: class
+        {
+            var flat_structure = flatten(structure);
+            var mapped_flat_structure = flat_structure.Select(func).Select(x => (object)x);
+
+            return pack_sequence_as(structure, mapped_flat_structure) as T2;
+        }
+
         /// <summary>
         /// Same as map_structure, but with only one structure (no combining of multiple structures)
         /// </summary>

@@ -97,7 +97,7 @@ namespace Tensorflow
                     else
                     {
                         unique_id = $"{handle_name}_{ops.uid()}";
-                        shared_name = tf.Context.shared_name();
+                        shared_name = null;
                     }
 
                     var attr = new AttrValue();

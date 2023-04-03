@@ -160,12 +160,12 @@ namespace Tensorflow.Checkpoint
         /// <param name="serialized_tensors"> A dictionary mapping `Trackable` to a tensor dict, which maps checkpoint_key -> (slice_spec ->) -> Tensor/SaveSpec. </param>
         /// <param name="registered_savers"></param>
         /// <param name="call_with_mapped_capture"></param>
-        public MultiDeviceSaver(IDictionary<Trackable, IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>> serialized_tensors,
+        public MultiDeviceSaver(IDictionary<Trackable, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>> serialized_tensors,
             IDictionary<string, IDictionary<string, Trackable>>? registered_savers = null, bool call_with_mapped_capture = false)
         {
             _keys_to_restore_fn = new Dictionary<(string, string), RestoreFunc>();
             _restore_fn_to_keys = new Dictionary<RestoreFunc, IList<(string, string)>>();
-            Dictionary<string, IDictionary<string, IDictionary<string, Tensor>>>  tensors_by_device= new();
+            Dictionary<string, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>>  tensors_by_device= new();
             
             foreach(var pair in serialized_tensors)
             {
@@ -191,16 +191,7 @@ namespace Tensorflow.Checkpoint
                 foreach(var item in tensor_dict)
                 {
                     var checkpoint_key = item.Key;
-                    IDictionary<string, Tensor> spec_to_tensor;
-                    if(item.Value.TryPickT0(out var t, out var dic))
-                    {
-                        spec_to_tensor = new Dictionary<string, Tensor>();
-                        spec_to_tensor[""] = t;
-                    }
-                    else
-                    {
-                        spec_to_tensor = dic;
-                    }
+                    var spec_to_tensor = item.Value;
 
                     foreach(var spec in spec_to_tensor)
                     {
@@ -216,11 +207,19 @@ namespace Tensorflow.Checkpoint
                         _restore_fn_to_keys.SetDefault(restore_fn, new List<(string, string)>()).Add((checkpoint_key, slice_spec));
 
                         // skip the process of device name because lack of API.
-                        var host_device = tensor.Device;
-                        var internal_dict = tensors_by_device.SetDefault(host_device, new Dictionary<string, IDictionary<string, Tensor>>());
+                        string host_device;
+                        if (tensor.IsT0)
+                        {
+                            host_device = tensor.AsT0.Device;
+                        }
+                        else
+                        {
+                            host_device = tensor.AsT1.device;
+                        }
+                        var internal_dict = tensors_by_device.SetDefault(host_device, new Dictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>());
                         if (!internal_dict.ContainsKey(checkpoint_key))
                         {
-                            internal_dict[checkpoint_key] = new Dictionary<string, Tensor>();
+                            internal_dict[checkpoint_key] = new Dictionary<string, OneOf<Tensor, SaveSpec>>();
                         }
                         internal_dict[checkpoint_key][slice_spec] = tensor;
                     }
@@ -425,7 +424,7 @@ namespace Tensorflow.Checkpoint
 
         public static MultiDeviceSaver from_saveables(IEnumerable<MySaveableObject> saveables, IDictionary<string, IDictionary<string, Trackable>>? registered_savers = null, bool call_with_mapped_captures = false)
         {
-            Dictionary<Trackable, IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>> serialized_tensors = new();
+            Dictionary<Trackable, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>> serialized_tensors = new();
             foreach (var saveable in saveables)
             {
                 var trackable = new SaveableCompatibilityConverter(saveable, new List<MySaveableObject>() { saveable });
