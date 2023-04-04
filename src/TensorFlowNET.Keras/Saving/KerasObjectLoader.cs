@@ -189,11 +189,8 @@ namespace Tensorflow.Keras.Saving
                 }
 
                 // `model.__init__(layers, config["name"])`InitLayers(layers);
-                s = new Sequential(new SequentialArgs(){
-                    Layers = layers.Select(x => x as ILayer).ToList(), 
-                    Name = config["name"].ToObject<string>()
-                });
-                //s.Name = config["name"].ToObject<string>();
+                s.InitLayers(layers.Select(x => x as ILayer));
+                s.Name = config["name"].ToObject<string>();
                 if(s.inputs is null || s.inputs.Length == 0)
                 {
                     var first_layer = _get_child_layer_node_ids(model_id)[0];
