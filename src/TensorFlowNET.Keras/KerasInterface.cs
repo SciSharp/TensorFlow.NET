@@ -58,6 +58,12 @@ namespace Tensorflow.Keras
                 Name = name
             });
 
+        public Sequential Sequential(params ILayer[] layers)
+            => new Sequential(new SequentialArgs
+            {
+                Layers = layers.ToList()
+            });
+
         /// <summary>
         /// `Model` groups layers into an object with training and inference features.
         /// </summary>

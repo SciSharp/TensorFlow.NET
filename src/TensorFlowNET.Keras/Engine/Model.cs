@@ -46,6 +46,12 @@ namespace Tensorflow.Keras.Engine
             set => optimizer = value;
         }
 
+        public bool Stop_training
+        {
+            get => stop_training;
+            set => stop_training = value;
+        }
+
         public Model(ModelArgs args)
             : base(args)
         {

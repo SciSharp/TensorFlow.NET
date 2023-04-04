@@ -1,5 +1,5 @@
 ﻿/*****************************************************************************
-   Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
+   Copyright 2023 The TensorFlow.NET Authors. All Rights Reserved.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ namespace Tensorflow
 
             public Tensor tanh(Tensor x, string name = null)
                 => math_ops.tanh(x, name: name);
-            
+
             /// <summary>
             /// Finds values and indices of the `k` largest entries for the last dimension.
             /// </summary>
@@ -93,6 +93,16 @@ namespace Tensorflow
                 bool binary_output = false)
                 => math_ops.bincount(arr, weights: weights, minlength: minlength, maxlength: maxlength,
                     dtype: dtype, name: name, axis: axis, binary_output: binary_output);
+
+            public Tensor real(Tensor x, string name = null)
+                    => gen_ops.real(x, x.dtype.real_dtype(), name);
+            public Tensor imag(Tensor x, string name = null)
+                => gen_ops.imag(x, x.dtype.real_dtype(), name);
+
+            public Tensor conj(Tensor x,  string name = null)
+                => gen_ops.conj(x, name);
+            public Tensor angle(Tensor x, string name = null)
+                => gen_ops.angle(x, x.dtype.real_dtype(), name);
         }
 
         public Tensor abs(Tensor x, string name = null)
@@ -537,7 +547,7 @@ namespace Tensorflow
         public Tensor reduce_sum(Tensor input, Axis? axis = null, Axis? reduction_indices = null,
             bool keepdims = false, string name = null)
         {
-            if(keepdims)
+            if (keepdims)
                 return math_ops.reduce_sum(input, axis: constant_op.constant(axis ?? reduction_indices), keepdims: keepdims, name: name);
             else
                 return math_ops.reduce_sum(input, axis: constant_op.constant(axis ?? reduction_indices));
@@ -585,5 +595,7 @@ namespace Tensorflow
             => gen_math_ops.square(x, name: name);
         public Tensor squared_difference(Tensor x, Tensor y, string name = null)
             => gen_math_ops.squared_difference(x: x, y: y, name: name);
+        public Tensor complex(Tensor real, Tensor imag, Tensorflow.TF_DataType? dtype = null, 
+                string name = null) => gen_ops.complex(real, imag, dtype, name);
     }
 }

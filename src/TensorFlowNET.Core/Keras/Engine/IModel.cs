@@ -22,6 +22,7 @@ public interface IModel : ILayer
             int verbose = 1,
             List<ICallback> callbacks = null,
             float validation_split = 0f,
+            (NDArray val_x, NDArray val_y)? validation_data = null,
             bool shuffle = true,
             int initial_epoch = 0,
             int max_queue_size = 10,
@@ -34,6 +35,7 @@ public interface IModel : ILayer
             int verbose = 1,
             List<ICallback> callbacks = null,
             float validation_split = 0f,
+            (IEnumerable<NDArray> val_x, NDArray val_y)? validation_data = null,
             bool shuffle = true,
             int initial_epoch = 0,
             int max_queue_size = 10,
@@ -65,7 +67,8 @@ public interface IModel : ILayer
             int max_queue_size = 10,
             int workers = 1,
             bool use_multiprocessing = false,
-            bool return_dict = false);
+            bool return_dict = false,
+            bool is_val = false);
 
     Tensors predict(Tensors x,
             int batch_size = -1,
@@ -79,5 +82,5 @@ public interface IModel : ILayer
 
     IKerasConfig get_config();
 
-    void set_stopTraining_true();
+    bool Stop_training { get;set; }
 }
