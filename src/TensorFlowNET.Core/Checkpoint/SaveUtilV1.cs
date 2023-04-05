@@ -110,14 +110,10 @@ public static class SaveUtilV1
         {
             var trackable = trackable_objects[i];
             Debug.Assert(node_ids[trackable] == i);
-            TrackableObjectGraph.Types.TrackableObject object_proto;
+            var object_proto = new TrackableObjectGraph.Types.TrackableObject();
             if (slot_variables.TryGetValue(trackable, out var slots))
             {
-                object_proto = new TrackableObjectGraph.Types.TrackableObject(slots);
-            }
-            else
-            {
-                object_proto = new TrackableObjectGraph.Types.TrackableObject();
+                object_proto.SlotVariables.AddRange(slots);
             }
             object_graph_proto.Nodes.Add(object_proto);
             foreach (var child in graph_view.list_children(trackable))

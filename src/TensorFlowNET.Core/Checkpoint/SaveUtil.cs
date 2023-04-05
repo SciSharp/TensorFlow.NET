@@ -106,7 +106,9 @@ namespace Tensorflow.Checkpoint
             {
                 var td = trackable_data[i];
                 Debug.Assert(td.node_id == i);
-                object_graph_proto.Nodes.Add(new TrackableObjectGraph.Types.TrackableObject(td.slot_variable_proto, td.children_proto));
+                TrackableObjectGraph.Types.TrackableObject trackable_object = new();
+                trackable_object.SlotVariables.AddRange(td.slot_variable_proto);
+                trackable_object.Children.AddRange(td.children_proto);
             }
             return object_graph_proto;
         }

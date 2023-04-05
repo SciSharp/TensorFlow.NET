@@ -1,7 +1,7 @@
 @ECHO OFF
 
-set SRC_DIR=D:/SciSharp/tensorflow-google
-set DST_DIR=D:/SciSharp/TensorFlow.NET/src/TensorFlowNET.Core/Protobuf
+set SRC_DIR=D:/development/tf.net/tensorflow-2.11.0
+set DST_DIR=D:/development/tf.net/gen_proto
 
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/resource_handle.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/framework/tensor_shape.proto
@@ -30,6 +30,10 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/saver.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/saved_object_graph.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/saved_model.proto
 ECHO Download `any.proto` from https://github.com/protocolbuffers/protobuf/tree/master/src/google/protobuf
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/coordination_service.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/coordination_config.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/service_config.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/data_service.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/meta_graph.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/cluster.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/config.proto
@@ -41,6 +45,14 @@ protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/struct.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/protobuf/verifier_config.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/util/event.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/core/util/memmapped_file_system.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/tsl/protobuf/histogram.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/xla.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/xla_data.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/service/hlo.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/pjrt/distributed/protocol.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/service/gpu/executable.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/service/cpu/executable.proto
+protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/compiler/xla/service/cpu/xla_framework.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/training/checkpoint_state.proto
 protoc -I=%SRC_DIR% --csharp_out=%DST_DIR% tensorflow/python/framework/cpp_shape_inference.proto
 

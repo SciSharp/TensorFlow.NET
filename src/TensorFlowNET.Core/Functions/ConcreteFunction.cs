@@ -34,14 +34,14 @@ namespace Tensorflow.Functions
         public TensorSpec[] OutputStructure;
         public IEnumerable<string> ArgKeywords { get; set; }
         public long NumPositionArgs { get; set; }
+        public FunctionDef FunctionDef => _delayed_rewrite_functions.Forward().Definition;
 
         public ConcreteFunction(string name)
         {
             func_graph = new FuncGraph(name);
             _captured_inputs = func_graph.external_captures;
             _attrs= new Dictionary<string, string>();
-            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
-            _inference_function = _delayed_rewrite_functions.Forward();
+            _set_infer_function();
         }
 
         public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs = null)
@@ -51,8 +51,7 @@ namespace Tensorflow.Functions
 
             //ToGraph(graph.Inputs, graph.Outputs.Where(x => x != null).ToArray());
             _attrs = attrs;
-            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
-            _inference_function = _delayed_rewrite_functions.Forward();
+            _set_infer_function();
         }
 
         public ConcreteFunction(Func<Tensor, Tensor> func, TF_DataType dtype)
@@ -72,8 +71,7 @@ namespace Tensorflow.Functions
             func_graph.Exit();
             _captured_inputs = func_graph.external_captures;
             _attrs = new Dictionary<string, string>();
-            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
-            _inference_function = _delayed_rewrite_functions.Forward();
+            _set_infer_function();
         }
 
         public ConcreteFunction(Func<Tensor, IDatasetV2> func, TF_DataType dtype)
@@ -96,8 +94,7 @@ namespace Tensorflow.Functions
             func_graph.Exit();
             _captured_inputs = func_graph.external_captures;
             _attrs = new Dictionary<string, string>();
-            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
-            _inference_function = _delayed_rewrite_functions.Forward();
+            _set_infer_function();
         }
 
         /*public ConcreteFunction(Func<Tensors, Tensors> func,
@@ -243,6 +240,12 @@ namespace Tensorflow.Functions
 
             // TODO(Rinne): add arg "input_tagents" for ForwardBackwardCall.
             return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: false);
+        }
+
+        internal void _set_infer_function()
+        {
+            _delayed_rewrite_functions = new DelayedRewriteGradientFunctions(func_graph, _attrs);
+            _inference_function = _delayed_rewrite_functions.Forward();
         }
 
         internal void _set_function_spec(FunctionSpec spec)

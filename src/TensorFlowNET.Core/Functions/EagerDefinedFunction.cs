@@ -21,7 +21,7 @@ namespace Tensorflow.Functions
         OpDef _signature;
         string _name;
         Tensor[] _func_graph_outputs;
-        public string Name => _func_graph.FuncName;
+        public string Name => _name;
         public DataType[] OutputTypes { get; protected set; }
         public Shape[] OutputShapes { get; protected set; }
         public FunctionDef Definition
@@ -51,18 +51,21 @@ namespace Tensorflow.Functions
             Tensors inputs, Tensors outputs,
             Dictionary<string, string> attrs)
         {
-            _num_outputs = outputs.Length;
-            
             var input_ops = inputs.Select(x => x.op).ToArray();
             var operations = graph.get_operations().Where(x => !input_ops.Contains(x.op))
                 .Select(x => x as Operation).ToArray();
             var output_names = new string[0];
-            OutputShapes = outputs.Select(x => x.shape).ToArray();
-            OutputTypes = outputs.Select(x => x.dtype.as_datatype_enum()).ToArray();
-
             _func_graph = new FuncGraph(graph, name, attrs);
             _func_graph_outputs = new List<Tensor>(outputs).ToArray();
             _func_graph.ToGraph(operations, inputs, outputs, output_names);
+
+            var signature = _get_definition().Signature;
+            _name = signature.Name;
+            // TODO(Rinne): deal with `fn`
+
+            _num_outputs = signature.OutputArg.Count;
+            OutputTypes = signature.OutputArg.Select(x => x.Type).ToArray();
+            OutputShapes = outputs.Select(x => x.shape).ToArray();
         }
 
         public Tensors Call(Tensors args)

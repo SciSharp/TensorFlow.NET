@@ -38,6 +38,21 @@ namespace Tensorflow.Graphs
 
             // make function as an Operation by autograph
             // need to restore mode when exits
+
+            //var func_graph = new FuncGraph(func_name);
+            //func_graph.as_default();
+            //var input_placeholders = args.Arguments.Select(x => tf.placeholder(((Tensor)x).dtype)).ToArray();
+            //// stop the function from recursive call.
+            //already_in_boundary = true;
+            //var outputs = args.Method.Invoke(args.Instance, input_placeholders) as Tensors;
+            //already_in_boundary = false;
+
+            //var opers = func_graph._nodes_by_name.Values.Select(x => x as Operation).ToArray();
+            //func_graph.ToGraph(opers,
+            //    input_placeholders,
+            //    outputs,
+            //    null);
+            //func_graph.Exit();
             function = new ConcreteFunction(func_name);
             function.Enter();
 
@@ -92,6 +107,7 @@ namespace Tensorflow.Graphs
 
             // cache function.
             function.ReturnType = args.ReturnValue.GetType();
+            function._set_infer_function();
             functions[func_name] = function;
 
             // run function
