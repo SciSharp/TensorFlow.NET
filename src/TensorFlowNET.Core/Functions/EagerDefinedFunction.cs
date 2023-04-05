@@ -1,9 +1,11 @@
 ﻿using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Tensorflow.Contexts;
+using Tensorflow.Eager;
 using Tensorflow.Graphs;
 using Tensorflow.Operations;
 using Tensorflow.Util;
@@ -16,6 +18,8 @@ namespace Tensorflow.Functions
         public int _num_outputs;
         FuncGraph _func_graph;
         FunctionDef _definition;
+        OpDef _signature;
+        string _name;
         Tensor[] _func_graph_outputs;
         public string Name => _func_graph.FuncName;
         public DataType[] OutputTypes { get; protected set; }
@@ -29,6 +33,18 @@ namespace Tensorflow.Functions
                     _definition = _get_definition();
                 }
                 return _definition;
+            }
+        }
+
+        public OpDef Signature
+        {
+            get
+            {
+                if( _signature is null)
+                {
+                    _signature = Definition.Signature;
+                }
+                return _signature;
             }
         }
         public EagerDefinedFunction(string name, FuncGraph graph, 
@@ -75,12 +91,12 @@ namespace Tensorflow.Functions
             Tensor[] outputs;
             if (executing_eagerly)
             {
-                outputs = tf.Runner.TFE_Execute(tf.Context,
-                tf.Context.DeviceName,
-                _func_graph.FuncName,
-                args,
-                attrs,
-                _num_outputs);
+                outputs = execute.executes(
+                    Signature.Name,
+                    _num_outputs,
+                    args,
+                    attrs,
+                    tf.Context);
             }
             else
             {
@@ -135,9 +151,13 @@ namespace Tensorflow.Functions
         private FunctionDef _get_definition()
         {
             var buffer = c_api_util.tf_buffer();
-            // TODO(Rinne): pywrap_tf_session.TF_FunctionToFunctionDef
+            Status status = new();
+            c_api.TF_FunctionToFunctionDef(_func_graph._func_graph_handle, buffer, status);
+            status.Check(true);
             var proto_data = c_api.TF_GetBuffer(buffer);
-            throw new NotImplementedException();
+            FunctionDef function_def = new();
+            function_def.MergeFrom(proto_data.AsSpan<byte>());
+            return function_def;
         }
     }
 }

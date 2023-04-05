@@ -10,7 +10,7 @@ namespace Tensorflow.Graphs;
 /// </summary>
 public class FuncGraph : Graph, IDisposable
 {
-    SafeFuncGraphHandle _func_graph_handle;
+    internal SafeFuncGraphHandle _func_graph_handle;
     public string FuncName => _graph_key;
 
     public Tensors Inputs { get; set; } = new Tensors();

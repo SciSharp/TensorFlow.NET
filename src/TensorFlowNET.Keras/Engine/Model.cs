@@ -199,11 +199,5 @@ namespace Tensorflow.Keras.Engine
             //}
             base.SetAttr(name, value);
         }
-
-
-        void IModel.set_stopTraining_true()
-        {
-            stop_training = true;
-        }
     }
 }

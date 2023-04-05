@@ -45,11 +45,8 @@ namespace Tensorflow
             _asset_file_def = meta_graph.AssetFileDef;
             _operation_attributes = meta_graph.GraphDef.Node.ToDictionary(x => x.Name, x => x.Attr);
             _proto = object_graph_proto;
-            // Debug(Rinne)
-            var temp = _proto.ToString();
             _export_dir = export_dir;
-            // TODO: `this._concrete_functions` and `this._restored_concrete_functions`
-            // TODO(Rinne): This method is very slow, needs to be accelareted.
+            // TODO(Rinne): This method is a bit slow (especially under debug mode), may need to be accelareted.
             _concrete_functions = function_deserialization.load_function_def_library(
                 meta_graph.GraphDef.Library, _proto);
             _restored_concrete_functions = new HashSet<string>();
@@ -322,11 +319,6 @@ namespace Tensorflow
             foreach(var (node_id, proto) in _iter_all_nodes())
             {
                 var node = get(node_id);
-                if(node is null)
-                {
-                    // skip it because now we skip the restoration of `Function` and `ConcreteFunction`.
-                    continue;
-                }
                 if(proto.SaveableObjects.Keys.Count == 1 && proto.SaveableObjects.First().Key == TrackableUtils.SERIALIZE_TO_TENSORS_NAME)
                 {
                     // Restore Trackable serialize- and restore-from-tensor functions.
@@ -390,7 +382,7 @@ namespace Tensorflow
                     var optimizer_object = nodes[optimizer_node_id];
                     var optimizer_variable = nodes[slot_variable_proto.OriginalVariableNodeId];
 
-                    // TODO: implement it.
+                    // TODO(Rinne): implement it.
                     throw new NotImplementedException("The model loading of SavedModel still has some incompleted part." +
                         " Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
                 }
@@ -508,21 +500,11 @@ namespace Tensorflow
         /// <param name="node_id"></param>
         private void _add_object_graph_edges(SavedObject proto, int node_id)
         {
-            // Debug(Rinne)
-            if(node_id == 1)
-            {
-                Console.WriteLine();
-            }
             var obj = _nodes[node_id];
             var setter = _node_setters[node_id];
 
             foreach(var refer in proto.Children)
             {
-                if(obj is null)
-                {
-                    // skip it because now we skip the restoration of `Function` and `ConcreteFunction`.
-                    continue;
-                }
                 setter.Invoke(obj, refer.LocalName, _nodes[refer.NodeId]);
                 // TODO(Rinne): deal with "__call__"
             }
@@ -553,12 +535,6 @@ namespace Tensorflow
         private (Trackable, Action<object, object, object>) _recreate(SavedObject proto, int node_id, IDictionary<int, Trackable> nodes)
         {
             // skip the registered classes.
-            if(node_id == 16)
-            {
-                // Debug(Rinne)
-                Console.WriteLine();
-            }
-
             Dictionary<OneOf<string, int>, Trackable> dependencies = new();
             foreach(var item in _get_node_dependencies(proto))
             {

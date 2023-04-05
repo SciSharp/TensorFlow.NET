@@ -25,5 +25,32 @@ namespace Tensorflow
         public IntPtr data;
         public ulong length;
         public IntPtr data_deallocator;
+
+        public unsafe Span<T> AsSpan<T>() where T: unmanaged
+        {
+            if(length > int.MaxValue)
+            {
+                throw new ValueError($"The length {length} is too large to use in the span.");
+            }
+            return new Span<T>(data.ToPointer(), (int)length);
+        }
+
+        public unsafe byte[] ToByteArray()
+        {
+            byte[] res = new byte[length];
+            if(length > int.MaxValue)
+            {
+                byte* root = (byte*)data;
+                for(ulong i = 0; i < length; i++)
+                {
+                    res[i] = *(root++);
+                }
+            }
+            else
+            {
+                new Span<byte>(data.ToPointer(), (int)length).CopyTo(res.AsSpan());
+            }
+            return res;
+        }
     }
 }

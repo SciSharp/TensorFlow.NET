@@ -238,6 +238,19 @@ namespace Tensorflow
             return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
         }
 
+        [Obsolete("The implementation is not complete.")]
+        internal void _set_device_from_string(string device_str)
+        {
+            // TODO(Rinne): complete it with new C API `SetRequestedDevice`.
+            //c_api.TF_SetDevice(_handle, device_str);
+        }
+
+        [Obsolete("The implementation is not complete.")]
+        internal void _set_device(string device)
+        {
+            _set_device_from_string(device);
+        }
+
         private NodeDef GetNodeDef()
         {
             var buffer = new Buffer();

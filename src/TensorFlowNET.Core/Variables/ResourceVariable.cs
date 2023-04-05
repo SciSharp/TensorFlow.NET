@@ -116,7 +116,11 @@ namespace Tensorflow
                         }
                     });
 
-                    _shape = shape ?? _initial_value.shape;
+                    if(shape is null)
+                    {
+                        shape = _initial_value.shape;
+                    }
+                    dtype = _initial_value.dtype;
 
                     if (_in_graph_mode)
                     {
@@ -135,7 +139,7 @@ namespace Tensorflow
                     {
                         handle = resource_variable_ops.eager_safe_variable_handle(
                           initial_value: _initial_value,
-                          shape: _shape,
+                          shape: shape,
                           shared_name: shared_name,
                           name: name,
                           graph_mode: _in_graph_mode);
@@ -154,6 +158,8 @@ namespace Tensorflow
                     }
 
                     base.__init__(trainable: trainable,
+                        shape: shape,
+                        dtype: dtype,
                         handle: handle,
                         name: name,
                         unique_id: unique_id,

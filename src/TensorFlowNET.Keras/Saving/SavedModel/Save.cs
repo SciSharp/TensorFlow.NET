@@ -124,18 +124,18 @@ public partial class KerasSavedModelUtils
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        }));
+        }).ToArray());
         var trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.TrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        }));
+        }).ToArray());
         var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.NonTrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        }));
-        var layers = TrackableDataStructure.wrap_or_unwrap(KerasSavedModelUtils.list_all_layers(layer).Select(x => x.GetTrackable()));
+        }).ToArray());
+        var layers = TrackableDataStructure.wrap_or_unwrap(list_all_layers(layer).Select(x => x.GetTrackable()).ToArray());
 
         Dictionary<string, Trackable> res = new();
         Debug.Assert(variables is Trackable);
@@ -158,6 +158,8 @@ public partial class KerasSavedModelUtils
     /// <returns></returns>
     public static IDictionary<string, Trackable> wrap_layer_functions(Layer layer, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
     {
+
+        // high priority
         // TODO: deal with type `RevivedLayer` and `Sequential`.
 
         // skip the process because of lack of APIs of `Layer`.

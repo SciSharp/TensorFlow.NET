@@ -121,7 +121,10 @@ namespace Tensorflow.Keras.Saving.SavedModel
                 }
                 else
                 {
-                    throw new ValueError($"Function {key} missing from serialized function dict.");
+                    // high priority
+                    // TODO(Rinne): complete the implementation.
+                    continue;
+                    //throw new ValueError($"Function {key} missing from serialized function dict.");
                 }
             }
             return Functions;
@@ -151,7 +154,10 @@ namespace Tensorflow.Keras.Saving.SavedModel
                 }
                 else
                 {
-                    throw new ValueError($"Object {key} missing from serialized object dict.");
+                    // high priority.
+                    // TODO(Rinne): Add the implementation.
+                    continue;
+                    //throw new ValueError($"Object {key} missing from serialized object dict.");
                 }
             }
             return CheckpointableObjects;

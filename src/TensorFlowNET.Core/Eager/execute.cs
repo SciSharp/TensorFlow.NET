@@ -18,6 +18,10 @@ namespace Tensorflow.Eager
             var types = v.Select(t => t.dtype.as_datatype_enum());
             return (types.ToArray(), v.ToArray());
         }
+        public static Tensor[] executes(string op_name, int num_outputs, Tensor[] inputs, object[] attrs, Context ctx, string name = null)
+        {
+            return quick_execute(op_name, num_outputs, inputs, attrs, ctx, name);
+        }
         public static Tensor[] quick_execute(string op_name, int num_outputs, Tensor[] inputs, object[] attrs, Context ctx, string name = null)
         {
             string device_name = ctx.DeviceName;

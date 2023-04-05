@@ -149,6 +149,7 @@ namespace Tensorflow
             foreach (var new_op in graph._add_new_tf_operations())
             {
                 var original_device = new_op.Device;
+                new_op._set_device(original_device);
             }
         }
 

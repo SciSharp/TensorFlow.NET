@@ -307,11 +307,6 @@ namespace Tensorflow.Keras.Saving
         private (Trackable, Action<object, object, object>) _load_layer(int node_id, string identifier, string metadata_json)
         {
             var metadata = JsonConvert.DeserializeObject<KerasMetaData>(metadata_json);
-            // Debug(Rinne)
-            if(node_id == 11)
-            {
-                Console.WriteLine();
-            }
 
             if (loaded_nodes.ContainsKey(node_id))
             {

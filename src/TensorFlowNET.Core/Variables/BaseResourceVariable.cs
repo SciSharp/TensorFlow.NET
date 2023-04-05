@@ -65,6 +65,8 @@ namespace Tensorflow
         }
 
         public void __init__(bool trainable = true,
+            Shape shape = null,
+            TF_DataType dtype = TF_DataType.DtInvalid,
             Tensor handle = null,
             string name = null,
             string unique_id = null,
@@ -75,6 +77,14 @@ namespace Tensorflow
             _unique_id = unique_id;
             this.handle = handle;
             _name = name;
+            if(shape is not null)
+            {
+                _shape = shape;
+            }
+            if(dtype != TF_DataType.DtInvalid)
+            {
+                _dtype = dtype;
+            }
 
             // After the handle has been created, set up a way to clean it up when
             // executing eagerly. We'll hold the only reference to the deleter, so that
