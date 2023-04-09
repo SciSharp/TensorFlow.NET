@@ -102,8 +102,8 @@ public class EarlyStopping: ICallback
                 {
                     Console.WriteLine($"Restoring model weights from the end of the best epoch: {_best_epoch + 1}");
                 }
+                _parameters.Model.Weights = _best_weights;
             }
-            _parameters.Model.Weights = _best_weights;
         }
     }
     public void on_train_end()
