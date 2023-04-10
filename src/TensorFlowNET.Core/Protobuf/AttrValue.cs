@@ -1303,7 +1303,7 @@ namespace Tensorflow {
       if (other.Name.Length != 0) {
         Name = other.Name;
       }
-      attr_.MergeFrom(other.attr_);
+      attr_.Add(other.attr_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

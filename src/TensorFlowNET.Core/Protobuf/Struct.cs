@@ -1677,7 +1677,7 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      fields_.MergeFrom(other.fields_);
+      fields_.Add(other.fields_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

@@ -592,12 +592,12 @@ namespace Tensorflow {
         }
         Signature.MergeFrom(other.Signature);
       }
-      attr_.MergeFrom(other.attr_);
-      argAttr_.MergeFrom(other.argAttr_);
-      resourceArgUniqueId_.MergeFrom(other.resourceArgUniqueId_);
+      attr_.Add(other.attr_);
+      argAttr_.Add(other.argAttr_);
+      resourceArgUniqueId_.Add(other.resourceArgUniqueId_);
       nodeDef_.Add(other.nodeDef_);
-      ret_.MergeFrom(other.ret_);
-      controlRet_.MergeFrom(other.controlRet_);
+      ret_.Add(other.ret_);
+      controlRet_.Add(other.controlRet_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -836,7 +836,7 @@ namespace Tensorflow {
           if (other == null) {
             return;
           }
-          attr_.MergeFrom(other.attr_);
+          attr_.Add(other.attr_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 

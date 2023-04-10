@@ -3161,7 +3161,7 @@ namespace Xla {
       if (other.XlaCpuStrictDotConvMath != false) {
         XlaCpuStrictDotConvMath = other.XlaCpuStrictDotConvMath;
       }
-      xlaBackendExtraOptions_.MergeFrom(other.xlaBackendExtraOptions_);
+      xlaBackendExtraOptions_.Add(other.xlaBackendExtraOptions_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

@@ -964,7 +964,6 @@ namespace Tensorflow {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static partial class Types {
-      [global::System.ObsoleteAttribute]
       public enum Level {
         [pbr::OriginalName("UNKNOWN")] Unknown = 0,
         /// <summary>

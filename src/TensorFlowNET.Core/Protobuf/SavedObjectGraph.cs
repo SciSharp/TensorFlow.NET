@@ -274,7 +274,7 @@ namespace Tensorflow {
         return;
       }
       nodes_.Add(other.nodes_);
-      concreteFunctions_.MergeFrom(other.concreteFunctions_);
+      concreteFunctions_.Add(other.concreteFunctions_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -886,7 +886,7 @@ namespace Tensorflow {
       children_.Add(other.children_);
       dependencies_.Add(other.dependencies_);
       slotVariables_.Add(other.slotVariables_);
-      saveableObjects_.MergeFrom(other.saveableObjects_);
+      saveableObjects_.Add(other.saveableObjects_);
       if (other.RegisteredName.Length != 0) {
         RegisteredName = other.RegisteredName;
       }

@@ -2425,7 +2425,7 @@ namespace Tensorflow {
           if (other.Name.Length != 0) {
             Name = other.Name;
           }
-          parameterMap_.MergeFrom(other.parameterMap_);
+          parameterMap_.Add(other.parameterMap_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 

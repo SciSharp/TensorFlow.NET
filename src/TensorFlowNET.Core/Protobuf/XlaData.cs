@@ -8345,7 +8345,7 @@ namespace Xla {
       if (other == null) {
         return;
       }
-      map_.MergeFrom(other.map_);
+      map_.Add(other.map_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

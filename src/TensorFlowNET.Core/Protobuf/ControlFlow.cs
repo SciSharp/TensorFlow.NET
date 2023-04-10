@@ -220,7 +220,7 @@ namespace Tensorflow {
         return;
       }
       values_.Add(other.values_);
-      externalValues_.MergeFrom(other.externalValues_);
+      externalValues_.Add(other.externalValues_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

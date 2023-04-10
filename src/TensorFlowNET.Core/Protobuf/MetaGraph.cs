@@ -427,8 +427,8 @@ namespace Tensorflow {
         }
         SaverDef.MergeFrom(other.SaverDef);
       }
-      collectionDef_.MergeFrom(other.collectionDef_);
-      signatureDef_.MergeFrom(other.signatureDef_);
+      collectionDef_.Add(other.collectionDef_);
+      signatureDef_.Add(other.signatureDef_);
       assetFileDef_.Add(other.assetFileDef_);
       if (other.objectGraphDef_ != null) {
         if (objectGraphDef_ == null) {
@@ -927,7 +927,7 @@ namespace Tensorflow {
           if (other.StrippedDefaultAttrs != false) {
             StrippedDefaultAttrs = other.StrippedDefaultAttrs;
           }
-          functionAliases_.MergeFrom(other.functionAliases_);
+          functionAliases_.Add(other.functionAliases_);
           _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
         }
 
@@ -3689,8 +3689,8 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      inputs_.MergeFrom(other.inputs_);
-      outputs_.MergeFrom(other.outputs_);
+      inputs_.Add(other.inputs_);
+      outputs_.Add(other.outputs_);
       if (other.MethodName.Length != 0) {
         MethodName = other.MethodName;
       }

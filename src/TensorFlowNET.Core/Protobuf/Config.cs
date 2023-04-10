@@ -4271,7 +4271,7 @@ namespace Tensorflow {
       if (other == null) {
         return;
       }
-      deviceCount_.MergeFrom(other.deviceCount_);
+      deviceCount_.Add(other.deviceCount_);
       if (other.IntraOpParallelismThreads != 0) {
         IntraOpParallelismThreads = other.IntraOpParallelismThreads;
       }
@@ -7855,8 +7855,8 @@ namespace Tensorflow {
         RunOptions.MergeFrom(other.RunOptions);
       }
       tensorConnection_.Add(other.tensorConnection_);
-      feedDevices_.MergeFrom(other.feedDevices_);
-      fetchDevices_.MergeFrom(other.fetchDevices_);
+      feedDevices_.Add(other.feedDevices_);
+      fetchDevices_.Add(other.fetchDevices_);
       if (other.FetchSkipSync != false) {
         FetchSkipSync = other.FetchSkipSync;
       }

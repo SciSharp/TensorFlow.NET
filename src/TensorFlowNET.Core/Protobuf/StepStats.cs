@@ -2237,7 +2237,7 @@ namespace Tensorflow {
         Device = other.Device;
       }
       nodeStats_.Add(other.nodeStats_);
-      threadNames_.MergeFrom(other.threadNames_);
+      threadNames_.Add(other.threadNames_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

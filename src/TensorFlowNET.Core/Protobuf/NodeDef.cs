@@ -399,7 +399,7 @@ namespace Tensorflow {
       if (other.Device.Length != 0) {
         Device = other.Device;
       }
-      attr_.MergeFrom(other.attr_);
+      attr_.Add(other.attr_);
       if (other.experimentalDebugInfo_ != null) {
         if (experimentalDebugInfo_ == null) {
           ExperimentalDebugInfo = new global::Tensorflow.NodeDef.Types.ExperimentalDebugInfo();

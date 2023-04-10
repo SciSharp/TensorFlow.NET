@@ -4014,7 +4014,7 @@ namespace Xla {
       if (other == null) {
         return;
       }
-      sequences_.MergeFrom(other.sequences_);
+      sequences_.Add(other.sequences_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 

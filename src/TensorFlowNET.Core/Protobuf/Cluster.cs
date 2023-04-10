@@ -218,7 +218,7 @@ namespace Tensorflow {
       if (other.Name.Length != 0) {
         Name = other.Name;
       }
-      tasks_.MergeFrom(other.tasks_);
+      tasks_.Add(other.tasks_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
