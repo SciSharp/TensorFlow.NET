@@ -79,5 +79,50 @@ namespace Tensorflow.Operations
 
             };
         }
+
+        public static Tensor[] symbolic_gradient(Tensor[] input, TF_DataType[] Tout, NameAttrList f, string name = null)
+        {
+            var ctx = tf.Context;
+            if (ctx.executing_eagerly())
+            {
+                try
+                {
+                    var _result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
+                    "SymbolicGradient", name, input, Tout, f));
+                    return _result;
+                }
+                catch (Exception)
+                {
+
+                }
+
+                try
+                {
+                    return symbolic_gradient_eager_fallback(input, Tout, f, name, ctx);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            var op = tf.OpDefLib._apply_op_helper("SymbolicGradient", name, new object[] { input, Tout, f });
+            var result = op.outputs;
+            if (execute.must_record_gradient())
+            {
+                throw new NotImplementedException();
+            }
+            return result;
+        }
+
+        public static Tensor[] symbolic_gradient_eager_fallback(Tensor[] input, TF_DataType[] Tout, NameAttrList f, string name, Context ctx)
+        {
+            object[] attrs = new object[] { "Tin", input, "Tout", Tout, "f", f };
+            var result = execute.executes("SymbolicGradient", Tout.Length, input, attrs, ctx, name);
+            if (execute.must_record_gradient())
+            {
+                throw new NotImplementedException();
+            }
+            return result;
+        }
     }
 }

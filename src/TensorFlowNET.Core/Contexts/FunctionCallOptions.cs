@@ -9,10 +9,11 @@ namespace Tensorflow.Contexts
     public class FunctionCallOptions
     {
         public ConfigProto Config { get; set; }
+        public string ExecutorType { get; set; }
 
-        public string config_proto_serialized()
+        public ByteString config_proto_serialized()
         {
-            return Config.ToByteString().ToStringUtf8();
+            return Config.ToByteString();
         }
     }
 }

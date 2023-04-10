@@ -98,12 +98,23 @@ namespace Tensorflow
         {
             if (op.inputs == null) return null;
 
-            RegisterFromAssembly();
+            var gradient_function = op._gradient_function;
+            if(gradient_function is null)
+            {
+                RegisterFromAssembly();
 
-            if (!gradientFunctions.ContainsKey(op.type))
-                throw new LookupError($"can't get graident function through get_gradient_function {op.type}");
+                if (!gradientFunctions.ContainsKey(op.type))
+                    throw new LookupError($"can't get graident function through get_gradient_function {op.type}");
 
-            return gradientFunctions[op.type];
+                return gradientFunctions[op.type];
+            }
+
+            Tensor[] wrapped_gradient_function(Operation operation, Tensor[] args)
+            {
+                return gradient_function(operation, args);
+            }
+            // TODO(Rinne): check if this needs to be registered.
+            return wrapped_gradient_function;
         }
     }
 }

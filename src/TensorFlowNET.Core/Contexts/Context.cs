@@ -38,7 +38,26 @@ namespace Tensorflow.Contexts
         public string ScopeName { get; set; } = "";
         bool initialized = false;
         ContextSwitchStack context_switches;
-        public FunctionCallOptions FunctionCallOptions { get; }
+        protected FunctionCallOptions _function_call_options;
+        public FunctionCallOptions FunctionCallOptions
+        {
+            get
+            {
+                if(_function_call_options is null)
+                {
+                    var config = Config;
+                    _function_call_options = new FunctionCallOptions()
+                    {
+                        Config = config
+                    };
+                }
+                return _function_call_options;
+            }
+            set
+            {
+                _function_call_options = value;
+            }
+        }
 
         SafeContextHandle _handle;
 
@@ -62,7 +81,6 @@ namespace Tensorflow.Contexts
             if (initialized)
                 return;
 
-            Config = MergeConfig();
             FunctionCallOptions.Config = Config;
             var config_str = Config.ToByteArray();
             var opts = new ContextOptions();
@@ -167,11 +185,29 @@ namespace Tensorflow.Contexts
             return c_api.TFE_ContextHasFunction(_handle, name);
         }
 
+        public void add_function(SafeFuncGraphHandle fn)
+        {
+            ensure_initialized();
+            Status status = new();
+            c_api.TFE_ContextAddFunction(_handle, fn, status);
+            status.Check(true);
+        }
+
+        public void remove_function(string name)
+        {
+            ensure_initialized();
+            Status status = new();
+            c_api.TFE_ContextRemoveFunction(_handle, name, status);
+            status.Check(true);
+        }
+
         public void add_function_def(FunctionDef fdef)
         {
             ensure_initialized();
-            var fdef_string = fdef.ToString();
-            c_api.TFE_ContextAddFunctionDef(_handle, fdef_string, fdef_string.Length);
+            var fdef_string = fdef.ToByteArray();
+            Status status = new Status();
+            c_api.TFE_ContextAddFunctionDef(_handle, fdef_string, (ulong)fdef_string.Length, status);
+            status.Check(true);
         }
 
         public void restore_mode()

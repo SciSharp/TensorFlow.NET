@@ -21,7 +21,7 @@ namespace Tensorflow
 {
     public partial class tensorflow
     {
-        GradientTape _tapeSet;
+        internal GradientTape _tapeSet;
 
         /// <summary>
         /// Record operations for automatic differentiation.

@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Contexts;
+using Tensorflow.Functions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Eager

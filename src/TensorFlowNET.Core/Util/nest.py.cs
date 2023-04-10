@@ -137,10 +137,12 @@ namespace Tensorflow.Util
                 switch (instance)
                 {
                     case Hashtable hash:
-                        var result = new Hashtable();
-                        foreach ((object key, object value) in zip<object, object>(_sorted(hash), args))
-                            result[key] = value;
-                        return result;
+                        {
+                            var result = new Hashtable();
+                            foreach ((object key, object value) in zip<object, object>(_sorted(hash), args))
+                                result[key] = value;
+                            return result;
+                        }
                 }
             }
             //else if( _is_namedtuple(instance) || _is_attrs(instance)) 
@@ -218,6 +220,16 @@ namespace Tensorflow.Util
         {
             var list = new List<T>();
             _flatten_recursive(structure, list);
+            return list;
+        }
+
+        public static List<T> flatten<T>(IEnumerable<T> structure)
+        {
+            var list = new List<T>();
+            foreach(var item in structure)
+            {
+                _flatten_recursive(item, list);
+            }
             return list;
         }
 
@@ -525,6 +537,14 @@ namespace Tensorflow.Util
             var mapped_flat_structure = flat_structure.Select(func).Select(x => (object)x);
 
             return pack_sequence_as(structure, mapped_flat_structure) as T2;
+        }
+
+        public static IEnumerable<T2> map_structure<T1, T2>(Func<T1, T2> func, IEnumerable<T1> structure) where T2 : class
+        {
+            var flat_structure = flatten(structure);
+            var mapped_flat_structure = flat_structure.Select(func).Select(x => (object)x);
+
+            return pack_sequence_as(structure, mapped_flat_structure) as IEnumerable<T2>;
         }
 
         /// <summary>

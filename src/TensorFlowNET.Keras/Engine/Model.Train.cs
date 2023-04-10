@@ -35,6 +35,10 @@ namespace Tensorflow.Keras.Engine
         {
             (x, y) = data_handler.DataAdapter.Expand1d(x, y);
             using var tape = tf.GradientTape();
+            //foreach (var variable in TrainableVariables)
+            //{
+            //    tape.watch(variable.Handle);
+            //}
             var y_pred = Apply(x, training: true);
             var loss = compiled_loss.Call(y, y_pred);
 

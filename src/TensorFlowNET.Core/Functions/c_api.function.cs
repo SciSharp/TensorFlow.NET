@@ -16,6 +16,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Tensorflow.Functions;
 
 namespace Tensorflow
 {
@@ -54,6 +55,9 @@ namespace Tensorflow
         public static extern IntPtr TF_FunctionName(SafeFuncGraphHandle func);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphCopyFunction(SafeGraphHandle g, SafeFuncGraphHandle func, IntPtr grad, SafeStatusHandle status);
+        public static extern void TF_GraphCopyFunction(SafeGraphHandle g, SafeFuncGraphHandle func, SafeFuncGraphHandle grad, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern int TF_GraphGetFunctions(SafeGraphHandle g, IntPtr[] funcs, int max_func, SafeStatusHandle status);
     }
 }

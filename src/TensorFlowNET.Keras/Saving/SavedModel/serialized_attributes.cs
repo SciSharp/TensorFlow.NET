@@ -51,9 +51,9 @@ namespace Tensorflow.Keras.Saving.SavedModel
             _all_functions = new HashSet<string>(objects_and_functions.Item2);
         }
 
-        public IDictionary<string, Trackable> Functions => _function_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
+        public IDictionary<string, Trackable> Functions => _function_dict.Where(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
 
-        public IDictionary<string, Trackable> CheckpointableObjects => _object_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
+        public IDictionary<string, Trackable> CheckpointableObjects => _object_dict.Where(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
 
         /// <summary>
         /// Returns functions to attach to the root object during serialization.
@@ -82,7 +82,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
         {
             get
             {
-                var objects = CheckpointableObjects.TakeWhile( x=> _all_checkpointable_objects.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
+                var objects = CheckpointableObjects.Where( x=> _all_checkpointable_objects.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
                 objects[Constants.KERAS_ATTR] = _keras_trackable;
                 return objects;
             }

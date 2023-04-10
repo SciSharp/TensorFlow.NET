@@ -84,8 +84,8 @@ namespace Tensorflow.Keras.Layers
                 inputs.Insert(index, value);
             }
 
-            var (c_op, _) = ops._create_c_op(graph, node_def, inputs.ToArray(), new Operation[0]);
-            var op = graph._create_op_from_tf_operation(c_op);
+            var (c_op, op_desc) = ops._create_c_op(graph, node_def, inputs.ToArray(), new Operation[0]);
+            var op = graph._create_op_from_tf_operation(c_op, desc: op_desc);
             op._control_flow_post_processing();
 
             // Record the gradient because custom-made ops don't go through the

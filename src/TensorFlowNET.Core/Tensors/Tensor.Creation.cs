@@ -101,6 +101,7 @@ namespace Tensorflow
             _op = op;
             _value_index = value_index;
             _override_dtype = dtype;
+            _tf_output = null;
             _id = ops.uid();
         }
 

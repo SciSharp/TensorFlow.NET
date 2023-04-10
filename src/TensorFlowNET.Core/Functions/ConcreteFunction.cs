@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Eager;
 using Tensorflow.Framework.Models;
+using Tensorflow.Gradients;
 using Tensorflow.Graphs;
 using Tensorflow.Train;
 using Tensorflow.Util;
@@ -19,7 +20,7 @@ namespace Tensorflow.Functions
         protected IEnumerable<Tensor> _captured_inputs;
         internal FuncGraph func_graph;
         protected DelayedRewriteGradientFunctions _delayed_rewrite_functions;
-        protected Dictionary<string, string> _attrs;
+        protected Dictionary<string, AttrValue> _attrs;
         protected FunctionSpec _function_spec;
         protected FunctionSpec _pre_initialized_function_spec = null;
         protected EagerDefinedFunction _inference_function;
@@ -29,22 +30,25 @@ namespace Tensorflow.Functions
 
         public string Name => _delayed_rewrite_functions.Forward().Name;
 
-        public Tensor[] Outputs;
+        public Tensor[] Outputs => func_graph.Outputs;
         public Type ReturnType;
         public TensorSpec[] OutputStructure;
         public IEnumerable<string> ArgKeywords { get; set; }
         public long NumPositionArgs { get; set; }
         public FunctionDef FunctionDef => _delayed_rewrite_functions.Forward().Definition;
+        public Tensor[] FlatStructuredOutputs => func_graph.FlatStructuredOutputs;
+        public IEnumerable<IVariableV1> Variables => func_graph.Variables;
+        public IEnumerable<IVariableV1> TrainableVariables => func_graph.TrainableVariables;
 
         public ConcreteFunction(string name)
         {
             func_graph = new FuncGraph(name);
             _captured_inputs = func_graph.external_captures;
-            _attrs= new Dictionary<string, string>();
+            _attrs= new Dictionary<string, AttrValue>();
             _set_infer_function();
         }
 
-        public ConcreteFunction(FuncGraph graph, Dictionary<string, string> attrs = null)
+        public ConcreteFunction(FuncGraph graph, Dictionary<string, AttrValue> attrs = null)
         {
             func_graph = graph;
             _captured_inputs = func_graph.external_captures;
@@ -70,7 +74,7 @@ namespace Tensorflow.Functions
                 null);
             func_graph.Exit();
             _captured_inputs = func_graph.external_captures;
-            _attrs = new Dictionary<string, string>();
+            _attrs = new Dictionary<string, AttrValue>();
             _set_infer_function();
         }
 
@@ -93,7 +97,7 @@ namespace Tensorflow.Functions
                 null);
             func_graph.Exit();
             _captured_inputs = func_graph.external_captures;
-            _attrs = new Dictionary<string, string>();
+            _attrs = new Dictionary<string, AttrValue>();
             _set_infer_function();
         }
 
@@ -160,27 +164,20 @@ namespace Tensorflow.Functions
             }
             if (!executing_eagerly)
             {
-
+                // TODO(Rinne): add the check
             }
-            tensor_inputs.AddRange(captured_inputs);
+            tensor_inputs.AddRange(captured_inputs); 
 
             args = tensor_inputs.ToArray();
 
-            var possible_gradient_type = tf.Runner.MustRecordGradient() ? 1 : 0;
+            var possible_gradient_type = gradients_util.PossibleTapeGradientTypes(args);
             // No tape is watching; skip to running the function.
-            if (possible_gradient_type == 0 && executing_eagerly)
+            if (possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_NONE && executing_eagerly)
             {
                 return _build_call_outputs(_inference_function.Call(args));
-                //var attrs = new object[]
-                //{
-                //    "executor_type", "",
-                //    "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
-                //};
-                //return tf.Runner.Execute(tf.Context, func_graph.FuncName, func_graph.Outputs.Length, args, attrs);
             }
 
-            if (forward_backward == null)
-                forward_backward = SelectForwardAndBackwardFunctions(args, possible_gradient_type, executing_eagerly);
+            forward_backward = SelectForwardAndBackwardFunctions(args, possible_gradient_type, executing_eagerly);
             var (forward_function, args_with_tangents) = forward_backward.Forward();
             Tensors flat_outputs = null;
             if (executing_eagerly)
@@ -189,8 +186,12 @@ namespace Tensorflow.Functions
             }
             else
             {
-                // TODO(Rinne): add `default_graph._override_gradient_function`.
-                flat_outputs = forward_function.Call(args_with_tangents);
+                tf_with(default_graph._override_gradient_function(new Dictionary<string, Func<Operation, object[], Tensor[]>>(){
+                    { "PartitionedCall", _get_gradient_function() }, { "StatefulPartitionedCall", _get_gradient_function() }
+                }), _ =>
+                {
+                    flat_outputs = forward_function.Call(args_with_tangents);
+                });
             }
             forward_backward.Record(flat_outputs);
             return _build_call_outputs(flat_outputs);
@@ -215,7 +216,8 @@ namespace Tensorflow.Functions
             TangentInfo input_tangents;
             if (executing_eagerly)
             {
-                throw new NotImplementedException();
+                // TODO(Rinne): check if it needs to be implemented.
+                input_tangents = new TangentInfo();
             }
             else
             {
@@ -239,7 +241,12 @@ namespace Tensorflow.Functions
             }
 
             // TODO(Rinne): add arg "input_tagents" for ForwardBackwardCall.
-            return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: false);
+            return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: tf.Runner.MustRecordGradient());
+        }
+
+        internal void set_variables(IEnumerable<IVariableV1> variables)
+        {
+            func_graph.Variables = variables;
         }
 
         internal void _set_infer_function()
@@ -272,6 +279,11 @@ namespace Tensorflow.Functions
                 IsMethod = spec.IsMethod,
                 InputSignature = spec.InputSignature
             };
+        }
+
+        internal Func<Operation, object[], Tensor[]> _get_gradient_function()
+        {
+            return _delayed_rewrite_functions._rewrite_forward_and_call_backward;
         }
 
         private Tensors _build_call_outputs(Tensors result)

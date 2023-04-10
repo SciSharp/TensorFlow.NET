@@ -24,6 +24,7 @@ using static Tensorflow.CppShapeInferenceResult.Types;
 using static Tensorflow.Binding;
 using Tensorflow.Operations;
 using System.Buffers;
+using Tensorflow.Eager;
 
 namespace Tensorflow
 {
@@ -41,12 +42,7 @@ namespace Tensorflow
                                                       name: name);
         }
 
-        public static bool is_resource_variable(IVariableV1 var)
-        {
-            return var is BaseResourceVariable;
-        }
-        
-        public static bool is_resource_variable(Trackable var)
+        public static bool is_resource_variable(object var)
         {
             return var is BaseResourceVariable;
         }
@@ -138,9 +134,26 @@ namespace Tensorflow
         /// <param name="graph_mode"></param>
         internal unsafe static void _set_handle_shapes_and_types(Tensor tensor, HandleData handle_data, bool graph_mode)
         {
-            tensor.HandleData = handle_data;
             if (!graph_mode)
                 return;
+
+            var size = handle_data.ShapeAndType.Count;
+
+            var shapes = new IntPtr[size];
+            var types = new DataType[size];
+            var ranks = new int[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                var shapeAndType = handle_data.ShapeAndType[i];
+                types[i] = shapeAndType.Dtype;
+                ranks[i] = shapeAndType.Shape.UnknownRank ? -1 : shapeAndType.Shape.Dim.Count;
+                var dims = shapeAndType.Shape.Dim.Select(x => x.Size).ToArray();
+            }
+
+            //tensor.HandleData = handle_data;
+            //if (!graph_mode)
+            //    return;
 
             //var shapes = handle_data.ShapeAndType.Select(x => x.Shape);
             //var types = handle_data.ShapeAndType.Select(x => x.Dtype).ToArray();
@@ -194,24 +207,6 @@ namespace Tensorflow
                 return variable_handle_data;
 
             throw new NotImplementedException("");
-        }
-
-        private static HandleData get_eager_safe_handle_data(Tensor handle)
-        {
-            if (handle.Handle == null)
-            {
-                var data = new HandleData();
-                data.ShapeAndType.Add(new HandleShapeAndType
-                {
-                    Shape = handle.shape.as_shape_proto(),
-                    Dtype = handle.dtype.as_datatype_enum()
-                });
-                return data;
-            }
-            else
-            {
-                return HandleData.Parser.ParseFrom(handle.BufferToArray());
-            }
         }
 
         /// <summary>
@@ -280,6 +275,32 @@ namespace Tensorflow
                     tensor.HandleData.ShapeAndType.AddRange(handle_data.ShapeAndType.Skip(1));
                 }
             }
+        }
+
+        public static HandleData get_eager_safe_handle_data(Tensor handle)
+        {
+            if (handle.Handle == null)
+            {
+                var data = new HandleData();
+                data.ShapeAndType.Add(new HandleShapeAndType
+                {
+                    Shape = handle.shape.as_shape_proto(),
+                    Dtype = handle.dtype.as_datatype_enum()
+                });
+                return data;
+            }
+            else
+            {
+                return HandleData.Parser.ParseFrom(handle.BufferToArray());
+            }
+            //if(handle is EagerTensor)
+            //{
+            //    return handle.HandleData;
+            //}
+            //else
+            //{
+            //    return handle_data_util.get_resource_handle_data(handle);
+            //}
         }
     }
 }

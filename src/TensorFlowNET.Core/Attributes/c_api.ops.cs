@@ -61,7 +61,7 @@ namespace Tensorflow
         public static extern void TF_SetAttrBool(IntPtr desc, string attr_name, bool value);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, byte[] proto, int proto_len, SafeStatusHandle status);
+        public static extern void TF_SetAttrValueProto(IntPtr desc, string attr_name, byte[] proto, ulong proto_len, SafeStatusHandle status);
 
         /// <summary>
         /// Set `num_dims` to -1 to represent "unknown rank".

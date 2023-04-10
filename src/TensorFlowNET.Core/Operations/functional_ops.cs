@@ -39,7 +39,7 @@ namespace Tensorflow
 
             if (config is null)
             {
-                config = function_utils.get_disabled_rewriter_config();
+                config = function_utils.get_disabled_rewriter_config().ToString();
             }
 
             if (executor_type is null)

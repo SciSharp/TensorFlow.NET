@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using Tensorflow.Graphs;
+using Tensorflow.Common.Extensions;
 using static Tensorflow.Binding;
 using static Tensorflow.CppShapeInferenceResult.Types;
 
@@ -64,7 +65,7 @@ namespace Tensorflow.Framework
             {
                 output_names[ops.tensor_id(func_graph.get_tensor_by_name(tensor_name))] = ret_arg_def.Name;
             }
-            // TODO(Rinne): func_graph._output_names = output_names
+            func_graph._output_names = output_names;
 
             func_graph.Exit();
             return func_graph;
@@ -154,9 +155,17 @@ namespace Tensorflow.Framework
             foreach(var node_def in fdef.NodeDef)
             {
                 var graph = default_graph;
-                // TODO(Rinne): The `Graph` lacks `_functions`, needed to be implemented in the future.
-                while(graph.OuterGraph is not null)
+                while (true)
                 {
+                    if(graph is null)
+                    {
+                        break;
+                    }
+                    var f = graph.Functions.GetOrDefault(node_def.Op, null);
+                    if(f is not null && graph.OuterGraph is null)
+                    {
+                        break;
+                    }
                     graph = graph.OuterGraph;
                 }
 

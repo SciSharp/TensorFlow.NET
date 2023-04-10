@@ -132,8 +132,8 @@ namespace Tensorflow.Training
         {
             get
             {
-                var trainable_extra_variables = _self_extra_variables.TakeWhile(x => x.Trainable).ToList();
-                var non_trainable_extra_variables = _self_extra_variables.TakeWhile(x => !x.Trainable).ToList();
+                var trainable_extra_variables = _self_extra_variables.Where(x => x.Trainable).ToList();
+                var non_trainable_extra_variables = _self_extra_variables.Where(x => !x.Trainable).ToList();
                 List<IVariableV1> non_trainable_variables = new();
                 foreach(var obj in Values)
                 {
@@ -576,7 +576,7 @@ namespace Tensorflow.Training
 
             if(save_type == SaveType.SAVEDMODEL)
             {
-                children = children.Concat(this.TakeWhile(x => x is Function or ConcreteFunction).Select((x, idx) => new KeyValuePair<string, Trackable>(idx.ToString(), x))).ToDictionary(x => x.Key, x => x.Value);
+                children = children.Concat(this.Where(x => x is Function or ConcreteFunction).Select((x, idx) => new KeyValuePair<string, Trackable>(idx.ToString(), x))).ToDictionary(x => x.Key, x => x.Value);
             }
 
             return children;

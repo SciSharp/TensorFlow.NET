@@ -9,18 +9,27 @@ using Tensorflow.Eager;
 using Tensorflow.Graphs;
 using Tensorflow.Operations;
 using Tensorflow.Util;
+using Tensorflow.Common.Extensions;
 using static Tensorflow.Binding;
+using Tensorflow.Framework;
+using System.Buffers;
+using Tensorflow.Gradients;
 
 namespace Tensorflow.Functions
 {
-    public class EagerDefinedFunction
+    public class EagerDefinedFunction: IDisposable
     {
         public int _num_outputs;
-        FuncGraph _func_graph;
+        FuncGraph _graph;
         FunctionDef _definition;
         OpDef _signature;
         string _name;
-        Tensor[] _func_graph_outputs;
+        internal ScopedTFFunction _c_func;
+        internal Tensor[] _func_graph_outputs;
+        internal string _grad_func_name;
+        internal Func<Operation, Tensor[], Tensor[]> csharp_grad_func;
+        internal EagerDefinedFunction _grad_func;
+        internal bool _registered_on_context = false;
         public string Name => _name;
         public DataType[] OutputTypes { get; protected set; }
         public Shape[] OutputShapes { get; protected set; }
@@ -47,48 +56,93 @@ namespace Tensorflow.Functions
                 return _signature;
             }
         }
-        public EagerDefinedFunction(string name, FuncGraph graph, 
+        public unsafe EagerDefinedFunction(string name, FuncGraph graph, 
             Tensors inputs, Tensors outputs,
-            Dictionary<string, string> attrs)
+            Dictionary<string, AttrValue> attrs)
         {
             var input_ops = inputs.Select(x => x.op).ToArray();
             var operations = graph.get_operations().Where(x => !input_ops.Contains(x.op))
                 .Select(x => x as Operation).ToArray();
-            var output_names = new string[0];
-            _func_graph = new FuncGraph(graph, name, attrs);
-            _func_graph_outputs = new List<Tensor>(outputs).ToArray();
-            _func_graph.ToGraph(operations, inputs, outputs, output_names);
+            var graph_output_names = graph._output_names;
+            string[] output_names;
+            if(graph_output_names is not null && outputs.All(t => graph_output_names.ContainsKey(ops.tensor_id(t))))
+            {
+                output_names = outputs.Select(t => graph_output_names[ops.tensor_id(t)]).ToArray();
+                if(output_names.Distinct().Count() != output_names.Length)
+                {
+                    output_names = new string[0];
+                }
+            }
+            else
+            {
+                output_names = new string[0];
+            }
+
+            Status status = new Status();
+            var fn = c_api.TF_GraphToFunction(graph.c_graph,
+                name,
+                false,
+                operations.Length,
+                operations.Length == 0 ? new IntPtr[0] : operations.Select(x => (IntPtr)x).ToArray(),
+                inputs.Length,
+                inputs.Select(t => t._as_tf_output()).ToArray(),
+                outputs.Length,
+                outputs.Select(t => t._as_tf_output()).ToArray(),
+                output_names.Length != outputs.Length ? null : output_names, 
+                IntPtr.Zero, // warning: the control output hasbben totally ignored.
+                null,
+                status);
+            status.Check(true);
+
+            _c_func = new ScopedTFFunction(fn, name);
+
+            foreach(var (attr_name, attr_value) in attrs)
+            {
+                var serialized = attr_value.ToByteArray();
+                c_api.TF_FunctionSetAttrValueProto(fn, attr_name, serialized, serialized.Length, status);
+                status.Check(true);
+            }
 
             var signature = _get_definition().Signature;
             _name = signature.Name;
-            // TODO(Rinne): deal with `fn`
+            tf_with(ops.init_scope(), s =>
+            {
+                tf.Context.add_function(fn);
+                _registered_on_context = true;
+            });
 
             _num_outputs = signature.OutputArg.Count;
             OutputTypes = signature.OutputArg.Select(x => x.Type).ToArray();
             OutputShapes = outputs.Select(x => x.shape).ToArray();
+            _func_graph_outputs = new List<Tensor>(outputs).ToArray();
+            csharp_grad_func = null;
+            _graph = graph;
         }
 
-        public Tensors Call(Tensors args)
+        public unsafe Tensors Call(Tensors args)
         {
             // TODO(Rinne): Add arg `CancellationManager`.
             // TODO(Rinne): Check the arg length.
             var function_call_options = tf.Context.FunctionCallOptions;
             string config;
-            if (string.IsNullOrEmpty(function_call_options.config_proto_serialized()))
+            if (function_call_options.config_proto_serialized().Length == 0)
             {
-                config = function_utils.get_disabled_rewriter_config();
+                config = function_utils.get_disabled_rewriter_config().ToString();
             }
             else
             {
-                config = function_call_options.config_proto_serialized();
+                config = function_call_options.config_proto_serialized().ToString();
             }
-            // TODO(Rinne): executor_type
+
+            config = ""; // TODO(Rinne): revise it.
+
+            string executor_type = function_call_options.ExecutorType ?? "";
             var executing_eagerly = tf.Context.executing_eagerly();
 
             var attrs = new object[]
                 {
-                    "executor_type", "",
-                    "config_proto", tf.Context.FunctionCallOptions.config_proto_serialized()
+                    "executor_type", executor_type,
+                    "config_proto", config
                 };
 
             Tensor[] outputs;
@@ -103,9 +157,19 @@ namespace Tensorflow.Functions
             }
             else
             {
-                tf.GradientTape().stop_recording();
-                outputs = functional_ops.partitioned_call(args, this, OutputTypes,
-                    executing_eagerly, config, "");
+                if(tf.GetTapeSet().Count == 0)
+                {
+                    outputs = functional_ops.partitioned_call(args, this, OutputTypes,
+                        executing_eagerly, config, "");
+                }
+                else
+                {
+                    var tape = tf.GetTapeSet().Peek();
+                    tape.StopRecord();
+                    outputs = functional_ops.partitioned_call(args, this, OutputTypes,
+                        executing_eagerly, config, "");
+                    tape.StartRecord();
+                }
             }
             foreach(var (i, func_graph_output) in enumerate(_func_graph_outputs))
             {
@@ -141,7 +205,7 @@ namespace Tensorflow.Functions
                 {
                     g.AddFunction(this);
                 }
-                foreach(var f in _func_graph.Functions.Values)
+                foreach(var f in _graph.Functions.Values)
                 {
                     if (!g.IsFunction(f.Name))
                     {
@@ -155,12 +219,15 @@ namespace Tensorflow.Functions
         {
             var buffer = c_api_util.tf_buffer();
             Status status = new();
-            c_api.TF_FunctionToFunctionDef(_func_graph._func_graph_handle, buffer, status);
+            c_api.TF_FunctionToFunctionDef(_c_func.Get(), buffer, status);
             status.Check(true);
             var proto_data = c_api.TF_GetBuffer(buffer);
-            FunctionDef function_def = new();
-            function_def.MergeFrom(proto_data.AsSpan<byte>());
-            return function_def;
+            return FunctionDef.Parser.ParseFrom(proto_data.AsSpan<byte>());
+        }
+
+        public void Dispose()
+        {
+            tf.Context.remove_function(Name);
         }
     }
 }

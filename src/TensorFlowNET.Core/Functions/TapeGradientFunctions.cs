@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Eager;
+using Tensorflow.Gradients;
 using Tensorflow.Graphs;
 using Tensorflow.NumPy;
+using Tensorflow.Operations;
 using static Tensorflow.Binding;
 using static Tensorflow.tensorflow;
 
@@ -22,11 +24,11 @@ namespace Tensorflow.Functions
         protected string _INFERENCE_PREFIX = "__inference_";
 
         protected FuncGraph _func_graph;
-        protected EagerDefinedFunction _forward;
+        protected EagerDefinedFunction _forward_function;
         protected FuncGraph _forward_graph;
         protected List<int> _forwardprop_output_indices;
         protected int _num_forwardprop_outputs;
-        protected ConcreteFunction _backward;
+        protected ConcreteFunction _backward_function;
         BackwardFunction _backward_function_wrapper;
 
         public TapeGradientFunctions(FuncGraph func_graph,
@@ -49,8 +51,8 @@ namespace Tensorflow.Functions
         public virtual void Record(Tensors flat_outputs, Tensors inference_args)
         {
             // TODO(Rinne): add arg `input_tagents`.
-            var (backward_function, to_record) = _wrap_backward_function(_forward_graph, _backward, flat_outputs);
-            tf.Runner.RecordGradient(_forward.Name, inference_args, new object[0], to_record,
+            var (backward_function, to_record) = _wrap_backward_function(_forward_graph, _backward_function, flat_outputs);
+            tf.Runner.RecordGradient(_forward_function.Name, inference_args, new object[0], to_record,
                 getBackwardFunction: backward_function);
         }
 
@@ -134,46 +136,58 @@ namespace Tensorflow.Functions
             var trainable_indices = new List<int>();
             foreach(var (index, output) in enumerate(outputs))
             {
-                if (gradients_util.IsTrainable(output))
+                if (backprop_util.IsTrainable(output))
                 {
                     trainable_outputs.Add(output);
                     trainable_indices.Add(index);
                 }
             }
 
-            var gradients_wrt_outputs = new List<Tensor>();
-            var backwards_graph = new FuncGraph($"{_BACKWARD_PREFIX}_{_func_graph.FuncName}_{ops.uid()}");
+            var backwards_graph = new FuncGraph(_func_graph.Name);
             backwards_graph.as_default();
+            var gradients_wrt_outputs = new List<Tensor>();
             foreach (var output in trainable_outputs)
-                gradients_wrt_outputs.Add(tf.placeholder(output.dtype, output.shape));
+            {
+                var (gradient_shape, gradient_dtype) = default_gradient.shape_and_dtype(output);
+                var gradient_placeholder = tf.placeholder(gradient_dtype, gradient_shape);
+                gradients_wrt_outputs.Add(gradient_placeholder);
+                handle_data_util.copy_handle_data(output, gradient_placeholder);
+            }
             var gradients_wrt_inputs = gradients_util._GradientsHelper(trainable_outputs.ToArray(),
-                _func_graph.Inputs,
-                grad_ys: gradients_wrt_outputs.ToArray(),
-                src_graph: _func_graph);
+                    _func_graph.Inputs,
+                    grad_ys: gradients_wrt_outputs.ToArray(),
+                    src_graph: _func_graph);
 
             var captures_from_forward = backwards_graph.external_captures
                 .Where(x => x is not EagerTensor && x is not NDArray && x.graph == _func_graph)
                 .ToArray();
+            HashSet<Tensor> existing_outputs = new(_func_graph.Outputs);
             foreach(var capture in captures_from_forward)
             {
-                if (!_func_graph.Outputs.Contains(capture))
+                if (!existing_outputs.Contains(capture))
+                {
+                    existing_outputs.Add(capture);
                     _func_graph.Outputs.Add(capture);
+                }
             }
             backwards_graph.Exit();
 
-            var forward_function_name = $"{_FORWARD_PREFIX}_{_func_graph.FuncName}_{ops.uid()}";
-            var backward_function_attr = new Dictionary<string, string>();
-            backward_function_attr[FORWARD_FUNCTION_ATTRIBUTE_NAME] = forward_function_name;
-            gradients_wrt_outputs.append(backwards_graph.internal_captures);
-            backwards_graph.Inputs = gradients_wrt_outputs;
-            backwards_graph.Outputs = gradients_wrt_inputs;
+            backwards_graph.Inputs = gradients_wrt_outputs.Concat(backwards_graph.internal_captures).ToArray();
+            backwards_graph.Outputs.AddRange(gradients_wrt_inputs.Where(x => x is not null));
 
-            var backward_function = new ConcreteFunction(backwards_graph, backward_function_attr);
+            var (forward_function, backward_function) = monomorphic_function_utils._create_forward_backward_with_graph(null, _func_graph, backwards_graph);
+            //var forward_function_name = $"{_FORWARD_PREFIX}_{_func_graph.FuncName}_{ops.uid()}";
+            //var backward_function_attr = new Dictionary<string, string>();
+            //backward_function_attr[FORWARD_FUNCTION_ATTRIBUTE_NAME] = forward_function_name;
+
+            //var backward_function = new ConcreteFunction(backwards_graph, 
+            //    monomorphic_function_utils._parse_func_attrs(backward_function_attr));
             
-            var forward_function_attr = new Dictionary<string, string>();
-            forward_function_attr[BACKWARD_FUNCTION_ATTRIBUTE_NAME] = backward_function.Name;
-            var forward_function = new EagerDefinedFunction(forward_function_name, _func_graph, 
-                _func_graph.Inputs, _func_graph.Outputs, forward_function_attr);
+            //var forward_function_attr = new Dictionary<string, string>();
+            //forward_function_attr[BACKWARD_FUNCTION_ATTRIBUTE_NAME] = backward_function.Name;
+            //var forward_function = new EagerDefinedFunction(forward_function_name, _func_graph, 
+            //    _func_graph.Inputs, _func_graph.Outputs, 
+            //    monomorphic_function_utils._parse_func_attrs(forward_function_attr));
             
             return (forward_function, _func_graph, backward_function, null, 0);
         }

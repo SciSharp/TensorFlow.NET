@@ -34,11 +34,10 @@ namespace Tensorflow.Functions
                         "https://github.com/SciSharp/TensorFlow.NET/issues");
                 }
             });
-            var bound_variables = inputs.TakeWhile(obj => obj is IVariableV1);
+            var bound_variables = inputs.Where(obj => obj is IVariableV1).Select(x => (IVariableV1)x);
 
             List<Tensor> captured_inputs_list = new();
-            // TODO(Rinne): concrete_function.set_variables(bound_variables)
-
+            concrete_function.set_variables(bound_variables);
 
             if (bound_inputs is not null)
             {
@@ -54,8 +53,14 @@ namespace Tensorflow.Functions
                         concrete_function.func_graph.replace_capture(bound_input, internal_capture);
                         if(internal_capture.dtype == dtypes.resource)
                         {
-                            // skip the check of variable.
-                            handle_data_util.copy_handle_data(bound_input, internal_capture);
+                            if (resource_variable_ops.is_resource_variable(bound_input))
+                            {
+                                handle_data_util.copy_handle_data(bound_input.Handle, internal_capture);
+                            }
+                            else
+                            {
+                                handle_data_util.copy_handle_data(bound_input, internal_capture);
+                            }
                         }
                         concrete_function.func_graph.capture(bound_input);
                     }

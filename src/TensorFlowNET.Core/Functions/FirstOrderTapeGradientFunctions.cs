@@ -17,9 +17,9 @@ namespace Tensorflow.Functions
         public override EagerDefinedFunction ForwardAndBackwardFunctions(Tensors inference_args)
         {
             var outputs = _func_graph.Outputs;
-            (_forward, _forward_graph, _backward, _forwardprop_output_indices, _num_forwardprop_outputs) 
+            (_forward_function, _forward_graph, _backward_function, _forwardprop_output_indices, _num_forwardprop_outputs) 
                 = BuildFunctionsForOutputs(outputs, inference_args);
-            return _forward;
+            return _forward_function;
         }
     }
 }

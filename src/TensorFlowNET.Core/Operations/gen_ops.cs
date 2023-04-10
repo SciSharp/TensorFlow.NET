@@ -10050,11 +10050,49 @@ namespace Tensorflow.Operations
         /// </remarks>
         public static Tensor ensure_shape(Tensor input, Shape shape, string name = "EnsureShape")
         {
+            var ctx = tf.Context;
+            if (ctx.executing_eagerly())
+            {
+                try
+                {
+                    var _result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("EnsureShape", name, input, shape));
+                    return _result[0];
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine();
+                }
+                try
+                {
+                    return ensure_shape_eager_fallback(input, shape, name, ctx);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine();
+                }
+            }
+
             var dict = new Dictionary<string, object>();
             dict["input"] = input;
             dict["shape"] = shape;
             var op = tf.OpDefLib._apply_op_helper("EnsureShape", name: name, keywords: dict);
+            if (execute.must_record_gradient())
+            {
+                throw new NotImplementedException();
+            }
             return op.output;
+        }
+
+        public static Tensor ensure_shape_eager_fallback(Tensor input, Shape shape, string name, Context ctx)
+        {
+            object[] attrs = new object[4] { "shape", shape, "T", input.dtype.as_datatype_enum() };
+            var _result = execute.executes("EnsureShape", 1, new Tensor[] { input },
+                             attrs, ctx, name);
+            if (execute.must_record_gradient())
+            {
+                throw new NotImplementedException();
+            }
+            return _result[0];
         }
 
         /// <summary>

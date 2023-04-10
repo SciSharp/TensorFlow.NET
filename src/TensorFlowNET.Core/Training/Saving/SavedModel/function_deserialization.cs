@@ -30,6 +30,31 @@ namespace Tensorflow.Training.Saving.SavedModel
         {
             var function_spec = _deserialize_function_spec_as_nonmethod(saved_function.FunctionSpec);
 
+            Tensor[] restored_function_body(Tensor[] inputs)
+            {
+                if(saved_function.ConcreteFunctions is null || saved_function.ConcreteFunctions.Count == 0)
+                {
+                    throw new ValueError("Found zero restored functions for caller function.");
+                }
+                foreach(var function_name in saved_function.ConcreteFunctions)
+                {
+                    var function = concrete_functions[function_name];
+                    if(function.CapturedInputs.Any(x => x is null))
+                    {
+                        throw new ValueError("Looks like you are trying to run a loaded " +
+                            "non-Keras model that was trained using tf.distribute.experimental.ParameterServerStrategy " +
+                            "with variable partitioning, which is not currently supported. Try using Keras to define your model " +
+                            "if possible.");
+                    }
+                    if(_concrete_function_callable_with(function, inputs, false))
+                    {
+                        return _call_concrete_function(function, inputs);
+                    }
+                }
+                throw new ValueError("Unexpected runtime behavior, please submit an issue to " +
+                    "https://github.com/SciSharp/TensorFlow.NET/issues");
+            }
+
             List<ConcreteFunction> concrete_function_objects = new();
             foreach(var concrete_function_name in saved_function.ConcreteFunctions)
             {
@@ -40,17 +65,10 @@ namespace Tensorflow.Training.Saving.SavedModel
                 cf._set_function_spec(function_spec);
             }
 
-            foreach(var function_name in saved_function.ConcreteFunctions)
-            {
-                var function = concrete_functions[function_name];
-                if(_concrete_function_callable_with(function, null, false))
-                {
-                    return new RestoredFunction(null, function, "function_from_deserialization");
-                }
-            }
-            return new RestoredFunction(x => x, new ConcreteFunction(x => x, TF_DataType.TF_FLOAT), "function_return_itself");
-            //throw new ValueError("Unexpected runtime behavior, please submit an issue to " +
-            //    "https://github.com/SciSharp/TensorFlow.NET/issues");
+            var restored_function = new RestoredFunction(restored_function_body, nameof(restored_function_body),
+                function_spec, concrete_function_objects);
+
+            return restored_function;
         }
 
         public static Dictionary<string, ConcreteFunction> load_function_def_library(FunctionDefLibrary library, 
@@ -102,15 +120,17 @@ namespace Tensorflow.Training.Saving.SavedModel
             {
                 var orig_name = _fix_fdef_in_place(fdef, functions, load_shared_name_suffix, new_gradient_op_types);
 
-                if(saved_object_graph is not null && saved_object_graph.ConcreteFunctions.ContainsKey(orig_name))
+                object structured_input_signature = null;
+                object structured_outputs = null;
+                if (saved_object_graph is not null && saved_object_graph.ConcreteFunctions.ContainsKey(orig_name))
                 {
-                    // TODO(Rinne): implement it.
-                    //var proto = saved_object_graph.ConcreteFunctions[orig_name];
-                    //throw new NotImplementedException();
+                    var proto = saved_object_graph.ConcreteFunctions[orig_name];
+                    structured_input_signature = nested_structure_coder.decode_proto(proto.CanonicalizedInputSignature);
+                    structured_outputs = nested_structure_coder.decode_proto(proto.OutputSignature);
                 }
 
                 graph.as_default();
-                var func_graph = function_def_lib.function_def_to_graph(fdef, null, null);
+                var func_graph = function_def_lib.function_def_to_graph(fdef, structured_input_signature, structured_outputs);
                 graph.Exit();
 
                 _restore_gradient_functions(func_graph, renamed_functions, loaded_gradients);
@@ -124,7 +144,7 @@ namespace Tensorflow.Training.Saving.SavedModel
                 {
                     fdef.Attr.Remove("_input_shapes");
                 }
-                var func = new ConcreteFunction(func_graph, fdef.Attr.ToDictionary(x => x.Key, x => x.Value.S.ToString()));
+                var func = new ConcreteFunction(func_graph, fdef.Attr.ToDictionary(x => x.Key, x => x.Value));
                 if(wrapper_function is not null)
                 {
                     throw new NotImplementedException();
@@ -142,8 +162,7 @@ namespace Tensorflow.Training.Saving.SavedModel
                 {
                     var gradient_op_type = gradients_to_register[orig_name];
                     loaded_gradients[gradient_op_type] = func;
-                    // TODO(Rinne): deal with gradient registry.
-                    //new RegisteredGradient() { RegisteredOpType = gradient_op_type }.
+                    ops.RegisterGradientFunction(gradient_op_type, _gen_gradient_func(func));
                 }
             }
             return functions;
@@ -203,6 +222,16 @@ namespace Tensorflow.Training.Saving.SavedModel
             }
         }
 
+        private static Func<Operation, Tensor[], Tensor[]> _gen_gradient_func(ConcreteFunction func)
+        {
+            return (unused_op, result_grads) =>
+            {
+                result_grads = zip(result_grads, func.func_graph.Inputs)
+                    .Select((item) => item.Item1 is null ? default_gradient.zeros_like(item.Item2) : item.Item1).ToArray();
+                return func.CallFlat(result_grads, func.CapturedInputs);
+            };
+        }
+
         private static void _restore_gradient_functions(FuncGraph func_graph, Dictionary<string, ConcreteFunction> renamed_functions, Dictionary<string, ConcreteFunction> loaded_gradients)
         {
             foreach(var op in func_graph.get_operations())
@@ -210,14 +239,14 @@ namespace Tensorflow.Training.Saving.SavedModel
                 if(op.op.type == "StatefulPartitionedCall" || op.op.type == "PartitionedCall")
                 {
                     var function = renamed_functions[op.op.node_def.Attr["f"].Func.Name];
-                    // TODO(Rinne): deal with `op._gradient_function`.
+                    op.op._gradient_function = function._get_gradient_function();
                 }
                 string gradient_op_type = null;
                 try
                 {
                     gradient_op_type = op.op.get_attr("_gradient_op_type") as string;
                 }
-                catch(Exception e)
+                catch(InvalidArgumentError)
                 {
                     continue;
                 }
@@ -389,7 +418,7 @@ namespace Tensorflow.Training.Saving.SavedModel
             concrete_function.ArgKeywords = saved_bare_concrete_function.ArgumentKeywords.ToList();
             concrete_function.NumPositionArgs = saved_bare_concrete_function.AllowedPositionalArguments;
 
-            var function_spec = _deserialize_function_spec_as_nonmethod(saved_bare_concrete_function.FunctionSpec);
+            //var function_spec = _deserialize_function_spec_as_nonmethod(saved_bare_concrete_function.FunctionSpec);
             // TODO(Rinne): set the functiona spec.
             concrete_function.AddTograph();
             return concrete_function;
@@ -413,19 +442,31 @@ namespace Tensorflow.Training.Saving.SavedModel
             return function.CallFlat(inputs, function.CapturedInputs);
         }
 
-        private static bool _concrete_function_callable_with(ConcreteFunction function, Tensors inputs, bool allow_conversion)
+        private static bool _concrete_function_callable_with(ConcreteFunction function, Tensor[] inputs, bool allow_conversion)
         {
             // TODO(Rinne): revise it.
-            return true;
+            return function.CapturedInputs.Length + inputs.Length == function.Inputs.Length;
+            //var expected_inputs = function.func_graph.Inputs;
+            //foreach(var (arg, expected) in zip(inputs, expected_inputs))
+            //{
+            //    if(arg.Id != expected.Id)
+            //    {
+            //        return false;
+            //    }
+            //}
+            //return true;
         }
     }
 
     public class RestoredFunction : Function
     {
-        public RestoredFunction(Func<Tensors, Tensors> function, ConcreteFunction concrete_function,
-            string name, bool auto_graph = true): base(function, name, auto_graph)
+        IEnumerable<ConcreteFunction> _concrete_functions;
+        FunctionSpec _function_spec;
+        public RestoredFunction(Func<Tensor[], Tensor[]> function, string name, FunctionSpec function_spec,
+            IEnumerable<ConcreteFunction> concrete_functions): base(function, name, auto_graph: false)
         {
-            _concrete_variable_creation_fn = concrete_function;
+            _concrete_functions = concrete_functions;
+            _function_spec = function_spec;
         }
 
         protected override bool _run_functions_eagerly()
