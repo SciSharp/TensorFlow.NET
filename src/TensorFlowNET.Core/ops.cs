@@ -577,6 +577,23 @@ namespace Tensorflow
             
         }
 
+        public static ITensorFlowObject device(string device_name)
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                return tf.Context.device(device_name);
+            }
+            //else if (ops.executing_eagerly_outside_functions())
+            //{
+            //    throw new NotImplementedException();
+            //}
+            else
+            {
+                return get_default_graph().device(device_name);
+            }
+            // TODO(Rinne): deal with `ops.executing_eagerly_outside_functions()`.
+        }
+
         public class NullContextManager: IDisposable
         {
             public void Dispose()

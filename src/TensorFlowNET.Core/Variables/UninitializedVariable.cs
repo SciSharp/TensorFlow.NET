@@ -49,9 +49,12 @@ namespace Tensorflow.Variables
                     {
                         tf_with(ops.name_scope("Read"), _ =>
                         {
-                            tf.device(handle.Device);
-                            var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
-                            // _maybe_set_handle_data(dtype, handle, value)
+                            var value = tf_with(ops.device(handle.Device), _ =>
+                            {
+                                var result = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                                // TODO(Rinne): _maybe_set_handle_data(dtype, handle, value)
+                                return result;
+                            });
                             _graph_element = value;
                         });
                         ops.add_to_collection(ops.GraphKeys.GLOBAL_VARIABLES_, this);

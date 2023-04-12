@@ -42,16 +42,20 @@ namespace Tensorflow
             _var_device = var.Device;
             _var_shape = var.shape;
 
-            Tensor _read_variable_closure(BaseResourceVariable v)
+            Tensor? _read_variable_closure(BaseResourceVariable v)
             {
-                tf.device(v.Device);
-                if(tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                return tf_with(ops.device(v.Device), _ =>
                 {
-                    return null;
-                }
-                var x = v.read_value_no_copy();
-                tf.device("/device:CPU:0");
-                return array_ops.identity(x);
+                    if (tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                    {
+                        return null;
+                    }
+                    var x = v.read_value_no_copy();
+                    return tf_with(ops.device("/device:CPU:0"), __ =>
+                    {
+                        return array_ops.identity(x);
+                    });
+                });
             }
 
             this.handle_op = var.Handle;

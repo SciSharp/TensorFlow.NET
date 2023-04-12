@@ -412,8 +412,10 @@ namespace Tensorflow
         {
             var variables_path = SavedModelUtils.get_variables_path(_export_dir);
             var saver = new TrackableSaver(new ObjectGraphView(get(0)));
-            tf.device("CPU");
-            saver.FilePrefixPlaceHolder = constant_op.constant(variables_path);
+            tf_with(ops.device("CPU"), _ =>
+            {
+                saver.FilePrefixPlaceHolder = constant_op.constant(variables_path);
+            });
             LoadStatus load_status;
             if (_save_options.allow_partial_checkpoint)
             {
@@ -598,14 +600,16 @@ namespace Tensorflow
 
             if (load_with_device)
             {
-                tf.device(saved_device);
-                return (new UninitializedVariable(
-                    shape: new Shape(proto.Shape.Dim.Select(x => (int)x.Size).ToArray()),
-                    dtype: (TF_DataType)proto.Dtype,
-                    name: name,
-                    trainable: trainable,
-                    aggregation: aggregation
-                ), setattr);
+                return tf_with(ops.device(saved_device), _ =>
+                {
+                    return (new UninitializedVariable(
+                        shape: new Shape(proto.Shape.Dim.Select(x => (int)x.Size).ToArray()),
+                        dtype: (TF_DataType)proto.Dtype,
+                        name: name,
+                        trainable: trainable,
+                        aggregation: aggregation
+                    ), setattr);
+                });
             }
             else
             {
