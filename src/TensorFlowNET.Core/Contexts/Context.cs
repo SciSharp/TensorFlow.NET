@@ -34,7 +34,6 @@ namespace Tensorflow.Contexts
         public const int EAGER_MODE = 1;
 
         int defaultExecutionMode = EAGER_MODE;
-        public string DeviceName { get; set; } = "";
         public string ScopeName { get; set; } = "";
         bool initialized = false;
         ContextSwitchStack context_switches;
@@ -62,6 +61,8 @@ namespace Tensorflow.Contexts
             if (initialized)
                 return;
 
+            Debug.Assert(_context_devices is null);
+
             Config = MergeConfig();
             FunctionCallOptions.Config = Config;
             var config_str = Config.ToByteArray();
@@ -72,6 +73,7 @@ namespace Tensorflow.Contexts
             c_api.TFE_ContextOptionsSetDevicePlacementPolicy(opts, _device_policy);
             _handle = c_api.TFE_NewContext(opts, status);
             status.Check(true);
+            _initialize_logical_devices();
             initialized = true;
         }
 
@@ -174,6 +176,7 @@ namespace Tensorflow.Contexts
             {
                 c_api.TFE_ContextClearCaches(_handle);
             }
+            _device_parsing_cache.Clear();
         }
 
         public static implicit operator SafeContextHandle(Context ctx)

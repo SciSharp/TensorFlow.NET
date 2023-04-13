@@ -211,9 +211,11 @@ namespace Tensorflow.Checkpoint
 
             string restore_device = string.IsNullOrEmpty(options.experimental_io_device) ? "cpu:0": options.experimental_io_device!;
 
-            // tf python has code `with ops.device(restore_device):` here.
-            tf.device(restore_device); // may be risky.
-            var restored_tensors = gen_ops.restore_v2(file_prefix, tensor_names.ToArray(), slice_specs.ToArray(), tensor_dtypes.ToArray());
+            Tensor[] restored_tensors = null;
+            tf_with(ops.device(restore_device), _ =>
+            {
+                restored_tensors = gen_ops.restore_v2(file_prefix, tensor_names.ToArray(), slice_specs.ToArray(), tensor_dtypes.ToArray());
+            });
 
             Dictionary<string, IDictionary<string, Tensor>> restored_tensor_dict = new();
             int idx = 0;
@@ -338,11 +340,14 @@ namespace Tensorflow.Checkpoint
                 options = new CheckpointOptions();
             }
 
-            tf.device("CPU"); // may be risky.
-            var sharded_suffix = array_ops.where(gen_ops.regex_full_match(file_prefix, tf.constant(@"^s3://.*")),
+            Tensor tmp_checkpoint_prefix = null;
+            tf_with(ops.device("CPU"), _ =>
+            {
+                var sharded_suffix = array_ops.where(gen_ops.regex_full_match(file_prefix, tf.constant(@"^s3://.*")),
                 constant_op.constant(".part"), constant_op.constant("_temp/part"));
-            var tmp_checkpoint_prefix = gen_ops.string_join(new Tensor[] { file_prefix, sharded_suffix });
-            IDictionary<string, Tensor> registered_paths = _registered_savers.Keys.ToDictionary(x => x, x => registered_saver_filename(file_prefix, x));
+                tmp_checkpoint_prefix = gen_ops.string_join(new Tensor[] { file_prefix, sharded_suffix });
+                IDictionary<string, Tensor> registered_paths = _registered_savers.Keys.ToDictionary(x => x, x => registered_saver_filename(file_prefix, x));
+            });
 
             Operation save_fn()
             {
@@ -364,16 +369,24 @@ namespace Tensorflow.Checkpoint
                     var saver = pair.Value;
                     last_device = device;
                     // skip the extra process of device name because of lack of API.
-                    tf.device(device);
-                    var shard_prefix = sharded_filename(tmp_checkpoint_prefix, shard, num_shards_tensor);
+                    Tensor shard_prefix = null;
+                    tf_with(ops.device(device), _ =>
+                    {
+                        shard_prefix = sharded_filename(tmp_checkpoint_prefix, shard, num_shards_tensor);
+                    });
                     saved_prefixes.Add(shard_prefix);
-                    sharded_saves.Add(saver.save(shard_prefix, options));
+                    tf_with(ops.device(device), _ =>
+                    {
+                        sharded_saves.Add(saver.save(shard_prefix, options));
+                    });
                 }
                 using (var controller = ops.control_dependencies(sharded_saves.ToArray()))
                 {
                     string merge_device = string.IsNullOrEmpty(options.experimental_io_device) ? last_device : options.experimental_io_device;
-                    tf.device(merge_device);
-                    return gen_ops.merge_v2_checkpoints(saved_prefixes.ToArray(), tf.constant(file_prefix), delete_old_dirs: true);
+                    return tf_with(ops.device(merge_device), _ =>
+                    {
+                        return gen_ops.merge_v2_checkpoints(saved_prefixes.ToArray(), tf.constant(file_prefix), delete_old_dirs: true);
+                    });
                 }
             }
 
@@ -407,54 +420,56 @@ namespace Tensorflow.Checkpoint
                 {
                     var device = single_saver.Key;
                     var saver = single_saver.Value;
-                    tf.device(device);
-                    var restored_tensor_dict = saver.restore(file_prefix, options);
-
-                    foreach(var pair in restored_tensor_dict)
+                    tf_with(ops.device(device), _ =>
                     {
-                        var checkpoint_key = pair.Key;
-                        var slice_and_tensor = pair.Value;
-                        foreach(var item in slice_and_tensor)
+                        var restored_tensor_dict = saver.restore(file_prefix, options);
+
+                        foreach (var pair in restored_tensor_dict)
                         {
-                            var slice_spec = item.Key;
-                            var tensor = item.Value;
-                            var restore_fn = _keys_to_restore_fn[(checkpoint_key, slice_spec)];
-                            var internal_dict = restore_fn_inputs.SetDefault(restore_fn, new Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>());
-                            if (!string.IsNullOrEmpty(slice_spec))
+                            var checkpoint_key = pair.Key;
+                            var slice_and_tensor = pair.Value;
+                            foreach (var item in slice_and_tensor)
                             {
-                                if (!internal_dict.ContainsKey(checkpoint_key))
+                                var slice_spec = item.Key;
+                                var tensor = item.Value;
+                                var restore_fn = _keys_to_restore_fn[(checkpoint_key, slice_spec)];
+                                var internal_dict = restore_fn_inputs.SetDefault(restore_fn, new Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>());
+                                if (!string.IsNullOrEmpty(slice_spec))
                                 {
-                                    Dictionary<string, Tensor> dict = new();
-                                    dict[slice_spec] = tensor;
-                                    internal_dict[checkpoint_key] = new Maybe<Tensor, IDictionary<string, Tensor>>(dict);
+                                    if (!internal_dict.ContainsKey(checkpoint_key))
+                                    {
+                                        Dictionary<string, Tensor> dict = new();
+                                        dict[slice_spec] = tensor;
+                                        internal_dict[checkpoint_key] = new Maybe<Tensor, IDictionary<string, Tensor>>(dict);
+                                    }
+                                    else
+                                    {
+                                        internal_dict[checkpoint_key].GetValue<IDictionary<string, Tensor>>()[slice_spec] = tensor;
+                                    }
                                 }
                                 else
                                 {
-                                    internal_dict[checkpoint_key].GetValue<IDictionary<string, Tensor>>()[slice_spec] = tensor;
+                                    internal_dict[checkpoint_key] = new Maybe<Tensor, IDictionary<string, Tensor>>(tensor);
                                 }
-                            }
-                            else
-                            {
-                                internal_dict[checkpoint_key] = new Maybe<Tensor, IDictionary<string, Tensor>>(tensor);
-                            }
-                            restore_fn_input_count[restore_fn]--;
+                                restore_fn_input_count[restore_fn]--;
 
-                            if (restore_fn_input_count[restore_fn] == 0)
-                            {
-                                Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors = new();
-                                foreach(var input in restore_fn_inputs[restore_fn])
+                                if (restore_fn_input_count[restore_fn] == 0)
                                 {
-                                    restored_tensors[TrackableUtils.extract_local_name(input.Key)] = input.Value;
-                                }
-                                var ret = restore_fn.DynamicInvoke(restored_tensors);
-                                if(ret is IDictionary<string, Operation>)
-                                {
-                                    var dict = (IDictionary<string, Operation>)ret;
-                                    restore_ops = restore_ops.Concat(dict).ToDictionary(x => x.Key, x => x.Value);
+                                    Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors = new();
+                                    foreach (var input in restore_fn_inputs[restore_fn])
+                                    {
+                                        restored_tensors[TrackableUtils.extract_local_name(input.Key)] = input.Value;
+                                    }
+                                    var ret = restore_fn.DynamicInvoke(restored_tensors);
+                                    if (ret is IDictionary<string, Operation>)
+                                    {
+                                        var dict = (IDictionary<string, Operation>)ret;
+                                        restore_ops = restore_ops.Concat(dict).ToDictionary(x => x.Key, x => x.Value);
+                                    }
                                 }
                             }
                         }
-                    }
+                    });
                 }
 
                 foreach(var item in _registered_savers)
@@ -500,21 +515,25 @@ namespace Tensorflow.Checkpoint
         private Tensor _traced_save(Tensor file_prefix)
         {
             var save_op = save(file_prefix);
-            tf.device("cpu:0");
-            using (ops.control_dependencies(new object[]{ save_op }))
+            return tf_with(ops.device("cpu:0"), _ =>
             {
-                return array_ops.identity(file_prefix);
-            }
+                return tf_with(ops.control_dependencies(new object[] { save_op }), __ =>
+                {
+                    return array_ops.identity(file_prefix);
+                });
+            });
         }
 
         private Tensor _traced_restore(Tensor file_prefix)
         {
             var restore_op = restore(file_prefix);
-            tf.device("cpu:0");
-            using (ops.control_dependencies(restore_op.Values.ToArray()))
+            return tf_with(ops.device("cpu:0"), _ =>
             {
-                return array_ops.identity(file_prefix);
-            }
+                return tf_with(ops.control_dependencies(restore_op.Values.ToArray()), __ =>
+                {
+                    return array_ops.identity(file_prefix);
+                });
+            });
         }
 
         public static MultiDeviceSaver from_saveables(IEnumerable<MySaveableObject> saveables, IDictionary<string, IDictionary<string, Trackable>>? registered_savers = null, bool call_with_mapped_captures = false)

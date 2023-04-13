@@ -266,9 +266,11 @@ namespace Tensorflow
             BaseResourceVariable new_variable;
             if (save_options.experimental_variable_policy.save_variable_devices())
             {
-                tf.device(this.Device);
                 Debug.Assert(this is ResourceVariable);
-                new_variable = resource_variable_ops.copy_to_graph_uninitialized((ResourceVariable)this);
+                new_variable = tf_with(ops.device(this.Device), _ =>
+                {
+                    return resource_variable_ops.copy_to_graph_uninitialized((ResourceVariable)this);
+                });
             }
             else
             {

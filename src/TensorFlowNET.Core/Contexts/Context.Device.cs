@@ -21,6 +21,7 @@ using Tensorflow.Eager;
 using static Tensorflow.Binding;
 using Google.Protobuf;
 using Tensorflow.Device;
+using Tensorflow.Exceptions;
 using System.Collections.Generic;
 
 namespace Tensorflow.Contexts
@@ -30,9 +31,29 @@ namespace Tensorflow.Contexts
     /// </summary>
     public sealed partial class Context
     {
+        internal static Dictionary<(string, string), (string, DeviceSpec)> _device_parsing_cache = new();
+        internal List<LogicalDevice> _logical_devices = null;
+        internal List<string> _context_devices = null;
+        
         ContextDevicePlacementPolicy _device_policy;
         bool _log_device_placement;
+        int _num_gpus;
         Dictionary<PhysicalDevice, bool> _memory_growth_map = new Dictionary<PhysicalDevice, bool>();
+
+        public string DeviceName { get; set; } = "";
+        public DeviceSpec DeviceSpec { get; set; } = null;
+
+        internal List<string> Devices
+        {
+            get
+            {
+                if(_context_devices is null)
+                {
+                    throw new AssertionError("Context must be initialized first.");
+                }
+                return _context_devices;
+            }
+        }
 
         public void log_device_placement(bool enable)
         {
@@ -89,5 +110,57 @@ namespace Tensorflow.Contexts
 
             return results.ToArray();
         }
+
+        public EagerDeviceContext device(string name)
+        {
+            return new EagerDeviceContext(this, name);
+        }
+
+        internal void _set_device(string device_name, DeviceSpec device_spec)
+        {
+            DeviceSpec = device_spec;
+            DeviceName = device_name;
+        }
+
+        internal void _initialize_logical_devices()
+        {
+            List<LogicalDevice> logical_devices = new();
+            List<string> context_devices = new();
+            Status status = new();
+            var device_list = c_api.TFE_ContextListDevices(_handle, status);
+            status.Check(true);
+            try
+            {
+                this._num_gpus = 0;
+                string current_job = null;
+                int current_task = -1;
+                for(int i = 0; i < c_api.TF_DeviceListCount(device_list); i++)
+                {
+                    var dev_name = c_api.TF_DeviceListName(device_list, i, status);
+                    status.Check(true);
+                    context_devices.Add(DeviceUtils.canonical_name(dev_name));
+                    var spec = DeviceSpec.from_string(dev_name);
+                    if(spec.Job == "localhost")
+                    {
+                        spec = spec.replace(job: null, replica: -1, task: -1);
+                    }
+                    logical_devices.Add(new LogicalDevice(spec.ToString(), spec.DeviceType));
+                    var dev_type_memory = c_api.TF_DeviceListType(device_list, i, status);
+                    var dev_type = c_api.StringPiece(dev_type_memory);
+                    status.Check(true);
+                    if(dev_type == "GPU" && spec.Job == current_job && spec.Task == current_task)
+                    {
+                        _num_gpus++;
+                    }
+                }
+            }
+            finally
+            {
+                _logical_devices = logical_devices;
+                _context_devices = context_devices;
+            }
+        }
     }
+
+    public record class LogicalDevice(string name, string device_type);
 }

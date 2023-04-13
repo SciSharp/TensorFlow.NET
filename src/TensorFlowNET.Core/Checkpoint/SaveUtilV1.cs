@@ -53,8 +53,11 @@ public static class SaveUtilV1
             var g = to_graph.as_default();
             var (named_saveable_objects, graph_proto, _, registered_savers) = serialize_gathered_objects(graph_view,
                     object_map, call_with_mapped_captures, saveables_cache);
-            tf.device("/cpu:0");
-            var object_graph_tensor = constant_op.constant(graph_proto.ToByteArray());
+            var object_graph_tensor = tf_with(ops.device("/cpu:0"), _ =>
+            {
+                // TODO(Rinne): locate the error that causes transferring TF_STRING to this function throws an exception.
+                return constant_op.constant(graph_proto.ToByteArray());
+            });
             named_saveable_objects.Add(new NoRestoreSaveable(object_graph_tensor, Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
             g.Exit();
             return (named_saveable_objects, registered_savers);
@@ -65,8 +68,10 @@ public static class SaveUtilV1
             {
                 var (named_saveable_objects, graph_proto, _, registered_savers) = serialize_gathered_objects(graph_view,
                     object_map, call_with_mapped_captures, saveables_cache);
-                tf.device("/cpu:0");
-                var object_graph_tensor = constant_op.constant(graph_proto.ToString(), TF_DataType.TF_STRING);
+                var object_graph_tensor = tf_with(ops.device("/cpu:0"), _ =>
+                {
+                    return constant_op.constant(graph_proto.ToString());
+                });
                 named_saveable_objects.Add(new NoRestoreSaveable(object_graph_tensor, Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
                 return (named_saveable_objects, registered_savers);
             }
