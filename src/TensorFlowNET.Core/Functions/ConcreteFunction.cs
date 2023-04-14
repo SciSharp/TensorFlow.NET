@@ -223,7 +223,7 @@ namespace Tensorflow.Functions
             {
                 input_tangents = new TangentInfo();
             }
-            if(possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_FIRST_ORDER)
+            if(possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_FIRST_ORDER || tf.Runner.MustRecordGradient())
             {
                 if(input_tangents.Indices is not null || executing_eagerly)
                 {

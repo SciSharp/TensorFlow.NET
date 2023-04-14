@@ -135,7 +135,7 @@ namespace Tensorflow
 
         protected virtual void SetShapeInternal(Shape value)
         {
-            if (value == null)
+            if (value is null || value.ndim == 0 || value.ndim == -1)
                 c_api.TF_GraphSetTensorShape(op.graph.c_graph, _as_tf_output(), null, -1, tf.Status);
             else
                 c_api.TF_GraphSetTensorShape(op.graph.c_graph, _as_tf_output(), value.dims, value.ndim, tf.Status);
