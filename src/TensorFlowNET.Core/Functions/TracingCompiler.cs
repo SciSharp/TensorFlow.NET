@@ -49,7 +49,7 @@ namespace Tensorflow.Functions
 
         private (ConcreteFunction, Tensor[]) _maybe_define_function(Tensor[] args)
         {
-            var lookup_func_key = male_cache_key(args);
+            var lookup_func_key = make_cache_key(args);
             if(_function_cache.TryGetValue(lookup_func_key, out var concrete_function))
             {
                 return (concrete_function, args);
@@ -71,7 +71,7 @@ namespace Tensorflow.Functions
             return concrete_function;
         }
 
-        private static string male_cache_key(Tensor[] inputs)
+        private static string make_cache_key(Tensor[] inputs)
         {
             //string res = "";
             //foreach (var input in inputs)

@@ -4,7 +4,7 @@ using Tensorflow.Train;
 
 namespace Tensorflow
 {
-    public class Function: Trackable
+    public class Function: Trackable, IGenericFunction
     {
 #pragma warning disable CS0169 // The field 'Function._handle' is never used
         private IntPtr _handle;
@@ -34,6 +34,11 @@ namespace Tensorflow
             return result;
         }
 
+        public ConcreteFunction get_concrete_function(params Tensor[] args)
+        {
+            return _get_concrete_function_garbage_collected(args);
+        }
+
         protected virtual Tensors _call(Tensors inputs)
         {
             if(_variable_creation_fn is not null)
@@ -55,6 +60,18 @@ namespace Tensorflow
         protected virtual bool _run_functions_eagerly()
         {
             return false;
+        }
+
+        protected ConcreteFunction _get_concrete_function_garbage_collected(Tensor[] args)
+        {
+            if(_variable_creation_fn is null)
+            {
+                _initialize(args);
+                // TODO(Rinne): _initialize_uninitialized_variables
+            }
+
+            var concrete = _variable_creation_fn._get_concrete_function_internal_garbage_collected(args);
+            return concrete;
         }
 
         private void _initialize(Tensor[] args)

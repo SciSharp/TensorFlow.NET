@@ -79,42 +79,6 @@ namespace Tensorflow
                 return _GatherReturnElements(return_elements, graph, results);
         }
 
-        //private static ITensorOrOperation[] _import_graph_def_internal(GraphDef graph_def, Dictionary<string, Tensor> input_map = null, string[] return_elements = null, 
-        //    bool validate_colocation_constraints = true, string name = null, OpList producer_op_list = null)
-        //{
-        //    graph_def = _ProcessGraphDefParam(graph_def);
-        //    input_map = _ProcessInputMapParam(input_map);
-        //    return_elements = _ProcessReturnElementsParam(return_elements);
-
-        //    if(producer_op_list is not null)
-        //    {
-        //        _RemoveDefaultAttrs(producer_op_list, graph_def);
-        //    }
-
-        //    var graph = ops.get_default_graph();
-        //    string prefix = null;
-        //    tf_with(ops.name_scope(name, "import", input_map.Values), scope =>
-        //    {
-        //        if (scope is not null)
-        //        {
-        //            Debug.Assert(scope.scope_name.EndsWith("/"));
-        //            prefix = scope.scope_name[scope.scope_name.Length - 1].ToString();
-        //        }
-        //        else
-        //        {
-        //            prefix = "";
-        //        }
-
-        //        input_map = _ConvertInputMapValues(name, input_map);
-        //    });
-
-        //    var scope_options = c_api_util.ScopedTFImportGraphDefOptions();
-        //    var options = scope_options.Options;
-        //    _PopulateTFImportGraphDefOptions(scope_options, prefix, input_map, return_elements, validate_colocation_constraints);
-        
-            
-        //}
-
         private static ITensorOrOperation[] _GatherReturnElements(string[] requested_return_elements,
             Graph graph,
             TF_ImportGraphDefResults results)

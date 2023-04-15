@@ -727,7 +727,7 @@ namespace Tensorflow
 
         private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor[] out_grads, Action func, Func<Operation, Tensor[], Tensor[]> grad_fn)
         {
-            //scope = scope.TrimEnd('/').Replace('/', '_');
+            // scope = scope.TrimEnd('/').Replace('/', '_');
             return grad_fn(op, out_grads);
         }
 

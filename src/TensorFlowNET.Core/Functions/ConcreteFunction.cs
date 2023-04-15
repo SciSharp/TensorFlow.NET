@@ -305,7 +305,7 @@ namespace Tensorflow.Functions
 
         private Tensors _build_call_outputs(Tensors result)
         {
-            // TODO(Rinne): dwal with `func_graph.structured_outputs`
+            // TODO(Rinne): deal with `func_graph.structured_outputs`
 
             return result;
         }

@@ -10060,7 +10060,7 @@ namespace Tensorflow.Operations
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine();
+                    
                 }
                 try
                 {
@@ -10068,7 +10068,7 @@ namespace Tensorflow.Operations
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine();
+                    
                 }
             }
 
