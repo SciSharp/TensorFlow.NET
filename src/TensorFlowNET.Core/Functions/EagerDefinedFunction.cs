@@ -124,17 +124,16 @@ namespace Tensorflow.Functions
             // TODO(Rinne): Add arg `CancellationManager`.
             // TODO(Rinne): Check the arg length.
             var function_call_options = tf.Context.FunctionCallOptions;
-            string config;
-            if (function_call_options.config_proto_serialized().Length == 0)
-            {
-                config = function_utils.get_disabled_rewriter_config().ToString();
-            }
-            else
-            {
-                config = function_call_options.config_proto_serialized().ToString();
-            }
+            string config = ""; // TODO(Rinne): revise it. The following code should work but not, for unclear reasons.
 
-            config = ""; // TODO(Rinne): revise it.
+            //if (function_call_options.config_proto_serialized().Length == 0)
+            //{
+            //    config = function_utils.get_disabled_rewriter_config().ToStringUtf8();
+            //}
+            //else
+            //{
+            //    config = function_call_options.config_proto_serialized().ToStringUtf8();
+            //}
 
             string executor_type = function_call_options.ExecutorType ?? "";
             var executing_eagerly = tf.Context.executing_eagerly();

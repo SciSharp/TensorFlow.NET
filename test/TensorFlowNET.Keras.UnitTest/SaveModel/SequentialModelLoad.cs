@@ -64,23 +64,19 @@ public class SequentialModelLoad
         var model = tf.keras.models.load_model(@"Assets/python_func_model");
         model.summary();
 
-        var x = tf.random.uniform((8, 784), -1, 1);
-        var y = model.Apply(x);
-        Console.WriteLine(y);
+        model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
-        //model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+        var data_loader = new MnistModelLoader();
+        var num_epochs = 1;
+        var batch_size = 8;
 
-        //var data_loader = new MnistModelLoader();
-        //var num_epochs = 1;
-        //var batch_size = 8;
+        var dataset = data_loader.LoadAsync(new ModelLoadSetting
+        {
+            TrainDir = "mnist",
+            OneHot = false,
+            ValidationSize = 55000,
+        }).Result;
 
-        //var dataset = data_loader.LoadAsync(new ModelLoadSetting
-        //{
-        //    TrainDir = "mnist",
-        //    OneHot = false,
-        //    ValidationSize = 58000,
-        //}).Result;
-
-        //model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
+        model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
     }
 }

@@ -223,7 +223,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             //base(checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers", "metrics", "layer_regularization_losses", "layer_metrics" }),
             //    functions.Concat(new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" })
             base(checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers"}),
-                functions.Concat(new string[] { }))
+                functions.Concat(new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" }))
         {
 
         }

@@ -257,12 +257,37 @@ namespace Tensorflow.Keras.Saving
         {
             foreach(var layer in layers)
             {
+                layer.Built = true;
+                var keras_attr = _get_keras_attr(layer);
+                if(keras_attr is not Trackable trackable)
+                {
+                    continue;
+                }
+                if (trackable.CustomizedFields.TryGetValue("call_and_return_conditional_losses", out var layer_call))
+                {
+                    Debug.Assert(layer_call is RestoredFunction);
+                    var concrete_functions = ((RestoredFunction)layer_call).ConcreteFunctions;
+                    if (concrete_functions is not null && concrete_functions.Count() > 0)
+                    {
+                        layer.ReplacedCall = use_wrapped_call(layer, ((RestoredFunction)layer_call).Apply);
+                    }
+                }
+            }
+
+            foreach(var layer in layers)
+            {
                 // TODO(Rinne): deal with `RevivedNetwork`.
                 
                 _restore_layer_unconditional_losses(layer);
                 _restore_layer_activation_loss(layer);
                 _restore_layer_metrics(layer);
             }
+        }
+
+        private Func<Tensors, Tensors> use_wrapped_call(Layer layer, Func<Tensors, Tensors> call)
+        {
+            // TODO(Rinne): revise it.
+            return call;
         }
 
         private void _restore_layer_unconditional_losses(Layer layer)

@@ -7,8 +7,9 @@ namespace Tensorflow.Eager
     public partial class EagerRunner
     {
         void TapeSetRecordBackprop(string op_type,
-            Tensor[] input_tensors,
-            TapeTensor[] output_tensors,
+            TapeTensor[] output_info,
+            long[] input_ids,
+            TF_DataType[] input_detyps,
             BackwardFunction backward_function)
         {
             if (!CouldBackprop())
@@ -18,7 +19,7 @@ namespace Tensorflow.Eager
 
             foreach (var tape in tf.GetTapeSet())
             {
-                tape.RecordOperation(op_type, input_tensors, output_tensors, backward_function);
+                tape.RecordOperation(op_type, output_info, input_ids, input_detyps, backward_function);
             }
         }
     }

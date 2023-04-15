@@ -215,6 +215,16 @@ public class FuncGraph : Graph, IDisposable
         return tensor;
     }
 
+    public void watch_variable(IVariableV1 v)
+    {
+        if (_resource_tensor_inputs.Contains(v.Handle))
+        {
+            return;
+        }
+        _watched_variables.Add(new WeakReference<IVariableV1>(v));
+        //this = this.outer_graph;
+    }
+
     Tensor capture_eager_tensor(Tensor tensor, string name)
     {
         Tensor graph_const = null;

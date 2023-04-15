@@ -13,7 +13,17 @@ namespace Tensorflow.Eager
             Tensor[] results,
             BackwardFunction backwardFunction = null)
         {
-            bool should_record = ShouldRecord(inputs);
+            var input_ids = MakeTensorIDList(inputs);
+            var input_dtypes = MakeTensorDtypeList(inputs);
+            bool should_record = false;
+            foreach (var tape in tf.GetTapeSet())
+            {
+                if (tape.ShouldRecord(input_ids, input_dtypes))
+                {
+                    should_record = true;
+                    break;
+                }
+            }
 
             if (!should_record)
             {
@@ -59,7 +69,7 @@ namespace Tensorflow.Eager
                 op_inputs = inputs;*/
 
             backwardFunction = backwardFunction ?? GetGradientFunction(op_name, inputs, attrs, results);
-            TapeSetRecordOperation(op_name, inputs, results, backwardFunction);
+            TapeSetRecordOperation(op_name, inputs, results, input_ids, input_dtypes, backwardFunction);
 
             return true;
         }
@@ -128,11 +138,6 @@ namespace Tensorflow.Eager
         bool CouldBackprop()
         {
             return HasGradientTape();
-        }
-
-        TF_DataType[] MakeTensorDtypeList(Tensor[] tensors)
-        {
-            return tensors.Select(x => x.dtype).ToArray();
         }
     }
 }

@@ -153,7 +153,7 @@ namespace Tensorflow.Functions
             foreach(var tape in tf.GetTapeSet())
             {
                 tape.RecordOperation(_inference_function.Signature.Name, to_record, 
-                    inference_args.Select(t => new TapeTensor(t)).ToArray(), backward_function);
+                    inference_args, backward_function);
             }
         }
 

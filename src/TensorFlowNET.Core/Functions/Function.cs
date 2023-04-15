@@ -14,7 +14,6 @@ namespace Tensorflow
         protected ConcreteFunction _concrete_variable_creation_fn;
         protected bool _autograph;
         protected TracingCompiler _variable_creation_fn;
-        protected bool _has_initialized;
         public string Name { get; set; }
         public Function(Func<Tensor[], Tensor[]> csharp_function, 
             string name, bool auto_graph = true)
@@ -22,7 +21,6 @@ namespace Tensorflow
             _csharp_function = csharp_function;
             Name = name;
             _autograph = auto_graph;
-            _has_initialized = false;
         }
 
         public virtual Tensors Apply(Tensors inputs)
@@ -38,10 +36,11 @@ namespace Tensorflow
 
         protected virtual Tensors _call(Tensors inputs)
         {
-            if (!_has_initialized)
+            if(_variable_creation_fn is not null)
             {
-                _initialize(inputs);
+                return _variable_creation_fn.Apply(inputs);
             }
+            _initialize(inputs);
 
             return _concrete_variable_creation_fn.CallFlat(inputs,
                 _concrete_variable_creation_fn.CapturedInputs);
@@ -63,7 +62,6 @@ namespace Tensorflow
             _variable_creation_fn = _compiler(_csharp_function);
             _variable_creation_fn._name = this.Name;
             _concrete_variable_creation_fn = _variable_creation_fn._get_concrete_function_internal_garbage_collected(args);
-            _has_initialized = true;
         }
     }
 }

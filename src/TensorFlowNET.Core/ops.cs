@@ -575,12 +575,8 @@ namespace Tensorflow
 
         public static HandleData get_resource_handle_data(Tensor graph_op)
         {
-            throw new NotImplementedException();
-            // This implementation hasn't been checked for some reasons.
-            // If it throws an exception in the future, please check it.
-
-            //var handle_data = c_api.GetHandleShapeAndType(graph_op.graph.c_graph, graph_op._as_tf_output());
-            //return HandleData.Parser.ParseFrom(tf.compat.as_bytes(c_api.StringPiece(handle_data)));
+            var handle_data = c_api.TFC_GetHandleShapeAndType(graph_op.graph.c_graph, graph_op._as_tf_output());
+            return HandleData.Parser.ParseFrom(tf.compat.as_bytes(c_api.StringPiece(handle_data)));
         }
 
         public static void dismantle_graph(Graph graph)

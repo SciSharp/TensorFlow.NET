@@ -85,16 +85,16 @@ namespace Tensorflow.Keras.Saving.SavedModel
             return _config;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
-        {
-            if(SerializedAttributes is null || !SerializedAttributes.TryGetValue("__call__", out var func) || func is not Function)
-            {
-                return base.Call(inputs, state, training);
-            }
-            else
-            {
-                return (func as Function).Apply(inputs);
-            }
-        }
+        //protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        //{
+        //    if(SerializedAttributes is null || !SerializedAttributes.TryGetValue("__call__", out var func) || func is not Function)
+        //    {
+        //        return base.Call(inputs, state, training);
+        //    }
+        //    else
+        //    {
+        //        return (func as Function).Apply(inputs);
+        //    }
+        //}
     }
 }

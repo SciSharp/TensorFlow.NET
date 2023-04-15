@@ -27,6 +27,7 @@ using Tensorflow.Keras.Utils;
 using Tensorflow.NumPy;
 using Tensorflow.Train;
 using Tensorflow.Training;
+using Tensorflow.Training.Saving.SavedModel;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -50,7 +51,17 @@ namespace Tensorflow.Keras.Engine
         /// the layer's weights.
         /// </summary>
         protected bool built;
-        public bool Built => built;
+        public bool Built
+        {
+            get
+            {
+                return built;
+            }
+            internal set
+            {
+                built = value;
+            }
+        }
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
         public bool AutoCast => args.Autocast;
@@ -179,6 +190,11 @@ namespace Tensorflow.Keras.Engine
         }
         protected List<ILayer> _self_tracked_trackables;
 
+        /// <summary>
+        /// If this value is set, the behavior of layer call will be changed to directly calling this function.
+        /// </summary>
+        public Func<Tensors, Tensors>? ReplacedCall { get; set; } = null;
+
         public Layer(LayerArgs args)
         {
             Initialize(args);
@@ -259,6 +275,10 @@ namespace Tensorflow.Keras.Engine
         /// <returns></returns>
         protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
+            if(ReplacedCall is not null)
+            {
+                return ReplacedCall(inputs);
+            }
             return inputs;
         }
 

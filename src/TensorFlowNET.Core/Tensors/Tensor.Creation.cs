@@ -30,7 +30,7 @@ namespace Tensorflow
     {
         public virtual IntPtr TensorDataPointer => _handle == null ? IntPtr.Zero : TF_TensorData(_handle);
 
-        public Tensor()
+        protected Tensor()
         {
         }
 
@@ -108,6 +108,7 @@ namespace Tensorflow
         protected unsafe void InitTensor(Shape shape, TF_DataType dtype)
         {
             _handle = TF_NewTensor(shape, dtype, null);
+            _id = ops.uid();
         }
 
         protected unsafe void InitTensor(Shape shape, byte[] bytes, TF_DataType dtype)
@@ -116,6 +117,7 @@ namespace Tensorflow
                 _handle = StringTensor(new byte[][] { bytes }, Shape.Scalar);
             else
                 _handle = TF_NewTensor(bytes, shape, dtype);
+            _id = ops.uid();
         }
 
         protected unsafe void InitTensor(Array array, Shape? shape = null)
@@ -166,6 +168,8 @@ namespace Tensorflow
                 string[] val => StringTensor(val, shape),
                 _ => throw new NotImplementedException("")
             };
+
+            _id = ops.uid();
         }
 
         unsafe SafeTensorHandle InitTensor<T>(T[] array, Shape shape, TF_DataType dtype) where T : unmanaged

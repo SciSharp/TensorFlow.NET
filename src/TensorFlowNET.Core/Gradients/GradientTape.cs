@@ -67,40 +67,59 @@ namespace Tensorflow.Gradients
         /// <param name="target"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        public Tensor gradient(Tensor target, Tensor source)
+        public Tensor gradient(Tensor target, Tensor source, List<Tensor> output_gradients = null, 
+            string unconnected_gradients = null)
         {
+            if(_tape is null)
+            {
+                throw new RuntimeError("A non-persistent GradientTape can only be used to " +
+                    "compute one set of gradients (or jacobians).");
+            }
+            
             ITape tape = stop_recording();
 
             var results = tf.Runner.TFE_TapeGradient(tape,
                 new[] { target },
                 new[] { source },
-                null);
+                output_gradients,
+                new[] { source }, 
+                unconnected_gradients);
 
             return results[0];
         }
 
-        public Tensor gradient(Tensor target, ResourceVariable source)
+        public Tensor gradient(Tensor target, ResourceVariable source, List<Tensor> output_gradients = null,
+            string unconnected_gradients = null)
         {
-            var results = gradient(target, new List<IVariableV1> { source });
+            var results = gradient(target, new List<IVariableV1> { source }, output_gradients, unconnected_gradients);
 
             return results[0];
         }
 
-        public (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources)
+        public (Tensor, Tensor) gradient(Tensor target, (ResourceVariable, ResourceVariable) sources, List<Tensor> output_gradients = null,
+            string unconnected_gradients = null)
         {
-            var results = gradient(target, new List<IVariableV1> { sources.Item1, sources.Item2 });
+            var results = gradient(target, new List<IVariableV1> { sources.Item1, sources.Item2 }, output_gradients, unconnected_gradients);
 
             return (results[0], results[1]);
         }
 
-        public Tensor[] gradient(Tensor target, IEnumerable<IVariableV1> sources)
+        public Tensor[] gradient(Tensor target, IEnumerable<IVariableV1> sources, List<Tensor> output_gradients = null,
+            string unconnected_gradients = null)
         {
+            if (_tape is null)
+            {
+                throw new RuntimeError("A non-persistent GradientTape can only be used to " +
+                    "compute one set of gradients (or jacobians).");
+            }
             var tape = stop_recording();
 
             var results = tf.Runner.TFE_TapeGradient(tape,
                 new[] { target },
                 sources.Select(x => x.Handle).ToArray(),
-                null);
+                output_gradients,
+                sources.Select(x => x.Handle).ToArray(), 
+                unconnected_gradients);
 
             if (!tape.Persistent)
             {

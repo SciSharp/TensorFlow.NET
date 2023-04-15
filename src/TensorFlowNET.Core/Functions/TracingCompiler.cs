@@ -73,12 +73,12 @@ namespace Tensorflow.Functions
 
         private static string male_cache_key(Tensor[] inputs)
         {
-            string res = "";
-            foreach (var input in inputs)
-            {
-                res += $"{input.name}_{input.Id}";
-            }
-            return res;
+            //string res = "";
+            //foreach (var input in inputs)
+            //{
+            //    res += $"{input.name}_{input.Id}";
+            //}
+            return inputs.Length.ToString();
         }
     }
 }

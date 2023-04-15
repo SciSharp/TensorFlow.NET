@@ -25,6 +25,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Operations;
 using System.Buffers;
 using Tensorflow.Eager;
+using Tensorflow.Graphs;
 
 namespace Tensorflow
 {
@@ -301,6 +302,19 @@ namespace Tensorflow
             //{
             //    return handle_data_util.get_resource_handle_data(handle);
             //}
+        }
+
+        public static void variable_accessed(IVariableV1 variable)
+        {
+            if (ops.get_default_graph() is FuncGraph func_graph)
+            {
+                func_graph.watch_variable(variable);
+            }
+            if (variable.Trainable)
+            {
+                foreach (var tape in tf.GetTapeSet())
+                    tape.VariableAccessed(variable);
+            }
         }
     }
 }

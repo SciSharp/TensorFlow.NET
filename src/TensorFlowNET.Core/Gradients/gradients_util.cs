@@ -704,32 +704,7 @@ namespace Tensorflow
 
         public static int PossibleTapeGradientTypes(Tensor[] tensors)
         {
-            var tape_set = tf.GetTapeSet();
-            bool some_tape_watching = false;
-            if(tape_set is not null && tape_set.Count > 0)
-            {
-                foreach(var tape in tape_set)
-                {
-                    if (tape.ShouldRecord(tensors))
-                    {
-                        if(tape.Persistent || some_tape_watching)
-                        {
-                            return POSSIBLE_GRADIENT_TYPES_HIGHER_ORDER;
-                        }
-                        some_tape_watching = true;
-                    }
-                }
-            }
-            // skip the forward_accumulators.
-
-            if (some_tape_watching)
-            {
-                return POSSIBLE_GRADIENT_TYPES_FIRST_ORDER;
-            }
-            else
-            {
-                return POSSIBLE_GRADIENT_TYPES_NONE;
-            }
+            return tf.Runner.TFE_TapeSetPossibleGradientTypes(tensors);
         }
 
         /// <summary>

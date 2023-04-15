@@ -49,8 +49,10 @@ namespace Tensorflow.Operations
                 target_t.HandleData = handle_data;
                 return;
             }
-            // TODO(Rinne): enable it. (currently the internal c api cannot be invoked.)
-            //c_api.SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), handle_data.ToByteArray());
+            Status status = new();
+            var proto = handle_data.ToByteArray();
+            c_api.TFC_SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), proto, proto.Length, status);
+            status.Check(true);
         }
 
         public static HandleData get_resource_handle_data(Tensor graph_op) => ops.get_resource_handle_data(graph_op);

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Tensorflow.Checkpoint;
 using Tensorflow.Training.Saving.SavedModel;
 using OneOf;
+using Tensorflow.Graphs;
 
 namespace Tensorflow
 {
@@ -193,6 +194,10 @@ namespace Tensorflow
         /// </summary>
         void variable_accessed(BaseResourceVariable variable)
         {
+            if(ops.get_default_graph() is FuncGraph func_graph)
+            {
+                func_graph.watch_variable(variable as IVariableV1);
+            }
             if (variable.Trainable)
             {
                 foreach (var tape in tf.GetTapeSet())

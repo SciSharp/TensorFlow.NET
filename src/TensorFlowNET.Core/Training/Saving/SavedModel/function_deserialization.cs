@@ -462,6 +462,7 @@ namespace Tensorflow.Training.Saving.SavedModel
     {
         IEnumerable<ConcreteFunction> _concrete_functions;
         FunctionSpec _function_spec;
+        public IEnumerable<ConcreteFunction> ConcreteFunctions => _concrete_functions;
         public RestoredFunction(Func<Tensor[], Tensor[]> function, string name, FunctionSpec function_spec,
             IEnumerable<ConcreteFunction> concrete_functions): base(function, name, auto_graph: false)
         {

@@ -35,10 +35,6 @@ namespace Tensorflow.Keras.Engine
         {
             (x, y) = data_handler.DataAdapter.Expand1d(x, y);
             using var tape = tf.GradientTape();
-            //foreach (var variable in TrainableVariables)
-            //{
-            //    tape.watch(variable.Handle);
-            //}
             var y_pred = Apply(x, training: true);
             var loss = compiled_loss.Call(y, y_pred);
 
@@ -70,7 +66,7 @@ namespace Tensorflow.Keras.Engine
             gradients = optimizer.aggregate_gradients(zip(gradients, trainable_variables));
             gradients = optimizer.clip_gradients(gradients);
 
-            optimizer.apply_gradients(zip(gradients, trainable_variables.Select(x => x as ResourceVariable)),
+            optimizer.apply_gradients(zip(gradients, trainable_variables),
                 experimental_aggregate_gradients: false);
         }
     }

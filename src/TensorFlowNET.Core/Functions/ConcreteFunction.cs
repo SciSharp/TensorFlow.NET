@@ -18,12 +18,13 @@ namespace Tensorflow.Functions
     public class ConcreteFunction: Trackable
     {
         protected IEnumerable<Tensor> _captured_inputs;
-        internal FuncGraph func_graph;
         protected DelayedRewriteGradientFunctions _delayed_rewrite_functions;
         protected Dictionary<string, AttrValue> _attrs;
         protected FunctionSpec _function_spec;
         protected FunctionSpec _pre_initialized_function_spec = null;
         protected EagerDefinedFunction _inference_function;
+        protected Dictionary<string, TapeGradientFunctions> _tape_functions_cache = new();
+        internal FuncGraph func_graph;
         internal ForwardBackwardCall forward_backward;
         public Tensor[] Inputs => func_graph.Inputs;
         public Tensor[] CapturedInputs => func_graph.external_captures;
@@ -156,6 +157,17 @@ namespace Tensorflow.Functions
         {
             var executing_eagerly = tf.Context.executing_eagerly();
             var default_graph = ops.get_default_graph();
+            // TODO(Rinne): deal with `default_graph.building_function`
+
+            var tempvv = func_graph.Variables;
+            if(tf.GetTapeSet().Count > 0 || default_graph is FuncGraph)
+            {
+                foreach(var v in this.func_graph.Variables)
+                {
+                    resource_variable_ops.variable_accessed(v);
+                }
+            }
+
             var tensor_inputs = new Tensors();
             foreach (var (i, arg) in enumerate(args))
             {
@@ -223,11 +235,16 @@ namespace Tensorflow.Functions
             {
                 input_tangents = new TangentInfo();
             }
-            if(possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_FIRST_ORDER || tf.Runner.MustRecordGradient())
+            if(possible_gradient_type == gradients_util.POSSIBLE_GRADIENT_TYPES_FIRST_ORDER)
             {
                 if(input_tangents.Indices is not null || executing_eagerly)
                 {
-                    var functions = new FirstOrderTapeGradientFunctions(func_graph, false);
+                    string cache_key = "first_order";
+                    if(!_tape_functions_cache.TryGetValue(cache_key, out var functions))
+                    {
+                        functions = new FirstOrderTapeGradientFunctions(func_graph, false);
+                        _tape_functions_cache[cache_key] = functions;
+                    }
                     return new ForwardBackwardCall(functions, args, tape_watching: true);
                 }
                 else
@@ -241,7 +258,7 @@ namespace Tensorflow.Functions
             }
 
             // TODO(Rinne): add arg "input_tagents" for ForwardBackwardCall.
-            return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: tf.Runner.MustRecordGradient());
+            return new ForwardBackwardCall(_delayed_rewrite_functions, args, tape_watching: false);
         }
 
         internal void set_variables(IEnumerable<IVariableV1> variables)

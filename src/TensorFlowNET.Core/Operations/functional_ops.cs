@@ -39,7 +39,7 @@ namespace Tensorflow
 
             if (config is null)
             {
-                config = function_utils.get_disabled_rewriter_config().ToString();
+                config = function_utils.get_disabled_rewriter_config().ToStringUtf8();
             }
 
             if (executor_type is null)
@@ -49,6 +49,8 @@ namespace Tensorflow
 
             if (executing_eagerly)
             {
+                // TODO(Rinne): implement it.
+                
                 throw new NotImplementedException();
             }
 

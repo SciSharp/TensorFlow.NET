@@ -29,7 +29,14 @@ namespace Tensorflow.Eager
         Tensor[] TFE_TapeGradient(ITape tape,
             Tensor[] target,
             Tensor[] sources,
-            Tensor[] output_gradients);
+            List<Tensor> output_gradients,
+            Tensor[] sources_raw,
+            string unconnected_gradients);
+
+        void TFE_TapeSetRecordOperation(string op_type, Tensor[] output_tensors,
+            Tensor[] input_tensors, BackwardFunction backward_function);
+
+        int TFE_TapeSetPossibleGradientTypes(Tensor[] tensors);
 
         bool RecordGradient(string op_name,
             Tensor[] inputs,

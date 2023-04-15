@@ -9,7 +9,7 @@ namespace Tensorflow.Gradients
         /// Map from tensor to how many references still exist for this tensor in
         /// the tape.
         /// </summary>
-        public UnorderedMap<Tensor, long> tensor_usage_counts { get; set; }
+        public UnorderedMap<long, long> tensor_usage_counts { get; set; }
         /// <summary>
         /// Maps from op ID to how many output tensors of this op still need to have
         /// their gradients computed.
@@ -19,7 +19,7 @@ namespace Tensorflow.Gradients
         public BackpropInitialState()
         {
             op_tape = new OpTape();
-            tensor_usage_counts = new UnorderedMap<Tensor, long>();
+            tensor_usage_counts = new UnorderedMap<long, long>();
             op_missing_tensor = new UnorderedMap<long, long>();
         }
     }

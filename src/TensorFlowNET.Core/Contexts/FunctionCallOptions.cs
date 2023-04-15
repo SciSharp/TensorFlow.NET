@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Google.Protobuf;
+using Protobuf.Text;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Contexts

@@ -14,12 +14,11 @@ namespace Tensorflow.Functions
 
         }
 
-        public override EagerDefinedFunction ForwardAndBackwardFunctions(Tensors inference_args)
+        public override (EagerDefinedFunction, FuncGraph, ConcreteFunction, List<int>, int)
+            ForwardAndBackwardFunctions(Tensors inference_args)
         {
-            var outputs = _func_graph.Outputs;
-            (_forward_function, _forward_graph, _backward_function, _forwardprop_output_indices, _num_forwardprop_outputs) 
-                = BuildFunctionsForOutputs(outputs, inference_args);
-            return _forward_function;
+            var outputs = _func_graph.Outputs.Take(_num_inference_outputs).ToArray();
+            return BuildFunctionsForOutputs(outputs, inference_args);
         }
     }
 }
