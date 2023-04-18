@@ -59,7 +59,7 @@ public class SequentialModelLoad
     }
 
     [TestMethod]
-    public void Temp()
+    public void ModelWithSelfDefinedModule()
     {
         var model = tf.keras.models.load_model(@"Assets/python_func_model");
         model.summary();
