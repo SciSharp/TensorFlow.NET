@@ -28,6 +28,8 @@ public sealed class ImportGraphDefOptions
         _handle = c_api.TF_NewImportGraphDefOptions();
     }
 
+    public SafeImportGraphDefOptionsHandle Options => _handle;
+
     public void AddReturnOutput(string name, int index)
     {
         c_api.TF_ImportGraphDefOptionsAddReturnOutput(_handle, name, index);

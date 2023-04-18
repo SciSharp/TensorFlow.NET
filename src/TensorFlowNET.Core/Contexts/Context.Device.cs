@@ -111,6 +111,14 @@ namespace Tensorflow.Contexts
             return results.ToArray();
         }
 
+        public bool is_custom_device(string device_name)
+        {
+            return false;
+            // TODO(Rinne): After tf2.11 TFE_IsCustomDevice has been added to C APIs.
+            //ensure_initialized();
+            //return c_api.TFE_IsCustomDevice(_handle, device_name);
+        }
+
         public EagerDeviceContext device(string name)
         {
             return new EagerDeviceContext(this, name);

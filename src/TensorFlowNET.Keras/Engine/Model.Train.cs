@@ -66,7 +66,7 @@ namespace Tensorflow.Keras.Engine
             gradients = optimizer.aggregate_gradients(zip(gradients, trainable_variables));
             gradients = optimizer.clip_gradients(gradients);
 
-            optimizer.apply_gradients(zip(gradients, trainable_variables.Select(x => x as ResourceVariable)),
+            optimizer.apply_gradients(zip(gradients, trainable_variables),
                 experimental_aggregate_gradients: false);
         }
     }

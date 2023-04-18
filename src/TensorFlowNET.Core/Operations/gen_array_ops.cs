@@ -17,6 +17,7 @@
 using System;
 using System.Linq;
 using Tensorflow.Contexts;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -210,7 +211,51 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `value`.</returns>
         public static Tensor fill<T>(Tensor dims, T value, string name = null)
-            => tf.Context.ExecuteOp("Fill", name, new ExecuteOpArgs(dims, value));
+        {
+            var ctx = tf.Context;
+            if (ctx.executing_eagerly())
+            {
+                try
+                {
+                    var _result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Fill", name, dims, value));
+                    return _result[0];
+                }
+                catch (Exception)
+                {
+                    
+                }
+                try
+                {
+                    return fill_eager_fallback(dims, value as Tensor, name, ctx);
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            Dictionary<string, object> attrs = new Dictionary<string, object>();
+            attrs["dims"] = dims;
+            attrs["value"] = value;
+            var result = tf.OpDefLib._apply_op_helper("Fill", name, attrs);
+            if (execute.must_record_gradient())
+            {
+                throw new NotImplementedException();
+            }
+            return result.output;
+        }
+
+        public static Tensor fill_eager_fallback(Tensor dims, Tensor value, string name, Context ctx)
+        {
+            object[] attrs = new object[] { "T", dims.dtype.as_datatype_enum(), "index_type", dims.dtype.as_datatype_enum() };
+            var _result = execute.executes("Fill", 1, new Tensor[] { dims, value }, attrs, ctx, name);
+
+            if (execute.must_record_gradient())
+            {
+                throw new NotImplementedException();
+            }
+            return _result[0];
+        }
+            //=> tf.Context.ExecuteOp("Fill", name, new ExecuteOpArgs(dims, value));
 
         /// <summary>
         /// Return the reduction indices for computing gradients of s0 op s1 with broadcast.

@@ -12,11 +12,12 @@ namespace Tensorflow.Training.Saving.SavedModel
     {
         public WrapperFunction(ConcreteFunction concrete_function): base(concrete_function.func_graph)
         {
-            this.forward_backward = concrete_function.forward_backward;
-            this.Outputs = concrete_function.Outputs;
-            this.ReturnType = concrete_function.ReturnType;
-            this.OutputStructure = concrete_function.OutputStructure;
-            this.ArgKeywords = concrete_function.ArgKeywords;
+            throw new NotImplementedException();
+            //this.forward_backward = concrete_function.forward_backward;
+            //this.Outputs = concrete_function.Outputs;
+            //this.ReturnType = concrete_function.ReturnType;
+            //this.OutputStructure = concrete_function.OutputStructure;
+            //this.ArgKeywords = concrete_function.ArgKeywords;
         }
     }
 }

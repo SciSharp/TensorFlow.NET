@@ -20,6 +20,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
+using System.Diagnostics;
 
 namespace Tensorflow
 {
@@ -47,6 +50,8 @@ namespace Tensorflow
 
         private readonly Graph _graph;
 
+        internal Func<Operation, object[], Tensor[]> _gradient_function;
+
         public string type => OpType;
 
         public Graph graph => _graph;
@@ -61,7 +66,7 @@ namespace Tensorflow
 
         public string Device => _handle == IntPtr.Zero ? "" : c_api.StringPiece(c_api.TF_OperationDevice(_handle));
 
-        // OperationDescription _opDesc;
+        //private OperationDescription _op_desc;
 
         public NodeDef node_def => GetNodeDef();
 
@@ -216,26 +221,37 @@ namespace Tensorflow
 
             var x = AttrValue.Parser.ParseFrom(buf.ToArray());
 
-            string oneof_value = x.ValueCase.ToString();
-            if (string.IsNullOrEmpty(oneof_value))
-                return null;
+            var oneof_value = x.ValueCase;
+            if (oneof_value == AttrValue.ValueOneofCase.None)
+                return new object[0];
 
-            switch (oneof_value.ToLower())
+            if(oneof_value == AttrValue.ValueOneofCase.List)
             {
-                case "list":
-                    throw new NotImplementedException($"Unsupported field type in {oneof_value}");
-                case "type":
-                    return x.Type;
-                case "s":
-                    return x.S.ToStringUtf8();
-                default:
-                    return x.GetType().GetProperty(oneof_value).GetValue(x);
+                throw new NotImplementedException($"Unsupported field type in {oneof_value}");
             }
+            if(oneof_value == AttrValue.ValueOneofCase.Type)
+            {
+                return dtypes.as_tf_dtype(x.Type);
+            }
+            return ProtoUtils.GetSingleAttrValue(x, oneof_value);
         }
 
         public TF_AttrMetadata GetAttributeMetadata(string attr_name, Status s)
         {
             return c_api.TF_OperationGetAttrMetadata(_handle, attr_name, s);
+        }
+
+        [Obsolete("The implementation is not complete.")]
+        internal void _set_device_from_string(string device_str)
+        {
+            // TODO(Rinne): complete it with new C API `SetRequestedDevice`.
+            //c_api.TF_SetDevice(_handle, device_str);
+        }
+
+        [Obsolete("The implementation is not complete.")]
+        internal void _set_device(string device)
+        {
+            _set_device_from_string(device);
         }
 
         private NodeDef GetNodeDef()
@@ -296,5 +312,60 @@ namespace Tensorflow
         }
 
         public NDArray numpy() => throw new NotImplementedException("");
+
+        internal void _add_outputs(TF_DataType[] types, Shape[] shapes)
+        {
+            Debug.Assert(types.Length == shapes.Length);
+            int orig_num_outputs = this.outputs.Length;
+            var new_outputs = new List<Tensor>(_outputs);
+
+            // Since the `_outputs` is defined as `Array`, when we add new output, we 
+            // have to create a new array, which brings some performance concerns.
+            // In the future maybe the type of `outputs` should be reconsidered.
+            for(int i = 0; i < types.Length; i++)
+            {
+                var t = new Tensor(this, orig_num_outputs + i, types[i]);
+                t.shape = shapes[i];
+                new_outputs.Add(t);
+            }
+            _outputs = new_outputs.ToArray();
+        }
+
+        internal void _set_func_attr(string attr_name, string func_name)
+        {
+            var func = new NameAttrList() { Name = func_name };
+            _set_attr(attr_name, new AttrValue() { Func = func });
+        }
+
+        internal void _set_type_list_attr(string attr_name, DataType[] types)
+        {
+            if(types is null || types.Length == 0)
+            {
+                return;
+            }
+            var type_list = new AttrValue.Types.ListValue();
+            type_list.Type.AddRange(types);
+            _set_attr(attr_name, new AttrValue() { List = type_list });
+        }
+
+        internal void _set_attr(string attr_name, AttrValue attr_value)
+        {
+            var buffer = new Buffer(attr_value.ToByteArray());
+            try
+            {
+                _set_attr_with_buf(attr_name, buffer);
+            }
+            finally
+            {
+                buffer.Release();
+            }
+        }
+
+        internal void _set_attr_with_buf(string attr_name, Buffer attr_buf)
+        {
+            Status status = new();
+            c_api.TFC_SetAttr(graph, _handle, attr_name, attr_buf, status);
+            status.Check(true);
+        }
     }
 }

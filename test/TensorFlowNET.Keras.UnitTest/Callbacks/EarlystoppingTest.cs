@@ -13,12 +13,12 @@ using Tensorflow.Keras;
 namespace TensorFlowNET.Keras.UnitTest
 {
     [TestClass]
-    public class EarltstoppingTest
+    public class EarlystoppingTest
     {
         [TestMethod]
         // Because loading the weight variable into the model has not yet been implemented,
         // so you'd better not set patience too large, because the weights will equal to the last epoch's weights.
-        public void Earltstopping()
+        public void Earlystopping()
         {
             var layers = keras.layers;
             var model = keras.Sequential(new List<ILayer>

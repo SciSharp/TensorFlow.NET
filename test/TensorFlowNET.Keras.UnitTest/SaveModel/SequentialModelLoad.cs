@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 using Tensorflow;
 using Tensorflow.Keras.Optimizers;
@@ -56,5 +57,27 @@ public class SequentialModelLoad
         var dataset = new RandomDataSet(new Shape(227, 227, 3), 16);
 
         model.fit(dataset.Data, dataset.Labels, batch_size, num_epochs);
+    }
+
+    [TestMethod]
+    public void ModelWithSelfDefinedModule()
+    {
+        var model = tf.keras.models.load_model(@"Assets/python_func_model");
+        model.summary();
+
+        model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+
+        var data_loader = new MnistModelLoader();
+        var num_epochs = 1;
+        var batch_size = 8;
+
+        var dataset = data_loader.LoadAsync(new ModelLoadSetting
+        {
+            TrainDir = "mnist",
+            OneHot = false,
+            ValidationSize = 55000,
+        }).Result;
+
+        model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
     }
 }

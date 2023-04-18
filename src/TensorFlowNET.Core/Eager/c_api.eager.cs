@@ -31,6 +31,9 @@ namespace Tensorflow
         public static extern void TFE_ContextOptionsSetConfig(SafeContextOptionsHandle opts, byte[] proto, ulong proto_len, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TFE_ContextAddFunctionDef(SafeContextHandle ctx, byte[] serialized_function_def, ulong size, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TFE_ContextOptionsSetDevicePlacementPolicy(SafeContextOptionsHandle opts, ContextDevicePlacementPolicy device_policy);
 
         /// <summary>
@@ -277,7 +280,7 @@ namespace Tensorflow
         public static extern void TFE_OpSetAttrIntList(SafeEagerOpHandle op, string attr_name, long[] values, int num_values);
 
         [DllImport(TensorFlowLibName)]
-        public static extern void TFE_OpSetAttrValueProto(SafeEagerOpHandle op, string attr_name, IMessage[] proto, int proto_len, SafeStatusHandle status);
+        public static extern void TFE_OpSetAttrValueProto(IntPtr op, string attr_name, IntPtr proto, ulong proto_len, SafeStatusHandle status);
 
         /// <summary>
         /// 
@@ -480,5 +483,8 @@ namespace Tensorflow
             IntPtr[] target, int target_size,
             IntPtr[] sources, int source_size,
             IntPtr[] outputs, int output_size);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern bool TFE_IsCustomDevice(SafeContextHandle ctx, string device_name);
     }
 }

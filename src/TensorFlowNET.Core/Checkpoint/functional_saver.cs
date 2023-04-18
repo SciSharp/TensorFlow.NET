@@ -15,106 +15,14 @@ using Tensorflow.Graphs;
 using System.Xml.Linq;
 using System.Diagnostics;
 using RestoreFunc = System.Func<object, object>;
+using OneOf;
 
 namespace Tensorflow.Checkpoint
 {
-    public class Maybe<TA, TB>
-    {
-        private TA? _valueA = default(TA);
-        private TB? _valueB = default(TB);
-        private Type _type;
-        private bool _assignedTA;
-        public Maybe(TA value)
-        {
-            _valueA = value;
-            _type= typeof(TA);
-            _assignedTA = true;
-        }
-        public Maybe(TB value)
-        {
-            _valueB = value;
-            _type = typeof(TB);
-            _assignedTA = false;
-        }
-
-        public Type DataType => _type;
-
-        /// <summary>
-        /// Try to get the type T member of this instance. It returns true when TA or TB derive from T and is correspondingly assigned.
-        /// It returns 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="res"></param>
-        /// <returns></returns>
-        public bool TryGet<T>(out T? res)
-        {
-            if(_valueA is T && _valueB is not T)
-            {
-                res = (T)(object)_valueA;
-                return _assignedTA;
-            }
-            else if(_valueA is not T && _valueB is T)
-            {
-                res = (T)(object)_valueB;
-                return !_assignedTA;
-            }
-            res = default(T);
-            return false;
-        }
-
-        public bool IsTypeOrDeriveFrom<T>()
-        {
-            if (_valueA is T && _valueB is not T)
-            {
-                return _assignedTA;
-            }
-            else if (_valueA is not T && _valueB is T)
-            {
-                return !_assignedTA;
-            }
-            else if (_valueA is T && _valueB is T)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public T GetValue<T>()
-        {
-            if (_valueA is T && _valueB is not T)
-            {
-                return (T)(object)_valueA;
-            }
-            else if (_valueA is not T && _valueB is T)
-            {
-                return (T)(object)_valueB;
-            }
-            else if (_valueA is T && _valueB is T)
-            {
-                throw new TypeError("The type is vague, this is always because TA and TB both derive from T.");
-            }
-            else
-            {
-                throw new TypeError($"Expected {typeof(TA)} or {typeof(TB)}, but got typeof{typeof(T)}.");
-            }
-        }
-
-        public static implicit operator Maybe<TA, TB>(TA a)
-        {
-            return new Maybe<TA, TB>(a);
-        }
-        public static implicit operator Maybe<TA, TB>(TB b)
-        {
-            return new Maybe<TA, TB>(b);
-        }
-    }
     internal class SingleDeviceSaver
     {
-        private IDictionary<string, IDictionary<string, Maybe<Tensor, SaveSpec>>> _tensor_slice_dict;
-        public SingleDeviceSaver(IDictionary<string, IDictionary<string, Maybe<Tensor, SaveSpec>>> tensor_slice_dict)
+        private IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> _tensor_slice_dict;
+        public SingleDeviceSaver(IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> tensor_slice_dict)
         {
             _tensor_slice_dict = tensor_slice_dict;
         }
@@ -122,15 +30,15 @@ namespace Tensorflow.Checkpoint
         {
             _tensor_slice_dict = tensor_slice_dict.ToDictionary(
                 x => x.Key, x => x.Value.ToDictionary(
-                    y => y.Key, y => new Maybe<Tensor, SaveSpec>(y.Value)) 
-                as IDictionary<string, Maybe<Tensor, SaveSpec>>);
+                    y => y.Key, y => OneOf<Tensor, SaveSpec>.FromT0(y.Value)) 
+                as IDictionary<string, OneOf<Tensor, SaveSpec>>);
         }
         public SingleDeviceSaver(IDictionary<string, IDictionary<string, SaveSpec>> tensor_slice_dict)
         {
             _tensor_slice_dict = tensor_slice_dict.ToDictionary(
                 x => x.Key, x => x.Value.ToDictionary(
-                    y => y.Key, y => new Maybe<Tensor, SaveSpec>(y.Value))
-                as IDictionary<string, Maybe<Tensor, SaveSpec>>);
+                    y => y.Key, y => OneOf<Tensor, SaveSpec>.FromT1(y.Value))
+                as IDictionary<string, OneOf<Tensor, SaveSpec>>);
         }
         public Operation? save(Tensor file_prefix, CheckpointOptions? options = null)
         {
@@ -149,7 +57,7 @@ namespace Tensorflow.Checkpoint
                 {
                     var slice_spec = slice.Key;
                     var maybe_tensor = slice.Value;
-                    if(maybe_tensor.TryGet<SaveSpec>(out var spec))
+                    if(maybe_tensor.TryPickT1(out var spec, out var tensor))
                     {
                         var tensor_value = spec.tensor;
                         if (tensor_value is not null)
@@ -161,7 +69,6 @@ namespace Tensorflow.Checkpoint
                     }
                     else
                     {
-                        var tensor = maybe_tensor.GetValue<Tensor>();
                         tensor_names.Add(checkpoint_key);
                         tensors.Add(tensor);
                         slice_specs.Add(slice_spec);
@@ -193,7 +100,7 @@ namespace Tensorflow.Checkpoint
                     var slice_spec = slice.Key;
                     var maybe_tensor = slice.Value;
                     // TODO: deal with other types. Currently only `SaveSpec` is allowed.
-                    if(maybe_tensor.TryGet<SaveSpec>(out var spec))
+                    if(maybe_tensor.TryPickT1(out var spec, out var tensor))
                     {
                         tensor_dtypes.Add(spec.dtype);
                         slice_specs.Add(spec.slice_spec);
@@ -201,7 +108,6 @@ namespace Tensorflow.Checkpoint
                     }
                     else
                     {
-                        var tensor = maybe_tensor.GetValue<Tensor>();
                         tensor_dtypes.Add(tensor.dtype);
                         slice_specs.Add(slice_spec);
                         tensor_names.Add(checkpoint_key);
@@ -256,12 +162,12 @@ namespace Tensorflow.Checkpoint
         /// <param name="serialized_tensors"> A dictionary mapping `Trackable` to a tensor dict, which maps checkpoint_key -> (slice_spec ->) -> Tensor/SaveSpec. </param>
         /// <param name="registered_savers"></param>
         /// <param name="call_with_mapped_capture"></param>
-        public MultiDeviceSaver(IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>> serialized_tensors,
+        public MultiDeviceSaver(IDictionary<Trackable, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>> serialized_tensors,
             IDictionary<string, IDictionary<string, Trackable>>? registered_savers = null, bool call_with_mapped_capture = false)
         {
             _keys_to_restore_fn = new Dictionary<(string, string), RestoreFunc>();
             _restore_fn_to_keys = new Dictionary<RestoreFunc, IList<(string, string)>>();
-            Dictionary<string, IDictionary<string, IDictionary<string, Tensor>>>  tensors_by_device= new();
+            Dictionary<string, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>>  tensors_by_device= new();
             
             foreach(var pair in serialized_tensors)
             {
@@ -276,9 +182,9 @@ namespace Tensorflow.Checkpoint
                 {
                     restore_fn = new RestoreFunc(x =>
                     {
-                        if(x is IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>)
+                        if(x is IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>)
                         {
-                            return obj._restore_from_tensors(x as IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>);
+                            return obj._restore_from_tensors(x as IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>);
                         }
                         throw new TypeError($"Expected `IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>` as input, got{x.GetType()}.");
                     });
@@ -287,16 +193,7 @@ namespace Tensorflow.Checkpoint
                 foreach(var item in tensor_dict)
                 {
                     var checkpoint_key = item.Key;
-                    IDictionary<string, Tensor> spec_to_tensor;
-                    if(item.Value.TryGet<Tensor>(out var t))
-                    {
-                        spec_to_tensor = new Dictionary<string, Tensor>();
-                        spec_to_tensor[""] = t;
-                    }
-                    else
-                    {
-                        spec_to_tensor = item.Value.GetValue<IDictionary<string, Tensor>>();
-                    }
+                    var spec_to_tensor = item.Value;
 
                     foreach(var spec in spec_to_tensor)
                     {
@@ -311,12 +208,20 @@ namespace Tensorflow.Checkpoint
                         _keys_to_restore_fn[(checkpoint_key, slice_spec)] = restore_fn;
                         _restore_fn_to_keys.SetDefault(restore_fn, new List<(string, string)>()).Add((checkpoint_key, slice_spec));
 
-                        // skip the process of device name because lack of API.
-                        var host_device = tensor.Device;
-                        var internal_dict = tensors_by_device.SetDefault(host_device, new Dictionary<string, IDictionary<string, Tensor>>());
+                        string host_device;
+                        if (tensor.IsT0)
+                        {
+                            host_device = tensor.AsT0.Device;
+                        }
+                        else
+                        {
+                            host_device = tensor.AsT1.device;
+                        }
+                        host_device = saveable_object_util.set_cpu0(host_device);
+                        var internal_dict = tensors_by_device.SetDefault(host_device, new Dictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>());
                         if (!internal_dict.ContainsKey(checkpoint_key))
                         {
-                            internal_dict[checkpoint_key] = new Dictionary<string, Tensor>();
+                            internal_dict[checkpoint_key] = new Dictionary<string, OneOf<Tensor, SaveSpec>>();
                         }
                         internal_dict[checkpoint_key][slice_spec] = tensor;
                     }
@@ -412,7 +317,7 @@ namespace Tensorflow.Checkpoint
 
             IDictionary<string, Operation> restore_func()
             {
-                Dictionary<RestoreFunc, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>> restore_fn_inputs = new();
+                Dictionary<RestoreFunc, IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>> restore_fn_inputs = new();
                 Dictionary<RestoreFunc, int> restore_fn_input_count = _restore_fn_to_keys.ToDictionary(x => x.Key, x => x.Value.Count);
                 Dictionary<string, Operation> restore_ops = new();
 
@@ -433,29 +338,29 @@ namespace Tensorflow.Checkpoint
                                 var slice_spec = item.Key;
                                 var tensor = item.Value;
                                 var restore_fn = _keys_to_restore_fn[(checkpoint_key, slice_spec)];
-                                var internal_dict = restore_fn_inputs.SetDefault(restore_fn, new Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>());
+                                var internal_dict = restore_fn_inputs.SetDefault(restore_fn, new Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>());
                                 if (!string.IsNullOrEmpty(slice_spec))
                                 {
                                     if (!internal_dict.ContainsKey(checkpoint_key))
                                     {
                                         Dictionary<string, Tensor> dict = new();
                                         dict[slice_spec] = tensor;
-                                        internal_dict[checkpoint_key] = new Maybe<Tensor, IDictionary<string, Tensor>>(dict);
+                                        internal_dict[checkpoint_key] = OneOf<Tensor, IDictionary<string, Tensor>>.FromT1(dict);
                                     }
                                     else
                                     {
-                                        internal_dict[checkpoint_key].GetValue<IDictionary<string, Tensor>>()[slice_spec] = tensor;
+                                        internal_dict[checkpoint_key].AsT1[slice_spec] = tensor;
                                     }
                                 }
                                 else
                                 {
-                                    internal_dict[checkpoint_key] = new Maybe<Tensor, IDictionary<string, Tensor>>(tensor);
+                                    internal_dict[checkpoint_key] = OneOf<Tensor, IDictionary<string, Tensor>>.FromT0(tensor);
                                 }
                                 restore_fn_input_count[restore_fn]--;
 
                                 if (restore_fn_input_count[restore_fn] == 0)
                                 {
-                                    Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors = new();
+                                    Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> restored_tensors = new();
                                     foreach (var input in restore_fn_inputs[restore_fn])
                                     {
                                         restored_tensors[TrackableUtils.extract_local_name(input.Key)] = input.Value;
@@ -538,7 +443,7 @@ namespace Tensorflow.Checkpoint
 
         public static MultiDeviceSaver from_saveables(IEnumerable<MySaveableObject> saveables, IDictionary<string, IDictionary<string, Trackable>>? registered_savers = null, bool call_with_mapped_captures = false)
         {
-            Dictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>> serialized_tensors = new();
+            Dictionary<Trackable, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>> serialized_tensors = new();
             foreach (var saveable in saveables)
             {
                 var trackable = new SaveableCompatibilityConverter(saveable, new List<MySaveableObject>() { saveable });

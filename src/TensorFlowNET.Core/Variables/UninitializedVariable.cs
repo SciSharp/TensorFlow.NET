@@ -9,7 +9,7 @@ namespace Tensorflow.Variables
     /// <summary>
     /// A variable with no initializer.
     /// </summary>
-    public sealed class UninitializedVariable: BaseResourceVariable
+    public sealed class UninitializedVariable : BaseResourceVariable, IVariableV1
     {
         // TODO: complete the arg list.
         public UninitializedVariable(
@@ -19,10 +19,11 @@ namespace Tensorflow.Variables
             TF_DataType dtype = TF_DataType.DtInvalid,
             VariableAggregation aggregation = VariableAggregation.None,
             Shape shape = null,
-            Tensor extra_handle_data = null) 
+            Tensor extra_handle_data = null)
         {
             string unique_id = "";
             string handle_name = "";
+            Tensor created_handle = null;
             tf_with(ops.init_scope(), (x) =>
             {
                 _in_graph_mode = !tf.Context.executing_eagerly();
@@ -40,7 +41,7 @@ namespace Tensorflow.Variables
                         unique_id = $"{handle_name}-{ops.uid()}";
                         shared_name = null;
                     }
-                    var handle = resource_variable_ops.variable_handle_from_shape_and_dtype(
+                    created_handle = resource_variable_ops.variable_handle_from_shape_and_dtype(
                         shape, dtype, shared_name, name, _in_graph_mode, extra_handle_data);
                     // skip the assignment of `handle._parent_trackable` because of lack of API.
                     // skip the assignment of `handle._name` and `handle._unique_id` because of accessability.
@@ -49,10 +50,10 @@ namespace Tensorflow.Variables
                     {
                         tf_with(ops.name_scope("Read"), _ =>
                         {
-                            var value = tf_with(ops.device(handle.Device), _ =>
+                            var value = tf_with(ops.device(created_handle.Device), _ =>
                             {
-                                var result = gen_resource_variable_ops.read_variable_op(handle, dtype);
-                                // TODO(Rinne): _maybe_set_handle_data(dtype, handle, value)
+                                var result = gen_resource_variable_ops.read_variable_op(created_handle, dtype);
+                                resource_variable_ops._maybe_set_handle_data(dtype, created_handle, result);
                                 return result;
                             });
                             _graph_element = value;
@@ -65,9 +66,7 @@ namespace Tensorflow.Variables
                     }
                 });
             });
-            _shape = shape;
-            _dtype = dtype;
-            base.__init__(trainable, handle, unique_id: unique_id, handle_name: handle_name);
+            base.__init__(trainable, shape, dtype, created_handle, unique_id: unique_id, handle_name: handle_name);
         }
     }
 }

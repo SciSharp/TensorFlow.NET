@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Operations;
+
 namespace Tensorflow
 {
     public partial class tensorflow
@@ -79,5 +81,10 @@ namespace Tensorflow
                 num_split: num_split,
                 axis: axis,
                 name: name);
+
+        public Tensor ensure_shape(Tensor x, Shape shape, string name = null)
+        {
+            return gen_ops.ensure_shape(x, shape, name);
+        }
     }
 }

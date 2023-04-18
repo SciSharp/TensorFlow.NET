@@ -14,6 +14,7 @@ using Tensorflow.Variables;
 using Tensorflow.Functions;
 using Tensorflow.Training.Saving.SavedModel;
 using Tensorflow.Trackables;
+using OneOf;
 
 namespace Tensorflow
 {
@@ -35,6 +36,8 @@ namespace Tensorflow
         private Dictionary<int, (Trackable, Action<object, object, object>)> _loaded_nodes;
         private List<Trackable> _nodes;
         private Dictionary<int, Action<object, object, object>> _node_setters;
+        private Dictionary<string, ConcreteFunction> _concrete_functions;
+        private HashSet<string> _restored_concrete_functions;
         public Loader(SavedObjectGraph object_graph_proto, SavedModel saved_model_proto, string export_dir, 
             CheckpointOptions ckpt_options, LoadOptions save_options, IDictionary<string, (Trackable, Action<object, object, object>)> filters)
         {
@@ -43,7 +46,10 @@ namespace Tensorflow
             _operation_attributes = meta_graph.GraphDef.Node.ToDictionary(x => x.Name, x => x.Attr);
             _proto = object_graph_proto;
             _export_dir = export_dir;
-            // TODO: `this._concrete_functions` and `this._restored_concrete_functions`
+            // TODO(Rinne): This method is a bit slow (especially under debug mode), may need to be accelareted.
+            _concrete_functions = function_deserialization.load_function_def_library(
+                meta_graph.GraphDef.Library, _proto);
+            _restored_concrete_functions = new HashSet<string>();
             _checkpoint_options = ckpt_options;
             _save_options = save_options;
 
@@ -254,9 +260,9 @@ namespace Tensorflow
         /// </summary>
         /// <param name="proto"></param>
         /// <returns></returns>
-        private Dictionary<Maybe<string, int>, int> _get_node_dependencies(SavedObject proto)
+        private Dictionary<OneOf<string, int>, int> _get_node_dependencies(SavedObject proto)
         {
-            Dictionary<Maybe<string, int>, int> dependencies = new();
+            Dictionary<OneOf<string, int>, int> dependencies = new();
             foreach(var refer in proto.Dependencies)
             {
                 dependencies[refer.LocalName] = refer.NodeId;
@@ -313,11 +319,6 @@ namespace Tensorflow
             foreach(var (node_id, proto) in _iter_all_nodes())
             {
                 var node = get(node_id);
-                if(node is null)
-                {
-                    // skip it because now we skip the restoration of `Function` and `ConcreteFunction`.
-                    continue;
-                }
                 if(proto.SaveableObjects.Keys.Count == 1 && proto.SaveableObjects.First().Key == TrackableUtils.SERIALIZE_TO_TENSORS_NAME)
                 {
                     // Restore Trackable serialize- and restore-from-tensor functions.
@@ -381,7 +382,7 @@ namespace Tensorflow
                     var optimizer_object = nodes[optimizer_node_id];
                     var optimizer_variable = nodes[slot_variable_proto.OriginalVariableNodeId];
 
-                    // TODO: implement it.
+                    // TODO(Rinne): implement it.
                     throw new NotImplementedException("The model loading of SavedModel still has some incompleted part." +
                         " Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
                 }
@@ -466,9 +467,17 @@ namespace Tensorflow
             }
         }
 
-        private void _setup_function_captures()
+        private void _setup_function_captures(string concrete_function_name, IDictionary<OneOf<string, int>, Trackable> nodes)
         {
-            // TODO: implement it with concrete functions.
+            if (_restored_concrete_functions.Contains(concrete_function_name))
+            {
+                return;
+            }
+            _restored_concrete_functions.Add(concrete_function_name);
+            var concrete_function = _concrete_functions[concrete_function_name];
+            var proto = _proto.ConcreteFunctions[concrete_function_name];
+            var inputs = proto.BoundInputs.Select(x => nodes[x]);
+            function_saved_model_utils.restore_captures(concrete_function, inputs);
         }
 
         private void _setup_remaining_functions()
@@ -498,13 +507,8 @@ namespace Tensorflow
 
             foreach(var refer in proto.Children)
             {
-                if(obj is null)
-                {
-                    // skip it because now we skip the restoration of `Function` and `ConcreteFunction`.
-                    continue;
-                }
                 setter.Invoke(obj, refer.LocalName, _nodes[refer.NodeId]);
-                // skip the process of "__call__"
+                // TODO(Rinne): deal with "__call__"
             }
         }
 
@@ -533,8 +537,7 @@ namespace Tensorflow
         private (Trackable, Action<object, object, object>) _recreate(SavedObject proto, int node_id, IDictionary<int, Trackable> nodes)
         {
             // skip the registered classes.
-
-            Dictionary<Maybe<string, int>, Trackable> dependencies = new();
+            Dictionary<OneOf<string, int>, Trackable> dependencies = new();
             foreach(var item in _get_node_dependencies(proto))
             {
                 dependencies[item.Key] = nodes[item.Value];
@@ -555,13 +558,13 @@ namespace Tensorflow
         /// <param name="proto"></param>
         /// <param name="node_id"></param>
         /// <param name="dependencies"></param>
-        private (Trackable, Action<object, object, object>) _recreate_default(SavedObject proto, int node_id, IDictionary<Maybe<string, int>, Trackable> dependencies)
+        private (Trackable, Action<object, object, object>) _recreate_default(SavedObject proto, int node_id, IDictionary<OneOf<string, int>, Trackable> dependencies)
         {
             return proto.KindCase switch
             {
                 SavedObject.KindOneofCase.UserObject => _recreate_user_object(proto.UserObject, node_id),
                 SavedObject.KindOneofCase.Function => _recreate_function(proto.Function, null),
-                SavedObject.KindOneofCase.BareConcreteFunction => throw new NotImplementedException(),
+                SavedObject.KindOneofCase.BareConcreteFunction => _recreate_bare_concrete_function(proto.BareConcreteFunction, dependencies),
                 SavedObject.KindOneofCase.Variable => _recreate_variable(proto.Variable),
                 SavedObject.KindOneofCase.CapturedTensor => throw new NotImplementedException(),
                 _ => throw new NotImplementedException()
@@ -571,13 +574,12 @@ namespace Tensorflow
         private (Trackable, Action<object, object, object>) _recreate_user_object(SavedUserObject? proto, int node_id)
         {
             // skip the check of proto identifier because of lack of property.
-
-            var looked_up = RevivedTypes.deserialize(proto);
-            if(looked_up is null)
+            var (trackable, setter) = RevivedTypes.deserialize(proto);
+            if(trackable is null)
             {
                 return _recreate_base_user_object(proto, node_id);
             }
-            return (looked_up.Item1, looked_up.Item2);
+            return (trackable, setter);
         }
 
         private (Trackable, Action<object, object, object>) _recreate_base_user_object(SavedUserObject? proto = null, int? node_id = null)
@@ -623,35 +625,43 @@ namespace Tensorflow
             }
         }
 
-        private (ConcreteFunction, Action<object, object, object>) _recreate_function(SavedFunction proto,
-            Dictionary<Maybe<string, int>, Trackable> dependencies)
+        private (Function, Action<object, object, object>) _recreate_function(SavedFunction proto,
+            Dictionary<OneOf<string, int>, Trackable> dependencies)
         {
-            var fn = function_deserialization.recreate_function(proto, null);
+            var fn = function_deserialization.recreate_function(proto, _concrete_functions);
             foreach (var name in proto.ConcreteFunctions)
             {
-                _setup_function_captures();
+                _setup_function_captures(name, dependencies);
             }
             return (fn, setattr);
         }
 
         private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
-            Dictionary<Maybe<string, int>, Trackable> dependencies)
+            IDictionary<OneOf<string, int>, Trackable> dependencies)
         {
-            throw new NotImplementedException();
-            //var fn = function_deserialization.setup_bare_concrete_function(proto, )
+            var fn = function_deserialization.setup_bare_concrete_function(proto, _concrete_functions);
+            _setup_function_captures(proto.ConcreteFunctionName, dependencies);
+            return (fn, setattr);
         }
 
         // TODO: remove this to a common class.
         public static Action<object, object, object> setattr = (x, y, z) =>
         {
             Debug.Assert(y is string);
-            var properties = x.GetType().GetProperties();
-            foreach(var p in properties)
+            if(x is Trackable trackable)
             {
-                if((string)y == p.Name)
+                trackable.SetAttr(y as string, z);
+            }
+            else
+            {
+                var properties = x.GetType().GetProperties();
+                foreach (var p in properties)
                 {
-                    p.SetValue(x, z);
-                    return;
+                    if ((string)y == p.Name)
+                    {
+                        p.SetValue(x, z);
+                        return;
+                    }
                 }
             }
             // TODO(Rinne): check if the property has been set successfully.

@@ -11,7 +11,7 @@ using Tensorflow.Keras.Optimizers;
 using ThirdParty.Tensorflow.Python.Keras.Protobuf;
 using static Tensorflow.Binding;
 using Tensorflow.Training;
-
+using System.Diagnostics;
 
 namespace Tensorflow.Keras.Saving.SavedModel;
 
@@ -124,23 +124,28 @@ public partial class KerasSavedModelUtils
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        }));
+        }).ToArray());
         var trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.TrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        }));
+        }).ToArray());
         var non_trainable_variables = TrackableDataStructure.wrap_or_unwrap(layer.NonTrainableVariables.Select(x =>
         {
             if (x is ResourceVariable or RefVariable) return (Trackable)x;
             else throw new TypeError($"The type{x.GetType()} is not supported for the wrapping of layer.");
-        }));
+        }).ToArray());
+        var layers = TrackableDataStructure.wrap_or_unwrap(list_all_layers(layer).Select(x => x.GetTrackable()).ToArray());
 
         Dictionary<string, Trackable> res = new();
-        res["variables"] = variables;
-        res["trainable_variables"] = trainable_variables;
-        res["non_trainable_variables"] = non_trainable_variables;
-        res["layers"] = TrackableDataStructure.wrap_or_unwrap(KerasSavedModelUtils.list_all_layers(layer).Select(x => x.GetTrackable()));
+        Debug.Assert(variables is Trackable);
+        Debug.Assert(trainable_variables is Trackable);
+        Debug.Assert(non_trainable_variables is Trackable);
+        Debug.Assert(layers is Trackable);
+        res["variables"] = variables as Trackable;
+        res["trainable_variables"] = trainable_variables as Trackable;
+        res["non_trainable_variables"] = non_trainable_variables as Trackable;
+        res["layers"] = layers as Trackable;
 
         return res;
     }
@@ -153,6 +158,8 @@ public partial class KerasSavedModelUtils
     /// <returns></returns>
     public static IDictionary<string, Trackable> wrap_layer_functions(Layer layer, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>> serialization_cache)
     {
+
+        // high priority
         // TODO: deal with type `RevivedLayer` and `Sequential`.
 
         // skip the process because of lack of APIs of `Layer`.

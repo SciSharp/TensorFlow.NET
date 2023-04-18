@@ -118,7 +118,7 @@ namespace Tensorflow
         /// <param name="compute_device">(Optional.) If True, device functions will be executed
         /// to compute the device property of the Operation.</param>
         /// <returns>An `Operation` object.</returns>
-        public Operation _create_op_from_tf_operation(IntPtr c_op, bool compute_device = true)
+        public Operation _create_op_from_tf_operation(IntPtr c_op, bool compute_device = true, OperationDescription desc = null)
         {
             var ret = new Operation(c_op, this);
             _add_op(ret);

@@ -60,7 +60,15 @@ namespace Tensorflow.Keras
 
         public void track_variable(IVariableV1 v)
         {
+            if (tf.Context.executing_eagerly())
+            {
+                return;
+            }
             var graph = v.Graph;
+            if(graph is null)
+            {
+                graph = get_graph();
+            }
             _GRAPH_VARIABLES[graph.graph_key] = v;
         }
 

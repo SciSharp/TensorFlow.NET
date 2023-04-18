@@ -87,6 +87,7 @@ namespace Tensorflow
         public object Tag { get; set; }
         protected new SafeTensorHandle _handle;
         public virtual SafeTensorHandle Handle => _handle;
+        public Tensorflow.CppShapeInferenceResult.Types.HandleData HandleData { get; internal set; }
 
         protected SafeEagerTensorHandle _eagerTensorHandle;
         /// <summary>
@@ -134,10 +135,10 @@ namespace Tensorflow
 
         protected virtual void SetShapeInternal(Shape value)
         {
-            if (value == null)
-                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), null, -1, tf.Status);
+            if (value is null || value.ndim == 0 || value.ndim == -1)
+                c_api.TF_GraphSetTensorShape(op.graph.c_graph, _as_tf_output(), null, -1, tf.Status);
             else
-                c_api.TF_GraphSetTensorShape(graph, _as_tf_output(), value.dims, value.ndim, tf.Status);
+                c_api.TF_GraphSetTensorShape(op.graph.c_graph, _as_tf_output(), value.dims, value.ndim, tf.Status);
         }
 
         public int[] _shape_tuple()
@@ -176,7 +177,9 @@ namespace Tensorflow
                 if (_handle == null)
                 {
                     var output = _as_tf_output();
-                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, tf.Status);
+                    Status status = new();
+                    int ndim = c_api.TF_GraphGetTensorNumDims(op.graph, output, status);
+                    status.Check(true);
                     return ndim;
                 }
 
@@ -198,7 +201,7 @@ namespace Tensorflow
         public TF_Output _as_tf_output()
         {
             if (!_tf_output.HasValue)
-                _tf_output = new TF_Output(op, value_index);
+                _tf_output = new TF_Output(op, _value_index);
 
             return _tf_output.Value;
         }

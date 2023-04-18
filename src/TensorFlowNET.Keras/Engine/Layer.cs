@@ -21,10 +21,14 @@ using System.Linq;
 using System.Threading;
 using Tensorflow.Eager;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using Tensorflow.NumPy;
 using Tensorflow.Train;
+using Tensorflow.Training;
+using Tensorflow.Training.Saving.SavedModel;
+using Tensorflow.Util;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
@@ -40,14 +44,24 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// Arguments initialize layer.
         /// </summary>
-        LayerArgs args;
+        internal LayerArgs args;
 
         /// <summary>
         /// Indicates whether `build` needs to be called upon layer call, to create
         /// the layer's weights.
         /// </summary>
         protected bool built;
-        public bool Built => built;
+        public bool Built
+        {
+            get
+            {
+                return built;
+            }
+            internal set
+            {
+                built = value;
+            }
+        }
         public bool Trainable => args.Trainable;
         public TF_DataType DType => args.DType;
         public bool AutoCast => args.Autocast;
@@ -147,7 +161,7 @@ namespace Tensorflow.Keras.Engine
         List<INode> outboundNodes;
         public List<INode> OutboundNodes => outboundNodes;
 
-        public JObject SerializedAttributes { get; set; }
+        public Dictionary<string, object> SerializedAttributes { get; set; }
 
         ThreadLocal<CallContext> callContext = new ThreadLocal<CallContext>();
         public CallContext CallContext => callContext.Value;
@@ -175,6 +189,11 @@ namespace Tensorflow.Keras.Engine
             }
         }
         protected List<ILayer> _self_tracked_trackables;
+
+        /// <summary>
+        /// If this value is set, the behavior of layer call will be changed to directly calling this function.
+        /// </summary>
+        public Func<Tensors, Tensors>? ReplacedCall { get; set; } = null;
 
         public Layer(LayerArgs args)
         {
@@ -256,6 +275,10 @@ namespace Tensorflow.Keras.Engine
         /// <returns></returns>
         protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
         {
+            if(ReplacedCall is not null)
+            {
+                return ReplacedCall(inputs);
+            }
             return inputs;
         }
 
@@ -348,6 +371,60 @@ namespace Tensorflow.Keras.Engine
         public virtual void adapt(Tensor data, int? batch_size = null, int? steps = null)
         {
             
+        }
+
+        public override void SetAttr(string name, object value)
+        {
+            // TODO(Rinne): deal with "_self_setattr_tracking".
+
+            value = TrackableDataStructure.sticky_attribute_assignment(this, name, value);
+            
+            foreach(var val in nest.flatten(value))
+            {
+                if(val is Metric)
+                {
+                    // TODO(Rinne): deal with metrics.
+                }
+            }
+
+            // TODO(Rinne): deal with "_auto_track_sub_layers".
+
+            foreach(var val in nest.flatten(value))
+            {
+                if(val is not IVariableV1 variable)
+                {
+                    continue;
+                }
+                if (variable.Trainable)
+                {
+                    if (_trainable_weights.Contains(variable))
+                    {
+                        continue;
+                    }
+                    _trainable_weights.Add(variable);
+                }
+                else
+                {
+                    if (_non_trainable_weights.Contains(variable))
+                    {
+                        continue;
+                    }
+                    _non_trainable_weights.Add(variable);
+                }
+                keras.backend.track_variable(variable);
+            }
+
+            // Directly use the implementation of `Trackable`.
+            var t = this.GetType();
+            var field_info = t.GetField(name);
+            if (field_info is not null)
+            {
+                field_info.SetValue(this, value);
+            }
+            else
+            {
+                CustomizedFields[name] = value;
+            }
         }
     }
 }

@@ -161,7 +161,7 @@ public static class CheckPointUtils
 
     internal static IEnumerable<Trackable> _objects_with_attributes(IEnumerable<Trackable> full_list)
     {
-        return full_list.TakeWhile(x =>
+        return full_list.Where(x =>
         {
             var saveables = x.gather_saveables_for_checkpoint();
             return saveables is not null && saveables.Count > 0;

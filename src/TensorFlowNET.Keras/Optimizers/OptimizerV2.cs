@@ -42,7 +42,7 @@ namespace Tensorflow.Keras.Optimizers
             _set_hyper("decay", args.InitialDecay);
         }
 
-        public void apply_gradients((Tensor, ResourceVariable) grads_and_vars,
+        public void apply_gradients((Tensor, IVariableV1) grads_and_vars,
             string name = null,
             bool experimental_aggregate_gradients = true)
             => apply_gradients(new[] { grads_and_vars },
@@ -55,7 +55,7 @@ namespace Tensorflow.Keras.Optimizers
         /// <param name="grads_and_vars"></param>
         /// <param name="name"></param>
         /// <param name="experimental_aggregate_gradients"></param>
-        public void apply_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars,
+        public void apply_gradients(IEnumerable<(Tensor, IVariableV1)> grads_and_vars,
             string name = null,
             bool experimental_aggregate_gradients = true)
         {
@@ -78,7 +78,7 @@ namespace Tensorflow.Keras.Optimizers
             });
         }
 
-        void apply_grad_to_update_var(ResourceVariable var, Tensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state)
+        void apply_grad_to_update_var(IVariableV1 var, Tensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state)
         {
             _resource_apply_dense(var, grad, apply_state);
             // if var.constraint is not None:
@@ -93,7 +93,7 @@ namespace Tensorflow.Keras.Optimizers
             throw new NotImplementedException("_resource_apply_dense");
         }
 
-        void _distributed_apply(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars,
+        void _distributed_apply(IEnumerable<(Tensor, IVariableV1)> grads_and_vars,
             string name,
             Dictionary<DeviceDType, Dictionary<string, Tensor>> _apply_state)
         {

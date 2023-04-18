@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {

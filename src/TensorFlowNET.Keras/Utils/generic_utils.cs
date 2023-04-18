@@ -23,6 +23,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
@@ -60,6 +61,10 @@ namespace Tensorflow.Keras.Utils
         public static Layer deserialize_keras_object(string class_name, JToken config)
         {
             var argType = Assembly.Load("Tensorflow.Binding").GetType($"Tensorflow.Keras.ArgsDefinition.{class_name}Args");
+            if(argType is null)
+            {
+                return null;
+            }
             var deserializationMethod = typeof(JToken).GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Single(x => x.Name == "ToObject" && x.IsGenericMethodDefinition && x.GetParameters().Count() == 0);
             var deserializationGenericMethod = deserializationMethod.MakeGenericMethod(argType);
@@ -72,6 +77,10 @@ namespace Tensorflow.Keras.Utils
         public static Layer deserialize_keras_object(string class_name, LayerArgs args)
         {
             var layer = Assembly.Load("Tensorflow.Keras").CreateInstance($"Tensorflow.Keras.Layers.{class_name}", true, BindingFlags.Default, null, new object[] { args }, null, null);
+            if (layer is null)
+            {
+                return null;
+            }
             Debug.Assert(layer is Layer);
             return layer as Layer;
         }

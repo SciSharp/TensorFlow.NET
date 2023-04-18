@@ -14,10 +14,14 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Framework;
+using Tensorflow.Functions;
+using Tensorflow.Operations;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
 
@@ -25,6 +29,74 @@ namespace Tensorflow
 {
     public class functional_ops
     {
+        public static Tensor[] partitioned_call(Tensors args, EagerDefinedFunction f, DataType[] tout,
+            bool executing_eagerly, string config, string executor_type)
+        {
+            if (tout is null)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (config is null)
+            {
+                config = function_utils.get_disabled_rewriter_config().ToStringUtf8();
+            }
+
+            if (executor_type is null)
+            {
+                executor_type = "";
+            }
+
+            if (executing_eagerly)
+            {
+                // TODO(Rinne): implement it.
+                
+                throw new NotImplementedException();
+            }
+
+            var converted_args = args.Select(x => ops.convert_to_tensor(x)).ToArray();
+            AttrValue tin_attr = new()
+            {
+                List = new AttrValue.Types.ListValue()
+            };
+            tin_attr.List.Type.AddRange(args.Select(x => x.dtype.as_datatype_enum()));
+            AttrValue tout_attr = new()
+            {
+                List = new AttrValue.Types.ListValue()
+            };
+            tout_attr.List.Type.AddRange(tout);
+            AttrValue func_attr = new()
+            {
+                Func = new NameAttrList()
+            };
+            func_attr.Func.Name = f.Name;
+            AttrValue executor_type_attr = new AttrValue()
+            {
+                S = tf.compat.as_bytes(executor_type)
+            };
+            AttrValue config_proto = new AttrValue()
+            {
+                S = ByteString.CopyFromUtf8(executor_type)
+            };
+
+            var graph = ops.get_default_graph();
+            f.AddToGraph(graph);
+            // TODO(Rinne): complete it with `f.stateful`
+            var op_name = "PartitionedCall";
+            string xla_compile_attr = "_XlaMustCompile";
+            Dictionary<string, AttrValue> op_attrs = new();
+            op_attrs["Tin"] = tin_attr;
+            op_attrs["Tout"] = tout_attr;
+            op_attrs["f"] = func_attr;
+            op_attrs["config_proto"] = config_proto;
+            op_attrs["executor_type"] = executor_type_attr;
+            // TODO(Rinne): deal with `f.definition`.
+            var op = graph.create_op(op_name, args, tout.Select(x => x.as_tf_dtype()).ToArray(), 
+                name: op_name, attrs: op_attrs);
+            var outputs = op.outputs;
+            // TODO(Rinne): deal with `f.graph`.
+            return outputs;
+        }
         public static Tensor scan(
             Func<Tensor, Tensor, Tensor> fn,
             Tensor elems,

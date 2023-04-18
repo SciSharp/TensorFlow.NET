@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -29,7 +30,7 @@ namespace Tensorflow.Gradients
             _created_eagerly = tf.Context.executing_eagerly();
             tensor_tape_ = new TensorTape();
             op_tape_ = new OpTape();
-            tensor_usage_ = new UnorderedMap<Tensor, long>();
+            tensor_usage_ = new UnorderedMap<long, long>();
             if(_created_eagerly)
                 tf.Context.start_step();
             // nesting_id = ++tape_nesting_id_counter;
@@ -42,29 +43,28 @@ namespace Tensorflow.Gradients
         public void Watch(Tensor x)
         {
             tf.Logger.Debug($"Watch tensor id={x.Id}, name={x.name}");
-            tensor_tape_.emplace(x, -1);
+            tensor_tape_.emplace(x.Id, -1);
         }
 
-        public bool ShouldRecord(Tensor[] tensors)
+        public bool ShouldRecord(long[] tensor_ids, TF_DataType[] tensor_dtypes)
         {
-            var dtypes = tensors.Select(x => x.dtype).ToArray();
-            for (int i = 0; i < tensors.Length; ++i)
+            Debug.Assert(tensor_ids.Length == tensor_dtypes.Length);
+            for (int i = 0; i < tensor_ids.Length; ++i)
             {
-                if (tensor_tape_.find(tensors[i]))
+                if (tensor_tape_.find(tensor_ids[i]) && IsDtypeTrainable(tensor_dtypes[i]))
                 {
-                    if (IsDtypeTrainable(dtypes[i]))
-                        return true;
+                    return true;
                 }
             }
             return false;
         }
 
-        public void VariableAccessed(ResourceVariable variable)
+        public void VariableAccessed(IVariableV1 variable)
         {
             Watch(variable.Handle);
         }
 
-        public ResourceVariable[] WatchedVariables()
+        public IVariableV1[] WatchedVariables()
         {
             return null;
         }

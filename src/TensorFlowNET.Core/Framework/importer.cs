@@ -17,6 +17,7 @@
 using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using static Tensorflow.Binding;
 using static Tensorflow.OpDef.Types;
@@ -25,9 +26,14 @@ namespace Tensorflow
 {
     public class importer
     {
+        public static ITensorOrOperation[] import_graph_def_for_function(GraphDef graph_def, string name = null)
+        {
+            return import_graph_def(graph_def, validate_colocation_constraints: false, name: name);
+        }
         public static ITensorOrOperation[] import_graph_def(GraphDef graph_def,
             Dictionary<string, Tensor> input_map = null,
             string[] return_elements = null,
+            bool validate_colocation_constraints = true,
             string name = null,
             OpList producer_op_list = null)
         {
@@ -60,7 +66,7 @@ namespace Tensorflow
             var scoped_options = c_api_util.ScopedTFImportGraphDefOptions();
             var status = new Status();
             
-            _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements);
+            _PopulateTFImportGraphDefOptions(scoped_options, prefix, input_map, return_elements, validate_colocation_constraints );
             // need to create a class ImportGraphDefWithResults with IDisposal
             results = new TF_ImportGraphDefResults(c_api.TF_GraphImportGraphDefWithResults(graph, buffer, scoped_options, status));
             status.Check(true);
@@ -107,21 +113,36 @@ namespace Tensorflow
             foreach (var new_op in graph._add_new_tf_operations())
             {
                 var original_device = new_op.Device;
+                new_op._set_device(original_device);
             }
         }
 
         public static void _PopulateTFImportGraphDefOptions(ImportGraphDefOptions options,
             string prefix,
             Dictionary<string, Tensor> input_map,
-            string[] return_elements)
+            string[] return_elements, 
+            bool validate_colocation_constraints)
         {
             c_api.TF_ImportGraphDefOptionsSetPrefix(options, prefix);
-            c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options, (char)1);
+            c_api.TF_ImportGraphDefOptionsSetUniquifyNames(options.Options, true);
 
             foreach (var input in input_map)
             {
-                var (src_name, src_index) = _ParseTensorName(input.Key);
-                c_api.TF_ImportGraphDefOptionsAddInputMapping(options, src_name, src_index, input.Value._as_tf_output());
+                var input_src = tf.compat.as_str(input.Key);
+                var input_dst = input.Value;
+                if (input_src.StartsWith("^"))
+                {
+                    var src_name = tf.compat.as_str(input_src.Substring(1));
+                    var dst_op = input_dst._as_tf_output().oper;
+                    c_api.TF_ImportGraphDefOptionsRemapControlDependency(options.Options, src_name, dst_op);
+                }
+                else
+                {
+                    var (src_name, src_index) = _ParseTensorName(input.Key);
+                    src_name = tf.compat.as_str(src_name);
+                    var dst_output = input_dst._as_tf_output();
+                    c_api.TF_ImportGraphDefOptionsAddInputMapping(options.Options, src_name, src_index, dst_output);
+                }
             }
 
             if (return_elements == null)
@@ -132,15 +153,16 @@ namespace Tensorflow
                 if (name.Contains(":"))
                 {
                     var (op_name, index) = _ParseTensorName(name);
-                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options, op_name, index);
+                    op_name = tf.compat.as_str(op_name);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOutput(options.Options, op_name, index);
                 }
                 else
                 {
-                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options, name);
+                    c_api.TF_ImportGraphDefOptionsAddReturnOperation(options.Options, tf.compat.as_str(name));
                 }
             }
 
-            // c_api.TF_ImportGraphDefOptionsSetValidateColocationConstraints(options, validate_colocation_constraints);
+            c_api.TF_ImportGraphDefOptionsSetValidateColocationConstraints(options.Options, validate_colocation_constraints);
         }
 
         private static (string, int) _ParseTensorName(string tensor_name)
@@ -169,6 +191,14 @@ namespace Tensorflow
                 var op_def = op_dict[node.Op];
                 _SetDefaultAttrValues(node, op_def);
             }
+
+            return graph_def;
+        }
+
+        private static GraphDef _ProcessGraphDefParam(GraphDef graph_def)
+        {
+            var old_graph_def = graph_def;
+            graph_def = new GraphDef(old_graph_def);
 
             return graph_def;
         }
@@ -234,6 +264,35 @@ namespace Tensorflow
                             if (attr_def != null && attr_def.DefaultValue != null &&
                                     node.Attr[key.Key] == attr_def.DefaultValue)
                                 node.Attr[key.Key].ClearValue();
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void _RemoveDefaultAttrs(OpList producer_op_list, GraphDef graph_def)
+        {
+            var producer_op_dict = producer_op_list.Op.ToDictionary(x => x.Name, x => x);
+
+            foreach (var node in graph_def.Node)
+            {
+                // Remove any default attr values that aren't in op_def.
+                if (producer_op_dict.ContainsKey(node.Op))
+                {
+                    var op_def = op_def_registry.GetOpDef(node.Op);
+                    if(op_def is null)
+                    {
+                        continue;
+                    }
+                    var producer_op_def = producer_op_dict[node.Op];
+                    foreach (var key in node.Attr.Keys)
+                    {
+                        if (_FindAttrInOpDef(key, op_def) is null)
+                        {
+                            var attr_def = _FindAttrInOpDef(key, producer_op_def);
+                            if (attr_def != null && attr_def.DefaultValue != null &&
+                                    node.Attr[key] == attr_def.DefaultValue)
+                                node.Attr[key].ClearValue();
                         }
                     }
                 }

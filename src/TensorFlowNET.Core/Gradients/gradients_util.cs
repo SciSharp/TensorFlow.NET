@@ -14,10 +14,15 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Tensorflow.Functions;
+using Tensorflow.Gradients;
 using Tensorflow.Graphs;
+using Tensorflow.Operations;
 using Tensorflow.Operations.ControlFlows;
 using static Tensorflow.Binding;
 
@@ -25,6 +30,11 @@ namespace Tensorflow
 {
     public class gradients_util
     {
+        // Represents the output of TFE_Py_TapeSetPossibleGradientTypes. Real enums are
+        // unfortunately too slow to use here.
+        public static int POSSIBLE_GRADIENT_TYPES_NONE = 0;
+        public static int POSSIBLE_GRADIENT_TYPES_FIRST_ORDER = 1;
+        public static int POSSIBLE_GRADIENT_TYPES_HIGHER_ORDER = 2;
         public static Tensor[] _GradientsHelper(Tensor[] ys,
             Tensor[] xs,
             Tensor[] grad_ys = null,
@@ -143,7 +153,7 @@ namespace Tensorflow
                             Tensor[] in_grads = null;
                             Func<Operation, Tensor[], Tensor[]> grad_fn = null;
                             var is_partitioned_call = _IsPartitionedCall(op);
-                            var is_func_call = false;
+                            var is_func_call = src_graph.IsFunction(op.type) || is_partitioned_call;
                             var has_out_grads = out_grads.Exists(x => x != null);
                             if (has_out_grads && !stop_ops.Contains(op))
                             {
@@ -157,14 +167,41 @@ namespace Tensorflow
                                 {
                                     if (is_func_call)
                                     {
+                                        EagerDefinedFunction func_call = null;
                                         if (is_partitioned_call)
                                         {
-
+                                            var func_attr = op.get_attr("f");
+                                            Debug.Assert(func_attr is NameAttrList);
+                                            var func_name = ((NameAttrList)func_attr).Name;
+                                            func_call = src_graph._get_function(func_name);
+                                            if(func_call is null && src_graph.OuterGraph is not null)
+                                            {
+                                                var graph = src_graph.OuterGraph;
+                                                while(graph is not null)
+                                                {
+                                                    func_call = graph._get_function(func_name);
+                                                    if(func_call is not null)
+                                                    {
+                                                        break;
+                                                    }
+                                                    if(graph.OuterGraph is not null)
+                                                    {
+                                                        graph = graph.OuterGraph;
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
                                         }
                                         else
                                         {
-
+                                            func_call = src_graph._get_function(op.type);
                                         }
+                                        // skip the following codes:
+                                        // `func_call = getattr(op, "__defun", func_call)`
+                                        grad_fn = func_call.csharp_grad_func;
                                     }
                                     else
                                     {
@@ -208,6 +245,8 @@ namespace Tensorflow
                                     }
                                     else
                                     {
+                                        in_grads = _MaybeCompile(grad_scope, op, out_grads.Where(x => x != null).Select(x => x[0]).ToArray(),
+                                            null, (x, y) => _SymGrad(x, y));
                                         throw new NotImplementedException("lambda: _SymGrad(op, out_grads)");
                                     }
                                     _VerifyGeneratedGradients(in_grads, op);
@@ -663,6 +702,11 @@ namespace Tensorflow
                               dtypes.resource, dtypes.variant}.Contains(dtype);
         }
 
+        public static int PossibleTapeGradientTypes(Tensor[] tensors)
+        {
+            return tf.Runner.TFE_TapeSetPossibleGradientTypes(tensors);
+        }
+
         /// <summary>
         /// Return true if op has real gradient.
         /// </summary>
@@ -683,7 +727,7 @@ namespace Tensorflow
 
         private static Tensor[] _MaybeCompile(string scope, Operation op, Tensor[] out_grads, Action func, Func<Operation, Tensor[], Tensor[]> grad_fn)
         {
-            scope = scope.EndsWith("/") ? scope.Substring(0, scope.Length - 1) : scope;
+            // scope = scope.TrimEnd('/').Replace('/', '_');
             return grad_fn(op, out_grads);
         }
 
@@ -695,6 +739,29 @@ namespace Tensorflow
             if (grads.Count() != op.inputs._inputs.Count())
                 throw new ValueError($"Num gradients {grads.Length} generated for op {op.node_def} do not match num " +
                     $"inputs {op.inputs._inputs.Count()}");
+        }
+
+        private static Tensor[] _SymGrad(Operation op, Tensor[] out_grads)
+        {
+            var f_in = ((Tensor[])op.inputs).Concat(out_grads).ToArray();
+            var f_types = ((Tensor[])op.inputs).Select(x => default_gradient.get_zeros_dtype(x)).ToArray();
+            NameAttrList f = new();
+            if (_IsPartitionedCall(op))
+            {
+                var func_attr = op.get_attr("f");
+                Debug.Assert(func_attr is NameAttrList);
+                f.Name = ((NameAttrList)func_attr).Name;
+            }
+            else
+            {
+                f.Name = op.type;
+            }
+            foreach(var k in op.node_def.Attr.Keys)
+            {
+                f.Attr[k] = AttrValue.Parser.ParseFrom(op.node_def.Attr[k].ToByteArray());
+            }
+            var in_grads = gen_functional_ops.symbolic_gradient(f_in, f_types, f);
+            return in_grads;
         }
     }
 }

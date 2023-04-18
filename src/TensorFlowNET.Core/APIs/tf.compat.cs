@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
 using System.Text;
 
 namespace Tensorflow
@@ -44,6 +45,23 @@ namespace Tensorflow
             internal string as_str(byte[] bytes_or_text, Encoding? encoding = null)
             {
                 return as_text(bytes_or_text, encoding);
+            }
+
+            public ByteString as_bytes(ByteString bytes, Encoding encoding = null)
+            {
+                return bytes;
+            }
+            public ByteString as_bytes(byte[] bytes, Encoding encoding = null)
+            {
+                return ByteString.CopyFrom(bytes);
+            }
+            public ByteString as_bytes(string text, Encoding encoding = null)
+            {
+                if(encoding is null)
+                {
+                    encoding = Encoding.UTF8;
+                }
+                return ByteString.CopyFrom(encoding.GetBytes(text));
             }
         }
 

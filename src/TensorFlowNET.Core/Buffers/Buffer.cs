@@ -107,6 +107,12 @@ namespace Tensorflow
             }
         }
 
+        public void Release()
+        {
+            _handle.Dispose();
+            _handle = null;
+        }
+
         public override string ToString()
             => $"0x{_handle.DangerousGetHandle():x16}";
 

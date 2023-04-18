@@ -56,7 +56,8 @@ namespace Tensorflow.Keras.Saving.SavedModel
             }
             else
             {
-                throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
+                throw new NotImplementedException("SavedModel saved prior to TF 2.5 detected when loading Keras model, please" +
+                    " use higher version or submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues. to let us know you need it.");
             }
 
             if (metadata.Nodes is null || metadata.Nodes.Count == 0)
