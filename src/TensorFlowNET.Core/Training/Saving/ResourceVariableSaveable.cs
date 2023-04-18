@@ -46,14 +46,18 @@ namespace Tensorflow
             {
                 return () =>
                 {
-                    tf.device(v.Device);
-                    if (tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                    return tf_with(ops.device(v.Device), _ =>
                     {
-                        return null;
-                    }
-                    var x = v.read_value_no_copy();
-                    tf.device("/device:CPU:0");
-                    return array_ops.identity(x);
+                        if (tf.Context.executing_eagerly() && !((bool)v.is_initialized().numpy()))
+                        {
+                            return null;
+                        }
+                        var x = v.read_value_no_copy();
+                        return tf_with(ops.device("/device:CPU:0"), _ =>
+                        {
+                            return array_ops.identity(x);
+                        });
+                    });
                 };
             }
 
@@ -69,10 +73,12 @@ namespace Tensorflow
         public override Operation restore(Tensor[] restored_tensors, Shape[] restored_shapes = null)
         {
             var restored_tensor = restored_tensors[0];
-            tf.device(_var_device);
-            restored_tensor = array_ops.identity(restored_tensor);
-            return resource_variable_ops.shape_safe_assign_variable_handle(
+            return tf_with(ops.device(_var_device), _ =>
+            {
+                restored_tensor = array_ops.identity(restored_tensor);
+                return resource_variable_ops.shape_safe_assign_variable_handle(
                 handle_op, _var_shape, restored_tensor);
+            });
         }
     }
 }

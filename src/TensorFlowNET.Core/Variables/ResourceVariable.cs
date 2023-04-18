@@ -124,16 +124,29 @@ namespace Tensorflow
 
                     if (_in_graph_mode)
                     {
+                        // TODO(Rinne): deal with initializer_op.
+                        //if(initial_value is not null)
+                        //{
+                        //    tf_with(ops.name_scope("Assign"), n =>
+                        //    {
+                        //        tf_with(ops.device(handle.Device), _ =>
+                        //        {
+
+                        //        });
+                        //    });
+                        //}
                         handle = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
                         initializer_op = gen_state_ops.assign(handle, _initial_value, true).op;
 
                         ops.colocate_with(initializer_op);
-                        tf.device(handle.Device);
-                        var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
-                        resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
-                        _graph_element = gen_array_ops.identity(handle, name = "read");
-                        ops.add_to_collections<IVariableV1>(collections, this);
-                        _dtype = handle.dtype;
+                        tf_with(ops.device(handle.Device), _ =>
+                        {
+                            var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                            resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
+                            _graph_element = gen_array_ops.identity(handle, name = "read");
+                            ops.add_to_collections<IVariableV1>(collections, this);
+                            _dtype = handle.dtype;
+                        });
                     }
                     else
                     {
@@ -149,9 +162,11 @@ namespace Tensorflow
                         _graph_element = null;
                         if (!string.IsNullOrEmpty(caching_device))
                         {
-                            tf.device(caching_device);
-                            var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
-                            resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
+                            tf_with(ops.device(caching_device), _ =>
+                            {
+                                var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                                resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
+                            });
                         }
                         _dtype = _initial_value.dtype.as_base_dtype();
                         // initial_value = _in_graph_mode ? initial_value : null;

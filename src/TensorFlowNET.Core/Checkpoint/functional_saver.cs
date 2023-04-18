@@ -208,7 +208,6 @@ namespace Tensorflow.Checkpoint
                         _keys_to_restore_fn[(checkpoint_key, slice_spec)] = restore_fn;
                         _restore_fn_to_keys.SetDefault(restore_fn, new List<(string, string)>()).Add((checkpoint_key, slice_spec));
 
-                        // skip the process of device name because lack of API.
                         string host_device;
                         if (tensor.IsT0)
                         {
@@ -218,6 +217,7 @@ namespace Tensorflow.Checkpoint
                         {
                             host_device = tensor.AsT1.device;
                         }
+                        host_device = saveable_object_util.set_cpu0(host_device);
                         var internal_dict = tensors_by_device.SetDefault(host_device, new Dictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>());
                         if (!internal_dict.ContainsKey(checkpoint_key))
                         {
@@ -329,51 +329,52 @@ namespace Tensorflow.Checkpoint
                     {
                         var restored_tensor_dict = saver.restore(file_prefix, options);
 
-                    foreach(var pair in restored_tensor_dict)
-                    {
-                        var checkpoint_key = pair.Key;
-                        var slice_and_tensor = pair.Value;
-                        foreach(var item in slice_and_tensor)
+                        foreach (var pair in restored_tensor_dict)
                         {
-                            var slice_spec = item.Key;
-                            var tensor = item.Value;
-                            var restore_fn = _keys_to_restore_fn[(checkpoint_key, slice_spec)];
-                            var internal_dict = restore_fn_inputs.SetDefault(restore_fn, new Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>());
-                            if (!string.IsNullOrEmpty(slice_spec))
+                            var checkpoint_key = pair.Key;
+                            var slice_and_tensor = pair.Value;
+                            foreach (var item in slice_and_tensor)
                             {
-                                if (!internal_dict.ContainsKey(checkpoint_key))
+                                var slice_spec = item.Key;
+                                var tensor = item.Value;
+                                var restore_fn = _keys_to_restore_fn[(checkpoint_key, slice_spec)];
+                                var internal_dict = restore_fn_inputs.SetDefault(restore_fn, new Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>>());
+                                if (!string.IsNullOrEmpty(slice_spec))
                                 {
-                                    Dictionary<string, Tensor> dict = new();
-                                    dict[slice_spec] = tensor;
-                                    internal_dict[checkpoint_key] = OneOf<Tensor, IDictionary<string, Tensor>>.FromT1(dict);
+                                    if (!internal_dict.ContainsKey(checkpoint_key))
+                                    {
+                                        Dictionary<string, Tensor> dict = new();
+                                        dict[slice_spec] = tensor;
+                                        internal_dict[checkpoint_key] = OneOf<Tensor, IDictionary<string, Tensor>>.FromT1(dict);
+                                    }
+                                    else
+                                    {
+                                        internal_dict[checkpoint_key].AsT1[slice_spec] = tensor;
+                                    }
                                 }
                                 else
                                 {
-                                    internal_dict[checkpoint_key].AsT1[slice_spec] = tensor;
+                                    internal_dict[checkpoint_key] = OneOf<Tensor, IDictionary<string, Tensor>>.FromT0(tensor);
                                 }
-                            }
-                            else
-                            {
-                                internal_dict[checkpoint_key] = OneOf<Tensor, IDictionary<string, Tensor>>.FromT0(tensor);
-                            }
-                            restore_fn_input_count[restore_fn]--;
+                                restore_fn_input_count[restore_fn]--;
 
-                            if (restore_fn_input_count[restore_fn] == 0)
-                            {
-                                Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> restored_tensors = new();
-                                foreach(var input in restore_fn_inputs[restore_fn])
+                                if (restore_fn_input_count[restore_fn] == 0)
                                 {
-                                    restored_tensors[TrackableUtils.extract_local_name(input.Key)] = input.Value;
-                                }
-                                var ret = restore_fn.DynamicInvoke(restored_tensors);
-                                if(ret is IDictionary<string, Operation>)
-                                {
-                                    var dict = (IDictionary<string, Operation>)ret;
-                                    restore_ops = restore_ops.Concat(dict).ToDictionary(x => x.Key, x => x.Value);
+                                    Dictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> restored_tensors = new();
+                                    foreach (var input in restore_fn_inputs[restore_fn])
+                                    {
+                                        restored_tensors[TrackableUtils.extract_local_name(input.Key)] = input.Value;
+                                    }
+                                    var ret = restore_fn.DynamicInvoke(restored_tensors);
+                                    if (ret is IDictionary<string, Operation>)
+                                    {
+                                        var dict = (IDictionary<string, Operation>)ret;
+                                        restore_ops = restore_ops.Concat(dict).ToDictionary(x => x.Key, x => x.Value);
+                                    }
                                 }
                             }
                         }
-                    }
+                    });
                 }
 
                 foreach(var item in _registered_savers)

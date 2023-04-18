@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Checkpoint;
+using Tensorflow.Contexts;
+using Tensorflow.Device;
 using Tensorflow.Operations.Activation;
 using Tensorflow.Train;
 using Tensorflow.Training;
@@ -404,6 +406,17 @@ namespace Tensorflow
             bool call_with_mapped_captures = false)
         {
             return factory(key);
+        }
+
+        public static string set_cpu0(string device_string)
+        {
+            if (tf.Context.is_custom_device(device_string))
+            {
+                return device_string;
+            }
+            var parsed_device = DeviceSpec.from_string(device_string);
+            parsed_device = parsed_device.replace(device_type: "CPU", device_index: 0);
+            return parsed_device.ToString();
         }
 
         private static bool _tensor_comes_from_variable(object v)

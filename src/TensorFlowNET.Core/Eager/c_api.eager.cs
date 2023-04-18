@@ -483,5 +483,8 @@ namespace Tensorflow
             IntPtr[] target, int target_size,
             IntPtr[] sources, int source_size,
             IntPtr[] outputs, int output_size);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern bool TFE_IsCustomDevice(SafeContextHandle ctx, string device_name);
     }
 }
