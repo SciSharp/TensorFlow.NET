@@ -77,7 +77,7 @@ public class EarlyStopping: ICallback
         // Restore the weights after first epoch if no progress is ever made.
         if (_restore_best_weights && _best_weights == null)
         {
-            _best_weights = _parameters.Model.TrainableWeights;
+            _best_weights = _parameters.Model.Weights;
         }
         _wait += 1;
 
@@ -102,10 +102,8 @@ public class EarlyStopping: ICallback
                 {
                     Console.WriteLine($"Restoring model weights from the end of the best epoch: {_best_epoch + 1}");
                 }
+                _parameters.Model.Weights = _best_weights;
             }
-            // Because loading the weight variable into the model has not yet been implemented, so Earlystopping can't load best_weight yet.
-            // TODO(Wanglongzhi2001): implement it.
-            // _parameters.Model.load_weights(best_weights);
         }
     }
     public void on_train_end()

@@ -22,6 +22,7 @@ using System.Linq;
 using Tensorflow.Framework;
 using Tensorflow.Functions;
 using Tensorflow.Common.Extensions;
+using Tensorflow.Graphs;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -344,9 +345,15 @@ namespace Tensorflow
             return op;
         }
 
-        public void device(string device_name)
+        public ITensorFlowObject device(string device_name)
         {
-            
+            return new GraphDeviceContext(this, device_name);
+        }
+
+        private void add_device_to_stack(string device_name, int offset = 0)
+        {
+            // TODO(Rinne): deal with device spec.
+            int total_offset = offset + 1;
         }
 
         private void _create_op_helper(Operation op, bool compute_device = true)

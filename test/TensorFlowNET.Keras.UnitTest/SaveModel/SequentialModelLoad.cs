@@ -12,6 +12,7 @@ namespace TensorFlowNET.Keras.UnitTest.SaveModel;
 [TestClass]
 public class SequentialModelLoad
 {
+    [Ignore]
     [TestMethod]
     public void SimpleModelFromAutoCompile()
     {

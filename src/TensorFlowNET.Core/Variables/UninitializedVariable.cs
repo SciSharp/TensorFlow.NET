@@ -9,7 +9,7 @@ namespace Tensorflow.Variables
     /// <summary>
     /// A variable with no initializer.
     /// </summary>
-    public sealed class UninitializedVariable: BaseResourceVariable, IVariableV1
+    public sealed class UninitializedVariable : BaseResourceVariable, IVariableV1
     {
         // TODO: complete the arg list.
         public UninitializedVariable(
@@ -19,7 +19,7 @@ namespace Tensorflow.Variables
             TF_DataType dtype = TF_DataType.DtInvalid,
             VariableAggregation aggregation = VariableAggregation.None,
             Shape shape = null,
-            Tensor extra_handle_data = null) 
+            Tensor extra_handle_data = null)
         {
             string unique_id = "";
             string handle_name = "";
@@ -50,9 +50,12 @@ namespace Tensorflow.Variables
                     {
                         tf_with(ops.name_scope("Read"), _ =>
                         {
-                            tf.device(created_handle.Device);
-                            var value = gen_resource_variable_ops.read_variable_op(created_handle, dtype);
-                            resource_variable_ops._maybe_set_handle_data(dtype, created_handle, value);
+                            var value = tf_with(ops.device(created_handle.Device), _ =>
+                            {
+                                var result = gen_resource_variable_ops.read_variable_op(created_handle, dtype);
+                                resource_variable_ops._maybe_set_handle_data(dtype, created_handle, result);
+                                return result;
+                            });
                             _graph_element = value;
                         });
                         ops.add_to_collection(ops.GraphKeys.GLOBAL_VARIABLES_, this);

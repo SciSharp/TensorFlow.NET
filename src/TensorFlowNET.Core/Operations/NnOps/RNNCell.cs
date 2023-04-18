@@ -84,6 +84,8 @@ namespace Tensorflow
         protected bool built = false;
         public bool Built => built;
 
+        List<IVariableV1> ILayer.Weights { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public RnnCell(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,

@@ -59,8 +59,10 @@ public class TrackableSaver
 
         if(object_graph_tensor is null)
         {
-            tf.device("/cpu:0");
-            object_graph_tensor = constant_op.constant(graph_proto.ToByteArray());
+            tf_with(ops.device("/cpu:0"), _ =>
+            {
+                object_graph_tensor = constant_op.constant(graph_proto.ToByteArray());
+            });
         }
         else
         {
@@ -232,13 +234,15 @@ public class TrackableSaver
         Tensor object_graph_string = reader.GetTensor(Trackable.Constants.OBJECT_GRAPH_PROTO_KEY, dtype: TF_DataType.TF_STRING);
 
         Dictionary<Tensor, string> file_prefix_feed_dict;
-        Tensor file_prefix_tensor;
+        Tensor file_prefix_tensor = null;
         if (graph_building)
         {
             if(_file_prefix_placeholder is null)
             {
-                tf.device("/cpu:0");
-                _file_prefix_placeholder = constant_op.constant("model");
+                _file_prefix_placeholder = tf_with(ops.device("/cpu:0"), _ =>
+                {
+                    return constant_op.constant("model");
+                });
             }
             file_prefix_tensor = _file_prefix_placeholder;
             file_prefix_feed_dict = new();
@@ -246,8 +250,10 @@ public class TrackableSaver
         }
         else
         {
-            tf.device("/cpu:0");
-            file_prefix_tensor = constant_op.constant(save_path);
+            file_prefix_tensor = tf_with(ops.device("/cpu:0"), _ =>
+            {
+                return constant_op.constant(save_path);
+            });
             file_prefix_feed_dict = null;
         }
         TrackableObjectGraph object_graph_proto = new();
