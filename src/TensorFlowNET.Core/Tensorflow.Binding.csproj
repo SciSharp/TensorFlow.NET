@@ -113,8 +113,4 @@ https://tensorflownet.readthedocs.io</Description>
     <PackageReference Include="Protobuf.Text" Version="0.7.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Tensorflow.Common\Tensorflow.Common.csproj" />
-  </ItemGroup>
 </Project>
