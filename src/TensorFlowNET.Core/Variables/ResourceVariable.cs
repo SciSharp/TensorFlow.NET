@@ -174,7 +174,7 @@ namespace Tensorflow
 
                     base.__init__(trainable: trainable,
                         shape: shape,
-                        dtype: dtype,
+                        dtype: _dtype,
                         handle: handle,
                         name: name,
                         unique_id: unique_id,

@@ -10,7 +10,7 @@ namespace Tensorflow.Util
         {
             return valueCase switch
             {
-                AttrValue.ValueOneofCase.S => value.S,
+                AttrValue.ValueOneofCase.S => value.S.ToStringUtf8(),
                 AttrValue.ValueOneofCase.I => value.I,
                 AttrValue.ValueOneofCase.F => value.F,
                 AttrValue.ValueOneofCase.B => value.B,
