@@ -563,7 +563,7 @@ namespace Tensorflow
             return proto.KindCase switch
             {
                 SavedObject.KindOneofCase.UserObject => _recreate_user_object(proto.UserObject, node_id),
-                SavedObject.KindOneofCase.Function => _recreate_function(proto.Function, null),
+                SavedObject.KindOneofCase.Function => _recreate_function(proto.Function, dependencies),
                 SavedObject.KindOneofCase.BareConcreteFunction => _recreate_bare_concrete_function(proto.BareConcreteFunction, dependencies),
                 SavedObject.KindOneofCase.Variable => _recreate_variable(proto.Variable),
                 SavedObject.KindOneofCase.CapturedTensor => throw new NotImplementedException(),
@@ -626,7 +626,7 @@ namespace Tensorflow
         }
 
         private (Function, Action<object, object, object>) _recreate_function(SavedFunction proto,
-            Dictionary<OneOf<string, int>, Trackable> dependencies)
+            IDictionary<OneOf<string, int>, Trackable> dependencies)
         {
             var fn = function_deserialization.recreate_function(proto, _concrete_functions);
             foreach (var name in proto.ConcreteFunctions)
@@ -642,6 +642,13 @@ namespace Tensorflow
             var fn = function_deserialization.setup_bare_concrete_function(proto, _concrete_functions);
             _setup_function_captures(proto.ConcreteFunctionName, dependencies);
             return (fn, setattr);
+        }
+
+        private (Tensor, Action<object, object, object>) _get_tensor_from_fn(CapturedTensor proto)
+        {
+            var outer_graph = _concrete_functions[proto.ConcreteFunction].func_graph;
+            var captured_tensor = outer_graph.get_tensor_by_name(proto.Name);
+            return (captured_tensor, setattr);
         }
 
         // TODO: remove this to a common class.

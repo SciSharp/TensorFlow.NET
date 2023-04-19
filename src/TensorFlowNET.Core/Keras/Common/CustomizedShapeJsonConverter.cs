@@ -7,6 +7,11 @@ using System.Text;
 
 namespace Tensorflow.Keras.Common
 {
+    class ShapeInfoFromPython
+    {
+        public string class_name { get; set; }
+        public long?[] items { get; set; }
+    }
     public class CustomizedShapeJsonConverter: JsonConverter
     {
         public override bool CanConvert(Type objectType)
@@ -44,36 +49,23 @@ namespace Tensorflow.Keras.Common
                         dims[i] = shape.dims[i];
                     }
                 }
-                var token = JToken.FromObject(dims);
+                var token = JToken.FromObject(new ShapeInfoFromPython()
+                {
+                    class_name = "__tuple__",
+                    items = dims
+                });
                 token.WriteTo(writer);
             }
         }
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            long?[] dims;
-            try
-            {
-                dims = serializer.Deserialize(reader, typeof(long?[])) as long?[];
-            }
-            catch (JsonSerializationException ex)
-            {
-                if (reader.Value.Equals("class_name"))
-                {
-                    reader.Read();
-                    reader.Read();
-                    reader.Read();
-                    dims = serializer.Deserialize(reader, typeof(long?[])) as long?[];
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-            if (dims is null)
+            var shape_info_from_python = serializer.Deserialize<ShapeInfoFromPython>(reader);
+            if (shape_info_from_python is null)
             {
                 return null;
             }
+            long ?[]dims = shape_info_from_python.items;
             long[] convertedDims = new long[dims.Length];
             for(int i = 0; i < dims.Length; i++)
             {
