@@ -6,13 +6,13 @@ using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.Keras.UnitTest.SaveModel;
 
 [TestClass]
 public class SequentialModelLoad
 {
-    [Ignore]
     [TestMethod]
     public void SimpleModelFromAutoCompile()
     {
@@ -79,5 +79,28 @@ public class SequentialModelLoad
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
+    }
+
+    [Ignore]
+    [TestMethod]
+    public void VGG19()
+    {
+        var model = tf.keras.models.load_model(@"D:\development\tf.net\models\VGG19");
+        model.summary();
+
+        var classify_model = keras.Sequential(new System.Collections.Generic.List<Tensorflow.Keras.ILayer>()
+        {
+            model,
+            keras.layers.Flatten(),
+            keras.layers.Dense(10),
+        });
+        classify_model.summary();
+
+        classify_model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+
+        var x = np.random.uniform(0, 1, (8, 512, 512, 3));
+        var y = np.ones((8));
+
+        classify_model.fit(x, y, batch_size: 4);
     }
 }

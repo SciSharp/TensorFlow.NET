@@ -71,6 +71,9 @@ namespace Tensorflow.Keras.Utils
             var args = deserializationGenericMethod.Invoke(config, null);
             var layer = Assembly.Load("Tensorflow.Keras").CreateInstance($"Tensorflow.Keras.Layers.{class_name}", true, BindingFlags.Default, null, new object[] { args }, null, null);
             Debug.Assert(layer is Layer);
+
+            // TODO(Rinne): _shared_object_loading_scope().set(shared_object_id, deserialized_obj)
+
             return layer as Layer;
         }
 
@@ -82,6 +85,9 @@ namespace Tensorflow.Keras.Utils
                 return null;
             }
             Debug.Assert(layer is Layer);
+
+            // TODO(Rinne): _shared_object_loading_scope().set(shared_object_id, deserialized_obj)
+
             return layer as Layer;
         }
 
