@@ -29543,7 +29543,7 @@ namespace Tensorflow.Operations
         ///    if &amp;lt; 0, <c>scale * features</c> otherwise.
         ///    
         ///    To be used together with
-        ///    <c>initializer = tf.variance_scaling_initializer(factor=1.0, mode='FAN_IN')</c>.
+        ///    <c>initializer = tf.variance_scaling_initializer(scale=1.0, mode='fan_in')</c>.
         ///    For correct dropout, use <c>tf.contrib.nn.alpha_dropout</c>.
         ///    
         ///    See [Self-Normalizing Neural Networks](https://arxiv.org/abs/1706.02515)

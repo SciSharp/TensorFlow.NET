@@ -27,7 +27,7 @@ public partial class InitializersApi : IInitializersApi
     /// <returns></returns>
     public IInitializer HeNormal(int? seed = null)
     {
-        return new VarianceScaling(factor: 2.0f, mode: "fan_in", seed: seed);
+        return new VarianceScaling(scale: 2.0f, mode: "fan_in", seed: seed);
     }
 
     public IInitializer Orthogonal(float gain = 1.0f, int? seed = null)

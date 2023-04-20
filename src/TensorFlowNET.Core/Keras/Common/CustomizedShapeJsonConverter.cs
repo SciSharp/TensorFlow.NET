@@ -60,12 +60,20 @@ namespace Tensorflow.Keras.Common
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            var shape_info_from_python = serializer.Deserialize<ShapeInfoFromPython>(reader);
-            if (shape_info_from_python is null)
+            long?[] dims;
+            try
             {
-                return null;
+                var shape_info_from_python = serializer.Deserialize<ShapeInfoFromPython>(reader);
+                if (shape_info_from_python is null)
+                {
+                    return null;
+                }
+                dims = shape_info_from_python.items;
             }
-            long ?[]dims = shape_info_from_python.items;
+            catch(JsonSerializationException)
+            {
+                dims = serializer.Deserialize<long?[]>(reader);
+            }
             long[] convertedDims = new long[dims.Length];
             for(int i = 0; i < dims.Length; i++)
             {
