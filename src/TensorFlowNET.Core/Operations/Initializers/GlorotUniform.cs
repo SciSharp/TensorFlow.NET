@@ -26,12 +26,12 @@ namespace Tensorflow.Operations.Initializers
         public override IDictionary<string, object> Config => _config;
 
         public GlorotUniform(float scale = 1.0f,
-            string mode = "FAN_AVG",
-            bool uniform = true,
+            string mode = "fan_avg",
+            string distribution = "uniform",
             int? seed = null,
-            TF_DataType dtype = TF_DataType.TF_FLOAT) : base(factor: scale,
+            TF_DataType dtype = TF_DataType.TF_FLOAT) : base(scale: scale,
                 mode: mode,
-                uniform: uniform,
+                distribution: distribution,
                 seed: seed,
                 dtype: dtype)
         {

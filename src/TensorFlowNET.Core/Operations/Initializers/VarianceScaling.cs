@@ -28,35 +28,42 @@ namespace Tensorflow.Operations.Initializers
     {
         protected float _scale;
         protected string _mode;
-        protected string _distribution;
         protected int? _seed;
         protected TF_DataType _dtype;
-        protected bool _uniform;
+        protected string _distribution;
         private readonly Dictionary<string, object> _config;
 
         public virtual string ClassName => "VarianceScaling";
 
         public virtual IDictionary<string, object> Config => _config;
 
-        public VarianceScaling(float factor = 2.0f,
-            string mode = "FAN_IN",
-            bool uniform = false,
+        public VarianceScaling(float scale = 1.0f,
+            string mode = "fan_in",
+            string distribution = "truncated_normal",
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT)
         {
             if (!dtype.is_floating())
                 throw new TypeError("Cannot create initializer for non-floating point type.");
-            if (!new string[] { "FAN_IN", "FAN_OUT", "FAN_AVG" }.Contains(mode))
-                throw new TypeError($"Unknown {mode} %s [FAN_IN, FAN_OUT, FAN_AVG]");
+            if (!new string[] { "fan_in", "fan_out", "fan_avg" }.Contains(mode))
+                throw new TypeError($"Unknown {mode} %s [fan_in, fan_out, fan_avg]");
+            if(distribution == "normal")
+            {
+                distribution = "truncated_normal";
+            }
+            if(!new string[] { "uniform", "truncated_normal", "untruncated_normal" }.Contains(distribution))
+            {
+                throw new ValueError($"Invalid `distribution` argument: {distribution}");
+            }
 
-            if (factor < 0)
+            if (scale <= 0)
                 throw new ValueError("`scale` must be positive float.");
 
-            _scale = factor;
+            _scale = scale;
             _mode = mode;
             _seed = seed;
             _dtype = dtype;
-            _uniform = uniform;
+            _distribution = distribution;
 
             _config = new();
             _config["scale"] = _scale;
@@ -72,23 +79,28 @@ namespace Tensorflow.Operations.Initializers
 
             float n = 0;
             var (fan_in, fan_out) = _compute_fans(args.Shape);
-            if (_mode == "FAN_IN")
-                n = fan_in;
-            else if (_mode == "FAN_OUT")
-                n = fan_out;
-            else if (_mode == "FAN_AVG")
-                n = (fan_in + fan_out) / 2.0f;
+            var scale = this._scale;
+            if (_mode == "fan_in")
+                scale /= Math.Max(1.0f, fan_in);
+            else if (_mode == "fan_out")
+                scale /= Math.Max(1.0f, fan_out);
+            else
+                scale /= Math.Max(1.0f, (fan_in + fan_out) / 2);
 
-            if (_uniform)
+            if(_distribution == "truncated_normal")
             {
-                var limit = Convert.ToSingle(Math.Sqrt(3.0f * _scale / n));
-                return random_ops.random_uniform(args.Shape, -limit, limit, args.DType);
+                var stddev = Math.Sqrt(scale) / .87962566103423978f;
+                return random_ops.truncated_normal(args.Shape, 0.0f, (float)stddev, args.DType);
+            }
+            else if(_distribution == "untruncated_normal")
+            {
+                var stddev = Math.Sqrt(scale);
+                return random_ops.random_normal(args.Shape, 0.0f, (float)stddev, args.DType);
             }
             else
             {
-                var trunc_stddev = Convert.ToSingle(Math.Sqrt(1.3f * _scale / n));
-                return random_ops.truncated_normal(args.Shape, 0.0f, trunc_stddev, args.DType,
-                                                   seed: _seed);
+                var limit = (float)Math.Sqrt(scale * 3.0f);
+                return random_ops.random_uniform(args.Shape, -limit, limit, args.DType);
             }
         }
 

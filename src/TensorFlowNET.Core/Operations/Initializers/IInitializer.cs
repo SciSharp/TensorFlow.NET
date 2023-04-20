@@ -16,9 +16,11 @@
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using Tensorflow.Keras.Common;
 
 namespace Tensorflow
 {
+    [JsonConverter(typeof(CustomizedIinitializerJsonConverter))]
     public interface IInitializer
     {
         [JsonProperty("class_name")]

@@ -76,13 +76,13 @@ namespace Tensorflow
         /// <param name="dtype"></param>
         /// <returns></returns>
         public IInitializer variance_scaling_initializer(float factor = 1.0f,
-            string mode = "FAN_IN",
-            bool uniform = false,
+            string mode = "fan_in",
+            string distribution = "truncated_normal",
             int? seed = null,
             TF_DataType dtype = TF_DataType.TF_FLOAT) => new VarianceScaling(
-                factor: factor,
+                scale: factor,
                 mode: mode,
-                uniform: uniform,
+                distribution: distribution,
                 seed: seed,
                 dtype: dtype);
 
