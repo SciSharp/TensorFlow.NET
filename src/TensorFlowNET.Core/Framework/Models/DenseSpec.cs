@@ -6,8 +6,11 @@
     public class DenseSpec : TypeSpec
     {
         protected Shape _shape;
-        public Shape shape => _shape;
-
+        public Shape shape
+        {
+            get { return _shape; }
+            set { _shape = value; }
+        }
         protected TF_DataType _dtype;
         public TF_DataType dtype => _dtype;
 

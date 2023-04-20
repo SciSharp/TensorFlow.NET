@@ -6,24 +6,31 @@ namespace Tensorflow.Gradients
     public interface ITape
     {
         void SetTapeId(int id);
-        bool ShouldRecord(Tensor[] tensors);
+        bool ShouldRecord(long[] tensor_ids, TF_DataType[] tensor_dtypes);
         void StartRecord();
         void StopRecord();
         bool Persistent { get; }
         void RecordOperation(string op_type,
-            Tensor[] input_tensors,
             TapeTensor[] output_tensors,
+            long[] input_tensor_id,
+            TF_DataType[] input_dtypes,
             BackwardFunction backward_function);
 
-        void VariableAccessed(ResourceVariable variable);
+        void RecordOperation(string op_type,
+            Tensor[] outputs,
+            Tensor[] inputs,
+            BackwardFunction backward_function);
+
+        void VariableAccessed(IVariableV1 variable);
 
         void Watch(Tensor x);
 
-        ResourceVariable[] WatchedVariables();
+        IVariableV1[] WatchedVariables();
 
-        Tensor[] ComputeGradient(Tensor[] target_tensor_ids,
-            Tensor[] source_tensor_ids,
-            UnorderedMap<Tensor, TapeTensor> sources_that_are_targets,
-            Tensor[] output_gradients);
+        Tensor[] ComputeGradient(long[] target_tensor_ids,
+            long[] source_tensor_ids,
+            UnorderedMap<long, TapeTensor> sources_that_are_targets,
+            List<Tensor> output_gradients,
+            bool build_default_zeros_grads);
     }
 }

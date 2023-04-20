@@ -185,6 +185,9 @@ namespace Tensorflow
         [DllImport(TensorFlowLibName)]
         public static extern void TF_ImportGraphDefOptionsAddReturnOperation(SafeImportGraphDefOptionsHandle opts, string oper_name);
 
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_ImportGraphDefOptionsSetValidateColocationConstraints(SafeImportGraphDefOptionsHandle options, bool validate_colocation_constraints);
+
         /// <summary>
         /// Add an output in `graph_def` to be returned via the `return_outputs` output
         /// parameter of TF_GraphImportGraphDef(). If the output is remapped via an input
@@ -246,7 +249,7 @@ namespace Tensorflow
         /// <param name="ops">TF_ImportGraphDefOptions*</param>
         /// <param name="uniquify_prefix">unsigned char</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_ImportGraphDefOptionsSetUniquifyNames(SafeImportGraphDefOptionsHandle ops, char uniquify_prefix);
+        public static extern void TF_ImportGraphDefOptionsSetUniquifyNames(SafeImportGraphDefOptionsHandle ops, bool uniquify_prefix);
 
         /// <summary>
         /// Fetches the return operations requested via
@@ -308,7 +311,7 @@ namespace Tensorflow
         /// <param name="types">const TF_DataType*</param>
         /// <param name="status">TF_Status*</param>
         [DllImport(TensorFlowLibName)]
-        public static extern void TF_GraphSetOutputHandleShapesAndTypes(IntPtr graph, TF_Output output,
+        public static extern void TF_GraphSetOutputHandleShapesAndTypes(SafeGraphHandle graph, TF_Output output,
             int num_shapes_and_types, IntPtr[] shapes, int[] ranks, DataType[] types,
             SafeStatusHandle status);
 

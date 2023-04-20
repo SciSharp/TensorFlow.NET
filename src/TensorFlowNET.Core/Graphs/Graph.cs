@@ -19,6 +19,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Tensorflow.Framework;
+using Tensorflow.Functions;
+using Tensorflow.Common.Extensions;
 using Tensorflow.Graphs;
 using static Tensorflow.Binding;
 
@@ -86,6 +89,13 @@ namespace Tensorflow
         private int _next_id_counter;
         private List<Operation> _unfetchable_ops = new List<Operation>();
         private List<Tensor> _unfeedable_tensors = new List<Tensor>();
+        private Dictionary<string, EagerDefinedFunction> _functions = new();
+        internal Dictionary<string, Func<Operation, object[], Tensor[]>> _gradient_function_map = new();
+        private VersionDef _graph_def_versions = new VersionDef()
+        {
+            Producer = versions.GRAPH_DEF_VERSION,
+            MinConsumer = versions.GRAPH_DEF_VERSION_MIN_CONSUMER
+        };
 
         public string _name_stack = "";
         protected string _graph_key;
@@ -121,6 +131,8 @@ namespace Tensorflow
 
         protected Graph outer_graph;
         public Graph OuterGraph => outer_graph;
+        public Dictionary<string, EagerDefinedFunction> Functions => _functions;
+        public SafeGraphHandle c_graph => _handle;
 
         public Graph()
         {
@@ -145,6 +157,44 @@ namespace Tensorflow
         {
             tf.Context.graph_mode(isFunc: false);
             return ops.set_default_graph(this);
+        }
+
+        public bool IsFunction(string name)
+        {
+            return _functions.ContainsKey(tf.compat.as_str(name));
+        }
+
+        internal void AddFunction(EagerDefinedFunction function)
+        {
+            _check_not_finalized();
+
+            var name = function.Name;
+            if(function._grad_func_name is not null && function.csharp_grad_func is not null)
+            {
+                throw new ValueError($"Gradient defined twice for function {name}");
+            }
+
+            var c_graph = this.c_graph;
+            var func = function._c_func.Get();
+            Status status = new();
+            if (function._grad_func is not null)
+            {
+                var gradient = function._grad_func._c_func.Get();
+                c_api.TF_GraphCopyFunction(c_graph, func, gradient, status);
+                status.Check(true);
+            }
+            else
+            {
+                c_api.TF_GraphCopyFunction(c_graph, func, new SafeFuncGraphHandle(IntPtr.Zero), status);
+                status.Check(true);
+            }
+
+            _functions[tf.compat.as_str(name)] = function;
+
+            if(_graph_def_versions.MinConsumer < 12)
+            {
+                _graph_def_versions.MinConsumer = 12;
+            }
         }
 
         private Tensor _as_graph_element(object obj)
@@ -308,6 +358,9 @@ namespace Tensorflow
 
         private void _create_op_helper(Operation op, bool compute_device = true)
         {
+            // high priority
+            // TODO(Rinne): complete the implementation.
+            op._gradient_function = _gradient_function_map.GetOrDefault(op.type, null);
             _record_op_seen_by_control_dependencies(op);
         }
 
@@ -522,6 +575,11 @@ namespace Tensorflow
         {
             tf.Context.restore_mode();
             ops.pop_graph();
+        }
+
+        internal EagerDefinedFunction _get_function(string name)
+        {
+            return _functions.GetOrDefault(name, null);
         }
 
         string debugString = string.Empty;

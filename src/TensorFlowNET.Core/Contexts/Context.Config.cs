@@ -14,9 +14,11 @@
    limitations under the License.
 ******************************************************************************/
 
+using Google.Protobuf;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using Tensorflow.Common.Extensions;
 
 namespace Tensorflow.Contexts
 {
@@ -25,12 +27,93 @@ namespace Tensorflow.Contexts
     /// </summary>
     public sealed partial class Context
     {
-        public ConfigProto Config { get; set; } = new ConfigProto
+        protected Device.PhysicalDevice[] _physical_devices;
+        protected Dictionary<Device.PhysicalDevice, int> _physical_device_to_index;
+        ConfigProto _config;
+        public ConfigProto Config
         {
-            GpuOptions = new GPUOptions
+            get
             {
+                _initialize_physical_devices();
+
+                var config = new ConfigProto();
+                if(_config is not null)
+                {
+                    config.MergeFrom(_config);
+                }
+                config.LogDevicePlacement = _log_device_placement;
+
+                config.DeviceCount["CPU"] = 0;
+                config.DeviceCount["GPU"] = 0;
+                foreach(var dev in _physical_devices)
+                {
+                    if (config.DeviceCount.ContainsKey(dev.DeviceType))
+                    {
+                        config.DeviceCount[dev.DeviceType] += 1;
+                    }
+                    else
+                    {
+                        config.DeviceCount[dev.DeviceType] = 1;
+                    }
+                }
+
+                var gpu_options = _compute_gpu_options();
+                config.GpuOptions = GPUOptions.Parser.ParseFrom(gpu_options.ToByteArray());
+
+                return config;
             }
-        };
+            set
+            {
+                _config = value;
+            }
+        }
+
+        protected void _initialize_physical_devices(bool reinitialize = false)
+        {
+            if(!reinitialize && _physical_devices is not null)
+            {
+                return;
+            }
+            var devs = list_physical_devices();
+            _physical_devices = devs.Select(d => new Device.PhysicalDevice()
+            {
+                DeviceName = d.DeviceName,
+                DeviceType = d.DeviceType
+            }).ToArray();
+            _physical_device_to_index = _physical_devices.Select((p, i) => new KeyValuePair<Device.PhysicalDevice, int>(p, i))
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            _import_config();
+        }
+
+        protected void _import_config()
+        {
+            if(_config is null)
+            {
+                return;
+            }
+            if(!_config.DeviceCount.TryGetValue("CPU", out var num_cpus))
+            {
+                num_cpus = 1;
+            }
+            if(num_cpus != 1)
+            {
+                // TODO(Rinne): implement it.
+            }
+
+            var gpus = _physical_devices.Where(d => d.DeviceType == "GPU");
+            if(gpus.Count() == 0)
+            {
+                return;
+            }
+
+            if(!_config.DeviceCount.TryGetValue("GPU", out var gpu_count))
+            {
+                gpu_count = 0;
+            }
+
+            // TODO(Rinne): implement it.
+        }
 
         ConfigProto MergeConfig()
         {

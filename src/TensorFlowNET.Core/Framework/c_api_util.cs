@@ -111,7 +111,17 @@ namespace Tensorflow
 
         public static ImportGraphDefOptions ScopedTFImportGraphDefOptions() => new ImportGraphDefOptions();
 
-        public static Buffer tf_buffer(byte[] data) => new Buffer(data);
+        public static Buffer tf_buffer(byte[] data = null)
+        {
+            if(data is not null)
+            {
+                return new Buffer(data); ;
+            }
+            else
+            {
+                return new Buffer();
+            }
+        }
 
         public static IEnumerable<Operation> new_tf_operations(Graph graph)
         {

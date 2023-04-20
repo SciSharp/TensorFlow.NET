@@ -54,6 +54,6 @@ namespace Tensorflow
             Dictionary<string, Tensor> input_map = null,
             string[] return_elements = null,
             string name = null,
-            OpList producer_op_list = null) => importer.import_graph_def(graph_def, input_map, return_elements, name, producer_op_list);
+            OpList producer_op_list = null) => importer.import_graph_def(graph_def, input_map, return_elements, name: name, producer_op_list: producer_op_list);
     }
 }

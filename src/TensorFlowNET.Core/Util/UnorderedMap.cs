@@ -25,6 +25,19 @@ namespace Tensorflow.Util
             }
         }
 
+        public Tv SetDefault(Tk key, Tv default_value)
+        {
+            if(TryGetValue(key, out var res))
+            {
+                return res;
+            }
+            else
+            {
+                base[key] = default_value;
+                return base[key];
+            }
+        }
+
         public void push_back(Tk key, Tv value)
             => this[key] = value;
 

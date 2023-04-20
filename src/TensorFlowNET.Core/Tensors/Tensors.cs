@@ -56,7 +56,7 @@ namespace Tensorflow
         public void Add(Tensor tensor)
             => items.Add(tensor);
 
-        public void AddRange(Tensor[] tensors)
+        public void AddRange(IEnumerable<Tensor> tensors)
             => items.AddRange(tensors);
 
         public void Insert(int index, Tensor tensor)

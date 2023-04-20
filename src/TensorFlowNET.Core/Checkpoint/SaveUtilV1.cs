@@ -8,6 +8,7 @@ using Tensorflow.Training;
 using pbc = global::Google.Protobuf.Collections;
 using static Tensorflow.Binding;
 using Google.Protobuf;
+using OneOf;
 
 namespace Tensorflow.Checkpoint;
 
@@ -114,14 +115,10 @@ public static class SaveUtilV1
         {
             var trackable = trackable_objects[i];
             Debug.Assert(node_ids[trackable] == i);
-            TrackableObjectGraph.Types.TrackableObject object_proto;
+            var object_proto = new TrackableObjectGraph.Types.TrackableObject();
             if (slot_variables.TryGetValue(trackable, out var slots))
             {
-                object_proto = new TrackableObjectGraph.Types.TrackableObject(slots);
-            }
-            else
-            {
-                object_proto = new TrackableObjectGraph.Types.TrackableObject();
+                object_proto.SlotVariables.AddRange(slots);
             }
             object_graph_proto.Nodes.Add(object_proto);
             foreach (var child in graph_view.list_children(trackable))
@@ -184,13 +181,13 @@ public static class SaveUtilV1
 
                 // TODO: tensorflow python has a process with callable `saveable_factory`.
                 List<MySaveableObject> saveables = new();
-                if (maybe_saveable.TryGet<MySaveableObject>(out var s))
+                if (maybe_saveable.TryPickT1(out var s, out var variable))
                 {
                     saveables.Add(s);
                 }
                 else
                 {
-                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(maybe_saveable.GetValue<BaseResourceVariable>() as Trackable, key));
+                    saveables.AddRange(saveable_object_util.saveable_objects_for_op(variable as Trackable, key));
                 }
 
                 foreach (var saveable in saveables)
@@ -222,7 +219,7 @@ public static class SaveUtilV1
 
 public record class CheckpointFactoryData
 (
-    Func<string, Maybe<BaseResourceVariable, MySaveableObject>> factory,
+    Func<string, OneOf<BaseResourceVariable, MySaveableObject>> factory,
     string name,
     string checkpoint_key
 );

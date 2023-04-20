@@ -9,7 +9,7 @@ namespace Tensorflow.Keras.ArgsDefinition
     /// This class has nothing but the attributes different from `LayerArgs`.
     /// It's used to serialize the model to `tf` format. 
     /// If the `get_config` of a `Layer` in python code of tensorflow contains `super().get_config`,
-    /// then the Arg definition should inherit `utoSerializeLayerArgs` instead of `LayerArgs`.
+    /// then the Arg definition should inherit `AutoSerializeLayerArgs` instead of `LayerArgs`.
     /// </summary>
     public class AutoSerializeLayerArgs: LayerArgs
     {

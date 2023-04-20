@@ -12,6 +12,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Operations;
 using Newtonsoft.Json;
 using Tensorflow.Training;
+using OneOf;
 
 namespace Tensorflow.Checkpoint;
 
@@ -44,12 +45,12 @@ public class TrackableSaver
         _graph_view = graph_view;
         
         // TODO: cache when not executing eagerly.
-        // including `_cache`, `_file_prefix_feed_tensor`, `_file_prefix_placeholder`,
+        // including `_cache`, `_file_prefix_feed_tensor`, `_file_prefix_placeholder`
         // `_object_graph_feed_tensor`, `_object_map`, `_restore_op_cache`, `_saveables_cache`
         
     }
 
-    private (IDictionary<Trackable, IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>>, IDictionary<Tensor, object>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
+    private (IDictionary<Trackable, IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>>, IDictionary<Tensor, object>, IDictionary<string, IDictionary<string, Trackable>>, TrackableObjectGraph) 
         gather_serialized_tensors(Tensor? object_graph_tensor = null)
     {
         var (serialized_tensors, feed_additions, registered_savers, graph_proto) = SaveUtil.serialize_graph_view(_graph_view, _object_map, cache:_cache);
@@ -70,9 +71,10 @@ public class TrackableSaver
         Debug.Assert(!serialized_tensors.ContainsKey(Trackable.None) || !serialized_tensors[Trackable.None].ContainsKey(Trackable.Constants.OBJECT_GRAPH_PROTO_KEY));
         if (!serialized_tensors.ContainsKey(Trackable.None))
         {
-            serialized_tensors[Trackable.None] = new Dictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>>();
+            serialized_tensors[Trackable.None] = new Dictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>>();
         }
-        serialized_tensors[Trackable.None][Trackable.Constants.OBJECT_GRAPH_PROTO_KEY] = object_graph_tensor;
+        serialized_tensors[Trackable.None][Trackable.Constants.OBJECT_GRAPH_PROTO_KEY] = new Dictionary<string, OneOf<Tensor, SaveSpec>>();
+        serialized_tensors[Trackable.None][Trackable.Constants.OBJECT_GRAPH_PROTO_KEY].Add(saveable_object_util.NO_SLICE_SPEC_KEY, object_graph_tensor);
         return (serialized_tensors, feed_additions, registered_savers, graph_proto);
     }
 
@@ -392,6 +394,7 @@ public class CheckpointRestoreCoordinator
     /// </summary>
     public List<Trackable> AllTrackables => _all_trackables;
     public HashSet<int> MatchedProtoIds => _matched_proto_ids;
+    // TODO(Rinne): change to weak ref.
     public Dictionary<int, Trackable> ObjectByProtoId => _object_by_proto_id;
     public int RestoreUid => _restore_uid;
     public TrackableObjectGraph ObjectGraphProto => _object_graph_proto;
@@ -406,7 +409,7 @@ public class CheckpointRestoreCoordinator
         // skip the callback.
     }
 
-    public List<Operation> restore_saveables(Dictionary<string, Maybe<BaseResourceVariable, MySaveableObject>> tensor_saveables, List<CheckpointPosition> positions, object? registered_savers = null)
+    public List<Operation> restore_saveables(Dictionary<string, OneOf<BaseResourceVariable, MySaveableObject>> tensor_saveables, List<CheckpointPosition> positions, object? registered_savers = null)
     {
         List<Operation> restore_ops = new();
         foreach(var position in positions)
@@ -418,7 +421,7 @@ public class CheckpointRestoreCoordinator
         Dictionary<string, BaseResourceVariable> variable_dict = new();
         foreach(var item in tensor_saveables)
         {
-            if(item.Value.TryGet<BaseResourceVariable>(out var variable))
+            if(item.Value.TryPickT0(out var variable, out var _))
             {
                 variable_dict[item.Key] = variable;
             }

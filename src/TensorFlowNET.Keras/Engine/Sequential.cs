@@ -124,11 +124,12 @@ namespace Tensorflow.Keras.Engine
             if (set_inputs || _is_graph_network)
             {
                 _init_graph_network(inputs, outputs);
-                _is_graph_network = true;
+                _graph_initialized = true;
             }
             else
             {
                 _self_tracked_trackables.add(layer);
+                // TODO(Rinne): self._handle_deferred_layer_dependencies([layer])
             }
         }
 

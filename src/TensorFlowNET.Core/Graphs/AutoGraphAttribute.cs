@@ -1,6 +1,7 @@
 ﻿using MethodBoundaryAspect.Fody.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Tensorflow.Eager;
 using Tensorflow.Functions;
@@ -22,7 +23,7 @@ namespace Tensorflow.Graphs
         public override void OnEntry(MethodExecutionArgs args)
         {
             // TODO: func_name can be cache in FullName + Args
-            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}_{ops.uid_function()}";
+            func_name = $"{args.Method.DeclaringType.FullName}.{args.Method.Name}";
 
             if (functions.ContainsKey(func_name))
             {
@@ -91,6 +92,7 @@ namespace Tensorflow.Graphs
 
             // cache function.
             function.ReturnType = args.ReturnValue.GetType();
+            function._set_infer_function();
             functions[func_name] = function;
 
             // run function

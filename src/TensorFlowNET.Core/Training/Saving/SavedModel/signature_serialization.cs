@@ -102,6 +102,6 @@ public class SignatureMap: Trackable
             return new Dictionary<string, Trackable>();
         }
 
-        return _signatures.TakeWhile(x => x.Value is Function or ConcreteFunction).ToDictionary(x => x.Key, x => x.Value);
+        return _signatures.Where(x => x.Value is Function or ConcreteFunction).ToDictionary(x => x.Key, x => x.Value);
     }
 }

@@ -14,6 +14,8 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Exceptions;
+
 namespace Tensorflow
 {
     /// <summary>
@@ -21,8 +23,24 @@ namespace Tensorflow
     /// </summary>
     public class SaveSpec
     {
-        private Tensor _tensor;
-        public Tensor tensor => _tensor;
+        private Tensor _tensor = null;
+        private Func<Tensor> _tensor_creator = null;
+        public Tensor tensor
+        {
+            get
+            {
+                if(_tensor is not null || _tensor_creator is null)
+                {
+                    return _tensor;
+                }
+                else
+                {
+                    return _tensor_creator();
+                }
+            }
+        }
+
+        internal Func<Tensor> TensorCreator => _tensor_creator;
 
         private string _slice_spec;
         public string slice_spec => _slice_spec;
@@ -32,13 +50,36 @@ namespace Tensorflow
 
         private TF_DataType _dtype;
         public TF_DataType dtype => _dtype;
+        private string _device;
+        public string device => _device;
 
-        public SaveSpec(Tensor tensor, string slice_spec, string name, TF_DataType dtype = TF_DataType.DtInvalid)
+        public SaveSpec(Tensor tensor, string slice_spec, string name, TF_DataType dtype = TF_DataType.DtInvalid, string device = null)
         {
             _tensor = tensor;
             _slice_spec = slice_spec;
             _name = name;
             _dtype = dtype;
+            if(device is not null)
+            {
+                _device = device;
+            }
+            else
+            {
+                _device = tensor.Device;
+            }
+        }
+
+        public SaveSpec(Func<Tensor> tensor_creator, string slice_spec, string name, TF_DataType dtype = TF_DataType.DtInvalid, string device = null)
+        {
+            _tensor_creator = tensor_creator;
+            _slice_spec = slice_spec;
+            _name = name;
+            if(dtype == TF_DataType.DtInvalid || device is null)
+            {
+                throw new AssertionError("When passing a callable `tensor` to a SaveSpec, an explicit dtype and device must be provided.");
+            }
+            _dtype = dtype;
+            _device = device;
         }
     }
 }

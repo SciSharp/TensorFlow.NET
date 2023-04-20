@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using OneOf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,8 +44,8 @@ namespace Tensorflow.Train
         protected IList<TrackableReference> _unconditional_checkpoint_dependencies;
         protected Dictionary<string, IList<CheckpointPosition>> _unconditional_deferred_dependencies;
 
-        protected IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> _self_saveable_object_factories =
-            new Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>>();
+        protected IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> _self_saveable_object_factories =
+            new Dictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>();
         private bool _manual_tracking = true;
 
         private static Trackable _none = new AutoTrackable();
@@ -73,7 +74,7 @@ namespace Tensorflow.Train
         public IDictionary<string, Trackable> UnconditionalDependencyNames { get => _unconditional_dependency_names; }
         public IList<TrackableReference> CheckpointDependencies { get => UnconditionalCheckpointDependencies; }
         public Dictionary<string, IList<CheckpointPosition>> DeferredDependencies => _unconditional_deferred_dependencies;
-        public IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> SelfSaveableObjectFactories
+        public IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> SelfSaveableObjectFactories
         {
             get
             {
@@ -83,6 +84,72 @@ namespace Tensorflow.Train
             {
                 _self_saveable_object_factories = value;
             }
+        }
+        public Dictionary<string, object> CustomizedFields { get; set; } = new Dictionary<string, object>();
+
+        public virtual void SetAttr(string name, object value)
+        {
+            var t = this.GetType();
+            var field_info = t.GetField(name);
+            if(field_info is not null)
+            {
+                field_info.SetValue(this, value);
+            }
+            else
+            {
+                CustomizedFields[name] = value;
+            }
+
+            // On account of performance, we don't use reflection to set the attribute if it exists in `Trackable`.
+            // When adding new members or properties to this class, please add corresponding process to this method.
+            //switch (name)
+            //{
+            //    case "_manual_tracking":
+            //        {
+            //            _manual_tracking = (bool)value;
+            //            break;
+            //        }
+            //    case "_self_saveable_object_factories":
+            //        {
+            //            _self_saveable_object_factories = (IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>)value;
+            //            break;
+            //        }
+            //    case "_self_update_uid":
+            //        {
+            //            _self_update_uid = (int)value;
+            //            break;
+            //        }
+            //    case "_unconditional_checkpoint_dependencies":
+            //        {
+            //            _unconditional_checkpoint_dependencies = (IList<TrackableReference>)value;
+            //            break;
+            //        }
+            //    case "_unconditional_deferred_dependencies":
+            //        {
+            //            _unconditional_deferred_dependencies = (Dictionary<string, IList<CheckpointPosition>>)value;
+            //            break;
+            //        }
+            //    case "_unconditional_dependency_names":
+            //        {
+            //            _unconditional_dependency_names = (IDictionary<string, Trackable>)value;
+            //            break;
+            //        }
+            //    case "SelfSaveableObjectFactories":
+            //        {
+            //            SelfSaveableObjectFactories = (IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>>)value;
+            //            break;
+            //        }
+            //    case "UpdateUid":
+            //        {
+            //            UpdateUid = (int)value;
+            //            break;
+            //        }
+            //    default:
+            //        {
+            //            CustomizedAttributes[name] = value;
+            //            break;
+            //        }
+            // }
         }
 
         /// <summary>
@@ -249,9 +316,9 @@ namespace Tensorflow.Train
             return self_tensor_map.Keys.ToList();
         }
 
-        public virtual IDictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> gather_saveables_for_checkpoint()
+        public virtual IDictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> gather_saveables_for_checkpoint()
         {
-            Maybe<BaseResourceVariable, MySaveableObject> create_saveable(string name = "")
+            OneOf<BaseResourceVariable, MySaveableObject> create_saveable(string name = "")
             {
                 throw new NotImplementedException();
                 //return new TrackableSaveable(this, null, name, null, null);
@@ -259,7 +326,7 @@ namespace Tensorflow.Train
             if (saveable_object_util.trackable_has_serialize_to_tensor(this))
             {
                 // TODO: complete the implementation (need to complete the class `saveable_object_util.TrackableSaveable`).
-                Dictionary<string, Func<string, Maybe<BaseResourceVariable, MySaveableObject>>> res = new();
+                Dictionary<string, Func<string, OneOf<BaseResourceVariable, MySaveableObject>>> res = new();
                 res[""] = create_saveable;
                 return res;
             }
@@ -278,12 +345,12 @@ namespace Tensorflow.Train
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public virtual IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> serialize_to_tensors()
+        public virtual IDictionary<string, IDictionary<string, OneOf<Tensor, SaveSpec>>> serialize_to_tensors()
         {
             throw new NotImplementedException();
         }
 
-        public virtual IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, Maybe<Tensor, IDictionary<string, Tensor>>> restored_tensors)
+        public virtual IDictionary<string, Operation> _restore_from_tensors(IDictionary<string, OneOf<Tensor, IDictionary<string, Tensor>>> restored_tensors)
         {
             throw new NotImplementedException();
         }

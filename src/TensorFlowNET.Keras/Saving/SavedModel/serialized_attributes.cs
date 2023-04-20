@@ -19,8 +19,8 @@ namespace Tensorflow.Keras.Saving.SavedModel
         protected IDictionary<string, Trackable?> _object_dict;
         protected IDictionary<string, Trackable?> _function_dict;
         protected AutoTrackable _keras_trackable;
-        protected HashSet<string> _all_functions;
-        protected HashSet<string> _all_checkpointable_objects;
+        internal HashSet<string> _all_functions;
+        internal HashSet<string> _all_checkpointable_objects;
 
         private SerializedAttributes()
         {
@@ -51,9 +51,9 @@ namespace Tensorflow.Keras.Saving.SavedModel
             _all_functions = new HashSet<string>(objects_and_functions.Item2);
         }
 
-        public IDictionary<string, Trackable> Functions => _function_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
+        public IDictionary<string, Trackable> Functions => _function_dict.Where(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
 
-        public IDictionary<string, Trackable> CheckpointableObjects => _object_dict.TakeWhile(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
+        public IDictionary<string, Trackable> CheckpointableObjects => _object_dict.Where(x => x.Value is not null).ToDictionary(x => x.Key, x => x.Value!);
 
         /// <summary>
         /// Returns functions to attach to the root object during serialization.
@@ -82,7 +82,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
         {
             get
             {
-                var objects = CheckpointableObjects.TakeWhile( x=> _all_checkpointable_objects.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
+                var objects = CheckpointableObjects.Where( x=> _all_checkpointable_objects.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value);
                 objects[Constants.KERAS_ATTR] = _keras_trackable;
                 return objects;
             }
@@ -121,7 +121,10 @@ namespace Tensorflow.Keras.Saving.SavedModel
                 }
                 else
                 {
-                    throw new ValueError($"Function {key} missing from serialized function dict.");
+                    // high priority
+                    // TODO(Rinne): complete the implementation.
+                    continue;
+                    //throw new ValueError($"Function {key} missing from serialized function dict.");
                 }
             }
             return Functions;
@@ -151,7 +154,10 @@ namespace Tensorflow.Keras.Saving.SavedModel
                 }
                 else
                 {
-                    throw new ValueError($"Object {key} missing from serialized object dict.");
+                    // high priority.
+                    // TODO(Rinne): Add the implementation.
+                    continue;
+                    //throw new ValueError($"Object {key} missing from serialized object dict.");
                 }
             }
             return CheckpointableObjects;
@@ -197,19 +203,15 @@ namespace Tensorflow.Keras.Saving.SavedModel
     public class CommonEndPoints: SerializedAttributes
     {
         public CommonEndPoints(IEnumerable<string> checkpointable_objects, IEnumerable<string> functions) :
-            //base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables", "regularization_losses" }),
-            //    functions.Concat(new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" }))
-            base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables"}),
-                functions.Concat(new string[] { }))
+            base(checkpointable_objects.Concat(new string[] { "variables", "trainable_variables", "regularization_losses" }),
+                functions.Concat(new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" }))
         {
 
         }
 
         public CommonEndPoints() :
-            //base(new string[] { "variables", "trainable_variables", "regularization_losses" },
-            //    new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" })
-            base(new string[] { "variables", "trainable_variables"},
-                new string[] {})
+            base(new string[] { "variables", "trainable_variables", "regularization_losses" },
+                new string[] { "__call__", "call_and_return_all_conditional_losses", "_default_save_signature" })
         {
 
         }
@@ -221,7 +223,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             //base(checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers", "metrics", "layer_regularization_losses", "layer_metrics" }),
             //    functions.Concat(new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" })
             base(checkpointable_objects.Concat(new string[] { "non_trainable_variables", "layers"}),
-                functions.Concat(new string[] { }))
+                functions.Concat(new string[] { "call_and_return_conditional_losses", "activity_regularizer_fn" }))
         {
 
         }

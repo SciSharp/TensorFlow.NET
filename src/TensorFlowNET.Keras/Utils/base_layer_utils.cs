@@ -165,6 +165,14 @@ namespace Tensorflow.Keras.Utils
             }
         }
 
+        public static bool has_weights(object obj)
+        {
+            var obj_type = obj.GetType();
+            return obj_type.GetField("trainable_weights") is not null &&
+                obj_type.GetField("non_trainable_weights") is not null &&
+                obj is not Type;
+        }
+
         // recusive
         static bool uses_keras_history(Tensor op_input)
         {

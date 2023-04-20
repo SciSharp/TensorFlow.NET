@@ -97,7 +97,7 @@ namespace Tensorflow
                     else
                     {
                         unique_id = $"{handle_name}_{ops.uid()}";
-                        shared_name = tf.Context.shared_name();
+                        shared_name = null;
                     }
 
                     var attr = new AttrValue();
@@ -116,24 +116,43 @@ namespace Tensorflow
                         }
                     });
 
-                    _shape = shape ?? _initial_value.shape;
+                    if(shape is null)
+                    {
+                        shape = _initial_value.shape;
+                    }
+                    dtype = _initial_value.dtype;
 
                     if (_in_graph_mode)
                     {
+                        // TODO(Rinne): deal with initializer_op.
+                        //if(initial_value is not null)
+                        //{
+                        //    tf_with(ops.name_scope("Assign"), n =>
+                        //    {
+                        //        tf_with(ops.device(handle.Device), _ =>
+                        //        {
+
+                        //        });
+                        //    });
+                        //}
                         handle = state_ops.variable_op_v2(_initial_value.shape, _initial_value.dtype.as_base_dtype(), name: name);
                         initializer_op = gen_state_ops.assign(handle, _initial_value, true).op;
 
                         ops.colocate_with(initializer_op);
-
-                        _graph_element = gen_array_ops.identity(handle, name = "read");
-                        ops.add_to_collections<IVariableV1>(collections, this);
-                        _dtype = handle.dtype;
+                        tf_with(ops.device(handle.Device), _ =>
+                        {
+                            var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                            resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
+                            _graph_element = gen_array_ops.identity(handle, name = "read");
+                            ops.add_to_collections<IVariableV1>(collections, this);
+                            _dtype = handle.dtype;
+                        });
                     }
                     else
                     {
                         handle = resource_variable_ops.eager_safe_variable_handle(
                           initial_value: _initial_value,
-                          shape: _shape,
+                          shape: shape,
                           shared_name: shared_name,
                           name: name,
                           graph_mode: _in_graph_mode);
@@ -141,11 +160,21 @@ namespace Tensorflow
                         gen_resource_variable_ops.assign_variable_op(handle, _initial_value);
                         initializer_op = null;
                         _graph_element = null;
+                        if (!string.IsNullOrEmpty(caching_device))
+                        {
+                            tf_with(ops.device(caching_device), _ =>
+                            {
+                                var value = gen_resource_variable_ops.read_variable_op(handle, dtype);
+                                resource_variable_ops._maybe_set_handle_data(dtype, handle, value);
+                            });
+                        }
                         _dtype = _initial_value.dtype.as_base_dtype();
                         // initial_value = _in_graph_mode ? initial_value : null;
                     }
 
                     base.__init__(trainable: trainable,
+                        shape: shape,
+                        dtype: _dtype,
                         handle: handle,
                         name: name,
                         unique_id: unique_id,

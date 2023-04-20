@@ -413,7 +413,7 @@ namespace Tensorflow.Native.UnitTest
             ASSERT_EQ(TF_OK, s_.Code, s_.Message);
             ASSERT_NE(func_, IntPtr.Zero);
             ASSERT_EQ(func_name_, c_api.StringPiece(c_api.TF_FunctionName(func_)));
-            c_api.TF_GraphCopyFunction(host_graph_, func_, IntPtr.Zero, s_);
+            c_api.TF_GraphCopyFunction(host_graph_, func_, new SafeFuncGraphHandle(IntPtr.Zero), s_);
             ASSERT_EQ(TF_OK, s_.Code, s_.Message);
         }
 

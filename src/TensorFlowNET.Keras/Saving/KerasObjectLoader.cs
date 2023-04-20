@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
@@ -17,6 +19,8 @@ using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Train;
 using Tensorflow.Training;
+using Tensorflow.Training.Saving.SavedModel;
+using Tensorflow.Util;
 using ThirdParty.Tensorflow.Python.Keras.Protobuf;
 using static Tensorflow.ApiDef.Types;
 using static Tensorflow.Binding;
@@ -26,7 +30,7 @@ namespace Tensorflow.Keras.Saving
 {
     public class KerasObjectLoader
     {
-        private static readonly IDictionary<string, Trackable> PUBLIC_ATTRIBUTES = new CommonEndPoints().CheckpointableObjects;
+        internal static readonly IDictionary<string, Trackable> PUBLIC_ATTRIBUTES;
         private SavedMetadata _metadata;
         private SavedObjectGraph _proto;
         private Dictionary<int, string> _node_paths = new Dictionary<int, string>();
@@ -39,7 +43,13 @@ namespace Tensorflow.Keras.Saving
 
         static KerasObjectLoader()
         {
-            PUBLIC_ATTRIBUTES[Keras.Saving.SavedModel.Constants.KERAS_ATTR] = null;
+            var endPoints = new CommonEndPoints();
+            PUBLIC_ATTRIBUTES = new Dictionary<string, Trackable>();
+            foreach (var key in endPoints._all_checkpointable_objects.Concat(endPoints._all_functions))
+            {
+                PUBLIC_ATTRIBUTES[key] = null;
+            }
+            PUBLIC_ATTRIBUTES[SavedModel.Constants.KERAS_ATTR] = null;
         }
 
         public KerasObjectLoader(SavedMetadata metadata, SavedObjectGraph object_graph_def)
@@ -125,8 +135,14 @@ namespace Tensorflow.Keras.Saving
                     continue;
                 }
 
-                // TODO: deal with `RevivedLayer` and `RevivedInputLayer`.
-                layers_revived_from_config.Add(node as Layer);
+                if(node is RevivedLayer or RevivedInputLayer)
+                {
+                    layers_revived_from_saved_model.Add(node as Layer);
+                }
+                else
+                {
+                    layers_revived_from_config.Add(node as Layer);
+                }
             }
 
             _finalize_saved_model_layers(layers_revived_from_saved_model);
@@ -171,16 +187,17 @@ namespace Tensorflow.Keras.Saving
                         // TODO(Rinne): implement it
                     }
                 }
-                
-                // `model.__init__(layers, config["name"])`
-                s.InitLayers(layers);
+
+                // `model.__init__(layers, config["name"])`InitLayers(layers);
+                s.InitLayers(layers.Select(x => x as ILayer));
                 s.Name = config["name"].ToObject<string>();
-                if(s.input is null || s.input.Length == 0)
+                if(s.inputs is null || s.inputs.Length == 0)
                 {
                     var first_layer = _get_child_layer_node_ids(model_id)[0];
                     var input_specs = _infer_inputs(first_layer);
-                    var input_shapes = _infer_inputs(first_layer, true);
+                    var input_shapes = _infer_input_shapes(first_layer);
                     // `model._set_inputs(input_specs)`
+                    s._set_inputs(input_specs);
 
                     // skip the check of input_specs is Dictionary
                     if (!s.Built)
@@ -205,7 +222,12 @@ namespace Tensorflow.Keras.Saving
 
         private void _set_network_attributes_from_metadata(Model revived_object)
         {
-            // TODO: implement it.
+            var metadata = revived_object.SerializedAttributes["metadata"] as KerasMetaData;
+            if (metadata.DType != TF_DataType.DtInvalid)
+            {
+                // TODO(Rinne): set_dtype_policy.
+            }
+            revived_object.args.Trainable = metadata.Trainable;
         }
 
         /// <summary>
@@ -235,12 +257,37 @@ namespace Tensorflow.Keras.Saving
         {
             foreach(var layer in layers)
             {
+                layer.Built = true;
+                var keras_attr = _get_keras_attr(layer);
+                if(keras_attr is not Trackable trackable)
+                {
+                    continue;
+                }
+                if (trackable.CustomizedFields.TryGetValue("call_and_return_conditional_losses", out var layer_call))
+                {
+                    Debug.Assert(layer_call is RestoredFunction);
+                    var concrete_functions = ((RestoredFunction)layer_call).ConcreteFunctions;
+                    if (concrete_functions is not null && concrete_functions.Count() > 0)
+                    {
+                        layer.ReplacedCall = use_wrapped_call(layer, ((RestoredFunction)layer_call).Apply);
+                    }
+                }
+            }
+
+            foreach(var layer in layers)
+            {
                 // TODO(Rinne): deal with `RevivedNetwork`.
                 
                 _restore_layer_unconditional_losses(layer);
                 _restore_layer_activation_loss(layer);
                 _restore_layer_metrics(layer);
             }
+        }
+
+        private Func<Tensors, Tensors> use_wrapped_call(Layer layer, Func<Tensors, Tensors> call)
+        {
+            // TODO(Rinne): revise it.
+            return call;
         }
 
         private void _restore_layer_unconditional_losses(Layer layer)
@@ -311,6 +358,10 @@ namespace Tensorflow.Keras.Saving
                 {
                     (obj, setter) = _revive_custom_object(identifier, metadata);
                 }
+                if(obj is null)
+                {
+                    throw new ValueError($"Cannot revive {metadata.Name} from the config or customized object.");
+                }
                 Debug.Assert(obj is Layer);
                 _maybe_add_serialized_attributes(obj as Layer, metadata);
                 return (obj, setter);
@@ -326,7 +377,7 @@ namespace Tensorflow.Keras.Saving
         private (Trackable, Action<object, object, object>) _revive_from_config(string identifier, KerasMetaData metadata, int node_id)
         {
             Trackable obj;
-            if(identifier == Keras.Saving.SavedModel.Constants.METRIC_IDENTIFIER)
+            if(identifier == SavedModel.Constants.METRIC_IDENTIFIER)
             {
                 // TODO(Rinne): implement it.
                 return (null, null);
@@ -349,8 +400,14 @@ namespace Tensorflow.Keras.Saving
 
         private (Trackable, Action<object, object, object>) _revive_custom_object(string identifier, KerasMetaData metadata)
         {
-            // TODO(Rinne): implement it.
-            throw new NotImplementedException();
+            if(identifier == SavedModel.Constants.LAYER_IDENTIFIER)
+            {
+                return RevivedLayer.init_from_metadata(metadata);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         Model _revive_graph_network(string identifier, KerasMetaData metadata, int node_id)
@@ -403,9 +460,13 @@ namespace Tensorflow.Keras.Saving
 
             var obj = generic_utils.deserialize_keras_object(class_name, config);
 
+            if(obj is null)
+            {
+                return null;
+            }
             obj.Name = metadata.Name;
             // TODO(Rinne): add `trainable`, `dtype`, `stateful` and `save_spec`
-           
+
 
             var built = _try_build_layer(obj, node_id, metadata.BuildInputShape);
             if (!built)
@@ -415,37 +476,30 @@ namespace Tensorflow.Keras.Saving
             return obj;
         }
 
-        private void _revive_setter(object layer, object name, object value)
+        private void _revive_setter(object obj, object name, object value)
         {
             Debug.Assert(name is string);
-            Debug.Assert(layer is Layer);
+            Debug.Assert(obj is Layer);
+            Layer layer = (Layer)obj;
             if(PUBLIC_ATTRIBUTES.ContainsKey(name as string))
             {
                 if(value is Trackable)
                 {
-                    (layer as Layer)._track_trackable(value as Trackable, name as string);
+                    layer._track_trackable(value as Trackable, name as string);
                 }
-                if((layer as Layer).SerializedAttributes is null)
+                if(layer.SerializedAttributes is null)
                 {
-                    (layer as Layer).SerializedAttributes = new JObject();
+                    layer.SerializedAttributes = new Dictionary<string, object>();
                 }
-                (layer as Layer).SerializedAttributes[name as string] = JToken.FromObject(value);
+                layer.SerializedAttributes[name as string] = value;
             }
-            else if(layer is Functional && Regex.Match(name as string, @"^layer(_with_weights)?-[\d+]").Success)
+            else if(layer is Functional functional && Regex.Match(name as string, @"^layer(_with_weights)?-[\d+]").Success)
             {
-                (layer as Functional)._track_trackable(value as Trackable, name as string, overwrite: true);
+                functional._track_trackable(value as Trackable, name as string, overwrite: true);
             }
             else
             {
-                var properties = layer.GetType().GetProperties();
-                foreach(var p in properties)
-                {
-                    if(p.Name == name as string && p.GetValue(layer) is not null)
-                    {
-                        return;
-                    }
-                }
-                Loader.setattr(layer, name, value);
+                layer.SetAttr(name as string, value);
             }
         }
 
@@ -507,7 +561,7 @@ namespace Tensorflow.Keras.Saving
             }
 
             var metric_list_node_id = _search_for_child_node(node_id, new string[] { 
-                Keras.Saving.SavedModel.Constants.KERAS_ATTR, "layer_metrics" 
+                SavedModel.Constants.KERAS_ATTR, "layer_metrics" 
             });
             if(metric_list_node_id is not null && obj is Model model && model.metrics is not null)
             {
@@ -533,7 +587,7 @@ namespace Tensorflow.Keras.Saving
                 // skip the check for registered identifier
 
                 Action<object, object, object> setter;
-                if (Keras.Saving.SavedModel.Constants.KERAS_OBJECT_IDENTIFIERS.Contains(obj_child.ObjectIdentifier))
+                if (SavedModel.Constants.KERAS_OBJECT_IDENTIFIERS.Contains(obj_child.ObjectIdentifier))
                 {
                     setter = _revive_setter;
                 }
@@ -572,7 +626,7 @@ namespace Tensorflow.Keras.Saving
 
             if(build_input_shape is null)
             {
-                build_input_shape = _infer_inputs(node_id, convert_to_shapes: true);
+                build_input_shape = _infer_input_shapes(node_id);
             }
 
             if(build_input_shape is not null)
@@ -598,7 +652,7 @@ namespace Tensorflow.Keras.Saving
         /// <param name="layer_node_id"></param>
         /// <param name="convert_to_shapes"></param>
         /// <returns></returns>
-        private Shape _infer_inputs(int layer_node_id, bool convert_to_shapes = false)
+        private TensorSpec _infer_inputs(int layer_node_id)
         {
             var call_fn_id = _search_for_child_node(layer_node_id, new string[] { "call_and_return_all_conditional_losses" });
             if(call_fn_id is null)
@@ -613,7 +667,22 @@ namespace Tensorflow.Keras.Saving
             }
             var call_fn_name = concrete_functions[0];
             var call_fn_proto = _proto.ConcreteFunctions[call_fn_name];
-            throw new NotImplementedException("Not implemented, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
+            var structured_input_signature = nested_structure_coder.decode_proto(call_fn_proto.CanonicalizedInputSignature);
+            Debug.Assert(structured_input_signature is IEnumerable);
+            var first_enumerator = (structured_input_signature as IEnumerable).GetEnumerator();
+            first_enumerator.MoveNext();
+            var first = first_enumerator.Current;
+            Debug.Assert(first is IEnumerable);
+            var inputs_enumerator = (first as IEnumerable).GetEnumerator();
+            inputs_enumerator.MoveNext();
+            var inputs = inputs_enumerator.Current as TensorSpec;
+            return inputs;
+        }
+
+        private Shape _infer_input_shapes(int layer_node_id)
+        {
+            var inputs = _infer_inputs(layer_node_id);
+            return nest.map_structure(x => x.shape, inputs);
         }
 
         private int? _search_for_child_node(int parent_id, IEnumerable<string> path_to_child)
@@ -645,7 +714,23 @@ namespace Tensorflow.Keras.Saving
 
         private void _maybe_add_serialized_attributes(Layer layer, KerasMetaData metadata)
         {
-            // TODO: deal with `RevivedLayer`
+            if(layer.SerializedAttributes is null || layer.SerializedAttributes.Count == 0)
+            {
+                layer.SerializedAttributes = new Dictionary<string, object>();
+                layer.SerializedAttributes["metadata"] = metadata;
+            }
+        }
+
+        private static object _get_keras_attr(Layer layer)
+        {
+            if((layer.SerializedAttributes ?? new Dictionary<string, object>()).TryGetValue(SavedModel.Constants.KERAS_ATTR, out var value))
+            {
+                return value;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

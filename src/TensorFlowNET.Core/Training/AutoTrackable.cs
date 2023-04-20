@@ -3,6 +3,7 @@ using System.Linq;
 using Tensorflow.Functions;
 using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Operations.Activation;
+using Tensorflow.Training;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Train
@@ -25,6 +26,13 @@ namespace Tensorflow.Train
             }
         }
 
+        public override void SetAttr(string name, object value)
+        {
+            // TODO(Rinne): deal with `self_setattr_tracking`.
+            value = TrackableDataStructure.sticky_attribute_assignment(this, name, value);
+            base.SetAttr(name, value);
+        }
+
         public override IDictionary<string, Trackable> _trackable_children(SaveType save_type, IDictionary<string, IDictionary<Trackable, ISerializedAttributes>>? cache = null)
         {
             if(save_type != SaveType.SAVEDMODEL)
@@ -34,6 +42,7 @@ namespace Tensorflow.Train
 
             Dictionary<string, Trackable> functions = new();
             // TODO: process of logs.
+            // TODO(Rinne): deal with members.
             var properties = this.GetType().GetProperties();
             foreach ( var property in properties )
             {
@@ -41,6 +50,16 @@ namespace Tensorflow.Train
                 {
                     string name = property.Name;
                     object value = property.GetValue(this, null);
+                    functions[name] = (Trackable)value;
+                }
+            }
+
+            foreach(var item in CustomizedFields)
+            {
+                var name = item.Key;
+                var value = item.Value;
+                if (value is Function or ConcreteFunction)
+                {
                     functions[name] = (Trackable)value;
                 }
             }
