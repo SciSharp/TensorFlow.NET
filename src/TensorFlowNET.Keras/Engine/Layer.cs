@@ -120,6 +120,30 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
+        public virtual void set_weights(List<NDArray> weights)
+        {
+            if (Weights.Count() != weights.Count()) throw new ValueError(
+                                            $"You called `set_weights` on layer \"{this.name}\"" +
+                                            $"with a weight list of length {len(weights)}, but the layer was " +
+                                            $"expecting {len(Weights)} weights.");
+            for (int i = 0; i < weights.Count(); i++)
+            {
+                if (weights[i].shape != Weights[i].shape)
+                {
+                    throw new ValueError($"Layer weight shape {weights[i].shape} not compatible with provided weight shape {Weights[i].shape}");
+                }
+            }
+            foreach (var (this_w, v_w) in zip(Weights, weights))
+                this_w.assign(v_w, read_value: true);
+        }
+
+        public List<NDArray> get_weights()
+        {
+            List<NDArray > weights = new List<NDArray>();
+            weights.AddRange(Weights.ConvertAll(x => x.numpy())); 
+            return weights;
+        }
+
         protected int id;
         public int Id => id;
         protected string name;

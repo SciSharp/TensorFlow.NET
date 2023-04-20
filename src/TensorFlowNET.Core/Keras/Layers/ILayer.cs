@@ -1,5 +1,6 @@
 ﻿using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.NumPy;
 using Tensorflow.Training;
 
 namespace Tensorflow.Keras
@@ -18,6 +19,8 @@ namespace Tensorflow.Keras
         List<IVariableV1> TrainableWeights { get; }
         List<IVariableV1> NonTrainableWeights { get; }
         List<IVariableV1> Weights { get; set; }
+        void set_weights(List<NDArray> weights);
+        List<NDArray> get_weights();
         Shape OutputShape { get; }
         Shape BatchInputShape { get; }
         TensorShapeConfig BuildInputShape { get; }
