@@ -137,7 +137,7 @@ public class SaveableView
     /// </summary>
     public List<int> dependency_sorted_node_ids()
     {
-        Dictionary<int, IEnumerable<int>> dependency_map = new();
+        Dictionary<int, List<int>> dependency_map = new();
         foreach (var node in _nodes)
         {
             var node_id = _node_ids[node];

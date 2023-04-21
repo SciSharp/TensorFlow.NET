@@ -52,7 +52,7 @@ public static class TrackableUtils
     /// </summary>
     /// <param name="dependency_map"></param>
     /// <exception cref="ValueError"></exception>
-    public static List<int> order_by_dependency(IDictionary<int, IEnumerable<int>> dependency_map)
+    public static List<int> order_by_dependency(IDictionary<int, List<int>> dependency_map)
     {
         Dictionary<int, HashSet<int>> reverse_dependency_map = new();
         foreach (var pair in dependency_map)
@@ -102,7 +102,7 @@ public static class TrackableUtils
                 edges.Remove(x);
                 if (edges.Count == 0)
                 {
-                    to_visit.Enqueue(dep);
+                     to_visit.Enqueue(dep);
                     if (!reverse_dependency_map.Remove(dep))
                     {
                         throw new KeyError($"Cannot find the key {dep} in reverse_dependency_map");

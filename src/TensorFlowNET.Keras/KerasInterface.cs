@@ -36,6 +36,11 @@ namespace Tensorflow.Keras
             }
         }
 
+        static KerasInterface()
+        {
+            RevivedTypes.RegisterRevivedTypeCreator("optimizer", new RestoredOptimizer());
+        }
+
         public KerasDataset datasets { get; } = new KerasDataset();
         public IInitializersApi initializers { get; } = new InitializersApi();
         public Regularizers regularizers { get; } = new Regularizers();

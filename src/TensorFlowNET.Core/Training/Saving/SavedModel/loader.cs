@@ -15,6 +15,7 @@ using Tensorflow.Functions;
 using Tensorflow.Training.Saving.SavedModel;
 using Tensorflow.Trackables;
 using OneOf;
+using Tensorflow.Keras.Engine;
 
 namespace Tensorflow
 {
@@ -34,7 +35,7 @@ namespace Tensorflow
         private List<int>? _filtered_nodes;
         private List<int> _ordered_node_ids;
         private Dictionary<int, (Trackable, Action<object, object, object>)> _loaded_nodes;
-        private List<Trackable> _nodes;
+        private List<object> _nodes;
         private Dictionary<int, Action<object, object, object>> _node_setters;
         private Dictionary<string, ConcreteFunction> _concrete_functions;
         private HashSet<string> _restored_concrete_functions;
@@ -213,7 +214,13 @@ namespace Tensorflow
                     continue;
                 }
                 var proto = _proto.Nodes[node_id];
-                foreach(var dep in _get_node_dependencies(proto).Values.Distinct())
+                if(node_id == 10522)
+                {
+                    // Debug(Rinne)
+                    Console.WriteLine();
+                }
+                var temp = _get_node_dependencies(proto);
+                foreach (var dep in _get_node_dependencies(proto).Values.Distinct())
                 {
                     deps.Add(dep);
                     if(_filtered_nodes is not null && !_filtered_nodes.Contains(dep))
@@ -232,7 +239,7 @@ namespace Tensorflow
                     // The optimizer and original variable must be created before the slot
                     // variable, since the slot variable is generated using the Optimizer's
                     // add_slot API.
-                    var slot_deps = dependency_map[slot_variable_node_id];
+                    var slot_deps = dependency_map.SetDefault(slot_variable_node_id, new List<int>());
                     slot_deps.Add(node_id);
                     slot_deps.Add(slot_variable_proto.OriginalVariableNodeId);
 
@@ -245,7 +252,12 @@ namespace Tensorflow
             }
             try
             {
-                return TrackableUtils.order_by_dependency(dependency_map.ToDictionary(x => x.Key, x => x.Value as IEnumerable<int>));
+                int total = 0;
+                foreach(var v in dependency_map.Values)
+                {
+                    total += v.Count;
+                }
+                return TrackableUtils.order_by_dependency(dependency_map);
             }
             catch (TrackableUtils.CyclicDependencyError ex)
             {
@@ -339,9 +351,20 @@ namespace Tensorflow
                         var saveable_object_proto = item.Value;
                         var save_fn_id = saveable_object_proto.SaveFunction;
                         var restore_fn_id = saveable_object_proto.RestoreFunction;
-                        saveable_fn_by_name[name] = (get(save_fn_id), get(restore_fn_id));
+                        saveable_fn_by_name[name] = ((Trackable)get(save_fn_id), (Trackable)get(restore_fn_id));
                     }
-                    node.SelfSaveableObjectFactories = saveable_object_util.recreate_saveable_objects(saveable_fn_by_name, null);
+                    var saveable_objects = saveable_object_util.recreate_saveable_objects(saveable_fn_by_name, null);
+                    if (saveable_objects is not null && saveable_objects.Count > 0)
+                    {
+                        if(node is Trackable trackable)
+                        {
+                            trackable.SelfSaveableObjectFactories = saveable_objects;
+                        }
+                        else
+                        {
+                            throw new TypeError();
+                        }
+                    }
                 }
             }
         }
@@ -379,12 +402,12 @@ namespace Tensorflow
                 {
                     // Use the public Optimizer interface when creating slot variables.
                     var (optimizer_node_id, slot_variable_proto) = slot_variable_node_ids[node_id];
-                    var optimizer_object = nodes[optimizer_node_id];
+                    var optimizer_object = nodes[optimizer_node_id] as IOptimizer;
                     var optimizer_variable = nodes[slot_variable_proto.OriginalVariableNodeId];
 
-                    // TODO(Rinne): implement it.
-                    throw new NotImplementedException("The model loading of SavedModel still has some incompleted part." +
-                        " Please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues.");
+                    var slot_variable = optimizer_object.add_slot(optimizer_variable as IVariableV1, slot_variable_proto.SlotName);
+                    nodes[slot_variable_proto.SlotVariableNodeId] = slot_variable as Trackable;
+                    node_setters[slot_variable_proto.SlotVariableNodeId] = setattr;
                 }
                 else
                 {
@@ -398,7 +421,7 @@ namespace Tensorflow
             {
                 nodes[0] = _recreate_base_user_object().Item1;
             }
-            _nodes = new List<Trackable>();
+            _nodes = new List<object>();
             for(int i = 0; i < _proto.Nodes.Count; i++)
             {
                 _nodes.Add(nodes[i]);
@@ -412,7 +435,7 @@ namespace Tensorflow
         private void _restore_checkpoint()
         {
             var variables_path = SavedModelUtils.get_variables_path(_export_dir);
-            var saver = new TrackableSaver(new ObjectGraphView(get(0)));
+            var saver = new TrackableSaver(new ObjectGraphView((Trackable)get(0)));
             tf_with(ops.device("CPU"), _ =>
             {
                 saver.FilePrefixPlaceHolder = constant_op.constant(variables_path);
@@ -467,7 +490,7 @@ namespace Tensorflow
             }
         }
 
-        private void _setup_function_captures(string concrete_function_name, IDictionary<OneOf<string, int>, Trackable> nodes)
+        private void _setup_function_captures(string concrete_function_name, IDictionary<OneOf<string, int>, object> nodes)
         {
             if (_restored_concrete_functions.Contains(concrete_function_name))
             {
@@ -485,12 +508,12 @@ namespace Tensorflow
            // TODO: implement it with concrete functions.
         }
 
-        public Trackable get(int node_id)
+        public object get(int node_id)
         {
             return _nodes[node_id];
         }
 
-        public Trackable get(string node_id)
+        public object get(string node_id)
         {
             return get(_node_path_to_id[node_id]);
         }
@@ -512,9 +535,9 @@ namespace Tensorflow
             }
         }
 
-        private (Dictionary<int, Trackable>, Dictionary<int, Action<object, object, object>>) _initialize_loaded_nodes()
+        private (Dictionary<int, object>, Dictionary<int, Action<object, object, object>>) _initialize_loaded_nodes()
         {
-            Dictionary<int, Trackable> nodes = new();
+            Dictionary<int, object> nodes = new();
             Dictionary<int, Action<object, object, object>> node_setters = new();
             foreach(var item in _loaded_nodes)
             {
@@ -534,10 +557,10 @@ namespace Tensorflow
             }
         }
 
-        private (Trackable, Action<object, object, object>) _recreate(SavedObject proto, int node_id, IDictionary<int, Trackable> nodes)
+        private (object, Action<object, object, object>) _recreate(SavedObject proto, int node_id, IDictionary<int, object> nodes)
         {
             // skip the registered classes.
-            Dictionary<OneOf<string, int>, Trackable> dependencies = new();
+            Dictionary<OneOf<string, int>, object> dependencies = new();
             foreach(var item in _get_node_dependencies(proto))
             {
                 dependencies[item.Key] = nodes[item.Value];
@@ -558,7 +581,7 @@ namespace Tensorflow
         /// <param name="proto"></param>
         /// <param name="node_id"></param>
         /// <param name="dependencies"></param>
-        private (Trackable, Action<object, object, object>) _recreate_default(SavedObject proto, int node_id, IDictionary<OneOf<string, int>, Trackable> dependencies)
+        private (Trackable, Action<object, object, object>) _recreate_default(SavedObject proto, int node_id, IDictionary<OneOf<string, int>, object> dependencies)
         {
             return proto.KindCase switch
             {
@@ -626,7 +649,7 @@ namespace Tensorflow
         }
 
         private (Function, Action<object, object, object>) _recreate_function(SavedFunction proto,
-            IDictionary<OneOf<string, int>, Trackable> dependencies)
+            IDictionary<OneOf<string, int>, object> dependencies)
         {
             var fn = function_deserialization.recreate_function(proto, _concrete_functions);
             foreach (var name in proto.ConcreteFunctions)
@@ -637,7 +660,7 @@ namespace Tensorflow
         }
 
         private (ConcreteFunction, Action<object, object, object>) _recreate_bare_concrete_function(SavedBareConcreteFunction proto,
-            IDictionary<OneOf<string, int>, Trackable> dependencies)
+            IDictionary<OneOf<string, int>, object> dependencies)
         {
             var fn = function_deserialization.setup_bare_concrete_function(proto, _concrete_functions);
             _setup_function_captures(proto.ConcreteFunctionName, dependencies);

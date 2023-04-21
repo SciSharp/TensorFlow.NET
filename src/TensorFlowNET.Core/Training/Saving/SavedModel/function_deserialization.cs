@@ -116,17 +116,23 @@ namespace Tensorflow.Training.Saving.SavedModel
             }
 
             Dictionary<string, ConcreteFunction> loaded_gradients = new();
-            foreach (var fdef in _sort_function_defs(library, function_deps))
+            // Debug(Rinne)
+            var temp = _sort_function_defs(library, function_deps);
+            int i = 0;
+            foreach (var fdef in temp)
             {
+                i++;
                 var orig_name = _fix_fdef_in_place(fdef, functions, load_shared_name_suffix, new_gradient_op_types);
 
                 object structured_input_signature = null;
                 object structured_outputs = null;
                 if (saved_object_graph is not null && saved_object_graph.ConcreteFunctions.ContainsKey(orig_name))
                 {
-                    var proto = saved_object_graph.ConcreteFunctions[orig_name];
-                    structured_input_signature = nested_structure_coder.decode_proto(proto.CanonicalizedInputSignature);
-                    structured_outputs = nested_structure_coder.decode_proto(proto.OutputSignature);
+                    // TODO(Rinne): deal with structured_input_signature and structured_outputs.
+
+                    //var proto = saved_object_graph.ConcreteFunctions[orig_name];
+                    //structured_input_signature = nested_structure_coder.decode_proto(proto.CanonicalizedInputSignature);
+                    //structured_outputs = nested_structure_coder.decode_proto(proto.OutputSignature);
                 }
 
                 graph.as_default();
@@ -234,27 +240,41 @@ namespace Tensorflow.Training.Saving.SavedModel
 
         private static void _restore_gradient_functions(FuncGraph func_graph, Dictionary<string, ConcreteFunction> renamed_functions, Dictionary<string, ConcreteFunction> loaded_gradients)
         {
-            foreach(var op in func_graph.get_operations())
+            if(loaded_gradients is null || loaded_gradients.Count == 0)
             {
-                if(op.op.type == "StatefulPartitionedCall" || op.op.type == "PartitionedCall")
+                foreach (var op in func_graph.get_operations())
                 {
-                    var function = renamed_functions[op.op.node_def.Attr["f"].Func.Name];
-                    op.op._gradient_function = function._get_gradient_function();
+                    if (op.op.type == "StatefulPartitionedCall" || op.op.type == "PartitionedCall")
+                    {
+                        var function = renamed_functions[op.op.node_def.Attr["f"].Func.Name];
+                        op.op._gradient_function = function._get_gradient_function();
+                    }
                 }
-                string gradient_op_type = null;
-                try
+            }
+            else
+            {
+                foreach (var op in func_graph.get_operations())
                 {
-                    gradient_op_type = op.op.get_attr("_gradient_op_type") as string;
-                }
-                catch(InvalidArgumentError)
-                {
-                    continue;
-                }
-                if (loaded_gradients.ContainsKey(gradient_op_type))
-                {
-                    var grad_fn = loaded_gradients[gradient_op_type];
-                    grad_fn.NumPositionArgs = op.op.inputs.Length;
-                    grad_fn.ArgKeywords = op.op.inputs._inputs.Select(x => x.name);
+                    if (op.op.type == "StatefulPartitionedCall" || op.op.type == "PartitionedCall")
+                    {
+                        var function = renamed_functions[op.op.node_def.Attr["f"].Func.Name];
+                        op.op._gradient_function = function._get_gradient_function();
+                    }
+                    string gradient_op_type = null;
+                    try
+                    {
+                        gradient_op_type = op.op.get_attr("_gradient_op_type") as string;
+                    }
+                    catch (InvalidArgumentError)
+                    {
+                        continue;
+                    }
+                    if (loaded_gradients.ContainsKey(gradient_op_type))
+                    {
+                        var grad_fn = loaded_gradients[gradient_op_type];
+                        grad_fn.NumPositionArgs = op.op.inputs.Length;
+                        grad_fn.ArgKeywords = op.op.inputs._inputs.Select(x => x.name);
+                    }
                 }
             }
         }

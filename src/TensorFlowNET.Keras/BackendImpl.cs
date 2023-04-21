@@ -169,6 +169,12 @@ namespace Tensorflow.Keras
             _GRAPH_LEARNING_PHASES[tf.get_default_graph()] = (GraphLearningPhase)((value) ? 1 : 0);
         }
 
+        public void set_value(IVariableV1 x, object value)
+        {
+            // TODO(Rinne): check the implementation.
+            x.assign(value);
+        }
+
         public void batch_set_value(List<(IVariableV1, NDArray)> tuples)
         {
             if (ops.executing_eagerly_outside_functions())

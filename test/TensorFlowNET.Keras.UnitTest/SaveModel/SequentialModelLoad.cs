@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Tensorflow;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using Tensorflow.NumPy;
@@ -102,5 +103,14 @@ public class SequentialModelLoad
         var y = np.ones((8));
 
         classify_model.fit(x, y, batch_size: 4);
+    }
+
+    [Ignore]
+    [TestMethod]
+    public void TestModelBeforeTF2_5()
+    {
+        var a = keras.layers;
+        var model = tf.saved_model.load(@"D:\development\temp\saved_model") as Model;
+        model.summary();
     }
 }
