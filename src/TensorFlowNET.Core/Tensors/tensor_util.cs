@@ -64,36 +64,68 @@ namespace Tensorflow
             var num_elements = shape.size;
             var tensor_dtype = tensor.Dtype.as_tf_dtype();
 
+            T[] ExpandArrayToSize<T>(IList<T> src)
+            {
+                if(src.Count == 0)
+                {
+                    return new T[0];
+                }
+                var pad_count = num_elements - src.Count;
+                var pre = pad_count / 2;
+                var after = pad_count - pre;
+                var first_elem = src[0];
+                var last_elem = src[src.Count - 1];
+                T[] res = new T[num_elements];
+                for(long i = 0; i < num_elements; i++)
+                {
+                    if (i < pre) res[i] = first_elem;
+                    else if (i >= num_elements - after) res[i] = last_elem;
+                    else res[i] = src[(int)(i - pre)];
+                }
+                return res;
+            }
+
             if (shape.ndim > 0 && tensor.TensorContent.Length > 0)
             {
                 return np.frombuffer(tensor.TensorContent.ToByteArray(), shape, tensor_dtype);
             }
-            else if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
+            NDArray values;
+            if (tensor.Dtype == DataType.DtHalf || tensor.Dtype == DataType.DtBfloat16)
             {
-                return np.array(tensor.HalfVal.ToArray()).reshape(shape);
+                values = np.array(ExpandArrayToSize(tensor.HalfVal));
             }
             else if (tensor.Dtype == DataType.DtFloat)
             {
-                return np.array(tensor.FloatVal.ToArray()).reshape(shape);
+                values = np.array(ExpandArrayToSize(tensor.FloatVal));
             }
             else if (new DataType[] { DataType.DtInt32, DataType.DtUint8 }.Contains(tensor.Dtype))
             {
-                return np.array(tensor.IntVal.ToArray()).reshape(shape);
+                values = np.array(ExpandArrayToSize(tensor.IntVal));
             }
             else if (new DataType[] { DataType.DtInt64 }.Contains(tensor.Dtype))
             {
-                return np.array(tensor.Int64Val.ToArray()).reshape(shape);
+                values = np.array(ExpandArrayToSize(tensor.Int64Val));
             }
             else if (new DataType[] { DataType.DtUint64 }.Contains(tensor.Dtype))
             {
-                return np.array(tensor.Uint64Val.ToArray()).reshape(shape);
+                values = np.array(ExpandArrayToSize(tensor.Uint64Val));
             }
             else if (tensor.Dtype == DataType.DtBool)
             {
-                return np.array(tensor.BoolVal.ToArray()).reshape(shape);
+                values = np.array(ExpandArrayToSize(tensor.BoolVal));
+            }
+            else
+            {
+                throw new TypeError($"Unsupported tensor type: {tensor.Dtype}. See " +
+                    $"https://www.tensorflow.org/api_docs/python/tf/dtypes for supported TF dtypes.");
             }
 
-            throw new NotImplementedException("MakeNdarray");
+            if(values.size == 0)
+            {
+                return np.zeros(shape, tensor_dtype);
+            }
+
+            return values.reshape(shape);
         }
 
         private static readonly TF_DataType[] quantized_types = new TF_DataType[]

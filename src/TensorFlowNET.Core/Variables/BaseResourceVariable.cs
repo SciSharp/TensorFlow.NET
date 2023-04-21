@@ -333,5 +333,23 @@ namespace Tensorflow
             });
             return array_ops.identity(value);
         }
+
+        //public static Tensor operator +(BaseResourceVariable x, int y) => x.value() + y;
+        //public static Tensor operator +(BaseResourceVariable x, float y) => x.value() + y;
+        //public static Tensor operator +(BaseResourceVariable x, double y) => x.value() + y;
+        //public static Tensor operator +(BaseResourceVariable x, BaseResourceVariable y) => x.value() + y.value();
+        //public static Tensor operator -(BaseResourceVariable x, int y) => x.value() - y;
+        //public static Tensor operator -(BaseResourceVariable x, float y) => x.value() - y;
+        //public static Tensor operator -(BaseResourceVariable x, double y) => x.value() - y;
+        //public static Tensor operator -(BaseResourceVariable x, Tensor y) => x.value() - y;
+        //public static Tensor operator -(BaseResourceVariable x, BaseResourceVariable y) => x.value() - y.value();
+
+        //public static Tensor operator *(BaseResourceVariable x, BaseResourceVariable y) => x.value() * y.value();
+        //public static Tensor operator *(BaseResourceVariable x, Tensor y) => x.value() * y;
+        //public static Tensor operator *(BaseResourceVariable x, NDArray y) => x.value() * y;
+
+        //public static Tensor operator <(BaseResourceVariable x, Tensor y) => x.value() < y;
+
+        //public static Tensor operator >(BaseResourceVariable x, Tensor y) => x.value() > y;
     }
 }

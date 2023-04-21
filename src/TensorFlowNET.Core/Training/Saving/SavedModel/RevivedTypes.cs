@@ -46,4 +46,9 @@ public class RevivedTypes
             return (null, null);
         }
     }
+
+    public static void RegisterRevivedTypeCreator(string identifier, ITrackableWrapper obj)
+    {
+        _registered_revived_creator[identifier] = obj;
+    }
 }

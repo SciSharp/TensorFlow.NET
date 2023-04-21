@@ -8,6 +8,7 @@ using Tensorflow.Exceptions;
 using Tensorflow.Framework;
 using Tensorflow.Framework.Models;
 using Tensorflow.Functions;
+using Tensorflow.NumPy;
 using Tensorflow.Operations;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
@@ -181,7 +182,7 @@ public class FuncGraph : Graph, IDisposable
     const int _EAGER_CONST_THRESHOLD = 128;
     public Tensor capture(Tensor tensor, string name = null, Shape shape = null)
     {
-        if(tensor is EagerTensor)
+        if(tensor is EagerTensor or NDArray)
         {
             if (name == null)
                 name = ops.uid().ToString();

@@ -14,11 +14,11 @@ namespace Tensorflow.Keras.Optimizers
         protected bool _hypers_created;
         protected virtual string _name { get; }
 
-        IVariableV1 _iterations;
+        protected IVariableV1 _iterations;
         protected ResourceVariable iterations => _iterations as ResourceVariable;
         List<IVariableV1> _weights;
-        Dictionary<string, float> _hyper;
-        Dictionary<string, IVariableV1> _hyper_variables;
+        protected Dictionary<string, float> _hyper;
+        protected Dictionary<string, IVariableV1> _hyper_variables;
         protected bool _momentum;
         protected float _initial_decay = 0.0f;
         protected bool _use_locking = true;
@@ -224,7 +224,7 @@ namespace Tensorflow.Keras.Optimizers
             }
         }
 
-        protected IVariableV1 add_slot(IVariableV1 var, string slot_name, IInitializer initializer = null)
+        public IVariableV1 add_slot(IVariableV1 var, string slot_name, IInitializer initializer = null)
         {
             if (initializer == null)
                 initializer = tf.zeros_initializer;

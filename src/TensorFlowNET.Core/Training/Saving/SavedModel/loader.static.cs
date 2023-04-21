@@ -78,7 +78,7 @@ namespace Tensorflow
                 tf_with(ops.init_scope(), x =>
                 {
                     loader = new Loader(object_graph_proto, saved_model_proto, export_dir, ckpt_options, options, filters);
-                    root = loader.get(0);
+                    root = (Trackable)loader.get(0);
                     // skip the assignment of `graph_debug_info`.
                 });
                 // skip the assignment of `tensorflow_version`
@@ -99,7 +99,7 @@ namespace Tensorflow
             }
             if(filters != null && filters.Count > 0)
             {
-                return filters.Keys.ToDictionary(x => x, x => loader.get(x));
+                return filters.Keys.ToDictionary(x => x, x => (Trackable)loader.get(x));
             }
             else
             {

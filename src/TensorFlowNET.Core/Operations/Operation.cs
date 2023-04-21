@@ -216,10 +216,12 @@ namespace Tensorflow
         public virtual object get_attr(string name)
         {
             var buf = new Buffer();
-            c_api.TF_OperationGetAttrValueProto(_handle, name, buf, tf.Status);
-            tf.Status.Check(true);
+            Status status = new();
+            c_api.TF_OperationGetAttrValueProto(_handle, name, buf, status);
+            status.Check(true);
+            var tf_buffer = c_api.TF_GetBuffer(buf);
 
-            var x = AttrValue.Parser.ParseFrom(buf.ToArray());
+            var x = AttrValue.Parser.ParseFrom(tf_buffer.AsSpan<byte>());
 
             var oneof_value = x.ValueCase;
             if (oneof_value == AttrValue.ValueOneofCase.None)
