@@ -19,7 +19,7 @@ namespace Tensorflow.Keras
         List<IVariableV1> TrainableWeights { get; }
         List<IVariableV1> NonTrainableWeights { get; }
         List<IVariableV1> Weights { get; set; }
-        void set_weights(List<NDArray> weights);
+        void set_weights(IEnumerable<NDArray> weights);
         List<NDArray> get_weights();
         Shape OutputShape { get; }
         Shape BatchInputShape { get; }

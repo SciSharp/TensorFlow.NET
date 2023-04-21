@@ -75,7 +75,7 @@ namespace Tensorflow
         public List<IVariableV1> Weights { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public List<NDArray> get_weights() => throw new NotImplementedException();
-        public void set_weights(List<NDArray> weights) => throw new NotImplementedException();
+        public void set_weights(IEnumerable<NDArray> weights) => throw new NotImplementedException();
         public List<IVariableV1> NonTrainableWeights => throw new NotImplementedException();
 
         public Shape OutputShape => throw new NotImplementedException();
