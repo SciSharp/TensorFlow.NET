@@ -21,6 +21,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.NumPy;
 using Tensorflow.Operations;
 using Tensorflow.Train;
 using Tensorflow.Util;
@@ -71,7 +72,10 @@ namespace Tensorflow
 
         public List<IVariableV1> TrainableVariables => throw new NotImplementedException();
         public List<IVariableV1> TrainableWeights => throw new NotImplementedException();
-        public List<IVariableV1> Weights => throw new NotImplementedException();
+        public List<IVariableV1> Weights { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public List<NDArray> get_weights() => throw new NotImplementedException();
+        public void set_weights(IEnumerable<NDArray> weights) => throw new NotImplementedException();
         public List<IVariableV1> NonTrainableWeights => throw new NotImplementedException();
 
         public Shape OutputShape => throw new NotImplementedException();
@@ -83,8 +87,6 @@ namespace Tensorflow
         public TF_DataType DType => throw new NotImplementedException();
         protected bool built = false;
         public bool Built => built;
-
-        List<IVariableV1> ILayer.Weights { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public RnnCell(bool trainable = true,
             string name = null,
