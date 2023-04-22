@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers {
@@ -12,7 +13,7 @@ namespace Tensorflow.Keras.Layers {
         {
             // Exponential has no args
         }
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             base.build(input_shape);
         }

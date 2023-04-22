@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Keras.Common
+namespace Tensorflow.Keras.Saving.Common
 {
     public class CustomizedAxisJsonConverter : JsonConverter
     {
@@ -38,7 +38,7 @@ namespace Tensorflow.Keras.Common
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             int[]? axis;
-            if(reader.ValueType == typeof(long))
+            if (reader.ValueType == typeof(long))
             {
                 axis = new int[1];
                 axis[0] = (int)serializer.Deserialize(reader, typeof(int));
@@ -51,7 +51,7 @@ namespace Tensorflow.Keras.Common
             {
                 throw new ValueError("Cannot deserialize 'null' to `Axis`.");
             }
-            return new Axis((int[])(axis!));
+            return new Axis(axis!);
         }
     }
 }

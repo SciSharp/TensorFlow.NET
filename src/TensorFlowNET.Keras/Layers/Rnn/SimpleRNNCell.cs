@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -18,11 +19,12 @@ namespace Tensorflow.Keras.Layers.Rnn
             this.args = args;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
-            var input_dim = input_shape[-1];
+            var single_shape = input_shape.ToSingleShape();
+            var input_dim = single_shape[-1];
 
-            kernel = add_weight("kernel", (input_shape[-1], args.Units),
+            kernel = add_weight("kernel", (single_shape[-1], args.Units),
                 initializer: args.KernelInitializer
             );
 

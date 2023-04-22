@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 
@@ -49,16 +50,17 @@ namespace Tensorflow.Keras.Layers
             axis = args.Axis.axis;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
-            var ndims = input_shape.ndim;
+            var single_shape = input_shape.ToSingleShape();
+            var ndims = single_shape.ndim;
             foreach (var (idx, x) in enumerate(axis))
                 if (x < 0)
                     axis[idx] = ndims + x;
 
             var axis_to_dim = new Dictionary<int, int>();
             foreach (var x in axis)
-                axis_to_dim[x] = (int)input_shape[x];
+                axis_to_dim[x] = (int)single_shape[x];
 
             inputSpec = new InputSpec(ndim: ndims, axes: axis_to_dim);
             var param_dtype = DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : DType;

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Operations;
 using static Tensorflow.Binding;
@@ -57,12 +58,13 @@ namespace Tensorflow.Keras.Layers
             _tf_data_format = conv_utils.convert_data_format(data_format, rank + 2);
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             int channel_axis = data_format == "channels_first" ? 1 : -1;
+            var single_shape = input_shape.ToSingleShape();
             var input_channel = channel_axis < 0 ?
-                input_shape.dims[input_shape.ndim + channel_axis] :
-                input_shape.dims[channel_axis];
+                single_shape.dims[single_shape.ndim + channel_axis] :
+                single_shape.dims[channel_axis];
             Shape kernel_shape = kernel_size.dims.concat(new long[] { input_channel / args.Groups, filters });
             kernel = add_weight(name: "kernel",
                 shape: kernel_shape,

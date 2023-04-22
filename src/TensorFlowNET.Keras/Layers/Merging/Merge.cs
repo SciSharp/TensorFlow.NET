@@ -4,6 +4,7 @@ using System.Text;
 using static Tensorflow.Binding;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -14,7 +15,7 @@ namespace Tensorflow.Keras.Layers
 
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             // output_shape = input_shape.dims[1^];
             _buildInputShape = input_shape;

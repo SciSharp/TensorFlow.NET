@@ -17,6 +17,7 @@
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -48,13 +49,13 @@ namespace Tensorflow.Keras.Layers
                 args.InputShape = args.InputLength;
 
             if (args.BatchInputShape == null)
-                args.BatchInputShape = new long[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
+                args.BatchInputShape = new KerasShapesWrapper(new long[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray());
 
             embeddings_initializer = args.EmbeddingsInitializer ?? tf.random_uniform_initializer;
             SupportsMasking = mask_zero;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             tf.Context.eager_mode();
             embeddings = add_weight(shape: (input_dim, output_dim),

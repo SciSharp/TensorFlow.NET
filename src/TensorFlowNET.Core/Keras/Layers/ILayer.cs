@@ -10,7 +10,7 @@ namespace Tensorflow.Keras
         string Name { get; }
         bool Trainable { get; }
         bool Built { get; }
-        void build(Shape input_shape);
+        void build(KerasShapesWrapper input_shape);
         List<ILayer> Layers { get; }
         List<INode> InboundNodes { get; }
         List<INode> OutboundNodes { get; }
@@ -22,8 +22,8 @@ namespace Tensorflow.Keras
         void set_weights(IEnumerable<NDArray> weights);
         List<NDArray> get_weights();
         Shape OutputShape { get; }
-        Shape BatchInputShape { get; }
-        TensorShapeConfig BuildInputShape { get; }
+        KerasShapesWrapper BatchInputShape { get; }
+        KerasShapesWrapper BuildInputShape { get; }
         TF_DataType DType { get; }
         int count_params();
         void adapt(Tensor data, int? batch_size = null, int? steps = null);

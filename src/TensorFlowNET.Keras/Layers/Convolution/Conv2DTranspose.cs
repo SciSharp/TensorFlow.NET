@@ -19,6 +19,7 @@ using static Tensorflow.Binding;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.KerasApi;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -58,13 +59,14 @@ namespace Tensorflow.Keras.Layers
             return args;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
+            var single_shape = input_shape.ToSingleShape();
             if (len(input_shape) != 4)
                 throw new ValueError($"Inputs should have rank 4. Received input shape: {input_shape}");
 
             var channel_axis = _get_channel_axis();
-            var input_dim = input_shape[-1];
+            var input_dim = single_shape[-1];
             var kernel_shape = new Shape(kernel_size[0], kernel_size[1], filters, input_dim);
 
             kernel = add_weight(name: "kernel",

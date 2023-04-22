@@ -16,7 +16,7 @@
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Tensorflow.Keras.Common;
+using Tensorflow.Keras.Saving.Common;
 
 namespace Tensorflow
 {

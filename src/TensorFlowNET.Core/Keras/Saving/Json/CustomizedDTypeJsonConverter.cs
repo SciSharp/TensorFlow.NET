@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace Tensorflow.Keras.Common
+namespace Tensorflow.Keras.Saving.Common
 {
     public class CustomizedDTypeJsonConverter : JsonConverter
     {
@@ -16,7 +16,7 @@ namespace Tensorflow.Keras.Common
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            var token = JToken.FromObject(dtypes.as_numpy_name((TF_DataType)value));
+            var token = JToken.FromObject(((TF_DataType)value).as_numpy_name());
             token.WriteTo(writer);
         }
 

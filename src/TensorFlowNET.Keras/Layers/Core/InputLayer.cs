@@ -40,10 +40,10 @@ namespace Tensorflow.Keras.Layers
             built = true;
             SupportsMasking = true;
 
-            if (BatchInputShape != null)
+            if (BatchInputShape is not null)
             {
-                args.BatchSize = (int)BatchInputShape.dims[0];
-                args.InputShape = BatchInputShape.dims.Skip(1).ToArray();
+                args.BatchSize = (int)(BatchInputShape.ToSingleShape().dims[0]);
+                args.InputShape = BatchInputShape.ToSingleShape().dims.Skip(1).ToArray();
             }
 
             // moved to base class
@@ -63,9 +63,8 @@ namespace Tensorflow.Keras.Layers
             {
                 if (args.InputShape != null)
                 {
-                    args.BatchInputShape = new long[] { args.BatchSize }
-                        .Concat(args.InputShape.dims)
-                        .ToArray();
+                    args.BatchInputShape = new Saving.KerasShapesWrapper(new long[] { args.BatchSize }
+                        .Concat(args.InputShape.dims).ToArray());
                 }
                 else
                 {
@@ -76,7 +75,7 @@ namespace Tensorflow.Keras.Layers
                 graph.as_default();
 
                 args.InputTensor = keras.backend.placeholder(
-                    shape: BatchInputShape,
+                    shape: BatchInputShape.ToSingleShape(),
                     dtype: DType,
                     name: Name,
                     sparse: args.Sparse,

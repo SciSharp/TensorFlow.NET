@@ -173,6 +173,11 @@ namespace Tensorflow.Keras.Utils
                 obj is not Type;
         }
 
+        public static Tensor generate_placeholders_from_shape(Shape shape)
+        {
+            return array_ops.placeholder(keras.backend.floatx(), shape);
+        }
+
         // recusive
         static bool uses_keras_history(Tensor op_input)
         {

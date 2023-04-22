@@ -102,9 +102,9 @@ namespace Tensorflow.Keras.Utils
             return args as LayerArgs;
         }
 
-        public static ModelConfig deserialize_model_config(JToken json)
+        public static FunctionalConfig deserialize_model_config(JToken json)
         {
-            ModelConfig config = new ModelConfig();
+            FunctionalConfig config = new FunctionalConfig();
             config.Name = json["name"].ToObject<string>();
             config.Layers = new List<LayerConfig>();
             var layersToken = json["layers"];

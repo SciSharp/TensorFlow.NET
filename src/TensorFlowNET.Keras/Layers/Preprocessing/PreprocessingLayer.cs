@@ -77,8 +77,8 @@ namespace Tensorflow.Keras.Layers
             {
                 var data_shape = data.shape;
                 var data_shape_nones = Enumerable.Range(0, data.ndim).Select(x => -1).ToArray();
-                _args.BatchInputShape = BatchInputShape ?? new Shape(data_shape_nones);
-                build(data_shape);
+                _args.BatchInputShape = BatchInputShape ?? new Saving.KerasShapesWrapper(new Shape(data_shape_nones));
+                build(new Saving.KerasShapesWrapper(data_shape));
                 built = true;
             }
         }

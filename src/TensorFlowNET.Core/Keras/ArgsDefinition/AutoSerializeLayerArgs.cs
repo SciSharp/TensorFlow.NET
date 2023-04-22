@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
@@ -18,7 +19,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         [JsonProperty("dtype")]
         public override TF_DataType DType { get => base.DType; set => base.DType = value; }
         [JsonProperty("batch_input_shape", NullValueHandling = NullValueHandling.Ignore)]
-        public override Shape BatchInputShape { get => base.BatchInputShape; set => base.BatchInputShape = value; }
+        public override KerasShapesWrapper BatchInputShape { get => base.BatchInputShape; set => base.BatchInputShape = value; }
         [JsonProperty("trainable")]
         public override bool Trainable { get => base.Trainable; set => base.Trainable = value; }
     }

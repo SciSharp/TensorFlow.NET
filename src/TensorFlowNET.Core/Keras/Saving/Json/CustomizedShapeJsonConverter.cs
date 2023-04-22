@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.Keras.Common
+namespace Tensorflow.Keras.Saving.Common
 {
     class ShapeInfoFromPython
     {
         public string class_name { get; set; }
         public long?[] items { get; set; }
     }
-    public class CustomizedShapeJsonConverter: JsonConverter
+    public class CustomizedShapeJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -25,12 +25,12 @@ namespace Tensorflow.Keras.Common
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
-            if(value is null)
+            if (value is null)
             {
                 var token = JToken.FromObject(null);
                 token.WriteTo(writer);
             }
-            else if(value is not Shape)
+            else if (value is not Shape)
             {
                 throw new TypeError($"Unable to use `CustomizedShapeJsonConverter` to serialize the type {value.GetType()}.");
             }
@@ -38,7 +38,7 @@ namespace Tensorflow.Keras.Common
             {
                 var shape = (value as Shape)!;
                 long?[] dims = new long?[shape.ndim];
-                for(int i = 0; i < dims.Length; i++)
+                for (int i = 0; i < dims.Length; i++)
                 {
                     if (shape.dims[i] == -1)
                     {
@@ -61,7 +61,7 @@ namespace Tensorflow.Keras.Common
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             long?[] dims;
-            try
+            if (reader.TokenType == JsonToken.StartObject)
             {
                 var shape_info_from_python = serializer.Deserialize<ShapeInfoFromPython>(reader);
                 if (shape_info_from_python is null)
@@ -70,14 +70,22 @@ namespace Tensorflow.Keras.Common
                 }
                 dims = shape_info_from_python.items;
             }
-            catch(JsonSerializationException)
+            else if (reader.TokenType == JsonToken.StartArray)
             {
                 dims = serializer.Deserialize<long?[]>(reader);
             }
-            long[] convertedDims = new long[dims.Length];
-            for(int i = 0; i < dims.Length; i++)
+            else if (reader.TokenType == JsonToken.Null)
             {
-                convertedDims[i] = dims[i] ?? (-1);
+                return null;
+            }
+            else
+            {
+                throw new ValueError($"Cannot deserialize the token {reader} as Shape.");
+            }
+            long[] convertedDims = new long[dims.Length];
+            for (int i = 0; i < dims.Length; i++)
+            {
+                convertedDims[i] = dims[i] ?? -1;
             }
             return new Shape(convertedDims);
         }

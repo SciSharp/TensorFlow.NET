@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Saving;
 
-namespace Tensorflow.Keras.Common
+namespace Tensorflow.Keras.Saving.Common
 {
     public class CustomizedNodeConfigJsonConverter : JsonConverter
     {
@@ -46,10 +46,10 @@ namespace Tensorflow.Keras.Common
             {
                 throw new ValueError("Cannot deserialize 'null' to `Shape`.");
             }
-            if(values.Length == 1)
+            if (values.Length == 1)
             {
                 var array = values[0] as JArray;
-                if(array is null)
+                if (array is null)
                 {
                     throw new ValueError($"The value ({string.Join(", ", values)}) cannot be deserialized to type `NodeConfig`.");
                 }

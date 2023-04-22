@@ -11,7 +11,7 @@ namespace Tensorflow.Keras.Engine
 {
     public partial class Functional
     {
-        public static Functional from_config(ModelConfig config)
+        public static Functional from_config(FunctionalConfig config)
         {
             var (input_tensors, output_tensors, created_layers) = reconstruct_from_config(config);
             var model = new Functional(input_tensors, output_tensors, name: config.Name);
@@ -24,7 +24,7 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static (Tensors, Tensors, Dictionary<string, ILayer>) reconstruct_from_config(ModelConfig config, Dictionary<string, ILayer>? created_layers = null)
+        public static (Tensors, Tensors, Dictionary<string, ILayer>) reconstruct_from_config(FunctionalConfig config, Dictionary<string, ILayer>? created_layers = null)
         {
             // Layer instances created during the graph reconstruction process.
             created_layers = created_layers ?? new Dictionary<string, ILayer>();

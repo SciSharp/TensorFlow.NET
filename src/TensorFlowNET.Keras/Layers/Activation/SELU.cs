@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers {
@@ -15,7 +16,7 @@ namespace Tensorflow.Keras.Layers {
             public SELU ( LayerArgs args ) : base(args) {
                   // SELU has no arguments
             }
-            public override void build(Shape input_shape) {
+            public override void build(KerasShapesWrapper input_shape) {
                 if ( alpha < 0f ) {
                     throw new ValueError("Alpha must be a number greater than 0.");
                 }

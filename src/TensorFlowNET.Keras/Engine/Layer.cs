@@ -211,9 +211,9 @@ namespace Tensorflow.Keras.Engine
 
         protected bool computePreviousMask;
         protected List<Operation> updates;
-        public Shape BatchInputShape => args.BatchInputShape;
-        protected TensorShapeConfig _buildInputShape = null;
-        public TensorShapeConfig BuildInputShape => _buildInputShape;
+        public KerasShapesWrapper BatchInputShape => args.BatchInputShape;
+        protected KerasShapesWrapper _buildInputShape = null;
+        public KerasShapesWrapper BuildInputShape => _buildInputShape;
 
         List<INode> inboundNodes;
         public List<INode> InboundNodes => inboundNodes;
@@ -284,7 +284,7 @@ namespace Tensorflow.Keras.Engine
             // Manage input shape information if passed.
             if (args.BatchInputShape == null && args.InputShape != null)
             {
-                args.BatchInputShape = new long[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray();
+                args.BatchInputShape = new KerasShapesWrapper(new long[] { args.BatchSize }.Concat(args.InputShape.dims).ToArray());
             }
         }
 
@@ -363,7 +363,7 @@ namespace Tensorflow.Keras.Engine
                 tf.Context.eager_mode(isFunc: tf.Context.is_build_function());
             }
                
-            build(inputs.shape);
+            build(new KerasShapesWrapper(inputs.shape));
 
             if (need_restore_mode)
                 tf.Context.restore_mode();
@@ -371,7 +371,7 @@ namespace Tensorflow.Keras.Engine
             built = true;
         }
 
-        public virtual void build(Shape input_shape)
+        public virtual void build(KerasShapesWrapper input_shape)
         {
             _buildInputShape = input_shape;
             built = true;

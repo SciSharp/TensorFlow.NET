@@ -80,9 +80,9 @@ namespace Tensorflow
 
         public Shape OutputShape => throw new NotImplementedException();
 
-        public Shape BatchInputShape => throw new NotImplementedException();
+        public KerasShapesWrapper BatchInputShape => throw new NotImplementedException();
 
-        public TensorShapeConfig BuildInputShape => throw new NotImplementedException();
+        public KerasShapesWrapper BuildInputShape => throw new NotImplementedException();
 
         public TF_DataType DType => throw new NotImplementedException();
         protected bool built = false;
@@ -158,6 +158,11 @@ namespace Tensorflow
         }
 
         public void build(Shape input_shape)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void build(KerasShapesWrapper input_shape)
         {
             throw new NotImplementedException();
         }
