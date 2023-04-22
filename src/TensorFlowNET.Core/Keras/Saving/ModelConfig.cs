@@ -9,7 +9,7 @@ using static Google.Protobuf.Reflection.FieldDescriptorProto.Types;
 
 namespace Tensorflow.Keras.Saving
 {
-    public class ModelConfig : IKerasConfig
+    public class FunctionalConfig : IKerasConfig
     {
         [JsonProperty("name")]
         public string Name { get; set; }

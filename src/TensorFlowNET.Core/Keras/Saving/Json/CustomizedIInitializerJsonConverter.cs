@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Operations;
+
 using Tensorflow.Operations.Initializers;
 
-namespace Tensorflow.Keras.Common
+namespace Tensorflow.Keras.Saving.Common
 {
     class InitializerInfo
     {
@@ -27,7 +28,7 @@ namespace Tensorflow.Keras.Common
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             var initializer = value as IInitializer;
-            if(initializer is null)
+            if (initializer is null)
             {
                 JToken.FromObject(null).WriteTo(writer);
                 return;
@@ -42,7 +43,7 @@ namespace Tensorflow.Keras.Common
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             var info = serializer.Deserialize<InitializerInfo>(reader);
-            if(info is null)
+            if (info is null)
             {
                 return null;
             }
@@ -54,8 +55,8 @@ namespace Tensorflow.Keras.Common
                 "Orthogonal" => new Orthogonal(info.config["gain"].ToObject<float>(), info.config["seed"].ToObject<int?>()),
                 "RandomNormal" => new RandomNormal(info.config["mean"].ToObject<float>(), info.config["stddev"].ToObject<float>(),
                     info.config["seed"].ToObject<int?>()),
-                "RandomUniform" => new RandomUniform(minval:info.config["minval"].ToObject<float>(), 
-                    maxval:info.config["maxval"].ToObject<float>(), seed: info.config["seed"].ToObject<int?>()),
+                "RandomUniform" => new RandomUniform(minval: info.config["minval"].ToObject<float>(),
+                    maxval: info.config["maxval"].ToObject<float>(), seed: info.config["seed"].ToObject<int?>()),
                 "TruncatedNormal" => new TruncatedNormal(info.config["mean"].ToObject<float>(), info.config["stddev"].ToObject<float>(),
                     info.config["seed"].ToObject<int?>()),
                 "VarianceScaling" => new VarianceScaling(info.config["scale"].ToObject<float>(), info.config["mode"].ToObject<string>(),

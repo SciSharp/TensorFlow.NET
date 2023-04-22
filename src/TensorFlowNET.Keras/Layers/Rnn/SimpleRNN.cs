@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Operations.Activation;
 using static HDF.PInvoke.H5Z;
 using static Tensorflow.ApiDef.Types;
@@ -14,12 +15,13 @@ namespace Tensorflow.Keras.Layers.Rnn
             this.args = args;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
-            var input_dim = input_shape[-1];
+            var single_shape = input_shape.ToSingleShape();
+            var input_dim = single_shape[-1];
             _buildInputShape = input_shape;
 
-            kernel = add_weight("kernel", (input_shape[-1], args.Units),
+            kernel = add_weight("kernel", (single_shape[-1], args.Units),
                 initializer: args.KernelInitializer
                 //regularizer = self.kernel_regularizer,
                 //constraint = self.kernel_constraint,

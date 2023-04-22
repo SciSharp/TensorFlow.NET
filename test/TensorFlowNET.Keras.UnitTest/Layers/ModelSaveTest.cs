@@ -18,8 +18,8 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var model = GetFunctionalModel();
             var config = model.get_config();
-            Debug.Assert(config is ModelConfig);
-            var new_model = new ModelsApi().from_config(config as ModelConfig);
+            Debug.Assert(config is FunctionalConfig);
+            var new_model = new ModelsApi().from_config(config as FunctionalConfig);
             Assert.AreEqual(model.Layers.Count, new_model.Layers.Count);
         }
 

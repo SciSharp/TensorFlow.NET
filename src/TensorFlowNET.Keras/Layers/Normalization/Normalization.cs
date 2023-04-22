@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -45,10 +46,11 @@ namespace Tensorflow.Keras.Layers
             input_variance = args.Variance;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             base.build(input_shape);
-            var ndim = input_shape.ndim;
+            var single_shape = input_shape.ToSingleShape();
+            var ndim = single_shape.ndim;
             foreach (var (idx, x) in enumerate(axis))
                 if (x < 0)
                     axis[idx] = ndim + x;
@@ -57,8 +59,8 @@ namespace Tensorflow.Keras.Layers
             _reduce_axis = range(ndim).Where(d => !_keep_axis.Contains(d)).ToArray();
             var _reduce_axis_mask = range(ndim).Select(d => _keep_axis.Contains(d) ? 0 : 1).ToArray();
             // Broadcast any reduced axes.
-            _broadcast_shape = new Shape(range(ndim).Select(d => _keep_axis.Contains(d) ? input_shape.dims[d] : 1).ToArray());
-            var mean_and_var_shape = _keep_axis.Select(d => input_shape.dims[d]).ToArray();
+            _broadcast_shape = new Shape(range(ndim).Select(d => _keep_axis.Contains(d) ? single_shape.dims[d] : 1).ToArray());
+            var mean_and_var_shape = _keep_axis.Select(d => single_shape.dims[d]).ToArray();
 
             var param_dtype = DType == TF_DataType.DtInvalid ? TF_DataType.TF_FLOAT : DType;
             var param_shape = input_shape;

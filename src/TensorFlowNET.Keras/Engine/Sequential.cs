@@ -92,7 +92,7 @@ namespace Tensorflow.Keras.Engine
                     {
                         // Instantiate an input layer.
                         var x = keras.Input(
-                              batch_input_shape: layer.BatchInputShape,
+                              batch_input_shape: layer.BatchInputShape.ToSingleShape(),
                               dtype: layer.DType,
                               name: layer.Name + "_input");
 

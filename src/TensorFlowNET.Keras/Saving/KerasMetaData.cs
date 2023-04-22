@@ -22,16 +22,19 @@ namespace Tensorflow.Keras.Saving
         public int SharedObjectId { get; set; }
         [JsonProperty("must_restore_from_config")]
         public bool MustRestoreFromConfig { get; set; }
+        [JsonProperty("config")]
         public JObject Config { get; set; }
         [JsonProperty("build_input_shape")]
-        public TensorShapeConfig BuildInputShape { get; set; }
+        public KerasShapesWrapper BuildInputShape { get; set; }
         [JsonProperty("batch_input_shape")]
-        public TensorShapeConfig BatchInputShape { get; set; }
+        public KerasShapesWrapper BatchInputShape { get; set; }
         [JsonProperty("activity_regularizer")]
         public IRegularizer ActivityRegularizer { get; set; }
         [JsonProperty("input_spec")]
         public JToken InputSpec { get; set; }
         [JsonProperty("stateful")]
         public bool? Stateful { get; set; }
+        [JsonProperty("model_config")]
+        public KerasModelConfig? ModelConfig { get; set; }
     }
 }

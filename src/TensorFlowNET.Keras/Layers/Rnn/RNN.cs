@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 // from tensorflow.python.distribute import distribution_strategy_context as ds_context;
 
 namespace Tensorflow.Keras.Layers.Rnn
@@ -36,7 +37,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             //}
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             if (!cell.Built)
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -23,7 +24,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             /*var shape_set = new HashSet<Shape>();
             var reduced_inputs_shapes = inputs.Select(x => x.shape).ToArray();

@@ -7,7 +7,7 @@ namespace Tensorflow.Framework.Models
         public TensorSpec(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null) :
             base(shape, dtype, name)
         {
-
+            
         }
 
         public TensorSpec _unbatch()

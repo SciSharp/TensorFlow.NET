@@ -16,9 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -41,10 +43,12 @@ namespace Tensorflow.Keras.Layers
             this.inputSpec = new InputSpec(min_ndim: 2);
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             _buildInputShape = input_shape;
-            var last_dim = input_shape.dims.Last();
+            Debug.Assert(input_shape.Shapes.Length <= 1);
+            var single_shape = input_shape.ToSingleShape();
+            var last_dim = single_shape.dims.Last();
             var axes = new Dictionary<int, int>();
             axes[-1] = (int)last_dim;
             inputSpec = new InputSpec(min_ndim: 2, axes: axes);

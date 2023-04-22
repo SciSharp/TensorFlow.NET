@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.ArgsDefinition.Core;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -119,9 +120,10 @@ namespace Tensorflow.Keras.Layers
             this.bias_constraint = args.BiasConstraint;
         }
 
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
-            var shape_data = _analyze_einsum_string(this.equation, this.bias_axes, input_shape, this.partial_output_shape);
+            var shape_data = _analyze_einsum_string(this.equation, this.bias_axes, 
+                input_shape.ToSingleShape(), this.partial_output_shape);
             var kernel_shape = shape_data.Item1;
             var bias_shape = shape_data.Item2;
             this.full_output_shape = shape_data.Item3;

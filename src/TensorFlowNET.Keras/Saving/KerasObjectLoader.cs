@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Tensorflow.Extensions;
 using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
@@ -356,7 +357,7 @@ namespace Tensorflow.Keras.Saving
                 var (obj, setter) = _revive_from_config(identifier, metadata, node_id);
                 if (obj is null)
                 {
-                    (obj, setter) = _revive_custom_object(identifier, metadata);
+                    (obj, setter) = revive_custom_object(identifier, metadata);
                 }
                 if(obj is null)
                 {
@@ -398,7 +399,7 @@ namespace Tensorflow.Keras.Saving
             return (obj, setter);
         }
 
-        private (Trackable, Action<object, object, object>) _revive_custom_object(string identifier, KerasMetaData metadata)
+        private (Trackable, Action<object, object, object>) revive_custom_object(string identifier, KerasMetaData metadata)
         {
             if(identifier == SavedModel.Constants.LAYER_IDENTIFIER)
             {
@@ -437,7 +438,7 @@ namespace Tensorflow.Keras.Saving
             }
             else
             {
-                model = new Functional(new Tensors(), new Tensors(), config["name"].ToObject<string>());
+                model = new Functional(new Tensors(), new Tensors(), config.TryGetOrReturnNull<string>("name"));
             }
 
             // Record this model and its layers. This will later be used to reconstruct
@@ -619,7 +620,7 @@ namespace Tensorflow.Keras.Saving
             }
         }
 
-        private bool _try_build_layer(Layer obj, int node_id, Shape build_input_shape)
+        private bool _try_build_layer(Layer obj, int node_id, KerasShapesWrapper build_input_shape)
         {
             if (obj.Built)
                 return true;
@@ -679,10 +680,10 @@ namespace Tensorflow.Keras.Saving
             return inputs;
         }
 
-        private Shape _infer_input_shapes(int layer_node_id)
+        private KerasShapesWrapper _infer_input_shapes(int layer_node_id)
         {
             var inputs = _infer_inputs(layer_node_id);
-            return nest.map_structure(x => x.shape, inputs);
+            return new KerasShapesWrapper(nest.map_structure(x => x.shape, inputs));
         }
 
         private int? _search_for_child_node(int parent_id, IEnumerable<string> path_to_child)

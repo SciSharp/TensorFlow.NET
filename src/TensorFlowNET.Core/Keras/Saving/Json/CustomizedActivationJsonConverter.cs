@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Keras.Common
+namespace Tensorflow.Keras.Saving.Common
 {
     public class CustomizedActivationJsonConverter : JsonConverter
     {

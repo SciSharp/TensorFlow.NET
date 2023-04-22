@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Reflection;
 using System.Runtime.Versioning;
-using Tensorflow.Keras.Common;
+using Tensorflow.Keras.Saving.Common;
 
 namespace Tensorflow.Keras
 {

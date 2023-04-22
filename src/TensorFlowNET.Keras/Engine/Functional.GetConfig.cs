@@ -19,9 +19,9 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// Builds the config, which consists of the node graph and serialized layers.
         /// </summary>
-        ModelConfig get_network_config()
+        FunctionalConfig get_network_config()
         {
-            var config = new ModelConfig
+            var config = new FunctionalConfig
             {
                 Name = name
             };

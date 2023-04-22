@@ -116,12 +116,8 @@ namespace Tensorflow.Training.Saving.SavedModel
             }
 
             Dictionary<string, ConcreteFunction> loaded_gradients = new();
-            // Debug(Rinne)
-            var temp = _sort_function_defs(library, function_deps);
-            int i = 0;
-            foreach (var fdef in temp)
+            foreach (var fdef in _sort_function_defs(library, function_deps))
             {
-                i++;
                 var orig_name = _fix_fdef_in_place(fdef, functions, load_shared_name_suffix, new_gradient_op_types);
 
                 object structured_input_signature = null;

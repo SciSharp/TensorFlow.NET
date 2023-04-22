@@ -93,7 +93,7 @@ namespace Tensorflow.Keras.Layers
         }
 
         // Creates variable when `use_scale` is True or `score_mode` is `concat`.
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             if (this.use_scale)
                 this.scale = this.add_weight(name: "scale",

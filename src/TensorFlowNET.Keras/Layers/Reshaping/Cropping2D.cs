@@ -1,5 +1,6 @@
 ﻿using Tensorflow.Keras.ArgsDefinition.Reshaping;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers.Reshaping
 {
@@ -15,7 +16,7 @@ namespace Tensorflow.Keras.Layers.Reshaping
         {
             this.args = args;
         }
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
             built = true;
             _buildInputShape = input_shape;

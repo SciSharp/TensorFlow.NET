@@ -5,6 +5,7 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers {
     public class Permute : Layer
@@ -14,14 +15,15 @@ namespace Tensorflow.Keras.Layers {
         {
             this.dims = args.dims;
         }
-        public override void build(Shape input_shape)
+        public override void build(KerasShapesWrapper input_shape)
         {
-            var rank = input_shape.rank;
+            var single_shape = input_shape.ToSingleShape();
+            var rank = single_shape.rank;
             if (dims.Length != rank - 1)
             {
                 throw new ValueError("Dimensions must match.");
             }
-            permute = new int[input_shape.rank];
+            permute = new int[single_shape.rank];
             dims.CopyTo(permute, 1);
             built = true;
             _buildInputShape = input_shape;

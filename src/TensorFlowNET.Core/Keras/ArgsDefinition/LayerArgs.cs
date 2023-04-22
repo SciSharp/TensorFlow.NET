@@ -33,7 +33,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         /// <summary>
         /// Only applicable to input layers.
         /// </summary>
-        public virtual Shape BatchInputShape { get; set; }
+        public virtual KerasShapesWrapper BatchInputShape { get; set; }
 
         public virtual int BatchSize { get; set; } = -1;
 

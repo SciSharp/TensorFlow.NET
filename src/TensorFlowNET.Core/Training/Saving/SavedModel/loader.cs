@@ -214,12 +214,6 @@ namespace Tensorflow
                     continue;
                 }
                 var proto = _proto.Nodes[node_id];
-                if(node_id == 10522)
-                {
-                    // Debug(Rinne)
-                    Console.WriteLine();
-                }
-                var temp = _get_node_dependencies(proto);
                 foreach (var dep in _get_node_dependencies(proto).Values.Distinct())
                 {
                     deps.Add(dep);
