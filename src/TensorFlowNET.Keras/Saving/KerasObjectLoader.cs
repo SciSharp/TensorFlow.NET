@@ -401,13 +401,22 @@ namespace Tensorflow.Keras.Saving
 
         private (Trackable, Action<object, object, object>) revive_custom_object(string identifier, KerasMetaData metadata)
         {
-            if(identifier == SavedModel.Constants.LAYER_IDENTIFIER)
+            if (identifier == SavedModel.Constants.LAYER_IDENTIFIER)
             {
                 return RevivedLayer.init_from_metadata(metadata);
             }
+            else if(identifier == SavedModel.Constants.MODEL_IDENTIFIER || identifier == SavedModel.Constants.SEQUENTIAL_IDENTIFIER
+                || identifier == SavedModel.Constants.NETWORK_IDENTIFIER)
+            {
+                return RevivedNetwork.init_from_metadata(metadata);
+            }
+            else if(identifier == SavedModel.Constants.INPUT_LAYER_IDENTIFIER)
+            {
+                return RevivedInputLayer.init_from_metadata(metadata);
+            }
             else
             {
-                throw new NotImplementedException();
+                throw new ValueError($"Cannot revive the layer {identifier}.");
             }
         }
 

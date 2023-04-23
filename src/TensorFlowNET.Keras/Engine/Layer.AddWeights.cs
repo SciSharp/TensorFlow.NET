@@ -22,9 +22,9 @@ namespace Tensorflow.Keras.Engine
                 // If dtype is DT_FLOAT, provide a uniform unit scaling initializer
                 if (dtype.is_floating())
                     initializer = tf.glorot_uniform_initializer;
-                else if (dtype.is_integer())
+                else if (dtype.is_integer() || dtype.is_unsigned() || dtype.is_bool())
                     initializer = tf.zeros_initializer;
-                else
+                else if(getter is null)
                     throw new ValueError($"An initializer for variable {name} of type {dtype.as_base_dtype()} is required for layer {name}");
             }
 

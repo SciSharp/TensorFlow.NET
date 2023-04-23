@@ -36,5 +36,9 @@ namespace Tensorflow.Keras.Saving
         public bool? Stateful { get; set; }
         [JsonProperty("model_config")]
         public KerasModelConfig? ModelConfig { get; set; }
+        [JsonProperty("sparse")]
+        public bool Sparse { get; set; }
+        [JsonProperty("ragged")]
+        public bool Ragged { get; set; }
     }
 }

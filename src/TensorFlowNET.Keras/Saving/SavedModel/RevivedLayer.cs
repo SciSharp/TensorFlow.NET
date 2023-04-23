@@ -53,7 +53,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             return (revived_obj, ReviveUtils._revive_setter);
         }
 
-        private RevivedConfig _config = null;
+        protected RevivedConfig _config = null;
 
         public object keras_api
         {
@@ -70,7 +70,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             }
         }
 
-        public RevivedLayer(LayerArgs args): base(args)
+        protected RevivedLayer(LayerArgs args): base(args)
         {
 
         }
@@ -84,17 +84,5 @@ namespace Tensorflow.Keras.Saving.SavedModel
         {
             return _config;
         }
-
-        //protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
-        //{
-        //    if(SerializedAttributes is null || !SerializedAttributes.TryGetValue("__call__", out var func) || func is not Function)
-        //    {
-        //        return base.Call(inputs, state, training);
-        //    }
-        //    else
-        //    {
-        //        return (func as Function).Apply(inputs);
-        //    }
-        //}
     }
 }

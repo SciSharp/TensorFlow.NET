@@ -207,9 +207,24 @@ namespace Tensorflow
         }
 
         public override string ToString()
-            => items.Count() == 1
-               ? items.First().ToString()
-               : items.Count() + " Tensors" + ". " + string.Join(", ", items.Select(x => x.name));
+        {
+            if(items.Count == 1)
+            {
+                return items[0].ToString();
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"Totally {items.Count} tensors, which are {string.Join(", ", items.Select(x => x.name))}\n[\n");
+                for(int i = 0; i < items.Count; i++)
+                {
+                    var tensor = items[i];
+                    sb.Append($"Tensor {i}({tensor.name}): {tensor.ToString()}\n");
+                }
+                sb.Append("]\n");
+                return sb.ToString();
+            }
+        }
 
         public void Dispose()
         {
