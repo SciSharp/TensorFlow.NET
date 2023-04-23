@@ -301,6 +301,17 @@ namespace Tensorflow
                 type == TF_DataType.DtInt32Ref || type == TF_DataType.DtInt64Ref;
         }
 
+        public static bool is_unsigned(this TF_DataType type)
+        {
+            return type == TF_DataType.TF_UINT8 || type == TF_DataType.TF_UINT16 || type == TF_DataType.TF_UINT32 ||
+                type == TF_DataType.TF_UINT64;
+        }
+
+        public static bool is_bool(this TF_DataType type)
+        {
+            return type == TF_DataType.TF_BOOL;
+        }
+
         public static bool is_floating(this TF_DataType type)
         {
             return type == TF_DataType.TF_HALF || type == TF_DataType.TF_FLOAT || type == TF_DataType.TF_DOUBLE;
