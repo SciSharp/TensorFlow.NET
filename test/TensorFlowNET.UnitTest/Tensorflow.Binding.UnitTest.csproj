@@ -2,17 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
     <SignAssembly>false</SignAssembly>
-
     <DelaySign>false</DelaySign>
-
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
-
-    <LangVersion>11.0</LangVersion>
-
+    <LangVersion>10.0</LangVersion>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
