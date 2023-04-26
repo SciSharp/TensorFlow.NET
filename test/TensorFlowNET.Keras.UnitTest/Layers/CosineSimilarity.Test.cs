@@ -1,11 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.NumPy;
-using Tensorflow;
 using Tensorflow.Keras.Losses;
-using static Tensorflow.Binding;
+using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
     public class CosineSimilarity
@@ -16,7 +14,7 @@ namespace TensorFlowNET.Keras.UnitTest
         NDArray y_pred_float = new float[,] { { 1.0f, 0.0f }, { 1.0f, 1.0f } };
 
         [TestMethod]
-      
+
         public void _Default()
         {
             //>>> # Using 'auto'/'sum_over_batch_size' reduction type.  
@@ -27,7 +25,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //>>> # loss = mean(sum(l2_norm(y_true) . l2_norm(y_pred), axis=1))  
             //>>> #       = -((0. + 0.) +  (0.5 + 0.5)) / 2  
             //-0.5
-            var loss = keras.losses.CosineSimilarity(axis : 1);
+            var loss = keras.losses.CosineSimilarity(axis: 1);
             var call = loss.Call(y_true_float, y_pred_float);
             Assert.AreEqual((NDArray)(-0.49999997f), call.numpy());
         }
@@ -41,7 +39,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //- 0.0999
             var loss = keras.losses.CosineSimilarity();
             var call = loss.Call(y_true_float, y_pred_float, sample_weight: (NDArray)new float[] { 0.8f, 0.2f });
-            Assert.AreEqual((NDArray) (- 0.099999994f), call.numpy());
+            Assert.AreEqual((NDArray)(-0.099999994f), call.numpy());
         }
 
         [TestMethod]
@@ -53,7 +51,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //...     reduction = tf.keras.losses.Reduction.SUM)
             //>>> cosine_loss(y_true, y_pred).numpy()
             //- 0.999
-            var loss = keras.losses.CosineSimilarity(axis: 1,reduction : ReductionV2.SUM);
+            var loss = keras.losses.CosineSimilarity(axis: 1, reduction: ReductionV2.SUM);
             var call = loss.Call(y_true_float, y_pred_float);
             Assert.AreEqual((NDArray)(-0.99999994f), call.numpy());
         }
@@ -67,7 +65,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //...     reduction = tf.keras.losses.Reduction.NONE)
             //>>> cosine_loss(y_true, y_pred).numpy()
             //array([-0., -0.999], dtype = float32)
-            var loss = keras.losses.CosineSimilarity(axis :1, reduction: ReductionV2.NONE);
+            var loss = keras.losses.CosineSimilarity(axis: 1, reduction: ReductionV2.NONE);
             var call = loss.Call(y_true_float, y_pred_float);
             Assert.AreEqual((NDArray)new float[] { -0f, -0.99999994f }, call.numpy());
         }

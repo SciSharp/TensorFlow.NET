@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Tensorflow;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest
 {
     [TestClass]
     public class MultiInputModelTest

@@ -1,18 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Linq;
-using Tensorflow;
-using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest.SaveModel;
+namespace Tensorflow.Keras.UnitTest.Model;
 
 [TestClass]
-public class SequentialModelLoad
+public class ModelLoadTest
 {
     [TestMethod]
     public void SimpleModelFromAutoCompile()
@@ -46,7 +43,7 @@ public class SequentialModelLoad
     [TestMethod]
     public void AlexnetFromSequential()
     {
-        new SequentialModelSave().AlexnetFromSequential();
+        new ModelSaveTest().AlexnetFromSequential();
         var model = tf.keras.models.load_model(@"./alexnet_from_sequential");
         model.summary();
 
@@ -89,7 +86,7 @@ public class SequentialModelLoad
         var model = tf.keras.models.load_model(@"D:\development\tf.net\models\VGG19");
         model.summary();
 
-        var classify_model = keras.Sequential(new System.Collections.Generic.List<Tensorflow.Keras.ILayer>()
+        var classify_model = keras.Sequential(new System.Collections.Generic.List<ILayer>()
         {
             model,
             keras.layers.Flatten(),
@@ -100,7 +97,7 @@ public class SequentialModelLoad
         classify_model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
 
         var x = np.random.uniform(0, 1, (8, 512, 512, 3));
-        var y = np.ones((8));
+        var y = np.ones(8);
 
         classify_model.fit(x, y, batch_size: 4);
     }
@@ -110,7 +107,7 @@ public class SequentialModelLoad
     public void TestModelBeforeTF2_5()
     {
         var a = keras.layers;
-        var model = tf.saved_model.load(@"D:\development\temp\saved_model") as Model;
+        var model = tf.saved_model.load(@"D:\development\temp\saved_model") as Tensorflow.Keras.Engine.Model;
         model.summary();
     }
 }

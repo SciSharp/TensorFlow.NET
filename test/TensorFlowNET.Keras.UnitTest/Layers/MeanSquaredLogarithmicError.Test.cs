@@ -1,11 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.NumPy;
-using Tensorflow;
 using Tensorflow.Keras.Losses;
-using static Tensorflow.Binding;
+using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
     public class MeanSquaredLogarithmicError
@@ -49,7 +47,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //...     reduction = tf.keras.losses.Reduction.SUM)
             //>>> msle(y_true, y_pred).numpy()
             //0.480
-            var loss = keras.losses.MeanSquaredLogarithmicError( reduction: ReductionV2.SUM);
+            var loss = keras.losses.MeanSquaredLogarithmicError(reduction: ReductionV2.SUM);
             var call = loss.Call(y_true_float, y_pred_float);
             Assert.AreEqual((NDArray)(0.48045287f), call.numpy());
         }

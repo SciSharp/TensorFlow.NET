@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.NumPy;
-using Tensorflow;
-using Tensorflow.Operations;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
     public class LayersConvolutionTest : EagerModeTestBase
@@ -14,7 +12,7 @@ namespace TensorFlowNET.Keras.UnitTest
         {
             var filters = 8;
 
-            var conv = keras.layers.Conv1D(filters, kernel_size: 3,  activation: "linear");
+            var conv = keras.layers.Conv1D(filters, kernel_size: 3, activation: "linear");
 
             var x = np.arange(256.0f).reshape((8, 8, 4));
             var y = conv.Apply(x);

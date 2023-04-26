@@ -1,11 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.NumPy;
-using Tensorflow;
 using Tensorflow.Keras.Losses;
-using static Tensorflow.Binding;
+using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
     public class MeanAbsoluteError
@@ -50,7 +48,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //...     reduction = tf.keras.losses.Reduction.SUM)
             //>>> mae(y_true, y_pred).numpy()
             //1.0
-            var loss = keras.losses.MeanAbsoluteError( reduction: ReductionV2.SUM);
+            var loss = keras.losses.MeanAbsoluteError(reduction: ReductionV2.SUM);
             var call = loss.Call(y_true_float, y_pred_float);
             Assert.AreEqual((NDArray)(1.0f), call.numpy());
         }

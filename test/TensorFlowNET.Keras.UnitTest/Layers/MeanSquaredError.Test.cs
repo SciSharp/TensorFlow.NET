@@ -1,14 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.NumPy;
-using Tensorflow;
-using Tensorflow.Keras.Losses;
-using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
-    public class MeanSquaredErrorTest 
+    public class MeanSquaredErrorTest
     {
         //https://keras.io/api/losses/regression_losses/#meansquarederror-class
 
@@ -16,7 +13,7 @@ namespace TensorFlowNET.Keras.UnitTest
         private NDArray y_pred = new double[,] { { 1.0, 1.0 }, { 1.0, 0.0 } };
 
         [TestMethod]
-      
+
         public void Mse_Double()
         {
             var mse = keras.losses.MeanSquaredError();
@@ -25,7 +22,7 @@ namespace TensorFlowNET.Keras.UnitTest
         }
 
         [TestMethod]
-      
+
         public void Mse_Float()
         {
             NDArray y_true_float = new float[,] { { 0.0f, 1.0f }, { 0.0f, 0.0f } };

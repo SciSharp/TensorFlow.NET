@@ -1,12 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Tensorflow.Binding;
 
-namespace TensorflowNET.Keras
+namespace Tensorflow.Keras.UnitTest.Model
 {
     [TestClass]
     public class ModelBuildTest

@@ -1,12 +1,12 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading.Tasks;
 using Tensorflow.Keras.Engine;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
-using System.Threading.Tasks;
-using Tensorflow.NumPy;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest
 {
     [TestClass]
     public class MultiThreads

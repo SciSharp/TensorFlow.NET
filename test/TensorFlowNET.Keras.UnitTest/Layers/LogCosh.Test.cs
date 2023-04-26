@@ -1,11 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.NumPy;
-using Tensorflow;
 using Tensorflow.Keras.Losses;
-using static Tensorflow.Binding;
+using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
     public class LogCosh
@@ -16,7 +14,7 @@ namespace TensorFlowNET.Keras.UnitTest
         NDArray y_pred_float = new float[,] { { 1.0f, 1.0f }, { 0.0f, 0.0f } };
 
         [TestMethod]
-      
+
         public void _Default()
         {
             //>>> # Using 'auto'/'sum_over_batch_size' reduction type.  
@@ -32,9 +30,9 @@ namespace TensorFlowNET.Keras.UnitTest
 
         public void _Sample_Weight()
         {
-        //>>> # Calling with 'sample_weight'.  
-        //>>> l(y_true, y_pred, sample_weight =[0.8, 0.2]).numpy()
-        //0.087
+            //>>> # Calling with 'sample_weight'.  
+            //>>> l(y_true, y_pred, sample_weight =[0.8, 0.2]).numpy()
+            //0.087
             var loss = keras.losses.LogCosh();
             var call = loss.Call(y_true_float, y_pred_float, sample_weight: (NDArray)new float[] { 0.8f, 0.2f });
             Assert.AreEqual((NDArray)0.08675616f, call.numpy());
@@ -49,7 +47,7 @@ namespace TensorFlowNET.Keras.UnitTest
             //...     reduction = tf.keras.losses.Reduction.SUM)
             //>>> l(y_true, y_pred).numpy()
             //0.217
-            var loss = keras.losses.LogCosh(reduction : ReductionV2.SUM);
+            var loss = keras.losses.LogCosh(reduction: ReductionV2.SUM);
             var call = loss.Call(y_true_float, y_pred_float);
             Assert.AreEqual((NDArray)0.2168904f, call.numpy());
         }

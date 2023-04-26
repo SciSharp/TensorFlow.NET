@@ -1,15 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tensorflow;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest;
+namespace Tensorflow.Keras.UnitTest.Layers.Metrics;
 
 [TestClass]
 public class MetricsTest : EagerModeTestBase
@@ -40,7 +33,7 @@ public class MetricsTest : EagerModeTestBase
     [TestMethod]
     public void BinaryAccuracy()
     {
-        var y_true = np.array(new[,] { { 1 }, { 1 },{ 0 }, { 0 } });
+        var y_true = np.array(new[,] { { 1 }, { 1 }, { 0 }, { 0 } });
         var y_pred = np.array(new[,] { { 0.98f }, { 1f }, { 0f }, { 0.6f } });
         var m = tf.keras.metrics.BinaryAccuracy();
         m.update_state(y_true, y_pred);
@@ -183,17 +176,17 @@ public class MetricsTest : EagerModeTestBase
     public void HammingLoss()
     {
         // multi-class hamming loss
-        var y_true = np.array(new[,] 
-        { 
-            { 1, 0, 0, 0 }, 
-            { 0, 0, 1, 0 }, 
-            { 0, 0, 0, 1 }, 
-            { 0, 1, 0, 0 } 
+        var y_true = np.array(new[,]
+        {
+            { 1, 0, 0, 0 },
+            { 0, 0, 1, 0 },
+            { 0, 0, 0, 1 },
+            { 0, 1, 0, 0 }
         });
-        var y_pred = np.array(new[,] 
-        { 
-            { 0.8f, 0.1f, 0.1f, 0.0f }, 
-            { 0.2f, 0.0f, 0.8f, 0.0f }, 
+        var y_pred = np.array(new[,]
+        {
+            { 0.8f, 0.1f, 0.1f, 0.0f },
+            { 0.2f, 0.0f, 0.8f, 0.0f },
             { 0.05f, 0.05f, 0.1f, 0.8f },
             { 1.0f, 0.0f, 0.0f, 0.0f }
         });

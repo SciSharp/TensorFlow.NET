@@ -1,14 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using Tensorflow.NumPy;
 using static Tensorflow.KerasApi;
-using Tensorflow;
-using Tensorflow.Keras.Datasets;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest
 {
     [TestClass]
     public class PreprocessingTests : EagerModeTestBase
@@ -71,8 +65,8 @@ namespace TensorFlowNET.Keras.UnitTest
 
             Assert.AreEqual(28, tokenizer.word_index.Count);
 
-            Assert.AreEqual(1,  tokenizer.word_index[OOV]);
-            Assert.AreEqual(8,  tokenizer.word_index["worst"]);
+            Assert.AreEqual(1, tokenizer.word_index[OOV]);
+            Assert.AreEqual(8, tokenizer.word_index["worst"]);
             Assert.AreEqual(13, tokenizer.word_index["number"]);
             Assert.AreEqual(17, tokenizer.word_index["were"]);
         }
@@ -204,13 +198,13 @@ namespace TensorFlowNET.Keras.UnitTest
 
             for (var i = 0; i < sequences.Count; i++)
                 for (var j = 0; j < sequences[i].Length; j++)
-                Assert.AreNotEqual(tokenizer.word_index[OOV], sequences[i][j]);
+                    Assert.AreNotEqual(tokenizer.word_index[OOV], sequences[i][j]);
         }
 
         [TestMethod]
         public void TokenizeTextsToSequencesWithOOVPresent()
         {
-            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV, num_words:20);
+            var tokenizer = keras.preprocessing.text.Tokenizer(oov_token: OOV, num_words: 20);
             tokenizer.fit_on_texts(texts);
 
             var sequences = tokenizer.texts_to_sequences(texts);
@@ -255,7 +249,7 @@ namespace TensorFlowNET.Keras.UnitTest
             tokenizer.fit_on_texts(texts);
 
             var sequences = tokenizer.texts_to_sequences(texts);
-            var padded = keras.preprocessing.sequence.pad_sequences(sequences,maxlen:15);
+            var padded = keras.preprocessing.sequence.pad_sequences(sequences, maxlen: 15);
 
             Assert.AreEqual(4, padded.dims[0]);
             Assert.AreEqual(15, padded.dims[1]);
@@ -348,7 +342,7 @@ namespace TensorFlowNET.Keras.UnitTest
 
             Assert.AreEqual(27, tokenizer.word_index.Count);
 
-            var matrix = tokenizer.texts_to_matrix(texts, mode:"count");
+            var matrix = tokenizer.texts_to_matrix(texts, mode: "count");
 
             Assert.AreEqual(texts.Length, matrix.dims[0]);
 

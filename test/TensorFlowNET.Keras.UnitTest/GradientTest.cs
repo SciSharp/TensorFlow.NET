@@ -1,14 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using Tensorflow;
 using Tensorflow.Keras.Engine;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
-using Tensorflow.NumPy;
-using System;
-using Tensorflow.Keras.Optimizers;
 
-namespace TensorFlowNET.Keras.UnitTest;
+namespace Tensorflow.Keras.UnitTest;
 
 [TestClass]
 public class GradientTest : EagerModeTestBase

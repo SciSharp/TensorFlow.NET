@@ -1,13 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.NumPy;
 using System.Collections.Generic;
-using Tensorflow;
-using Tensorflow.Keras;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
-using System.Linq;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     /// <summary>
     /// https://www.tensorflow.org/versions/r2.3/api_docs/python/tf/keras/layers
@@ -235,7 +232,7 @@ namespace TensorFlowNET.Keras.UnitTest
             // one-hot
             var inputs = np.array(new[] { 3, 2, 0, 1 });
             var layer = tf.keras.layers.CategoryEncoding(4);
-            
+
             Tensor output = layer.Apply(inputs);
             Assert.AreEqual((4, 4), output.shape);
             Assert.IsTrue(output[0].numpy().Equals(new[] { 0, 0, 0, 1f }));

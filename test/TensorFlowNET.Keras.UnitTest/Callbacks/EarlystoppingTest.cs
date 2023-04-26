@@ -1,16 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tensorflow.Keras.UnitTest.Helpers;
-using static Tensorflow.Binding;
-using Tensorflow;
-using Tensorflow.Keras.Optimizers;
+using System.Collections.Generic;
 using Tensorflow.Keras.Callbacks;
 using Tensorflow.Keras.Engine;
-using System.Collections.Generic;
 using static Tensorflow.KerasApi;
-using Tensorflow.Keras;
 
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Callbacks
 {
     [TestClass]
     public class EarlystoppingTest
@@ -31,7 +26,7 @@ namespace TensorFlowNET.Keras.UnitTest
                 layers.Dense(10)
             });
 
-            
+
             model.summary();
 
             model.compile(optimizer: keras.optimizers.RMSprop(1e-3f),
@@ -55,7 +50,7 @@ namespace TensorFlowNET.Keras.UnitTest
             var callbacks = new List<ICallback>();
             callbacks.add(earlystop);
 
-            model.fit(x_train[new Slice(0, 2000)], y_train[new Slice(0, 2000)], batch_size, num_epochs,callbacks:callbacks);
+            model.fit(x_train[new Slice(0, 2000)], y_train[new Slice(0, 2000)], batch_size, num_epochs, callbacks: callbacks);
         }
 
     }
