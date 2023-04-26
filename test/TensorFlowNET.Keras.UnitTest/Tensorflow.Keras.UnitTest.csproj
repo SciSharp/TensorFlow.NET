@@ -20,7 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.2" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.3" />
   </ItemGroup>
 
   <ItemGroup>
