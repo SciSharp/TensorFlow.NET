@@ -417,7 +417,7 @@ namespace Tensorflow
                 {
                     TF_DataType.TF_DOUBLE => constant(1.0d),
                     TF_DataType.TF_FLOAT => constant(1.0f),
-                    _ => constant(1)
+                    _ => constant(1, dtype)
                 };
 
                 if (shape.ndim == 0)

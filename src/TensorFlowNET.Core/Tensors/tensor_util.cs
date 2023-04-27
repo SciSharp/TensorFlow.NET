@@ -22,6 +22,7 @@ using System.Text;
 using Tensorflow.Eager;
 using Tensorflow.Graphs;
 using static Tensorflow.Binding;
+using System.Diagnostics;
 
 namespace Tensorflow
 {
@@ -648,6 +649,25 @@ would not be rank 1.", tensor.op.get_attr("axis")));
                 ShrinkAxisMask = shrink_axis_mask,
                 NewAxisMask = new_axis_mask
             };
+        }
+
+        /// <summary>
+        /// Warning: this method is an extremely dangerous method. It directly changes the dtype inside the tensor 
+        /// and security is not guaranteed at all. Currently this method is only used for some conditions to reuse 
+        /// the existing memory. Any other usage should be prevented. If you are sure you want to use it when 
+        /// developing tensorflow.net, please ask @Oceanic2018 or @AsakusaRinne first.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="dtype"></param>
+        internal static unsafe void DangerousManuallySetTensorDType(SafeTensorHandle handle, TF_DataType dtype)
+        {
+            long tf_tensor_address = handle.DangerousGetHandle().ToInt64();
+            long interface_address = *(long*)(tf_tensor_address);
+            long tensor_shape_address = interface_address + 8;
+            long tensor_dtype_address = tensor_shape_address + 13;
+            byte* dtype_pointer = (byte*)tensor_dtype_address;
+            *dtype_pointer = (byte)dtype;
+            Debug.Assert(c_api.TF_TensorType(handle) == dtype);
         }
     }
 }

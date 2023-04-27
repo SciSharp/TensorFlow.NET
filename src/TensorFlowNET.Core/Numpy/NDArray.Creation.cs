@@ -8,6 +8,7 @@ namespace Tensorflow.NumPy
 {
     public partial class NDArray
     {
+        protected NDArray() { }
         public NDArray(bool value) : base(value) => NewEagerTensorHandle(); 
         public NDArray(byte value) : base(value) => NewEagerTensorHandle();
         public NDArray(short value) : base(value) => NewEagerTensorHandle();
@@ -56,6 +57,20 @@ namespace Tensorflow.NumPy
                 double val => new NDArray(val),
                 _ => throw new NotImplementedException("")
             };
+
+        /// <summary>
+        /// Reuse the existing memory instead of copying it.
+        /// </summary>
+        /// <param name="data_ptr"></param>
+        /// <param name="shape"></param>
+        /// <param name="dtype"></param>
+        /// <param name="deallocator"></param>
+        protected void InitWithExistingMemory(IntPtr data_ptr, Shape shape, TF_DataType dtype, c_api.DeallocatorV2 deallocator)
+        {
+            _handle = c_api.TF_NewTensor(TF_DataType.TF_STRING, shape.dims, shape.ndim, data_ptr, (ulong)(shape.size * dtype.get_datatype_size()), deallocator, IntPtr.Zero);
+            tensor_util.DangerousManuallySetTensorDType(_handle, dtype);
+            NewEagerTensorHandle();
+        }
 
         void NewEagerTensorHandle()
         {
