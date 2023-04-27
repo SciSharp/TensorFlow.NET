@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Tensorflow;
-using Tensorflow.Keras;
 using static Tensorflow.Binding;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest
 {
     public class EagerModeTestBase
     {

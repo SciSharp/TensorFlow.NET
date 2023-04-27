@@ -1,15 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+using Tensorflow.Keras.Layers;
+using Tensorflow.Keras.Utils;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
-using Tensorflow.Keras.Layers;
-using Tensorflow;
-using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.Utils;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     [TestClass]
     public class AttentionTest : EagerModeTestBase
@@ -118,7 +114,8 @@ namespace TensorFlowNET.Keras.UnitTest
             } }, dtype: np.float32);
             var attention_layer = (Attention)keras.layers.Attention(score_mode: "concat");
             //attention_layer.concat_score_weight = 1;
-            attention_layer.concat_score_weight = base_layer_utils.make_variable(new VariableArgs() {
+            attention_layer.concat_score_weight = base_layer_utils.make_variable(new VariableArgs()
+            {
                 Name = "concat_score_weight",
                 Shape = (1),
                 DType = TF_DataType.TF_FLOAT,
@@ -156,7 +153,7 @@ namespace TensorFlowNET.Keras.UnitTest
 
             var query = keras.Input(shape: (4, 8));
             var value = keras.Input(shape: (2, 8));
-            var mask_tensor = keras.Input(shape:(4, 2));
+            var mask_tensor = keras.Input(shape: (4, 2));
             var attention_layer = keras.layers.MultiHeadAttention(num_heads: 2, key_dim: 2);
             attention_layer.Apply(new Tensor[] { query, value, mask_tensor });
 

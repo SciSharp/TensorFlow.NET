@@ -1,12 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using static Tensorflow.Binding;
 using Tensorflow.NumPy;
+using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
-using Tensorflow;
 
-namespace TensorFlowNET.Keras.UnitTest {
+namespace Tensorflow.Keras.UnitTest.Layers
+{
     [TestClass]
     public class ActivationTest : EagerModeTestBase
     {

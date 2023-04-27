@@ -1,12 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow.NumPy;
-using System.Linq;
-using Tensorflow;
-using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
-using Microsoft.VisualBasic;
 
-namespace TensorFlowNET.Keras.UnitTest
+namespace Tensorflow.Keras.UnitTest.Layers
 {
     /// <summary>
     /// https://www.tensorflow.org/versions/r2.3/api_docs/python/tf/keras/layers
@@ -231,7 +227,7 @@ namespace TensorFlowNET.Keras.UnitTest
         public void Max1DPoolingChannelsLast()
         {
             var x = input_array_1D;
-            var pool = keras.layers.MaxPooling1D(pool_size:2, strides:1);
+            var pool = keras.layers.MaxPooling1D(pool_size: 2, strides: 1);
             var y = pool.Apply(x);
 
             Assert.AreEqual(4, y.shape[0]);

@@ -1,16 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tensorflow;
 using Tensorflow.NumPy;
-using TensorFlowNET.Keras.UnitTest;
 using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
-namespace TensorFlowNET.Keras.UnitTest;
+namespace Tensorflow.Keras.UnitTest.Losses;
 
 [TestClass]
 public class LossesTest : EagerModeTestBase
@@ -47,7 +39,7 @@ public class LossesTest : EagerModeTestBase
         // Using 'none' reduction type.
         bce = tf.keras.losses.BinaryCrossentropy(from_logits: true, reduction: Reduction.NONE);
         loss = bce.Call(y_true, y_pred);
-        Assert.AreEqual(new float[] { 0.23515666f, 1.4957594f}, loss.numpy());
+        Assert.AreEqual(new float[] { 0.23515666f, 1.4957594f }, loss.numpy());
     }
 
     /// <summary>
