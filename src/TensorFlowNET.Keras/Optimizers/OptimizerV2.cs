@@ -78,6 +78,42 @@ namespace Tensorflow.Keras.Optimizers
             });
         }
 
+        public void apply_gradients((Tensor, ResourceVariable) grads_and_vars,
+            string name = null,
+            bool experimental_aggregate_gradients = true)
+            => apply_gradients(new[] { grads_and_vars },
+                name: name,
+                experimental_aggregate_gradients: experimental_aggregate_gradients);
+
+        /// <summary>
+        /// Apply gradients to variables.
+        /// </summary>
+        /// <param name="grads_and_vars"></param>
+        /// <param name="name"></param>
+        /// <param name="experimental_aggregate_gradients"></param>
+        public void apply_gradients(IEnumerable<(Tensor, ResourceVariable)> grads_and_vars,
+            string name = null,
+            bool experimental_aggregate_gradients = true)
+        {
+            var var_list = grads_and_vars.Select(x => x.Item2).ToArray();
+            tf_with(ops.name_scope(_name), delegate
+            {
+                ops.init_scope();
+                _create_all_weights(var_list);
+                if (grads_and_vars == null || grads_and_vars.Count() == 0)
+                    return control_flow_ops.no_op();
+
+                var apply_state = _prepare(var_list);
+                // if(experimental_aggregate_gradients)
+                {
+                    // var reduced_grads = _aggregate_gradients(grads_and_vars);
+                    _distributed_apply(grads_and_vars.Select(x => (x.Item1, (IVariableV1)x.Item2)), name, apply_state);
+                }
+
+                return null;
+            });
+        }
+
         void apply_grad_to_update_var(IVariableV1 var, Tensor grad, Dictionary<DeviceDType, Dictionary<string, Tensor>> apply_state)
         {
             _resource_apply_dense(var, grad, apply_state);

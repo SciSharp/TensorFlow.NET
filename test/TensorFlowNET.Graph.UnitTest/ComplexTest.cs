@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
-using Buffer = Tensorflow.Buffer;
-using TensorFlowNET.Keras.UnitTest;
+using Tensorflow.Keras.UnitTest;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
