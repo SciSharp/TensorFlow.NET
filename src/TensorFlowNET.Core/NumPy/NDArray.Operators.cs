@@ -33,7 +33,16 @@ namespace Tensorflow.NumPy
                 return Scalar(false);
             if(rhs is null)
                 return Scalar(false);
-            return new NDArray(math_ops.equal(lhs, rhs));
+            // TODO(Rinne): use np.allclose instead.
+            if (lhs.dtype.is_floating() || rhs.dtype.is_floating())
+            {
+                var diff = tf.abs(lhs - rhs);
+                return new NDArray(gen_math_ops.less(diff, new NDArray(1e-5).astype(diff.dtype)));
+            }
+            else
+            {
+                return new NDArray(math_ops.equal(lhs, rhs));
+            }
         }
         [AutoNumPy]
         public static NDArray operator !=(NDArray lhs, NDArray rhs)
@@ -42,7 +51,15 @@ namespace Tensorflow.NumPy
                 return Scalar(false);
             if(lhs is null || rhs is null)
                 return Scalar(true);
-            return new NDArray(math_ops.not_equal(lhs, rhs));
+            if (lhs.dtype.is_floating() || rhs.dtype.is_floating())
+            {
+                var diff = tf.abs(lhs - rhs);
+                return new NDArray(gen_math_ops.greater_equal(diff, new NDArray(1e-5).astype(diff.dtype)));
+            }
+            else
+            {
+                return new NDArray(math_ops.not_equal(lhs, rhs));
+            }
         }
     }
 }

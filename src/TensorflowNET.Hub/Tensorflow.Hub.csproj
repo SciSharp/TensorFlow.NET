@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <Version>1.0.0</Version>
     <PackageId>TensorFlow.NET.Hub</PackageId>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseExpression>Apache2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
     <Authors>Yaohui Liu, Haiping Chen</Authors>
