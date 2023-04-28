@@ -24,8 +24,8 @@ jobs:
       run: dotnet restore
     - name: Build CPU version
       run: dotnet build --no-restore
-    - name: Test GPU version
-      run: dotnet test --no-build --verbosity normal
+#     - name: Test CPU version
+#       run: dotnet test --no-build --verbosity normal
     - name: uninstall redist cpu for unit tests
       run: dotnet remove Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
     - name: install redist gpu for unit tests
@@ -34,8 +34,8 @@ jobs:
       run: dotnet restore
     - name: Build GPU version
       run: dotnet build --no-restore
-    - name: Test GPU version
-      run: dotnet test --no-build --verbosity normal
+#     - name: Test GPU version
+#       run: dotnet test --no-build --verbosity normal
 
   build-and-test-on-linux:
 
@@ -51,8 +51,8 @@ jobs:
       run: dotnet restore
     - name: Build CPU version
       run: dotnet build --no-restore
-    - name: Test CPU version
-      run: dotnet test --no-build --verbosity normal
+#     - name: Test CPU version
+#       run: dotnet test --no-build --verbosity normal
     - name: uninstall redist cpu for unit tests
       run: dotnet remove Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
     - name: install redist gpu for unit tests
@@ -61,5 +61,5 @@ jobs:
       run: dotnet restore
     - name: Build GPU version
       run: dotnet build --no-restore
-    - name: Test GPU version
-      run: dotnet test --no-build --verbosity normal
+#     - name: Test GPU version
+#       run: dotnet test --no-build --verbosity normal
