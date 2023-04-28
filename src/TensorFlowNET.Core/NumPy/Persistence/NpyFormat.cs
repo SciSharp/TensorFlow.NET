@@ -70,7 +70,7 @@ public class NpyFormat
         if (type == typeof(bool))
             return "|b1";
         else if (type == typeof(byte))
-            return "|i1";
+            return "|u1";
         else if (type == typeof(short))
             return "<i2";
         else if (type == typeof(int))

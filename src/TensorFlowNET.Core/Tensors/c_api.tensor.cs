@@ -71,7 +71,7 @@ namespace Tensorflow
         /// <param name="deallocator_arg"></param>
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
-        public static extern SafeTensorHandle TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len, Deallocator deallocator, IntPtr deallocator_arg);
+        public static extern SafeTensorHandle TF_NewTensor(TF_DataType dataType, long[] dims, int num_dims, IntPtr data, ulong len, DeallocatorV2 deallocator, IntPtr deallocator_arg);
 
         public static unsafe SafeTensorHandle TF_NewTensor(byte[] data, Shape shape, TF_DataType dtype)
         {
@@ -146,6 +146,15 @@ namespace Tensorflow
         /// <returns></returns>
         [DllImport(TensorFlowLibName)]
         public static extern TF_DataType TF_TensorType(SafeTensorHandle tensor);
+
+        /// <summary>
+        /// Set a new shape for the Tensor. Note that this API only works after tf2.11.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="dims"></param>
+        /// <param name="num_dims"></param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetShape(SafeTensorHandle tensor, long[] dims, int num_dims);
 
         /// <summary>
         /// Return the size in bytes required to encode a string `len` bytes long into a
