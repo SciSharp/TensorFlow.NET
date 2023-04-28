@@ -47,6 +47,7 @@ jobs:
   release:
     runs-on: windows-latest
 #     needs: run-semantic-release
+    needs: build
 
     steps:
     - name: Setup .NET 6.0.x SDK
