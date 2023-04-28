@@ -31,11 +31,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
+    <ProjectReference Include="..\..\UnitTestRedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
     <ProjectReference Include="..\TensorFlowNET.Keras.UnitTest\Tensorflow.Keras.UnitTest.csproj" />
   </ItemGroup>
 
