@@ -8,6 +8,7 @@ on:
 
 env:
   MYGET_API_TOKEN: ${{ SECRETS.RINNE_MYGET_KEY }}
+  GITHUB_TOKEN: ${{ SECRETS.RINNE_GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -86,4 +87,4 @@ jobs:
       run: dotnet nuget add source https://www.myget.org/F/rinne/api/v2/package --name myget.org
 
     - name: Push packages to myget.org
-      run: dotnet nuget push .\packages\*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
+      run: dotnet nuget push .\packages\TensorFlow*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
