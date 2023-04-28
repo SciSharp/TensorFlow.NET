@@ -5,6 +5,23 @@
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
     <Version>1.0.0</Version>
+    <PackageId>TensorFlow.NET.Hub</PackageId>
+    <PackageLicenseExpression>Apache2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <SignAssembly>true</SignAssembly>
+    <Authors>Yaohui Liu, Haiping Chen</Authors>
+    <Company>SciSharp STACK</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Apache 2.0, Haiping Chen $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
+    <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+    <PackageTags>TensorFlow, SciSharp, Machine Learning, Deep Learning, TensorFlow Hub, TensorFlow.NET, TF.NET, AI</PackageTags>
+    <Description>
+      Google's TensorFlow Hub full binding in .NET Standard.
+      A library for transfer learning with TensorFlow.NET.
+    </Description>
   </PropertyGroup>
 
   <ItemGroup>
