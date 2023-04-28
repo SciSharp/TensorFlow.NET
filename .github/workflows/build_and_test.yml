@@ -10,7 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build-and-test-on-windows:
+  windows:
 
     runs-on: windows-latest
 
@@ -37,7 +37,7 @@ jobs:
 #     - name: Test GPU version
 #       run: dotnet test --no-build --verbosity normal
 
-  build-and-test-on-linux:
+  linux:
 
     runs-on: ubuntu-latest
 
