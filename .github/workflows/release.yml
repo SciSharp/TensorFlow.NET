@@ -1,0 +1,89 @@
+name: release
+
+on:
+  workflow_run:
+    workflows: ["build_and_test"]
+    types:
+      - completed
+
+env:
+  MYGET_API_TOKEN: ${{ SECRETS.RINNE_MYGET_KEY }}
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET 6.0.x SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Check .NET info
+      run: dotnet --info
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build solution
+      run: dotnet build -c Release --no-restore
+
+  run-semantic-release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run semantic-release
+        run: |
+          export PATH=$PATH:$(yarn global bin)
+          yarn global add semantic-release@17.4.3
+          semantic-release
+
+  release:
+    runs-on: windows-latest
+    needs: run-semantic-release
+
+    steps:
+    - name: Setup .NET 6.0.x SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Check .NET info
+      run: dotnet --info
+
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build solution
+      run: dotnet build -c Release --no-restore
+
+    - name: Pack packages
+      run: |
+        $LastTag = git describe --tags (git rev-list --tags --max-count=1);
+        echo "Last tag is: $LastTag";
+        $Version = ($LastTag).TrimStart('v');
+        echo "Publishing version: $Version";
+        dotnet pack -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
+
+        if($LastExitCode -ne 0)
+        {
+            Write-Warning -Message "Pack packages warming, last exit code is ${LastExitCode}."
+            $LastExitCode = 0;
+        }
+
+    - name: Upload packages artefacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: "drop-ci-packages"
+        path: './packages'
+
+    - name: Add myget nuget source
+      run: dotnet nuget add source https://www.myget.org/F/rinne/api/v2/package --name myget.org
+
+    - name: Push packages to myget.org
+      run: dotnet nuget push .\packages\*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
