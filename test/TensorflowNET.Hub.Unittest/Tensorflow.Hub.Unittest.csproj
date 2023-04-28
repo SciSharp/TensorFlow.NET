@@ -13,11 +13,11 @@
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorflowNET.Hub\Tensorflow.Hub.csproj" />
+    <ProjectReference Include="..\..\UnitTestRedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
   </ItemGroup>
 
 </Project>
