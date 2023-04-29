@@ -1,15 +1,10 @@
 name: auto-release
 
 on: 
-  # workflow_run:
-  #   workflows: ["build_and_test"]
-  #   types:
-  #     - completed
-  [pull_request]
-  # push:
-  #   branches: [ "master" ]
-  # pull_request:
-  #   branches: [ "master" ]
+  workflow_run:
+    workflows: ["build_and_test"]
+    types:
+      - completed
 
 env:
   MYGET_API_TOKEN: ${{ SECRETS.RINNE_MYGET_KEY }}
@@ -17,7 +12,7 @@ env:
 
 jobs:
   build:
-    # if: ${{ github.event.label.name == 'auto-release'}}
+    if: ${{ github.event.label.name == 'auto-release'}}
     runs-on: windows-latest
 
     steps:
@@ -75,7 +70,7 @@ jobs:
     - name: Pack packages
       run: |
         git fetch;
-        $LastTag = git describe --tags (git rev-list --tags --max-count=1);
+        $LastTag = git describe --tags;
         echo "Last tag is: $LastTag";
         $Version = ($LastTag).TrimStart('v');
         echo "Publishing version: $Version";
@@ -96,5 +91,11 @@ jobs:
     - name: Add myget nuget source
       run: dotnet nuget add source https://www.myget.org/F/rinne/api/v2/package --name myget.org
 
-    - name: Push packages to myget.org
-      run: dotnet nuget push .\packages\TensorFlow*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
+    - name: Push TensorFlow.NET to myget.org
+      run: dotnet nuget push .\packages\TensorFlow.NET.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
+
+    - name: Push TensorFlow.Keras to myget.org
+      run: dotnet nuget push .\packages\TensorFlow.Keras.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
+
+    - name: Push TensorFlow.Hub to myget.org
+      run: dotnet nuget push .\packages\TensorFlow.Hub.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate

@@ -5,7 +5,7 @@
     <LangVersion>10</LangVersion>
     <Nullable>enable</Nullable>
     <Version>1.0.0</Version>
-    <PackageId>TensorFlow.NET.Hub</PackageId>
+    <PackageId>TensorFlow.Hub</PackageId>
     <PackageLicenseExpression>Apache2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <SignAssembly>true</SignAssembly>
