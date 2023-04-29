@@ -1,11 +1,11 @@
 name: auto-release
 
-on:
+on: workflow_dispatch
   # workflow_run:
   #   workflows: ["build_and_test"]
   #   types:
   #     - completed
-  [push, pull_request]
+
   # push:
   #   branches: [ "master" ]
   # pull_request:
