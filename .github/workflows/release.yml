@@ -5,7 +5,7 @@ on:
   #   workflows: ["build_and_test"]
   #   types:
   #     - completed
-  [push, pull_request]
+  [pull_request]
   # push:
   #   branches: [ "master" ]
   # pull_request:
@@ -74,6 +74,7 @@ jobs:
 
     - name: Pack packages
       run: |
+        git fetch;
         $LastTag = git describe --tags (git rev-list --tags --max-count=1);
         echo "Last tag is: $LastTag";
         $Version = ($LastTag).TrimStart('v');
