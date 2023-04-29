@@ -12,8 +12,8 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.label.name == 'auto-release'}}
     runs-on: windows-latest
+    if: contains(github.event.issue.labels.*.name, 'auto-release')
 
     steps:
     - uses: actions/checkout@v3
