@@ -94,7 +94,7 @@ namespace Tensorflow.Keras.UnitTest.Layers
                 { 7.6400003f, 12.24f, 16.84f },
                 { 14.24f, 22.84f, 31.439999f }
             } }, dtype: np.float32);
-            Assert.AreEqual(expected, actual.numpy());
+            Assert.IsTrue(expected == actual.numpy());
         }
 
         [TestMethod]

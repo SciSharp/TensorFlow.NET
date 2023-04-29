@@ -39,7 +39,7 @@ public class LossesTest : EagerModeTestBase
         // Using 'none' reduction type.
         bce = tf.keras.losses.BinaryCrossentropy(from_logits: true, reduction: Reduction.NONE);
         loss = bce.Call(y_true, y_pred);
-        Assert.AreEqual(new float[] { 0.23515666f, 1.4957594f }, loss.numpy());
+        Assert.IsTrue(new NDArray(new float[] { 0.23515666f, 1.4957594f }) == loss.numpy());
     }
 
     /// <summary>
