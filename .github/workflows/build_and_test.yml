@@ -1,65 +1,66 @@
-# # This workflow will build a .NET project
-# # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-# name: build_and_test
+name: build_and_test
 
-# on:
-#   push:
-#     branches: [ "master" ]
-#   pull_request:
-#     branches: [ "master" ]
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    types: ["opened", "reopened", "synchronize", "ready_for_review", "auto_merge_enabled"]
 
-# jobs:
-#   windows:
+jobs:
+  windows:
 
-#     runs-on: windows-latest
+    runs-on: windows-latest
 
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Setup .NET 6
-#       uses: actions/setup-dotnet@v3
-#       with:
-#         dotnet-version: 6.0.x
-#     - name: Restore dependencies
-#       run: dotnet restore
-#     - name: Build CPU version
-#       run: dotnet build --no-restore
-# #     - name: Test CPU version
-# #       run: dotnet test --no-build --verbosity normal
-#     - name: uninstall redist cpu for unit tests
-#       run: dotnet remove helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
-#     - name: install redist gpu for unit tests
-#       run: dotnet add helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist-Windows-GPU
-#     - name: Restore dependencies
-#       run: dotnet restore
-#     - name: Build GPU version
-#       run: dotnet build --no-restore
-# #     - name: Test GPU version
-# #       run: dotnet test --no-build --verbosity normal
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build CPU version
+      run: dotnet build --no-restore
+    - name: Test CPU version
+      run: dotnet test --no-build --verbosity normal
+    - name: uninstall redist cpu for unit tests
+      run: dotnet remove helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
+    - name: install redist gpu for unit tests
+      run: dotnet add helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist-Windows-GPU
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build GPU version
+      run: dotnet build --no-restore
+#     - name: Test GPU version
+#       run: dotnet test --no-build --verbosity normal
 
-#   linux:
+  linux:
 
-#     runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Setup .NET
-#       uses: actions/setup-dotnet@v3
-#       with:
-#         dotnet-version: 6.0.x
-#     - name: Restore dependencies
-#       run: dotnet restore
-#     - name: Build CPU version
-#       run: dotnet build --no-restore
-# #     - name: Test CPU version
-# #       run: dotnet test --no-build --verbosity normal
-#     - name: uninstall redist cpu for unit tests
-#       run: dotnet remove helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
-#     - name: install redist gpu for unit tests
-#       run: dotnet add helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist-Linux-GPU
-#     - name: Restore dependencies
-#       run: dotnet restore
-#     - name: Build GPU version
-#       run: dotnet build --no-restore
-# #     - name: Test GPU version
-# #       run: dotnet test --no-build --verbosity normal
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build CPU version
+      run: dotnet build --no-restore
+    - name: Test CPU version
+      run: dotnet test --no-build --verbosity normal
+    - name: uninstall redist cpu for unit tests
+      run: dotnet remove helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
+    - name: install redist gpu for unit tests
+      run: dotnet add helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist-Linux-GPU
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build GPU version
+      run: dotnet build --no-restore
+#     - name: Test GPU version
+#       run: dotnet test --no-build --verbosity normal
