@@ -1,10 +1,8 @@
 name: auto-release
 
-on: 
-  workflow_run:
-    workflows: ["build_and_test"]
-    types:
-      - completed
+on:
+  pull_request:
+    types: [ labeled ]
 
 env:
   MYGET_API_TOKEN: ${{ SECRETS.RINNE_MYGET_KEY }}
@@ -12,8 +10,8 @@ env:
 
 jobs:
   build:
+    if: ${{ github.event.label.name == 'auto-release'}}
     runs-on: windows-latest
-    if: contains(github.event.issue.labels.*.name, 'auto-release')
 
     steps:
     - uses: actions/checkout@v3
@@ -30,6 +28,7 @@ jobs:
 
     - name: Build solution
       run: dotnet build -c Release --no-restore
+
 
 #   run-semantic-release:
 #     runs-on: ubuntu-latest
