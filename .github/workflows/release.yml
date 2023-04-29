@@ -29,7 +29,6 @@ jobs:
     - name: Build solution
       run: dotnet build -c Release --no-restore
 
-
 #   run-semantic-release:
 #     runs-on: ubuntu-latest
 #     needs: build
