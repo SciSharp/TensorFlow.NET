@@ -1,11 +1,11 @@
 name: auto-release
 
-on: workflow_dispatch
+on: 
   # workflow_run:
   #   workflows: ["build_and_test"]
   #   types:
   #     - completed
-
+  [push, pull_request]
   # push:
   #   branches: [ "master" ]
   # pull_request:
@@ -17,7 +17,7 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.label.name == 'auto-release'}}
+    # if: ${{ github.event.label.name == 'auto-release'}}
     runs-on: windows-latest
 
     steps:
