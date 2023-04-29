@@ -8,6 +8,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    types: ["opened", "reopened", "synchronize", "ready_for_review", "auto_merge_enabled"]
 
 jobs:
   windows:
@@ -24,8 +25,8 @@ jobs:
       run: dotnet restore
     - name: Build CPU version
       run: dotnet build --no-restore
-#     - name: Test CPU version
-#       run: dotnet test --no-build --verbosity normal
+    - name: Test CPU version
+      run: dotnet test --no-build --verbosity normal
     - name: uninstall redist cpu for unit tests
       run: dotnet remove helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
     - name: install redist gpu for unit tests
@@ -51,8 +52,8 @@ jobs:
       run: dotnet restore
     - name: Build CPU version
       run: dotnet build --no-restore
-#     - name: Test CPU version
-#       run: dotnet test --no-build --verbosity normal
+    # - name: Test CPU version
+    #   run: dotnet test --no-build --verbosity normal
     - name: uninstall redist cpu for unit tests
       run: dotnet remove helpers/Tensorflow.UnitTest.RedistHolder package SciSharp.TensorFlow.Redist
     - name: install redist gpu for unit tests

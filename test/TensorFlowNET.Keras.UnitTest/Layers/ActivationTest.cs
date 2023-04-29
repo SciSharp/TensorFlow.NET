@@ -49,7 +49,7 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Tensor input = tf.constant(new float[] { -3f, -2f, -1f, 0f, 1f, 2f });
             Tensor output = keras.layers.Softplus().Apply(input);
             NDArray expected = new NDArray(new float[] { 0.04858733f, 0.12692805f, 0.31326166f, 0.6931472f, 1.3132616f, 2.126928f });
-            Assert.AreEqual(expected, output.numpy());
+            Assert.IsTrue(expected == output.numpy());
         }
 
         [TestMethod]
