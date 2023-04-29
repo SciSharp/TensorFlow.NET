@@ -5,10 +5,11 @@ on:
   #   workflows: ["build_and_test"]
   #   types:
   #     - completed
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  [push, pull_request]
+  # push:
+  #   branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
 
 env:
   MYGET_API_TOKEN: ${{ SECRETS.RINNE_MYGET_KEY }}
