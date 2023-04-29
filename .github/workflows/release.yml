@@ -5,7 +5,6 @@ on:
     workflows: ["build_and_test"]
     types:
       - completed
-      - required
 
 env:
   MYGET_API_TOKEN: ${{ SECRETS.RINNE_MYGET_KEY }}
@@ -30,6 +29,7 @@ jobs:
 
     - name: Build solution
       run: dotnet build -c Release --no-restore
+
 
 #   run-semantic-release:
 #     runs-on: ubuntu-latest
