@@ -97,10 +97,4 @@ jobs:
       run: dotnet nuget add source https://www.myget.org/F/rinne/api/v2/package --name myget.org
 
     - name: Push TensorFlow.NET to myget.org
-      run: dotnet nuget push .\packages\TensorFlow.NET.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
-
-    - name: Push TensorFlow.Keras to myget.org
-      run: dotnet nuget push .\packages\TensorFlow.Keras.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
-
-    - name: Push TensorFlow.Hub to myget.org
-      run: dotnet nuget push .\packages\TensorFlow.Hub.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
+      run: dotnet nuget push .\packages\TensorFlow*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
