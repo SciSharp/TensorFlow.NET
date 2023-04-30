@@ -94,7 +94,7 @@ jobs:
         path: './packages'
 
     - name: Add myget nuget source
-      run: dotnet nuget add source https://www.myget.org/F/rinne/api/v3/package --name myget.org
+      run: dotnet nuget add source https://www.myget.org/F/rinne/api/v2/package --name myget.org
 
     - name: Push TensorFlow.NET to myget.org
       run: dotnet nuget push .\packages\TensorFlow*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
