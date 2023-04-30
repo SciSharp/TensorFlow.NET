@@ -75,13 +75,7 @@ jobs:
         git fetch origin;
         $LastTag = git describe --tags;
         echo "Last tag is: $LastTag";
-        $VersionTag = ($LastTag).TrimStart('v');
-        $TagArray=(${string//,/ });
-        $Version = ""
-        for var in ${array[@]}
-        do
-          Version += $var
-        done
+        $Version = ($LastTag).TrimStart('v') + "-preview";
         echo "Publishing version: $Version";
         dotnet pack ./src/TensorFlowNET.Core/Tensorflow.Binding.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
         dotnet pack ./src/TensorFlowNET.Keras/Tensorflow.Keras.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
