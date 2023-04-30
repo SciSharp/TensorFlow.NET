@@ -75,7 +75,13 @@ jobs:
         git fetch origin;
         $LastTag = git describe --tags;
         echo "Last tag is: $LastTag";
-        $Version = "preview-v" + ($LastTag).TrimStart('v');
+        $VersionTag = ($LastTag).TrimStart('v');
+        $TagArray=(${string//,/ });
+        $Version = ""
+        for var in ${array[@]}
+        do
+          Version += $var
+        done
         echo "Publishing version: $Version";
         dotnet pack ./src/TensorFlowNET.Core/Tensorflow.Binding.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
         dotnet pack ./src/TensorFlowNET.Keras/Tensorflow.Keras.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
@@ -87,14 +93,14 @@ jobs:
             $LastExitCode = 0;
         }
 
-    - name: Upload packages artefacts
+    - name: Upload packages artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
         name: "drop-ci-packages"
         path: './packages'
 
     - name: Add myget nuget source
-      run: dotnet nuget add source https://www.myget.org/F/rinne/api/v2/package --name myget.org
+      run: dotnet nuget add source https://www.myget.org/F/rinne/api/v3/package --name myget.org
 
     - name: Push TensorFlow.NET to myget.org
       run: dotnet nuget push .\packages\TensorFlow*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
