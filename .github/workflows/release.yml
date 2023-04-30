@@ -77,9 +77,9 @@ jobs:
         echo "Last tag is: $LastTag";
         $Version = ($LastTag).TrimStart('v');
         echo "Publishing version: $Version";
-        dotnet pack Tensorflow.Binding -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
-        dotnet pack Tensorflow.Keras -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
-        dotnet pack Tensorflow.Hub -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
+        dotnet pack ./src/TensorFlowNET.Core/Tensorflow.Binding.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
+        dotnet pack ./src/TensorFlowNET.Keras/Tensorflow.Keras.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
+        dotnet pack ./src/TensorflowNET.Hub/Tensorflow.Hub.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
 
         if($LastExitCode -ne 0)
         {

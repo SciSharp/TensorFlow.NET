@@ -34,6 +34,7 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageTags>tensorflow, keras, deep learning, machine learning</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageOutputPath>packages</PackageOutputPath>
     <RepositoryType>Git</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>

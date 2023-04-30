@@ -17,7 +17,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>http://scisharpstack.org</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
-    <PackageTags>TensorFlow, SciSharp, Machine Learning, Deep Learning, TensorFlow Hub, TensorFlow.NET, TF.NET, AI</PackageTags>
+    <PackageTags>TensorFlow, SciSharp, Machine Learning, Deep Learning, Transfer Learning, TensorFlow Hub, TensorFlow.NET, TF.NET, AI</PackageTags>
+    <PackageOutputPath>packages</PackageOutputPath>
     <Description>
       Google's TensorFlow Hub full binding in .NET Standard.
       A library for transfer learning with TensorFlow.NET.
