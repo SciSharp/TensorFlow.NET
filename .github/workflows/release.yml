@@ -66,7 +66,9 @@ jobs:
 
     - name: Pack packages
       run: |
-        git fetch;
+        git fetch --unshallow;
+        git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*";
+        git fetch origin;
         $LastTag = git describe --tags;
         echo "Last tag is: $LastTag";
         $Version = ($LastTag).TrimStart('v');
