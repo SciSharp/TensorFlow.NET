@@ -196,5 +196,17 @@ namespace Tensorflow.Keras.UnitTest.Model
             //    )
             #endregion
         }
+
+        [TestMethod]
+        public void SaveAfterLoad()
+        {
+            var model = tf.keras.models.load_model(@"Assets/simple_model_from_auto_compile");
+            model.summary();
+
+            model.save("Assets/saved_auto_compile_after_loading");
+
+            //model = tf.keras.models.load_model(@"Assets/saved_auto_compile_after_loading");
+            //model.summary();
+        }
     }
 }

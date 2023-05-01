@@ -17,7 +17,14 @@ namespace Tensorflow
     {
         protected string _name;
         public virtual string Name => _handle_name;
-        public virtual string SharedName => _name;
+        public virtual string SharedName
+        {
+            get
+            {
+                // TODO(Rinne): optimize the implementation with refactor of variable.
+                return _handle_name.Substring(0, _handle_name.IndexOf(':') + 1);
+            }
+        }
         protected TF_DataType _dtype;
         public TF_DataType dtype => _dtype;
         protected string _handle_name;

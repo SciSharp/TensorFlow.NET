@@ -93,13 +93,14 @@ public class SaveableView
         //     
         // }
 
-        foreach (var obj in _nodes)
-        {
-            if (obj is ConcreteFunction)
-            {
-                _concrete_functions.Add((ConcreteFunction)obj);
-            }
-        }
+        //_concrete_functions = new();
+        //foreach (var obj in _nodes)
+        //{
+        //    if (obj is ConcreteFunction)
+        //    {
+        //        _concrete_functions.Add((ConcreteFunction)obj);
+        //    }
+        //}
     }
 
     public List<ConcreteFunction> get_concrete_resource_initializers()
@@ -225,8 +226,8 @@ public class SaveableView
         }
         else if (obj is ConcreteFunction)
         {
-            // TODO: complete it.
-            throw new NotImplementedException();
+            // TODO(Rinne): complete it.
+            // throw new NotImplementedException();
         }
         // skip the process of type `_CapturedTensor` and `CapturableResource`.
         else
