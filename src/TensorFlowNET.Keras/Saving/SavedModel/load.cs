@@ -77,7 +77,7 @@ namespace Tensorflow.Keras.Saving.SavedModel
             var loaded = Loader.load_partial(path, nodes_to_load, options);
 
             keras_loader.finalize_objects();
-            // keras_loader.del_tracking();
+            keras_loader.del_tracking();
 
             var model = loaded["root"];
 

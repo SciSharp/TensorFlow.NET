@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Tensorflow.Functions;
 using Tensorflow.Train;
 using Tensorflow.Training;
 using pbc = global::Google.Protobuf.Collections;
@@ -13,7 +14,7 @@ public static class CheckPointUtils
 {
     private static string _ESCAPE_CHAR = ".";
     public static (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>, IDictionary<Trackable, int>,
-        IDictionary<Trackable, pbc::RepeatedField<global::Tensorflow.TrackableObjectGraph.Types.TrackableObject.Types.SlotVariableReference>>,
+        IDictionary<Trackable, pbc::RepeatedField<TrackableObjectGraph.Types.TrackableObject.Types.SlotVariableReference>>,
         IDictionary<Trackable, string>) objects_ids_and_slot_variables_and_paths(ObjectGraphView graph_view)
     {
         var (trackable_objects, node_paths) = graph_view.breadth_first_traversal();
