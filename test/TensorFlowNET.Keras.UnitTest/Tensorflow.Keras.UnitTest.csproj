@@ -20,10 +20,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\helpers\Tensorflow.UnitTest.RedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Keras\Tensorflow.Keras.csproj" />
   </ItemGroup>
 

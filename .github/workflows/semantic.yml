@@ -1,0 +1,17 @@
+name: Semantic
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  semantic-pull-request:
+    name: Semantic check
+    runs-on: windows-latest
+    steps:
+      - name: semantic-pull-request
+        uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          validateSingleCommit: true
