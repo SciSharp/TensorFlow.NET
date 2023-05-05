@@ -1,12 +1,10 @@
 name: auto-release
 
 on:
-  label:
-    types: [created, edited]
   pull_request:
     branches: 
       - master
-    types: [ labeled, opened, reopened, synchronize ]
+    types: [ closed ]
 
 env:
   MYGET_API_TOKEN: ${{ SECRETS.MYGET_API_KEY }}
@@ -14,7 +12,7 @@ env:
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'auto-release')
+    if: contains(github.event.pull_request.labels.*.name, 'auto-release') && ${{ github.event.pull_request.merged }}
     runs-on: windows-latest
 
     steps:
