@@ -93,8 +93,5 @@ jobs:
         name: "drop-ci-packages"
         path: './packages'
 
-    - name: Add myget nuget source
-      run: dotnet nuget add source https://www.myget.org/F/scisharp/api/v2/package --name myget.org
-
     - name: Push TensorFlow.NET to myget.org
-      run: dotnet nuget push .\packages\TensorFlow*.nupkg -s myget.org -k $env:MYGET_API_TOKEN --skip-duplicate
+      run: dotnet nuget push .\packages\TensorFlow*.nupkg --source https://www.myget.org/F/scisharp/api/v3/index.json -k $env:MYGET_API_TOKEN --skip-duplicate
