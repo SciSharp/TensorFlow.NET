@@ -93,5 +93,8 @@ jobs:
         name: "drop-ci-packages"
         path: './packages'
 
+    - name: test temp
+      run: echo "auth_token length ${#auth_token}"
+
     - name: Push TensorFlow.NET to myget.org
-      run: dotnet nuget push .\packages\TensorFlow*.nupkg --source https://www.myget.org/F/scisharp/api/v3/index.json --api-key ${{ secrets.MYGET_API_KEY }} --skip-duplicate
+      run: dotnet nuget push .\packages\TensorFlow*.nupkg --source https://www.myget.org/F/scisharp/api/v3/index.json -k ${{ secrets.MYGET_API_KEY }} --skip-duplicate
