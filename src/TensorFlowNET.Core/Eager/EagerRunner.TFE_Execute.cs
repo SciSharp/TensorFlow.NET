@@ -42,7 +42,7 @@ namespace Tensorflow.Eager
             object[] attrs,
             int num_outputs)
         {
-            var status = tf.Status;
+            var status = new Status();
             var op = GetOp(ctx, op_name, status);
             c_api.TFE_OpSetDevice(op, device_name, status);
             if (status.ok())
