@@ -138,6 +138,9 @@ namespace Tensorflow.Keras
             ops.set_default_session(tf.Session(ops.get_default_graph()));
             tf.enable_eager_execution();
             tf.Runner.ClearEagerOperationMap();
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
         public void manual_variable_initialization(bool value)
         {

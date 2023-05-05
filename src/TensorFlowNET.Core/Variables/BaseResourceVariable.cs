@@ -102,7 +102,7 @@ namespace Tensorflow
             if (handle is EagerTensor)
             {
                 _handle = handle.EagerTensorHandle.DangerousGetHandle();
-                eager_resource_deleter = new EagerResourceDeleter(handle, handle.Device);
+                // eager_resource_deleter = new EagerResourceDeleter(handle, handle.Device);
             }
             else if(handle is null)
             {

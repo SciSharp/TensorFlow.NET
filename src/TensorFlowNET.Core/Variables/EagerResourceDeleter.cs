@@ -14,9 +14,6 @@ namespace Tensorflow.Variables
             _tensor = handle;
             _handle = handle.EagerTensorHandle.DangerousGetHandle();
             _handle_device = handle_device;
-            
-            bool success = false;
-            handle.EagerTensorHandle.DangerousAddRef(ref success);
         }
 
         protected override void DisposeUnmanagedResources(IntPtr handle)
@@ -27,8 +24,6 @@ namespace Tensorflow.Variables
             tf.Runner.TFE_Execute(tf.Context, _handle_device, "DestroyResourceOp",
                 new[] { _tensor },
                 new object[] { "ignore_lookup_error", true }, 0);
-            
-            _tensor.EagerTensorHandle.DangerousRelease();
         }
     }
 }
