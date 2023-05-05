@@ -94,7 +94,7 @@ jobs:
         path: './packages'
 
     - name: test temp
-      run: echo "auth_token length ${#auth_token}"
+      run: echo "auth_token length ${#MYGET_API_TOKEN}"
 
     - name: Push TensorFlow.NET to myget.org
-      run: dotnet nuget push .\packages\TensorFlow*.nupkg --source https://www.myget.org/F/scisharp/api/v3/index.json -k ${{ secrets.MYGET_API_KEY }} --skip-duplicate
+      run: dotnet nuget push .\packages\TensorFlow*.nupkg --source https://www.myget.org/F/scisharp/api/v3/index.json -k ${{ secrets.MYGET_API_TOKEN }} --skip-duplicate
