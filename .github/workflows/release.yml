@@ -37,9 +37,9 @@ jobs:
         git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*";
         git fetch origin;
         $LastTag = git describe --tags;
-        $LastTag = ($LastTag).TrimStart('v');
-        echo "Last tag is: $LastTag";
-        $Version = ${LastTag%%-*} + "-preview";
+        dropped_tag = ($LastTag).TrimStart('v');
+        echo "Last tag is: $dropped_tag";
+        $Version = ${dropped_tag%%-*} + "-preview";
         echo "Publishing version: $Version";
         dotnet pack ./src/TensorFlowNET.Core/Tensorflow.Binding.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
         dotnet pack ./src/TensorFlowNET.Keras/Tensorflow.Keras.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
