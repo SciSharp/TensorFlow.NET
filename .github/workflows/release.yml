@@ -11,7 +11,7 @@ env:
   GITHUB_TOKEN: ${{ SECRETS.RINNE_GITHUB_TOKEN }}
 
 jobs:
-  release to myget:
+  release_to_myget:
     runs-on: windows-latest
 #     needs: run-semantic-release
     needs: build
