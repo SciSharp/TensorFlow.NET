@@ -17,19 +17,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    # - name: Setup .NET 6.0.x SDK
-    #   uses: actions/setup-dotnet@v3
-    #   with:
-    #     dotnet-version: 6.0.x
+    - name: Setup .NET 6.0.x SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
 
-    # - name: Check .NET info
-    #   run: dotnet --info
+    - name: Check .NET info
+      run: dotnet --info
 
-    # - name: Install dependencies
-    #   run: dotnet restore
+    - name: Install dependencies
+      run: dotnet restore
 
-    # - name: Build solution
-    #   run: dotnet build -c Release --no-restore
+    - name: Build solution
+      run: dotnet build -c Release --no-restore
 
 #   run-semantic-release:
 #     runs-on: ubuntu-latest
