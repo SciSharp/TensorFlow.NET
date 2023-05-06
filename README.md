@@ -3,15 +3,16 @@
 **TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in C# which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. TensorFlow.NET has built-in Keras high-level interface and is released as an independent package [TensorFlow.Keras](https://www.nuget.org/packages/TensorFlow.Keras/).
 
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
-[![Tensorflow.NET](https://ci.appveyor.com/api/projects/status/wx4td43v2d3f2xj6?svg=true)](https://ci.appveyor.com/project/Haiping-Chen/tensorflow-net)
-[![NuGet](https://img.shields.io/nuget/dt/TensorFlow.NET.svg)](https://www.nuget.org/packages/TensorFlow.NET)
+[![CI Status](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml)
+[![NuGet Badge](https://buildstats.info/nuget/TensorFlow.NET?includePreReleases=true)](https://www.nuget.org/packages/TensorFlow.NET)
+[![MyGet Badge](https://img.shields.io/badge/dynamic/json?color=purple&label=nightly%20release&prefix=myget-v&query=items%5B0%5D.lower&url=https%3A%2F%2Fwww.myget.org%2FF%2Fscisharp%2Fapi%2Fv3%2Fregistration1%2Ftensorflow.net%2Findex.json)](https://www.myget.org/feed/scisharp/package/nuget/Tensorflow.NET)
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
 English | [中文](docs/README-CN.md)
 
-*master branch is corresponding to tensorflow v2.10, v0.6x branch is from tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15.*
+*master branch and v0.100.x is corresponding to tensorflow v2.10, v0.6x branch is from tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15. Please add `https://www.myget.org/F/scisharp/api/v3/index.json` to nuget source to use nightly release.*
 
 
 ![tensors_flowing](docs/assets/tensors_flowing.gif)
