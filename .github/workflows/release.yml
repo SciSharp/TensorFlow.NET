@@ -12,24 +12,24 @@ env:
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'auto-release') && ${{ github.event.pull_request.merged }}
+    if: contains(github.event.pull_request.labels.*.name, 'auto-release')
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET 6.0.x SDK
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
+    # - name: Setup .NET 6.0.x SDK
+    #   uses: actions/setup-dotnet@v3
+    #   with:
+    #     dotnet-version: 6.0.x
 
-    - name: Check .NET info
-      run: dotnet --info
+    # - name: Check .NET info
+    #   run: dotnet --info
 
-    - name: Install dependencies
-      run: dotnet restore
+    # - name: Install dependencies
+    #   run: dotnet restore
 
-    - name: Build solution
-      run: dotnet build -c Release --no-restore
+    # - name: Build solution
+    #   run: dotnet build -c Release --no-restore
 
 #   run-semantic-release:
 #     runs-on: ubuntu-latest
@@ -72,8 +72,9 @@ jobs:
         git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*";
         git fetch origin;
         $LastTag = git describe --tags;
+        $LastTag = ($LastTag).TrimStart('v');
         echo "Last tag is: $LastTag";
-        $Version = ($LastTag).TrimStart('v') + "-preview";
+        $Version = ${LastTag%%-*} + "-preview";
         echo "Publishing version: $Version";
         dotnet pack ./src/TensorFlowNET.Core/Tensorflow.Binding.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
         dotnet pack ./src/TensorFlowNET.Keras/Tensorflow.Keras.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
