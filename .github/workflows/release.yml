@@ -40,7 +40,8 @@ jobs:
         $DroppedTag = ($LastTag).TrimStart('v');
         echo "Last tag is: $DroppedTag";
         $Suffix = "-preview"
-        $Version = $(echo $string | cut -d'-' -f1)$Suffix;
+        $Prefix = $(echo $string | cut -d'-' -f1)
+        $Version = "${Prefix}${Suffix}";
         echo "Publishing version: $Version";
         dotnet pack ./src/TensorFlowNET.Core/Tensorflow.Binding.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
         dotnet pack ./src/TensorFlowNET.Keras/Tensorflow.Keras.csproj -c Release -o packages /p:PackageVersion=$Version /p:Version=$Version;
