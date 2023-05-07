@@ -18,15 +18,24 @@ namespace Tensorflow.CodeGen
 
             StringBuilder result = new StringBuilder();
 
-            int state = 0; // the previous char was not lowered.
+            int state = 1; // the previous char was not lowered.
             for (int i = 0; i < input.Length; i++)
             {
                 char current = input[i];
 
                 // 首字母不需要添加下划线
-                if (i != 0 && char.IsUpper(current))
+                if (char.IsUpper(current))
                 {
-                    if(state == 0)
+                    if(i > 0)
+                    {
+                        char pre = input[i - 1];
+                        if (char.IsDigit(pre))
+                        {
+                            result.Append(char.ToLower(current));
+                            continue;
+                        }
+                    }
+                    if (state == 0)
                     {
                         result.Append("_");
                         state = 1;

@@ -10,27 +10,39 @@ namespace Tensorflow.CodeGen
     public class OpClassifier
     {
         private static readonly string _filenamePattern = @"^gen_[a-z]*_ops.py$";
-        private static readonly string _pythonFunctionPattern = @"def\s+(\w+)\((?:\s*\w+\s*(?:=\s*[\S]*)*,\s*)*\s*\w+\s*=None\s*\):";
+        private static readonly string _pythonFunctionPattern = @"def\s+(\w+\d*\w*)\((?:\s*\w+\s*(?:=\s*[\S]*)*,\s*)*\s*name=None\):";
         private Dictionary<string, HashSet<string>> _opSet = new();
         public Dictionary<string, HashSet<string>> OpSet => _opSet;
-        public OpClassifier(string pythonFileFolder)
+        public OpClassifier(string pythonFileFolder, IEnumerable<string> funcNames)
         {
             DirectoryInfo directory = new DirectoryInfo(pythonFileFolder);
 
+            Dictionary<string, string> fileContentMap = new();
             foreach (FileInfo file in directory.GetFiles())
             {
                 if (Regex.IsMatch(file.Name, _filenamePattern))
                 {
+                    Console.WriteLine(file.Name);
                     string filenamePrefix = file.Name.Split('.')[0];
                     string content = File.ReadAllText(file.FullName);
-                    var matches = Regex.Matches(content, _pythonFunctionPattern);
-                    foreach(Match match in matches)
+                    fileContentMap[filenamePrefix] = content;
+                }
+            }
+
+            foreach(var funcName in funcNames)
+            {
+                Console.WriteLine(funcName);
+                string funcPattern = @$"^def\s+{funcName}\(";
+                string fallbackFuncPattern = @$"^def\s+{funcName}_eager_fallback\(";
+                foreach (var (target, content) in fileContentMap)
+                {
+                    if(content.Contains($"def {funcName}") && content.Contains($"def {funcName}_eager_fallback"))
                     {
-                        var funcName = match.Groups[1].Value;
-                        if (!funcName.EndsWith("_eager_fallback"))
-                        {
-                            _opSet.SetDefault(filenamePrefix, new HashSet<string>()).Add(funcName);
-                        }
+                        _opSet.SetDefault(target, new HashSet<string>()).Add(funcName);
+                    }
+                    else if (content.Contains($"def _{funcName}") && content.Contains($"def _{funcName}_eager_fallback"))
+                    {
+                        _opSet.SetDefault(target, new HashSet<string>()).Add(funcName);
                     }
                 }
             }

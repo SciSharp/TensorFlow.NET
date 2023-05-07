@@ -21,7 +21,7 @@ namespace Tensorflow.CodeGen
             var opDefs = ReadAllOpDefs(opDefFilename);
             _opMap = opDefs.Op.ToDictionary(
                 x => Tensorflow.CodeGen.Utils.ConvertToUnderscore(x.Name), x => x);
-            _opClassifier = new OpClassifier(pythonFilesDirectory);
+            _opClassifier = new OpClassifier(pythonFilesDirectory, opDefs.Op.Select(x => Utils.ConvertToUnderscore(x.Name)));
         }
 
         public void WriteAll()
@@ -45,7 +45,7 @@ namespace Tensorflow.CodeGen
                 sb.AppendLine();
 
                 // Write class name
-                sb.AppendLine($"internal static class {target}");
+                sb.AppendLine($"public static class {target}");
                 sb.AppendLine("{");
 
                 foreach(var funcName in set)
