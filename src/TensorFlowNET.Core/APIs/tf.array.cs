@@ -44,7 +44,8 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor batch_to_space_nd<T>(T input, int[] block_shape, int[,] crops, string name = null)
-            => gen_array_ops.batch_to_space_nd(input, block_shape, crops, name: name);
+            => gen_array_ops.batch_to_space_nd(ops.convert_to_tensor(input), ops.convert_to_tensor(block_shape), 
+                ops.convert_to_tensor(crops), name: name);
 
         /// <summary>
         /// Apply boolean mask to tensor.
@@ -91,7 +92,7 @@ namespace Tensorflow
                 });
             }
 
-            return gen_array_ops.concat_v2(values.ToArray(), axis, name: name);
+            return gen_array_ops.concat_v2(values.ToArray(), ops.convert_to_tensor(axis), name: name);
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor fill<T>(Tensor dims, T value, string name = null)
-            => gen_array_ops.fill(dims, value, name: name);
+            => gen_array_ops.fill(dims, ops.convert_to_tensor(value), name: name);
 
         public Tensor fill<T>(Shape dims, T value, string name = null)
             => array_ops.fill(dims, value, name: name);
@@ -138,7 +139,7 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <returns></returns>
         public Tensor gather(Tensor @params, Tensor indices, string name = null, int axis = 0)
-            => array_ops.gather(@params, indices, name: name, axis: axis);
+            => array_ops.gather(@params, indices, name: name, axis: ops.convert_to_tensor(axis));
 
         /// <summary>
         /// Return the elements, either from `x` or `y`, depending on the `condition`.
@@ -166,7 +167,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor reverse(Tensor tensor, int[] axis, string name = null)
-            => gen_array_ops.reverse(tensor, axis, name: name);
+            => gen_array_ops.reverse(tensor, ops.convert_to_tensor(axis), name: name);
 
         public Tensor reverse(Tensor tensor, Tensor axis, string name = null)
             => gen_array_ops.reverse(tensor, axis, name: name);
@@ -189,7 +190,8 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor` the same type as `input`.</returns>
         public Tensor slice<Tb, Ts>(Tensor input, Tb[] begin, Ts[] size, string name = null)
-            => array_ops.slice(input, begin, size, name: name);
+            => array_ops.slice(input, begin.Select(x => ops.convert_to_tensor(x)).ToArray(), 
+                size.Select(x => ops.convert_to_tensor(x)).ToArray(), name: name);
 
         public Tensor squeeze(Tensor input, int axis, string name = null, int squeeze_dims = -1)
             => array_ops.squeeze(input, new[] { axis }, name);
@@ -255,7 +257,7 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional).</param>
         /// <returns>A `Tensor`. Has the same type as `input`.</returns>
         public Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
-            => gen_array_ops.placeholder_with_default(input, shape, name: name);
+            => gen_array_ops.placeholder_with_default(ops.convert_to_tensor(input), shape, name: name);
 
         /// <summary>
         /// Returns the shape of a tensor.

@@ -103,6 +103,11 @@ namespace Tensorflow
                 DataType dtype = DataType.DtInvalid;
                 DataType default_dtype = DataType.DtInvalid;
 
+                if (values is Tensors tensors)
+                {
+                    values = (Tensor[])tensors;
+                }
+
                 if (_IsListParameter(input_arg))
                 {
                     if (!_IsListValue(values))

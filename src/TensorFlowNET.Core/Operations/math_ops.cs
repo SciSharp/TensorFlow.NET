@@ -21,6 +21,7 @@ using System.Linq;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 using Tensorflow.Operations;
+using System.Runtime.CompilerServices;
 
 namespace Tensorflow
 {
@@ -39,18 +40,18 @@ namespace Tensorflow
                 {
                     return gen_ops.complex_abs(x, Tout: x.dtype.real_dtype(), name: name);
                 }
-                return gen_math_ops._abs(x, name: name);
+                return gen_math_ops.abs(x, name: name);
             });
         }
 
         public static Tensor add<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.add(x, y, name);
+            => gen_math_ops.add(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         public static Tensor add_v2(Tensor x, Tensor y, string name = null)
             => tf.Context.ExecuteOp("AddV2", name, new ExecuteOpArgs(x, y));
 
         public static Tensor add_v2<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.add_v2(x, y, name);
+            => gen_math_ops.add_v2(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         /// <summary>
         /// Adds all input tensors element-wise.
@@ -254,9 +255,9 @@ namespace Tensorflow
         }
 
         public static Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.greater_equal<Tx, Ty>(x, y, name: name);
+            => gen_math_ops.greater_equal(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
         public static Tensor equal<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.equal(x, y, name: name);
+            => gen_math_ops.equal(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         /// <summary>
         /// Computes the Gauss error function of `x` element-wise.
@@ -274,13 +275,13 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(x, y));
 
         public static Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.mul(x, y, name: name);
+            => gen_math_ops.mul(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         public static Tensor not_equal<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.not_equal(x, y, name: name);
+            => gen_math_ops.not_equal(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         public static Tensor mul_no_nan<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.mul_no_nan(x, y, name: name);
+            => gen_math_ops.mul_no_nan(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         public static Tensor scalar_mul<Tscale, Tx>(Tscale scale, Tx x, string name = null)
             => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(scale, x));
@@ -396,7 +397,7 @@ namespace Tensorflow
             });
 
         public static Tensor sign<T>(T x, string name = null)
-            => gen_math_ops.sign(x, name: name);
+            => gen_math_ops.sign(ops.convert_to_tensor(x), name: name);
 
         public static Tensor sin(Tensor x, string name = null)
             => tf.Context.ExecuteOp("Sin", name, new ExecuteOpArgs(x));
@@ -421,7 +422,7 @@ namespace Tensorflow
 
         public static Tensor subtract<Tx, Ty>(Tx x, Ty y, string name = null)
         {
-            return gen_math_ops.sub(x, y, name);
+            return gen_math_ops.sub(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
         }
 
         public static Tensor log(Tensor x, string name = null)
@@ -455,8 +456,8 @@ namespace Tensorflow
                 var axis_tensor = array_ops.where_v2(constant_op.constant(axis >= 0), x: axis, y: ndims + axis);
 
                 // The purpose is to avoid having negative values when repeating.
-                var num_fill = gen_math_ops.maximum(num_int_tensor - 2, 0);
-                var n_steps = gen_math_ops.maximum(num_int_tensor - 1, 1);
+                var num_fill = gen_math_ops.maximum(num_int_tensor - 2, ops.convert_to_tensor(0));
+                var n_steps = gen_math_ops.maximum(num_int_tensor - 1, ops.convert_to_tensor(1));
                 var delta = (expanded_stop - expanded_start) / cast(n_steps, expanded_stop.dtype);
 
                 var range_end = array_ops.where_v2(num_int_tensor >= 0, n_steps, -1);
@@ -503,7 +504,7 @@ namespace Tensorflow
             var axes_shape = array_ops.shape(axes);
             var rng = math_ops.range(input_rank);
             var a1 = new Tensor[] { rng, axes };
-            var fill = gen_array_ops.fill(axes_shape, 1);
+            var fill = gen_array_ops.fill(axes_shape, ops.convert_to_tensor(1));
             var a2 = new Tensor[] { input_shape, fill };
 
             return gen_data_flow_ops.dynamic_stitch(a1, a2);
@@ -528,7 +529,7 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor reduce_all(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
         {
-            var all = gen_math_ops._all(input_tensor,
+            var all = gen_math_ops.all(input_tensor,
                     _ReductionDims(input_tensor, axis),
                     keepdims,
                     name: name);
@@ -581,23 +582,23 @@ namespace Tensorflow
         public static Tensor reduce_any(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            var max = (axis != null) ? gen_math_ops._any(input_tensor, axis, keepdims, name) :
-                gen_math_ops._any(input_tensor, r, keepdims, name);
+            var max = (axis != null) ? gen_math_ops.any(input_tensor, axis, keepdims, name) :
+                gen_math_ops.any(input_tensor, r, keepdims, name);
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
         public static Tensor reduce_max(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            var max = (axis != null) ? gen_math_ops._max(input_tensor, axis, keepdims, name) :
-                gen_math_ops._max(input_tensor, r, keepdims, name);
+            var max = (axis != null) ? gen_math_ops.max(input_tensor, axis, keepdims, name) :
+                gen_math_ops.max(input_tensor, r, keepdims, name);
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
         public static Tensor reduce_min(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            var min = gen_math_ops._min(input_tensor, r, keepdims, name);
+            var min = gen_math_ops.min(input_tensor, r, keepdims, name);
             return _may_reduce_to_scalar(keepdims, axis, min);
         }
 
@@ -643,7 +644,7 @@ namespace Tensorflow
         public static Tensor reduce_sum(Tensor input_tensor, Tensor axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
-            var m = gen_math_ops._sum(input_tensor, r, keep_dims: keepdims, name: name);
+            var m = gen_math_ops.sum(input_tensor, r, keep_dims: keepdims, name: name);
             return _may_reduce_to_scalar(keepdims, axis, m);
         }
 
@@ -752,10 +753,10 @@ namespace Tensorflow
         }
 
         public static Tensor minimum<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.minimum(x, y, name: name);
+            => gen_math_ops.minimum(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         public static Tensor maximum<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.maximum(x, y, name: name);
+            => gen_math_ops.maximum(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         /// <summary>
         /// Multiplies matrix `a` by matrix `b`, producing `a` * `b`.

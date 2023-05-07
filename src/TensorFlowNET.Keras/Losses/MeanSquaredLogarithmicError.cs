@@ -20,14 +20,14 @@ namespace Tensorflow.Keras.Losses
             Tensor y_true_cast = gen_math_ops.cast(y_true, y_pred_dispatch.dtype);
             Tensor first_log=null, second_log=null;
             if (y_pred_dispatch.dtype == TF_DataType.TF_DOUBLE) {
-                first_log = math_ops.log(gen_math_ops.maximum(y_pred_dispatch, 1e-7) + 1.0);
-                second_log = math_ops.log(gen_math_ops.maximum(y_true_cast, 1e-7) + 1.0);
+                first_log = math_ops.log(math_ops.maximum(y_pred_dispatch, 1e-7) + 1.0);
+                second_log = math_ops.log(math_ops.maximum(y_true_cast, 1e-7) + 1.0);
             }
             else {
-                first_log = math_ops.log(gen_math_ops.maximum(y_pred_dispatch, 1e-7f) + 1.0f);
-                second_log = math_ops.log(gen_math_ops.maximum(y_true_cast, 1e-7f) + 1.0f);
+                first_log = math_ops.log(math_ops.maximum(y_pred_dispatch, 1e-7f) + 1.0f);
+                second_log = math_ops.log(math_ops.maximum(y_true_cast, 1e-7f) + 1.0f);
             }
-            return gen_math_ops.mean(gen_math_ops.squared_difference(first_log, second_log), axis: -1);
+            return gen_math_ops.mean(gen_math_ops.squared_difference(first_log, second_log), ops.convert_to_tensor(-1));
         }
     }
 }

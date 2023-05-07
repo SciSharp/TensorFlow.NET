@@ -47,8 +47,8 @@ namespace Tensorflow.Gradients
             {
                 return new Tensor[]
                 {
-                    gen_math_ops.mul(grad, y),
-                    gen_math_ops.mul(grad, x)
+                    math_ops.multiply(grad, y),
+                    math_ops.multiply(grad, x)
                 };
             }
 

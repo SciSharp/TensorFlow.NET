@@ -30,7 +30,7 @@ namespace Tensorflow.Keras.Losses
             return gen_math_ops.mean(array_ops.where_v2(abs_error <= delta,
                                                         half * math_ops.pow(error, 2),
                                                         half * math_ops.pow(delta, 2) + delta * (abs_error - delta)),
-                                     axis: -1);
+                                     ops.convert_to_tensor(-1));
         }
     }
 }

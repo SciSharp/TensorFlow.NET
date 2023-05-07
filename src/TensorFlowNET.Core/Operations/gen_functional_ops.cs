@@ -19,7 +19,7 @@ namespace Tensorflow.Operations
             {
                 try
                 {
-                    return tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("PartitionedCall", name,
+                    return tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "PartitionedCall", name,
                         args, tout, f, config, config_proto, executor_type));
                 }
                 catch (Exception)
@@ -50,7 +50,7 @@ namespace Tensorflow.Operations
             var output = tf.OpDefLib._apply_op_helper("PartitionedCall",
                 name, kwargs);
             var result = output.outputs;
-            if (execute.must_record_gradient())
+            if (_execute.must_record_gradient())
             {
                 throw new NotImplementedException();
             }
@@ -88,7 +88,7 @@ namespace Tensorflow.Operations
                 try
                 {
                     var _result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
-                    "SymbolicGradient", name, input, Tout, f));
+                    tf.Context, "SymbolicGradient", name, input, Tout, f));
                     return _result;
                 }
                 catch (Exception)
@@ -107,7 +107,7 @@ namespace Tensorflow.Operations
             }
             var op = tf.OpDefLib._apply_op_helper("SymbolicGradient", name, new object[] { input, Tout, f });
             var result = op.outputs;
-            if (execute.must_record_gradient())
+            if (_execute.must_record_gradient())
             {
                 throw new NotImplementedException();
             }
@@ -117,8 +117,8 @@ namespace Tensorflow.Operations
         public static Tensor[] symbolic_gradient_eager_fallback(Tensor[] input, TF_DataType[] Tout, NameAttrList f, string name, Context ctx)
         {
             object[] attrs = new object[] { "Tin", input, "Tout", Tout, "f", f };
-            var result = execute.executes("SymbolicGradient", Tout.Length, input, attrs, ctx, name);
-            if (execute.must_record_gradient())
+            var result = _execute.execute("SymbolicGradient", Tout.Length, input, attrs, ctx, name);
+            if (_execute.must_record_gradient())
             {
                 throw new NotImplementedException();
             }

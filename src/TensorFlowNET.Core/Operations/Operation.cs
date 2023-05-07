@@ -187,6 +187,33 @@ namespace Tensorflow
         public virtual T get_attr<T>(string name)
             => (T)get_attr(name);
 
+        internal unsafe TF_DataType _get_attr_type(string name)
+        {
+            Status status = new();
+            TF_DataType result;
+            c_api.TF_OperationGetAttrType(_handle, name, new IntPtr(&result), status);
+            status.Check(true);
+            return result;
+        }
+
+        internal unsafe int _get_attr_int(string name)
+        {
+            Status status = new();
+            int result;
+            c_api.TF_OperationGetAttrInt(_handle, name, new IntPtr(&result), status);
+            status.Check(true);
+            return result;
+        }
+
+        internal unsafe bool _get_attr_bool(string name)
+        {
+            Status status = new();
+            bool result;
+            c_api.TF_OperationGetAttrBool(_handle, name, new IntPtr(&result), status);
+            status.Check(true);
+            return result;
+        }
+
         public virtual T[] get_attr_list<T>(string name)
         {
             if (tf.executing_eagerly())
@@ -229,7 +256,42 @@ namespace Tensorflow
 
             if(oneof_value == AttrValue.ValueOneofCase.List)
             {
-                throw new NotImplementedException($"Unsupported field type in {oneof_value}");
+                if (x.List.S is not null && x.List.S.Count > 0)
+                {
+                    return x.List.S.Select(x => x.ToStringUtf8()).ToArray();
+                }
+                else if (x.List.I is not null && x.List.I.Count > 0)
+                {
+                    return x.List.I.ToArray();
+                }
+                else if (x.List.F is not null && x.List.F.Count > 0)
+                {
+                    return x.List.F.ToArray();
+                }
+                else if (x.List.B is not null && x.List.B.Count > 0)
+                {
+                    return x.List.B.ToArray();
+                }
+                else if (x.List.Shape is not null && x.List.Shape.Count > 0)
+                {
+                    return x.List.Shape.ToArray();
+                }
+                else if (x.List.Tensor is not null && x.List.Tensor.Count > 0)
+                {
+                    return x.List.Tensor.ToArray();
+                }
+                else if (x.List.Func is not null && x.List.Func.Count > 0)
+                {
+                    return x.List.Func.ToArray();
+                }
+                else if (x.List.Type is not null && x.List.Type.Count > 0)
+                {
+                    return x.List.Type.Select(x => x.as_tf_dtype()).ToArray();
+                }
+                else
+                {
+                    return null;
+                }
             }
             if(oneof_value == AttrValue.ValueOneofCase.Type)
             {

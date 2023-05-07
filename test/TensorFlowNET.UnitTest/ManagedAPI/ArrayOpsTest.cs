@@ -18,7 +18,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var input_array = tf.constant(np.array(new int[] { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6 }).reshape((3,2,3)));
             var indices = tf.constant(np.array(new int[] { 0, 2 }));
 
-            var r1 = array_ops.slice(input_array, new int[] { 1, 0, 0 }, new int[] { 1, 1, 3 });
+            var r1 = array_ops.slice(input_array, ops.convert_n_to_tensor(new object[] { 1, 0, 0 }), ops.convert_n_to_tensor(new object[] { 1, 1, 3 }));
             Assert.AreEqual(new Shape(1,1,3), r1.shape);
             var r1np = r1.numpy();
             Assert.AreEqual(r1np[0, 0, 0], 3);
@@ -26,7 +26,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(r1np[0, 0, 2], 3);
 
 
-            var r2 = array_ops.slice(input_array, new int[] { 1, 0, 0 }, new int[] { 1, 2, 3 });
+            var r2 = array_ops.slice(input_array, ops.convert_n_to_tensor(new object[] { 1, 0, 0 }), ops.convert_n_to_tensor(new object[] { 1, 2, 3 }));
             Assert.AreEqual(new Shape(1, 2, 3), r2.shape);
             var r2np = r2.numpy();
             Assert.AreEqual(r2np[0, 0, 0], 3);
@@ -36,7 +36,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(r2np[0, 1, 1], 4);
             Assert.AreEqual(r2np[0, 1, 2], 4);
 
-            var r3 = array_ops.slice(input_array, new int[] { 1, 0, 0 }, new int[] { 2, 1, 3 });
+            var r3 = array_ops.slice(input_array, ops.convert_n_to_tensor(new object[] { 1, 0, 0 }), ops.convert_n_to_tensor(new object[] { 2, 1, 3 }));
             Assert.AreEqual(new Shape(2, 1, 3), r3.shape);
             var r3np = r3.numpy();
             Assert.AreEqual(r3np[0, 0, 0], 3);

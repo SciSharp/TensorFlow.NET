@@ -236,7 +236,7 @@ namespace Tensorflow
                 Tensor size = array_ops.size(value, out_type: dtypes.int64);
                 Tensor zero_fraction_float32 = null;
 
-                size = gen_math_ops.less_equal(size, dtypes.int32.max());
+                size = gen_math_ops.less_equal(size, ops.convert_to_tensor(dtypes.int32.max()));
                 Tensor num_nonzero = control_flow_ops.cond(
                         size,
                         () => math_ops.cast(_count_nonzero(value, dtype: dtypes.int32), TF_DataType.TF_INT64),

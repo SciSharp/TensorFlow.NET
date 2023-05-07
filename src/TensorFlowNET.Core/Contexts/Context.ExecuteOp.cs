@@ -49,7 +49,7 @@ namespace Tensorflow.Contexts
 
         Tensors ExecEagerAction(string OpType, string Name, ExecuteOpArgs args)
         {
-            var opExecInfo = new FastPathOpExecInfo(OpType, Name, args.OpInputArgs)
+            var opExecInfo = new FastPathOpExecInfo(tf.Context, OpType, Name, args.OpInputArgs)
             {
                 attrs = args.OpAttrs
             };

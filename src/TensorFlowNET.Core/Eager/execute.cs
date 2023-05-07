@@ -7,10 +7,11 @@ using Tensorflow.Contexts;
 using static Tensorflow.ApiDef.Types;
 using static Tensorflow.CostGraphDef.Types;
 using static Tensorflow.Binding;
+using Tensorflow.Gradients;
 
 namespace Tensorflow.Eager
 {
-    internal static class execute
+    internal static class _execute
     {
         public static (DataType[], Tensor[]) onvert_to_mixed_eager_tensors(Tensor[] values, Context ctx)
         {
@@ -18,7 +19,7 @@ namespace Tensorflow.Eager
             var types = v.Select(t => t.dtype.as_datatype_enum());
             return (types.ToArray(), v.ToArray());
         }
-        public static Tensor[] executes(string op_name, int num_outputs, Tensor[] inputs, object[] attrs, Context ctx, string name = null)
+        public static Tensor[] execute(string op_name, int num_outputs, Tensor[] inputs, object[] attrs, Context ctx, string name = null)
         {
             return quick_execute(op_name, num_outputs, inputs, attrs, ctx, name);
         }
@@ -33,7 +34,12 @@ namespace Tensorflow.Eager
         }
         public static bool must_record_gradient()
         {
-            return false;
+            return tf.GetTapeSet().Count != 0;
+        }
+
+        public static bool record_gradient(string op_name, Tensor[] inputs, object[] attrs, Tensor[] results)
+        {
+            return tf.Runner.RecordGradient(op_name, inputs, attrs, results);
         }
     }
 }

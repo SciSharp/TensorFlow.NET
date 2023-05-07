@@ -44,6 +44,15 @@ namespace Tensorflow.Gradients
             return tape;
         }
 
+        public void PushTape(ITape tape)
+        {
+            // Enters a context inside which operations are recorded on this tape.
+            if (tf.Context.executing_eagerly())
+                tf.Context.ensure_initialized();
+
+            _tapeSet.Push(tape);
+        }
+
         ITape PopTape()
         {
             _tape.StopRecord();

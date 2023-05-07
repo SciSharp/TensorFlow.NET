@@ -161,6 +161,9 @@ namespace Tensorflow
             EnsureSingleTensor(tensor, "explicit conversion to string");
             return (string)tensor[0];
         }
+
+        public static explicit operator object[](Tensors tensors)
+            => tensors.items.ToArray();
         #endregion
 
         #region Implicit Conversions

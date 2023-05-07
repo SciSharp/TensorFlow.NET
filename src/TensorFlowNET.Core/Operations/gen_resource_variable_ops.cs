@@ -25,7 +25,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
-                    "AssignSubVariableOp", name, resource, value));
+                    tf.Context, "AssignSubVariableOp", name, resource, value));
 
                 return null;
             }
@@ -44,7 +44,7 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("AssignAddVariableOp", name,
+                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "AssignAddVariableOp", name,
                     resource, value));
 
                 return null;
@@ -59,7 +59,7 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("AssignVariableOp", name,
+                tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "AssignVariableOp", name,
                     resource, value));
 
                 return null;
@@ -74,7 +74,7 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("VarIsInitializedOp", name,
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "VarIsInitializedOp", name,
                     resource));
 
                 return results[0];
@@ -99,7 +99,7 @@ namespace Tensorflow
         {
             if (tf.Context.executing_eagerly())
             {
-                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("VarHandleOp", name)
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "VarHandleOp", name)
                 {
                     attrs = ConvertToDict(new
                     {

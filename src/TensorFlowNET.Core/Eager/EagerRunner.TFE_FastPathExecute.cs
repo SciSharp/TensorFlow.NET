@@ -68,7 +68,8 @@ namespace Tensorflow.Eager
                 var input_arg = op_def.InputArg[i];
                 if (!string.IsNullOrEmpty(input_arg.NumberAttr))
                 {
-                    int len = (input as object[]).Length;
+                    var fast_input_array = input is Tensors tensors ? (object[])tensors : (object[])input;
+                    int len = fast_input_array.Length;
                     c_api.TFE_OpSetAttrInt(op, input_arg.NumberAttr, len);
                     if (op_exec_info.run_callbacks)
                     {
@@ -79,7 +80,6 @@ namespace Tensorflow.Eager
 
                     if (len > 0)
                     {
-                        var fast_input_array = (object[])op_exec_info.args[i];
                         // First item adds the type attr.
                         if (!AddInputToOp(fast_input_array[i], true, input_arg, flattened_attrs, flattened_inputs, op, status))
                             return null;

@@ -36,8 +36,7 @@ namespace Tensorflow.Gradients
             var input_value = op.inputs[0];
             var broadcast_shape = op.inputs[1];
             var input_value_shape = array_ops.shape(input_value);
-            var (_, reduction_axes) = gen_array_ops.broadcast_gradient_args(broadcast_shape,
-                                                            input_value_shape);
+            var reduction_axes = gen_array_ops.broadcast_gradient_args(broadcast_shape, input_value_shape)[1];
             var updates_grad_reshaped = math_ops.reduce_sum(grad,
                                               axis: reduction_axes,
                                               keepdims: true);
@@ -351,16 +350,16 @@ namespace Tensorflow.Gradients
                 null,
                 null,
                 null,
-                gen_array_ops.strided_slice(
+                array_ops.strided_slice(
                     grad,
                     begin,
                     end,
                     strides,
-                    begin_mask: op.get_attr<long>("begin_mask"),
-                    end_mask: op.get_attr<long>("end_mask"),
-                    ellipsis_mask: op.get_attr<long>("ellipsis_mask"),
-                    new_axis_mask: op.get_attr<long>("new_axis_mask"),
-                    shrink_axis_mask: op.get_attr<long>("shrink_axis_mask"))
+                    begin_mask: (int)op.get_attr<long>("begin_mask"),
+                    end_mask: (int)op.get_attr<long>("end_mask"),
+                    ellipsis_mask: (int)op.get_attr<long>("ellipsis_mask"),
+                    new_axis_mask: (int)op.get_attr<long>("new_axis_mask"),
+                    shrink_axis_mask: (int)op.get_attr<long>("shrink_axis_mask"))
             };
         }
 

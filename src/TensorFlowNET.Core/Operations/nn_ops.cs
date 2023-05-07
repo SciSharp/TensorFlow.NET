@@ -55,7 +55,7 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
             {
                 name = scope;
-                return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
+                return gen_nn_ops.bias_add(value, ops.convert_to_tensor(bias), data_format: data_format, name: name);
             });
         }
 
@@ -117,7 +117,7 @@ namespace Tensorflow
         {
             return tf_with(ops.name_scope(name, "in_top_k"), delegate
             {
-                return gen_nn_ops.in_top_kv2(predictions, targets, k, name: name);
+                return gen_nn_ops.in_top_kv2(predictions, targets, ops.convert_to_tensor(k), name: name);
             });
         }
 
@@ -222,8 +222,8 @@ namespace Tensorflow
                 // Check if no reshapes are required.
                 if (logits.shape.ndim == 2)
                 {
-                    var (cost, _) = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
-                        precise_logits, labels, name: name);
+                    var cost = gen_nn_ops.sparse_softmax_cross_entropy_with_logits(
+                        precise_logits, labels, name: name)[0];
                     if (logits.dtype == dtypes.float16)
                         return math_ops.cast(cost, dtypes.float32);
                     else
@@ -261,7 +261,8 @@ namespace Tensorflow
                 // The second output tensor contains the gradients.  We use it in
                 // _CrossEntropyGrad() in nn_grad but not here.
 
-                var (cost, unused_backprop) = gen_nn_ops.softmax_cross_entropy_with_logits(precise_logits, labels, name: name);
+                var entropy = gen_nn_ops.softmax_cross_entropy_with_logits(precise_logits, labels, name: name);
+                var (cost, unused_backprop) = (entropy[0], entropy[1]);
 
                 // The output cost shape should be the input minus axis.
                 var output_shape = array_ops.slice(input_shape,
