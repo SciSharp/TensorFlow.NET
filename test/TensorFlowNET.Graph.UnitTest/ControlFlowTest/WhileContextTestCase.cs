@@ -25,8 +25,8 @@ namespace TensorFlowNET.UnitTest.ControlFlowTest
             // TODO: implement missing code dependencies
             var sess = this.cached_session();
             var i = constant_op.constant(0, name: "i");
-            var c = new Func<Tensor, Tensor>(x => gen_math_ops.less(x, 10, name: "c"));
-            var b = new Func<Tensor, Tensor>(x => gen_math_ops.add(x, 1, name: "c"));
+            var c = new Func<Tensor, Tensor>(x => gen_math_ops.less(x, ops.convert_to_tensor(10), name: "c"));
+            var b = new Func<Tensor, Tensor>(x => math_ops.add(x, 1, name: "c"));
             //control_flow_ops.while_loop(
             //      c, b, i , maximum_iterations: tf.constant(maximum_iterations));
             foreach (Operation op in sess.graph.get_operations())

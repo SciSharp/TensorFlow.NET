@@ -192,17 +192,8 @@ namespace Tensorflow.Gradients
                     explicit_paddings: explicit_paddings,
                     dilations: dilations,
                     data_format: data_format),
-                gen_nn_ops.conv2d(new Conv2dParams
-                    {
-                        Input = grad,
-                        Filter = op.inputs[1],
-                        Strides = strides,
-                        Padding = padding,
-                        DataFormat = data_format,
-                        Dilations = dilations,
-                        ExplicitPaddings = explicit_paddings,
-                        UseCudnnOnGpu = use_cudnn_on_gpu
-                    })
+                gen_nn_ops.conv2d(grad, op.inputs[1], strides, padding,
+                    use_cudnn_on_gpu, explicit_paddings, data_format, dilations)
             };
         }
 
@@ -265,20 +256,27 @@ namespace Tensorflow.Gradients
             var epsilon = op.get_attr<float>("epsilon");
             var data_format = op.get_attr<string>("data_format");
             var is_training = op.get_attr<bool>("is_training");
-            Func<FusedBatchNormParams, Tensor[]> grad_fun = null;
-
-            switch (version)
+            Func<FusedBatchNormParams, Tensor[]> grad_fun = (p) =>
             {
-                case 2:
-                    grad_fun = gen_nn_ops.fused_batch_norm_grad_v3;
-                    break;
-                case 1:
-                    // grad_fun = gen_nn_ops.fused_batch_norm_grad_v2;
-                    throw new NotImplementedException("");
-                default:
-                    grad_fun = gen_nn_ops.fused_batch_norm_grad;
-                    break;
-            }
+                if(version == 2)
+                {
+                    return gen_nn_ops.fused_batch_norm_grad_v3(p.YBackprop, p.X, p.Scale,
+                        p.ReserveSpace1, p.ReserveSpace2, p.ReserveSpace3, p.Epsilon,
+                        p.DataFormat, p.IsTraining, p.Name);
+                }
+                else if(version == 1)
+                {
+                    return gen_nn_ops.fused_batch_norm_grad_v2(p.YBackprop, p.X, p.Scale, 
+                        p.ReserveSpace1, p.ReserveSpace2, p.Epsilon, p.DataFormat, 
+                        p.IsTraining, p.Name);
+                }
+                else
+                {
+                    return gen_nn_ops.fused_batch_norm_grad(p.YBackprop, p.X, p.Scale,
+                        p.ReserveSpace1, p.ReserveSpace2, p.Epsilon, p.DataFormat,
+                        p.IsTraining, p.Name);
+                }
+            };
 
             if (is_training)
             {
@@ -406,7 +404,7 @@ namespace Tensorflow.Gradients
             // finally reshaping it to the original input shape.
             var scatter = gen_array_ops.scatter_nd(array_ops.expand_dims(ind, -1),
               array_ops.reshape(grad, new int[] { -1 }),
-              new Tensor[] { math_ops.reduce_prod(in_shape) });
+              math_ops.reduce_prod(in_shape));
 
             return new Tensor[]
             {

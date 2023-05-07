@@ -17,8 +17,9 @@ namespace Tensorflow
         public bool run_callbacks { get; set; }
         public Action callbacks { get; set; }
 
-        public FastPathOpExecInfo(string opName, string name, params object[] inputArgs)
+        public FastPathOpExecInfo(Context ctx, string opName, string name, params object[] inputArgs)
         {
+            this.ctx = ctx;
             this.op_name = opName;
             this.name = name;
             this.args = inputArgs;

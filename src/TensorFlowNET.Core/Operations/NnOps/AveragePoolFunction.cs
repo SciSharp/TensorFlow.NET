@@ -34,7 +34,7 @@ namespace Tensorflow.Operations
             {
                 name = scope;
                 value = ops.convert_to_tensor(value, name: "input");
-                return gen_nn_ops.average_pool(
+                return gen_nn_ops.avg_pool(
                     value,
                     ksize: ksize,
                     strides: strides,

@@ -26,7 +26,7 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
             {
                 var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
-                    "Assert", name,
+                    tf.Context, "Assert", name,
                     new object[] { condition, data, summarize }));
 
                 return results[0];

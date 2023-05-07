@@ -10055,7 +10055,7 @@ namespace Tensorflow.Operations
             {
                 try
                 {
-                    var _result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("EnsureShape", name, input, shape));
+                    var _result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "EnsureShape", name, input, shape));
                     return _result[0];
                 }
                 catch (Exception)
@@ -10076,7 +10076,7 @@ namespace Tensorflow.Operations
             dict["input"] = input;
             dict["shape"] = shape;
             var op = tf.OpDefLib._apply_op_helper("EnsureShape", name: name, keywords: dict);
-            if (execute.must_record_gradient())
+            if (_execute.must_record_gradient())
             {
                 throw new NotImplementedException();
             }
@@ -10086,9 +10086,9 @@ namespace Tensorflow.Operations
         public static Tensor ensure_shape_eager_fallback(Tensor input, Shape shape, string name, Context ctx)
         {
             object[] attrs = new object[4] { "shape", shape, "T", input.dtype.as_datatype_enum() };
-            var _result = execute.executes("EnsureShape", 1, new Tensor[] { input },
+            var _result = _execute.execute("EnsureShape", 1, new Tensor[] { input },
                              attrs, ctx, name);
-            if (execute.must_record_gradient())
+            if (_execute.must_record_gradient())
             {
                 throw new NotImplementedException();
             }
@@ -17194,7 +17194,7 @@ namespace Tensorflow.Operations
             var ctx = tf.Context;
             if (ctx.executing_eagerly())
             {
-                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("MergeV2Checkpoints", name,
+                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "MergeV2Checkpoints", name,
                         checkpoint_prefixes, destination_prefix, "delete_old_dirs", delete_old_dirs, "allow_missing_files", allow_missing_files));
                 result = null;
                 return null;
@@ -24297,7 +24297,7 @@ namespace Tensorflow.Operations
             var ctx = tf.Context;
             if (ctx.executing_eagerly())
             {
-                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("RegexFullMatch", name, input, pattern));
+                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "RegexFullMatch", name, input, pattern));
                 return result[0];
             }
             var dict = new Dictionary<string, object>();
@@ -27201,7 +27201,7 @@ namespace Tensorflow.Operations
                     Dictionary<string, object> attrs = new();
                     attrs["dtypes"] = dtypes;
                     var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(
-                            "RestoreV2", name, prefix, tensor_names, shape_and_slices
+                            tf.Context, "RestoreV2", name, prefix, tensor_names, shape_and_slices
                         )
                     { attrs = attrs });
                     return result;
@@ -27236,9 +27236,9 @@ namespace Tensorflow.Operations
             var shape_and_slices_tensor = ops.convert_to_tensor(shape_and_slices, TF_DataType.TF_STRING);
             object[] attrs = new object[] { "dtypes", dtypes };
             Tensor[] inputs_flat = new Tensor[] { prefix, tensor_names_tensor, shape_and_slices_tensor };
-            var result = execute.quick_execute("RestoreV2", dtypes.Length, inputs_flat, attrs, ctx, name);
+            var result = _execute.quick_execute("RestoreV2", dtypes.Length, inputs_flat, attrs, ctx, name);
 
-            if (execute.must_record_gradient())
+            if (_execute.must_record_gradient())
             {
                 // TODO(Rinne); record the gradient
             }
@@ -29829,7 +29829,7 @@ namespace Tensorflow.Operations
             var ctx = tf.Context;
             if (ctx.executing_eagerly())
             {
-                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("ShardedFilename", name, basename, shard, num_shards));
+                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "ShardedFilename", name, basename, shard, num_shards));
                 return result[0];
             }
             var dict = new Dictionary<string, object>();
@@ -34759,7 +34759,7 @@ namespace Tensorflow.Operations
             var ctx = tf.Context;
             if (ctx.executing_eagerly())
             {
-                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("StringJoin", name, inputs, "separator", separator));
+                var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "StringJoin", name, inputs, "separator", separator));
                 return result[0];
             }
             var dict = new Dictionary<string, object>();

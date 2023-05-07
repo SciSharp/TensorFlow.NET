@@ -22,12 +22,13 @@ using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
+using System.Diagnostics;
 
 namespace Tensorflow
 {
     public class array_ops
     {
-        public static Tensor placeholder_with_default<T>(T input, int[] shape, string name = null)
+        public static Tensor placeholder_with_default(Tensor input, int[] shape, string name = null)
             => gen_array_ops.placeholder_with_default(input, shape, name);
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace Tensorflow
                 if (ndims_mask < 1)
                     throw new ValueError("mask cannot be scalar.");
 
-                var leading_size = gen_math_ops.prod(shape(tensor_tensor)[$"{axis}:{axis + ndims_mask}"], new[] { 0 });
+                var leading_size = gen_math_ops.prod(shape(tensor_tensor)[$"{axis}:{axis + ndims_mask}"], ops.convert_to_tensor(new[] { 0 }));
                 var shape1 = concat(new[]
                 {
                     shape(tensor_tensor)[$":{axis}"],
@@ -153,7 +154,7 @@ namespace Tensorflow
         private static Tensor _apply_mask_1d(Tensor reshaped_tensor, Tensor mask, int axis = 0)
         {
             var indices = squeeze(where(mask), axis: new[] { 1 });
-            return gather(reshaped_tensor, indices, axis: axis);
+            return gather(reshaped_tensor, indices, axis: ops.convert_to_tensor(axis));
         }
 
         public static Tensor zeros(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
@@ -293,7 +294,7 @@ namespace Tensorflow
         }
 
         public static Tensor expand_dims(Tensor input, int axis = -1, string name = null)
-            => gen_array_ops.expand_dims(input, axis, name);
+            => gen_array_ops.expand_dims(input, ops.convert_to_tensor(axis), name);
 
         /// <summary>
         /// Creates a tensor filled with a scalar value.
@@ -304,7 +305,7 @@ namespace Tensorflow
         /// <param name="name">Optional string. The name of the output `tf.Tensor`.</param>
         /// <returns>A `tf.Tensor` with shape `dims` and the same dtype as `value`.</returns>
         public static Tensor fill<T>(Shape dims, T value, string name = null)
-            => gen_array_ops.fill(dims, value, name: name);
+            => gen_array_ops.fill(dims, ops.convert_to_tensor(value), name: name);
 
         /// <summary>
         /// Returns the rank of a tensor.
@@ -368,7 +369,7 @@ namespace Tensorflow
             => gen_array_ops.reshape(tensor, shape, name: name);
 
         public static Tensor reshape(Tensor tensor, object[] shape, string name = null)
-            => gen_array_ops.reshape(tensor, shape, name: name);
+            => gen_array_ops.reshape(tensor, ops.convert_to_tensor(shape), name: name);
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
@@ -466,7 +467,11 @@ namespace Tensorflow
         }
 
         public static (Tensor, Tensor) unique(Tensor x, TF_DataType out_idx = TF_DataType.TF_INT32, string name = null)
-            => gen_array_ops.unique(x, out_idx: out_idx, name: name);
+        {
+            var res = gen_array_ops.unique(x, out_idx: out_idx, name: name);
+            Debug.Assert(res.Length == 2);
+            return (res[0], res[1]);
+        }
 
         public static Tensor stack(Tensor[] values, int axis = 0, string name = "stack")
         {
@@ -492,19 +497,18 @@ namespace Tensorflow
                 {
                     name = scope;
                     condition = ops.convert_to_tensor(condition, preferred_dtype: dtypes.@bool, name: "condition");
-                    return gen_array_ops.where(condition: condition, name: name);
+                    return gen_array_ops.where(condition, name: name);
                 });
             }
             else if (x != null && y != null)
             {
-                return gen_array_ops.select(condition, x, y, name);
+                return gen_math_ops.select(condition, ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
             }
             else
             {
                 throw new ValueError("x and y must both be non-None or both be None.");
             }
         }
-
 
         public static Tensor where_v2(Tensor condition, object x = null, object y = null, string name = null)
         {
@@ -514,18 +518,19 @@ namespace Tensorflow
                 {
                     name = scope;
                     condition = ops.convert_to_tensor(condition, preferred_dtype: dtypes.@bool, name: "condition");
-                    return gen_array_ops.where(condition: condition, name: name);
+                    return gen_array_ops.where(condition, name: name);
                 });
             }
             else if (x != null && y != null)
             {
-                return gen_array_ops.select_v2(condition, x, y, name);
+                return gen_math_ops.select_v2(condition, ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
             }
             else
             {
                 throw new ValueError("x and y must both be non-None or both be None.");
             }
         }
+
         /// <summary>
         /// Returns the shape of a tensor.
         /// </summary>
@@ -634,7 +639,13 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public static Tensor stop_gradient(Tensor input, string name = null)
-            => tf.Context.ExecuteOp("StopGradient", name, new ExecuteOpArgs(input));
+        {
+            var tape = tf.GradientTape().stop_recording();
+            var result = gen_array_ops.stop_gradient(input, name);
+            tape.StartRecord();
+            tf.GradientTape().PushTape(tape);
+            return result;
+        }
 
         /// <summary>
         /// Extracts a strided slice of a tensor (generalized python array indexing).
@@ -858,7 +869,7 @@ namespace Tensorflow
                 });
             }
 
-            return gen_array_ops.concat_v2(values, axis, name: name);
+            return gen_array_ops.concat_v2(values, ops.convert_to_tensor(axis), name: name);
         }
 
         public static Tensor concat(Tensor[] values, Tensor axis, string name = "concat")
@@ -868,7 +879,7 @@ namespace Tensorflow
 
         public static Tensor concat(object[] values, int axis, string name = "concat")
         {
-            return gen_array_ops.concat_v2(values, axis, name: name);
+            return tf.Context.ExecuteOp("ConcatV2", name, new ExecuteOpArgs(values, axis));
         }
 
         /// <summary>
@@ -886,16 +897,31 @@ namespace Tensorflow
         /// </param>
         /// <param name="batch_dims">An integer. The number of batch dimensions. Must be less than or equal to rank(indices).</param>
         /// <returns></returns>
-        public static Tensor gather<T1, T2>(T1 @params, T2 indices, string name = null, int axis = 0, int batch_dims = 0)
+        public static Tensor gather(Tensor @params, Tensor indices, string name = null, Tensor axis = null, int batch_dims = 0)
         {
-            if (axis != 0)
-                return gen_array_ops.gather_v2(@params, indices, axis, name: name);
-
-            if (@params is ResourceVariable variable &&
-                indices is Tensor indices_tensor)
-                return variable.sparse_read(indices_tensor, name);
+            if (axis is null)
+                axis = tf.convert_to_tensor(batch_dims);
+            if(tensor_util.constant_value(axis) != 0)
+            {
+                return gen_array_ops.gather_v2(@params, indices, axis, batch_dims: batch_dims, name: name);
+            }
 
             return gen_array_ops.gather_v2(@params, indices, axis, name: name);
+        }
+
+        public static Tensor gather(Tensor @params, Tensor indices, int axis, string name = null, int batch_dims = 0)
+            => gather(@params, indices, name, ops.convert_to_tensor(axis), batch_dims);
+
+        public static Tensor gather(ResourceVariable @params, Tensor indices, string name = null, Tensor axis = null, int batch_dims = 0)
+        {
+            if (axis is null)
+                axis = tf.convert_to_tensor(batch_dims);
+            if (tensor_util.constant_value(axis) != 0)
+            {
+                throw new NotImplementedException();
+            }
+
+            return @params.sparse_read(indices, name);
         }
 
         public static Tensor transpose<T1>(T1 a, Axis perm, string name = "transpose", bool conjugate = false)
@@ -927,7 +953,7 @@ namespace Tensorflow
             if (num == -1)
                 num = (int)size_splits.shape[0];
 
-            return gen_array_ops.split_v(value, size_splits, axis, num, name: name);
+            return gen_array_ops.split_v(value, size_splits, tf.convert_to_tensor(axis), num, name: name);
         }
 
         public static Tensor[] split<T>(Tensor value, int num_split, T axis,
@@ -956,20 +982,10 @@ namespace Tensorflow
         }
 
         public static Tensor slice(Tensor input, Tensor[] begin, Tensor[] size, string name = null)
-               => gen_array_ops.slice(input, begin, size, name: name);
-
-        public static Tensor slice<Tb, Ts>(Tensor input, Tb begin, Ts size, string name = null)
-            => gen_array_ops.slice(input, begin, size, name: name);
+               => gen_array_ops.slice(input, ops.convert_to_tensor(begin), ops.convert_to_tensor(size), name: name);
 
         public static Tensor slice(Tensor input, Tensor begin, Tensor size, string name = null)
-            => tf.Context.ExecuteOp("Slice", name, new ExecuteOpArgs(input, begin, size)
-            {
-                GetGradientAttrs = (op) => new
-                {
-                    T = op.get_attr<TF_DataType>("T"),
-                    Index = op.get_attr<int>("Index")
-                }
-            });
+            => gen_array_ops.slice(input, begin, size, name: name);
 
 
         public static Tensor stack(object values, int axis = 0, string name = "stack")

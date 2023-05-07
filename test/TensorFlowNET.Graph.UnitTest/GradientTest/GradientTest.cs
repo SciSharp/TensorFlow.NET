@@ -260,7 +260,7 @@ namespace TensorFlowNET.UnitTest.Gradient
         public void testStopGradientFunction()
         {
             var ap = tf.constant(1f);
-            var b = tf.tanh(ap) + gen_array_ops.stop_gradient(ap);
+            var b = tf.tanh(ap) + array_ops.stop_gradient(ap);
             var g = tf.gradients(b, ap);
             var sess = tf.Session();
             var result = sess.run(g);

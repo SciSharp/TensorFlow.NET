@@ -67,16 +67,15 @@ namespace Tensorflow.Operations
                     var dilations = _get_sequence(args.DilationRate, num_spatial_dims, channel_index).ToArray();
                     var strides = _get_sequence(args.Strides, num_spatial_dims, channel_index).ToArray();
 
-                    result = gen_nn_ops.conv2d(new Conv2dParams
-                    {
-                        Input = input,
-                        Filter = filters,
-                        Strides = strides,
-                        Padding = padding,
-                        DataFormat = data_format,
-                        Dilations = dilations,
-                        Name = name
-                    });
+                    result = gen_nn_ops.conv2d(
+                        input, 
+                        filters, 
+                        strides, 
+                        padding, 
+                        data_format: data_format, 
+                        dilations: dilations, 
+                        name: name
+                    );
                 }
                 else
                 {
@@ -93,16 +92,15 @@ namespace Tensorflow.Operations
                     input = array_ops.expand_dims(input, spatial_start_dim);
                     filters = array_ops.expand_dims(filters, 0);
 
-                    result = gen_nn_ops.conv2d(new Conv2dParams
-                    {
-                        Input = input,
-                        Filter = filters,
-                        Strides = strides.ToArray(),
-                        Padding = padding,
-                        DataFormat = channel_first ? "NCHW" : "NHWC",
-                        Dilations = dilations.ToArray(),
-                        Name = name
-                    });
+                    result = gen_nn_ops.conv2d(
+                        input, 
+                        filters, 
+                        strides.ToArray(),
+                        padding, 
+                        data_format: channel_first ? "NCHW" : "NHWC", 
+                        dilations: dilations.ToArray(), 
+                        name: name
+                    );
                     result = array_ops.squeeze(result, new[] { spatial_start_dim });
                 }
             });

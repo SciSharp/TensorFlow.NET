@@ -29,21 +29,8 @@ namespace Tensorflow
             public Tensor conv2d(Tensor input, Tensor filter, int[] strides, string padding, bool use_cudnn_on_gpu = true,
                 string data_format = "NHWC", int[] dilations = null, string name = null)
             {
-                var parameters = new Conv2dParams
-                {
-                    Input = input,
-                    Filter = filter,
-                    Strides = strides,
-                    Padding = padding,
-                    UseCudnnOnGpu = use_cudnn_on_gpu,
-                    DataFormat = data_format,
-                    Name = name
-                };
-
-                if (dilations != null)
-                    parameters.Dilations = dilations;
-
-                return gen_nn_ops.conv2d(parameters);
+                return gen_nn_ops.conv2d(input, filter, strides, padding, use_cudnn_on_gpu, 
+                    data_format: data_format, dilations: dilations, name: name);
             }
 
             public Tensor[] ctc_greedy_decoder(Tensor inputs, Tensor sequence_length, bool merge_repeated = true, string name = null)
@@ -118,7 +105,7 @@ namespace Tensorflow
 
             public IActivation softmax() => new softmax();
             public Tensor tanh(Tensor x, string name = null)
-                => gen_nn_ops.tanh(x, name);
+                => gen_math_ops.tanh(x, name);
 
             public Tensor relu(Tensor features, string name = null)
                 => gen_nn_ops.relu(features, name);
@@ -146,14 +133,14 @@ namespace Tensorflow
                 => nn_ops.in_top_k(predictions, targets, k, name);
 
             public Tensor[] top_k(Tensor input, int k = 1, bool sorted = true, string name = null)
-                => gen_nn_ops.top_kv2(input, k: k, sorted: sorted, name: name);
+                => gen_nn_ops.top_kv2(input, k: ops.convert_to_tensor(k), sorted: sorted, name: name);
 
             public Tensor bias_add(Tensor value, IVariableV1 bias, string data_format = null, string name = null)
             {
                 return tf_with(ops.name_scope(name, "BiasAdd", new { value, bias }), scope =>
                 {
                     name = scope;
-                    return gen_nn_ops.bias_add(value, bias, data_format: data_format, name: name);
+                    return gen_nn_ops.bias_add(value, ops.convert_to_tensor(bias), data_format: data_format, name: name);
                 });
             }
 
@@ -172,7 +159,7 @@ namespace Tensorflow
             /// <returns></returns>
             public Tensor lrn(Tensor input, int depth_radius = 5, int bias = 1,
                 int alpha = 1, float beta = 0.5f, string name = null)
-                => gen_nn_ops.local_response_normalization(input, depth_radius: depth_radius, bias: bias,
+                => gen_nn_ops.lrn(input, depth_radius: depth_radius, bias: bias,
                     alpha: alpha, beta: beta, name: name);
 
             public Tensor leaky_relu(Tensor features, float alpha = 0.2f, string name = null)

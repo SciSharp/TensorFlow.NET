@@ -106,7 +106,7 @@ namespace Tensorflow
                 name = scope;
 
                 // Add a placeholder string tensor for the filename.
-                var filename_tensor = array_ops.placeholder_with_default(string.IsNullOrEmpty(filename) ? "model" : filename, shape: new int[0], name: "filename");
+                var filename_tensor = array_ops.placeholder_with_default(tf.convert_to_tensor(string.IsNullOrEmpty(filename) ? "model" : filename), shape: new int[0], name: "filename");
                 // Keep the name "Const" for backwards compatibility.
                 filename_tensor = gen_array_ops.placeholder_with_default(filename_tensor, shape: new int[0], name: "Const");
 

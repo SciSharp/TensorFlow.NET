@@ -112,7 +112,7 @@ namespace Tensorflow
                 var strides = new[] { 1, 1, 1, 1 };
                 var dilations = new[] { 1, 1, 1, 1 };
 
-                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Conv2D", null, input, filter)
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "Conv2D", null, input, filter)
                 {
                     attrs = ConvertToDict(new
                     {
@@ -134,7 +134,7 @@ namespace Tensorflow
                 var strides = new[] { 1, 1, 1, 1 };
                 var dilations = new[] { 1, 1, 1, 1 };
 
-                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("Conv2D", null, input, filter)
+                var results = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "Conv2D", null, input, filter)
                 {
                     attrs = ConvertToDict(new
                     {

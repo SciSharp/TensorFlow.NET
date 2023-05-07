@@ -177,11 +177,11 @@ namespace Tensorflow
                  if (shape.ndim == 3 || shape.ndim == Unknown)
                  {
                      Tensor uniform_random = random_ops.random_uniform(new int[] { }, 0f, 1.0f, seed: seed);
-                     var mirror_cond = gen_math_ops.less(uniform_random, .5);
+                     var mirror_cond = gen_math_ops.less(uniform_random, ops.convert_to_tensor(.5));
 
                      var result = control_flow_ops.cond(
                          pred: mirror_cond,
-                         true_fn: () => gen_array_ops.reverse(image, new { flip_index }),
+                         true_fn: () => gen_array_ops.reverse(image, ops.convert_to_tensor(new int[] { flip_index })),
                          false_fn: () => image,
                          name: scope
                      );
@@ -197,7 +197,7 @@ namespace Tensorflow
                      var flips = math_ops.round(
                          array_ops.reshape(uniform_random, shape: array_ops.constant(value: new object[] { batch_size[0], 1, 1, 1 })));
                      flips = math_ops.cast(flips, image.dtype);
-                     var flipped_input = gen_array_ops.reverse(image, new int[] { flip_index + 1 });
+                     var flipped_input = gen_array_ops.reverse(image, ops.convert_to_tensor(new int[] { flip_index + 1 }));
                      return flips * flipped_input + (1 - flips) * image;
                  }
                  else
@@ -222,11 +222,11 @@ namespace Tensorflow
                   Shape shape = image.shape;
                   if (shape.ndim == 3 || shape.ndim == Unknown)
                   {
-                      return fix_image_flip_shape(image, gen_array_ops.reverse(image, new { flip_index }));
+                      return fix_image_flip_shape(image, gen_array_ops.reverse(image, ops.convert_to_tensor(new int[] { flip_index })));
                   }
                   else if (shape.ndim == 4)
                   {
-                      return gen_array_ops.reverse(image, new[] { flip_index + 1 });
+                      return gen_array_ops.reverse(image, ops.convert_to_tensor(new[] { flip_index + 1 }));
                   }
                   else
                   {
@@ -268,15 +268,15 @@ namespace Tensorflow
         {
             Tensor _rot90()
             {
-                return array_ops.transpose(gen_array_ops.reverse(image, new[] { 1, 0, 2 }), new int[] { 1 });
+                return array_ops.transpose(gen_array_ops.reverse(image, ops.convert_to_tensor(new[] { 1, 0, 2 })), new int[] { 1 });
             };
             Tensor _rot180()
             {
-                return gen_array_ops.reverse(image, new[] { 0, 1 });
+                return gen_array_ops.reverse(image, ops.convert_to_tensor(new[] { 0, 1 }));
             };
             Tensor _rot270()
             {
-                return gen_array_ops.reverse(array_ops.transpose(image, new[] { 1, 0, 2 }), new[] { 1 });
+                return gen_array_ops.reverse(array_ops.transpose(image, new[] { 1, 0, 2 }), ops.convert_to_tensor(new[] { 1 }));
             };
 
             var cases = new[] {math_ops.equal(k, 1), _rot90(),
@@ -1389,7 +1389,7 @@ new_height, new_width");
             Operation[] checks = new Operation[] { };
             checks.append(
                 control_flow_ops.Assert(
-                    gen_math_ops.greater_equal(array_ops.size(shape1_tensor), 3), new[] { shape1, shape2 },
+                    gen_math_ops.greater_equal(array_ops.size(shape1_tensor), ops.convert_to_tensor(3)), new[] { shape1, shape2 },
                     summarize: 10));
             checks.append(
                 control_flow_ops.Assert(
@@ -1762,8 +1762,8 @@ new_height, new_width");
         {
             var batch_size = array_ops.shape(boxes)[0];
             var new_slice = array_ops.slice(
-                boxes, new object[] { 0, inner_idx * tile_size, 0 },
-                new object[] { batch_size, tile_size, 4 });
+                boxes, new Tensor[] { ops.convert_to_tensor(0), ops.convert_to_tensor(inner_idx * tile_size), ops.convert_to_tensor(0) },
+                new Tensor[] { ops.convert_to_tensor(batch_size), ops.convert_to_tensor(tile_size), ops.convert_to_tensor(4) });
             var iou = _bbox_overlap(new_slice, box_slice);
             var box_slice_after_suppression = array_ops.expand_dims(
                 math_ops.cast(math_ops.reduce_all(iou < iou_threshold, new(1)),
@@ -1816,8 +1816,8 @@ new_height, new_width");
                 (Tensor, Tensor, Tensor, Tensor) cross_suppression_func(Tensor boxes, Tensor box_slice, Tensor iou_threshold, Tensor inner_idx, int tile_size)
                     => _cross_suppression(boxes, box_slice, iou_threshold, inner_idx, tile_size);
 
-                var box_slice = array_ops.slice(boxes, new[] { 0, idx * tile_size, 0 },
-                                                new[] { batch_size, tile_size, 4 });
+                var box_slice = array_ops.slice(boxes, new Tensor[]{ ops.convert_to_tensor(0), ops.convert_to_tensor(idx * tile_size), ops.convert_to_tensor(0) },
+                                                new Tensor[] { ops.convert_to_tensor(batch_size), ops.convert_to_tensor(tile_size), ops.convert_to_tensor(4) });
 
                 var iou = _bbox_overlap(box_slice, box_slice);
                 var mask = array_ops.expand_dims(

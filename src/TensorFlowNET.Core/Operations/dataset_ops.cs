@@ -233,7 +233,7 @@ namespace Tensorflow
             {
                 try
                 {
-                    var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo("AnonymousIteratorV3", name)
+                    var result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(tf.Context, "AnonymousIteratorV3", name)
                     {
                         attrs = attrs
                     });
@@ -250,7 +250,7 @@ namespace Tensorflow
         public Tensor anonymous_iterator_v3_eager_fallback(TF_DataType[] output_types, Shape[] output_shapes, string name, Context ctx)
         {
             object[] attrs = new object[] { output_types, output_shapes };
-            var result = execute.quick_execute("AnonymousIteratorV3", 1, new Tensor[] { }, attrs, ctx, name);
+            var result = _execute.quick_execute("AnonymousIteratorV3", 1, new Tensor[] { }, attrs, ctx, name);
             return result[0];
         }
 

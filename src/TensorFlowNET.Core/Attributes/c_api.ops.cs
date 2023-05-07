@@ -58,6 +58,21 @@ namespace Tensorflow
         public static extern int TF_OperationGetAttrValueProto(IntPtr oper, string attr_name, SafeBufferHandle output_attr_value, SafeStatusHandle status);
 
         [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationGetAttrType(IntPtr oper, string attr_name, IntPtr value, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationGetAttrInt(IntPtr oper, string attr_name, IntPtr value, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationGetAttrFloat(IntPtr oper, string attr_name, IntPtr value, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationGetAttrBool(IntPtr oper, string attr_name, IntPtr value, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_OperationGetAttrShape(IntPtr oper, string attr_name, long[] value, int num_dims, SafeStatusHandle status);
+
+        [DllImport(TensorFlowLibName)]
         public static extern void TF_SetAttrBool(IntPtr desc, string attr_name, bool value);
 
         [DllImport(TensorFlowLibName)]

@@ -147,7 +147,7 @@ namespace Tensorflow.Functions
             Tensor[] outputs;
             if (executing_eagerly)
             {
-                outputs = execute.executes(
+                outputs = _execute.execute(
                     Signature.Name,
                     _num_outputs,
                     args,

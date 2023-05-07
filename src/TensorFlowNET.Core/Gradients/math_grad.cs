@@ -53,7 +53,8 @@ namespace Tensorflow.Gradients
 
             var sx = array_ops.shape(x);
             var sy = array_ops.shape(y);
-            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var args = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var (rx, ry) = (args[0], args[1]);
 
             var sum1 = math_ops.reduce_sum(grad, rx);
             var r1 = gen_array_ops.reshape(sum1, sx);
@@ -101,7 +102,8 @@ namespace Tensorflow.Gradients
             var y = op.inputs[1];
             var sx = array_ops.shape(x);
             var sy = array_ops.shape(y);
-            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var args = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var (rx, ry) = (args[0], args[1]);
             x = math_ops.conj(x);
             y = math_ops.conj(y);
 
@@ -427,7 +429,8 @@ namespace Tensorflow.Gradients
                 isMaximum
                     ? gen_math_ops.greater_equal(x, y)
                     : gen_math_ops.less_equal(x, y);
-            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var args = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var (rx, ry) = (args[0], args[1]);
             var xgrad = array_ops.where(xmask, grad, zeros);
             var gx = array_ops.reshape(math_ops.reduce_sum(xgrad, rx), sx);
             var ygrad = array_ops.where(xmask, zeros, grad);
@@ -458,7 +461,7 @@ namespace Tensorflow.Gradients
 
         private static Tensor _safe_shape_div(Tensor x, Tensor y)
         {
-            return math_ops.floordiv(x, gen_math_ops.maximum(y, 1));
+            return math_ops.floordiv(x, gen_math_ops.maximum(y, ops.convert_to_tensor(1)));
         }
 
         [RegisterGradient("Sub")]
@@ -573,7 +576,8 @@ namespace Tensorflow.Gradients
 
             var sx = array_ops.shape(x);
             var sy = array_ops.shape(y);
-            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var args = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var (rx, ry) = (args[0], args[1]);
             x = math_ops.conj(x);
             y = math_ops.conj(y);
 
@@ -824,7 +828,7 @@ namespace Tensorflow.Gradients
                 mask = x > 0.0f;
             var ones = array_ops.ones_like(x);
             var safe_x = array_ops.where(mask, x, ones);
-            var x1 = gen_array_ops.log(safe_x);
+            var x1 = math_ops.log(safe_x);
             var y1 = array_ops.zeros_like(x);
             var log_x = array_ops.where(mask, x1, y1);
             var mul1 = grad * z * log_x;
@@ -855,7 +859,8 @@ namespace Tensorflow.Gradients
                 sy = array_ops.shape_internal(y, optimize: false);
             }
 
-            var (rx, ry) = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var args = gen_array_ops.broadcast_gradient_args(sx, sy);
+            var (rx, ry) = (args[0], args[1]);
             return new[]
             {
                 (sx, rx, !x.shape.Equals(grad.shape)),

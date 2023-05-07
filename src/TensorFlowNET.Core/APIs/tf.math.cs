@@ -130,7 +130,7 @@ namespace Tensorflow
             => gen_math_ops.add(a, b, name: name);
 
         public Tensor add<Tx, Ty>(Tx a, Ty b, string name = null)
-            => gen_math_ops.add(a, b, name: name);
+            => gen_math_ops.add(ops.convert_to_tensor(a), ops.convert_to_tensor(b), name: name);
 
         /// <summary>
         /// Adds all input tensors element-wise.
@@ -151,10 +151,10 @@ namespace Tensorflow
             => gen_math_ops.atan(x, name);
 
         public Tensor arg_max(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
-            => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
+            => gen_math_ops.arg_max(input, ops.convert_to_tensor(dimension), output_type: output_type, name: name);
 
         public Tensor arg_min(Tensor input, int dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
-            => gen_math_ops.arg_min(input, dimension, output_type: output_type, name: name);
+            => gen_math_ops.arg_min(input, ops.convert_to_tensor(dimension), output_type: output_type, name: name);
 
         public Tensor is_finite(Tensor input, string name = null)
             => gen_math_ops.is_finite(input, name);
@@ -199,7 +199,7 @@ namespace Tensorflow
             => gen_math_ops.cos(x, name);
 
         public Tensor cos(float x, string name = null)
-            => gen_math_ops.cos(x, name);
+            => gen_math_ops.cos(ops.convert_to_tensor(x), name);
 
         /// <summary>
         /// Computes hyperbolic cosine of x element-wise.
@@ -235,7 +235,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor greater<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.greater(x, y, name);
+            => gen_math_ops.greater(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         /// <summary>
         /// Returns the truth value of (x >= y) element-wise.
@@ -247,7 +247,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor greater_equal<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.greater_equal(x, y, name);
+            => gen_math_ops.greater_equal(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         /// <summary>
         /// Returns the truth value of (x &lt; y) element-wise.
@@ -259,7 +259,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor less<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.less(x, y, name);
+            => gen_math_ops.less(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         /// <summary>
         /// Computes the log of the absolute value of `Gamma(x)` element-wise.
@@ -280,7 +280,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor less_equal<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.less_equal(x, y, name);
+            => gen_math_ops.less_equal(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         /// <summary>
         /// Computes natural logarithm of (1 + x) element-wise.
@@ -292,7 +292,7 @@ namespace Tensorflow
             => gen_math_ops.log1p(x, name);
 
         public Tensor logical_and<T>(T x, T y, string name = null)
-            => gen_math_ops.logical_and(x, y, name);
+            => gen_math_ops.logical_and(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name);
 
         public Tensor logical_not(Tensor x, string name = null)
             => gen_math_ops.logical_not(x, name);
@@ -301,7 +301,10 @@ namespace Tensorflow
             => gen_math_ops.logical_or(x, y, name);
 
         public Tensor logical_xor(Tensor x, Tensor y, string name = "LogicalXor")
-            => gen_math_ops.logical_xor(x, y, name);
+        {
+            return gen_math_ops.logical_and(gen_math_ops.logical_or(x, y), 
+                gen_math_ops.logical_not(gen_math_ops.logical_and(x, y)), name);
+        }
 
         /// <summary>
         /// Clips tensor values to a specified min and max.
@@ -312,7 +315,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor _clip_by_value(Tensor t, Tensor clip_value_min, Tensor clip_value_max, string name = null)
-            => gen_math_ops._clip_by_value(t, clip_value_min, clip_value_max);
+            => gen_math_ops.clip_by_value(t, clip_value_min, clip_value_max);
 
         /// <summary>
         ///    Clips tensor values to a specified min and max.
@@ -345,7 +348,7 @@ namespace Tensorflow
             => clip_ops.clip_by_value(t, clip_value_min, clip_value_max, name);
 
         public Tensor sub<Tx, Ty>(Tx a, Ty b, string name = null)
-            => gen_math_ops.sub(a, b, name: name);
+            => gen_math_ops.sub(ops.convert_to_tensor(a), ops.convert_to_tensor(b), name: name);
 
         public Tensor divide(Tensor a, Tensor b)
             => a / b;
@@ -396,7 +399,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor max<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-            => gen_math_ops._max(input, axis, keep_dims: keep_dims, name: name);
+            => gen_math_ops.max(ops.convert_to_tensor(input), ops.convert_to_tensor(axis), keep_dims: keep_dims, name: name);
 
         /// <summary>
         /// Computes the minimum of elements across dimensions of a tensor.
@@ -409,7 +412,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor min<Tx, Ty>(Tx input, Ty axis, bool keep_dims = false, string name = null)
-            => gen_math_ops._min(input, axis, keep_dims: keep_dims, name: name);
+            => gen_math_ops.min(ops.convert_to_tensor(input), ops.convert_to_tensor(axis), keep_dims: keep_dims, name: name);
 
         /// <summary>
         /// Returns the max of x and y (i.e. x > y ? x : y) element-wise.
@@ -421,7 +424,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor maximum<T1, T2>(T1 x, T2 y, string name = null)
-            => gen_math_ops.maximum(x, y, name: name);
+            => gen_math_ops.maximum(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         /// <summary>
         /// Returns the min of x and y (i.e. x &lt; y ? x : y) element-wise.
@@ -433,7 +436,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor minimum<T1, T2>(T1 x, T2 y, string name = null)
-            => gen_math_ops.minimum(x, y, name: name);
+            => gen_math_ops.minimum(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         public Tensor multiply(Tensor x, Tensor y, string name = null)
             => gen_math_ops.mul(x, y, name: name);
@@ -448,7 +451,7 @@ namespace Tensorflow
         /// <param name="name"></param>
         /// <returns></returns>
         public Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
-            => gen_math_ops.mul(x, y, name: name);
+            => gen_math_ops.mul(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
 
         public Tensor negative(Tensor x, string name = null)
             => gen_math_ops.neg(x, name);
@@ -577,7 +580,7 @@ namespace Tensorflow
             => math_ops.sigmoid(x, name: name);
 
         public Tensor sum(Tensor input, int axis, bool keep_dims = false, string name = null)
-            => gen_math_ops._sum(input, axis, keep_dims: keep_dims, name: name);
+            => gen_math_ops.sum(input, ops.convert_to_tensor(axis), keep_dims: keep_dims, name: name);
 
         public Tensor reduce_mean(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null, int? reduction_indices = null)
             => math_ops.reduce_mean(input_tensor, axis: axis, keepdims: keepdims, name: name, reduction_indices: reduction_indices);

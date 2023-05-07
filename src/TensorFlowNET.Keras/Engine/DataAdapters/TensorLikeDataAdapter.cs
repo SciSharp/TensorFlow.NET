@@ -57,7 +57,8 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         IDatasetV2 slice_batch_indices(Tensor indices)
         {
             var num_in_full_batch = num_full_batches * _batch_size;
-            var first_k_indices = array_ops.slice(indices, new int[] { 0 }, new int[] { num_in_full_batch });
+            var first_k_indices = array_ops.slice(indices, new Tensor[] { ops.convert_to_tensor(0) }, 
+                new Tensor[] { ops.convert_to_tensor(num_in_full_batch) });
             first_k_indices = array_ops.reshape(first_k_indices, new int[] { num_full_batches, _batch_size });
             var flat_dataset = tf.data.Dataset.from_tensor_slices(first_k_indices);
             if (_partial_batch_size > 0)
@@ -81,7 +82,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             {
                 var indices = inputs[0];
                 var results = inputs.Skip(1)
-                    .Select(x => gen_array_ops.gather_v2(x, indices, 0))
+                    .Select(x => array_ops.gather(x, indices, axis: 0))
                     .ToArray();
                 return new Tensors(results);
             }, -1);

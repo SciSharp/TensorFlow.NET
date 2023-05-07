@@ -78,7 +78,7 @@ namespace Tensorflow
                     minlength: nrows_int32,
                     maxlength: nrows_int32,
                     dtype: value_rowids.dtype);
-                var row_splits = array_ops.concat(new object[]
+                var row_splits = array_ops.concat(new Tensor[]
                 {
                     ops.convert_to_tensor(new long[] { 0 }),
                     tf.cumsum(row_lengths)

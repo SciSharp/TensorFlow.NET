@@ -79,7 +79,7 @@ namespace Tensorflow.Keras.Layers
             }
             else
             {
-                outputs = gen_math_ops.mat_mul(inputs, kernel.AsTensor());
+                outputs = math_ops.matmul(inputs, kernel.AsTensor());
             }
 
             if (args.UseBias)
