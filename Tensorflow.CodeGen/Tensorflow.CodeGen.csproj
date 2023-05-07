@@ -9,10 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.6.0-1.final" />
+    <PackageReference Include="Protobuf.Text" Version="0.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\protobuf.Text\src\protobuf.Text\protobuf.Text.csproj" />
     <ProjectReference Include="..\src\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
   </ItemGroup>
 
