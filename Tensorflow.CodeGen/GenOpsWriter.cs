@@ -12,16 +12,18 @@ namespace Tensorflow.CodeGen
         private string _basePath;
         private Dictionary<string, OpDef> _opMap;
         private OpClassifier _opClassifier;
-        private FunctionGenerator _g = new();
+        private FunctionGenerator _fg = new();
+        private DescriptionGenerator _dg;
 
-        public GenOpsWriter(string basePath, string pythonFilesDirectory, string opDefFilename)
+        public GenOpsWriter(string basePath, string pythonFilesDirectory, string apiDefFilesDirectory, string opDefFilename)
         {
             _basePath = basePath;
 
-            var opDefs = ReadAllOpDefs(opDefFilename);
+            var opDefs = Utils.ReadAllOpDefs(opDefFilename);
             _opMap = opDefs.Op.ToDictionary(
-                x => Tensorflow.CodeGen.Utils.ConvertToUnderscore(x.Name), x => x);
+                x => Utils.ConvertToUnderscore(x.Name), x => x);
             _opClassifier = new OpClassifier(pythonFilesDirectory, opDefs.Op.Select(x => Utils.ConvertToUnderscore(x.Name)));
+            _dg = new DescriptionGenerator(apiDefFilesDirectory);
         }
 
         public void WriteAll()
@@ -53,12 +55,17 @@ namespace Tensorflow.CodeGen
                     if(_opMap.ContainsKey(funcName))
                     {
                         var opDef = _opMap[funcName];
-                        _g.AppendFunction(opDef, sb);
+
+                        // write the descriptions.
+                        _dg.AppendDescription(opDef, sb);
+
+                        // write the function body.
+                        _fg.AppendFunction(opDef, sb);
                     }
                     else if (funcName.StartsWith("_"))
                     {
                         var opDef = _opMap[funcName.Substring(1)];
-                        _g.AppendFunction(opDef, sb);
+                        _fg.AppendFunction(opDef, sb);
                     }
                 }
 
@@ -68,13 +75,6 @@ namespace Tensorflow.CodeGen
                 string fullFilePath = Path.Combine(_basePath, $"{target}.cs");
                 File.WriteAllText(fullFilePath, sb.ToString());
             }
-        }
-
-        private OpList ReadAllOpDefs(string path)
-        {
-            var text = File.ReadAllText(path);
-            var opDefs = OpList.Parser.ParseText(text);
-            return opDefs;
         }
     }
 }

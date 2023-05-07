@@ -44,7 +44,7 @@ namespace Tensorflow.CodeGen
             // begin to write main body
             sb.AppendLine("var _ctx = tf.Context;");
 
-            var attrValueDic = GetAttrsDefaultValue(op, out var dynamicDefaultValues);
+            var attrValueDic = Utils.GetAttrsDefaultValue(op, out var dynamicDefaultValues);
             // deal with dynamic default values.
             foreach(var (name, expr) in dynamicDefaultValues)
             {
@@ -183,7 +183,7 @@ namespace Tensorflow.CodeGen
                     sb.Append($"Tensor {argName}, ");
                 }
             }
-            var attrValueDic = GetAttrsDefaultValue(op, out var dynamicDefaultValues);
+            var attrValueDic = Utils.GetAttrsDefaultValue(op, out var dynamicDefaultValues);
             foreach (var (key, typeStr, value) in attrValueDic.Where(x => x.Item3 == "NOVALUE"))
             {
                 var token = SyntaxFactory.ParseToken(key);
@@ -226,7 +226,7 @@ namespace Tensorflow.CodeGen
             }
 
             sb.Append("}, attrs = new Dictionary<string, object>(){ ");
-            var attrValueDic = GetAttrsDefaultValue(op, out var _);
+            var attrValueDic = Utils.GetAttrsDefaultValue(op, out var _);
             foreach (var (key, _, _) in attrValueDic)
             {
                 sb.Append($"[\"{key}\"] = {key}, ");
@@ -252,7 +252,7 @@ namespace Tensorflow.CodeGen
                 }
                 sb.Append($"{inputArgRealName}, ");
             }
-            var attrValueDic = GetAttrsDefaultValue(op, out var _);
+            var attrValueDic = Utils.GetAttrsDefaultValue(op, out var _);
             foreach (var (key, _, _) in attrValueDic)
             {
                 string keyRealName = key;
@@ -439,7 +439,7 @@ namespace Tensorflow.CodeGen
                     sb.Append($"Tensor {argName}, ");
                 }
             }
-            var attrValueDic = GetAttrsDefaultValue(op, out var _);
+            var attrValueDic = Utils.GetAttrsDefaultValue(op, out var _);
             foreach (var (key, typeStr, _) in attrValueDic)
             {
                 var token = SyntaxFactory.ParseToken(key);
@@ -465,201 +465,12 @@ namespace Tensorflow.CodeGen
                 }
                 sb.AppendLine($"keywords[\"{arg.Name}\"] = {realArgName};");
             }
-            var attrValueDic = GetAttrsDefaultValue(op, out var _);
+            var attrValueDic = Utils.GetAttrsDefaultValue(op, out var _);
             foreach (var (key, _, _) in attrValueDic)
             {
                 sb.AppendLine($"keywords[\"{key}\"] = {key};");
             }
             sb.AppendLine($"var _op = tf.OpDefLib._apply_op_helper(\"{op.Name}\", name, keywords);");
-        }
-
-        // name, type string, default value
-        public List<(string, string, string)> GetAttrsDefaultValue(OpDef op, out Dictionary<string, string> dynamicDefaultValues)
-        {
-            dynamicDefaultValues = new();
-            List<(string, string, string)> res = new();
-            foreach (var attr in op.Attr)
-            {
-                if (attr.Type == "type")
-                {
-                    bool found = op.InputArg.Any(x => x.TypeAttr == attr.Name);
-                    if (!found)
-                    {
-                        if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.Type)
-                        {
-                            string name = Enum.GetName(typeof(TF_DataType), attr.DefaultValue.Type.as_tf_dtype());
-                            string enumPath = typeof(TF_DataType).Name + "." + name;
-                            res.Add((attr.Name, "TF_DataType", enumPath));
-                        }
-                        else
-                        {
-                            res.Add((attr.Name, "TF_DataType", "NOVALUE"));
-                        }
-                    }
-                }
-                else if (attr.Type == "int")
-                {
-                    if(op.InputArg.Any(x => x.NumberAttr == attr.Name))
-                    {
-                        continue;
-                    }
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.I)
-                    {
-                        res.Add((attr.Name, "int", attr.DefaultValue.I.ToString()));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "int", "0"));
-                    }
-                }
-                else if (attr.Type == "float")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.F)
-                    {
-                        res.Add((attr.Name, "float", attr.DefaultValue.F.ToString() + "f"));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "float", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "string")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.S)
-                    {
-                        res.Add((attr.Name, "string", $"\"{attr.DefaultValue.S.ToStringUtf8()}\""));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "string", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "bool")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.B)
-                    {
-                        res.Add((attr.Name, "bool", attr.DefaultValue.B.ToString().ToLower()));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "bool", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "shape")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.Shape)
-                    {
-                        if (attr.DefaultValue.Shape.UnknownRank)
-                        {
-                            res.Add((attr.Name, "Shape", $"null"));
-                        }
-                        else
-                        {
-                            Shape shape = new Shape(attr.DefaultValue.Shape);
-                            string expression = $"new Shape({string.Join(", ", shape.dims)})";
-                            dynamicDefaultValues[attr.Name] = expression;
-                            res.Add((attr.Name, "Shape", $"null"));
-                        }
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "Shape", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "list(type)")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.Type)
-                    {
-                        List<TF_DataType> values = new();
-                        foreach (var value in attr.DefaultValue.List.Type)
-                        {
-                            values.Add(value.as_tf_dtype());
-                        }
-                        string expression = "new TF_DataType[]{" + $"{string.Join(", ", values)}" + "}";
-                        dynamicDefaultValues[attr.Name] = expression;
-                        res.Add((attr.Name, "TF_DataType[]", $"null"));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "TF_DataType[]", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "list(shape)")
-                {
-                    res.Add((attr.Name, "Shape[]", "NOVALUE"));
-                }
-                else if (attr.Type == "list(string)")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.S)
-                    {
-                        List<string> values = new();
-                        foreach (var value in attr.DefaultValue.List.S)
-                        {
-                            values.Add(value.ToStringUtf8());
-                        }
-                        string expression = "new string[]{" + $"{string.Join(", ", values)}" + "}";
-                        dynamicDefaultValues[attr.Name] = expression;
-                        res.Add((attr.Name, "string[]", $"null"));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "string[]", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "list(int)")
-                {
-                    if(attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.List)
-                    {
-                        List<int> values = new();
-                        foreach(var value in attr.DefaultValue.List.I)
-                        {
-                            values.Add((int)value);
-                        }
-                        string expression = "new int[]{" + $"{string.Join(", ", values)}" +"}";
-                        dynamicDefaultValues[attr.Name] = expression;
-                        res.Add((attr.Name, "int[]", $"null"));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "int[]", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "list(float)")
-                {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.List)
-                    {
-                        List<float> values = new();
-                        foreach (var value in attr.DefaultValue.List.F)
-                        {
-                            values.Add(value);
-                        }
-                        string expression = "new float[]{" + $"{string.Join(", ", values)}" + "}";
-                        dynamicDefaultValues[attr.Name] = expression;
-                        res.Add((attr.Name, "float[]", $"null"));
-                    }
-                    else
-                    {
-                        res.Add((attr.Name, "float[]", "NOVALUE"));
-                    }
-                }
-                else if (attr.Type == "func")
-                {
-                    res.Add((attr.Name, "Func<Tensors, Tensors>", "NOVALUE"));
-                }
-                else if (attr.Type == "list(func)")
-                {
-                    res.Add((attr.Name, "Func<Tensors, Tensors>[]", "NOVALUE"));
-                }
-                else if (attr.Type == "tensor")
-                {
-                    res.Add((attr.Name, "TensorProto", "NOVALUE"));
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
-            }
-            return res;
         }
 
         private static bool HasRefArgs(OpDef op)
