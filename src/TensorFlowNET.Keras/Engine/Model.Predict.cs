@@ -84,7 +84,7 @@ namespace Tensorflow.Keras.Engine
                 Steps = data_handler.Inferredsteps
             });
 
-            Tensor batch_outputs = null;
+            Tensors batch_outputs = null;
             _predict_counter.assign(0);
             callbacks.on_predict_begin();
             foreach (var (epoch, iterator) in data_handler.enumerate_epochs())
@@ -95,7 +95,7 @@ namespace Tensorflow.Keras.Engine
                     var tmp_batch_outputs = run_predict_step(iterator);
                     if (batch_outputs == null)
                     {
-                        batch_outputs = tmp_batch_outputs[0];
+                        batch_outputs = tmp_batch_outputs;
                     }
                     else
                     {
