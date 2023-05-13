@@ -2,6 +2,7 @@
 
 **TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in C# which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. TensorFlow.NET has built-in Keras high-level interface and is released as an independent package [TensorFlow.Keras](https://www.nuget.org/packages/TensorFlow.Keras/).
 
+![Discord](https://img.shields.io/discord/1106946823282761851?label=Discord)
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![CI Status](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml)
 [![NuGet Badge](https://buildstats.info/nuget/TensorFlow.NET?includePreReleases=true)](https://www.nuget.org/packages/TensorFlow.NET)
@@ -238,9 +239,9 @@ Buy our book to make open source project be sustainable [TensorFlow.NET实战](h
 
 ### Contact
 
-Follow us on [Twitter](https://twitter.com/ScisharpStack), [Facebook](https://www.facebook.com/scisharp.stack.9), [Medium](https://medium.com/scisharp), [LinkedIn](https://www.linkedin.com/company/scisharp-stack/).
+Join our chat on [Discord](https://discord.gg/quBc2jrz) or [Gitter](https://gitter.im/sci-sharp/community).
 
-Join our chat on [Gitter](https://gitter.im/sci-sharp/community).
+Follow us on [Twitter](https://twitter.com/ScisharpStack), [Facebook](https://www.facebook.com/scisharp.stack.9), [Medium](https://medium.com/scisharp), [LinkedIn](https://www.linkedin.com/company/scisharp-stack/).
 
 TensorFlow.NET is a part of [SciSharp STACK](https://scisharp.github.io/SciSharp/)
 <br>
