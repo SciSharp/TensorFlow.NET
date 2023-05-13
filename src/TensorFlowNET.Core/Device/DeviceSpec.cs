@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,8 +8,8 @@ namespace Tensorflow.Device
 {
     public class DeviceSpec
     {
-        private static Dictionary<string, Components> _STRING_TO_COMPONENTS_CACHE = new();
-        private static Dictionary<Components, string> _COMPONENTS_TO_STRING_CACHE = new();
+        private static ConcurrentDictionary<string, Components> _STRING_TO_COMPONENTS_CACHE = new();
+        private static ConcurrentDictionary<Components, string> _COMPONENTS_TO_STRING_CACHE = new();
         private string _job;
         private int _replica;
         private int _task;
