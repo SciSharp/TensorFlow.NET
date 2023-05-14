@@ -2,7 +2,7 @@
 
 **TensorFlow.NET** (TF.NET) provides a .NET Standard binding for [TensorFlow](https://www.tensorflow.org/). It aims to implement the complete Tensorflow API in C# which allows .NET developers to develop, train and deploy Machine Learning models with the cross-platform .NET Standard framework. TensorFlow.NET has built-in Keras high-level interface and is released as an independent package [TensorFlow.Keras](https://www.nuget.org/packages/TensorFlow.Keras/).
 
-![Discord](https://img.shields.io/discord/1106946823282761851?label=Discord)
+[![Discord](https://img.shields.io/discord/1106946823282761851?label=Discord)](https://discord.gg/quBc2jrz)
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![CI Status](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml)
 [![NuGet Badge](https://buildstats.info/nuget/TensorFlow.NET?includePreReleases=true)](https://www.nuget.org/packages/TensorFlow.NET)
