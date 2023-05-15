@@ -5,9 +5,10 @@
 [![Discord](https://img.shields.io/discord/1106946823282761851?label=Discord)](https://discord.gg/quBc2jrz)
 [![Join the chat at https://gitter.im/publiclab/publiclab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sci-sharp/community)
 [![CI Status](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/SciSharp/TensorFlow.NET/actions/workflows/build_and_test.yml)
-[![NuGet Badge](https://buildstats.info/nuget/TensorFlow.NET?includePreReleases=true)](https://www.nuget.org/packages/TensorFlow.NET)
-[![MyGet Badge](https://img.shields.io/badge/dynamic/json?color=purple&label=nightly%20release&prefix=myget-v&query=items%5B0%5D.lower&url=https%3A%2F%2Fwww.myget.org%2FF%2Fscisharp%2Fapi%2Fv3%2Fregistration1%2Ftensorflow.net%2Findex.json)](https://www.myget.org/feed/scisharp/package/nuget/Tensorflow.NET)
 [![Documentation Status](https://readthedocs.org/projects/tensorflownet/badge/?version=latest)](https://tensorflownet.readthedocs.io/en/latest/?badge=latest)
+[![TensorFlow.NET Badge](https://img.shields.io/nuget/v/TensorFlow.NET?label=TensorFlow.NET)](https://www.nuget.org/packages/TensorFlow.NET)
+[![TensorFlow.Keras Badge](https://img.shields.io/nuget/v/TensorFlow.Keras?label=TensorFlow.Keras)](https://www.nuget.org/packages/TensorFlow.Keras)
+[![MyGet Badge](https://img.shields.io/badge/dynamic/json?color=purple&label=Nightly%20Release&prefix=myget-v&query=items%5B0%5D.lower&url=https%3A%2F%2Fwww.myget.org%2FF%2Fscisharp%2Fapi%2Fv3%2Fregistration1%2Ftensorflow.net%2Findex.json)](https://www.myget.org/feed/scisharp/package/nuget/Tensorflow.NET)
 [![Badge](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu/#/en_US)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/javiercp/BinderTF.NET/master?urlpath=lab)
 
