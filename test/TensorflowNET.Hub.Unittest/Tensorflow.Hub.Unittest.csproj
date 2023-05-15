@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\helpers\Tensorflow.UnitTest.RedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
     <ProjectReference Include="..\..\src\TensorflowNET.Hub\Tensorflow.Hub.csproj" />
   </ItemGroup>
 

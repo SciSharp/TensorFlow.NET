@@ -54,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\helpers\Tensorflow.UnitTest.RedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Core\Tensorflow.Binding.csproj" />
   </ItemGroup>
 
