@@ -86,6 +86,18 @@ namespace Tensorflow
 
             OpDefLib = new OpDefLibrary();
             InitGradientEnvironment();
+
+            try
+            {
+                var handle = c_api.TF_Version();
+            }
+            catch (DllNotFoundException)
+            {
+                throw new RuntimeError("Tensorflow.NET cannot find a backend. Please install one of the following packages for your program: " +
+                    "SciSharp.TensorFlow.Redist, SciSharp.TensorFlow.Redist-Linux-GPU, SciSharp.TensorFlow.Redist-Windows-GPU. For more details, " +
+                    "please visit https://github.com/SciSharp/TensorFlow.NET. If it still not work after installing the backend, please submit an " +
+                    "issue to https://github.com/SciSharp/TensorFlow.NET/issues");
+            }
         }
 
         public string VERSION => c_api.StringPiece(c_api.TF_Version());
