@@ -45,6 +45,21 @@ namespace Tensorflow
     {
         public const string TensorFlowLibName = "tensorflow";
 
+        static c_api()
+        {
+            try
+            {
+                var handle = TF_Version();
+            }
+            catch (DllNotFoundException)
+            {
+                throw new RuntimeError("Tensorflow.NET cannot find a backend. Please install one of the following packages for your program: " +
+                    "SciSharp.TensorFlow.Redist, SciSharp.TensorFlow.Redist-Linux-GPU, SciSharp.TensorFlow.Redist-Windows-GPU. For more details, " +
+                    "please visit https://github.com/SciSharp/TensorFlow.NET. If it still not work after installing the backend, please submit an " +
+                    "issue to https://github.com/SciSharp/TensorFlow.NET/issues");
+            }
+        }
+
         public static string StringPiece(IntPtr handle)
         {
             return handle == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(handle);
