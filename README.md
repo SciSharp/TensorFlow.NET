@@ -16,7 +16,7 @@ English | [中文](docs/README-CN.md)
 
 **=========================================================**
 
-### [Voting: Naming Convention approach of v1.0.0](https://github.com/SciSharp/TensorFlow.NET/issues/1074)
+### [Voting: Naming Convention Approach of v1.0.0](https://github.com/SciSharp/TensorFlow.NET/issues/1074)
 
 Dear all, 
 
@@ -24,7 +24,7 @@ We would like to urge you to participate in our upcoming vote regarding the nami
 
 Thank you,
 
-TensorFlow Authors
+TensorFlow.NET Authors
 
 **=========================================================**
 
