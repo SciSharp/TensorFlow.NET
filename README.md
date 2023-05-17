@@ -16,11 +16,11 @@ English | [中文](docs/README-CN.md)
 
 **=========================================================**
 
-### Voting: Naming Convention approach of v1.0.0
+### [Voting: Naming Convention approach of v1.0.0](https://github.com/SciSharp/TensorFlow.NET/issues/1074)
 
 Dear all, 
 
-We would like to urge you to participate in our upcoming vote regarding the naming convention for TensorFlow.NET version 1.0.0 in #1074. Your participation in the vote is essential to help us decide on the best approach for improving the naming convention used in previous versions.
+We would like to urge you to participate in our upcoming vote regarding the naming convention for TensorFlow.NET version 1.0.0 in [#1074](https://github.com/SciSharp/TensorFlow.NET/issues/1074). Your participation in the vote is essential to help us decide on the best approach for improving the naming convention used in previous versions.
 
 Thank you,
 
