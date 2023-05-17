@@ -77,6 +77,10 @@ namespace Tensorflow.Keras
 
         public Activation GetActivationFromName(string name)
         {
+            if (name == null)
+            {
+                return _linear;
+            }
             if (!_nameActivationMap.TryGetValue(name, out var res))
             {
                 throw new Exception($"Activation {name} not found");
