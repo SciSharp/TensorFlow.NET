@@ -11,7 +11,8 @@ namespace Tensorflow.Keras.Layers {
             public Softmax ( SoftmaxArgs args ) : base(args) {
                   axis = args.axis;
             }
-            protected override Tensors Call ( Tensors inputs, Tensor state = null, bool? training = null ) {
+            protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+            {
                   Tensor x = inputs.Length == 2 ? inputs + ((1.0 - tf.cast(inputs[1], inputs.dtype)) * 1e-9)
                                                 : inputs;
                   Tensor e = tf.exp(tf.sub(x, tf.reduce_max(x, axis: this.axis, keepdims: true)));

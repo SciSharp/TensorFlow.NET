@@ -12,7 +12,7 @@ namespace Tensorflow.Keras.Layers
         {
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             if (data_format == "channels_last")
                 return math_ops.reduce_max(inputs, (1, 2), false);

@@ -57,6 +57,21 @@ namespace Tensorflow
                 new[] { loop_vars });
             return results[0];
         }
+        public (Tensor, List<TensorArray>, Tensors, Tensors) while_loop(Func<Tensor, Tensor> cond,
+           Func<Tensor, List<TensorArray>, Tensors, Tensors, (Tensor, List<TensorArray>, Tensors, Tensors)> body,
+           (Tensor, List<TensorArray>, Tensors, Tensors) loop_vars,
+           int parallel_iterations = 10)
+           => control_flow_ops.while_loop(cond,
+               body,
+               loop_vars);
+
+        public (Tensor, List<TensorArray>, Tensors) while_loop(Func<Tensor, Tensor> cond,
+            Func<Tensor, List<TensorArray>, Tensors, (Tensor, List<TensorArray>, Tensors)> body,
+            (Tensor, List<TensorArray>, Tensors) loop_vars,
+            int parallel_iterations = 10)
+            => control_flow_ops.while_loop(cond,
+                body,
+                loop_vars);
 
         public Tensor[] while_loop(Func<Tensor[], Tensor> cond,
             Func<Tensor[], Tensor[]> body,

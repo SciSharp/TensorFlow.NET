@@ -10,7 +10,8 @@ namespace Tensorflow.Keras.Layers {
             public Softplus ( LayerArgs args ) : base(args) {
                   // Softplus has no arguments
             }
-            protected override Tensors Call ( Tensors inputs, Tensor state = null, bool? training = null ) {
+            protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+            {
                   Tensor x = inputs;
                   return tf.log(
                         tf.add(tf.exp(x), 1f));

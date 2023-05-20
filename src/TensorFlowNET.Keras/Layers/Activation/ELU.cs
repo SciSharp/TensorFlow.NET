@@ -29,7 +29,7 @@ namespace Tensorflow.Keras.Layers {
             base.build(input_shape);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             Tensor output = inputs;
             output = tf.where(output > 0f, output,

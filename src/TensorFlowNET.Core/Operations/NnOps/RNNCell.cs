@@ -26,6 +26,7 @@ using Tensorflow.Operations;
 using Tensorflow.Train;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
+using static Tensorflow.Keras.ArgsDefinition.Rnn.RNNArgs;
 
 namespace Tensorflow
 {
@@ -50,7 +51,7 @@ namespace Tensorflow
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
-    public abstract class RnnCell : ILayer, RNNArgs.IRnnArgCell
+    public abstract class RnnCell : ILayer
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight

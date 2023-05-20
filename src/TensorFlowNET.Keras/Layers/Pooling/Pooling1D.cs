@@ -36,7 +36,7 @@ namespace Tensorflow.Keras.Layers
             input_spec = new InputSpec(ndim: 3);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             int pad_axis = args.DataFormat == "channels_first" ? 2 : 3;
             inputs = tf.expand_dims(inputs, pad_axis);

@@ -42,9 +42,9 @@ namespace Tensorflow.Keras.Layers.Rnn
             built = true;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
-            return base.Call(inputs, state, training);
+            return base.Call(inputs, initial_state, training);
         }
     }
 }

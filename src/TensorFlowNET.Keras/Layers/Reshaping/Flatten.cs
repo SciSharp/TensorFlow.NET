@@ -23,7 +23,7 @@ namespace Tensorflow.Keras.Layers
             _channels_first = args.DataFormat == "channels_first";
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             if (_channels_first)
             {

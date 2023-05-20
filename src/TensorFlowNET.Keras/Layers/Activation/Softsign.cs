@@ -10,7 +10,8 @@ namespace Tensorflow.Keras.Layers {
             public Softsign ( LayerArgs args ) : base(args) {
                   // Softsign has no arguments
             }
-            protected override Tensors Call ( Tensors inputs, Tensor state = null, bool? training = null ) {
+            protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+            {
                   Tensor x = inputs;
                   // x / (abs(x) + 1)
                   return tf.div(x, tf.add(1f, tf.abs(x)));

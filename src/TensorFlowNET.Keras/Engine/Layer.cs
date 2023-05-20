@@ -332,9 +332,9 @@ namespace Tensorflow.Keras.Engine
         /// <param name="state"></param>
         /// <param name="training"></param>
         /// <returns></returns>
-        protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected virtual Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
-            if(ReplacedCall is not null)
+            if (ReplacedCall is not null)
             {
                 return ReplacedCall(inputs);
             }

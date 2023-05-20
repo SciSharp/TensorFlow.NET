@@ -698,6 +698,53 @@ namespace Tensorflow
             });
         }
 
+        public static (Tensor, List<TensorArray>, Tensors, Tensors) while_loop(Func<Tensor, Tensor> cond,
+            Func<Tensor, List<TensorArray>, Tensors, Tensors, (Tensor, List<TensorArray>, Tensors, Tensors)> body,
+            (Tensor, List<TensorArray>, Tensors, Tensors) loop_vars,
+            int parallel_iterations = 10,
+            string name = null)
+        {
+            var executing_eagerly = tf.Context.executing_eagerly();
+            if (!executing_eagerly)
+            {
+                throw new NotImplementedException("");
+            }
+
+            return tf_with(ops.name_scope("name", "while"), delegate
+            {
+                while ((bool)cond(loop_vars.Item1))
+                {
+                    loop_vars = body(loop_vars.Item1, loop_vars.Item2, loop_vars.Item3, loop_vars.Item4);
+                }
+
+                return loop_vars;
+            });
+        }
+
+        public static (Tensor, List<TensorArray>, Tensors) while_loop(Func<Tensor, Tensor> cond,
+            Func<Tensor, List<TensorArray>, Tensors, (Tensor, List<TensorArray>, Tensors)> body,
+            (Tensor, List<TensorArray>, Tensors) loop_vars,
+            int parallel_iterations = 10,
+            string name = null)
+        {
+            var executing_eagerly = tf.Context.executing_eagerly();
+            if (!executing_eagerly)
+            {
+                throw new NotImplementedException("");
+            }
+
+            return tf_with(ops.name_scope("name", "while"), delegate
+            {
+                while ((bool)cond(loop_vars.Item1))
+                {
+                    loop_vars = body(loop_vars.Item1, loop_vars.Item2, loop_vars.Item3);
+                }
+
+                return loop_vars;
+            });
+        }
+
+
         /// <summary>
         /// Repeat `body` while the condition `cond` is true.
         /// </summary>

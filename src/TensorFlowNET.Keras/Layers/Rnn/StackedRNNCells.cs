@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
+using static Tensorflow.Keras.ArgsDefinition.Rnn.RNNArgs;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Keras.ArgsDefinition.Rnn;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
-    public class StackedRNNCells : Layer, RNNArgs.IRnnArgCell
+    public class StackedRNNCells : Layer
     {
-        public IList<RnnCell> Cells { get; set; }
+        public IList<IRnnArgCell> Cells { get; set; }
         public bool reverse_state_order;
 
         public StackedRNNCells(StackedRNNCellsArgs args) : base(args)
@@ -51,7 +52,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     return lastCell.output_size;
                 }
-                else if (RNN._is_multiple_state(lastCell.state_size))
+                else if (RNN.is_multiple_state(lastCell.state_size))
                 {
                     // return ((dynamic)Cells[-1].state_size)[0];
                     throw new NotImplementedException("");
@@ -62,6 +63,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 }
             }
         }
+
 
         public object get_initial_state()
         {
@@ -80,7 +82,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             //    return tuple(initial_states)
         }
 
-        public object call()
+        public Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             throw new NotImplementedException();
             //  def call(self, inputs, states, constants= None, training= None, ** kwargs):

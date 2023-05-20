@@ -157,7 +157,7 @@ namespace Tensorflow.Keras.Layers
             base.adapt(data, batch_size: batch_size, steps: steps);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             if (_args.Invert)
             {

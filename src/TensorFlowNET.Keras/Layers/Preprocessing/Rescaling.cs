@@ -17,7 +17,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             scale = constant_op.constant(args.Scale, args.DType);
             offset = constant_op.constant(args.Offset, args.DType);

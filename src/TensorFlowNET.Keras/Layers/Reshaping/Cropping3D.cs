@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Layers.Reshaping
             _buildInputShape = input_shape;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             Tensor output = inputs;
             if (output.rank != 5)

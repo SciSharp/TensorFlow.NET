@@ -189,7 +189,7 @@ namespace Tensorflow.Keras.Layers
         //    return new dict(base_config.items().ToList() + config.items().ToList());
         //}
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             var ret = tf.linalg.einsum(this.equation, (inputs, this.kernel.AsTensor()));
             if (this.bias != null)

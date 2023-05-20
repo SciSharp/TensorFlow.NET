@@ -211,6 +211,28 @@ namespace Tensorflow.Util
             => arg is IEnumerable && !(arg is string) && !(arg is NDArray) &&
                     !(arg.GetType().IsGenericType && arg.GetType().GetGenericTypeDefinition() == typeof(HashSet<>));
 
+        public static bool is_nested(object obj)
+        {
+            // Check if the object is an IEnumerable
+            if (obj is IEnumerable)
+            {
+                // If it is, check if it is a nested structure
+                foreach (object item in (IEnumerable)obj)
+                {
+                    if (is_nested(item))
+                    {
+                        return true;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                // If it is not, return false
+                return false;
+            }
+        }
+
         public static bool is_mapping(object arg) => arg is IDictionary;
 
         //# See the swig file (util.i) for documentation.
@@ -263,7 +285,29 @@ namespace Tensorflow.Util
             }
         }
 
+        public static List<T> FlattenTupple<T>(object tuple)
+        {
+            List<T> items = new List<T>();
+            var type = tuple.GetType();
 
+            if (type.GetInterface("ITuple") == null)
+                throw new ArgumentException("This is not a tuple!");
+
+            foreach (var property in type.GetProperties())
+            {
+                var value = property.GetValue(tuple);
+                if (property.PropertyType.GetInterface("ITuple") != null)
+                {
+                    var subItems = FlattenTupple<T>(value);
+                    items.AddRange(subItems);
+                }
+                else
+                {
+                    items.Add((T)value);
+                }
+            }
+            return items;
+        }
         //# See the swig file (util.i) for documentation.
         //_same_namedtuples = _pywrap_tensorflow.SameNamedtuples
 
