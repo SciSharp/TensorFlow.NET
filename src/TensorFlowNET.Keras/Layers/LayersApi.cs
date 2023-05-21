@@ -262,7 +262,7 @@ namespace Tensorflow.Keras.Layers
         /// <summary>
         /// Just your regular densely-connected NN layer.
         /// 
-        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
+        /// Dense implements the operation: output = activation(input * kernel + bias) where activation is the 
         /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
         /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
         /// </summary>
@@ -272,57 +272,35 @@ namespace Tensorflow.Keras.Layers
         /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
         /// <param name="bias_initializer">Initializer for the bias vector.</param>
         /// <param name="input_shape">N-D tensor with shape: (batch_size, ..., input_dim). The most common situation would be a 2D input with shape (batch_size, input_dim).</param>
+        /// <param name="kernel_regularizer">Regularizer instance for the kernel matrix (callable).</param>
+        /// <param name="bias_regularizer">Regularizer instance for the bias (callable).</param>
+        /// <param name="activity_regularizer">Regularizer instance for the output (callable).</param>
+        /// <param name="kernel_constraint">Constraint function for the kernel matrix.</param>
+        /// <param name="bias_constraint">Constraint function for the bias.</param>
         /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
         public ILayer Dense(int units,
             Activation activation = null,
             IInitializer kernel_initializer = null,
             bool use_bias = true,
             IInitializer bias_initializer = null,
-            Shape input_shape = null)
+            Shape input_shape = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null,
+            Action kernel_constraint = null,
+            Action bias_constraint = null)
             => new Dense(new DenseArgs
             {
                 Units = units,
                 Activation = activation ?? keras.activations.Linear,
                 KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                 BiasInitializer = bias_initializer ?? (use_bias ? tf.zeros_initializer : null),
-                InputShape = input_shape
-            });
-
-        /// <summary>
-        /// Just your regular densely-connected NN layer.
-        /// 
-        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
-        /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
-        /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
-        /// </summary>
-        /// <param name="units">Positive integer, dimensionality of the output space.</param>
-        /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
-        public ILayer Dense(int units)
-            => new Dense(new DenseArgs
-            {
-                Units = units,
-                Activation = keras.activations.GetActivationFromName("linear")
-            });
-
-        /// <summary>
-        /// Just your regular densely-connected NN layer.
-        /// 
-        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
-        /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
-        /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
-        /// </summary>
-        /// <param name="units">Positive integer, dimensionality of the output space.</param>
-        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x).</param>
-        /// <param name="input_shape">N-D tensor with shape: (batch_size, ..., input_dim). The most common situation would be a 2D input with shape (batch_size, input_dim).</param>
-        /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
-        public ILayer Dense(int units,
-            string activation = null,
-            Shape input_shape = null)
-            => new Dense(new DenseArgs
-            {
-                Units = units,
-                Activation = keras.activations.GetActivationFromName(activation),
-                InputShape = input_shape
+                InputShape = input_shape,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                KernelConstraint = kernel_constraint,
+                BiasConstraint = bias_constraint
             });
 
         /// <summary>
@@ -331,10 +309,15 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         /// <param name="inputs"></param>
         /// <param name="units">Python integer, dimensionality of the output space.</param>
-        /// <param name="activation"></param>
-        /// <param name="use_bias">Boolean, whether the layer uses a bias.</param>
-        /// <param name="kernel_initializer"></param>
-        /// <param name="bias_initializer"></param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix.</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector.</param>
+        /// <param name="kernel_regularizer">Regularizer instance for the kernel matrix (callable).</param>
+        /// <param name="bias_regularizer">Regularizer instance for the bias (callable).</param>
+        /// <param name="activity_regularizer">Regularizer instance for the output (callable).</param>
+        /// <param name="kernel_constraint">Constraint function for the kernel matrix.</param>
+        /// <param name="bias_constraint">Constraint function for the bias.</param>
         /// <param name="trainable"></param>
         /// <param name="name"></param>
         /// <param name="reuse"></param>
@@ -345,6 +328,11 @@ namespace Tensorflow.Keras.Layers
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null,
+            Action kernel_constraint = null,
+            Action bias_constraint = null,
             bool trainable = true,
             string name = null,
             bool? reuse = null)
@@ -359,6 +347,11 @@ namespace Tensorflow.Keras.Layers
                 UseBias = use_bias,
                 BiasInitializer = bias_initializer,
                 KernelInitializer = kernel_initializer,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                KernelConstraint = kernel_constraint,
+                BiasConstraint = bias_constraint,
                 Trainable = trainable,
                 Name = name
             });

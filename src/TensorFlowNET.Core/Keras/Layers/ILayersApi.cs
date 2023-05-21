@@ -94,16 +94,17 @@ namespace Tensorflow.Keras.Layers
             string kernel_initializer = "glorot_uniform",
             string bias_initializer = "zeros");
 
-        public ILayer Dense(int units);
-        public ILayer Dense(int units,
-            string activation = null,
-            Shape input_shape = null);
         public ILayer Dense(int units,
             Activation activation = null,
             IInitializer kernel_initializer = null,
             bool use_bias = true,
             IInitializer bias_initializer = null,
-            Shape input_shape = null);
+            Shape input_shape = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null,
+            Action kernel_constraint = null,
+            Action bias_constraint = null);
 
         public ILayer Dropout(float rate, Shape noise_shape = null, int? seed = null);
 
