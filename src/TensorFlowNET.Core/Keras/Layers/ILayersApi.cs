@@ -48,7 +48,7 @@ namespace Tensorflow.Keras.Layers
             string data_format = "channels_last",
             int dilation_rate = 1,
             int groups = 1,
-            string activation = null,
+            ActivationAdaptor activation = null,
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
             string bias_initializer = "zeros");
@@ -60,7 +60,7 @@ namespace Tensorflow.Keras.Layers
             string data_format = null,
             Shape dilation_rate = null,
             int groups = 1,
-            Activation activation = null,
+            ActivationAdaptor activation = null,
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer bias_initializer = null,
@@ -74,7 +74,7 @@ namespace Tensorflow.Keras.Layers
             string output_padding = "valid",
             string data_format = null,
             Shape dilation_rate = null,
-            string activation = null,
+            ActivationAdaptor activation = null,
             bool use_bias = true,
             string kernel_initializer = null,
             string bias_initializer = null,
@@ -82,20 +82,8 @@ namespace Tensorflow.Keras.Layers
             string bias_regularizer = null,
             string activity_regularizer = null);
 
-        public ILayer Conv2D(int filters,
-            Shape kernel_size = null,
-            Shape strides = null,
-            string padding = "valid",
-            string data_format = null,
-            Shape dilation_rate = null,
-            int groups = 1,
-            string activation = null,
-            bool use_bias = true,
-            string kernel_initializer = "glorot_uniform",
-            string bias_initializer = "zeros");
-
         public ILayer Dense(int units,
-            Activation activation = null,
+            ActivationAdaptor activation = null,
             IInitializer kernel_initializer = null,
             bool use_bias = true,
             IInitializer bias_initializer = null,
@@ -118,7 +106,7 @@ namespace Tensorflow.Keras.Layers
         public ILayer EinsumDense(string equation,
                 Shape output_shape,
                 string bias_axes,
-                Activation activation = null,
+                ActivationAdaptor activation = null,
                 IInitializer kernel_initializer = null,
                 IInitializer bias_initializer = null,
                 IRegularizer kernel_regularizer = null,
@@ -161,8 +149,8 @@ namespace Tensorflow.Keras.Layers
         public ILayer LeakyReLU(float alpha = 0.3f);
 
         public ILayer LSTM(int units,
-            Activation activation = null,
-            Activation recurrent_activation = null,
+            ActivationAdaptor activation = null,
+            ActivationAdaptor recurrent_activation = null,
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer recurrent_initializer = null,
@@ -194,7 +182,7 @@ namespace Tensorflow.Keras.Layers
             Shape input_shape = null);
 
         public ILayer SimpleRNN(int units,
-            string activation = "tanh",
+            ActivationAdaptor activation = null,
             string kernel_initializer = "glorot_uniform",
             string recurrent_initializer = "orthogonal",
             string bias_initializer = "zeros",

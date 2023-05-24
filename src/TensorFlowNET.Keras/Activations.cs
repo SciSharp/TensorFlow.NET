@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Linq;
 using Tensorflow.Operations.Activation;
 using static Tensorflow.Binding;
 
@@ -88,6 +90,34 @@ namespace Tensorflow.Keras
             else
             {
                 return res;
+            }
+        }
+
+        public Activation GetActivationFromAdaptor(ActivationAdaptor adaptor)
+        {
+            if(adaptor == null)
+            {
+                return _linear;
+            }
+            if(adaptor.Name != null)
+            {
+                return GetActivationFromName(adaptor.Name);
+            }
+            else if(adaptor.Activation != null)
+            {
+                return adaptor.Activation;
+            }
+            else if(adaptor.Func != null)
+            {
+                return new Activation()
+                {
+                    Name = adaptor.Func.GetMethodInfo().Name,
+                    ActivationFunction = adaptor.Func
+                };
+            }
+            else
+            {
+                throw new Exception("Could not interpret activation adaptor");
             }
         }
     }
