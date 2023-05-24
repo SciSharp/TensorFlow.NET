@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TensorFlowNET.Recommenders\Tensorflow.Recommenders.csproj" />
-    <ProjectReference Include="..\TensorFlowNET.Text\Tensorflow.Text.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Recommenders\Tensorflow.Recommenders.csproj" />
+    <ProjectReference Include="..\..\src\TensorFlowNET.Text\Tensorflow.Text.csproj" />
   </ItemGroup>
 
 </Project>

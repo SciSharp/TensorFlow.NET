@@ -30,6 +30,7 @@ public class BaseSession : IDisposable
     {
         _handle = handle;
         _graph = g ?? ops.get_default_graph();
+        _status = tf.Status;
     }
 
     public BaseSession(string target = "", Graph g = null, ConfigProto config = null, Status status = null)

@@ -62,7 +62,7 @@ namespace Tensorflow.Keras.Layers
         public override void build(KerasShapesWrapper input_shape)
         {
             var single_shape = input_shape.ToSingleShape();
-            if (len(input_shape) != 4)
+            if (len(single_shape) != 4)
                 throw new ValueError($"Inputs should have rank 4. Received input shape: {input_shape}");
 
             var channel_axis = _get_channel_axis();
@@ -138,7 +138,10 @@ namespace Tensorflow.Keras.Layers
             }
 
             if (use_bias)
-                throw new NotImplementedException("");
+                tf.nn.bias_add(
+                    outputs,
+                    bias,
+                    data_format: conv_utils.convert_data_format(data_format, ndim: 4));
 
             if (activation != null)
                 return activation.Apply(outputs);
