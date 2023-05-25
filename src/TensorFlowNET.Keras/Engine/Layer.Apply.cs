@@ -41,5 +41,19 @@ namespace Tensorflow.Keras.Engine
 
             return outputs;
         }
+
+        // TODO(Rinne): remove it and completely fix issue 1084
+        [Obsolete]
+        private bool _enforce_layer_construction = false;
+        [Obsolete]
+        internal void enforce_layer_construction()
+        {
+            _enforce_layer_construction = true;
+        }
+        [Obsolete]
+        internal void unset_layer_construction()
+        {
+            _enforce_layer_construction = false;
+        }
     }
 }

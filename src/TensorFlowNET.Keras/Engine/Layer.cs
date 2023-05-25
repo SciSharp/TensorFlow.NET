@@ -291,7 +291,7 @@ namespace Tensorflow.Keras.Engine
         bool _in_functional_construction_mode(Tensors inputs)
         {
             return tf.Context.executing_eagerly()
-                && inputs.Count(x => x is not EagerTensor && x is not NDArray) == inputs.Count();
+                && inputs.Count(x => x is not EagerTensor && x is not NDArray) == inputs.Count() || _enforce_layer_construction;
         }
 
         public void SetConnectivityMetadata(Tensors inputs, Tensors outputs)
