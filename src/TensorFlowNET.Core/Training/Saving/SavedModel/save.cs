@@ -88,7 +88,7 @@ public static partial class SavedModelUtils
         {
             if (ops.inside_function())
             {
-                throw new AssertionError("`tf.saved_model.save` is not supported inside a traced @tf.function. " +
+                throw new AssertionError("`tf.saved_model.save` is not supported inside a traced [AutoGraph]. " +
                                          "Move the call to the outer eagerly-executed context.");
             }
 
