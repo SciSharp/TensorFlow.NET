@@ -113,6 +113,32 @@ namespace Tensorflow.Keras.Layers
                 KernelInitializer = GetInitializerByName(kernel_initializer),
                 BiasInitializer = GetInitializerByName(bias_initializer)
             });
+        public ILayer Conv1D(int filters,
+            Shape kernel_size,
+            int strides = 1,
+            string padding = "valid",
+            string data_format = "channels_last",
+            int dilation_rate = 1,
+            int groups = 1,
+            string activation = null,
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string bias_initializer = "zeros")
+            => new Conv1D(new Conv1DArgs
+            {
+                Rank = 1,
+                Filters = filters,
+                KernelSize = kernel_size ?? new Shape(1, 5),
+                Strides = strides,
+                Padding = padding,
+                DataFormat = data_format,
+                DilationRate = dilation_rate,
+                Groups = groups,
+                UseBias = use_bias,
+                Activation = keras.activations.GetActivationFromName(activation),
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer)
+            });
 
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
@@ -166,6 +192,38 @@ namespace Tensorflow.Keras.Layers
                     ActivityRegularizer = activity_regularizer,
                     Activation = keras.activations.GetActivationFromAdaptor(activation),
                 });
+        public ILayer Conv2D(int filters,
+            Shape kernel_size = null,
+            Shape strides = null,
+            string padding = "valid",
+            string data_format = null,
+            Shape dilation_rate = null,
+            int groups = 1,
+            string activation = null,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null)
+                => new Conv2D(new Conv2DArgs
+                {
+                    Rank = 2,
+                    Filters = filters,
+                    KernelSize = (kernel_size == null) ? (5, 5) : kernel_size,
+                    Strides = strides == null ? (1, 1) : strides,
+                    Padding = padding,
+                    DataFormat = data_format,
+                    DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
+                    Groups = groups,
+                    UseBias = use_bias,
+                    KernelRegularizer = kernel_regularizer,
+                    KernelInitializer = kernel_initializer == null ? tf.glorot_uniform_initializer : kernel_initializer,
+                    BiasInitializer = bias_initializer == null ? tf.zeros_initializer : bias_initializer,
+                    BiasRegularizer = bias_regularizer,
+                    ActivityRegularizer = activity_regularizer,
+                    Activation = keras.activations.GetActivationFromName(activation),
+                });
 
         /// <summary>
         /// Transposed convolution layer (sometimes called Deconvolution).
@@ -211,6 +269,33 @@ namespace Tensorflow.Keras.Layers
                     BiasInitializer = GetInitializerByName(bias_initializer),
                     Activation = keras.activations.GetActivationFromAdaptor(activation)
                 });
+        public ILayer Conv2DTranspose(int filters,
+            Shape kernel_size = null,
+            Shape strides = null,
+            string output_padding = "valid",
+            string data_format = null,
+            Shape dilation_rate = null,
+            string activation = null,
+            bool use_bias = true,
+            string kernel_initializer = null,
+            string bias_initializer = null,
+            string kernel_regularizer = null,
+            string bias_regularizer = null,
+            string activity_regularizer = null)
+                => new Conv2DTranspose(new Conv2DArgs
+                {
+                    Rank = 2,
+                    Filters = filters,
+                    KernelSize = (kernel_size == null) ? (5, 5) : kernel_size,
+                    Strides = strides == null ? (1, 1) : strides,
+                    Padding = output_padding,
+                    DataFormat = data_format,
+                    DilationRate = dilation_rate == null ? (1, 1) : dilation_rate,
+                    UseBias = use_bias,
+                    KernelInitializer = GetInitializerByName(kernel_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    Activation = keras.activations.GetActivationFromName(activation)
+                });
 
         /// <summary>
         /// Just your regular densely-connected NN layer.
@@ -246,6 +331,30 @@ namespace Tensorflow.Keras.Layers
             {
                 Units = units,
                 Activation = keras.activations.GetActivationFromAdaptor(activation),
+                KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                BiasInitializer = bias_initializer ?? (use_bias ? tf.zeros_initializer : null),
+                InputShape = input_shape,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                KernelConstraint = kernel_constraint,
+                BiasConstraint = bias_constraint
+            });
+        public ILayer Dense(int units,
+            string activation,
+            IInitializer kernel_initializer = null,
+            bool use_bias = true,
+            IInitializer bias_initializer = null,
+            Shape input_shape = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null,
+            Action kernel_constraint = null,
+            Action bias_constraint = null)
+            => new Dense(new DenseArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
                 KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                 BiasInitializer = bias_initializer ?? (use_bias ? tf.zeros_initializer : null),
                 InputShape = input_shape,
@@ -311,7 +420,42 @@ namespace Tensorflow.Keras.Layers
 
             return layer.Apply(inputs);
         }
+        public Tensor dense(Tensor inputs,
+            int units,
+            string activation,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            IRegularizer activity_regularizer = null,
+            Action kernel_constraint = null,
+            Action bias_constraint = null,
+            bool trainable = true,
+            string name = null,
+            bool? reuse = null)
+        {
+            if (bias_initializer == null)
+                bias_initializer = tf.zeros_initializer;
 
+            var layer = new Dense(new DenseArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
+                UseBias = use_bias,
+                BiasInitializer = bias_initializer,
+                KernelInitializer = kernel_initializer,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                KernelConstraint = kernel_constraint,
+                BiasConstraint = bias_constraint,
+                Trainable = trainable,
+                Name = name
+            });
+
+            return layer.Apply(inputs);
+        }
 
         public ILayer EinsumDense(string equation,
                 Shape output_shape,
@@ -330,6 +474,31 @@ namespace Tensorflow.Keras.Layers
                 OutputShape = output_shape,
                 BiasAxes = bias_axes,
                 Activation = keras.activations.GetActivationFromAdaptor(activation),
+                KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer,
+                ActivityRegularizer = activity_regularizer,
+                KernelConstraint = kernel_constraint,
+                BiasConstraint = bias_constraint
+            });
+        public ILayer EinsumDense(string equation,
+                Shape output_shape,
+                string bias_axes,
+                string activation,
+                IInitializer kernel_initializer = null,
+                IInitializer bias_initializer = null,
+                IRegularizer kernel_regularizer = null,
+                IRegularizer bias_regularizer = null,
+                IRegularizer activity_regularizer = null,
+                Action kernel_constraint = null,
+                Action bias_constraint = null) =>
+            new EinsumDense(new EinsumDenseArgs()
+            {
+                Equation = equation,
+                OutputShape = output_shape,
+                BiasAxes = bias_axes,
+                Activation = keras.activations.GetActivationFromName(activation),
                 KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                 BiasInitializer = bias_initializer ?? tf.zeros_initializer,
                 KernelRegularizer = kernel_regularizer,
@@ -654,6 +823,23 @@ namespace Tensorflow.Keras.Layers
                     ReturnSequences = return_sequences,
                     ReturnState = return_state
                 });
+        public ILayer SimpleRNN(int units,
+            string activation,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            bool return_sequences = false,
+            bool return_state = false)
+                => new SimpleRNN(new SimpleRNNArgs
+                {
+                    Units = units,
+                    Activation = activation == null ? keras.activations.GetActivationFromName(activation) : keras.activations.Tanh,
+                    KernelInitializer = GetInitializerByName(kernel_initializer),
+                    RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    ReturnSequences = return_sequences,
+                    ReturnState = return_state
+                });
 
         /// <summary>
         /// Long Short-Term Memory layer - Hochreiter 1997.
@@ -704,6 +890,41 @@ namespace Tensorflow.Keras.Layers
                     Units = units,
                     Activation = activation == null ? keras.activations.GetActivationFromAdaptor(activation) : keras.activations.Tanh,
                     RecurrentActivation = recurrent_activation == null ? keras.activations.GetActivationFromAdaptor(activation) : keras.activations.Sigmoid,
+                    KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                    RecurrentInitializer = recurrent_initializer ?? tf.orthogonal_initializer,
+                    BiasInitializer = bias_initializer ?? tf.zeros_initializer,
+                    Dropout = dropout,
+                    RecurrentDropout = recurrent_dropout,
+                    Implementation = implementation,
+                    ReturnSequences = return_sequences,
+                    ReturnState = return_state,
+                    GoBackwards = go_backwards,
+                    Stateful = stateful,
+                    TimeMajor = time_major,
+                    Unroll = unroll
+                });
+        public ILayer LSTM(int units,
+            string activation,
+            string recurrent_activation,
+            bool use_bias = true,
+            IInitializer kernel_initializer = null,
+            IInitializer recurrent_initializer = null,
+            IInitializer bias_initializer = null,
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool time_major = false,
+            bool unroll = false)
+                => new LSTM(new LSTMArgs
+                {
+                    Units = units,
+                    Activation = activation == null ? keras.activations.GetActivationFromName(activation) : keras.activations.Tanh,
+                    RecurrentActivation = recurrent_activation == null ? keras.activations.GetActivationFromName(activation) : keras.activations.Sigmoid,
                     KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                     RecurrentInitializer = recurrent_initializer ?? tf.orthogonal_initializer,
                     BiasInitializer = bias_initializer ?? tf.zeros_initializer,
