@@ -93,6 +93,13 @@ namespace Tensorflow.Keras
             }
         }
 
+        /// <summary>
+        /// Convert ActivationAdaptor to Activation.
+        /// If more than one properties of ActivationAdaptor are specified, the order of priority is `Name`, `Activation`, `Func`
+        /// </summary>
+        /// <param name="adaptor"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Activation GetActivationFromAdaptor(ActivationAdaptor adaptor)
         {
             if(adaptor == null)

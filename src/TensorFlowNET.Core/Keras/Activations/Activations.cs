@@ -26,42 +26,56 @@ namespace Tensorflow.Keras
             };
         }
     }
+
+    /// <summary>
+    /// The ActivationAdaptor is used to store string, Activation, and Func for Laysers Api to accept different types of activation parameters.
+    /// One of the properties must be specified while initializing.
+    /// </summary>
     public class ActivationAdaptor
     {
-        public string? Name { get; set; }
+        /// <summary>
+        /// The name of activaiton function, such as `tanh`, `sigmoid`.
+        /// </summary>
+        public string? Name { get; set; } = null;
 
-        public Activation? Activation { get; set; }
+        /// <summary>
+        /// The available Activation instance of activaiton function, such as keras.activations.Tanh, keras.activations.Sigmoid.
+        /// </summary>
+        public Activation? Activation { get; set; } = null;
 
-        public Func<Tensor, string, Tensor>? Func { get; set; }
+        /// <summary>
+        /// The Func definition of activation function, which can be customized.
+        /// </summary>
+        public Func<Tensor, string, Tensor>? Func { get; set; } = null;
+
+        public ActivationAdaptor(string name)
+        {
+            Name = name;
+        }
+
+        public ActivationAdaptor(Activation activation)
+        {
+            Activation = activation;
+        }
+
+        public ActivationAdaptor(Func<Tensor, string, Tensor> func)
+        {
+            Func = func;
+        }
 
         public static implicit operator ActivationAdaptor(string name)
         {
-            return new ActivationAdaptor()
-            {
-                Name = name,
-                Activation = null,
-                Func = null
-            };
+            return new ActivationAdaptor(name);
         }
 
         public static implicit operator ActivationAdaptor(Activation activation)
         {
-            return new ActivationAdaptor()
-            {
-                Name = null,
-                Activation = activation,
-                Func = null
-            };
+            return new ActivationAdaptor(activation);
         }
 
         public static implicit operator ActivationAdaptor(Func<Tensor, string, Tensor> func)
         {
-            return new ActivationAdaptor()
-            {
-                Name = null,
-                Activation = null,
-                Func = func
-            };
+            return new ActivationAdaptor(func);
         }
     }
 
