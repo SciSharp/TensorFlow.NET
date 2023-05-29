@@ -3,11 +3,12 @@ using System;
 using System.Reflection;
 using System.Runtime.Versioning;
 using Tensorflow.Keras.Saving.Common;
+using Tensorflow.Operations.Activation;
 
 namespace Tensorflow.Keras
 {
     [JsonConverter(typeof(CustomizedActivationJsonConverter))]
-    public class Activation
+    public class Activation : IActivation
     {
         public string Name { get; set; }
         /// <summary>
@@ -15,7 +16,21 @@ namespace Tensorflow.Keras
         /// </summary>
         public Func<Tensor, string, Tensor> ActivationFunction { get; set; }
 
-        public Tensor Apply(Tensor input, string name = null) => ActivationFunction(input, name);
+        /// <summary>
+        /// The implementation function of `IActivation`
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor Activate(Tensor x, string name = null) => ActivationFunction(x, name);
+
+        /// <summary>
+        /// The function for calling in LayersApi, an alias for `Activate`.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor Apply(Tensor input, string name = null) => Activate(input, name);
 
         public static implicit operator Activation(Func<Tensor, string, Tensor> func)
         {
@@ -28,23 +43,23 @@ namespace Tensorflow.Keras
     }
 
     /// <summary>
-    /// The ActivationAdapter is used to store string, Activation, and Func for Laysers Api to accept different types of activation parameters.
+    /// The `ActivationAdapter` is used to store the string, the `IActivation` implementation class, and the `Func` for LayersApi to accept different types of activation parameters.
     /// One of the properties must be specified while initializing.
     /// </summary>
     public class ActivationAdapter
     {
         /// <summary>
-        /// The name of activaiton function, such as `tanh`, `sigmoid`.
+        /// The name of the activaiton function, such as "tanh", "sigmoid".
         /// </summary>
         public string? Name { get; set; } = null;
 
         /// <summary>
-        /// The available Activation instance of activaiton function, such as keras.activations.Tanh, keras.activations.Sigmoid.
+        /// The available `IActivation` implementation class of the activaiton function, such as the `Activation` instances (keras.activations.Tanh, keras.activations.Sigmoid) and other `IActivation` implementation class.
         /// </summary>
-        public Activation? Activation { get; set; } = null;
+        public IActivation? Activation { get; set; } = null;
 
         /// <summary>
-        /// The Func definition of activation function, which can be customized.
+        /// The `Func` definition of the activation function, which can be customized.
         /// </summary>
         public Func<Tensor, string, Tensor>? Func { get; set; } = null;
 
@@ -53,7 +68,7 @@ namespace Tensorflow.Keras
             Name = name;
         }
 
-        public ActivationAdapter(Activation activation)
+        public ActivationAdapter(IActivation activation)
         {
             Activation = activation;
         }
@@ -83,7 +98,7 @@ namespace Tensorflow.Keras
     public interface IActivationsApi
     {
         Activation GetActivationFromName(string name);
-        
+
         Activation GetActivationFromAdapter(ActivationAdapter adapter);
 
         Activation Linear { get; }

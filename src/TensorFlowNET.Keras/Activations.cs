@@ -94,8 +94,8 @@ namespace Tensorflow.Keras
         }
 
         /// <summary>
-        /// Convert ActivationAdapter to Activation.
-        /// If more than one properties of ActivationAdapter are specified, the order of priority is `Name`, `Activation`, `Func`
+        /// Convert `ActivationAdapter` to `Activation`.
+        /// If more than one properties of `ActivationAdapter` are specified, the order of priority is `Name`, `Activation`, `Func`
         /// </summary>
         /// <param name="adapter"></param>
         /// <returns></returns>
@@ -112,7 +112,7 @@ namespace Tensorflow.Keras
             }
             else if(adapter.Activation != null)
             {
-                return adapter.Activation;
+                return (Activation) adapter.Activation;
             }
             else if(adapter.Func != null)
             {
