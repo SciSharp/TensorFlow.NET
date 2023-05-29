@@ -62,7 +62,17 @@ namespace Tensorflow.Keras.Engine
         {
             foreach(var layer in layers)
             {
+                // TODO(Rinne): remove it and completely fix issue 1084
+                if(layer is Sequential s)
+                {
+                    s.Layers.ForEach(x => ((Layer)x).enforce_layer_construction());
+                }
                 add(layer);
+                // TODO(Rinne): remove it and completely fix issue 1084
+                if (layer is Sequential s2)
+                {
+                    s2.Layers.ForEach(x => ((Layer)x).unset_layer_construction());
+                }
             }
         }
 
@@ -163,7 +173,7 @@ namespace Tensorflow.Keras.Engine
             Tensors layer_output = null;
             Tensors outputs = null;
             List<INode> created_nodes = new List<INode>();
-            foreach (var layer in args.Layers)
+            foreach (var layer in Layers)
             {
                 clear_previously_created_nodes(layer, _created_nodes);
                 layer_output = layer.Apply(layer_input);
