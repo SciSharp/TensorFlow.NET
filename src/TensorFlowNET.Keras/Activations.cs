@@ -94,37 +94,37 @@ namespace Tensorflow.Keras
         }
 
         /// <summary>
-        /// Convert ActivationAdaptor to Activation.
-        /// If more than one properties of ActivationAdaptor are specified, the order of priority is `Name`, `Activation`, `Func`
+        /// Convert ActivationAdapter to Activation.
+        /// If more than one properties of ActivationAdapter are specified, the order of priority is `Name`, `Activation`, `Func`
         /// </summary>
-        /// <param name="adaptor"></param>
+        /// <param name="adapter"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Activation GetActivationFromAdaptor(ActivationAdaptor adaptor)
+        public Activation GetActivationFromAdapter(ActivationAdapter adapter)
         {
-            if(adaptor == null)
+            if(adapter == null)
             {
                 return _linear;
             }
-            if(adaptor.Name != null)
+            if(adapter.Name != null)
             {
-                return GetActivationFromName(adaptor.Name);
+                return GetActivationFromName(adapter.Name);
             }
-            else if(adaptor.Activation != null)
+            else if(adapter.Activation != null)
             {
-                return adaptor.Activation;
+                return adapter.Activation;
             }
-            else if(adaptor.Func != null)
+            else if(adapter.Func != null)
             {
                 return new Activation()
                 {
-                    Name = adaptor.Func.GetMethodInfo().Name,
-                    ActivationFunction = adaptor.Func
+                    Name = adapter.Func.GetMethodInfo().Name,
+                    ActivationFunction = adapter.Func
                 };
             }
             else
             {
-                throw new Exception("Could not interpret activation adaptor");
+                throw new Exception("Could not interpret activation adapter");
             }
         }
     }

@@ -94,7 +94,7 @@ namespace Tensorflow.Keras.Layers
             string data_format = "channels_last",
             int dilation_rate = 1,
             int groups = 1,
-            ActivationAdaptor activation = null,
+            ActivationAdapter activation = null,
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
             string bias_initializer = "zeros")
@@ -109,7 +109,7 @@ namespace Tensorflow.Keras.Layers
                 DilationRate = dilation_rate,
                 Groups = groups,
                 UseBias = use_bias,
-                Activation = keras.activations.GetActivationFromAdaptor(activation),
+                Activation = keras.activations.GetActivationFromAdapter(activation),
                 KernelInitializer = GetInitializerByName(kernel_initializer),
                 BiasInitializer = GetInitializerByName(bias_initializer)
             });
@@ -167,7 +167,7 @@ namespace Tensorflow.Keras.Layers
             string data_format = null,
             Shape dilation_rate = null,
             int groups = 1,
-            ActivationAdaptor activation = null,
+            ActivationAdapter activation = null,
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer bias_initializer = null,
@@ -190,7 +190,7 @@ namespace Tensorflow.Keras.Layers
                     BiasInitializer = bias_initializer == null ? tf.zeros_initializer : bias_initializer,
                     BiasRegularizer = bias_regularizer,
                     ActivityRegularizer = activity_regularizer,
-                    Activation = keras.activations.GetActivationFromAdaptor(activation),
+                    Activation = keras.activations.GetActivationFromAdapter(activation),
                 });
         public ILayer Conv2D(int filters,
             Shape kernel_size = null,
@@ -248,7 +248,7 @@ namespace Tensorflow.Keras.Layers
             string output_padding = "valid",
             string data_format = null,
             Shape dilation_rate = null,
-            ActivationAdaptor activation = null,
+            ActivationAdapter activation = null,
             bool use_bias = true,
             string kernel_initializer = null,
             string bias_initializer = null,
@@ -267,7 +267,7 @@ namespace Tensorflow.Keras.Layers
                     UseBias = use_bias,
                     KernelInitializer = GetInitializerByName(kernel_initializer),
                     BiasInitializer = GetInitializerByName(bias_initializer),
-                    Activation = keras.activations.GetActivationFromAdaptor(activation)
+                    Activation = keras.activations.GetActivationFromAdapter(activation)
                 });
         public ILayer Conv2DTranspose(int filters,
             Shape kernel_size = null,
@@ -317,7 +317,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="bias_constraint">Constraint function for the bias.</param>
         /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
         public ILayer Dense(int units,
-            ActivationAdaptor activation = null,
+            ActivationAdapter activation = null,
             IInitializer kernel_initializer = null,
             bool use_bias = true,
             IInitializer bias_initializer = null,
@@ -330,7 +330,7 @@ namespace Tensorflow.Keras.Layers
             => new Dense(new DenseArgs
             {
                 Units = units,
-                Activation = keras.activations.GetActivationFromAdaptor(activation),
+                Activation = keras.activations.GetActivationFromAdapter(activation),
                 KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                 BiasInitializer = bias_initializer ?? (use_bias ? tf.zeros_initializer : null),
                 InputShape = input_shape,
@@ -386,7 +386,7 @@ namespace Tensorflow.Keras.Layers
         /// <returns></returns>
         public Tensor dense(Tensor inputs,
             int units,
-            ActivationAdaptor activation = null,
+            ActivationAdapter activation = null,
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer bias_initializer = null,
@@ -405,7 +405,7 @@ namespace Tensorflow.Keras.Layers
             var layer = new Dense(new DenseArgs
             {
                 Units = units,
-                Activation = keras.activations.GetActivationFromAdaptor(activation),
+                Activation = keras.activations.GetActivationFromAdapter(activation),
                 UseBias = use_bias,
                 BiasInitializer = bias_initializer,
                 KernelInitializer = kernel_initializer,
@@ -460,7 +460,7 @@ namespace Tensorflow.Keras.Layers
         public ILayer EinsumDense(string equation,
                 Shape output_shape,
                 string bias_axes,
-                ActivationAdaptor activation = null,
+                ActivationAdapter activation = null,
                 IInitializer kernel_initializer= null,
                 IInitializer bias_initializer= null,
                 IRegularizer kernel_regularizer= null,
@@ -473,7 +473,7 @@ namespace Tensorflow.Keras.Layers
                 Equation = equation,
                 OutputShape = output_shape,
                 BiasAxes = bias_axes,
-                Activation = keras.activations.GetActivationFromAdaptor(activation),
+                Activation = keras.activations.GetActivationFromAdapter(activation),
                 KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                 BiasInitializer = bias_initializer ?? tf.zeros_initializer,
                 KernelRegularizer = kernel_regularizer,
@@ -807,7 +807,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="activation">The name of the activation function to use. Default: hyperbolic tangent (tanh)..</param>
         /// <returns></returns>
         public ILayer SimpleRNN(int units,
-            ActivationAdaptor activation = null,
+            ActivationAdapter activation = null,
             string kernel_initializer = "glorot_uniform",
             string recurrent_initializer = "orthogonal",
             string bias_initializer = "zeros",
@@ -816,7 +816,7 @@ namespace Tensorflow.Keras.Layers
                 => new SimpleRNN(new SimpleRNNArgs
                 {
                     Units = units,
-                    Activation = activation == null ? keras.activations.GetActivationFromAdaptor(activation): keras.activations.Tanh,
+                    Activation = activation == null ? keras.activations.GetActivationFromAdapter(activation): keras.activations.Tanh,
                     KernelInitializer = GetInitializerByName(kernel_initializer),
                     RecurrentInitializer = GetInitializerByName(recurrent_initializer),
                     BiasInitializer = GetInitializerByName(bias_initializer),
@@ -869,8 +869,8 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <returns></returns>
         public ILayer LSTM(int units,
-            ActivationAdaptor activation = null,
-            ActivationAdaptor recurrent_activation = null,
+            ActivationAdapter activation = null,
+            ActivationAdapter recurrent_activation = null,
             bool use_bias = true,
             IInitializer kernel_initializer = null,
             IInitializer recurrent_initializer = null,
@@ -888,8 +888,8 @@ namespace Tensorflow.Keras.Layers
                 => new LSTM(new LSTMArgs
                 {
                     Units = units,
-                    Activation = activation == null ? keras.activations.GetActivationFromAdaptor(activation) : keras.activations.Tanh,
-                    RecurrentActivation = recurrent_activation == null ? keras.activations.GetActivationFromAdaptor(activation) : keras.activations.Sigmoid,
+                    Activation = activation == null ? keras.activations.GetActivationFromAdapter(activation) : keras.activations.Tanh,
+                    RecurrentActivation = recurrent_activation == null ? keras.activations.GetActivationFromAdapter(activation) : keras.activations.Sigmoid,
                     KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
                     RecurrentInitializer = recurrent_initializer ?? tf.orthogonal_initializer,
                     BiasInitializer = bias_initializer ?? tf.zeros_initializer,

@@ -28,10 +28,10 @@ namespace Tensorflow.Keras
     }
 
     /// <summary>
-    /// The ActivationAdaptor is used to store string, Activation, and Func for Laysers Api to accept different types of activation parameters.
+    /// The ActivationAdapter is used to store string, Activation, and Func for Laysers Api to accept different types of activation parameters.
     /// One of the properties must be specified while initializing.
     /// </summary>
-    public class ActivationAdaptor
+    public class ActivationAdapter
     {
         /// <summary>
         /// The name of activaiton function, such as `tanh`, `sigmoid`.
@@ -48,34 +48,34 @@ namespace Tensorflow.Keras
         /// </summary>
         public Func<Tensor, string, Tensor>? Func { get; set; } = null;
 
-        public ActivationAdaptor(string name)
+        public ActivationAdapter(string name)
         {
             Name = name;
         }
 
-        public ActivationAdaptor(Activation activation)
+        public ActivationAdapter(Activation activation)
         {
             Activation = activation;
         }
 
-        public ActivationAdaptor(Func<Tensor, string, Tensor> func)
+        public ActivationAdapter(Func<Tensor, string, Tensor> func)
         {
             Func = func;
         }
 
-        public static implicit operator ActivationAdaptor(string name)
+        public static implicit operator ActivationAdapter(string name)
         {
-            return new ActivationAdaptor(name);
+            return new ActivationAdapter(name);
         }
 
-        public static implicit operator ActivationAdaptor(Activation activation)
+        public static implicit operator ActivationAdapter(Activation activation)
         {
-            return new ActivationAdaptor(activation);
+            return new ActivationAdapter(activation);
         }
 
-        public static implicit operator ActivationAdaptor(Func<Tensor, string, Tensor> func)
+        public static implicit operator ActivationAdapter(Func<Tensor, string, Tensor> func)
         {
-            return new ActivationAdaptor(func);
+            return new ActivationAdapter(func);
         }
     }
 
@@ -84,7 +84,7 @@ namespace Tensorflow.Keras
     {
         Activation GetActivationFromName(string name);
         
-        Activation GetActivationFromAdaptor(ActivationAdaptor adaptor);
+        Activation GetActivationFromAdapter(ActivationAdapter adapter);
 
         Activation Linear { get; }
 
