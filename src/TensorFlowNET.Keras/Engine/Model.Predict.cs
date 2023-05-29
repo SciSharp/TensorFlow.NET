@@ -99,7 +99,8 @@ namespace Tensorflow.Keras.Engine
                     }
                     else
                     {
-                        batch_outputs = tf.concat(new Tensor[] { batch_outputs, tmp_batch_outputs[0] }, axis: 0);
+                        for (int i = 0; i < batch_outputs.Length; i++)
+                            batch_outputs[i] = tf.concat(new Tensor[] { batch_outputs[i], tmp_batch_outputs[i] }, axis: 0);
                     }
 
                     var end_step = step + data_handler.StepIncrement;
@@ -116,7 +117,7 @@ namespace Tensorflow.Keras.Engine
         {
             var data = iterator.next();
             var outputs = predict_step(data);
-            tf_with(ops.control_dependencies(new object[0]), ctl => _predict_counter.assign_add(1));
+            tf_with(ops.control_dependencies(Array.Empty<object>()), ctl => _predict_counter.assign_add(1));
             return outputs;
         }
 
