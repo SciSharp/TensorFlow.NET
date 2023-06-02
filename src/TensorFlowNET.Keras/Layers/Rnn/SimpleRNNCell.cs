@@ -68,8 +68,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             Tensor h;
             var ranks = inputs.rank;
-            //if (dp_mask != null)
-            if(false)
+            if (dp_mask != null)
             {
                 if (ranks > 2)
                 {
