@@ -143,7 +143,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             if (!_has_explicit_input_shape)
             {
@@ -154,10 +154,10 @@ namespace Tensorflow.Keras.Engine
             {
                 if (!built)
                     _init_graph_network(this.inputs, outputs);
-                return base.Call(inputs, state, training);
+                return base.Call(inputs, initial_state, training);
             }
 
-            return base.Call(inputs, state, training);
+            return base.Call(inputs, initial_state, training);
         }
 
         void _build_graph_network_for_inferred_shape(Shape input_shape, TF_DataType input_dtype)

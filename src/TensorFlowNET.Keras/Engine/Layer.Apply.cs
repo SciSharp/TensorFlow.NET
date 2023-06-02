@@ -30,7 +30,7 @@ namespace Tensorflow.Keras.Engine
             if (!built)
                 MaybeBuild(inputs);
 
-            var outputs = Call(inputs, state: state, training: training);
+            var outputs = Call(inputs, initial_state: state, training: training);
 
             // memory leak
             // _set_connectivity_metadata_(inputs, outputs);

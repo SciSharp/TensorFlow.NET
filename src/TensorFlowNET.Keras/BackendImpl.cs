@@ -614,331 +614,331 @@ namespace Tensorflow.Keras
                     return nest.pack_sequence_as(inputs, inp);
                 }
 
-                if (mask != null)
-                {
-                    var mask_list = tf.unstack(mask);
-                    if (go_backwards)
-                    {
-                        mask_list.Reverse();
-                    }
+                //if (mask != null)
+                //{
+                //    var mask_list = tf.unstack(mask);
+                //    if (go_backwards)
+                //    {
+                //        mask_list.Reverse();
+                //    }
 
-                    for (int i = 0; i < time_steps; i++)
-                    {
-                        // TODO(Wanglongzhi2001),deal with _get_input_tensor
-                        var inp = _get_input_tensor(i);
-                        var mask_t = mask_list[i];
-                        // TODO
-                        var (output, newStates) = step_function((Tensors)inp, new Tensors { states, constants });
+                //    for (int i = 0; i < time_steps; i++)
+                //    {
+                //        // TODO(Wanglongzhi2001),deal with _get_input_tensor
+                //        var inp = _get_input_tensor(i);
+                //        var mask_t = mask_list[i];
+                //        // TODO
+                //        var (output, newStates) = step_function((Tensors)inp, new Tensors { states, constants });
 
-                        var tiled_mask_t = _expand_mask(mask_t, output);
+                //        var tiled_mask_t = _expand_mask(mask_t, output);
 
-                        Tensors prev_output;
-                        if (successive_outputs == null)
-                        {
-                            prev_output = tf.zeros_like(output);
-                        }
-                        else
-                        {
-                            prev_output = successive_outputs[successive_outputs.Length - 1];
-                        }
+                //        Tensors prev_output;
+                //        if (successive_outputs == null)
+                //        {
+                //            prev_output = tf.zeros_like(output);
+                //        }
+                //        else
+                //        {
+                //            prev_output = successive_outputs[successive_outputs.Length - 1];
+                //        }
 
-                        output = tf.where(tiled_mask_t, output, prev_output);
+                //        output = tf.where(tiled_mask_t, output, prev_output);
 
-                        //var flat_states = nest.flatten(states);
-                        //var flat_new_states = nest.flatten(newStates);
-                        var flat_states = states.ToList();
-                        var flat_new_states = newStates.ToList();
+                //        //var flat_states = nest.flatten(states);
+                //        //var flat_new_states = nest.flatten(newStates);
+                //        var flat_states = states.ToList();
+                //        var flat_new_states = newStates.ToList();
 
-                        var tiledMaskT = flat_states
-                            .Select(s => _expand_mask(mask_t, s))
-                            .ToArray();
-                        var tuple = Tuple.Create(tiledMaskT);
+                //        var tiledMaskT = flat_states
+                //            .Select(s => _expand_mask(mask_t, s))
+                //            .ToArray();
+                //        var tuple = Tuple.Create(tiledMaskT);
 
-                        List<Tensor> flat_final_states = new List<Tensor>();
-                        foreach (var (m, s, ps) in Enumerable.Zip(tiled_mask_t, flat_new_states, flat_states))
-                        {
-                            flat_final_states.Add(tf.where(m, s, ps));
-                        }
+                //        List<Tensor> flat_final_states = new List<Tensor>();
+                //        foreach (var (m, s, ps) in Enumerable.Zip(tiled_mask_t, flat_new_states, flat_states))
+                //        {
+                //            flat_final_states.Add(tf.where(m, s, ps));
+                //        }
 
-                        states = (Tensors)nest.pack_sequence_as(states, flat_final_states);
-                        if (return_all_outputs)
-                        {
-                            successive_outputs.Add(output);
-                            successive_states.Add(states);
-                        }
-                        else
-                        {
-                            successive_outputs = new Tensors { output };
-                            successive_states = new Tensors { states };
-                        }
+                //        states = (Tensors)nest.pack_sequence_as(states, flat_final_states);
+                //        if (return_all_outputs)
+                //        {
+                //            successive_outputs.Add(output);
+                //            successive_states.Add(states);
+                //        }
+                //        else
+                //        {
+                //            successive_outputs = new Tensors { output };
+                //            successive_states = new Tensors { states };
+                //        }
 
-                    }
-                    last_output = successive_outputs[successive_outputs.Length - 1];
-                    new_states = successive_states[successive_states.Length - 1];
-                    outputs = tf.stack(successive_outputs);
+                //    }
+                //    last_output = successive_outputs[successive_outputs.Length - 1];
+                //    new_states = successive_states[successive_states.Length - 1];
+                //    outputs = tf.stack(successive_outputs);
 
-                    if (zero_output_for_mask)
-                    {
-                        last_output = tf.where(_expand_mask(mask_list[mask_list.Length - 1], last_output), last_output, tf.zeros_like(last_output));
-                        outputs = tf.where(_expand_mask(mask, outputs, fixed_dim: 2), outputs, tf.zeros_like(outputs));
-                    }
-                    else // mask is null
-                    {
-                        for (int i = 0; i < time_steps; i++)
-                        {
-                            var inp = _get_input_tensor(i);
-                            var (output, newStates) = step_function((Tensors)inp, new Tensors { states, constants });
-                            states = newStates;
+                //    if (zero_output_for_mask)
+                //    {
+                //        last_output = tf.where(_expand_mask(mask_list[mask_list.Length - 1], last_output), last_output, tf.zeros_like(last_output));
+                //        outputs = tf.where(_expand_mask(mask, outputs, fixed_dim: 2), outputs, tf.zeros_like(outputs));
+                //    }
+                //    else // mask is null
+                //    {
+                //        for (int i = 0; i < time_steps; i++)
+                //        {
+                //            var inp = _get_input_tensor(i);
+                //            var (output, newStates) = step_function((Tensors)inp, new Tensors { states, constants });
+                //            states = newStates;
 
-                            if (return_all_outputs)
-                            {
-                                successive_outputs.Add(output);
-                                successive_states.Add(newStates);
-                            }
-                            else
-                            {
-                                successive_outputs = new Tensors { output };
-                                successive_states = new Tensors { newStates };
-                            }
-                        }
-                        last_output = successive_outputs[successive_outputs.Length - 1];
-                        new_states = successive_states[successive_states.Length - 1];
-                        outputs = tf.stack(successive_outputs);
-                    }
-                }
+                //            if (return_all_outputs)
+                //            {
+                //                successive_outputs.Add(output);
+                //                successive_states.Add(newStates);
+                //            }
+                //            else
+                //            {
+                //                successive_outputs = new Tensors { output };
+                //                successive_states = new Tensors { newStates };
+                //            }
+                //        }
+                //        last_output = successive_outputs[successive_outputs.Length - 1];
+                //        new_states = successive_states[successive_states.Length - 1];
+                //        outputs = tf.stack(successive_outputs);
+                //    }
+                //}
             }
-            else // unroll == false
-            {
-                var states = initial_states;
-                //  Create input tensor array, if the inputs is nested tensors, then it
-                //  will be flattened first, and tensor array will be created one per
-                //  flattened tensor.
-                var input_ta = new List<TensorArray>();
-                for (int i = 0; i < flatted_inptus.Count; i++)
-                {
-                    input_ta.Add(tf.TensorArray(dtype: flatted_inptus[i].dtype, size: time_step_t));
-                }
+            //else // unroll == false
+            //{
+            //    var states = initial_states;
+            //    //  Create input tensor array, if the inputs is nested tensors, then it
+            //    //  will be flattened first, and tensor array will be created one per
+            //    //  flattened tensor.
+            //    var input_ta = new List<TensorArray>();
+            //    for (int i = 0; i < flatted_inptus.Count; i++)
+            //    {
+            //        input_ta.Add(tf.TensorArray(dtype: flatted_inptus[i].dtype, size: time_step_t));
+            //    }
 
-                // Get the time(0) input and compute the output for that, the output will
-                // be used to determine the dtype of output tensor array. Don't read from
-                // input_ta due to TensorArray clear_after_read default to True.
-                var inps = new Tensors();
-                foreach (var inp in flatted_inptus)
-                {
-                    inps.Add(inp[0]);
-                }
-                var input_time_zero = nest.pack_sequence_as(inputs, inps);
+            //    // Get the time(0) input and compute the output for that, the output will
+            //    // be used to determine the dtype of output tensor array. Don't read from
+            //    // input_ta due to TensorArray clear_after_read default to True.
+            //    var inps = new Tensors();
+            //    foreach (var inp in flatted_inptus)
+            //    {
+            //        inps.Add(inp[0]);
+            //    }
+            //    var input_time_zero = nest.pack_sequence_as(inputs, inps);
 
-                // output_time_zero is used to determine the cell output shape and its
-                // dtype.  the value is discarded.
-                (output_time_zero, _) = step_function((Tensor)input_time_zero, new Tensors { initial_states, constants });
+            //    // output_time_zero is used to determine the cell output shape and its
+            //    // dtype.  the value is discarded.
+            //    (output_time_zero, _) = step_function((Tensor)input_time_zero, new Tensors { initial_states, constants });
 
-                var output_ta_size = return_all_outputs ? time_step_t : tf.constant(1);
-                var output_ta = new List<TensorArray>();
-                for (int i = 0; i < output_time_zero.ToList().Count; i++)
-                {
-                    var Out = output_time_zero.ToList()[i];
-                    output_ta.Add(tf.TensorArray(dtype: Out.dtype, size: output_ta_size, element_shape: Out.shape));
-                }
+            //    var output_ta_size = return_all_outputs ? time_step_t : tf.constant(1);
+            //    var output_ta = new List<TensorArray>();
+            //    for (int i = 0; i < output_time_zero.ToList().Count; i++)
+            //    {
+            //        var Out = output_time_zero.ToList()[i];
+            //        output_ta.Add(tf.TensorArray(dtype: Out.dtype, size: output_ta_size, element_shape: Out.shape));
+            //    }
 
-                var time = tf.constant(0, dtype: TF_DataType.TF_INT32, name: "time");
-
-
-
-                Func<Tensor, Tensor>? masking_fn;
-                Func<Tensors, Tensors, Tensors, Tensors>? compute_masked_output = null;
-                if (mask != null)
-                {
-                    if (go_backwards)
-                    {
-                        mask = tf.reverse(mask, axis: new[] { 0 });
-                    }
-                    var mask_ta = tf.TensorArray(dtype: TF_DataType.TF_BOOL, size: time_step_t);
-                    mask_ta = mask_ta.unstack(mask);
-
-                    masking_fn = (time) =>
-                    {
-                        return mask_ta.read(time);
-                    };
-
-                    compute_masked_output = (mask_t, flat_out, flat_mask) =>
-                    {
-                        var tiled_mask_t = new Tensors();
-                        foreach (var o in flat_out)
-                        {
-                            tiled_mask_t.Add(_expand_mask(mask_t, o, fixed_dim: mask_t.rank));
-                        }
-
-                        Tensors res = new Tensors();
-                        foreach (var (m, o, fm) in Enumerable.Zip(tiled_mask_t, flat_out, flat_mask))
-                        {
-                            res.Add(tf.where(m, o, fm));
-                        }
-                        return res;
-                    };
-                }
-                // TODO(Wanglongzhi2001), what the input_length's type should be(an integer or a single tensor)?
-                else if (input_length is Tensor)
-                {
-                    if (go_backwards)
-                    {
-                        var max_len = tf.reduce_max(input_length, axis: 0);
-                        var rev_input_length = tf.subtract(max_len - 1, input_length);
-
-                        masking_fn = (time) =>
-                        {
-                            return tf.less(rev_input_length, time);
-                        };
-                    }
-                    else
-                    {
-                        masking_fn = (time) =>
-                        {
-                            return tf.greater(input_length, time);
-                        };
-                    }
-
-                    compute_masked_output = (mask_t, flat_out, flat_mask) =>
-                    {
-                        var res = new List<Tensor>();
-                        foreach (var (o, zo) in zip(flat_out, flat_mask))
-                        {
-                            res.Add(tf.where(mask_t, o, zo));
-                        }
-                        return res;
-                    };
-                }
-                else
-                {
-                    masking_fn = null;
-                }
-
-
-                if (masking_fn != null)
-                {
-                    // Mask for the T output will be base on the output of T - 1. In the
-                    // case T = 0, a zero filled tensor will be used.
-                    var flat_zero_output = new Tensors();
-                    foreach (var o in nest.flatten(output_time_zero))
-                    {
-                        flat_zero_output.Add(tf.zeros_like(o));
-                    }
-
-
-                    (Tensor, List<TensorArray>, Tensors, Tensors) _step(Tensor time, List<TensorArray> output_ta_t, Tensors prev_output, Tensors states)
-                    {
-                        /*
-                         RNN step function.
-                         Args:
-                            time: Current timestep value.
-                            output_ta_t: TensorArray.
-                            prev_output: tuple of outputs from time - 1.
-                            *states: List of states.
-                         Returns:
-                            Tuple(todo): `(time + 1, output_ta_t, output) + tuple(new_states)`                          
-                         */
-
-                        var current_input = input_ta.Select(x => x.read(time)).ToList();
-                        // maybe set shape
-                        // TODO(Wanglongzhi2001),deal with nest.pack_sequence_as's return type
-                        current_input = (List<Tensor>)nest.pack_sequence_as(inputs, current_input);
-                        var mask_t = masking_fn(time);
-                        var (output, new_states) = step_function(current_input, new Tensors { states, constants });
-                        // mask output
-                        //var flat_output = nest.flatten(output);
-                        var flat_output = output.ToList();
-
-                        var flat_mask_output = zero_output_for_mask ? flat_zero_output : prev_output.ToList();
-
-                        // TODO(Wanglongzhi2001),deal with compute_masked_output's third parameter's type
-                        var flat_new_output = compute_masked_output(mask_t, flat_output, flat_mask_output);
-
-                        // mask states
-                        var flat_state = states.ToList();
-                        var flat_new_state = new_states.ToList();
-
-                        foreach (var (state, new_state) in zip(flat_state, flat_new_state))
-                        {
-                            if (new_state is Tensor)
-                            {
-                                new_state.set_shape(state.shape);
-                            }
-                        }
-
-                        var flat_final_state = compute_masked_output(mask_t, flat_new_state, flat_state);
-                        new_states = (Tensors)nest.pack_sequence_as(new_states, flat_final_state);
-
-                        var ta_index_to_write = return_all_outputs ? time : tf.constant(0);
-                        var Output_ta_t = new List<TensorArray>();
-                        // TODO(Wanglongzhi2001),deal with zip output_ta_t
-                        foreach (var (ta, Out) in zip(output_ta_t, flat_new_output))
-                        {
-                            Output_ta_t.Add(ta.write(ta_index_to_write, Out));
-                        }
+            //    var time = tf.constant(0, dtype: TF_DataType.TF_INT32, name: "time");
 
 
 
-                        //new_states = (Tensors)nest.pack_sequence_as(initial_states, flat_new_state);
+            //    Func<Tensor, Tensor>? masking_fn;
+            //    Func<Tensors, Tensors, Tensors, Tensors>? compute_masked_output = null;
+            //    if (mask != null)
+            //    {
+            //        if (go_backwards)
+            //        {
+            //            mask = tf.reverse(mask, axis: new[] { 0 });
+            //        }
+            //        var mask_ta = tf.TensorArray(dtype: TF_DataType.TF_BOOL, size: time_step_t);
+            //        mask_ta = mask_ta.unstack(mask);
+
+            //        masking_fn = (time) =>
+            //        {
+            //            return mask_ta.read(time);
+            //        };
+
+            //        compute_masked_output = (mask_t, flat_out, flat_mask) =>
+            //        {
+            //            var tiled_mask_t = new Tensors();
+            //            foreach (var o in flat_out)
+            //            {
+            //                tiled_mask_t.Add(_expand_mask(mask_t, o, fixed_dim: mask_t.rank));
+            //            }
+
+            //            Tensors res = new Tensors();
+            //            foreach (var (m, o, fm) in Enumerable.Zip(tiled_mask_t, flat_out, flat_mask))
+            //            {
+            //                res.Add(tf.where(m, o, fm));
+            //            }
+            //            return res;
+            //        };
+            //    }
+            //    // TODO(Wanglongzhi2001), what the input_length's type should be(an integer or a single tensor)?
+            //    else if (input_length is Tensor)
+            //    {
+            //        if (go_backwards)
+            //        {
+            //            var max_len = tf.reduce_max(input_length, axis: 0);
+            //            var rev_input_length = tf.subtract(max_len - 1, input_length);
+
+            //            masking_fn = (time) =>
+            //            {
+            //                return tf.less(rev_input_length, time);
+            //            };
+            //        }
+            //        else
+            //        {
+            //            masking_fn = (time) =>
+            //            {
+            //                return tf.greater(input_length, time);
+            //            };
+            //        }
+
+            //        compute_masked_output = (mask_t, flat_out, flat_mask) =>
+            //        {
+            //            var res = new List<Tensor>();
+            //            foreach (var (o, zo) in zip(flat_out, flat_mask))
+            //            {
+            //                res.Add(tf.where(mask_t, o, zo));
+            //            }
+            //            return res;
+            //        };
+            //    }
+            //    else
+            //    {
+            //        masking_fn = null;
+            //    }
 
 
-                        return (time + 1, Output_ta_t, flat_new_output, new_states);
+            //    if (masking_fn != null)
+            //    {
+            //        // Mask for the T output will be base on the output of T - 1. In the
+            //        // case T = 0, a zero filled tensor will be used.
+            //        var flat_zero_output = new Tensors();
+            //        foreach (var o in nest.flatten(output_time_zero))
+            //        {
+            //            flat_zero_output.Add(tf.zeros_like(o));
+            //        }
 
-                    }
-                    Func<Tensor, Tensor> cond = (time) => (time < time_step_t);
 
-                    var final_outputs = tf.while_loop(cond: cond, body: _step, loop_vars: (time, output_ta, flat_zero_output, states));
-                    new_states = final_outputs.Item4;
-                    output_ta = final_outputs.Item2;
+            //        (Tensor, List<TensorArray>, Tensors, Tensors) _step(Tensor time, List<TensorArray> output_ta_t, Tensors prev_output, Tensors states)
+            //        {
+            //            /*
+            //             RNN step function.
+            //             Args:
+            //                time: Current timestep value.
+            //                output_ta_t: TensorArray.
+            //                prev_output: tuple of outputs from time - 1.
+            //                *states: List of states.
+            //             Returns:
+            //                Tuple(todo): `(time + 1, output_ta_t, output) + tuple(new_states)`                          
+            //             */
 
-                }
-                else
-                {
-                    (Tensor, List<TensorArray>, Tensors) _step(Tensor time, List<TensorArray> output_ta_t, Tensors states)
-                    {
-                        var current_input = input_ta.Select(x => x.read(time)).ToList();
-                        // maybe set shape
-                        // TODO(Wanglongzhi2001),deal with nest.pack_sequence_as's return type
-                        current_input = (List<Tensor>)nest.pack_sequence_as(inputs, current_input);
-                        var (output, new_states) = step_function(current_input, new Tensors { states, constants });
-                        var flat_state = states.ToList();
-                        var flat_new_state = new_states.ToList();
-                        foreach (var (state, new_state) in zip(flat_state, flat_new_state))
-                        {
-                            if (new_state is Tensor)
-                            {
-                                new_state.set_shape(state.shape);
-                            }
-                        }
-                        var flat_output = output.ToList();
-                        var ta_index_to_write = return_all_outputs ? time : tf.constant(0);
-                        var Output_ta_t = new List<TensorArray>();
-                        foreach (var (ta, out_) in zip(output_ta_t, flat_output))
-                        {
-                            Output_ta_t.Add(ta.write(ta_index_to_write, out_));
-                        }
+            //            var current_input = input_ta.Select(x => x.read(time)).ToList();
+            //            // maybe set shape
+            //            // TODO(Wanglongzhi2001),deal with nest.pack_sequence_as's return type
+            //            current_input = (List<Tensor>)nest.pack_sequence_as(inputs, current_input);
+            //            var mask_t = masking_fn(time);
+            //            var (output, new_states) = step_function(current_input, new Tensors { states, constants });
+            //            // mask output
+            //            //var flat_output = nest.flatten(output);
+            //            var flat_output = output.ToList();
 
-                        new_states = (Tensors)nest.pack_sequence_as(initial_states, flat_new_state);
-                        return (time + 1, Output_ta_t, new_states);
-                    }
-                    Func<Tensor, Tensor> cond = (time) => (time < time_step_t);
-                    var final_outputs = tf.while_loop(cond: cond, body: _step, loop_vars: (time, output_ta, states));
-                    new_states = final_outputs.Item3;
-                    output_ta = final_outputs.Item2;
+            //            var flat_mask_output = zero_output_for_mask ? flat_zero_output : prev_output.ToList();
 
-                }
-                //Tensors outputs = new Tensors();
-                foreach (var o in output_ta)
-                {
-                    outputs.Add(o.stack());
-                }
-                foreach (var o in outputs)
-                {
-                    last_output.Add(o[-1]);
-                }
-                outputs = (Tensors)nest.pack_sequence_as(output_time_zero, outputs);
-                last_output = (Tensors)nest.pack_sequence_as(output_time_zero, last_output);
+            //            // TODO(Wanglongzhi2001),deal with compute_masked_output's third parameter's type
+            //            var flat_new_output = compute_masked_output(mask_t, flat_output, flat_mask_output);
 
-            }
+            //            // mask states
+            //            var flat_state = states.ToList();
+            //            var flat_new_state = new_states.ToList();
+
+            //            foreach (var (state, new_state) in zip(flat_state, flat_new_state))
+            //            {
+            //                if (new_state is Tensor)
+            //                {
+            //                    new_state.set_shape(state.shape);
+            //                }
+            //            }
+
+            //            var flat_final_state = compute_masked_output(mask_t, flat_new_state, flat_state);
+            //            new_states = (Tensors)nest.pack_sequence_as(new_states, flat_final_state);
+
+            //            var ta_index_to_write = return_all_outputs ? time : tf.constant(0);
+            //            var Output_ta_t = new List<TensorArray>();
+            //            // TODO(Wanglongzhi2001),deal with zip output_ta_t
+            //            foreach (var (ta, Out) in zip(output_ta_t, flat_new_output))
+            //            {
+            //                Output_ta_t.Add(ta.write(ta_index_to_write, Out));
+            //            }
+
+
+
+            //            //new_states = (Tensors)nest.pack_sequence_as(initial_states, flat_new_state);
+
+
+            //            return (time + 1, Output_ta_t, flat_new_output, new_states);
+
+            //        }
+            //        Func<Tensor, Tensor> cond = (time) => (time < time_step_t);
+
+            //        var final_outputs = tf.while_loop(cond: cond, body: _step, loop_vars: (time, output_ta, flat_zero_output, states));
+            //        new_states = final_outputs.Item4;
+            //        output_ta = final_outputs.Item2;
+
+            //    }
+            //    else
+            //    {
+            //        (Tensor, List<TensorArray>, Tensors) _step(Tensor time, List<TensorArray> output_ta_t, Tensors states)
+            //        {
+            //            var current_input = input_ta.Select(x => x.read(time)).ToList();
+            //            // maybe set shape
+            //            // TODO(Wanglongzhi2001),deal with nest.pack_sequence_as's return type
+            //            current_input = (List<Tensor>)nest.pack_sequence_as(inputs, current_input);
+            //            var (output, new_states) = step_function(current_input, new Tensors { states, constants });
+            //            var flat_state = states.ToList();
+            //            var flat_new_state = new_states.ToList();
+            //            foreach (var (state, new_state) in zip(flat_state, flat_new_state))
+            //            {
+            //                if (new_state is Tensor)
+            //                {
+            //                    new_state.set_shape(state.shape);
+            //                }
+            //            }
+            //            var flat_output = output.ToList();
+            //            var ta_index_to_write = return_all_outputs ? time : tf.constant(0);
+            //            var Output_ta_t = new List<TensorArray>();
+            //            foreach (var (ta, out_) in zip(output_ta_t, flat_output))
+            //            {
+            //                Output_ta_t.Add(ta.write(ta_index_to_write, out_));
+            //            }
+
+            //            new_states = (Tensors)nest.pack_sequence_as(initial_states, flat_new_state);
+            //            return (time + 1, Output_ta_t, new_states);
+            //        }
+            //        Func<Tensor, Tensor> cond = (time) => (time < time_step_t);
+            //        var final_outputs = tf.while_loop(cond: cond, body: _step, loop_vars: (time, output_ta, states));
+            //        new_states = final_outputs.Item3;
+            //        output_ta = final_outputs.Item2;
+
+            //    }
+            //    //Tensors outputs = new Tensors();
+            //    foreach (var o in output_ta)
+            //    {
+            //        outputs.Add(o.stack());
+            //    }
+            //    foreach (var o in outputs)
+            //    {
+            //        last_output.Add(o[-1]);
+            //    }
+            //    outputs = (Tensors)nest.pack_sequence_as(output_time_zero, outputs);
+            //    last_output = (Tensors)nest.pack_sequence_as(output_time_zero, last_output);
+
+            //}
 
             Func<Tensor, Tensor> set_shape;
             set_shape = (output_) =>
@@ -967,6 +967,28 @@ namespace Tensorflow.Keras
             }
             return (last_output, Outputs, new_states);
 
+        }
+
+        // Multiplies 2 tensors (and/or variables) and returns a tensor.
+        // This operation corresponds to `numpy.dot(a, b, out=None)`.
+        public Tensor Dot(Tensor x, Tensor y)
+        {
+            //if (x.ndim != 1 && (x.ndim > 2 || y.ndim > 2))
+            //{
+            //    var x_shape = new List<int>();
+            //    foreach (var (i,s) in zip(x.shape.as_int_list(), tf.unstack(tf.shape(x))))
+            //    {
+            //        if (i != 0)
+            //        {
+            //            x_shape.append(i);
+            //        }
+            //        else
+            //        {
+            //            x_shape.append(s);
+            //        }
+            //    }
+            //}
+            throw new NotImplementedException();
         }
     }
 }

@@ -144,6 +144,17 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Assert.AreEqual(expected_output, actual_output);
         }
 
+        [TestMethod]
+        public void SimpleRNNCell()
+        {
+            var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
+            var x = tf.random.normal(new Shape(4, 100));
+            var cell = keras.layers.SimpleRNNCell(64);
+            var (y, h1) = cell.Apply(inputs:x, state:h0);
+            Assert.AreEqual((4, 64), y.shape);
+            Assert.AreEqual((4, 64), h1[0].shape);
+        }
+
         [TestMethod, Ignore("WIP")]
         public void SimpleRNN()
         {

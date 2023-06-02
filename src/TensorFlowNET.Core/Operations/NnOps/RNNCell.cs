@@ -89,6 +89,8 @@ namespace Tensorflow
         protected bool built = false;
         public bool Built => built;
 
+        StateSizeWrapper ILayer.state_size => throw new NotImplementedException();
+
         public RnnCell(bool trainable = true,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,
@@ -171,6 +173,11 @@ namespace Tensorflow
         public Trackable GetTrackable() { throw new NotImplementedException(); }
 
         public void adapt(Tensor data, int? batch_size = null, int? steps = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             throw new NotImplementedException();
         }

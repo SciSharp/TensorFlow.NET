@@ -325,7 +325,7 @@ namespace Tensorflow.Keras.Engine
             nodes_in_decreasing_depth.append(node);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             var tensor_dict = new Dictionary<long, Queue<Tensor>>();
             // map input values

@@ -200,6 +200,14 @@ namespace Tensorflow.Keras.Layers
             bool return_sequences = false,
             bool return_state = false);
 
+        public ILayer SimpleRNNCell(
+            int units,
+            string activation = "tanh",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros");
+
         public ILayer Subtract();
     }
 }
