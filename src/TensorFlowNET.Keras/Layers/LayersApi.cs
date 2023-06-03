@@ -715,7 +715,9 @@ namespace Tensorflow.Keras.Layers
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
             string recurrent_initializer = "orthogonal",
-            string bias_initializer = "zeros")
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f)
                 => new SimpleRNNCell(new SimpleRNNArgs
                 {
                     Units = units,
@@ -723,6 +725,8 @@ namespace Tensorflow.Keras.Layers
                     UseBias = use_bias,
                     KernelInitializer = GetInitializerByName(kernel_initializer),
                     RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                    Dropout = dropout,
+                    RecurrentDropout = recurrent_dropout
                 }
                 );
 

@@ -147,13 +147,15 @@ namespace Tensorflow.Keras.UnitTest.Layers
         [TestMethod]
         public void SimpleRNNCell()
         {
+            var cell = keras.layers.SimpleRNNCell(64, dropout:0.5f, recurrent_dropout:0.5f);
             var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
-            var x = tf.random.normal(new Shape(4, 100));
-            var cell = keras.layers.SimpleRNNCell(64);
-            var (y, h1) = cell.Apply(inputs:x, state:h0);
+            var x = tf.random.normal((4, 100));
+            var (y, h1) = cell.Apply(inputs: x, state: h0);
+            // TODO(Wanglongzhi2001)，因为SimpleRNNCell需要返回一个Tensor和一个Tensors，只用一个Tensors的话
+            // hold不住，所以自行在外面将h强制转换成Tensors
+            var h2 = (Tensors)h1;
             Assert.AreEqual((4, 64), y.shape);
-            // this test now cannot pass, need to deal with SimpleRNNCell's Call method
-            //Assert.AreEqual((4, 64), h1[0].shape);
+            Assert.AreEqual((4, 64), h2[0].shape);
         }
 
         [TestMethod, Ignore("WIP")]

@@ -13,9 +13,10 @@ namespace Tensorflow.Keras.Layers.Rnn
         public float dropout;
         public float recurrent_dropout;
         // Get the dropout mask for RNN cell's input.
-        public Tensors get_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
+        public Tensors? get_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
         {
-
+            if (dropout == 0f)
+                return null;
             return _generate_dropout_mask(
                 tf.ones_like(input),
                 dropout,
@@ -24,8 +25,10 @@ namespace Tensorflow.Keras.Layers.Rnn
         }
 
         // Get the recurrent dropout mask for RNN cell.
-        public Tensors get_recurrent_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
+        public Tensors? get_recurrent_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
         {
+            if (dropout == 0f)
+                return null;
             return _generate_dropout_mask(
                 tf.ones_like(input),
                 recurrent_dropout,

@@ -206,7 +206,9 @@ namespace Tensorflow.Keras.Layers
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
             string recurrent_initializer = "orthogonal",
-            string bias_initializer = "zeros");
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f);
 
         public ILayer Subtract();
     }
