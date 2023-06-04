@@ -27,7 +27,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="use_multiprocessing"></param>
         /// <param name="return_dict"></param>
         /// <param name="is_val"></param>
-        public Dictionary<string, float> evaluate(NDArray x, NDArray y,
+        public Dictionary<string, float> evaluate(Tensor x, Tensor y,
             int batch_size = -1,
             int verbose = 1,
             int steps = -1,
@@ -91,7 +91,7 @@ namespace Tensorflow.Keras.Engine
             return results;
         }
 
-        public Dictionary<string, float> evaluate(IEnumerable<Tensor> x, NDArray y, int verbose = 1, bool is_val = false)
+        public Dictionary<string, float> evaluate(IEnumerable<Tensor> x, Tensor y, int verbose = 1, bool is_val = false)
         {
             var data_handler = new DataHandler(new DataHandlerArgs
             {
@@ -119,7 +119,7 @@ namespace Tensorflow.Keras.Engine
                 foreach (var step in data_handler.steps())
                 {
                     callbacks.on_test_batch_begin(step);
-                    logs = test_step_multi_inputs_function(data_handler, iterator);
+                    logs = test_function(data_handler, iterator);
                     var end_step = step + data_handler.StepIncrement;
                     if (is_val == false)
                         callbacks.on_test_batch_end(end_step, logs);
@@ -180,18 +180,12 @@ namespace Tensorflow.Keras.Engine
         Dictionary<string, float> test_function(DataHandler data_handler, OwnedIterator iterator)
         {
             var data = iterator.next();
-            var outputs = test_step(data_handler, data[0], data[1]);
+            var x_size = data_handler.DataAdapter.GetDataset().FirstInputTensorCount;
+            var outputs = train_step(data_handler, new Tensors(data.Take(x_size)), new Tensors(data.Skip(x_size)));
             tf_with(ops.control_dependencies(new object[0]), ctl => _test_counter.assign_add(1));
             return outputs;
         }
-        Dictionary<string, float> test_step_multi_inputs_function(DataHandler data_handler, OwnedIterator iterator)
-        {
-            var data = iterator.next();
-            var x_size = data_handler.DataAdapter.GetDataset().FirstInputTensorCount;
-            var outputs = train_step(data_handler, new Tensors(data.Take(x_size)), new Tensors(data.Skip(x_size)));
-            tf_with(ops.control_dependencies(new object[0]), ctl => _train_counter.assign_add(1));
-            return outputs;
-        }
+
         Dictionary<string, float> test_step(DataHandler data_handler, Tensor x, Tensor y)
         {
             (x, y) = data_handler.DataAdapter.Expand1d(x, y);
