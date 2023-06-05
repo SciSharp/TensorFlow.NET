@@ -66,16 +66,19 @@ namespace TensorFlowNET.UnitTest.NumPy
             Assert.AreEqual(y, new[] { 0, 1, 8, 27, 64, 125 });
         }
          [TestMethod]
-        public void maximum()
+       public void maximum()
         {
             var x1 = new NDArray(new[,] { { 1, 2, 3 }, { 4, 5.1, 6 } });
             var x2 = new NDArray(new[,] { { 3, 2, 1 }, { 6, 5.1, 4 } });
-            var y = np.maximum(x1,x2);
+            var y0 = np.maximum(x1,x2);
             var y1 = np.maximum(x1, x2, axis: 0);
-            var y2 = new NDArray(new[,] { { 3, 2, 3 }, { 6, 5.1, 6 } });
-            var y3 = new NDArray(new[] {  6, 5.1, 6 });
-            Assert.AreEqual(y, y2);
-            Assert.AreEqual(y1, y3);
+            var y2 = np.maximum(x1, x2, axis: 1);
+            var y3 = new NDArray(new[,] { { 3, 2, 3 }, { 6, 5.1, 6 } });
+            var y4 = new NDArray(new[] {  6, 5.1, 6 });
+            var y5 = new NDArray(new[] { 3.0, 6 });
+            Assert.AreEqual(y0, y3);
+            Assert.AreEqual(y1, y4);
+            Assert.AreEqual(y2, y5);
         }
     }
 }
