@@ -131,8 +131,6 @@ namespace Tensorflow.Keras.Engine
                 {
                     callbacks.on_test_batch_begin(step);
 
-                    var data = iterator.next();
-
                     logs = test_func(data_handler, iterator.next());
 
                     tf_with(ops.control_dependencies(Array.Empty<object>()), ctl => _train_counter.assign_add(1));
