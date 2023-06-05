@@ -56,6 +56,7 @@ namespace Tensorflow.Keras.Layers
                 "kernel",
                 shape: new Shape(last_dim, args.Units),
                 initializer: args.KernelInitializer,
+                regularizer: args.KernelRegularizer,
                 dtype: DType,
                 trainable: true);
             if (args.UseBias)
@@ -63,6 +64,7 @@ namespace Tensorflow.Keras.Layers
                   "bias",
                   shape: new Shape(args.Units),
                   initializer: args.BiasInitializer,
+                  regularizer: args.BiasRegularizer,
                   dtype: DType,
                   trainable: true);
 
