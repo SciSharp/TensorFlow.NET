@@ -9,11 +9,11 @@ namespace Tensorflow.Keras.Layers.Rnn
     {
         GeneralizedTensorShape StateSize { get; }
         GeneralizedTensorShape OutputSize { get; }
+        bool IsTFRnnCell { get; }
         /// <summary>
         /// Whether the optional RNN args are supported when appying the layer.
         /// In other words, whether `Apply` is overwrited with process of `RnnOptionalArgs`.
         /// </summary>
         bool SupportOptionalArgs { get; }
-        (Tensor, Tensors) Call(Tensors inputs, Tensors states, bool? training = null);
     }
 }

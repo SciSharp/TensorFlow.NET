@@ -5,6 +5,7 @@ using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Common.Types;
+using Tensorflow.Common.Extensions;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -26,6 +27,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         public override GeneralizedTensorShape StateSize => _state_size;
         public override GeneralizedTensorShape OutputSize => _output_size;
+        public override bool IsTFRnnCell => true;
         public override bool SupportOptionalArgs => false;
 
         public SimpleRNNCell(SimpleRNNCellArgs args) : base(args)
@@ -66,37 +68,22 @@ namespace Tensorflow.Keras.Layers.Rnn
             built = true;
         }
 
-        public override (Tensor, Tensors) Call(Tensors inputs, Tensors states, bool? training = null)
+        // TODO(Rinne): revise the trining param (with refactoring of the framework)
+        protected override Tensors Call(Tensors inputs, Tensors states = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             // TODO(Rinne): check if it will have multiple tensors when not nested.
-            Tensor prev_output = states[0];
+            Tensors prev_output = Nest.IsNested(states) ? new Tensors(states[0]) : states;
             var dp_mask = get_dropout_maskcell_for_cell(inputs, training.Value);
             var rec_dp_mask = get_recurrent_dropout_maskcell_for_cell(prev_output, training.Value);
 
             Tensor h;
-            var ranks = inputs.rank;
             if (dp_mask != null)
             {
-                if (ranks > 2)
-                {
-                    // 因为multiply函数会自动添加第一个维度，所以加上下标0
-                    h = tf.linalg.tensordot(math_ops.multiply(inputs, dp_mask)[0], _kernel.AsTensor(), new[,] { { ranks - 1 }, { 0 } });
-                }
-                else
-                {
-                    h = math_ops.matmul(math_ops.multiply(inputs, dp_mask)[0], _kernel.AsTensor());
-                }
+                h = math_ops.matmul(math_ops.multiply(inputs.Single, dp_mask.Single), _kernel.AsTensor());
             }
             else
             {
-                if (ranks > 2)
-                {
-                    h = tf.linalg.tensordot(inputs, _kernel.AsTensor(), new[,] { { ranks - 1 }, { 0 } });
-                }
-                else
-                {
-                    h = math_ops.matmul(inputs, _kernel.AsTensor());
-                }
+                h = math_ops.matmul(inputs, _kernel.AsTensor());
             }
 
             if (_bias != null)
@@ -106,26 +93,25 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             if (rec_dp_mask != null)
             {
-                prev_output = math_ops.multiply(prev_output, rec_dp_mask)[0];
+                prev_output = math_ops.multiply(prev_output, rec_dp_mask);
             }
 
-            ranks = prev_output.rank;
-            Tensor output;
-            if (ranks > 2)
-            {
-                output = h + tf.linalg.tensordot(prev_output[0], _recurrent_kernel.AsTensor(), new[,] { { ranks - 1 }, { 0 } });
-            }
-            else
-            {
-                output = h + math_ops.matmul(prev_output, _recurrent_kernel.AsTensor());
-            }
-            Console.WriteLine($"shape of output: {output.shape}");
+            Tensor output = h + math_ops.matmul(prev_output, _recurrent_kernel.AsTensor());
 
             if (_args.Activation != null)
             {
                 output = _args.Activation.Apply(output);
             }
-            return (output, new Tensors { output });
+            if (Nest.IsNested(states))
+            {
+                return new Nest<Tensor>(new List<Nest<Tensor>> { 
+                    new Nest<Tensor>(new List<Nest<Tensor>> { new Nest<Tensor>(output) }), new Nest<Tensor>(output) })
+                    .ToTensors();
+            }
+            else
+            {
+                return new Tensors(output, output);
+            }
         }
     }
 }
