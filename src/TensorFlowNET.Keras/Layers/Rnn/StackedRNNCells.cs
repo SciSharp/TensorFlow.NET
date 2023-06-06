@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
@@ -8,7 +9,7 @@ using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
-    public class StackedRNNCells : Layer, RNNArgs.IRnnArgCell
+    public class StackedRNNCells : Layer, IRnnCell
     {
         public IList<RnnCell> Cells { get; set; }
         public bool reverse_state_order;
@@ -51,7 +52,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     return lastCell.output_size;
                 }
-                else if (RNN._is_multiple_state(lastCell.state_size))
+                else if (RNN.is_multiple_state(lastCell.StateSize))
                 {
                     // return ((dynamic)Cells[-1].state_size)[0];
                     throw new NotImplementedException("");
@@ -162,5 +163,13 @@ namespace Tensorflow.Keras.Layers.Rnn
             //          deserialize_layer(cell_config, custom_objects = custom_objects))
             //    return cls(cells, **config)
         }
+
+        public (Tensor, Tensors) Call(Tensors inputs, Tensors states, bool? training = null)
+        {
+            throw new NotImplementedException();
+        }
+        public GeneralizedTensorShape StateSize => throw new NotImplementedException();
+        public GeneralizedTensorShape OutputSize => throw new NotImplementedException();
+        public bool SupportOptionalArgs => throw new NotImplementedException();
     }
 }

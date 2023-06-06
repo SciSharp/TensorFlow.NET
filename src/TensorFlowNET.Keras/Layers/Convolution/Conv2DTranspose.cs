@@ -20,6 +20,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.KerasApi;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -83,7 +84,7 @@ namespace Tensorflow.Keras.Layers
             _buildInputShape = input_shape;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             var inputs_shape = array_ops.shape(inputs);
             var batch_size = inputs_shape[0];

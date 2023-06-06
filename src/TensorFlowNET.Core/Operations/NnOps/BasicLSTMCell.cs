@@ -11,6 +11,7 @@ namespace Tensorflow
     /// Basic LSTM recurrent network cell.
     /// The implementation is based on: http://arxiv.org/abs/1409.2329.
     /// </summary>
+    [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
     public class BasicLstmCell : LayerRnnCell
     {
         int _num_units;

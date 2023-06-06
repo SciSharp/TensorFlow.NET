@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Saving.SavedModel;
 using Tensorflow.Keras.Utils;
@@ -81,7 +82,7 @@ namespace Tensorflow.Keras.Engine
             }
             else
             {
-                _buildInputShape = new Saving.TensorShapeConfig();
+                _buildInputShape = new TensorShapeConfig();
             }
 
             if (outputs.Any(x => x.KerasHistory == null))
@@ -325,7 +326,7 @@ namespace Tensorflow.Keras.Engine
             nodes_in_decreasing_depth.append(node);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             var tensor_dict = new Dictionary<long, Queue<Tensor>>();
             // map input values

@@ -23,6 +23,38 @@ namespace Tensorflow
         public Graph graph => items.First().graph;
         public bool IsList { get; set; }
         public int Length => items.Count();
+        /// <summary>
+        /// Return a Tensor if `Tensors` has only one tensor, otherwise throw an exception.
+        /// </summary>
+        public Tensor Single
+        {
+            get
+            {
+                if (Length != 1)
+                {
+                    throw new ValueError("Tensors with more than one tensor cannot be " +
+                        "implicitly converted to Tensor.");
+                }
+                return items.First();
+            }
+        }
+
+        /// <summary>
+        /// Return a Tensor if `Tensors` has only one tensor, and return null when `Tensors` is empty, 
+        /// otherwise throw an exception.
+        /// </summary>
+        public Tensor? SingleOrNull
+        {
+            get
+            {
+                if (Length > 1)
+                {
+                    throw new ValueError($"Tensors with {Length} tensor cannot be " +
+                        "implicitly converted to Tensor.");
+                }
+                return items.FirstOrDefault();
+            }
+        }
 
         public Tensor this[int index]
         {
@@ -183,18 +215,18 @@ namespace Tensorflow
         public static implicit operator Tensors(List<Tensor> tensors)
             => new Tensors(tensors.ToArray());
 
-        public static implicit operator Tensor(Tensors tensors)
-            => tensors.FirstOrDefault();
+        public static implicit operator Tensor(Tensors? tensors)
+            => tensors?.SingleOrNull;
 
         public static implicit operator Tensor[](Tensors tensors)
             => tensors.items.ToArray();
 
         #endregion
 
-        public void Deconstruct(out Tensor a, out Tensor b)
+        public void Deconstruct(out Tensor a, out Tensors? b)
         {
             a = items[0];
-            b = items[1];
+            b = Length == 1? null : new Tensors(items.Skip(1));
         }
 
         private static void EnsureSingleTensor(Tensors tensors, string methodnName)

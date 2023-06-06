@@ -18,6 +18,7 @@ using System.Linq;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Common.Types;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -36,7 +37,7 @@ namespace Tensorflow.Keras.Layers
             input_spec = new InputSpec(ndim: 3);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             int pad_axis = args.DataFormat == "channels_first" ? 2 : 3;
             inputs = tf.expand_dims(inputs, pad_axis);

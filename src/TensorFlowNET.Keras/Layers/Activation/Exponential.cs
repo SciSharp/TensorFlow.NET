@@ -4,7 +4,7 @@ using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
-using static Tensorflow.Binding;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers {
     public class Exponential : Layer
@@ -17,7 +17,7 @@ namespace Tensorflow.Keras.Layers {
         {
             base.build(input_shape);
         }
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensor output = inputs;
             return tf.exp(output);

@@ -10,6 +10,7 @@ using Tensorflow.Keras.Engine;
 using static Tensorflow.Binding;
 using Tensorflow.Functions;
 using System.Threading;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -34,7 +35,7 @@ namespace Tensorflow.Keras.Layers
             built = true;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             if (tf.Context.executing_eagerly())
                 return DeFunCall(inputs);

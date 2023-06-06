@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Common.Types;
 
 /// <summary>
 /// Base class for attention layers that can be used in sequence DNN/CNN models.
@@ -114,7 +115,7 @@ namespace Tensorflow.Keras.Layers
             return (tf.linalg.einsum("bij,bjk->bik", (weights, value)), weights);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensors _inp;
             Tensors _mask = null;
