@@ -36,6 +36,7 @@ namespace Tensorflow.Util
     //  (np.array([3, 4]), tf.constant([3, 4])))`
     //
 
+    [Obsolete]
     public static class nest
     {
 
@@ -168,39 +169,6 @@ namespace Tensorflow.Util
                 }
             }
             throw new TypeError("Type of sequence not supported (yet): " + instance.GetType());
-        }
-
-        public static bool is_nested(object obj)
-        {
-            // Refer to https://www.tensorflow.org/api_docs/python/tf/nest
-            //if (obj is IList || obj is IDictionary || obj is ITuple)
-            //    return true;
-            if (obj is IList || obj is IDictionary)
-                return true;
-
-            if (obj is NDArray || obj is Tensor || obj is string || obj.GetType().IsGenericType
-                || obj is ISet<int> || obj is ISet<float> || obj is ISet<double>)
-                return false;
-
-            if (obj.GetType().IsNested) return true;
-            // Check if the object is an IEnumerable
-            if (obj is IEnumerable)
-            {
-                // If it is, check if it is a nested structure
-                foreach (object item in (IEnumerable)obj)
-                {
-                    if (is_nested(item))
-                    {
-                        return true;
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                // If it is not, return false
-                return false;
-            }
         }
 
         /// <summary>
