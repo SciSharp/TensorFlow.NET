@@ -1,17 +1,15 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using Tensorflow.Keras.Layers.Rnn;
 
 namespace Tensorflow.Keras.ArgsDefinition.Rnn
 {
+    // TODO(Rinne): add regularizers.
     public class RNNArgs : AutoSerializeLayerArgs
     {
-        public interface IRnnArgCell : ILayer
-        {
-            object state_size { get; }
-        }
         [JsonProperty("cell")]
         // TODO: the cell should be serialized with `serialize_keras_object`.
-        public IRnnArgCell Cell { get; set; } = null;
+        public IRnnCell Cell { get; set; } = null;
         [JsonProperty("return_sequences")]
         public bool ReturnSequences { get; set; } = false;
         [JsonProperty("return_state")]
@@ -34,6 +32,9 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         public IInitializer KernelInitializer { get; set; }
         public IInitializer RecurrentInitializer { get; set; }
         public IInitializer BiasInitializer { get; set; }
+        public float Dropout { get; set; } = .0f;
+        public bool ZeroOutputForMask { get; set; } = false;
+        public float RecurrentDropout { get; set; } = .0f;
 
         // kernel_regularizer=None,
         // recurrent_regularizer=None,

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Saving.Json
 {

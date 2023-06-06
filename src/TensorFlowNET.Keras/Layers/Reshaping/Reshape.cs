@@ -4,6 +4,7 @@ using static Tensorflow.Binding;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -19,7 +20,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             var shapes = new List<Tensor>();
             shapes.Add(array_ops.shape(inputs)[0]);
