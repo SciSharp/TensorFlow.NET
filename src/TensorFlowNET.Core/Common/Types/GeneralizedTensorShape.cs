@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tensorflow.Common.Types
 {
-    public class GeneralizedTensorShape: IEnumerable<long?[]>
+    public class GeneralizedTensorShape: IEnumerable<long?[]>, INestStructure<long?>, INestable<long?>
     {
         public TensorShapeConfig[] Shapes { get; set; }
         /// <summary>
@@ -61,6 +61,57 @@ namespace Tensorflow.Common.Types
         public Shape[] ToShapeArray()
         {
             return Shapes.Select(x => new Shape(x.Items.Select(y => y is null ? -1 : y.Value).ToArray())).ToArray();
+        }
+
+        public IEnumerable<long?> Flatten()
+        {
+            List<long?> result = new List<long?>();
+            foreach(var shapeConfig in Shapes)
+            {
+                result.AddRange(shapeConfig.Items);
+            }
+            return result;
+        }
+        public INestStructure<TOut> MapStructure<TOut>(Func<long?, TOut> func)
+        {
+            List<Nest<TOut>> lists = new();
+            foreach(var shapeConfig in Shapes)
+            {
+                lists.Add(new Nest<TOut>(shapeConfig.Items.Select(x => new Nest<TOut>(func(x)))));
+            }
+            return new Nest<TOut>(lists);
+        }
+
+        public Nest<long?> AsNest()
+        {
+            Nest<long?> DealWithSingleShape(TensorShapeConfig config)
+            {
+                if (config.Items.Length == 0)
+                {
+                    return Nest<long?>.Empty;
+                }
+                else if (config.Items.Length == 1)
+                {
+                    return new Nest<long?>(config.Items[0]);
+                }
+                else
+                {
+                    return new Nest<long?>(config.Items.Select(x => new Nest<long?>(x)));
+                }
+            }
+
+            if(Shapes.Length == 0)
+            {
+                return Nest<long?>.Empty;
+            }
+            else if(Shapes.Length == 1)
+            {
+                return DealWithSingleShape(Shapes[0]);
+            }
+            else
+            {
+                return new Nest<long?>(Shapes.Select(s => DealWithSingleShape(s)));
+            }
         }
 
         public IEnumerator<long?[]> GetEnumerator()

@@ -22,5 +22,12 @@ namespace Tensorflow.Common.Extensions
         {
             return new Tensors(tensors);
         }
+
+        public static void Deconstruct<T1, T2, T3>(this (T1, T2, T3) values, out T1 first, out T2 second, out T3 third)
+        {
+            first = values.Item1;
+            second = values.Item2;
+            third = values.Item3;
+        }
     }
 }
