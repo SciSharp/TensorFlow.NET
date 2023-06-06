@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Train;
 using Tensorflow.Training;
@@ -89,7 +90,7 @@ namespace Tensorflow.Hub
             }
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optionalArgs = null)
         {
             _check_trainability();
 

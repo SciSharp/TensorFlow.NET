@@ -55,8 +55,8 @@ namespace Tensorflow.Keras.Layers.Rnn
                 if (_states == null)
                 {
                     // CHECK(Rinne): check if this is correct.
-                    var state = nest.map_structure(x => null, _cell.StateSize);
-                    return new Tensors { state };
+                    var nested = _cell.StateSize.MapStructure<Tensor?>(x => null);
+                    _states = nested.AsNest().ToTensors();
                 }
                 return _states;
             }
@@ -230,7 +230,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             Tensors? mask = rnn_optional_args?.Mask;
             //var (inputs_padded, row_length) = BackendImpl.convert_inputs_if_ragged(inputs);
             // 暂时先不接受ragged tensor
-            int? row_length = null;
+            int row_length = 0; // TODO(Rinne): support this param.
             bool is_ragged_input = false;
             _validate_args_if_ragged(is_ragged_input, mask);
 
@@ -249,16 +249,16 @@ namespace Tensorflow.Keras.Layers.Rnn
             if (mask != null)
             {
                 // Time step masks must be the same for each input.
-                mask = nest.flatten(mask)[0];
+                mask = mask.Flatten().First();
             }
 
             Shape input_shape;
-            if (nest.is_nested(inputs))
+            if (!inputs.IsSingle())
             {
                 // In the case of nested input, use the first element for shape check
                 // input_shape = nest.flatten(inputs)[0].shape;
                 // TODO(Wanglongzhi2001)
-                input_shape = nest.flatten(inputs)[0].shape;
+                input_shape = inputs.Flatten().First().shape;
             }
             else
             {
@@ -286,6 +286,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             // cell_call_fn = (self.cell.__call__ if callable(self.cell) else self.cell.call)
             Func<Tensors, Tensors, (Tensors, Tensors)> step;
+            bool is_tf_rnn_cell = _cell.IsTFRnnCell;
             if (constants is not null)
             {
                 if (!_cell.SupportOptionalArgs)
@@ -299,7 +300,8 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     constants = new Tensors(states.TakeLast(_num_constants));
                     states = new Tensors(states.SkipLast(_num_constants));
-                    var(output, new_states) = _cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
+                    states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
+                    var (output, new_states) = _cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
                     // TODO(Wanglongzhi2001),should cell_call_fn's return value be Tensors, Tensors?
                     return (output, new_states.Single);
                 };
@@ -308,13 +310,13 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 step = (inputs, states) =>
                 {
-                    // states = (states[0] if len(states) == 1 and is_tf_rnn_cell else states)
+                    states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
                     var (output, new_states) = _cell.Apply(inputs, states);
                     return (output, new_states.Single);
                 };
             }
 
-            var (last_output, outputs, states) = BackendImpl.rnn(step,
+            var (last_output, outputs, states) = keras.backend.rnn(step,
                 inputs,
                 initial_state,
                 constants: constants,
@@ -334,8 +336,8 @@ namespace Tensorflow.Keras.Layers.Rnn
             Tensors output = new Tensors();
             if (_args.ReturnSequences)
             {
-                throw new NotImplementedException("this argument havn't been developed.");
-
+                // TODO(Rinne): add go_backwards parameter and revise the `row_length` param
+                output = keras.backend.maybe_convert_to_ragged(is_ragged_input, outputs, row_length, false);
             }
             else
             {

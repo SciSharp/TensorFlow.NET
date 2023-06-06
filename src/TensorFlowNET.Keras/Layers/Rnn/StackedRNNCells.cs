@@ -170,6 +170,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         }
         public GeneralizedTensorShape StateSize => throw new NotImplementedException();
         public GeneralizedTensorShape OutputSize => throw new NotImplementedException();
+        public bool IsTFRnnCell => throw new NotImplementedException();
         public bool SupportOptionalArgs => throw new NotImplementedException();
     }
 }
