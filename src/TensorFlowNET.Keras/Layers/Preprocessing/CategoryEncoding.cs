@@ -1,6 +1,6 @@
 ﻿using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
-
+using Tensorflow.Common.Types;
 namespace Tensorflow.Keras.Layers
 {
     /// <summary>
@@ -15,7 +15,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             var depth = args.NumTokens;
             var max_value = tf.reduce_max(inputs);

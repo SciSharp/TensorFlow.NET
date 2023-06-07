@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -26,9 +27,9 @@ namespace Tensorflow.Keras.Layers.Rnn
                 .ToArray();
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
-            return base.Call(inputs, state: state, training: training);
+            return base.Call(inputs, initial_state: state, training: training);
         }
     }
 }

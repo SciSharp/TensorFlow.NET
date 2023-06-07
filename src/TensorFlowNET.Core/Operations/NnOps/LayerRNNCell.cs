@@ -19,6 +19,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
+    [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
     public class LayerRnnCell : RnnCell
     {
         protected InputSpec inputSpec;

@@ -53,7 +53,7 @@ public class Orthogonal : IInitializer
         // Compute the qr factorization
         var (q, r) = tf.linalg.qr(a, full_matrices: false);
         // Make Q uniform
-        var d = tf.linalg.tensor_diag_part(r);
+        var d = tf.linalg.tensor_diag_part(r.Single);
         q *= tf.sign(d);
 
         if (num_rows < num_cols)

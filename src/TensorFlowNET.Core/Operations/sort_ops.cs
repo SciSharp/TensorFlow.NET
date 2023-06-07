@@ -44,7 +44,7 @@ namespace Tensorflow
                 {
                     sorted = true
                 }));
-            return indices;
+            return indices.Single;
         }
 
         public static Tensor sort(Tensor values, Axis axis, string direction = "ASCENDING", string? name = null)

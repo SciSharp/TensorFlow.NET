@@ -6,6 +6,7 @@ using System.Text;
 using System.Diagnostics;
 using OneOf.Types;
 using Tensorflow.Keras.Saving.Json;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Saving
 {

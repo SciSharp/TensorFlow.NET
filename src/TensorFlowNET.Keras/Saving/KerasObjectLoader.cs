@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Tensorflow.Extensions;
+using Tensorflow.Common.Extensions;
 using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;

@@ -20,6 +20,7 @@ using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
+    [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
     public class BasicRnnCell : LayerRnnCell
     {
         int _num_units;
