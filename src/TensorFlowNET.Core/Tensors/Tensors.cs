@@ -58,17 +58,12 @@ namespace Tensorflow
         public Tensor this[params string[] slices]
             => this.First()[slices];
 
-        public Tensors(Tensor tensor) : base(tensor)
-        {
-
-        }
-
         private Tensors(Nest<Tensor> nested) : base(nested)
         {
 
         }
 
-        public Tensors(params Tensor[] tensors): base(tensors.Select(x => new Nest<Tensor>(x)))
+        public Tensors(params Tensor[] tensors): base(DealWithConstructorArrayInput(tensors))
         {
             
         }
@@ -81,6 +76,22 @@ namespace Tensorflow
         public Tensors(NDArray nd): base(ops.convert_to_tensor(nd))
         {
             
+        }
+
+        private static Nest<Tensor> DealWithConstructorArrayInput(Tensor[] tensors)
+        {
+            if (tensors.Length == 0)
+            {
+                return Nest<Tensor>.Empty;
+            }
+            else if(tensors.Length == 1)
+            {
+                return new Nest<Tensor>(tensors[0]);
+            }
+            else
+            {
+                return new Nest<Tensor>(tensors.Select(x => new Nest<Tensor>(x)));
+            }
         }
 
         public bool IsSingle()
@@ -107,9 +118,14 @@ namespace Tensorflow
                 ListValue = new() { new Nest<Tensor>(Value), new Nest<Tensor>(tensor) };
                 Value = null;
             }
-            else
+            else if(NestType == NestType.List)
             {
-                ListValue.Add(new Nest<Tensor>(tensor));
+                ListValue!.Add(new Nest<Tensor>(tensor));
+            }
+            else //Empty
+            {
+                NestType = NestType.Node;
+                Value = tensor;
             }
         }
 
@@ -128,9 +144,14 @@ namespace Tensorflow
                 ListValue.AddRange(tensors.Select(x => new Nest<Tensor>(x)));
                 Value = null;
             }
-            else
+            else if(NestType == NestType.List)
             {
-                ListValue.AddRange(tensors.Select(x => new Nest<Tensor>(x)));
+                ListValue!.AddRange(tensors.Select(x => new Nest<Tensor>(x)));
+            }
+            else // empty
+            {
+                NestType = NestType.List;
+                ListValue = tensors.Select(x => new Nest<Tensor>(x)).ToList();
             }
         }
 
