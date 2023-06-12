@@ -510,7 +510,7 @@ namespace Tensorflow.Keras
                 }
 
             }
-
+            
             // tf.where needs its condition tensor to be the same shape as its two
             // result tensors, but in our case the condition (mask) tensor is
             // (nsamples, 1), and inputs are (nsamples, ndimensions) or even more.
@@ -535,7 +535,7 @@ namespace Tensorflow.Keras
                 {
                     mask_t = tf.expand_dims(mask_t, -1);
                 }
-                var multiples = Enumerable.Repeat(1, fixed_dim).ToArray().concat(input_t.shape.as_int_list().ToList().GetRange(fixed_dim, input_t.rank));
+                var multiples = Enumerable.Repeat(1, fixed_dim).ToArray().concat(input_t.shape.as_int_list().Skip(fixed_dim).ToArray());
                 return tf.tile(mask_t, multiples);
             }
 
@@ -569,9 +569,6 @@ namespace Tensorflow.Keras
                 // nested input, the input is flattened and then transformed
                 // individually.  The result of this will be a tuple of lists, each of
                 // the item in tuple is list of the tensor with shape (batch, feature)
-
-
-
 
                 Tensors _process_single_input_t(Tensor input_t)
                 {
@@ -609,7 +606,7 @@ namespace Tensorflow.Keras
                     var mask_list = tf.unstack(mask);
                     if (go_backwards)
                     {
-                        mask_list.Reverse();
+                        mask_list.Reverse().ToArray();
                     }
 
                     for (int i = 0; i < time_steps; i++)
@@ -629,9 +626,10 @@ namespace Tensorflow.Keras
                         }
                         else
                         {
-                            prev_output = successive_outputs[successive_outputs.Length - 1];
+                            prev_output = successive_outputs.Last();
                         }
 
+                        // output could be a tensor
                         output = tf.where(tiled_mask_t, output, prev_output);
 
                         var flat_states = Nest.Flatten(states).ToList();
@@ -661,13 +659,13 @@ namespace Tensorflow.Keras
                         }
 
                     }
-                    last_output = successive_outputs[successive_outputs.Length - 1];
-                    new_states = successive_states[successive_states.Length - 1];
+                    last_output = successive_outputs.Last();
+                    new_states = successive_states.Last();
                     outputs = tf.stack(successive_outputs);
 
                     if (zero_output_for_mask)
                     {
-                        last_output = tf.where(_expand_mask(mask_list[mask_list.Length - 1], last_output), last_output, tf.zeros_like(last_output));
+                        last_output = tf.where(_expand_mask(mask_list.Last(), last_output), last_output, tf.zeros_like(last_output));
                         outputs = tf.where(_expand_mask(mask, outputs, fixed_dim: 2), outputs, tf.zeros_like(outputs));
                     }
                     else // mask is null
@@ -689,8 +687,8 @@ namespace Tensorflow.Keras
                                 successive_states = new Tensors { newStates };
                             }
                         }
-                        last_output = successive_outputs[successive_outputs.Length - 1];
-                        new_states = successive_states[successive_states.Length - 1];
+                        last_output = successive_outputs.Last();
+                        new_states = successive_states.Last();
                         outputs = tf.stack(successive_outputs);
                     }
                 }
@@ -701,6 +699,8 @@ namespace Tensorflow.Keras
                 //  Create input tensor array, if the inputs is nested tensors, then it
                 //  will be flattened first, and tensor array will be created one per
                 //  flattened tensor.
+
+
                 var input_ta = new List<TensorArray>();
                 for (int i = 0; i < flatted_inptus.Count; i++)
                 {
@@ -718,6 +718,7 @@ namespace Tensorflow.Keras
                         ta.unstack(reverse(input_, 0));
                     }
                 }
+
 
                 // Get the time(0) input and compute the output for that, the output will
                 // be used to determine the dtype of output tensor array. Don't read from
@@ -773,7 +774,7 @@ namespace Tensorflow.Keras
                         return res;
                     };
                 }
-                // TODO(Wanglongzhi2001), what the input_length's type should be(an integer or a single tensor)?
+                // TODO(Wanglongzhi2001), what the input_length's type should be(an integer or a single tensor), it could be an integer or tensor
                 else if (input_length is Tensor)
                 {
                     if (go_backwards)
