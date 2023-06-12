@@ -1,5 +1,6 @@
 ﻿using System;
 using Tensorflow.Framework.Models;
+using Tensorflow.Keras.Layers.Rnn;
 using Tensorflow.NumPy;
 using static Google.Protobuf.Reflection.FieldDescriptorProto.Types;
 
@@ -192,6 +193,19 @@ namespace Tensorflow.Keras.Layers
             float offset = 0,
             Shape input_shape = null);
 
+        public IRnnCell SimpleRNNCell(
+            int units,
+            string activation = "tanh",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f);
+
+        public IRnnCell StackedRNNCells(
+            IEnumerable<IRnnCell> cells);
+
         public ILayer SimpleRNN(int units,
             string activation = "tanh",
             string kernel_initializer = "glorot_uniform",
@@ -199,6 +213,26 @@ namespace Tensorflow.Keras.Layers
             string bias_initializer = "zeros",
             bool return_sequences = false,
             bool return_state = false);
+
+        public ILayer RNN(
+            IRnnCell cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false
+            );
+
+        public ILayer RNN(
+            IEnumerable<IRnnCell> cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false
+            );
 
         public ILayer Subtract();
     }

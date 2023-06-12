@@ -109,7 +109,19 @@ namespace Tensorflow.Operations
 
                 return ta;
             });*/
-            throw new NotImplementedException("");
+            //if (indices is EagerTensor)
+            //{
+            //    indices = indices as EagerTensor;
+            //    indices = indices.numpy();
+            //}
+
+            //foreach (var (index, val) in zip(indices.ToArray<int>(), array_ops.unstack(value)))
+            //{
+            //    this.write(index, val);
+            //}
+            //return base;
+            //throw new NotImplementedException("");
+            return this;
         }
 
         public void _merge_element_shape(Shape shape)
