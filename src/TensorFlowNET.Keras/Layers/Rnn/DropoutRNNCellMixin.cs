@@ -17,6 +17,21 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         }
 
+        protected void _create_non_trackable_mask_cache()
+        {
+            
+        }
+
+        public void reset_dropout_mask()
+        {
+
+        }
+
+        public void reset_recurrent_dropout_mask()
+        {
+
+        }
+
         public Tensors? get_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
         {
             if (dropout == 0f)

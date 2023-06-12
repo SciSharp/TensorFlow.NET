@@ -38,7 +38,17 @@ namespace Tensorflow.Keras.Layers.Rnn
             SupportsMasking = true;
 
             // if is StackedRnncell
-            _cell = args.Cell;
+            if (args.Cells != null)
+            {
+                _cell = new StackedRNNCells(new StackedRNNCellsArgs
+                {
+                    Cells = args.Cells
+                });
+            }
+            else
+            {
+                _cell = args.Cell;
+            }
 
             // get input_shape
             _args = PreConstruct(args);
@@ -122,6 +132,8 @@ namespace Tensorflow.Keras.Layers.Rnn
                     var state_shape = new int[] { (int)batch }.concat(flat_state.as_int_list());
                     return new Shape(state_shape);
                 };
+
+
                 var state_shape = _get_state_shape(state_size);
 
                 return new List<Shape> { output_shape, state_shape };
@@ -240,7 +252,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             if (_cell is StackedRNNCells)
             {
                 var stack_cell = _cell as StackedRNNCells;
-                foreach (var cell in stack_cell.Cells)
+                foreach (IRnnCell cell in stack_cell.Cells)
                 {
                     _maybe_reset_cell_dropout_mask(cell);
                 }
@@ -253,7 +265,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
 
             Shape input_shape;
-            if (!inputs.IsSingle())
+            if (!inputs.IsNested())
             {
                 // In the case of nested input, use the first element for shape check
                 // input_shape = nest.flatten(inputs)[0].shape;
@@ -267,7 +279,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             var timesteps = _args.TimeMajor ? input_shape[0] : input_shape[1];
 
-            if (_args.Unroll && timesteps != null)
+            if (_args.Unroll && timesteps == null)
             {
                 throw new ValueError(
                 "Cannot unroll a RNN if the " +
@@ -302,7 +314,6 @@ namespace Tensorflow.Keras.Layers.Rnn
                     states = new Tensors(states.SkipLast(_num_constants));
                     states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
                     var (output, new_states) = _cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
-                    // TODO(Wanglongzhi2001),should cell_call_fn's return value be Tensors, Tensors?
                     return (output, new_states.Single);
                 };
             }
@@ -310,13 +321,14 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 step = (inputs, states) =>
                 {
-                    states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
+                    states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states.First()) : states;
                     var (output, new_states) = _cell.Apply(inputs, states);
-                    return (output, new_states.Single);
+                    return (output, new_states);
                 };
             }
-
-            var (last_output, outputs, states) = keras.backend.rnn(step,
+           
+            var (last_output, outputs, states) = keras.backend.rnn(
+                step,
                 inputs,
                 initial_state,
                 constants: constants,
@@ -394,6 +406,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                     initial_state = null;
                 inputs = inputs[0];
             }
+            
 
             if (_args.Stateful)
             {
@@ -402,7 +415,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                     var tmp = new Tensor[] { };
                     foreach (var s in nest.flatten(States))
                     {
-                        tmp.add(tf.math.count_nonzero((Tensor)s));
+                        tmp.add(tf.math.count_nonzero(s.Single()));
                     }
                     var non_zero_count = tf.add_n(tmp);
                     //initial_state = tf.cond(non_zero_count > 0, () => States, () => initial_state);
@@ -415,6 +428,15 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     initial_state = States;
                 }
+                // TODO(Wanglongzhi2001),
+//                initial_state = tf.nest.map_structure(
+//# When the layer has a inferred dtype, use the dtype from the
+//# cell.
+//                lambda v: tf.cast(
+//                    v, self.compute_dtype or self.cell.compute_dtype
+//                ),
+//                initial_state,
+//            )
 
             }
             else if (initial_state is null)
@@ -424,10 +446,9 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             if (initial_state.Length != States.Length)
             {
-                throw new ValueError(
-                                       $"Layer {this} expects {States.Length} state(s), " +
-                                                          $"but it received {initial_state.Length} " +
-                                                                             $"initial state(s). Input received: {inputs}");
+                throw new ValueError($"Layer {this} expects {States.Length} state(s), " +
+                                     $"but it received {initial_state.Length} " +
+                                     $"initial state(s). Input received: {inputs}");
             }
 
             return (inputs, initial_state, constants);
@@ -458,11 +479,11 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         void _maybe_reset_cell_dropout_mask(ILayer cell)
         {
-            //if (cell is DropoutRNNCellMixin)
-            //{
-            //    cell.reset_dropout_mask();
-            //    cell.reset_recurrent_dropout_mask();
-            //}
+            if (cell is DropoutRNNCellMixin CellDRCMixin)
+            {
+                CellDRCMixin.reset_dropout_mask();
+                CellDRCMixin.reset_recurrent_dropout_mask();
+            }
         }
 
         private static RNNArgs PreConstruct(RNNArgs args)
@@ -537,15 +558,24 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         protected Tensors get_initial_state(Tensors inputs)
         {
+            var get_initial_state_fn = _cell.GetType().GetMethod("get_initial_state");
+
             var input = inputs[0];
-            var input_shape = input.shape;
+            var input_shape = inputs.shape;
             var batch_size = _args.TimeMajor ? input_shape[1] : input_shape[0];
             var dtype = input.dtype;
-            Tensors init_state;
-            if (_cell is RnnCellBase rnn_base_cell)
+
+            Tensors init_state = new Tensors();
+
+            if(get_initial_state_fn != null)
             {
-                init_state = rnn_base_cell.GetInitialState(null, batch_size, dtype);
+                init_state = (Tensors)get_initial_state_fn.Invoke(_cell, new object[] { inputs, batch_size, dtype });
+                
             }
+            //if (_cell is RnnCellBase rnn_base_cell)
+            //{
+            //    init_state = rnn_base_cell.GetInitialState(null, batch_size, dtype);
+            //}
             else
             {
                 init_state = RnnUtils.generate_zero_filled_state(batch_size, _cell.StateSize, dtype);

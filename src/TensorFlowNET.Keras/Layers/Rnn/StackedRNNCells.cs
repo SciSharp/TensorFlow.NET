@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
     public class StackedRNNCells : Layer, IRnnCell
     {
-        public IList<RnnCell> Cells { get; set; }
+        public IList<IRnnCell> Cells { get; set; }
         public bool reverse_state_order;
 
         public StackedRNNCells(StackedRNNCellsArgs args) : base(args)
@@ -20,8 +23,19 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 args.Kwargs = new Dictionary<string, object>();
             }
-
+            foreach (var cell in args.Cells)
+            {
+                //Type type = cell.GetType();
+                //var CallMethodInfo = type.GetMethod("Call");
+                //if (CallMethodInfo == null)
+                //{
+                //    throw new ValueError(
+                //        "All cells must have a `Call` method. " +
+                //    $"Received cell without a `Call` method: {cell}");
+                //}
+            }
             Cells = args.Cells;
+            
             reverse_state_order = (bool)args.Kwargs.Get("reverse_state_order", false);
 
             if (reverse_state_order)
@@ -33,91 +47,112 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
-        public object state_size
+        public GeneralizedTensorShape StateSize
         {
-            get => throw new NotImplementedException();
-            //@property
-            //def state_size(self) :
-            //    return tuple(c.state_size for c in
-            //                 (self.cells[::- 1] if self.reverse_state_order else self.cells))
+            get
+            {
+                GeneralizedTensorShape state_size = new GeneralizedTensorShape(1, Cells.Count);
+                if (reverse_state_order && Cells.Count > 0)
+                {
+                    var idxAndCell = Cells.Reverse().Select((cell, idx) => (idx, cell));
+                    foreach (var cell in idxAndCell)
+                    {
+                        state_size.Shapes[cell.idx] = cell.cell.StateSize.Shapes.First();
+                    }
+                }
+                else
+                {
+                    //foreach (var cell in Cells)
+                    //{
+                    //    state_size.Shapes.add(cell.StateSize.Shapes.First());
+
+                    //}
+                    var idxAndCell = Cells.Select((cell, idx) => (idx, cell));
+                    foreach (var cell in idxAndCell)
+                    {
+                        state_size.Shapes[cell.idx] = cell.cell.StateSize.Shapes.First();
+                    }
+                }
+                return state_size;
+            }
         }
 
         public object output_size
         {
             get
             {
-                var lastCell = Cells[Cells.Count - 1];
-
-                if (lastCell.output_size != -1)
+                var lastCell = Cells.LastOrDefault();
+                if (lastCell.OutputSize.ToSingleShape() != -1)
                 {
-                    return lastCell.output_size;
+                    return lastCell.OutputSize;
                 }
                 else if (RNN.is_multiple_state(lastCell.StateSize))
                 {
-                    // return ((dynamic)Cells[-1].state_size)[0];
-                    throw new NotImplementedException("");
+                    return lastCell.StateSize.First();
+                    //throw new NotImplementedException("");
                 }
                 else
                 {
-                    return Cells[-1].state_size;
+                    return lastCell.StateSize;
                 }
             }
         }
 
-        public object get_initial_state()
+        public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
         {
-            throw new NotImplementedException();
-            //  def get_initial_state(self, inputs= None, batch_size= None, dtype= None) :
-            //    initial_states = []
-            //    for cell in self.cells[::- 1] if self.reverse_state_order else self.cells:
-            //      get_initial_state_fn = getattr(cell, 'get_initial_state', None)
-            //      if get_initial_state_fn:
-            //        initial_states.append(get_initial_state_fn(
-            //            inputs=inputs, batch_size=batch_size, dtype=dtype))
-            //      else:
-            //        initial_states.append(_generate_zero_filled_state_for_cell(
-            //            cell, inputs, batch_size, dtype))
-
-            //    return tuple(initial_states)
+            var cells = reverse_state_order ? Cells.Reverse() : Cells;
+            Tensors initial_states = new Tensors();
+            foreach (var cell in cells)
+            {
+                var get_initial_state_fn = cell.GetType().GetMethod("get_initial_state");
+                if (get_initial_state_fn != null)
+                {
+                    var result = (Tensors)get_initial_state_fn.Invoke(cell, new object[] { inputs, batch_size, dtype });
+                    initial_states.Add(result);
+                }
+                else
+                {
+                    initial_states.Add(RnnUtils.generate_zero_filled_state_for_cell(cell, inputs, batch_size.Value, dtype.Value));
+                }
+            }
+            return initial_states;
         }
 
-        public object call()
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
-            throw new NotImplementedException();
-            //  def call(self, inputs, states, constants= None, training= None, ** kwargs):
-            //    # Recover per-cell states.
-            //    state_size = (self.state_size[::- 1]
-            //                  if self.reverse_state_order else self.state_size)
-            //    nested_states = nest.pack_sequence_as(state_size, nest.flatten(states))
+            // Recover per-cell states.
+            var state_size = reverse_state_order ? StateSize.Reverse() : StateSize;
+            var nested_states = reverse_state_order ? state.Flatten().Reverse() : state.Flatten();
 
-            //    # Call the cells in order and store the returned states.
-            //    new_nested_states = []
-            //    for cell, states in zip(self.cells, nested_states) :
-            //      states = states if nest.is_nested(states) else [states]
-            //# TF cell does not wrap the state into list when there is only one state.
-            //    is_tf_rnn_cell = getattr(cell, '_is_tf_rnn_cell', None) is not None
-            //      states = states[0] if len(states) == 1 and is_tf_rnn_cell else states
-            //      if generic_utils.has_arg(cell.call, 'training'):
-            //        kwargs['training'] = training
-            //      else:
-            //        kwargs.pop('training', None)
-            //      # Use the __call__ function for callable objects, eg layers, so that it
-            //      # will have the proper name scopes for the ops, etc.
-            //      cell_call_fn = cell.__call__ if callable(cell) else cell.call
-            //      if generic_utils.has_arg(cell.call, 'constants'):
-            //        inputs, states = cell_call_fn(inputs, states,
-            //                                      constants= constants, ** kwargs)
-            //      else:
-            //        inputs, states = cell_call_fn(inputs, states, ** kwargs)
-            //      new_nested_states.append(states)
 
-            //    return inputs, nest.pack_sequence_as(state_size,
-            //                                         nest.flatten(new_nested_states))
+            var new_nest_states = new Tensors();
+            // Call the cells in order and store the returned states.
+            foreach (var (cell, states) in zip(Cells, nested_states))
+            {
+                // states = states if tf.nest.is_nested(states) else [states]
+                var type = cell.GetType();
+                bool IsTFRnnCell = type.GetProperty("IsTFRnnCell") != null;
+                state = len(state) == 1 && IsTFRnnCell ? state.FirstOrDefault() : state;
+
+                RnnOptionalArgs? rnn_optional_args = optional_args as RnnOptionalArgs;
+                Tensors? constants = rnn_optional_args?.Constants;
+
+                Tensors new_states;
+                 (inputs, new_states) = cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
+
+                new_nest_states.Add(new_states);
+            }
+            new_nest_states = reverse_state_order ? new_nest_states.Reverse().ToArray() : new_nest_states.ToArray();
+            return new Nest<Tensor>(new List<Nest<Tensor>> {
+                    new Nest<Tensor>(new List<Nest<Tensor>> { new Nest<Tensor>(inputs.Single()) }), new Nest<Tensor>(new_nest_states) })
+                    .ToTensors();
         }
+        
+        
 
         public void build()
         {
-            throw new NotImplementedException();
+            built = true;
             //  @tf_utils.shape_type_conversion
             //  def build(self, input_shape) :
             //    if isinstance(input_shape, list) :
@@ -168,9 +203,9 @@ namespace Tensorflow.Keras.Layers.Rnn
         {
             throw new NotImplementedException();
         }
-        public GeneralizedTensorShape StateSize => throw new NotImplementedException();
+
         public GeneralizedTensorShape OutputSize => throw new NotImplementedException();
-        public bool IsTFRnnCell => throw new NotImplementedException();
+        public bool IsTFRnnCell => true;
         public bool SupportOptionalArgs => throw new NotImplementedException();
     }
 }

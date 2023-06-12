@@ -12,9 +12,14 @@ namespace Tensorflow.Common.Types
         /// create a single-dim generalized Tensor shape.
         /// </summary>
         /// <param name="dim"></param>
-        public GeneralizedTensorShape(int dim)
+        public GeneralizedTensorShape(int dim, int size = 1)
         {
-            Shapes = new TensorShapeConfig[] { new TensorShapeConfig() { Items = new long?[] { dim } } };
+            var elem = new TensorShapeConfig() { Items = new long?[] { dim } };
+            Shapes = Enumerable.Repeat(elem, size).ToArray();
+            //Shapes = new TensorShapeConfig[size];
+            //Shapes.Initialize(new TensorShapeConfig() { Items = new long?[] { dim } });
+            //Array.Initialize(Shapes, new TensorShapeConfig() { Items = new long?[] { dim } });
+            ////Shapes = new TensorShapeConfig[] { new TensorShapeConfig() { Items = new long?[] { dim } } };
         }
 
         public GeneralizedTensorShape(Shape shape)
@@ -113,6 +118,11 @@ namespace Tensorflow.Common.Types
                 return new Nest<long?>(Shapes.Select(s => DealWithSingleShape(s)));
             }
         }
+        
+
+
+        public static implicit operator GeneralizedTensorShape(int dims)
+            => new GeneralizedTensorShape(dims);
 
         public IEnumerator<long?[]> GetEnumerator()
         {

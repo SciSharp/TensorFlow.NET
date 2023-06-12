@@ -10,6 +10,9 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         [JsonProperty("cell")]
         // TODO: the cell should be serialized with `serialize_keras_object`.
         public IRnnCell Cell { get; set; } = null;
+        [JsonProperty("cells")]
+        public IList<IRnnCell> Cells { get; set; } = null;
+
         [JsonProperty("return_sequences")]
         public bool ReturnSequences { get; set; } = false;
         [JsonProperty("return_state")]

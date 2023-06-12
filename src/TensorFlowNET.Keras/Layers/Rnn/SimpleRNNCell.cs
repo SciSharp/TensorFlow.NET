@@ -6,6 +6,7 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Common.Types;
 using Tensorflow.Common.Extensions;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -77,8 +78,10 @@ namespace Tensorflow.Keras.Layers.Rnn
             var rec_dp_mask = get_recurrent_dropout_maskcell_for_cell(prev_output, training.Value);
 
             Tensor h;
+            var ranks = inputs.rank;
             if (dp_mask != null)
             {
+
                 h = math_ops.matmul(math_ops.multiply(inputs.Single, dp_mask.Single), _kernel.AsTensor());
             }
             else
@@ -95,7 +98,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 prev_output = math_ops.multiply(prev_output, rec_dp_mask);
             }
-
+            var tmp =  _recurrent_kernel.AsTensor();
             Tensor output = h + math_ops.matmul(prev_output, _recurrent_kernel.AsTensor());
 
             if (_args.Activation != null)
@@ -112,6 +115,11 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 return new Tensors(output, output);
             }
+        }
+
+        public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
+        {
+            return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size.Value, dtype.Value);
         }
     }
 }

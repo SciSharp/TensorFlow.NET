@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
@@ -146,7 +147,9 @@ namespace Tensorflow.Operations
 
                 return ta;
             });*/
-            throw new NotImplementedException("");
+
+            //throw new NotImplementedException("");
+            return this;
         }
 
         public void _merge_element_shape(Shape shape)
