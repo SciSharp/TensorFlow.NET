@@ -702,6 +702,7 @@ namespace Tensorflow.Keras.Layers
                 UseBias = use_bias,
                 KernelInitializer = GetInitializerByName(kernel_initializer),
                 RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
                 Dropout = dropout,
                 RecurrentDropout = recurrent_dropout
             });
@@ -784,6 +785,33 @@ namespace Tensorflow.Keras.Layers
                 Stateful = stateful,
                 Unroll = unroll,
                 TimeMajor = time_major
+            });
+
+
+        public IRnnCell LSTMCell(int uints,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal", // TODO(Wanglongzhi2001),glorot_uniform has not been developed.
+            string bias_initializer = "zeros",
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2)
+            => new LSTMCell(new LSTMCellArgs
+            {
+                Units = uints,
+                Activation = keras.activations.GetActivationFromName(activation),
+                RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                UseBias = use_bias,
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                UnitForgetBias = unit_forget_bias,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                Implementation = implementation
             });
 
         /// <summary>
