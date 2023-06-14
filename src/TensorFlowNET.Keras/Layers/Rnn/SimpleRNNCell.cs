@@ -74,8 +74,8 @@ namespace Tensorflow.Keras.Layers.Rnn
         {
             // TODO(Rinne): check if it will have multiple tensors when not nested.
             Tensors prev_output = Nest.IsNested(states) ? new Tensors(states[0]) : states;
-            var dp_mask = get_dropout_maskcell_for_cell(inputs, training.Value);
-            var rec_dp_mask = get_recurrent_dropout_maskcell_for_cell(prev_output, training.Value);
+            var dp_mask = get_dropout_mask_for_cell(inputs, training.Value);
+            var rec_dp_mask = get_recurrent_dropout_mask_for_cell(prev_output, training.Value);
 
             Tensor h;
             var ranks = inputs.rank;
