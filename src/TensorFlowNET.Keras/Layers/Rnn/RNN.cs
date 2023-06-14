@@ -578,7 +578,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             //}
             else
             {
-                init_state = RnnUtils.generate_zero_filled_state(batch_size, _cell.StateSize, dtype);
+                init_state = RnnUtils.generate_zero_filled_state(tf.convert_to_tensor(batch_size), _cell.StateSize, dtype);
             }
 
             return init_state;
