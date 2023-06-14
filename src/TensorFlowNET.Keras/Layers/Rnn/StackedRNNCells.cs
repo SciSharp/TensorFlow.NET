@@ -5,9 +5,10 @@ using System.Linq;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
+using static Tensorflow.Keras.ArgsDefinition.Rnn.RNNArgs;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+<<<<<<< HEAD
 using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Layers.Rnn
@@ -15,6 +16,15 @@ namespace Tensorflow.Keras.Layers.Rnn
     public class StackedRNNCells : Layer, IRnnCell
     {
         public IList<IRnnCell> Cells { get; set; }
+=======
+using Tensorflow.Keras.ArgsDefinition.Rnn;
+
+namespace Tensorflow.Keras.Layers.Rnn
+{
+    public class StackedRNNCells : Layer
+    {
+        public IList<IRnnArgCell> Cells { get; set; }
+>>>>>>> master
         public bool reverse_state_order;
 
         public StackedRNNCells(StackedRNNCellsArgs args) : base(args)
@@ -86,7 +96,11 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     return lastCell.OutputSize;
                 }
+<<<<<<< HEAD
                 else if (RNN.is_multiple_state(lastCell.StateSize))
+=======
+                else if (RNN.is_multiple_state(lastCell.state_size))
+>>>>>>> master
                 {
                     return lastCell.StateSize.First();
                     //throw new NotImplementedException("");
@@ -98,7 +112,12 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
+<<<<<<< HEAD
         public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
+=======
+
+        public object get_initial_state()
+>>>>>>> master
         {
             var cells = reverse_state_order ? Cells.Reverse() : Cells;
             Tensors initial_states = new Tensors();
@@ -118,7 +137,11 @@ namespace Tensorflow.Keras.Layers.Rnn
             return initial_states;
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        public Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             // Recover per-cell states.
             var state_size = reverse_state_order ? StateSize.Reverse() : StateSize;

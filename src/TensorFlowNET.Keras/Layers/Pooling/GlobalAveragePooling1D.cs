@@ -13,7 +13,11 @@ namespace Tensorflow.Keras.Layers
         {
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             if (data_format == "channels_last")
                 return math_ops.reduce_mean(inputs, 1, false);

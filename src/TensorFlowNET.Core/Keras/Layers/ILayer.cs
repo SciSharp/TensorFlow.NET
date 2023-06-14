@@ -28,5 +28,11 @@ namespace Tensorflow.Keras
         TF_DataType DType { get; }
         int count_params();
         void adapt(Tensor data, int? batch_size = null, int? steps = null);
+
+        Tensors Call(Tensors inputs, Tensor? mask = null, bool? training = null, Tensors? initial_state = null, Tensors? constants = null);
+
+        StateSizeWrapper state_size { get; }
+
+        int output_size { get; }
     }
 }

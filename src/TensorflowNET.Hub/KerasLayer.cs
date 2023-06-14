@@ -90,7 +90,11 @@ namespace Tensorflow.Hub
             }
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optionalArgs = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             _check_trainability();
 

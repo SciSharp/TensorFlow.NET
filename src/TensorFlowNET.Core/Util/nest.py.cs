@@ -19,6 +19,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Tensorflow.Util
 {
@@ -212,6 +213,39 @@ namespace Tensorflow.Util
             => arg is IEnumerable && !(arg is string) && !(arg is NDArray) &&
                     !(arg.GetType().IsGenericType && arg.GetType().GetGenericTypeDefinition() == typeof(HashSet<>));
 
+        public static bool is_nested(object obj)
+        {
+            // Refer to https://www.tensorflow.org/api_docs/python/tf/nest
+            //if (obj is IList || obj is IDictionary || obj is ITuple)
+            //    return true;
+            if (obj is IList || obj is IDictionary)
+                return true;
+
+            if (obj is NDArray || obj is Tensor || obj is string || obj.GetType().IsGenericType
+                || obj is ISet<int> || obj is ISet<float> || obj is ISet<double>)
+                return false;
+
+            if (obj.GetType().IsNested) return true;
+            // Check if the object is an IEnumerable
+            if (obj is IEnumerable)
+            {
+                // If it is, check if it is a nested structure
+                foreach (object item in (IEnumerable)obj)
+                {
+                    if (is_nested(item))
+                    {
+                        return true;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                // If it is not, return false
+                return false;
+            }
+        }
+
         public static bool is_mapping(object arg) => arg is IDictionary;
 
         //# See the swig file (util.i) for documentation.
@@ -223,7 +257,13 @@ namespace Tensorflow.Util
             _flatten_recursive(structure, list);
             return list;
         }
-
+        // TODO(Wanglongzhi2001), ITuple must used in .NET standard 2.1, but now is 2.0 
+        // If you want to flatten a nested tuple, please specify the type of the tuple
+        //public static List<T> flatten<T>(ITuple structure)
+        //{
+        //    var list = FlattenTuple<T>(structure).ToList();
+        //    return list;
+        //}
         public static List<T> flatten<T>(IEnumerable<T> structure)
         {
             var list = new List<T>();
@@ -251,9 +291,13 @@ namespace Tensorflow.Util
                 case String str:
                     list.Add(obj);
                     break;
-                case NDArray nd:
+                // This case can hold both Tensor and NDArray
+                case Tensor tensor:
                     list.Add(obj);
                     break;
+                //case NDArray nd:
+                //    list.Add(obj);
+                //    break;
                 case IEnumerable structure:
                     foreach (var child in structure)
                         _flatten_recursive((T)child, list);
@@ -264,7 +308,27 @@ namespace Tensorflow.Util
             }
         }
 
+        private static IEnumerable<T> FlattenTuple<T>(object tuple)
+        {
+            //if (tuple is ITuple t)
+            //{
+            //    for (int i = 0; i < t.Length; i++)
+            //    {
+            //        foreach (var item in FlattenTuple<T>(t[i]))
+            //        {
+            //            yield return item;
+            //        }
+            //    }
+            //}
+            if(false)
+            {
 
+            }
+            else
+            {
+                yield return (T)tuple;
+            }
+        }
         //# See the swig file (util.i) for documentation.
         //_same_namedtuples = _pywrap_tensorflow.SameNamedtuples
 
@@ -451,8 +515,12 @@ namespace Tensorflow.Util
                 throw new ArgumentException("flat_sequence must not be null");
             //  if not is_sequence(flat_sequence):
             //    raise TypeError("flat_sequence must be a sequence")
-
-            if (!is_sequence(structure))
+            if (!is_nested(flat_sequence))
+            {
+                throw new ArrayTypeMismatchException($"Attempted to pack value:\\n  {flat_sequence}\\ninto a structure, " +
+                    $"but found incompatible type `{flat_sequence.GetType()}` instead.");
+            }
+            if (!is_nested(structure))
             {
                 if (len(flat) != 1)
                     throw new ValueError($"Structure is a scalar but len(flat_sequence) ==  {len(flat)} > 1");

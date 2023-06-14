@@ -102,7 +102,11 @@ namespace Tensorflow.Keras.Layers
             return input_shape;
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             Tensor outputs = null;
             var inputs_dtype = inputs.dtype.as_base_dtype();

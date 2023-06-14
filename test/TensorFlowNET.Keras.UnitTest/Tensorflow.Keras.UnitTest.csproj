@@ -67,4 +67,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Callbacks\" />
+  </ItemGroup>
+
 </Project>

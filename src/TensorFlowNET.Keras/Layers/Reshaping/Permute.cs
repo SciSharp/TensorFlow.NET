@@ -29,7 +29,11 @@ namespace Tensorflow.Keras.Layers {
             built = true;
             _buildInputShape = input_shape;
         }
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             Tensor outputs = inputs;
             return tf.transpose(outputs, new Axis(permute));

@@ -254,6 +254,10 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         public Func<Tensors, Tensors>? ReplacedCall { get; set; } = null;
 
+        public StateSizeWrapper state_size => throw new NotImplementedException();
+
+        public int output_size => throw new NotImplementedException();
+
         public Layer(LayerArgs args)
         {
             Initialize(args);
@@ -332,9 +336,13 @@ namespace Tensorflow.Keras.Engine
         /// <param name="state"></param>
         /// <param name="training"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         protected virtual Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected virtual Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
-            if(ReplacedCall is not null)
+            if (ReplacedCall is not null)
             {
                 return ReplacedCall(inputs);
             }
@@ -434,56 +442,61 @@ namespace Tensorflow.Keras.Engine
 
         public override void SetAttr(string name, object value)
         {
-            // TODO(Rinne): deal with "_self_setattr_tracking".
+            //// TODO(Rinne): deal with "_self_setattr_tracking".
 
-            value = TrackableDataStructure.sticky_attribute_assignment(this, name, value);
+            //value = TrackableDataStructure.sticky_attribute_assignment(this, name, value);
             
-            foreach(var val in nest.flatten(value))
-            {
-                if(val is Metric)
-                {
-                    // TODO(Rinne): deal with metrics.
-                }
-            }
+            //foreach(var val in nest.flatten(value))
+            //{
+            //    if(val is Metric)
+            //    {
+            //        // TODO(Rinne): deal with metrics.
+            //    }
+            //}
 
-            // TODO(Rinne): deal with "_auto_track_sub_layers".
+            //// TODO(Rinne): deal with "_auto_track_sub_layers".
 
-            foreach(var val in nest.flatten(value))
-            {
-                if(val is not IVariableV1 variable)
-                {
-                    continue;
-                }
-                if (variable.Trainable)
-                {
-                    if (_trainable_weights.Contains(variable))
-                    {
-                        continue;
-                    }
-                    _trainable_weights.Add(variable);
-                }
-                else
-                {
-                    if (_non_trainable_weights.Contains(variable))
-                    {
-                        continue;
-                    }
-                    _non_trainable_weights.Add(variable);
-                }
-                keras.backend.track_variable(variable);
-            }
+            //foreach(var val in nest.flatten(value))
+            //{
+            //    if(val is not IVariableV1 variable)
+            //    {
+            //        continue;
+            //    }
+            //    if (variable.Trainable)
+            //    {
+            //        if (_trainable_weights.Contains(variable))
+            //        {
+            //            continue;
+            //        }
+            //        _trainable_weights.Add(variable);
+            //    }
+            //    else
+            //    {
+            //        if (_non_trainable_weights.Contains(variable))
+            //        {
+            //            continue;
+            //        }
+            //        _non_trainable_weights.Add(variable);
+            //    }
+            //    keras.backend.track_variable(variable);
+            //}
 
-            // Directly use the implementation of `Trackable`.
-            var t = this.GetType();
-            var field_info = t.GetField(name);
-            if (field_info is not null)
-            {
-                field_info.SetValue(this, value);
-            }
-            else
-            {
-                CustomizedFields[name] = value;
-            }
+            //// Directly use the implementation of `Trackable`.
+            //var t = this.GetType();
+            //var field_info = t.GetField(name);
+            //if (field_info is not null)
+            //{
+            //    field_info.SetValue(this, value);
+            //}
+            //else
+            //{
+            //    CustomizedFields[name] = value;
+            //}
+        }
+
+        Tensors ILayer.Call(Tensors inputs, Tensor mask, bool? training, Tensors initial_state, Tensors constants)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -144,6 +144,34 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Assert.AreEqual(expected_output, actual_output);
         }
 
+<<<<<<< HEAD
+=======
+        [TestMethod]
+        public void SimpleRNNCell()
+        {
+            var cell = keras.layers.SimpleRNNCell(64, dropout:0.5f, recurrent_dropout:0.5f);
+            var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
+            var x = tf.random.normal((4, 100));
+            var (y, h1) = cell.Apply(inputs: x, state: h0);
+            // TODO(Wanglongzhi2001)，因为SimpleRNNCell需要返回一个Tensor和一个Tensors，只用一个Tensors的话
+            // hold不住，所以自行在外面将h强制转换成Tensors
+            var h2 = (Tensors)h1;
+            Assert.AreEqual((4, 64), y.shape);
+            Assert.AreEqual((4, 64), h2[0].shape);
+        }
+
+        [TestMethod, Ignore("WIP")]
+        public void SimpleRNN()
+        {
+            var inputs = np.arange(6 * 10 * 8).reshape((6, 10, 8)).astype(np.float32);
+            /*var simple_rnn = keras.layers.SimpleRNN(4);
+            var output = simple_rnn.Apply(inputs);
+            Assert.AreEqual((32, 4), output.shape);*/
+            var simple_rnn = tf.keras.layers.SimpleRNN(4, return_sequences: true, return_state: true);
+            var (whole_sequence_output, final_state) = simple_rnn.Apply(inputs);
+        }
+
+>>>>>>> master
         [TestMethod]
         public void Resizing()
         {

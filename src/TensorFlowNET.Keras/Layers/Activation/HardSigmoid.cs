@@ -11,7 +11,12 @@ namespace Tensorflow.Keras.Layers {
             public HardSigmoid ( LayerArgs args ) : base(args) {
                   // hard sigmoid has no arguments
             }
+<<<<<<< HEAD
             protected override Tensors Call ( Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null ) {
+=======
+            protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+        {
+>>>>>>> master
                   Tensor x = inputs;
                   return tf.clip_by_value(
                       tf.add(tf.multiply(x, 0.2f), 0.5f), 0f, 1f);

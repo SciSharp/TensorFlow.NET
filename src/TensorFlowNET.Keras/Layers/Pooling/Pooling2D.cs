@@ -37,7 +37,11 @@ namespace Tensorflow.Keras.Layers
             input_spec = new InputSpec(ndim: 4);
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             int[] pool_shape;
             int[] strides;

@@ -28,6 +28,7 @@ using Tensorflow.Operations;
 using Tensorflow.Train;
 using Tensorflow.Util;
 using static Tensorflow.Binding;
+using static Tensorflow.Keras.ArgsDefinition.Rnn.RNNArgs;
 
 namespace Tensorflow
 {
@@ -52,8 +53,12 @@ namespace Tensorflow
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
+<<<<<<< HEAD
     [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
     public abstract class RnnCell : ILayer, IRnnCell
+=======
+    public abstract class RnnCell : ILayer
+>>>>>>> master
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight
@@ -90,6 +95,8 @@ namespace Tensorflow
         public TF_DataType DType => throw new NotImplementedException();
         protected bool built = false;
         public bool Built => built;
+
+        StateSizeWrapper ILayer.state_size => throw new NotImplementedException();
 
         public RnnCell(bool trainable = true,
             string name = null,
@@ -177,6 +184,7 @@ namespace Tensorflow
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
         public (Tensor, Tensors) Call(Tensors inputs, Tensors states, bool? training = null)
         {
             throw new NotImplementedException();
@@ -185,5 +193,11 @@ namespace Tensorflow
         public GeneralizedTensorShape OutputSize => throw new NotImplementedException();
         public bool IsTFRnnCell => throw new NotImplementedException();
         public bool SupportOptionalArgs => throw new NotImplementedException();
+=======
+        public Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+        {
+            throw new NotImplementedException();
+        }
+>>>>>>> master
     }
 }

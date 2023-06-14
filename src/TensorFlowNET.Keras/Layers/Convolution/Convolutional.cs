@@ -104,7 +104,11 @@ namespace Tensorflow.Keras.Layers
             _buildInputShape = input_shape;
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = false, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             var outputs = _convolution_op.Apply(inputs, kernel.AsTensor());
             if (use_bias)

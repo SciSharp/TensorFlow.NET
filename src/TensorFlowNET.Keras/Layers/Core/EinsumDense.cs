@@ -190,7 +190,11 @@ namespace Tensorflow.Keras.Layers
         //    return new dict(base_config.items().ToList() + config.items().ToList());
         //}
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             var ret = tf.linalg.einsum(this.equation, (inputs, this.kernel.AsTensor()));
             if (this.bias != null)

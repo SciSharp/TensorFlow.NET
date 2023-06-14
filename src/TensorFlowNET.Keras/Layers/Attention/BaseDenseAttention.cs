@@ -115,7 +115,11 @@ namespace Tensorflow.Keras.Layers
             return (tf.linalg.einsum("bij,bjk->bik", (weights, value)), weights);
         }
 
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+=======
+        protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
+>>>>>>> master
         {
             Tensors _inp;
             Tensors _mask = null;
