@@ -2,18 +2,23 @@
 using OneOf;
 using System.Collections.Generic;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using Tensorflow.Keras.Layers.Rnn;
 =======
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.NumPy;
 >>>>>>> master
+=======
+using Tensorflow.Keras.Layers.Rnn;
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
 namespace Tensorflow.Keras.ArgsDefinition.Rnn
 {
     // TODO(Rinne): add regularizers.
     public class RNNArgs : AutoSerializeLayerArgs
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
         [JsonProperty("cell")]
         // TODO: the cell should be serialized with `serialize_keras_object`.
@@ -31,6 +36,13 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         // TODO: the cell should be serialized with `serialize_keras_object`.
         public OneOf<IList<IRnnArgCell>, IRnnArgCell> Cell { get; set; }
 >>>>>>> master
+=======
+        [JsonProperty("cell")]
+        // TODO: the cell should be serialized with `serialize_keras_object`.
+        public IRnnCell Cell { get; set; } = null;
+        [JsonProperty("cells")]
+        public IList<IRnnCell> Cells { get; set; } = null;
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
         [JsonProperty("return_sequences")]
         public bool ReturnSequences { get; set; } = false;

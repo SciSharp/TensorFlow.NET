@@ -227,6 +227,9 @@ namespace Tensorflow.Keras.Layers
             bool return_state = false);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         public ILayer RNN(
             IRnnCell cell,
             bool return_sequences = false,
@@ -246,6 +249,7 @@ namespace Tensorflow.Keras.Layers
             bool unroll = false,
             bool time_major = false
             );
+<<<<<<< HEAD
 =======
         public ILayer SimpleRNNCell(
             int units,
@@ -257,6 +261,8 @@ namespace Tensorflow.Keras.Layers
             float dropout = 0f,
             float recurrent_dropout = 0f);
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
         public ILayer Subtract();
     }

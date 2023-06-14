@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
@@ -14,6 +15,41 @@ namespace Tensorflow.Keras.Layers.Rnn
         public float recurrent_dropout;
         // Get the dropout mask for RNN cell's input.
         public Tensors? get_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
+=======
+using System.Text;
+using Tensorflow.Common.Types;
+using Tensorflow.Keras.ArgsDefinition;
+using Tensorflow.Keras.Engine;
+
+namespace Tensorflow.Keras.Layers.Rnn
+{
+    public abstract class DropoutRNNCellMixin: RnnCellBase
+    {
+        public float dropout;
+        public float recurrent_dropout;
+        // TODO(Rinne): deal with cache.
+        public DropoutRNNCellMixin(LayerArgs args): base(args)
+        {
+
+        }
+
+        protected void _create_non_trackable_mask_cache()
+        {
+            
+        }
+
+        public void reset_dropout_mask()
+        {
+
+        }
+
+        public void reset_recurrent_dropout_mask()
+        {
+
+        }
+
+        public Tensors? get_dropout_mask_for_cell(Tensors input, bool training, int count = 1)
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         {
             if (dropout == 0f)
                 return null;
@@ -25,7 +61,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         }
 
         // Get the recurrent dropout mask for RNN cell.
+<<<<<<< HEAD
         public Tensors? get_recurrent_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
+=======
+        public Tensors? get_recurrent_dropout_mask_for_cell(Tensors input, bool training, int count = 1)
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         {
             if (dropout == 0f)
                 return null;
@@ -78,6 +118,9 @@ namespace Tensorflow.Keras.Layers.Rnn
             return dropped_inputs();
         }
     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 }

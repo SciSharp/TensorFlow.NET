@@ -13,6 +13,7 @@ namespace Tensorflow.Keras.Layers {
                   axis = args.axis;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             protected override Tensors Call ( Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null) {
                   Tensor x = inputs.Length == 2 ? inputs[0] + ((1.0 - tf.cast(inputs[1], inputs.dtype)) * 1e-9)
 =======
@@ -20,6 +21,10 @@ namespace Tensorflow.Keras.Layers {
             {
                   Tensor x = inputs.Length == 2 ? inputs + ((1.0 - tf.cast(inputs[1], inputs.dtype)) * 1e-9)
 >>>>>>> master
+=======
+            protected override Tensors Call ( Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null) {
+                  Tensor x = inputs.Length == 2 ? inputs[0] + ((1.0 - tf.cast(inputs[1], inputs.dtype)) * 1e-9)
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                                                 : inputs;
                   Tensor e = tf.exp(tf.sub(x, tf.reduce_max(x, axis: this.axis, keepdims: true)));
                   Tensor s = tf.reduce_sum(e, axis: this.axis, keepdims: true);

@@ -54,11 +54,16 @@ namespace Tensorflow
     /// for each `s` in `self.batch_size`.
     /// </summary>
 <<<<<<< HEAD
+<<<<<<< HEAD
     [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
     public abstract class RnnCell : ILayer, IRnnCell
 =======
     public abstract class RnnCell : ILayer
 >>>>>>> master
+=======
+    [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
+    public abstract class RnnCell : ILayer, IRnnCell
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight
@@ -185,6 +190,9 @@ namespace Tensorflow
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         public (Tensor, Tensors) Call(Tensors inputs, Tensors states, bool? training = null)
         {
             throw new NotImplementedException();
@@ -193,11 +201,14 @@ namespace Tensorflow
         public GeneralizedTensorShape OutputSize => throw new NotImplementedException();
         public bool IsTFRnnCell => throw new NotImplementedException();
         public bool SupportOptionalArgs => throw new NotImplementedException();
+<<<<<<< HEAD
 =======
         public Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
             throw new NotImplementedException();
         }
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
     }
 }

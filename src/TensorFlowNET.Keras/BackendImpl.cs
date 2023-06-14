@@ -25,11 +25,15 @@ using static Tensorflow.Binding;
 using static Tensorflow.Graphs.SubGraphUtility;
 using Tensorflow.Util;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using Tensorflow.Common.Types;
 =======
 using Tensorflow.Operations;
 using OneOf;
 >>>>>>> master
+=======
+using Tensorflow.Common.Types;
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
 namespace Tensorflow.Keras
 {
@@ -460,6 +464,9 @@ namespace Tensorflow.Keras
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         public (Tensors, Tensors, Tensors) rnn(
            Func<Tensors, Tensors, (Tensors, Tensors)> step_function, // args:inputs, states, return:output, new_states
            Tensors inputs, // inputs is a tuple of tensors (one per input sequence)
@@ -475,6 +482,7 @@ namespace Tensorflow.Keras
         {
 
             Tensor swap_batch_timestep(Tensor input_t)
+<<<<<<< HEAD
 =======
         public static (Tensors, Tensors) convert_inputs_if_ragged(OneOf<Tensor, RaggedTensor> inputs)
         {
@@ -498,6 +506,8 @@ namespace Tensorflow.Keras
 
             Tensors swap_batch_timestep(Tensors input_t)
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
             {
                 var axes = Enumerable.Range(0, input_t.rank).ToArray();
                 axes[0] = 1;
@@ -508,6 +518,9 @@ namespace Tensorflow.Keras
             if (!time_major)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 inputs = Nest.MapStructure(swap_batch_timestep, inputs).ToTensors();
             }
 
@@ -516,6 +529,7 @@ namespace Tensorflow.Keras
             var time_steps = first_flatted_input.shape[0];
             var batch = first_flatted_input.shape[1];
             var time_steps_t = (int)first_flatted_input.shape[0];
+<<<<<<< HEAD
 =======
                 inputs = nest.map_structure(swap_batch_timestep, inputs);
             }
@@ -525,6 +539,8 @@ namespace Tensorflow.Keras
             var batch = flatted_inptus[0].shape[1];
             var time_step_t = tf.shape(flatted_inptus[0])[0];
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
             foreach (var input_ in flatted_inptus)
             {
@@ -550,6 +566,7 @@ namespace Tensorflow.Keras
 
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 =======
 
@@ -559,6 +576,9 @@ namespace Tensorflow.Keras
             }
 
 >>>>>>> master
+=======
+            
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
             // tf.where needs its condition tensor to be the same shape as its two
             // result tensors, but in our case the condition (mask) tensor is
             // (nsamples, 1), and inputs are (nsamples, ndimensions) or even more.
@@ -569,19 +589,27 @@ namespace Tensorflow.Keras
             Tensors _expand_mask(Tensors mask_t, Tensors input_t, int fixed_dim = 1)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (!mask_t.IsSingle())
 =======
                 if (nest.is_nested(mask_t))
 >>>>>>> master
+=======
+                if (!mask_t.IsSingle())
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 {
                     throw new ValueError($"mask_t is expected to be tensor, but got {mask_t}");
                 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 if (!input_t.IsSingle())
 =======
                 if (nest.is_nested(input_t))
 >>>>>>> master
+=======
+                if (!input_t.IsSingle())
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 {
                     throw new ValueError($"input_t is expected to be tensor, but got {input_t}");
                 }
@@ -592,10 +620,14 @@ namespace Tensorflow.Keras
                     mask_t = tf.expand_dims(mask_t, -1);
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var multiples = Enumerable.Repeat(1, fixed_dim).ToArray().concat(input_t.shape.as_int_list().Skip(fixed_dim).ToArray());
 =======
                 var multiples = Enumerable.Repeat(1, fixed_dim).ToArray().concat(input_t.shape.as_int_list().ToList().GetRange(fixed_dim, input_t.rank));
 >>>>>>> master
+=======
+                var multiples = Enumerable.Repeat(1, fixed_dim).ToArray().concat(input_t.shape.as_int_list().Skip(fixed_dim).ToArray());
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 return tf.tile(mask_t, multiples);
             }
 
@@ -631,6 +663,9 @@ namespace Tensorflow.Keras
                 // the item in tuple is list of the tensor with shape (batch, feature)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 Tensors _process_single_input_t(Tensor input_t)
                 {
                     var unstaked_input_t = array_ops.unstack(input_t); // unstack for time_step dim
@@ -639,6 +674,7 @@ namespace Tensorflow.Keras
                         unstaked_input_t = unstaked_input_t.Reverse().ToArray();
                     }
                     return unstaked_input_t;
+<<<<<<< HEAD
 =======
 
 
@@ -652,10 +688,13 @@ namespace Tensorflow.Keras
                     }
                     return input_t;
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 }
 
                 // TODO(Wanglongzhi2001)
                 Tensors processed_input;
+<<<<<<< HEAD
 <<<<<<< HEAD
                 if (!inputs.IsSingle())
                 {
@@ -665,6 +704,11 @@ namespace Tensorflow.Keras
                 {
                     processed_input = nest.map_structure(_process_single_input_t, inputs);
 >>>>>>> master
+=======
+                if (!inputs.IsSingle())
+                {
+                    processed_input = inputs.MapStructure(_process_single_input_t).ReduceTo<Tensors, Tensor>().ToTensors();
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 }
                 else
                 {
@@ -679,6 +723,9 @@ namespace Tensorflow.Keras
                         inp.Add(t_[time]);
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                     return Nest.PackSequenceAs(inputs, inp);
                 }
 
@@ -1006,6 +1053,7 @@ namespace Tensorflow.Keras
                 last_output = Nest.PackSequenceAs(output_time_zero, last_output).ToTensors();
 
             }
+<<<<<<< HEAD
 =======
                     return nest.pack_sequence_as(inputs, inp);
                 }
@@ -1336,6 +1384,8 @@ namespace Tensorflow.Keras
 
             //}
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
             Func<Tensor, Tensor> set_shape;
             set_shape = (output_) =>
@@ -1353,15 +1403,22 @@ namespace Tensorflow.Keras
                     }
                     shape[1] = (int)batch;
 <<<<<<< HEAD
+<<<<<<< HEAD
                     output_.shape = shape;
 =======
                     output_.set_shape(new Tensor(shape));
 >>>>>>> master
+=======
+                    output_.shape = shape;
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 }
                 return output_;
             };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
             outputs = Nest.MapStructure(set_shape, outputs).ToTensors();
             if (!time_major)
             {
@@ -1389,6 +1446,7 @@ namespace Tensorflow.Keras
             }
 
             throw new NotImplementedException("Not implemented currently, please submit an issue to https://github.com/SciSharp/TensorFlow.NET/issues");
+<<<<<<< HEAD
 =======
             var Outputs = (Tensors)nest.map_structure(set_shape, outputs);
             if (!time_major)
@@ -1420,6 +1478,8 @@ namespace Tensorflow.Keras
             //}
             throw new NotImplementedException();
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         }
     }
 }

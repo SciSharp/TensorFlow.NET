@@ -836,6 +836,82 @@ namespace Tensorflow.Keras.Layers
             });
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="return_sequences"></param>
+        /// <param name="return_state"></param>
+        /// <param name="go_backwards"></param>
+        /// <param name="stateful"></param>
+        /// <param name="unroll"></param>
+        /// <param name="time_major"></param>
+        /// <returns></returns>
+        public ILayer RNN(
+            IRnnCell cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false)
+            => new RNN(new RNNArgs
+            {
+                Cell = cell,
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                Unroll = unroll,
+                TimeMajor = time_major
+            });
+
+        public ILayer RNN(
+            IEnumerable<IRnnCell> cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false)
+            => new RNN(new RNNArgs
+            {
+                Cells = cell.ToList(),
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                Unroll = unroll,
+                TimeMajor = time_major
+            });
+
+
+        public IRnnCell LSTMCell(int uints,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal", // TODO(Wanglongzhi2001),glorot_uniform has not been developed.
+            string bias_initializer = "zeros",
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2)
+            => new LSTMCell(new LSTMCellArgs
+            {
+                Units = uints,
+                Activation = keras.activations.GetActivationFromName(activation),
+                RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                UseBias = use_bias,
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                UnitForgetBias = unit_forget_bias,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                Implementation = implementation
+            });
+
+        /// <summary>
         /// Long Short-Term Memory layer - Hochreiter 1997.
         /// </summary>
         /// <param name="units">Positive integer, dimensionality of the output space.</param>

@@ -337,10 +337,14 @@ namespace Tensorflow.Keras.Engine
         /// <param name="training"></param>
         /// <returns></returns>
 <<<<<<< HEAD
+<<<<<<< HEAD
         protected virtual Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
 =======
         protected virtual Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
 >>>>>>> master
+=======
+        protected virtual Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         {
             if (ReplacedCall is not null)
             {

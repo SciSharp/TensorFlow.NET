@@ -28,6 +28,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             return base.Call(inputs, initial_state: state, training: training);
@@ -36,6 +37,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         {
             return base.Call(inputs, initial_state: initial_state, training: training);
 >>>>>>> master
+=======
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
+        {
+            return base.Call(inputs, initial_state: state, training: training);
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         }
     }
 }

@@ -145,6 +145,7 @@ namespace Tensorflow.Keras.UnitTest.Layers
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         [TestMethod]
         public void SimpleRNNCell()
@@ -172,6 +173,8 @@ namespace Tensorflow.Keras.UnitTest.Layers
         }
 
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         [TestMethod]
         public void Resizing()
         {

@@ -5,12 +5,18 @@ using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 <<<<<<< HEAD
+<<<<<<< HEAD
 using Tensorflow.Common.Types;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Keras.Utils;
 =======
 using Tensorflow.Util;
 >>>>>>> master
+=======
+using Tensorflow.Common.Types;
+using Tensorflow.Common.Extensions;
+using Tensorflow.Keras.Utils;
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -24,6 +30,9 @@ namespace Tensorflow.Keras.Layers.Rnn
     public class SimpleRNNCell : DropoutRNNCellMixin
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         SimpleRNNCellArgs _args;
         IVariableV1 _kernel;
         IVariableV1 _recurrent_kernel;
@@ -37,6 +46,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         public override bool SupportOptionalArgs => false;
 
         public SimpleRNNCell(SimpleRNNCellArgs args) : base(args)
+<<<<<<< HEAD
         {
             this._args = args;
 =======
@@ -49,16 +59,24 @@ namespace Tensorflow.Keras.Layers.Rnn
         {
             this.args = args;
 >>>>>>> master
+=======
+        {
+            this._args = args;
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
             if (args.Units <= 0)
             {
                 throw new ValueError(
                             $"units must be a positive integer, got {args.Units}");
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
             this._args.Dropout = Math.Min(1f, Math.Max(0f, this._args.Dropout));
             this._args.RecurrentDropout = Math.Min(1f, Math.Max(0f, this._args.RecurrentDropout));
             _state_size = new GeneralizedTensorShape(args.Units);
             _output_size = new GeneralizedTensorShape(args.Units);
+<<<<<<< HEAD
 =======
             this.args.Dropout = Math.Min(1f, Math.Max(0f, this.args.Dropout));
             this.args.RecurrentDropout = Math.Min(1f, Math.Max(0f, this.args.RecurrentDropout));
@@ -69,6 +87,8 @@ namespace Tensorflow.Keras.Layers.Rnn
             DRCMixin.dropout = this.args.Dropout;
             DRCMixin.recurrent_dropout = this.args.RecurrentDropout;
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         }
 
         public override void build(KerasShapesWrapper input_shape)
@@ -96,6 +116,9 @@ namespace Tensorflow.Keras.Layers.Rnn
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         // TODO(Rinne): revise the trining param (with refactoring of the framework)
         protected override Tensors Call(Tensors inputs, Tensors states = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
@@ -103,6 +126,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             Tensors prev_output = Nest.IsNested(states) ? new Tensors(states[0]) : states;
             var dp_mask = get_dropout_mask_for_cell(inputs, training.Value);
             var rec_dp_mask = get_recurrent_dropout_mask_for_cell(prev_output, training.Value);
+<<<<<<< HEAD
 =======
         protected override Tensors Call(Tensors inputs, Tensor mask = null, bool? training = null, Tensors initial_state = null, Tensors constants = null)
         {
@@ -111,12 +135,17 @@ namespace Tensorflow.Keras.Layers.Rnn
             var dp_mask = DRCMixin.get_dropout_maskcell_for_cell(inputs, training.Value);
             var rec_dp_mask = DRCMixin.get_recurrent_dropout_maskcell_for_cell(prev_output, training.Value);
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
             Tensor h;
             var ranks = inputs.rank;
             if (dp_mask != null)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
                 h = math_ops.matmul(math_ops.multiply(inputs.Single, dp_mask.Single), _kernel.AsTensor());
             }
@@ -128,6 +157,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             if (_bias != null)
             {
                 h = tf.nn.bias_add(h, _bias);
+<<<<<<< HEAD
 =======
                 if (ranks > 2)
                 {
@@ -155,11 +185,16 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 h = tf.nn.bias_add(h, bias);
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
             }
 
             if (rec_dp_mask != null)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
                 prev_output = math_ops.multiply(prev_output, rec_dp_mask);
             }
 
@@ -184,6 +219,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
         {
             return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size.Value, dtype.Value);
+<<<<<<< HEAD
 =======
                 prev_output = math_ops.multiply(prev_output, rec_dp_mask)[0];
             }
@@ -216,6 +252,8 @@ namespace Tensorflow.Keras.Layers.Rnn
         {
             return RNNUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size, dtype);
 >>>>>>> master
+=======
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
         }
     }
 }

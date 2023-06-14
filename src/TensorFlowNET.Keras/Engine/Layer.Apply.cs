@@ -32,10 +32,14 @@ namespace Tensorflow.Keras.Engine
                 MaybeBuild(inputs);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             var outputs = Call(inputs, state: states, training: training);
 =======
             var outputs = Call(inputs, initial_state: state, training: training);
 >>>>>>> master
+=======
+            var outputs = Call(inputs, state: states, training: training);
+>>>>>>> 90a65d7d98b92f26574ac32392ed802a57d4d2c8
 
             // memory leak
             // _set_connectivity_metadata_(inputs, outputs);
