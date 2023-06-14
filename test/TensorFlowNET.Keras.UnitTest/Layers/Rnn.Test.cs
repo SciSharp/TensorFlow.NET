@@ -99,16 +99,6 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Assert.AreEqual((32, 5), output.shape);
         }
 
-        [TestMethod]
-        public void WlzTest()
-        {
-            long[] b = { 1, 2, 3 };
-            
-            Shape a = new Shape(Unknown).concatenate(b);
-            Console.WriteLine(a);
-
-        }
-
 
     }
 }

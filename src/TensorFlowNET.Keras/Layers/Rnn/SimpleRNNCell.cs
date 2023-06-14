@@ -98,7 +98,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 prev_output = math_ops.multiply(prev_output, rec_dp_mask);
             }
-            var tmp =  _recurrent_kernel.AsTensor();
+
             Tensor output = h + math_ops.matmul(prev_output, _recurrent_kernel.AsTensor());
 
             if (_args.Activation != null)
