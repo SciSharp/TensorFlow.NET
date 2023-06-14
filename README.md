@@ -15,7 +15,7 @@
 
 English | [中文](docs/README-CN.md)
 
-**=========================================================**
+**==========================================================**
 
 ### [Voting: Naming Convention Approach of v1.0.0](https://github.com/SciSharp/TensorFlow.NET/issues/1074)
 
@@ -27,7 +27,7 @@ Thank you,
 
 TensorFlow.NET Authors
 
-**=========================================================**
+**==========================================================**
 
 *master branch and v0.100.x is corresponding to tensorflow v2.10, v0.6x branch is from tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15. Please add `https://www.myget.org/F/scisharp/api/v3/index.json` to nuget source to use nightly release.*
 
