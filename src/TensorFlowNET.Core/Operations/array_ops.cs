@@ -971,6 +971,49 @@ namespace Tensorflow
             });
         }
 
+        /// <summary>
+        /// Transposes last two dimensions of tensor `a`.
+        /// For example:
+        /// <code> python
+        ///   x = tf.constant([[1, 2, 3], [4, 5, 6]])
+        ///   tf.matrix_transpose(x) # [[1, 4],
+        ///                         #  [2, 5],
+        ///                         #  [3, 6]]
+        /// </code>
+        /// Matrix with two batch dimensions.
+        /// x.shape is [1, 2, 3, 4]
+        /// tf.linalg.matrix_transpose(x) is shape [1, 2, 4, 3]
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="name"></param>
+        /// <param name="conjugate"></param>
+        /// <returns></returns>
+        /// <exception cref="ValueError"></exception>
+        public static Tensor matrix_transpose(Tensor a, string name = "matrix_transpose", bool conjugate = false)
+        {
+            return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
+            {
+                var a_shape = a.shape;
+                var ndims = a.shape.ndim;
+                Axis perm;
+                if(ndims != 0)
+                {
+                    if (ndims < 2)
+                    {
+                        throw new ValueError("Argument `a` should be a (batch) matrix with rank " +
+                            $">= 2.  Received `a` = {a} with shape: {a_shape}");
+                    }
+                    perm = new Axis(Enumerable.Range(0, ndims - 2).Concat(new int[] { ndims - 1, ndims - 2 }).ToArray());
+                }
+                else
+                {
+                    var a_rank = a.rank;
+                    perm = new Axis(Enumerable.Range(0, a_rank - 2).Concat(new int[] { a_rank - 1, a_rank - 2 }).ToArray());
+                }
+                return transpose(a, perm:perm, conjugate:conjugate);
+            });
+        }
+
         public static Tensor[] split(Tensor value, Tensor size_splits, int axis, int num = -1,
             string name = "split")
         {

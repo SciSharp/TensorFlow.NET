@@ -21,21 +21,6 @@ namespace Tensorflow.Keras.UnitTest.Layers
         [TestMethod]
         public void SimpleRNNCell()
         {
-            //var cell = tf.keras.layers.SimpleRNNCell(64, dropout: 0.5f, recurrent_dropout: 0.5f);
-            //var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
-            //var x = tf.random.normal((4, 100));
-            //var (y, h1) = cell.Apply(inputs: x, states: h0);
-            //var h2 = h1;
-            //Assert.AreEqual((4, 64), y.shape);
-            //Assert.AreEqual((4, 64), h2[0].shape);
-
-            //var model = keras.Sequential(new List<ILayer>
-            //{
-            //  keras.layers.InputLayer(input_shape: (4,100)),
-            //  keras.layers.SimpleRNNCell(64)
-            //});
-            //model.summary();
-
             var cell = tf.keras.layers.SimpleRNNCell(64, dropout: 0.5f, recurrent_dropout: 0.5f);
             var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
             var x = tf.random.normal((4, 100));
@@ -57,6 +42,17 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Console.WriteLine(state.shape);
             Assert.AreEqual((32, 5), output.shape);
             Assert.AreEqual((32, 4), state[0].shape);
+        }
+
+        [TestMethod]
+        public void LSTMCell()
+        {
+            var inputs = tf.ones((2, 100));
+            var states = new Tensors { tf.zeros((2, 4)), tf.zeros((2, 4)) };
+            var rnn = tf.keras.layers.LSTMCell(4);
+            var (output, new_states) = rnn.Apply(inputs, states);
+            Assert.AreEqual((2, 4), output.shape);
+            Assert.AreEqual((2, 4), new_states[0].shape);
         }
 
         [TestMethod]
@@ -105,15 +101,27 @@ namespace Tensorflow.Keras.UnitTest.Layers
         }
 
         [TestMethod]
-        public void WlzTest()
+        public void RNNForLSTMCell()
         {
-            long[] b = { 1, 2, 3 };
-            
-            Shape a = new Shape(Unknown).concatenate(b);
-            Console.WriteLine(a);
-
+            var inputs = tf.ones((5, 10, 8));
+            var rnn = tf.keras.layers.RNN(tf.keras.layers.LSTMCell(4));
+            var output = rnn.Apply(inputs);
+            Console.WriteLine($"output: {output}");
+            Assert.AreEqual((5, 4), output.shape);
         }
 
+        [TestMethod]
+        public void MyTest()
+        {
+            var a = tf.zeros((2, 3));
+            var b = tf.ones_like(a);
+            var c = tf.ones((3,4));
+
+            var d = new Tensors { a, b, c };
+            var (A, BC) = d;
+            Console.WriteLine($"A:{A}");
+            Console.WriteLine($"BC:{BC}");
+        }
 
     }
 }
