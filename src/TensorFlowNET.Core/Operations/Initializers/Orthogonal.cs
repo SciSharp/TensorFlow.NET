@@ -58,8 +58,7 @@ public class Orthogonal : IInitializer
 
         if (num_rows < num_cols)
         {
-            // q = tf.linalg.matrix_transpose(q);
-            throw new NotImplementedException("");
+            q = array_ops.matrix_transpose(q);
         }
 
         return _gain * tf.reshape(q, shape);

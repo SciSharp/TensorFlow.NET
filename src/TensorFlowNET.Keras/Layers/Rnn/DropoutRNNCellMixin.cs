@@ -32,7 +32,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         }
 
-        public Tensors? get_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
+        public Tensors? get_dropout_mask_for_cell(Tensors input, bool training, int count = 1)
         {
             if (dropout == 0f)
                 return null;
@@ -44,7 +44,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         }
 
         // Get the recurrent dropout mask for RNN cell.
-        public Tensors? get_recurrent_dropout_maskcell_for_cell(Tensors input, bool training, int count = 1)
+        public Tensors? get_recurrent_dropout_mask_for_cell(Tensors input, bool training, int count = 1)
         {
             if (dropout == 0f)
                 return null;

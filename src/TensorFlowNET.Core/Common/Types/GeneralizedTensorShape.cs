@@ -16,10 +16,6 @@ namespace Tensorflow.Common.Types
         {
             var elem = new TensorShapeConfig() { Items = new long?[] { dim } };
             Shapes = Enumerable.Repeat(elem, size).ToArray();
-            //Shapes = new TensorShapeConfig[size];
-            //Shapes.Initialize(new TensorShapeConfig() { Items = new long?[] { dim } });
-            //Array.Initialize(Shapes, new TensorShapeConfig() { Items = new long?[] { dim } });
-            ////Shapes = new TensorShapeConfig[] { new TensorShapeConfig() { Items = new long?[] { dim } } };
         }
 
         public GeneralizedTensorShape(Shape shape)
