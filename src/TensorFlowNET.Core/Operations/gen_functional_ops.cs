@@ -2,6 +2,7 @@
 
 using Tensorflow.Eager;
 using Tensorflow.Contexts;
+using Tensorflow.Exceptions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow;
@@ -53,6 +54,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Case", name) { args = new object[] { branch_index, input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["branches"] = branches, ["output_shapes"] = output_shapes } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -115,6 +120,10 @@ public static class gen_functional_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DeviceIndex", name) { args = new object[] { }, attrs = new Dictionary<string, object>() { ["device_names"] = device_names } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -171,6 +180,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeParam", name) { args = new object[] { }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype, ["shape"] = shape } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -239,6 +252,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "For", name) { args = new object[] { start, limit, delta, input }, attrs = new Dictionary<string, object>() { ["body"] = body } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -309,6 +326,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "If", name) { args = new object[] { cond, input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["then_branch"] = then_branch, ["else_branch"] = else_branch, ["output_shapes"] = output_shapes } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -384,6 +405,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "PartitionedCall", name) { args = new object[] { args }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["f"] = f, ["config"] = config, ["config_proto"] = config_proto, ["executor_type"] = executor_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -462,6 +487,10 @@ public static class gen_functional_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RemoteCall", name) { args = new object[] { target, args }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["f"] = f } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -528,6 +557,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StatefulPartitionedCall", name) { args = new object[] { args }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["f"] = f, ["config"] = config, ["config_proto"] = config_proto, ["executor_type"] = executor_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -628,6 +661,10 @@ public static class gen_functional_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StatelessCase", name) { args = new object[] { branch_index, input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["branches"] = branches, ["output_shapes"] = output_shapes } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -697,6 +734,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StatelessIf", name) { args = new object[] { cond, input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["then_branch"] = then_branch, ["else_branch"] = else_branch, ["output_shapes"] = output_shapes } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -774,6 +815,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StatelessWhile", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["cond"] = cond, ["body"] = body, ["output_shapes"] = output_shapes, ["parallel_iterations"] = parallel_iterations } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -855,6 +900,10 @@ public static class gen_functional_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SymbolicGradient", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["f"] = f } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -921,6 +970,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ToBool", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -990,6 +1043,10 @@ public static class gen_functional_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "While", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["cond"] = cond, ["body"] = body, ["output_shapes"] = output_shapes, ["parallel_iterations"] = parallel_iterations } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {

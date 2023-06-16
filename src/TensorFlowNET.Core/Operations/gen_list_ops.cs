@@ -2,6 +2,7 @@
 
 using Tensorflow.Eager;
 using Tensorflow.Contexts;
+using Tensorflow.Exceptions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow;
@@ -34,6 +35,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "EmptyTensorList", name) { args = new object[] { element_shape, max_num_elements }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -98,6 +103,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListConcat", name) { args = new object[] { input_handle }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype, ["element_shape"] = element_shape } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -150,6 +159,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListConcatLists", name) { args = new object[] { input_a, input_b }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -221,6 +234,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListConcatV2", name) { args = new object[] { input_handle, element_shape, leading_dims }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -280,6 +297,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListElementShape", name) { args = new object[] { input_handle }, attrs = new Dictionary<string, object>() { ["shape_type"] = shape_type } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -338,6 +359,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListFromTensor", name) { args = new object[] { tensor, element_shape }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -402,6 +427,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListGather", name) { args = new object[] { input_handle, indices, element_shape }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -456,6 +485,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListGetItem", name) { args = new object[] { input_handle, index, element_shape }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -514,6 +547,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListLength", name) { args = new object[] { input_handle }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -576,6 +613,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListPopBack", name) { args = new object[] { input_handle, element_shape }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -637,6 +678,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListPushBack", name) { args = new object[] { input_handle, tensor }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -687,6 +732,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListPushBackBatch", name) { args = new object[] { input_handles, tensor }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -748,6 +797,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListReserve", name) { args = new object[] { element_shape, num_elements }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -807,6 +860,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListResize", name) { args = new object[] { input_handle, size }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -872,6 +929,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListScatter", name) { args = new object[] { tensor, indices, element_shape }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -935,6 +996,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListScatterIntoExistingList", name) { args = new object[] { input_handle, tensor, indices }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1005,6 +1070,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListScatterV2", name) { args = new object[] { tensor, indices, element_shape, num_elements }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1058,6 +1127,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListSetItem", name) { args = new object[] { input_handle, index, item }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1123,6 +1196,10 @@ public static class gen_list_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListSplit", name) { args = new object[] { tensor, element_shape, lengths }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1186,6 +1263,10 @@ public static class gen_list_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorListStack", name) { args = new object[] { input_handle, element_shape }, attrs = new Dictionary<string, object>() { ["element_dtype"] = element_dtype, ["num_elements"] = num_elements } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
