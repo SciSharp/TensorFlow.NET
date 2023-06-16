@@ -24,11 +24,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         IVariableV1 _kernel;
         IVariableV1 _recurrent_kernel;
         IVariableV1 _bias;
-        GeneralizedTensorShape _state_size;
-        GeneralizedTensorShape _output_size;
+        INestStructure<long> _state_size;
+        INestStructure<long> _output_size;
 
-        public override GeneralizedTensorShape StateSize => _state_size;
-        public override GeneralizedTensorShape OutputSize => _output_size;
+        public override INestStructure<long> StateSize => _state_size;
+        public override INestStructure<long> OutputSize => _output_size;
         public override bool SupportOptionalArgs => false;
 
         public SimpleRNNCell(SimpleRNNCellArgs args) : base(args)
@@ -41,8 +41,8 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
             this._args.Dropout = Math.Min(1f, Math.Max(0f, this._args.Dropout));
             this._args.RecurrentDropout = Math.Min(1f, Math.Max(0f, this._args.RecurrentDropout));
-            _state_size = new GeneralizedTensorShape(args.Units);
-            _output_size = new GeneralizedTensorShape(args.Units);
+            _state_size = new NestNode<long>(args.Units);
+            _output_size = new NestNode<long>(args.Units);
         }
 
         public override void build(KerasShapesWrapper input_shape)

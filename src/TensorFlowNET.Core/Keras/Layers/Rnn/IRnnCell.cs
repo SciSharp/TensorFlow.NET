@@ -10,11 +10,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         /// <summary>
         /// If the derived class tends to not implement it, please return null.
         /// </summary>
-        GeneralizedTensorShape? StateSize { get; }
+        INestStructure<long>? StateSize { get; }
         /// <summary>
         /// If the derived class tends to not implement it, please return null.
         /// </summary>
-        GeneralizedTensorShape? OutputSize { get; }
+        INestStructure<long>? OutputSize { get; }
         /// <summary>
         /// Whether the optional RNN args are supported when appying the layer.
         /// In other words, whether `Apply` is overwrited with process of `RnnOptionalArgs`.

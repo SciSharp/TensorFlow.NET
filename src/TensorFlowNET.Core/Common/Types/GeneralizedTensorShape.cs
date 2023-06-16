@@ -7,21 +7,6 @@ namespace Tensorflow.Common.Types
 {
     public class GeneralizedTensorShape: Nest<Shape>
     {
-        ////public TensorShapeConfig[] Shapes { get; set; }
-        ///// <summary>
-        ///// create a single-dim generalized Tensor shape.
-        ///// </summary>
-        ///// <param name="dim"></param>
-        //public GeneralizedTensorShape(int dim, int size = 1)
-        //{
-        //    var elem = new TensorShapeConfig() { Items = new long?[] { dim } };
-        //    Shapes = Enumerable.Repeat(elem, size).ToArray();
-        //    //Shapes = new TensorShapeConfig[size];
-        //    //Shapes.Initialize(new TensorShapeConfig() { Items = new long?[] { dim } });
-        //    //Array.Initialize(Shapes, new TensorShapeConfig() { Items = new long?[] { dim } });
-        //    ////Shapes = new TensorShapeConfig[] { new TensorShapeConfig() { Items = new long?[] { dim } } };
-        //}
-
         public GeneralizedTensorShape(Shape value, string? name = null)
         {
             NodeValue = value;

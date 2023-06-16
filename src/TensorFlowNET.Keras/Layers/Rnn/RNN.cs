@@ -86,7 +86,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             set { _states = value; }
         }
 
-        private OneOf<Shape, List<Shape>> compute_output_shape(Shape input_shape)
+        private INestStructure<Shape> compute_output_shape(Shape input_shape)
         {
             var batch = input_shape[0];
             var time_step = input_shape[1];
@@ -96,13 +96,15 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
 
             // state_size is a array of ints or a positive integer
-            var state_size = Cell.StateSize.ToSingleShape();
-
-            // TODO(wanglongzhi2001),flat_output_size应该是什么类型的，Shape还是Tensor
-            Func<Shape, Shape> _get_output_shape;
-            _get_output_shape = (flat_output_size) =>
+            var state_size = Cell.StateSize;
+            if(state_size?.TotalNestedCount == 1)
             {
-                var output_dim = flat_output_size.as_int_list();
+                state_size = new NestList<long>(state_size.Flatten().First());
+            }
+
+            Func<long, Shape>  _get_output_shape = (flat_output_size) =>
+            {
+                var output_dim = new Shape(flat_output_size).as_int_list();
                 Shape output_shape;
                 if (_args.ReturnSequences)
                 {
@@ -125,31 +127,28 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             Type type = Cell.GetType();
             PropertyInfo output_size_info = type.GetProperty("output_size");
-            Shape output_shape;
+            INestStructure<Shape> output_shape;
             if (output_size_info != null)
             {
-                output_shape = nest.map_structure(_get_output_shape, Cell.OutputSize.ToSingleShape());
-                // TODO(wanglongzhi2001),output_shape应该简单的就是一个元组还是一个Shape类型
-                output_shape = (output_shape.Length == 1 ? (int)output_shape[0] : output_shape);
+                output_shape = Nest.MapStructure(_get_output_shape, Cell.OutputSize);
             }
             else
             {
-                output_shape = _get_output_shape(state_size);
+                output_shape = new NestNode<Shape>(_get_output_shape(state_size.Flatten().First()));
             }
 
             if (_args.ReturnState)
             {
-                Func<Shape, Shape> _get_state_shape;
-                _get_state_shape = (flat_state) =>
+                Func<long, Shape> _get_state_shape = (flat_state) =>
                 {
-                    var state_shape = new int[] { (int)batch }.concat(flat_state.as_int_list());
+                    var state_shape = new int[] { (int)batch }.concat(new Shape(flat_state).as_int_list());
                     return new Shape(state_shape);
                 };
 
 
-                var state_shape = _get_state_shape(state_size);
+                var state_shape = Nest.MapStructure(_get_state_shape, state_size);
 
-                return new List<Shape> { output_shape, state_shape };
+                return new Nest<Shape>(new[] { output_shape, state_shape } );
             }
             else
             {
@@ -435,7 +434,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                         tmp.add(tf.math.count_nonzero(s.Single()));
                     }
                     var non_zero_count = tf.add_n(tmp);
-                    //initial_state = tf.cond(non_zero_count > 0, () => States, () => initial_state);
+                    initial_state = tf.cond(non_zero_count > 0, States, initial_state);
                     if ((int)non_zero_count.numpy() > 0)
                     {
                         initial_state = States;
@@ -445,16 +444,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     initial_state = States;
                 }
-                // TODO(Wanglongzhi2001),
-//                initial_state = tf.nest.map_structure(
-//# When the layer has a inferred dtype, use the dtype from the
-//# cell.
-//                lambda v: tf.cast(
-//                    v, self.compute_dtype or self.cell.compute_dtype
-//                ),
-//                initial_state,
-//            )
-
+                //initial_state = Nest.MapStructure(v => tf.cast(v, this.), initial_state);
             }
             else if (initial_state is null)
             {

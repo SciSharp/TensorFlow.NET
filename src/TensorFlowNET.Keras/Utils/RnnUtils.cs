@@ -10,12 +10,11 @@ namespace Tensorflow.Keras.Utils
 {
     internal static class RnnUtils
     {
-        internal static Tensors generate_zero_filled_state(Tensor batch_size_tensor, GeneralizedTensorShape state_size, TF_DataType dtype)
+        internal static Tensors generate_zero_filled_state(Tensor batch_size_tensor, INestStructure<long> state_size, TF_DataType dtype)
         {
-            Func<GeneralizedTensorShape, Tensor> create_zeros;
-            create_zeros = (GeneralizedTensorShape unnested_state_size) =>
+            Func<long, Tensor> create_zeros = (unnested_state_size) =>
             {
-                var flat_dims = unnested_state_size.ToSingleShape().dims;
+                var flat_dims = new Shape(unnested_state_size).dims;
                 var init_state_size = new Tensor[] { batch_size_tensor }.
                     Concat(flat_dims.Select(x => tf.constant(x, dtypes.int32))).ToArray();
                 return array_ops.zeros(init_state_size, dtype: dtype);
@@ -24,11 +23,11 @@ namespace Tensorflow.Keras.Utils
             // TODO(Rinne): map structure with nested tensors.
             if(state_size.TotalNestedCount > 1)
             {
-                return new Tensors(state_size.Flatten().Select(s => create_zeros(new GeneralizedTensorShape(s))).ToArray());
+                return new Tensors(state_size.Flatten().Select(s => create_zeros(s)).ToArray());
             }
             else
             {
-                return create_zeros(state_size);
+                return create_zeros(state_size.Flatten().First());
             }
 
         }
@@ -96,7 +95,7 @@ namespace Tensorflow.Keras.Utils
         /// </summary>
         /// <param name="state_size"></param>
         /// <returns></returns>
-        public static bool is_multiple_state(GeneralizedTensorShape state_size)
+        public static bool is_multiple_state(INestStructure<long> state_size)
         {
             return state_size.TotalNestedCount > 1;
         }

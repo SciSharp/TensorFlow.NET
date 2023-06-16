@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
-using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
@@ -38,24 +36,24 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         public bool SupportOptionalArgs => false;
 
-        public GeneralizedTensorShape StateSize
+        public INestStructure<long> StateSize
         {
             get
             {
                 if (_reverse_state_order)
                 {
                     var state_sizes = Cells.Reverse().Select(cell => cell.StateSize);
-                    return new GeneralizedTensorShape(new Nest<Shape>(state_sizes.Select(s => new Nest<Shape>(s))));
+                    return new Nest<long>(state_sizes);
                 }
                 else
                 {
                     var state_sizes = Cells.Select(cell => cell.StateSize);
-                    return new GeneralizedTensorShape(new Nest<Shape>(state_sizes.Select(s => new Nest<Shape>(s))));
+                    return new Nest<long>(state_sizes);
                 }
             }
         }
 
-        public GeneralizedTensorShape OutputSize
+        public INestStructure<long> OutputSize
         {
             get
             {
@@ -66,7 +64,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 }
                 else if (RnnUtils.is_multiple_state(lastCell.StateSize))
                 {
-                    return lastCell.StateSize.First();
+                    return new NestNode<long>(lastCell.StateSize.Flatten().First());
                 }
                 else
                 {
@@ -89,7 +87,7 @@ namespace Tensorflow.Keras.Layers.Rnn
         protected override Tensors Call(Tensors inputs, Tensors states = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             // Recover per-cell states.
-            var state_size = _reverse_state_order ? new GeneralizedTensorShape(StateSize.Reverse()) : StateSize;
+            var state_size = _reverse_state_order ? new NestList<long>(StateSize.Flatten().Reverse()) : StateSize;
             var nested_states = Nest.PackSequenceAs(state_size, Nest.Flatten(states).ToArray());
 
             var new_nest_states = Nest<Tensor>.Empty;
@@ -118,20 +116,20 @@ namespace Tensorflow.Keras.Layers.Rnn
                     layer.build(shape);
                     layer.Built = true;
                 }
-                GeneralizedTensorShape output_dim;
+                INestStructure<long> output_dim;
                 if(cell.OutputSize is not null)
                 {
                     output_dim = cell.OutputSize;
                 }
                 else if (RnnUtils.is_multiple_state(cell.StateSize))
                 {
-                    output_dim = cell.StateSize.First();
+                    output_dim = new NestNode<long>(cell.StateSize.Flatten().First());
                 }
                 else
                 {
                     output_dim = cell.StateSize;
                 }
-                shape = new Shape(new long[] { shape.dims[0] }.Concat(output_dim.ToSingleShape().dims).ToArray());
+                shape = new Shape(new long[] { shape.dims[0] }.Concat(output_dim.Flatten()).ToArray());
             }
             this.Built = true;
         }

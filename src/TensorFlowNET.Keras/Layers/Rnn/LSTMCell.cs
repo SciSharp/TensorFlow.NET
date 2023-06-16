@@ -22,13 +22,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         IVariableV1 _recurrent_kernel;
         IInitializer _bias_initializer;
         IVariableV1 _bias;
-        GeneralizedTensorShape _state_size;
-        GeneralizedTensorShape _output_size;
-        public override GeneralizedTensorShape StateSize => _state_size;
+        INestStructure<long> _state_size;
+        INestStructure<long> _output_size;
+        public override INestStructure<long> StateSize => _state_size;
 
-        public override GeneralizedTensorShape OutputSize => _output_size;
-
-        public override bool IsTFRnnCell => true;
+        public override INestStructure<long> OutputSize => _output_size;
 
         public override bool SupportOptionalArgs => false;
         public LSTMCell(LSTMCellArgs args)
@@ -49,10 +47,8 @@ namespace Tensorflow.Keras.Layers.Rnn
                 _args.Implementation = 1;
             }
 
-            _state_size = new GeneralizedTensorShape(_args.Units, 2);
-            _output_size = new GeneralizedTensorShape(_args.Units);
-
-
+            _state_size = new NestList<long>(_args.Units, _args.Units);
+            _output_size = new NestNode<long>(_args.Units);
         }
 
         public override void build(KerasShapesWrapper input_shape)
@@ -228,11 +224,6 @@ namespace Tensorflow.Keras.Layers.Rnn
             var c = f * c_tm1 + i * _args.RecurrentActivation.Apply(z2);
             var o = _args.RecurrentActivation.Apply(z3);
             return new Tensors(c, o);
-        }
-
-        public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
-        {
-            return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size.Value, dtype.Value);
         }
     }
 

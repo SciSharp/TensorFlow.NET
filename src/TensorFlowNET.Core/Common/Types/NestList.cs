@@ -15,7 +15,12 @@ namespace Tensorflow.Common.Types
         public int ShallowNestedCount => Values.Count;
 
         public int TotalNestedCount => Values.Count;
-        
+
+        public NestList(params T[] values)
+        {
+            Values = new List<T>(values);
+        }
+
         public NestList(IEnumerable<T> values)
         {
             Values = new List<T>(values);

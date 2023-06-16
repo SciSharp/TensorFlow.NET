@@ -185,8 +185,8 @@ namespace Tensorflow
         {
             throw new NotImplementedException();
         }
-        public GeneralizedTensorShape StateSize => throw new NotImplementedException();
-        public GeneralizedTensorShape OutputSize => throw new NotImplementedException();
+        public INestStructure<long> StateSize => throw new NotImplementedException();
+        public INestStructure<long> OutputSize => throw new NotImplementedException();
         public bool IsTFRnnCell => throw new NotImplementedException();
         public bool SupportOptionalArgs => throw new NotImplementedException();
     }

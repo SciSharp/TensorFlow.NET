@@ -18,8 +18,8 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         }
 
-        public abstract GeneralizedTensorShape StateSize { get; }
-        public abstract GeneralizedTensorShape OutputSize { get; }
+        public abstract INestStructure<long> StateSize { get; }
+        public abstract INestStructure<long> OutputSize { get; }
         public abstract bool SupportOptionalArgs { get; }
         public virtual Tensors GetInitialState(Tensors inputs, Tensor batch_size, TF_DataType dtype)
         {
