@@ -28,7 +28,16 @@ namespace Tensorflow.NumPy
         public static NDArray multiply(NDArray x1, NDArray x2) => new NDArray(tf.multiply(x1, x2));
 
         [AutoNumPy]
-        public static NDArray maximum(NDArray x1, NDArray x2) => new NDArray(tf.maximum(x1, x2));
+        //public static NDArray maximum(NDArray x1, NDArray x2) => new NDArray(tf.maximum(x1, x2));
+        public static NDArray maximum(NDArray x1, NDArray x2, int? axis = null)
+        {
+            var maxValues = tf.maximum(x1, x2);
+            if (axis.HasValue)
+            {
+                maxValues = tf.reduce_max(maxValues, axis: axis.Value);
+            }
+            return new NDArray(maxValues);
+        }
 
         [AutoNumPy]
         public static NDArray minimum(NDArray x1, NDArray x2) => new NDArray(tf.minimum(x1, x2));
