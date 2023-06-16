@@ -7,6 +7,7 @@ using Tensorflow.Keras.Saving;
 using Tensorflow.Common.Types;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Graphs;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -28,7 +29,6 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         public override GeneralizedTensorShape StateSize => _state_size;
         public override GeneralizedTensorShape OutputSize => _output_size;
-        public override bool IsTFRnnCell => true;
         public override bool SupportOptionalArgs => false;
 
         public SimpleRNNCell(SimpleRNNCellArgs args) : base(args)
@@ -98,7 +98,6 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 prev_output = math_ops.multiply(prev_output, rec_dp_mask);
             }
-            var tmp =  _recurrent_kernel.AsTensor();
             Tensor output = h + math_ops.matmul(prev_output, _recurrent_kernel.AsTensor());
 
             if (_args.Activation != null)
@@ -117,9 +116,9 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
-        public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
+        public Tensors get_initial_state(Tensors inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size.Value, dtype.Value);
+            return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size, dtype);
         }
     }
 }

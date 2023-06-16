@@ -206,7 +206,6 @@ namespace Tensorflow.Keras.Layers.Rnn
                 // append bacth dim
                 state_spec_shape = new int[] { -1 }.concat(state_spec_shape);
                 return new InputSpec(shape: state_spec_shape);
-
             }
 
             // Check whether the input shape contains any nested shapes. It could be
@@ -298,7 +297,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             // cell_call_fn = (self.cell.__call__ if callable(self.cell) else self.cell.call)
             Func<Tensors, Tensors, (Tensors, Tensors)> step;
-            bool is_tf_rnn_cell = _cell.IsTFRnnCell;
+            bool is_tf_rnn_cell = false;
             if (constants is not null)
             {
                 if (!_cell.SupportOptionalArgs)
@@ -310,8 +309,8 @@ namespace Tensorflow.Keras.Layers.Rnn
 
                 step = (inputs, states) =>
                 {
-                    constants = new Tensors(states.TakeLast(_num_constants));
-                    states = new Tensors(states.SkipLast(_num_constants));
+                    constants = new Tensors(states.TakeLast(_num_constants).ToArray());
+                    states = new Tensors(states.SkipLast(_num_constants).ToArray());
                     states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
                     var (output, new_states) = _cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
                     return (output, new_states.Single);
@@ -395,12 +394,12 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 if (_num_constants != 0)
                 {
-                    initial_state = new Tensors(inputs.Skip(1));
+                    initial_state = new Tensors(inputs.Skip(1).ToArray());
                 }
                 else
                 {
-                    initial_state = new Tensors(inputs.Skip(1).SkipLast(_num_constants));
-                    constants = new Tensors(inputs.TakeLast(_num_constants));
+                    initial_state = new Tensors(inputs.Skip(1).SkipLast(_num_constants).ToArray());
+                    constants = new Tensors(inputs.TakeLast(_num_constants).ToArray());
                 }
                 if (len(initial_state) == 0)
                     initial_state = null;
@@ -558,36 +557,14 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         protected Tensors get_initial_state(Tensors inputs)
         {
-            var get_initial_state_fn = _cell.GetType().GetMethod("get_initial_state");
-
             var input = inputs[0];
-            var input_shape = inputs.shape;
+            var input_shape = array_ops.shape(inputs);
             var batch_size = _args.TimeMajor ? input_shape[1] : input_shape[0];
             var dtype = input.dtype;
 
-            Tensors init_state = new Tensors();
-
-            if(get_initial_state_fn != null)
-            {
-                init_state = (Tensors)get_initial_state_fn.Invoke(_cell, new object[] { inputs, batch_size, dtype });
-                
-            }
-            //if (_cell is RnnCellBase rnn_base_cell)
-            //{
-            //    init_state = rnn_base_cell.GetInitialState(null, batch_size, dtype);
-            //}
-            else
-            {
-                init_state = RnnUtils.generate_zero_filled_state(batch_size, _cell.StateSize, dtype);
-            }
+            Tensors init_state = _cell.GetInitialState(null, batch_size, dtype);
 
             return init_state;
-        }
-
-        // Check whether the state_size contains multiple states.
-        public static bool is_multiple_state(GeneralizedTensorShape state_size)
-        {
-            return state_size.Shapes.Length > 1;
         }
     }
 }

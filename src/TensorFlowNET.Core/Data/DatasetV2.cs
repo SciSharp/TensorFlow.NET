@@ -161,8 +161,8 @@ namespace Tensorflow
                     break;
                 }
 
-                yield return (new Tensors(results.Take(FirstInputTensorCount)), results.Length == FirstInputTensorCount ? 
-                    null : new Tensors(results.Skip(FirstInputTensorCount)));
+                yield return (new Tensors(results.Take(FirstInputTensorCount).ToArray()), results.Length == FirstInputTensorCount ? 
+                    null : new Tensors(results.Skip(FirstInputTensorCount).ToArray()));
             }
         }
 

@@ -21,7 +21,8 @@ namespace Tensorflow.CodeGen
             {
                 sb.Append("Operation ");
             }
-            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr))
+            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr)
+                && string.IsNullOrEmpty(op.OutputArg[0].TypeListAttr))
             {
                 sb.Append("Tensor ");
             }
@@ -70,7 +71,8 @@ namespace Tensorflow.CodeGen
                 {
                     sb.AppendLine("return null;");
                 }
-                else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr))
+                else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr)
+                    && string.IsNullOrEmpty(op.OutputArg[0].TypeListAttr))
                 {
                     sb.AppendLine("return _fast_path_result[0];");
                 }
@@ -149,7 +151,8 @@ namespace Tensorflow.CodeGen
             {
                 sb.AppendLine("return _op;");
             }
-            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr))
+            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr)
+                && string.IsNullOrEmpty(op.OutputArg[0].TypeListAttr))
             {
                 sb.AppendLine("return _result[0];");
             }
@@ -174,7 +177,7 @@ namespace Tensorflow.CodeGen
                 {
                     argName = $"{argName}_";
                 }
-                if (!string.IsNullOrEmpty(arg.NumberAttr))
+                if (!string.IsNullOrEmpty(arg.NumberAttr) || !string.IsNullOrEmpty(arg.TypeListAttr))
                 {
                     sb.Append($"Tensors {argName}, ");
                 }
@@ -273,7 +276,8 @@ namespace Tensorflow.CodeGen
             {
                 sb.Append("Operation ");
             }
-            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr))
+            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr)
+                && string.IsNullOrEmpty(op.OutputArg[0].TypeListAttr))
             {
                 sb.Append("Tensor ");
             }
@@ -366,6 +370,13 @@ namespace Tensorflow.CodeGen
                         sb.Append($"\"{attr.Name}\", {attrRealName}, ");
                     }
                 }
+                else if(attr.Type == "list(type)")
+                {
+                    if (op.InputArg.Any(x => x.TypeListAttr == attr.Name))
+                    {
+                        continue;
+                    }
+                }
                 else if(attr.Type == "int" && op.InputArg.Any(x => x.NumberAttr == attr.Name))
                 {
                     bool found = false;
@@ -408,7 +419,8 @@ namespace Tensorflow.CodeGen
             {
                 sb.AppendLine("return null;");
             }
-            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr))
+            else if (outputArgsCount == 1 && string.IsNullOrEmpty(op.OutputArg[0].NumberAttr)
+                && string.IsNullOrEmpty(op.OutputArg[0].TypeListAttr))
             {
                 sb.AppendLine("return _result[0];");
             }

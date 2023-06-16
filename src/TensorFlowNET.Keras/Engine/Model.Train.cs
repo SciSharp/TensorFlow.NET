@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Engine
         {
             var data = iterator.next();
             var x_size = data_handler.DataAdapter.GetDataset().FirstInputTensorCount;
-            var outputs = train_step(data_handler, new Tensors(data.Take(x_size)), new Tensors(data.Skip(x_size)));
+            var outputs = train_step(data_handler, new Tensors(data.Take(x_size).ToArray()), new Tensors(data.Skip(x_size).ToArray()));
             tf_with(ops.control_dependencies(new object[0]), ctl => _train_counter.assign_add(1));
             return outputs;
         }

@@ -359,6 +359,8 @@ namespace Tensorflow.Eager
                 case TF_AttrType.TF_ATTR_FUNC:
                     if (value is ConcreteFunction func)
                         c_api.TFE_OpSetAttrFunctionName(op, key, func.func_graph.FuncName, func.func_graph.FuncName.Length);
+                    else if(value is string str)
+                        c_api.TFE_OpSetAttrFunctionName(op, key, str, str.Length);
                     else
                         throw new NotImplementedException("TF_AttrType.TF_ATTR_FUNC");
                     break;

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
@@ -38,10 +39,6 @@ namespace Tensorflow.Operations
 
         bool _infer_shape;
         public override bool infer_shape => _infer_shape;
-        public bool _dynamic_size;
-        public Shape _element_shape;
-
-        public List<Tensor> _colocate_with;
 
         Tensor _handle;
         public override Tensor handle => _handle;
@@ -56,6 +53,7 @@ namespace Tensorflow.Operations
             bool infer_shape = true, Shape? element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
+            _size = size;
             _flow = constant_op.constant(0);
             _infer_shape = infer_shape;
             _element_shape = element_shape ?? Shape.Null;

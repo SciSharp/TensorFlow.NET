@@ -18,7 +18,12 @@ namespace Tensorflow.Common.Extensions
             return sequence.Take(sequence.Count() - count);
         }
 #endif
-        public static Tensors ToTensors(this IEnumerable<Tensor> tensors)
+        public static Tensors ToTensors(this Tensor[] tensors)
+        {
+            return new Tensors(tensors);
+        }
+
+        public static Tensors ToTensors(this IList<Tensor> tensors)
         {
             return new Tensors(tensors);
         }

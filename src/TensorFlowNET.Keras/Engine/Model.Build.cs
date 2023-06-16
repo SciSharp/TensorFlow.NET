@@ -23,7 +23,7 @@ namespace Tensorflow.Keras.Engine
                 var graph = tf.executing_eagerly() ? new FuncGraph("build_graph") : keras.backend.get_graph();
                 graph.as_default();
                 var shapes = input_shape.ToShapeArray();
-                var x = new Tensors(shapes.Select(x => base_layer_utils.generate_placeholders_from_shape(x)));
+                var x = new Tensors(shapes.Select(x => base_layer_utils.generate_placeholders_from_shape(x)).ToArray());
                 try
                 {
                     Call(x, training: false);

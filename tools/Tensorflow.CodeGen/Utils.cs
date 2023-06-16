@@ -155,6 +155,10 @@ namespace Tensorflow.CodeGen
                 }
                 else if (attr.Type == "list(type)")
                 {
+                    if(op.InputArg.Any(x => x.TypeListAttr == attr.Name))
+                    {
+                        continue;
+                    }
                     if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.Type)
                     {
                         List<TF_DataType> values = new();
@@ -231,11 +235,11 @@ namespace Tensorflow.CodeGen
                 }
                 else if (attr.Type == "func")
                 {
-                    res.Add((attr.Name, "Func<Tensors, Tensors>", "NOVALUE"));
+                    res.Add((attr.Name, "object", "NOVALUE"));
                 }
                 else if (attr.Type == "list(func)")
                 {
-                    res.Add((attr.Name, "Func<Tensors, Tensors>[]", "NOVALUE"));
+                    res.Add((attr.Name, "object[]", "NOVALUE"));
                 }
                 else if (attr.Type == "tensor")
                 {

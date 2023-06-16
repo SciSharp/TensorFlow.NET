@@ -10,20 +10,21 @@ namespace Tensorflow.Keras.Utils
 {
     internal static class RnnUtils
     {
-        internal static Tensors generate_zero_filled_state(long batch_size_tensor, GeneralizedTensorShape state_size, TF_DataType dtype)
+        internal static Tensors generate_zero_filled_state(Tensor batch_size_tensor, GeneralizedTensorShape state_size, TF_DataType dtype)
         {
             Func<GeneralizedTensorShape, Tensor> create_zeros;
             create_zeros = (GeneralizedTensorShape unnested_state_size) =>
             {
                 var flat_dims = unnested_state_size.ToSingleShape().dims;
-                var init_state_size = new long[] { batch_size_tensor }.Concat(flat_dims).ToArray();
-                return array_ops.zeros(new Shape(init_state_size), dtype: dtype);
+                var init_state_size = new Tensor[] { batch_size_tensor }.
+                    Concat(flat_dims.Select(x => tf.constant(x, dtypes.int32))).ToArray();
+                return array_ops.zeros(init_state_size, dtype: dtype);
             };
 
             // TODO(Rinne): map structure with nested tensors.
-            if(state_size.Shapes.Length > 1)
+            if(state_size.TotalNestedCount > 1)
             {
-                return new Tensors(state_size.ToShapeArray().Select(s => create_zeros(new GeneralizedTensorShape(s))));
+                return new Tensors(state_size.Flatten().Select(s => create_zeros(new GeneralizedTensorShape(s))).ToArray());
             }
             else
             {
@@ -32,11 +33,11 @@ namespace Tensorflow.Keras.Utils
 
         }
 
-        internal static Tensors generate_zero_filled_state_for_cell(IRnnCell cell, Tensors inputs, long batch_size, TF_DataType dtype)
+        internal static Tensors generate_zero_filled_state_for_cell(IRnnCell cell, Tensors inputs, Tensor batch_size, TF_DataType dtype)
         {
-            if (inputs != null)
+            if (inputs is not null)
             {
-                batch_size = inputs.shape[0];
+                batch_size = array_ops.shape(inputs)[0];
                 dtype = inputs.dtype;
             }
             return generate_zero_filled_state(batch_size, cell.StateSize, dtype);
@@ -77,17 +78,27 @@ namespace Tensorflow.Keras.Utils
                 Debug.Assert(initial_state is null && constants is null);
                 if(num_constants > 0)
                 {
-                    constants = inputs.TakeLast(num_constants).ToTensors();
-                    inputs = inputs.SkipLast(num_constants).ToTensors();
+                    constants = inputs.TakeLast(num_constants).ToArray().ToTensors();
+                    inputs = inputs.SkipLast(num_constants).ToArray().ToTensors();
                 }
                 if(inputs.Length > 1)
                 {
-                    initial_state = inputs.Skip(1).ToTensors();
-                    inputs = inputs.Take(1).ToTensors();
+                    initial_state = inputs.Skip(1).ToArray().ToTensors();
+                    inputs = inputs.Take(1).ToArray().ToTensors();
                 }
             }
 
             return (inputs, initial_state, constants);
+        }
+
+        /// <summary>
+        /// Check whether the state_size contains multiple states.
+        /// </summary>
+        /// <param name="state_size"></param>
+        /// <returns></returns>
+        public static bool is_multiple_state(GeneralizedTensorShape state_size)
+        {
+            return state_size.TotalNestedCount > 1;
         }
     }
 }

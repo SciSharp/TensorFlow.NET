@@ -5,136 +5,80 @@ using System.Text;
 
 namespace Tensorflow.Common.Types
 {
-    public class GeneralizedTensorShape: IEnumerable<long?[]>, INestStructure<long?>, INestable<long?>
+    public class GeneralizedTensorShape: Nest<Shape>
     {
-        public TensorShapeConfig[] Shapes { get; set; }
-        /// <summary>
-        /// create a single-dim generalized Tensor shape.
-        /// </summary>
-        /// <param name="dim"></param>
-        public GeneralizedTensorShape(int dim, int size = 1)
+        ////public TensorShapeConfig[] Shapes { get; set; }
+        ///// <summary>
+        ///// create a single-dim generalized Tensor shape.
+        ///// </summary>
+        ///// <param name="dim"></param>
+        //public GeneralizedTensorShape(int dim, int size = 1)
+        //{
+        //    var elem = new TensorShapeConfig() { Items = new long?[] { dim } };
+        //    Shapes = Enumerable.Repeat(elem, size).ToArray();
+        //    //Shapes = new TensorShapeConfig[size];
+        //    //Shapes.Initialize(new TensorShapeConfig() { Items = new long?[] { dim } });
+        //    //Array.Initialize(Shapes, new TensorShapeConfig() { Items = new long?[] { dim } });
+        //    ////Shapes = new TensorShapeConfig[] { new TensorShapeConfig() { Items = new long?[] { dim } } };
+        //}
+
+        public GeneralizedTensorShape(Shape value, string? name = null)
         {
-            var elem = new TensorShapeConfig() { Items = new long?[] { dim } };
-            Shapes = Enumerable.Repeat(elem, size).ToArray();
-            //Shapes = new TensorShapeConfig[size];
-            //Shapes.Initialize(new TensorShapeConfig() { Items = new long?[] { dim } });
-            //Array.Initialize(Shapes, new TensorShapeConfig() { Items = new long?[] { dim } });
-            ////Shapes = new TensorShapeConfig[] { new TensorShapeConfig() { Items = new long?[] { dim } } };
+            NodeValue = value;
+            NestType = NestType.Node;
         }
 
-        public GeneralizedTensorShape(Shape shape)
+        public GeneralizedTensorShape(IEnumerable<Shape> values, string? name = null)
         {
-            Shapes = new TensorShapeConfig[] { shape };
+            ListValue = values.Select(s => new Nest<Shape>(s) as INestStructure<Shape>).ToList();
+            Name = name;
+            NestType = NestType.List;
         }
 
-        public GeneralizedTensorShape(TensorShapeConfig shape)
+        public GeneralizedTensorShape(Dictionary<string, Shape> value, string? name = null)
         {
-            Shapes = new TensorShapeConfig[] { shape };
+            DictValue = value.ToDictionary(x => x.Key, x => new Nest<Shape>(x.Value) as INestStructure<Shape>);
+            Name = name;
+            NestType = NestType.Dictionary;
         }
 
-        public GeneralizedTensorShape(TensorShapeConfig[] shapes)
+        public GeneralizedTensorShape(Nest<Shape> other)
         {
-            Shapes = shapes;
-        }
-
-        public GeneralizedTensorShape(IEnumerable<Shape> shape)
-        {
-            Shapes = shape.Select(x => (TensorShapeConfig)x).ToArray();
+            NestType = other.NestType;
+            NodeValue = other.NodeValue;
+            DictValue = other.DictValue;
+            ListValue = other.ListValue;
+            Name = other.Name;
         }
 
         public Shape ToSingleShape()
         {
-            if (Shapes.Length != 1)
+            var shapes = Flatten().ToList();
+            if (shapes.Count != 1)
             {
                 throw new ValueError("The generalized shape contains more than 1 dim.");
             }
-            var shape_config = Shapes[0];
-            Debug.Assert(shape_config is not null);
-            return new Shape(shape_config.Items.Select(x => x is null ? -1 : x.Value).ToArray());
+            return shapes[0];
         }
 
         public long ToNumber()
         {
-            if(Shapes.Length != 1 || Shapes[0].Items.Length != 1)
+            var shapes = Flatten().ToList();
+            if (shapes.Count != 1 || shapes[0].ndim != 1)
             {
                 throw new ValueError("The generalized shape contains more than 1 dim.");
             }
-            var res = Shapes[0].Items[0];
-            return res is null ? -1 : res.Value;
+            return shapes[0].dims[0];
         }
 
-        public Shape[] ToShapeArray()
+        public INestStructure<TensorShapeConfig> ToTensorShapeConfigs()
         {
-            return Shapes.Select(x => new Shape(x.Items.Select(y => y is null ? -1 : y.Value).ToArray())).ToArray();
+            return MapStructure(s => new TensorShapeConfig() { Items = s.dims.Select<long, long?>(x => x == -1 ? null : x).ToArray() });
         }
 
-        public IEnumerable<long?> Flatten()
+        public static implicit operator GeneralizedTensorShape(Shape shape)
         {
-            List<long?> result = new List<long?>();
-            foreach(var shapeConfig in Shapes)
-            {
-                result.AddRange(shapeConfig.Items);
-            }
-            return result;
-        }
-        public INestStructure<TOut> MapStructure<TOut>(Func<long?, TOut> func)
-        {
-            List<Nest<TOut>> lists = new();
-            foreach(var shapeConfig in Shapes)
-            {
-                lists.Add(new Nest<TOut>(shapeConfig.Items.Select(x => new Nest<TOut>(func(x)))));
-            }
-            return new Nest<TOut>(lists);
-        }
-
-        public Nest<long?> AsNest()
-        {
-            Nest<long?> DealWithSingleShape(TensorShapeConfig config)
-            {
-                if (config.Items.Length == 0)
-                {
-                    return Nest<long?>.Empty;
-                }
-                else if (config.Items.Length == 1)
-                {
-                    return new Nest<long?>(config.Items[0]);
-                }
-                else
-                {
-                    return new Nest<long?>(config.Items.Select(x => new Nest<long?>(x)));
-                }
-            }
-
-            if(Shapes.Length == 0)
-            {
-                return Nest<long?>.Empty;
-            }
-            else if(Shapes.Length == 1)
-            {
-                return DealWithSingleShape(Shapes[0]);
-            }
-            else
-            {
-                return new Nest<long?>(Shapes.Select(s => DealWithSingleShape(s)));
-            }
-        }
-        
-
-
-        public static implicit operator GeneralizedTensorShape(int dims)
-            => new GeneralizedTensorShape(dims);
-
-        public IEnumerator<long?[]> GetEnumerator()
-        {
-            foreach (var shape in Shapes)
-            {
-                yield return shape.Items;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            return new GeneralizedTensorShape(shape);
         }
     }
 }

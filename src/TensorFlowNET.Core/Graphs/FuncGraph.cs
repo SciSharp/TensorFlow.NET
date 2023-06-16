@@ -81,7 +81,7 @@ public class FuncGraph : Graph, IDisposable
     public IEnumerable<IVariableV1> TrainableVariables => Variables.Where(v => v.Trainable);
     public Dictionary<string, AttrValue> Attrs { get; set; }
 
-    Dictionary<long, (Tensor, Tensor)> _captures
+    internal Dictionary<long, (Tensor, Tensor)> _captures
         = new Dictionary<long, (Tensor, Tensor)>();
 
     public Tensor[] external_captures
@@ -399,7 +399,7 @@ public class FuncGraph : Graph, IDisposable
         var flat_func_args = nest.flatten(func_args as object);
         var flat_func_kwargs = nest.flatten(func_kwargs as object);
         func_graph.Inputs = new Tensors(flat_func_args.concat(flat_func_kwargs)
-            .Where(x => x is Tensor).Select(x => (Tensor)x));
+            .Where(x => x is Tensor).Select(x => (Tensor)x).ToArray());
 
         //var func_args_before = nest.pack_sequence_as(func_args, flat_func_args, true);
         //var func_kwargs_before = nest.pack_sequence_as(func_kwargs, flat_func_kwargs, true);

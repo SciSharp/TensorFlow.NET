@@ -14,7 +14,9 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.Common.Types;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
@@ -44,5 +46,27 @@ namespace Tensorflow
 
         public abstract Tensor stack(string name = null);
         public abstract Tensor gather(Tensor indices, string name = null);
+
+        internal bool _dynamic_size;
+        internal Tensor _size;
+        internal List<Tensor> _colocate_with;
+        internal Shape _element_shape;
+
+        public static TensorArray Create(TF_DataType dtype, Tensor size = null, bool dynamic_size = false,
+            bool clear_after_read = true, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
+            bool infer_shape = true, Shape? element_shape = null,
+            bool colocate_with_first_write_call = true, string name = null)
+        {
+            if (tf.Context.executing_eagerly() && (flow is null || flow.dtype != dtypes.variant))
+            {
+                return new _EagerTensorArray(dtype, size, dynamic_size, clear_after_read, tensor_array_name, handle, flow,
+                    infer_shape, element_shape, colocate_with_first_write_call, name);
+            }
+            else
+            {
+                return new _GraphTensorArrayV2(dtype, size, dynamic_size, clear_after_read, tensor_array_name, handle, flow,
+                    infer_shape, element_shape, colocate_with_first_write_call, name);
+            }
+        }
     }
 }

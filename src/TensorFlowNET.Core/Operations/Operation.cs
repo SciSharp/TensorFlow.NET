@@ -46,9 +46,9 @@ namespace Tensorflow
     /// </summary>
     public partial class Operation : ITensorOrOperation
     {
-        private readonly IntPtr _handle; // _c_op in python
+        protected IntPtr _handle; // _c_op in python
 
-        private readonly Graph _graph;
+        protected Graph _graph;
 
         internal Func<Operation, object[], Tensor[]> _gradient_function;
 
@@ -69,6 +69,7 @@ namespace Tensorflow
         //private OperationDescription _op_desc;
 
         public NodeDef node_def => GetNodeDef();
+        protected Operation() { }
 
         public Operation(IntPtr handle, Graph g = null)
         {

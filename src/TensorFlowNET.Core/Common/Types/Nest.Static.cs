@@ -13,7 +13,7 @@ namespace Tensorflow.Common.Types
         /// <param name="template"></param>
         /// <param name="flatItems"></param>
         /// <returns></returns>
-        public static Nest<T> PackSequenceAs<T>(INestable<T> template, T[] flatItems)
+        public static Nest<TOut> PackSequenceAs<T, TOut>(INestable<T> template, TOut[] flatItems)
         {
             return template.AsNest().PackSequence(flatItems);
         }

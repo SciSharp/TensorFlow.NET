@@ -110,7 +110,7 @@ namespace Tensorflow.Keras.Engine
 
             var data_handler = new DataHandler(new DataHandlerArgs
             {
-                X = new Tensors(train_x),
+                X = new Tensors(train_x.ToArray()),
                 Y = train_y,
                 BatchSize = batch_size,
                 InitialEpoch = initial_epoch,

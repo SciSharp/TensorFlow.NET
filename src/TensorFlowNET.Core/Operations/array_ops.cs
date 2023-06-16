@@ -119,6 +119,27 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor zeros(Tensors shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        {
+            dtype = dtype.as_base_dtype();
+            Tensor shapeTensor;
+            if(shape.Length > 1)
+            {
+                shapeTensor = ops.convert_to_tensor(shape, dtypes.int32);
+                if(shapeTensor.ndim > 1)
+                {
+                    shapeTensor = array_ops.reshape(shapeTensor, new Shape(-1));
+                }
+            }
+            else
+            {
+                shapeTensor = shape[0];
+            }
+            var output = fill(shapeTensor, array_ops.constant(0, dtype), name);
+            Debug.Assert(output.dtype.as_base_dtype() == dtype);
+            return output;
+        }
+
         public static Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
         {
             return tf_with(ops.name_scope(name, values: new { tensor, mask }), delegate
@@ -305,6 +326,9 @@ namespace Tensorflow
         /// <param name="name">Optional string. The name of the output `tf.Tensor`.</param>
         /// <returns>A `tf.Tensor` with shape `dims` and the same dtype as `value`.</returns>
         public static Tensor fill<T>(Shape dims, T value, string name = null)
+            => gen_array_ops.fill(dims, ops.convert_to_tensor(value), name: name);
+
+        public static Tensor fill<T>(Tensor dims, T value, string name = null)
             => gen_array_ops.fill(dims, ops.convert_to_tensor(value), name: name);
 
         /// <summary>

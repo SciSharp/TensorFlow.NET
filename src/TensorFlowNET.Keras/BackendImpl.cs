@@ -25,6 +25,7 @@ using static Tensorflow.Binding;
 using static Tensorflow.Graphs.SubGraphUtility;
 using Tensorflow.Util;
 using Tensorflow.Common.Types;
+using System.Diagnostics;
 
 namespace Tensorflow.Keras
 {
@@ -485,7 +486,7 @@ namespace Tensorflow.Keras
             var first_flatted_input = flatted_inptus[0];
             var time_steps = first_flatted_input.shape[0];
             var batch = first_flatted_input.shape[1];
-            var time_steps_t = (int)first_flatted_input.shape[0];
+            var time_steps_t = tf.shape(first_flatted_input)[0];
 
             foreach (var input_ in flatted_inptus)
             {
@@ -704,7 +705,7 @@ namespace Tensorflow.Keras
                 var input_ta = new List<TensorArray>();
                 for (int i = 0; i < flatted_inptus.Count; i++)
                 {
-                    input_ta.Add(tf.TensorArray(dtype: flatted_inptus[i].dtype, size: time_steps_t));
+                    input_ta.Add(TensorArray.Create(dtype: flatted_inptus[i].dtype, size: time_steps_t));
                 }
 
                 foreach(var (ta, input_) in zip(input_ta, flatted_inptus))
@@ -730,17 +731,14 @@ namespace Tensorflow.Keras
                 (output_time_zero, _) = step_function(input_time_zero, 
                     constants is null ? initial_states : initial_states.MergeWith(constants));
 
-                int output_ta_size = return_all_outputs ? time_steps_t : 1;
+                Tensor output_ta_size = return_all_outputs ? time_steps_t : constant_op.constant(1);
                 var output_ta = new List<TensorArray>();
-                for (int i = 0; i < output_time_zero.ToList().Count; i++)
+                foreach(var output in output_time_zero.Flatten())
                 {
-                    var Out = output_time_zero.ToList()[i];
-                    output_ta.Add(tf.TensorArray(dtype: Out.dtype, size: output_ta_size, element_shape: Out.shape));
+                    output_ta.Add(TensorArray.Create(dtype: output.dtype, size: output_ta_size, element_shape: output.shape));
                 }
 
                 var time = tf.constant(0, dtype: TF_DataType.TF_INT32, name: "time");
-
-
 
                 Func<Tensor, Tensor>? masking_fn;
                 Func<Tensors, Tensors, Tensors, Tensors>? compute_masked_output = null;
@@ -750,7 +748,7 @@ namespace Tensorflow.Keras
                     {
                         mask = tf.reverse(mask, axis: new[] { 0 });
                     }
-                    var mask_ta = tf.TensorArray(dtype: TF_DataType.TF_BOOL, size: time_steps_t);
+                    var mask_ta = TensorArray.Create(dtype: TF_DataType.TF_BOOL, size: time_steps_t);
                     mask_ta = mask_ta.unstack(mask);
 
                     masking_fn = (time) =>
@@ -810,9 +808,9 @@ namespace Tensorflow.Keras
                     masking_fn = null;
                 }
 
-                Func<Tensor, Tensor> cond = (time) => (time < time_steps_t);
+                Func<Tensors, Tensor> cond = (time) => (time[0] < time_steps_t);
                 int parallel_iterations = 32;
-                new_states = states;
+                Tensors final_outputs;
                 if (masking_fn != null)
                 {
                     // Mask for the T output will be base on the output of T - 1. In the
@@ -825,7 +823,7 @@ namespace Tensorflow.Keras
 
                     var prev_output = flat_zero_output;
                     var output_ta_t = output_ta;
-                    Tensor _step(Tensor time)
+                    Tensors _step(Tensors tensors)
                     {
                         /*
                          RNN step function.
@@ -838,23 +836,28 @@ namespace Tensorflow.Keras
                             Tuple(todo): `(time + 1, output_ta_t, output) + tuple(new_states)`                          
                          */
 
+                        Tensor time = tensors[0];
+                        TensorArray output_ta_t = (tensors[1] as FakeTensorByTensorArray).TensorArray;
+                        Tensors prev_output = tensors.GetShallow(2);
+                        Tensors states = new Tensors(tensors.Skip(2 + prev_output.Length).ToArray());
+
                         var flat_current_input = input_ta.Select(x => x.read(time)).ToList();
                         // maybe set shape
                         // TODO(Wanglongzhi2001),deal with nest.pack_sequence_as's return type
                         var current_input = Nest.PackSequenceAs(inputs, flat_current_input).ToTensors();
                         var mask_t = masking_fn(time);
-                        var (output, new_states_internal) = step_function(current_input, new_states.MergeWith(constants));
+                        var (output, new_states) = step_function(current_input, states.MergeWith(constants));
                         // mask output
                         var flat_output = Nest.Flatten(output).ToList();
 
-                        var flat_mask_output = zero_output_for_mask ? flat_zero_output : prev_output.ToList();
+                        var flat_mask_output = zero_output_for_mask ? flat_zero_output : prev_output.Flatten().ToList();
 
                         // TODO(Wanglongzhi2001),deal with compute_masked_output's third parameter's type
                         var flat_new_output = compute_masked_output(mask_t, flat_output, flat_mask_output);
 
                         // mask states
-                        var flat_state = states.ToList();
-                        var flat_new_state = new_states_internal.ToList();
+                        var flat_state = states.Flatten().ToList();
+                        var flat_new_state = new_states.Flatten().ToList();
 
                         foreach (var (state, new_state) in zip(flat_state, flat_new_state))
                         {
@@ -865,38 +868,37 @@ namespace Tensorflow.Keras
                         }
 
                         var flat_final_state = compute_masked_output(mask_t, flat_new_state, flat_state);
-                        new_states_internal = Nest.PackSequenceAs(new_states, flat_final_state).ToTensors();
+                        new_states = Nest.PackSequenceAs(new_states, flat_final_state.ToArray()).ToTensors();
 
                         var ta_index_to_write = return_all_outputs ? time : tf.constant(0);
-                        output_ta_t = zip(output_ta_t, flat_new_output).Select(item =>
-                        {
-                            var (ta, out_) = item;
-                            return ta.write(ta_index_to_write, out_);
-                        }).ToList();
+                        Debug.Assert(flat_output.Count() == 1);
+                        output_ta_t = output_ta_t.write(ta_index_to_write, flat_new_output.First());
 
-
-                        new_states_internal = Nest.PackSequenceAs(initial_states, flat_new_state).ToTensors();
-
-                        output_ta = output_ta_t;
-                        new_states = new_states_internal;
-                        return time + 1;
+                        return new Tensor[] { time + 1, new FakeTensorByTensorArray(output_ta_t) }.Concat(flat_new_output).Concat(new_states)
+                            .ToArray().ToTensors();
 
                     }
-                    var final_outputs = tf.while_loop(cond: cond, body: _step, loop_vars: time, parallel_iterations: parallel_iterations);
+                    var loop_vars = new Tensor[] { time + 1, new FakeTensorByTensorArray(output_ta[0]) }
+                            .Concat(flat_zero_output.Flatten()).Concat(states).ToArray().ToTensors();
+                    final_outputs = control_flow_ops.while_loop(cond: cond, body: _step, loop_vars: loop_vars, parallel_iterations: parallel_iterations);
+                    new_states = final_outputs.Skip(3).ToList();
                 }
                 else
                 {
                     var output_ta_t = output_ta;
                     new_states = states;
-                    Tensor _step(Tensor time)
+                    Tensors _step(Tensors tensors)
                     {
+                        Tensor time = tensors[0];
+                        TensorArray output_ta_t = (tensors[1] as FakeTensorByTensorArray).TensorArray;
+                        Tensors states = new Tensors(tensors.Skip(2).ToArray());
                         var flat_current_input = input_ta.Select(x => x.read(time)).ToList();
                         // maybe set shape
                         // TODO(Wanglongzhi2001),deal with nest.pack_sequence_as's return type
                         var current_input = Nest.PackSequenceAs(inputs, flat_current_input).ToTensors();
-                        var (output, new_states_internal) = step_function(current_input, new_states.MergeWith(constants));
+                        var (output, new_states) = step_function(current_input, states.MergeWith(constants));
                         var flat_state = new_states.Flatten().ToList();
-                        var flat_new_state = new_states_internal.Flatten().ToList();
+                        var flat_new_state = new_states.Flatten().ToList();
                         foreach (var (state, new_state) in zip(flat_state, flat_new_state))
                         {
                             if (new_state is Tensor)
@@ -906,24 +908,23 @@ namespace Tensorflow.Keras
                         }
                         var flat_output = Nest.Flatten(output);
                         var ta_index_to_write = return_all_outputs ? time : tf.constant(0);
-                        output_ta_t = zip(output_ta_t, flat_output).Select(item =>
-                        {
-                            var (ta, out_) = item;
-                            return ta.write(ta_index_to_write, out_);
-                        }).ToList();
+                        Debug.Assert(flat_output.Count() == 1);
+                        output_ta_t = output_ta_t.write(ta_index_to_write, flat_output.First());
 
-                        new_states_internal = Nest.PackSequenceAs(initial_states, flat_new_state).ToTensors();
-                        output_ta = output_ta_t;
-                        new_states = new_states_internal;
-                        return time + 1;
+                        new_states = Nest.PackSequenceAs(initial_states, flat_new_state).ToTensors();
+                        return new Tensor[] { time + 1, new FakeTensorByTensorArray(output_ta_t) }.Concat(new_states).ToArray().ToTensors();
                     }
-                    var final_outputs = tf.while_loop(cond: cond, body: _step, loop_vars: time, parallel_iterations: parallel_iterations);
+                    Debug.Assert(output_ta.Count == 1);
+                    var loop_vars = new Tensor[] { time + 1, new FakeTensorByTensorArray(output_ta[0]) }.Concat(states).ToArray().ToTensors();
+                    final_outputs = control_flow_ops.while_loop(cond: cond, body: _step, loop_vars: loop_vars, parallel_iterations: parallel_iterations);
+                    new_states = final_outputs.Skip(2).ToList();
                 }
-                outputs = outputs.MergeWith(output_ta.Select(o => o.stack()).ToTensors());
-                last_output = last_output.MergeWith(outputs.Select(o => o[-1]).ToTensors());
-                outputs = Nest.PackSequenceAs(output_time_zero, outputs).ToTensors();
-                last_output = Nest.PackSequenceAs(output_time_zero, last_output).ToTensors();
 
+                output_ta = new List<TensorArray> { (final_outputs[1] as FakeTensorByTensorArray).TensorArray };
+                outputs = outputs.MergeWith(output_ta.Select(o => o.stack()).ToArray().ToTensors());
+                last_output = last_output.MergeWith(outputs.Select(o => o[-1]).ToArray().ToTensors());
+                outputs = Nest.PackSequenceAs(output_time_zero, (Tensor[])outputs).ToTensors();
+                last_output = Nest.PackSequenceAs(output_time_zero, (Tensor[])last_output).ToTensors();
             }
 
             Func<Tensor, Tensor> set_shape;
