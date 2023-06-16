@@ -83,6 +83,10 @@ namespace Tensorflow.CodeGen
 
                 sb.AppendLine("}"); // try
 
+                sb.Append("catch(NotOkStatusException ex)\n{\n");
+                sb.AppendLine("throw ex;");
+                sb.AppendLine("}"); // catch
+
                 sb.Append("catch(Exception)\n{\n");
                 sb.AppendLine("}"); // catch
 
