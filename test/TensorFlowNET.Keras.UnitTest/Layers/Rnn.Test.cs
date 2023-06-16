@@ -77,6 +77,11 @@ namespace Tensorflow.Keras.UnitTest.Layers
             var output = keras.layers.Dense(10).Apply(x);
             var model = keras.Model(inputs, output);
             model.summary();
+
+            model.compile(keras.optimizers.Adam(), keras.losses.SparseCategoricalCrossentropy());
+            var datax = np.ones((16, 10, 8), dtype: dtypes.float32);
+            var datay = np.ones((16));
+            model.fit(datax, datay, epochs: 20);
         }
         [TestMethod]
         public void RNNForSimpleRNNCell()

@@ -186,7 +186,16 @@ namespace Tensorflow
         }
 
         public virtual T get_attr<T>(string name)
-            => (T)get_attr(name);
+        {
+            if (typeof(T).IsValueType)
+            {
+                return (T)Convert.ChangeType(get_attr(name), typeof(T));
+            }
+            else
+            {
+                return (T)get_attr(name);
+            }
+        }
 
         internal unsafe TF_DataType _get_attr_type(string name)
         {

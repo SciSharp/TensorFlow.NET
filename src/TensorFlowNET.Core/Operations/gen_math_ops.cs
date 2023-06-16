@@ -4633,8 +4633,9 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatMul", name) { args = new object[] { a, b }, attrs = new Dictionary<string, object>() { ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b } });
                 return _fast_path_result[0];
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine();
             }
             try
             {
