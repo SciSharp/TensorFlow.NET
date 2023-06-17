@@ -111,7 +111,7 @@ https://tensorflownet.readthedocs.io</Description>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OneOf" Version="3.0.223" />
-    <PackageReference Include="Protobuf.Text" Version="0.7.0" />
+    <PackageReference Include="Protobuf.Text" Version="0.7.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
   </ItemGroup>
 

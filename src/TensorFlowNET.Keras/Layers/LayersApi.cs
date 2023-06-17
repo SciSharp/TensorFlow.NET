@@ -793,7 +793,7 @@ namespace Tensorflow.Keras.Layers
             bool unit_forget_bias = true,
             float dropout = 0f,
             float recurrent_dropout = 0f,
-            int implementation = 1)
+            int implementation = 2)
             => new LSTMCell(new LSTMCellArgs
             {
                 Units = uints,
@@ -846,7 +846,7 @@ namespace Tensorflow.Keras.Layers
             bool unit_forget_bias = true,
             float dropout = 0f,
             float recurrent_dropout = 0f,
-            int implementation = 1,
+            int implementation = 2,
             bool return_sequences = false,
             bool return_state = false,
             bool go_backwards = false,
@@ -869,7 +869,8 @@ namespace Tensorflow.Keras.Layers
                     GoBackwards = go_backwards,
                     Stateful = stateful,
                     TimeMajor = time_major,
-                    Unroll = unroll
+                    Unroll = unroll, 
+                    UnitForgetBias = unit_forget_bias
                 });
 
         /// <summary>

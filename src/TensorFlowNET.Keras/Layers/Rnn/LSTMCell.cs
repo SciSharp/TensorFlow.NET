@@ -1,4 +1,5 @@
-﻿using Serilog.Core;
+﻿using Newtonsoft.Json;
+using Serilog.Core;
 using System.Diagnostics;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
@@ -54,6 +55,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         public override void build(KerasShapesWrapper input_shape)
         {
+            base.build(input_shape);
             var single_shape = input_shape.ToSingleShape();
             var input_dim = single_shape[-1];
             _kernel = add_weight("kernel", (input_dim, _args.Units * 4),
@@ -82,7 +84,8 @@ namespace Tensorflow.Keras.Layers.Rnn
                     _bias_initializer = _args.BiasInitializer;
                 }
                 _bias = add_weight("bias", (_args.Units * 4),
-                    initializer: _bias_initializer);
+                    initializer: _bias_initializer
+                    );
             }
             built = true;
         }
@@ -203,7 +206,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                     x_c + math_ops.matmul(h_tm1_c, _recurrent_kernel_slice));
             _recurrent_kernel_slice = tf.slice(_recurrent_kernel_tensor,
                 new[] { 0, _args.Units * 3 }, new[] { startIndex, _args.Units });
-            var o = _args.RecurrentActivation.Apply(
+            var o = _args.Activation.Apply(
                 x_o + math_ops.matmul(h_tm1_o, _recurrent_kernel_slice));
 
             return new Tensors(c, o);
@@ -220,7 +223,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             Tensor z0 = z[0], z1 = z[1], z2 = z[2], z3 = z[3];
             var i = _args.RecurrentActivation.Apply(z0);
             var f = _args.RecurrentActivation.Apply(z1);
-            var c = f * c_tm1 + i * _args.RecurrentActivation.Apply(z2);
+            var c = f * c_tm1 + i * _args.Activation.Apply(z2);
             var o = _args.RecurrentActivation.Apply(z3);
             return new Tensors(c, o);
         }

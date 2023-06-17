@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.6.0-1.final" />
-    <PackageReference Include="Protobuf.Text" Version="0.7.0" />
+    <PackageReference Include="Protobuf.Text" Version="0.7.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -29,7 +29,7 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         [JsonProperty("unit_forget_bias")]
         public bool UnitForgetBias { get; set; } = true;
         [JsonProperty("implementation")]
-        public int Implementation { get; set; } = 1;
+        public int Implementation { get; set; } = 2;
 
     }
 }

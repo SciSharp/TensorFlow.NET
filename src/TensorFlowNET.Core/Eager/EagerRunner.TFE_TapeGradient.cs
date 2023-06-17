@@ -65,7 +65,7 @@ namespace Tensorflow.Eager
             {
                 outgrad_vec = output_gradients.ToList();
             }
-            var result = tape.ComputeGradient(target_vec, sources_vec, source_tensors_that_are_targets, outgrad_vec, false);
+            var result = tape.ComputeGradient(target_vec, sources_vec, source_tensors_that_are_targets, outgrad_vec, true);
 
 
             bool unconnected_gradients_zero = unconnected_gradients == "zero";

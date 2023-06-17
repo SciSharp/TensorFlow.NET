@@ -60,26 +60,23 @@ namespace Tensorflow.Keras.UnitTest.Layers
         {
             var input = keras.Input((784));
             var x = keras.layers.Reshape((28, 28)).Apply(input);
-            //x = keras.layers.LSTM(50, return_sequences: true).Apply(x);
-            //x = keras.layers.LSTM(100, return_sequences: true).Apply(x);
-            //x = keras.layers.LSTM(150, return_sequences: true).Apply(x);
-            x = keras.layers.LSTM(4, implementation: 2).Apply(x);
-            //x = keras.layers.Dense(100).Apply(x);
+            x = keras.layers.LSTM(50, return_sequences: true).Apply(x);
+            x = keras.layers.LSTM(100).Apply(x);
             var output = keras.layers.Dense(10, activation: "softmax").Apply(x);
 
             var model = keras.Model(input, output);
             model.summary();
-            model.compile(keras.optimizers.Adam(), keras.losses.SparseCategoricalCrossentropy(), new string[] { "accuracy" });
+            model.compile(keras.optimizers.Adam(), keras.losses.CategoricalCrossentropy(), new string[] { "accuracy" });
 
             var data_loader = new MnistModelLoader();
             var dataset = data_loader.LoadAsync(new ModelLoadSetting
             {
                 TrainDir = "mnist",
-                OneHot = false,
-                ValidationSize = 58000,
+                OneHot = true,
+                ValidationSize = 55000,
             }).Result;
 
-            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 30);
+            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 1);
         }
 
         [TestMethod]
@@ -102,7 +99,7 @@ namespace Tensorflow.Keras.UnitTest.Layers
                 ValidationSize = 58000,
             }).Result;
 
-            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 10);
+            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 2);
         }
 
         [TestMethod]

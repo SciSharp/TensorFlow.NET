@@ -7,7 +7,7 @@ namespace Tensorflow.NumPy
 {
     public class NDArrayRender
     {
-        public static string ToString(NDArray array)
+        public static string ToString(NDArray array, int maxLength = 10)
         {
             Shape shape = array.shape;
             if (shape.IsScalar)
@@ -15,12 +15,12 @@ namespace Tensorflow.NumPy
 
             var s = new StringBuilder();
             s.Append("array(");
-            Build(s, array);
+            Build(s, array, maxLength);
             s.Append(")");
             return s.ToString();
         }
 
-        static void Build(StringBuilder s, NDArray array)
+        static void Build(StringBuilder s, NDArray array, int maxLength)
         {
             var shape = array.shape;
 
@@ -35,11 +35,11 @@ namespace Tensorflow.NumPy
             var len = shape[0];
             s.Append("[");
 
-            if (len <= 10)
+            if (len <= maxLength)
             {
                 for (int i = 0; i < len; i++)
                 {
-                    Build(s, array[i]);
+                    Build(s, array[i], maxLength);
                     if (i < len - 1)
                     {
                         s.Append(", ");
@@ -49,9 +49,9 @@ namespace Tensorflow.NumPy
             }
             else
             {
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < maxLength / 2; i++)
                 {
-                    Build(s, array[i]);
+                    Build(s, array[i], maxLength);
                     if (i < len - 1)
                     {
                         s.Append(", ");
@@ -62,9 +62,9 @@ namespace Tensorflow.NumPy
                 s.Append(" ... ");
                 s.AppendLine();
 
-                for (int i = (int)len - 5; i < len; i++)
+                for (int i = (int)len - maxLength / 2; i < len; i++)
                 {
-                    Build(s, array[i]);
+                    Build(s, array[i], maxLength);
                     if (i < len - 1)
                     {
                         s.Append(", ");
