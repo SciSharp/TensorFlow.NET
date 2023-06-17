@@ -90,73 +90,73 @@ namespace Tensorflow
         }
 
         #region Explicit Conversions
-        public unsafe static explicit operator bool(Tensors tensor)
+        public static explicit operator bool(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to bool");
             return (bool)tensor[0];
         }
 
-        public unsafe static explicit operator sbyte(Tensors tensor)
+        public static explicit operator sbyte(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to sbyte");
             return (sbyte)tensor[0];
         }
 
-        public unsafe static explicit operator byte(Tensors tensor)
+        public static explicit operator byte(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to byte");
             return (byte)tensor[0];
         }
 
-        public unsafe static explicit operator ushort(Tensors tensor)
+        public static explicit operator ushort(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to ushort");
             return (ushort)tensor[0];
         }
 
-        public unsafe static explicit operator short(Tensors tensor)
+        public static explicit operator short(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to short");
             return (short)tensor[0];
         }
 
-        public unsafe static explicit operator int(Tensors tensor)
+        public static explicit operator int(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to int");
             return (int)tensor[0];
         }
 
-        public unsafe static explicit operator uint(Tensors tensor)
+        public static explicit operator uint(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to uint");
             return (uint)tensor[0];
         }
 
-        public unsafe static explicit operator long(Tensors tensor)
+        public static explicit operator long(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to long");
             return (long)tensor[0];
         }
 
-        public unsafe static explicit operator ulong(Tensors tensor)
+        public static explicit operator ulong(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to ulong");
             return (ulong)tensor[0];
         }
 
-        public unsafe static explicit operator float(Tensors tensor)
+        public static explicit operator float(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to byte");
             return (byte)tensor[0];
         }
 
-        public unsafe static explicit operator double(Tensors tensor)
+        public static explicit operator double(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to double");
             return (double)tensor[0];
         }
 
-        public unsafe static explicit operator string(Tensors tensor)
+        public static explicit operator string(Tensors tensor)
         {
             EnsureSingleTensor(tensor, "explicit conversion to string");
             return (string)tensor[0];
