@@ -389,9 +389,13 @@ namespace Tensorflow
                 case "list(type)":
                     attr_value.List.Type.AddRange((value as IList<TF_DataType>).Select(x => _MakeType(x, attr_def)));
                     break;
+                case "list(float)":
+                    if (value != null)
+                        attr_value.List.F.AddRange((value as IEnumerable<float>).ToArray());
+                    break;
                 case "list(int)":
                     if (value != null)
-                        attr_value.List.I.AddRange((value as int[]).Select(x => Convert.ToInt64(x)));
+                        attr_value.List.I.AddRange((value as IEnumerable<int>).Select(x => Convert.ToInt64(x)));
                     break;
                 case "bool":
                     attr_value.B = (bool)value;
@@ -427,6 +431,9 @@ namespace Tensorflow
                     break;
                 case "list(func)":
                     attr_value.List.Func.AddRange(_MakeFuncList(value, attr_def.Name));
+                    break;
+                case "list(string)":
+                    attr_value.List.S.AddRange((value as IEnumerable<string>).Select(x => ByteString.CopyFromUtf8(x)));
                     break;
                 default:
                     throw new TypeError($"SetAttrValue: can't not convert attr_def.Type '{attr_def.Type}' to protos.");

@@ -115,10 +115,5 @@ namespace Tensorflow.Keras.Layers.Rnn
                 return new Tensors(output, output);
             }
         }
-
-        public Tensors get_initial_state(Tensors inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
-        {
-            return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size, dtype);
-        }
     }
 }

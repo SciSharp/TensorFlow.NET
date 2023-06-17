@@ -182,7 +182,7 @@ namespace Tensorflow.Keras.Layers
             bool unit_forget_bias = true,
             float dropout = 0f,
             float recurrent_dropout = 0f,
-            int implementation = 2,
+            int implementation = 1,
             bool return_sequences = false,
             bool return_state = false,
             bool go_backwards = false,

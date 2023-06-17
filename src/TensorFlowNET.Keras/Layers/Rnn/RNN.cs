@@ -45,23 +45,25 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
-        public RNN(RNNArgs args) : base(PreConstruct(args))
+        public RNN(IRnnCell cell, RNNArgs args) : base(PreConstruct(args))
         {
             _args = args;
             SupportsMasking = true;
 
-            // if is StackedRnncell
-            if (args.Cells != null)
-            {
-                Cell = new StackedRNNCells(new StackedRNNCellsArgs
-                {
-                    Cells = args.Cells
-                });
-            }
-            else
-            {
-                Cell = args.Cell;
-            }
+            Cell = cell;
+
+            // get input_shape
+            _args = PreConstruct(args);
+
+            _num_constants = 0;
+        }
+
+        public RNN(IEnumerable<IRnnCell> cells, RNNArgs args) : base(PreConstruct(args))
+        {
+            _args = args;
+            SupportsMasking = true;
+
+            Cell = new StackedRNNCells(cells, new StackedRNNCellsArgs());
 
             // get input_shape
             _args = PreConstruct(args);
@@ -330,7 +332,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                     states = new Tensors(states.SkipLast(_num_constants).ToArray());
                     states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
                     var (output, new_states) = Cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
-                    return (output, new_states.Single);
+                    return (output, new_states);
                 };
             }
             else
@@ -382,6 +384,11 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
             else
             {
+                //var tapeSet = tf.GetTapeSet();
+                //foreach(var tape in tapeSet)
+                //{
+                //    tape.Watch(output);
+                //}
                 return output;
             }
         }
@@ -405,7 +412,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             throw new NotImplementedException();
         }
 
-        private (Tensors inputs, Tensors initial_state, Tensors constants) _process_inputs(Tensors inputs, Tensors initial_state, Tensors constants)
+        protected (Tensors inputs, Tensors initial_state, Tensors constants) _process_inputs(Tensors inputs, Tensors initial_state, Tensors constants)
         {
             if (inputs.Length > 1)
             {
@@ -484,7 +491,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         }
 
-        void _maybe_reset_cell_dropout_mask(ILayer cell)
+        protected void _maybe_reset_cell_dropout_mask(ILayer cell)
         {
             if (cell is DropoutRNNCellMixin CellDRCMixin)
             {
@@ -495,26 +502,21 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         private static RNNArgs PreConstruct(RNNArgs args)
         {
-            if (args.Kwargs == null)
-            {
-                args.Kwargs = new Dictionary<string, object>();
-            }
-
             // If true, the output for masked timestep will be zeros, whereas in the
             // false case, output from previous timestep is returned for masked timestep.
-            var zeroOutputForMask = (bool)args.Kwargs.Get("zero_output_for_mask", false);
+            var zeroOutputForMask = args.ZeroOutputForMask;
 
             Shape input_shape;
-            var propIS = (Shape)args.Kwargs.Get("input_shape", null);
-            var propID = (int?)args.Kwargs.Get("input_dim", null);
-            var propIL = (int?)args.Kwargs.Get("input_length", null);
+            var propIS = args.InputShape;
+            var propID = args.InputDim;
+            var propIL = args.InputLength;
 
             if (propIS == null && (propID != null || propIL != null))
             {
                 input_shape = new Shape(
                     propIL ?? -1,
                     propID ?? -1);
-                args.Kwargs["input_shape"] = input_shape;
+                args.InputShape = input_shape;
             }
 
             return args;

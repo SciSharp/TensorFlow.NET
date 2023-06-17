@@ -1,5 +1,6 @@
 ﻿using Serilog.Core;
 using System.Diagnostics;
+using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
@@ -81,7 +82,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                     _bias_initializer = _args.BiasInitializer;
                 }
                 _bias = add_weight("bias", (_args.Units * 4),
-                    initializer: _args.BiasInitializer);
+                    initializer: _bias_initializer);
             }
             built = true;
         }
@@ -93,7 +94,6 @@ namespace Tensorflow.Keras.Layers.Rnn
             var dp_mask = get_dropout_mask_for_cell(inputs, training.Value, count: 4);
             var rec_dp_mask = get_recurrent_dropout_mask_for_cell(
                                h_tm1, training.Value, count: 4);
-
 
             Tensor c;
             Tensor o;
@@ -123,7 +123,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 var x_f = math_ops.matmul(inputs_f, k_f);
                 var x_c = math_ops.matmul(inputs_c, k_c);
                 var x_o = math_ops.matmul(inputs_o, k_o);
-                if(_args.UseBias)
+                if (_args.UseBias)
                 {
                     var b = tf.split(_bias.AsTensor(), num_split: 4, axis: 0);
                     Tensor b_i = b[0], b_f = b[1], b_c = b[2], b_o = b[3];
@@ -170,7 +170,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
             var h = o * _args.Activation.Apply(c);
             // 这里是因为 Tensors 类初始化的时候会把第一个元素之后的元素打包成一个数组
-            return new Tensors(h, h, c);
+            return new Nest<Tensor>(new INestStructure<Tensor>[] { new NestNode<Tensor>(h), new NestList<Tensor>(h, c) }).ToTensors();
         }
 
         /// <summary>
@@ -188,22 +188,21 @@ namespace Tensorflow.Keras.Layers.Rnn
                 h_tm1_o = h_tm1[3];
 
             var _recurrent_kernel_tensor = _recurrent_kernel.AsTensor();
-            var startIndex = _recurrent_kernel_tensor.shape[0];
-            var endIndex = _recurrent_kernel_tensor.shape[1];
+            int startIndex = (int)_recurrent_kernel_tensor.shape[0];
             var _recurrent_kernel_slice = tf.slice(_recurrent_kernel_tensor, 
                 new[] { 0, 0 }, new[] { startIndex, _args.Units });
             var i = _args.RecurrentActivation.Apply(
                     x_i + math_ops.matmul(h_tm1_i, _recurrent_kernel_slice));
             _recurrent_kernel_slice = tf.slice(_recurrent_kernel_tensor,
-                new[] { 0, _args.Units }, new[] { startIndex, _args.Units * 2});
+                new[] { 0, _args.Units }, new[] { startIndex, _args.Units});
             var f = _args.RecurrentActivation.Apply(
                     x_f + math_ops.matmul(h_tm1_f, _recurrent_kernel_slice));
             _recurrent_kernel_slice = tf.slice(_recurrent_kernel_tensor,
-                new[] { 0, _args.Units * 2 }, new[] { startIndex, _args.Units * 3 });
+                new[] { 0, _args.Units * 2 }, new[] { startIndex, _args.Units });
             var c = f * c_tm1 + i * _args.Activation.Apply(
                     x_c + math_ops.matmul(h_tm1_c, _recurrent_kernel_slice));
             _recurrent_kernel_slice = tf.slice(_recurrent_kernel_tensor,
-                new[] { 0, _args.Units * 3 }, new[] { startIndex, endIndex });
+                new[] { 0, _args.Units * 3 }, new[] { startIndex, _args.Units });
             var o = _args.RecurrentActivation.Apply(
                 x_o + math_ops.matmul(h_tm1_o, _recurrent_kernel_slice));
 

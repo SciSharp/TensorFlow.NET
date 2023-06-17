@@ -10,14 +10,14 @@ namespace Tensorflow.Keras.Layers.Rnn
     public class SimpleRNN : RNN
     {
         SimpleRNNArgs args;
-        public SimpleRNN(SimpleRNNArgs args) : base(CreateCellForArgs(args))
+        public SimpleRNN(SimpleRNNArgs args) : base(CreateCellForArgs(args), args)
         {
             this.args = args;
         }
 
-        private static SimpleRNNArgs CreateCellForArgs(SimpleRNNArgs args)
+        private static SimpleRNNCell CreateCellForArgs(SimpleRNNArgs args)
         {
-            args.Cell = new SimpleRNNCell(new SimpleRNNCellArgs()
+            return new SimpleRNNCell(new SimpleRNNCellArgs()
             {
                 Units = args.Units,
                 Activation = args.Activation,
@@ -30,7 +30,6 @@ namespace Tensorflow.Keras.Layers.Rnn
                 DType = args.DType,
                 Trainable = args.Trainable,
             });
-            return args;
         }
     }
 }

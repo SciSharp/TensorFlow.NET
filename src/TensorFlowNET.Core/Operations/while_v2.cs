@@ -86,7 +86,7 @@ namespace Tensorflow.Operations
                     }
                 }
 
-                var cond_graph = FuncGraph.func_graph_from_func("cond", wrapped_cond, null,
+                var cond_graph = FuncGraph.func_graph_from_func(cond_name, wrapped_cond, null,
                     null, signature: func_graph_signature, add_control_dependencies: add_control_dependencies);
 
                 bool stateful_parallelism = false;
@@ -111,7 +111,7 @@ namespace Tensorflow.Operations
                     return new object[] { loop_counter + 1, maximum_iterations_arg }.Concat(outputs).ToArray();
                 }
 
-                var body_graph = FuncGraph.func_graph_from_func("body", wrapped_body, null, null, func_graph_signature,
+                var body_graph = FuncGraph.func_graph_from_func(body_name, wrapped_body, null, null, func_graph_signature,
                     add_control_dependencies: add_control_dependencies, acd_record_initial_resource_uses: stateful_parallelism);
 
                 // TODO(Rinne): possible wrong implementation here.

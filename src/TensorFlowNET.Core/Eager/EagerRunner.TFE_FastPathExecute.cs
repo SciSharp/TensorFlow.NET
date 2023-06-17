@@ -352,7 +352,11 @@ namespace Tensorflow.Eager
                     c_api.TFE_OpSetAttrFloat(op, key, Convert.ToSingle(value));
                     break;
                 case TF_AttrType.TF_ATTR_SHAPE:
-                    var dims = (value as long[]).ToArray();
+                    long[] dims;
+                    if (value is Shape shape) dims = shape.dims.ToArray();
+                    else if (value is long[] longs) dims = longs.ToArray();
+                    else if (value is int[] ints) dims = ints.Select(x => (long)x).ToArray();
+                    else dims = ((long[])value).ToArray();
                     c_api.TFE_OpSetAttrShape(op, key, dims, dims.Length, status);
                     status.Check(true);
                     break;

@@ -197,25 +197,11 @@ namespace Tensorflow.Common.Types
             }
             else if(NestType is NestType.List)
             {
-                foreach(var item in ListValue!)
-                {
-                    if(item.NestType is NestType.List or NestType.Dictionary)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return ListValue!.Count > 0;
             }
             else
             {
-                foreach (var item in DictValue!.Values)
-                {
-                    if (item.NestType is NestType.List or NestType.Dictionary)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return DictValue!.Count > 0;
             }
         }
 

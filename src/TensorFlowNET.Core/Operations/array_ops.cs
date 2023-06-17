@@ -1014,38 +1014,27 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor[] split(Tensor value, Tensor size_splits, int axis, int num = -1,
+        public static Tensor[] split(Tensor value, int num_or_size_splits, Tensor axis = null,
             string name = "split")
         {
-            if (num == -1)
-                num = (int)size_splits.shape[0];
-
-            return gen_array_ops.split_v(value, size_splits, tf.convert_to_tensor(axis), num, name: name);
+            return gen_array_ops.split(split_dim: axis, value: value, num_split: num_or_size_splits, name);
         }
 
-        public static Tensor[] split<T>(Tensor value, int num_split, T axis,
+        public static Tensor[] split(Tensor value, int[] num_or_size_splits, Tensor axis = null, int num = -1,
             string name = "split")
         {
-            var size_splits = ops.convert_to_tensor(num_split);
-
-            if (tf.Context.executing_eagerly())
+            if(num_or_size_splits.Length == 0)
             {
-                return split_eager_fallback(axis, value, num_split: num_split, name: name, ctx: tf.Context);
+                throw new ValueError("Rank-0 tensors are not supported as the num_or_size_splits argument to split.");
+            }
+            var size_splits = ops.convert_to_tensor(num_or_size_splits);
+
+            if(num == -1)
+            {
+                num = (int)size_splits.shape[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("Split", name, new { split_dim = axis, value, num_split });
-            return _op.outputs;
-        }
-
-        private static Tensor[] split_eager_fallback<Ta, Tv>(Ta axis, Tv value, int num_split, string name, Context ctx = null)
-        {
-            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new object[] { value });
-            var axis_tensor = ops.convert_to_tensor(axis, dtype: TF_DataType.TF_INT32);
-            var _inputs_flat = new List<Tensor> { axis_tensor };
-            _inputs_flat.AddRange(input);
-            var _attrs = new object[] { "num_split", num_split, "T", _attr_T };
-
-            return tf.Runner.Execute(ctx, "Split", num_split, _inputs_flat.ToArray(), _attrs, name: name);
+            return gen_array_ops.split_v(value: value, size_splits: size_splits, split_dim: axis, num_split: num, name: name);
         }
 
         public static Tensor slice(Tensor input, Tensor[] begin, Tensor[] size, string name = null)

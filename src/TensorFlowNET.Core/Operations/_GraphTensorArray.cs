@@ -390,7 +390,8 @@ namespace Tensorflow.Operations
                 int ta_size;
                 if(!_dynamic_size && (_size is not null))
                 {
-                    ta_size = (int)tensor_util.constant_value(_size);
+                    var size_tensor = tensor_util.constant_value(_size);
+                    ta_size = size_tensor is null ? -1 : (int)size_tensor;
                 }
                 else
                 {

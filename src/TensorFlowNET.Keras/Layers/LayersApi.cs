@@ -709,10 +709,7 @@ namespace Tensorflow.Keras.Layers
 
         public IRnnCell StackedRNNCells(
             IEnumerable<IRnnCell> cells)
-            => new StackedRNNCells(new StackedRNNCellsArgs
-            {
-                Cells = cells.ToList()
-            });
+            => new StackedRNNCells(cells.ToList(), new StackedRNNCellsArgs());
 
         /// <summary>
         /// 
@@ -757,9 +754,8 @@ namespace Tensorflow.Keras.Layers
             bool stateful = false,
             bool unroll = false,
             bool time_major = false)
-            => new RNN(new RNNArgs
+            => new RNN(cell, new RNNArgs
             {
-                Cell = cell,
                 ReturnSequences = return_sequences,
                 ReturnState = return_state,
                 GoBackwards = go_backwards,
@@ -776,9 +772,8 @@ namespace Tensorflow.Keras.Layers
             bool stateful = false,
             bool unroll = false,
             bool time_major = false)
-            => new RNN(new RNNArgs
+            => new RNN(cell, new RNNArgs
             {
-                Cells = cell.ToList(),
                 ReturnSequences = return_sequences,
                 ReturnState = return_state,
                 GoBackwards = go_backwards,
@@ -798,7 +793,7 @@ namespace Tensorflow.Keras.Layers
             bool unit_forget_bias = true,
             float dropout = 0f,
             float recurrent_dropout = 0f,
-            int implementation = 2)
+            int implementation = 1)
             => new LSTMCell(new LSTMCellArgs
             {
                 Units = uints,
@@ -851,7 +846,7 @@ namespace Tensorflow.Keras.Layers
             bool unit_forget_bias = true,
             float dropout = 0f,
             float recurrent_dropout = 0f,
-            int implementation = 2,
+            int implementation = 1,
             bool return_sequences = false,
             bool return_state = false,
             bool go_backwards = false,

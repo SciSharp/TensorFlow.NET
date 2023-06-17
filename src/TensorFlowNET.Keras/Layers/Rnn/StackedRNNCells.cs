@@ -15,15 +15,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         public IList<IRnnCell> Cells { get; set; }
         public bool _reverse_state_order;
 
-        public StackedRNNCells(StackedRNNCellsArgs args) : base(args)
+        public StackedRNNCells(IEnumerable<IRnnCell> cells, StackedRNNCellsArgs args) : base(args)
         {
-            if (args.Kwargs == null)
-            {
-                args.Kwargs = new Dictionary<string, object>();
-            }
-            Cells = args.Cells;
-            
-            _reverse_state_order = (bool)args.Kwargs.Get("reverse_state_order", false);
+            Cells = cells.ToList(); 
+
+            _reverse_state_order = args.ReverseStateOrder;
 
             if (_reverse_state_order)
             {
