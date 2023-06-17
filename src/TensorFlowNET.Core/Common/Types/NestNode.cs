@@ -10,7 +10,11 @@ namespace Tensorflow.Common.Types
     /// <typeparam name="T"></typeparam>
     public class NestNode<T> : INestStructure<T>
     {
+        public NestType NestType => NestType.Node;
         public T Value { get; set; }
+        public int ShallowNestedCount => 1;
+
+        public int TotalNestedCount => 1;
         public NestNode(T value)
         {
             Value = value;

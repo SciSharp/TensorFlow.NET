@@ -7,6 +7,7 @@ using Tensorflow.Keras.Saving;
 using Tensorflow.Common.Types;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Graphs;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
@@ -23,12 +24,11 @@ namespace Tensorflow.Keras.Layers.Rnn
         IVariableV1 _kernel;
         IVariableV1 _recurrent_kernel;
         IVariableV1 _bias;
-        GeneralizedTensorShape _state_size;
-        GeneralizedTensorShape _output_size;
+        INestStructure<long> _state_size;
+        INestStructure<long> _output_size;
 
-        public override GeneralizedTensorShape StateSize => _state_size;
-        public override GeneralizedTensorShape OutputSize => _output_size;
-        public override bool IsTFRnnCell => true;
+        public override INestStructure<long> StateSize => _state_size;
+        public override INestStructure<long> OutputSize => _output_size;
         public override bool SupportOptionalArgs => false;
 
         public SimpleRNNCell(SimpleRNNCellArgs args) : base(args)
@@ -41,8 +41,8 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
             this._args.Dropout = Math.Min(1f, Math.Max(0f, this._args.Dropout));
             this._args.RecurrentDropout = Math.Min(1f, Math.Max(0f, this._args.RecurrentDropout));
-            _state_size = new GeneralizedTensorShape(args.Units);
-            _output_size = new GeneralizedTensorShape(args.Units);
+            _state_size = new NestNode<long>(args.Units);
+            _output_size = new NestNode<long>(args.Units);
         }
 
         public override void build(KerasShapesWrapper input_shape)
@@ -74,8 +74,8 @@ namespace Tensorflow.Keras.Layers.Rnn
         {
             // TODO(Rinne): check if it will have multiple tensors when not nested.
             Tensors prev_output = Nest.IsNested(states) ? new Tensors(states[0]) : states;
-            var dp_mask = get_dropout_maskcell_for_cell(inputs, training.Value);
-            var rec_dp_mask = get_recurrent_dropout_maskcell_for_cell(prev_output, training.Value);
+            var dp_mask = get_dropout_mask_for_cell(inputs, training.Value);
+            var rec_dp_mask = get_recurrent_dropout_mask_for_cell(prev_output, training.Value);
 
             Tensor h;
             var ranks = inputs.rank;
@@ -98,7 +98,6 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 prev_output = math_ops.multiply(prev_output, rec_dp_mask);
             }
-            var tmp =  _recurrent_kernel.AsTensor();
             Tensor output = h + math_ops.matmul(prev_output, _recurrent_kernel.AsTensor());
 
             if (_args.Activation != null)
@@ -115,11 +114,6 @@ namespace Tensorflow.Keras.Layers.Rnn
             {
                 return new Tensors(output, output);
             }
-        }
-
-        public Tensors get_initial_state(Tensors inputs = null, long? batch_size = null, TF_DataType? dtype = null)
-        {
-            return RnnUtils.generate_zero_filled_state_for_cell(this, inputs, batch_size.Value, dtype.Value);
         }
     }
 }

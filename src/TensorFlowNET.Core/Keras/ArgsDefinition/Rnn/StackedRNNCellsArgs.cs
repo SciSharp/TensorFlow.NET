@@ -5,7 +5,6 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
 {
     public class StackedRNNCellsArgs : LayerArgs
     {
-        public IList<IRnnCell> Cells { get; set; }
-        public Dictionary<string, object> Kwargs { get; set; } = null;
+        public bool ReverseStateOrder = false;
     }
 }

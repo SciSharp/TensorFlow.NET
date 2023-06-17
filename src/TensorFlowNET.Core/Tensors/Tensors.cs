@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Common.Types;
+using Tensorflow.Operations;
+using Tensorflow.Common.Extensions;
 
 namespace Tensorflow
 {
@@ -58,7 +60,7 @@ namespace Tensorflow
         public Tensor this[params string[] slices]
             => this.First()[slices];
 
-        private Tensors(Nest<Tensor> nested) : base(nested)
+        internal Tensors(Nest<Tensor> nested) : base(nested)
         {
 
         }
@@ -68,14 +70,40 @@ namespace Tensorflow
             
         }
 
-        public Tensors(IEnumerable<Tensor> tensors): base(tensors.Select(x => new Nest<Tensor>(x)))
+        public Tensors(IList<Tensor> tensors) : base(tensors.Select(x => new Nest<Tensor>(x)))
         {
-            
+
         }
 
         public Tensors(NDArray nd): base(ops.convert_to_tensor(nd))
         {
             
+        }
+
+        /// <summary>
+        /// Get the element in shallow level. For example, for ts = [1, [2, 3], 4], 
+        /// common indexer has ts[1] = 2. Shallow indexer has ts[1] = [2, 3]
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Tensors GetShallow(int index)
+        {
+            if(NestType == NestType.Node)
+            {
+                if(index > 0)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+                return this;
+            }
+            else if(NestType == NestType.List)
+            {
+                return ListValue![index].AsNest().ToTensors();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private static Nest<Tensor> DealWithConstructorArrayInput(Tensor[] tensors)
@@ -115,8 +143,8 @@ namespace Tensorflow
             else if(NestType == NestType.Node)
             {
                 NestType = NestType.List;
-                ListValue = new() { new Nest<Tensor>(Value), new Nest<Tensor>(tensor) };
-                Value = null;
+                ListValue = new() { new Nest<Tensor>(NodeValue), new Nest<Tensor>(tensor) };
+                NodeValue = null;
             }
             else if(NestType == NestType.List)
             {
@@ -125,7 +153,7 @@ namespace Tensorflow
             else //Empty
             {
                 NestType = NestType.Node;
-                Value = tensor;
+                NodeValue = tensor;
             }
         }
 
@@ -140,9 +168,9 @@ namespace Tensorflow
             else if (NestType == NestType.Node)
             {
                 NestType = NestType.List;
-                ListValue = new() { new Nest<Tensor>(Value) };
+                ListValue = new() { new Nest<Tensor>(NodeValue) };
                 ListValue.AddRange(tensors.Select(x => new Nest<Tensor>(x)));
-                Value = null;
+                NodeValue = null;
             }
             else if(NestType == NestType.List)
             {
@@ -151,7 +179,7 @@ namespace Tensorflow
             else // empty
             {
                 NestType = NestType.List;
-                ListValue = tensors.Select(x => new Nest<Tensor>(x)).ToList();
+                ListValue = tensors.Select(x => new Nest<Tensor>(x) as INestStructure<Tensor>).ToList();
             }
         }
 
@@ -166,9 +194,9 @@ namespace Tensorflow
             else if(NestType == NestType.Node)
             {
                 NestType = NestType.List;
-                ListValue = new() { new Nest<Tensor>(Value) };
+                ListValue = new() { new Nest<Tensor>(NodeValue) };
                 ListValue.Insert(index, new Nest<Tensor>(tensor));
-                Value = null;
+                NodeValue = null;
             }
             else
             {
@@ -283,7 +311,7 @@ namespace Tensorflow
             => tensors?.SingleOrNull;
 
         public static implicit operator Tensor[](Tensors tensors)
-            => tensors.Flatten().ToArray(); 
+            => tensors.Flatten().ToArray();
         #endregion
 
         public static Tensors? FromNest(Nest<Tensor> nested)
@@ -298,7 +326,7 @@ namespace Tensorflow
         public void Deconstruct(out Tensor a, out Tensors? b)
         {
             a = this.First();
-            b = Length == 1? null : new Tensors(this.Skip(1));
+            b = Length == 1? null : new Tensors(this.Skip(1).ToArray());
         }
 
         public override string ToString()

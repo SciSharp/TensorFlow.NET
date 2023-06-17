@@ -105,6 +105,13 @@ namespace Tensorflow
             _id = ops.uid();
         }
 
+        internal static Tensor _create_with_tf_output(Operation op, int value_index, TF_DataType dtype, TF_Output tf_output)
+        {
+            Tensor ret = new Tensor(op, value_index, dtype);
+            ret._tf_output = tf_output;
+            return ret;
+        }
+
         protected unsafe void InitTensor(Shape shape, TF_DataType dtype)
         {
             _handle = TF_NewTensor(shape, dtype, null);

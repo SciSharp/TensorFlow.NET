@@ -28,27 +28,58 @@ namespace Tensorflow.Common.Types
         public static Nest<T> Empty => _empty;
         public NestType NestType { get; protected set; }
         public string? Name { get; set; }
-        public T? Value { get; protected set; }
-        public List<Nest<T>>? ListValue { get; protected set; }
-        public Dictionary<string, Nest<T>>? DictValue { get; protected set; }
+        public T? NodeValue { get; protected set; }
+        public List<INestStructure<T>>? ListValue { get; protected set; }
+        public Dictionary<string, INestStructure<T>>? DictValue { get; protected set; }
+
+        public int ShallowNestedCount
+        {
+            get
+            {
+                if (NestType == NestType.Empty)
+                {
+                    return 0;
+                }
+                else if (NestType == NestType.Node)
+                {
+                    return 1;
+                }
+                else if (NestType == NestType.List)
+                {
+                    return ListValue!.Count;
+                }
+                else // dict
+                {
+                    return DictValue!.Count;
+                }
+            }
+        }
+
+        public int TotalNestedCount
+        {
+            get
+            {
+                return Flatten().Count();
+            }
+        }
 
         protected Nest() { }
 
         public Nest(T value, string? name = null)
         {
-            Value = value;
+            NodeValue = value;
             Name = name;
             NestType = NestType.Node;
         }
 
-        public Nest(IEnumerable<Nest<T>> values, string? name = null)
+        public Nest(IEnumerable<INestStructure<T>> values, string? name = null)
         {
             ListValue = values.ToList();
             Name = name;
             NestType = NestType.List;
         }
 
-        public Nest(Dictionary<string, Nest<T>> value, string? name = null)
+        public Nest(Dictionary<string, INestStructure<T>> value, string? name = null)
         {
             DictValue = value;
             Name = name;
@@ -58,7 +89,7 @@ namespace Tensorflow.Common.Types
         public Nest(Nest<T> other)
         {
             NestType = other.NestType;
-            Value = other.Value;
+            NodeValue = other.NodeValue;
             DictValue = other.DictValue;
             ListValue = other.ListValue;
             Name = other.Name;
@@ -78,17 +109,17 @@ namespace Tensorflow.Common.Types
         /// </summary>
         /// <param name="flatItems"></param>
         /// <returns></returns>
-        public virtual Nest<T> PackSequence(T[] flatItems)
+        public virtual Nest<TOut> PackSequence<TOut>(TOut[] flatItems)
         {
             if(flatItems.Length == 0)
             {
-                return Nest<T>.Empty;
+                return Nest<TOut>.Empty;
             }
             int index = 0;
             return PackSequenceInternal(this, flatItems, ref index);
         }
 
-        private static Nest<T> PackSequenceInternal(Nest<T> template, T[] flatItems, ref int index)
+        private static Nest<TOut> PackSequenceInternal<TOut>(Nest<T> template, TOut[] flatItems, ref int index)
         {
             if(template.NestType == NestType.Node)
             {
@@ -96,25 +127,25 @@ namespace Tensorflow.Common.Types
                 {
                     throw new InvalidArgumentError("The template and flat items are not matched.");
                 }
-                return new Nest<T>(flatItems[index++]);
+                return new Nest<TOut>(flatItems[index++]);
             }
             else if(template.NestType == NestType.List)
             {
-                List<Nest<T>> nestedObjects = new List<Nest<T>>();
+                List<Nest<TOut>> nestedObjects = new List<Nest<TOut>>();
                 for (int i = 0; i < template.ListValue!.Count; i++)
                 {
-                    nestedObjects.Add(PackSequenceInternal(template.ListValue![i], flatItems, ref index));
+                    nestedObjects.Add(PackSequenceInternal(template.ListValue![i].AsNest(), flatItems, ref index));
                 }
-                return new Nest<T>(nestedObjects);
+                return new Nest<TOut>(nestedObjects);
             }
             else if(template.NestType == NestType.Node)
             {
-                Dictionary<string, Nest<T>> dict = new Dictionary<string, Nest<T>>();
+                Dictionary<string, INestStructure<TOut>> dict = new Dictionary<string, INestStructure<TOut>>();
                 foreach(var (key, value) in template.DictValue!)
                 {
-                    dict[key] = PackSequenceInternal(value, flatItems, ref index);
+                    dict[key] = PackSequenceInternal(value.AsNest(), flatItems, ref index);
                 }
-                return new Nest<T>(dict);
+                return new Nest<TOut>(dict);
             }
             // Consider Empty as invalid type.
             throw new InvalidArgumentError("When using `PackSequenceAs`, the template cannot contain empty node.");
@@ -166,25 +197,11 @@ namespace Tensorflow.Common.Types
             }
             else if(NestType is NestType.List)
             {
-                foreach(var item in ListValue!)
-                {
-                    if(item.NestType is NestType.List or NestType.Dictionary)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return ListValue!.Count > 0;
             }
             else
             {
-                foreach (var item in DictValue!.Values)
-                {
-                    if (item.NestType is NestType.List or NestType.Dictionary)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return DictValue!.Count > 0;
             }
         }
 
@@ -223,10 +240,10 @@ namespace Tensorflow.Common.Types
         public static Nest<T> ReduceFrom<TOut>(INestStructure<TOut> input) where TOut: INestStructure<T>
         {
             var nested = input.AsNest();
-            return ReduceInternal(nested);
+            return ReduceInternal(nested).AsNest();
         }
 
-        private static Nest<T> ReduceInternal<TOut>(Nest<TOut> node) where TOut : INestStructure<T>
+        private static INestStructure<T> ReduceInternal<TOut>(Nest<TOut> node) where TOut : INestStructure<T>
         {
             if(node.NestType == NestType.Empty)
             {
@@ -234,15 +251,15 @@ namespace Tensorflow.Common.Types
             }
             else if(node.NestType == NestType.Node)
             {
-                return node.Value!.AsNest();
+                return node.NodeValue!.AsNest();
             }
             else if(node.NestType == NestType.List)
             {
-                return new Nest<T>(node.ListValue!.Select(x => ReduceInternal(x)));
+                return new Nest<T>(node.ListValue!.Select(x => ReduceInternal(x.AsNest())));
             }
             else // Dictionary type
             {
-                return new Nest<T>(node.DictValue!.ToDictionary(x => x.Key, x => ReduceInternal(x.Value)));
+                return new Nest<T>(node.DictValue!.ToDictionary(x => x.Key, x => ReduceInternal(x.Value.AsNest())));
             }
         }
 
@@ -252,7 +269,7 @@ namespace Tensorflow.Common.Types
             {
                 if(index == 0)
                 {
-                    result = node.Value!;
+                    result = node.NodeValue!;
                     return true;
                 }
                 result = default(T);
@@ -264,7 +281,7 @@ namespace Tensorflow.Common.Types
                 {
                     if(index == 0)
                     {
-                        return FindInternal(item, index, out result);
+                        return FindInternal(item.AsNest(), index, out result);
                     }
                     index--;
                 }
@@ -277,7 +294,7 @@ namespace Tensorflow.Common.Types
                 {
                     if (index == 0)
                     {
-                        return FindInternal(item, index, out result);
+                        return FindInternal(item.AsNest(), index, out result);
                     }
                     index--;
                 }
@@ -297,7 +314,7 @@ namespace Tensorflow.Common.Types
             {
                 if (index == 0)
                 {
-                    node.Value = newValue;
+                    node.NodeValue = newValue;
                     return true;
                 }
                 return false;
@@ -308,7 +325,7 @@ namespace Tensorflow.Common.Types
                 {
                     if (index == 0)
                     {
-                        return SetInternal(item, index, newValue);
+                        return SetInternal(item.AsNest(), index, newValue);
                     }
                     index--;
                 }
@@ -320,7 +337,7 @@ namespace Tensorflow.Common.Types
                 {
                     if (index == 0)
                     {
-                        return SetInternal(item, index, newValue);
+                        return SetInternal(item.AsNest(), index, newValue);
                     }
                     index--;
                 }
@@ -336,13 +353,13 @@ namespace Tensorflow.Common.Types
         {
             if (node.NestType == NestType.Node)
             {
-                yield return node.Value!;
+                yield return node.NodeValue!;
             }
             else if (node.NestType == NestType.List)
             {
                 foreach (var item in node.ListValue!)
                 {
-                    foreach(var val in FlattenInternal(item))
+                    foreach(var val in FlattenInternal(item.AsNest()))
                     {
                         yield return val;
                     }
@@ -352,7 +369,7 @@ namespace Tensorflow.Common.Types
             {
                 foreach (var item in node.DictValue!.Values)
                 {
-                    foreach (var val in FlattenInternal(item))
+                    foreach (var val in FlattenInternal(item.AsNest()))
                     {
                         yield return val;
                     }
@@ -364,23 +381,23 @@ namespace Tensorflow.Common.Types
         {
             if (NestType == NestType.Node)
             {
-                return new Nest<TOut>(func(Value!));
+                return new Nest<TOut>(func(NodeValue!));
             }
             else if (NestType == NestType.List)
             {
                 List<Nest<TOut>> outs = new List<Nest<TOut>>();
                 foreach (var item in ListValue!)
                 {
-                    outs.Add(item.MapStructureInternal(func));
+                    outs.Add(item.AsNest().MapStructureInternal(func));
                 }
                 return new Nest<TOut>(outs);
             }
             else if (NestType == NestType.Dictionary)
             {
-                Dictionary<string, Nest<TOut>> outs = new Dictionary<string, Nest<TOut>>();
+                Dictionary<string, INestStructure<TOut>> outs = new Dictionary<string, INestStructure<TOut>>();
                 foreach (var (key, value) in DictValue!)
                 {
-                    outs.Add(key, value.MapStructureInternal(func));
+                    outs.Add(key, value.AsNest().MapStructureInternal(func));
                 }
                 return new Nest<TOut>(outs);
             }
@@ -417,14 +434,14 @@ namespace Tensorflow.Common.Types
             }
             if (node.NestType == NestType.Node)
             {
-                sb.Append(node.Value!.ToString());
+                sb.Append(node.NodeValue!.ToString());
             }
             else if (node.NestType == NestType.List)
             {
                 sb.Append("[");
                 for(int i = 0; i < node.ListValue!.Count; i++)
                 {
-                    WriteString(node.ListValue![i], sb);
+                    WriteString(node.ListValue![i].AsNest(), sb);
                     if(i != node.ListValue!.Count - 1)
                     {
                         sb.Append(", ");
@@ -440,7 +457,7 @@ namespace Tensorflow.Common.Types
                 foreach (var (key, value) in node.DictValue!)
                 {
                     sb.Append($"{key}: ");
-                    WriteString(value, sb);
+                    WriteString(value.AsNest(), sb);
                     if (i != count - 1)
                     {
                         sb.Append(", ");
@@ -453,6 +470,16 @@ namespace Tensorflow.Common.Types
             {
                 sb.Append("<empty>");
             }
+        }
+
+        public static implicit operator Nest<T>((INestStructure<T>, INestStructure<T>) inputs)
+        {
+            return new Nest<T>(new INestStructure<T>[] { inputs.Item1, inputs.Item2 });
+        }
+
+        public static implicit operator Nest<T>((INestStructure<T>, INestStructure<T>, INestStructure<T>) inputs)
+        {
+            return new Nest<T>(new INestStructure<T>[] { inputs.Item1, inputs.Item2, inputs.Item3 });
         }
     }
 }

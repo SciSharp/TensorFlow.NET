@@ -179,8 +179,7 @@ namespace Tensorflow.Train
             // handles slot variables.
             if (!args.Overwrite || new_variable is RefVariable || new_variable is Trackable)
             {
-                var temp = new_variable as Trackable;
-                var res = _track_trackable(temp, args.Name, args.Overwrite);
+                var res = _track_trackable(new_variable as Trackable, args.Name, args.Overwrite);
                 Debug.Assert(res is IVariableV1);
                 return res as IVariableV1;
             }

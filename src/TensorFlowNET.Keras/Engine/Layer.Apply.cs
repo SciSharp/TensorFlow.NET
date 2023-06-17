@@ -38,6 +38,8 @@ namespace Tensorflow.Keras.Engine
             _handle_activity_regularization(inputs, outputs);
             _set_mask_metadata(inputs, outputs, null);
 
+            // TODO(Rinne): set save spec if null
+
             scope.__exit__();
 
             return outputs;

@@ -46,10 +46,10 @@ namespace Tensorflow
             Tensor loop_vars,
             int parallel_iterations = 10)
         {
-            Func<Tensor[], Tensor> cond1 = x
+            Func<Tensors, Tensor> cond1 = x
                 => cond(x[0]);
 
-            Func<Tensor[], Tensor[]> body1 = x
+            Func<Tensors, Tensors> body1 = x
                 => new[] { body(x[0]) };
 
             var results = control_flow_ops.while_loop(cond1,
@@ -58,9 +58,9 @@ namespace Tensorflow
             return results[0];
         }
 
-        public Tensor[] while_loop(Func<Tensor[], Tensor> cond,
-            Func<Tensor[], Tensor[]> body,
-            Tensor[] loop_vars,
+        public Tensor[] while_loop(Func<Tensors, Tensor> cond,
+            Func<Tensors, Tensors> body,
+            Tensors loop_vars,
             int parallel_iterations = 10,
             string name = null)
             => control_flow_ops.while_loop(cond, body, loop_vars,

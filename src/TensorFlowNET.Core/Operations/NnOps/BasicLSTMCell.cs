@@ -89,7 +89,7 @@ namespace Tensorflow
             gate_inputs = nn_ops.bias_add(gate_inputs, _bias);
 
             // i = input_gate, j = new_input, f = forget_gate, o = output_gate
-            var tensors = array_ops.split(value: gate_inputs, num_split: 4, axis: one);
+            var tensors = array_ops.split(value: gate_inputs, num_or_size_splits: 4, axis: one);
             var (i, j, f, o) = (tensors[0], tensors[1], tensors[2], tensors[3]);
 
             var forget_bias_tensor = constant_op.constant(_forget_bias, dtype: f.dtype);

@@ -6,7 +6,11 @@ namespace Tensorflow.Common.Types
 {
     public class NestDictionary<TKey, TValue> : INestStructure<TValue>, IDictionary<TKey, TValue> where TKey : notnull
     {
+        public NestType NestType => NestType.Dictionary;
         public IDictionary<TKey, TValue> Value { get; set; }
+        public int ShallowNestedCount => Values.Count;
+
+        public int TotalNestedCount => Values.Count;
         public NestDictionary(IDictionary<TKey, TValue> dict)
         {
             Value = dict;

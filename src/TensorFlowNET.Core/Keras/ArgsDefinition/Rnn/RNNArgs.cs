@@ -7,12 +7,6 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
     // TODO(Rinne): add regularizers.
     public class RNNArgs : AutoSerializeLayerArgs
     {
-        [JsonProperty("cell")]
-        // TODO: the cell should be serialized with `serialize_keras_object`.
-        public IRnnCell Cell { get; set; } = null;
-        [JsonProperty("cells")]
-        public IList<IRnnCell> Cells { get; set; } = null;
-
         [JsonProperty("return_sequences")]
         public bool ReturnSequences { get; set; } = false;
         [JsonProperty("return_state")]
@@ -25,8 +19,10 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         public bool Unroll { get; set; } = false;
         [JsonProperty("time_major")]
         public bool TimeMajor { get; set; } = false;
+
+        public int? InputDim { get; set; }
+        public int? InputLength { get; set; }
         // TODO: Add `num_constants` and `zero_output_for_mask`.
-        public Dictionary<string, object> Kwargs { get; set; } = null;
 
         public int Units { get; set; }
         public Activation Activation { get; set; }
@@ -38,21 +34,5 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         public float Dropout { get; set; } = .0f;
         public bool ZeroOutputForMask { get; set; } = false;
         public float RecurrentDropout { get; set; } = .0f;
-
-        // kernel_regularizer=None,
-        // recurrent_regularizer=None,
-        // bias_regularizer=None,
-        // activity_regularizer=None,
-        // kernel_constraint=None,
-        // recurrent_constraint=None,
-        // bias_constraint=None,
-        // dropout=0.,
-        // recurrent_dropout=0.,
-        // return_sequences=False,
-        // return_state=False,
-        // go_backwards=False,
-        // stateful=False,
-        // unroll=False,
-        // **kwargs):
     }
 }

@@ -119,6 +119,27 @@ namespace Tensorflow
             }
         }
 
+        public static Tensor zeros(Tensors shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+        {
+            dtype = dtype.as_base_dtype();
+            Tensor shapeTensor;
+            if(shape.Length > 1)
+            {
+                shapeTensor = ops.convert_to_tensor(shape, dtypes.int32);
+                if(shapeTensor.ndim > 1)
+                {
+                    shapeTensor = array_ops.reshape(shapeTensor, new Shape(-1));
+                }
+            }
+            else
+            {
+                shapeTensor = shape[0];
+            }
+            var output = fill(shapeTensor, array_ops.constant(0, dtype), name);
+            Debug.Assert(output.dtype.as_base_dtype() == dtype);
+            return output;
+        }
+
         public static Tensor boolean_mask<T1, T2>(T1 tensor, T2 mask, string name = "boolean_mask", int axis = 0)
         {
             return tf_with(ops.name_scope(name, values: new { tensor, mask }), delegate
@@ -305,6 +326,9 @@ namespace Tensorflow
         /// <param name="name">Optional string. The name of the output `tf.Tensor`.</param>
         /// <returns>A `tf.Tensor` with shape `dims` and the same dtype as `value`.</returns>
         public static Tensor fill<T>(Shape dims, T value, string name = null)
+            => gen_array_ops.fill(dims, ops.convert_to_tensor(value), name: name);
+
+        public static Tensor fill<T>(Tensor dims, T value, string name = null)
             => gen_array_ops.fill(dims, ops.convert_to_tensor(value), name: name);
 
         /// <summary>
@@ -947,38 +971,70 @@ namespace Tensorflow
             });
         }
 
-        public static Tensor[] split(Tensor value, Tensor size_splits, int axis, int num = -1,
-            string name = "split")
+        /// <summary>
+        /// Transposes last two dimensions of tensor `a`.
+        /// For example:
+        /// <code> python
+        ///   x = tf.constant([[1, 2, 3], [4, 5, 6]])
+        ///   tf.matrix_transpose(x) # [[1, 4],
+        ///                         #  [2, 5],
+        ///                         #  [3, 6]]
+        /// </code>
+        /// Matrix with two batch dimensions.
+        /// x.shape is [1, 2, 3, 4]
+        /// tf.linalg.matrix_transpose(x) is shape [1, 2, 4, 3]
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="name"></param>
+        /// <param name="conjugate"></param>
+        /// <returns></returns>
+        /// <exception cref="ValueError"></exception>
+        public static Tensor matrix_transpose(Tensor a, string name = "matrix_transpose", bool conjugate = false)
         {
-            if (num == -1)
-                num = (int)size_splits.shape[0];
-
-            return gen_array_ops.split_v(value, size_splits, tf.convert_to_tensor(axis), num, name: name);
+            return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
+            {
+                var a_shape = a.shape;
+                var ndims = a.shape.ndim;
+                Axis perm;
+                if(ndims != 0)
+                {
+                    if (ndims < 2)
+                    {
+                        throw new ValueError("Argument `a` should be a (batch) matrix with rank " +
+                            $">= 2.  Received `a` = {a} with shape: {a_shape}");
+                    }
+                    perm = new Axis(Enumerable.Range(0, ndims - 2).Concat(new int[] { ndims - 1, ndims - 2 }).ToArray());
+                }
+                else
+                {
+                    var a_rank = a.rank;
+                    perm = new Axis(Enumerable.Range(0, a_rank - 2).Concat(new int[] { a_rank - 1, a_rank - 2 }).ToArray());
+                }
+                return transpose(a, perm:perm, conjugate:conjugate);
+            });
         }
 
-        public static Tensor[] split<T>(Tensor value, int num_split, T axis,
+        public static Tensor[] split(Tensor value, int num_or_size_splits, Tensor axis = null,
             string name = "split")
         {
-            var size_splits = ops.convert_to_tensor(num_split);
+            return gen_array_ops.split(split_dim: axis, value: value, num_split: num_or_size_splits, name);
+        }
 
-            if (tf.Context.executing_eagerly())
+        public static Tensor[] split(Tensor value, int[] num_or_size_splits, Tensor axis = null, int num = -1,
+            string name = "split")
+        {
+            if(num_or_size_splits.Length == 0)
             {
-                return split_eager_fallback(axis, value, num_split: num_split, name: name, ctx: tf.Context);
+                throw new ValueError("Rank-0 tensors are not supported as the num_or_size_splits argument to split.");
+            }
+            var size_splits = ops.convert_to_tensor(num_or_size_splits);
+
+            if(num == -1)
+            {
+                num = (int)size_splits.shape[0];
             }
 
-            var _op = tf.OpDefLib._apply_op_helper("Split", name, new { split_dim = axis, value, num_split });
-            return _op.outputs;
-        }
-
-        private static Tensor[] split_eager_fallback<Ta, Tv>(Ta axis, Tv value, int num_split, string name, Context ctx = null)
-        {
-            var (_attr_T, input) = tf.Runner.ArgsToMatchingEager(ctx, args: new object[] { value });
-            var axis_tensor = ops.convert_to_tensor(axis, dtype: TF_DataType.TF_INT32);
-            var _inputs_flat = new List<Tensor> { axis_tensor };
-            _inputs_flat.AddRange(input);
-            var _attrs = new object[] { "num_split", num_split, "T", _attr_T };
-
-            return tf.Runner.Execute(ctx, "Split", num_split, _inputs_flat.ToArray(), _attrs, name: name);
+            return gen_array_ops.split_v(value: value, size_splits: size_splits, split_dim: axis, num_split: num, name: name);
         }
 
         public static Tensor slice(Tensor input, Tensor[] begin, Tensor[] size, string name = null)

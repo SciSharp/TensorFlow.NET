@@ -160,6 +160,18 @@ namespace Tensorflow.Keras.Layers
         public ILayer Normalization(Shape? input_shape = null, int? axis = -1, float? mean = null, float? variance = null, bool invert = false);
         public ILayer LeakyReLU(float alpha = 0.3f);
 
+        public IRnnCell LSTMCell(int uints,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2);
+
         public ILayer LSTM(int units,
             Activation activation = null,
             Activation recurrent_activation = null,

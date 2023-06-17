@@ -16,12 +16,20 @@
 
 using System;
 using System.Linq;
+using Tensorflow.Functions;
+using Tensorflow.Graphs;
 using Tensorflow.Operations;
+using static Tensorflow.Binding;
 
 namespace Tensorflow
 {
     public class control_flow_util
     {
+        public static readonly bool ENABLE_CONTROL_FLOW_V2 = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_ENABLE_CONTROL_FLOW_V2")) && Environment.GetEnvironmentVariable("TF_ENABLE_CONTROL_FLOW_V2") != "0" ||
+                              (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_ENABLE_CONTROL_FLOW_V2")) && Environment.GetEnvironmentVariable("TF_ENABLE_CONTROL_FLOW_V2") != "0") ||
+                              (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_ENABLE_COND_V2")) && Environment.GetEnvironmentVariable("TF_ENABLE_COND_V2") != "0") ||
+                              (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_ENABLE_WHILE_V2")) && Environment.GetEnvironmentVariable("TF_ENABLE_WHILE_V2") != "0") ||
+                              (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("TF_ENABLE_TENSOR_ARRAY_V2")) && Environment.GetEnvironmentVariable("TF_ENABLE_TENSOR_ARRAY_V2") != "0");
         /// <summary>
         /// Return true if `op` is an Exit.
         /// </summary>
@@ -195,6 +203,75 @@ namespace Tensorflow
                 ctxt = ctxt.outer_context;
             }
             return null;
+        }
+
+        public static bool EnableControlFlowV2(Graph graph)
+        {
+            return ENABLE_CONTROL_FLOW_V2 || graph.building_function && (graph is not FuncGraph func || func.captures.Length == 0);
+            
+        }
+
+        public static string create_new_tf_function(FuncGraph func_graph)
+        {
+            var func = new EagerDefinedFunction(func_graph.Name, func_graph, func_graph.Inputs, func_graph.Outputs, new Dictionary<string, AttrValue>());
+            func.AddToGraph(func_graph);
+            return func_graph.Name;
+        }
+
+        public static (Operation, Tensor[]) get_op_and_outputs(Tensor[] inputs)
+        {
+            if(inputs.Length == 0)
+            {
+                return (null, new Tensor[0]);
+            }
+            else
+            {
+                return (inputs[0], inputs);
+            }
+        }
+
+        public static Tensor[] run_as_function_for_tape_gradients(Func<Tensor[], Tensor[]> make_op, Tensor[] inputs)
+        {
+            if(gradients_util.PossibleTapeGradientTypes(inputs) == gradients_util.POSSIBLE_GRADIENT_TYPES_HIGHER_ORDER
+                && !(ops.get_default_graph().building_function))
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return make_op(inputs);
+            }
+        }
+
+        public static string unique_fn_name(string scope, string name)
+        {
+            return $"{scope}{name}_{ops.uid()}".Replace("/", "_");
+        }
+
+        public static bool output_all_intermediates()
+        {
+            if (in_defun())
+            {
+                return false;
+            }
+            if(tf.Context.FunctionCallOptions.ExecutorType == "SINGLE_THREADED_EXECUTOR")
+            {
+                return false;
+            }
+            // TODO(Rinne): check this after refactoring keras building.
+            return false;
+        }
+
+        public static bool in_defun()
+        {
+            if (tf.Context.executing_eagerly())
+            {
+                return false;
+            }
+
+            var graph = ops.get_default_graph();
+            // TODO(Rinne): CondBranchFuncGraph, WhileBodyFuncGraph, WhileCondFuncGraph
+            return graph is FuncGraph;
         }
     }
 }

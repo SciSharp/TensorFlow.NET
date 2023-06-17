@@ -17,6 +17,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Tensorflow.Exceptions;
 using Tensorflow.Util;
 using static Tensorflow.c_api;
 
@@ -88,7 +89,7 @@ namespace Tensorflow
                         case TF_Code.TF_INVALID_ARGUMENT:
                             throw new InvalidArgumentError(message);
                         default:
-                            throw new TensorflowException(message);
+                            throw new NotOkStatusException(message);
                     }
                 }
             }

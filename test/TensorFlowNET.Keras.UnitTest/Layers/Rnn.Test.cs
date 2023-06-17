@@ -21,21 +21,6 @@ namespace Tensorflow.Keras.UnitTest.Layers
         [TestMethod]
         public void SimpleRNNCell()
         {
-            //var cell = tf.keras.layers.SimpleRNNCell(64, dropout: 0.5f, recurrent_dropout: 0.5f);
-            //var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
-            //var x = tf.random.normal((4, 100));
-            //var (y, h1) = cell.Apply(inputs: x, states: h0);
-            //var h2 = h1;
-            //Assert.AreEqual((4, 64), y.shape);
-            //Assert.AreEqual((4, 64), h2[0].shape);
-
-            //var model = keras.Sequential(new List<ILayer>
-            //{
-            //  keras.layers.InputLayer(input_shape: (4,100)),
-            //  keras.layers.SimpleRNNCell(64)
-            //});
-            //model.summary();
-
             var cell = tf.keras.layers.SimpleRNNCell(64, dropout: 0.5f, recurrent_dropout: 0.5f);
             var h0 = new Tensors { tf.zeros(new Shape(4, 64)) };
             var x = tf.random.normal((4, 100));
@@ -60,24 +45,63 @@ namespace Tensorflow.Keras.UnitTest.Layers
         }
 
         [TestMethod]
+        public void LSTMCell()
+        {
+            var inputs = tf.ones((2, 100));
+            var states = new Tensors { tf.zeros((2, 4)), tf.zeros((2, 4)) };
+            var rnn = tf.keras.layers.LSTMCell(4);
+            var (output, new_states) = rnn.Apply(inputs, states);
+            Assert.AreEqual((2, 4), output.shape);
+            Assert.AreEqual((2, 4), new_states[0].shape);
+        }
+
+        [TestMethod] 
+        public void TrainLSTMWithMnist()
+        {
+            var input = keras.Input((784));
+            var x = keras.layers.Reshape((28, 28)).Apply(input);
+            x = keras.layers.LSTM(50, return_sequences: true).Apply(x);
+            x = keras.layers.LSTM(100).Apply(x);
+            var output = keras.layers.Dense(10, activation: "softmax").Apply(x);
+
+            var model = keras.Model(input, output);
+            model.summary();
+            model.compile(keras.optimizers.Adam(), keras.losses.CategoricalCrossentropy(), new string[] { "accuracy" });
+
+            var data_loader = new MnistModelLoader();
+            var dataset = data_loader.LoadAsync(new ModelLoadSetting
+            {
+                TrainDir = "mnist",
+                OneHot = true,
+                ValidationSize = 55000,
+            }).Result;
+
+            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 1);
+        }
+
+        [TestMethod]
         public void SimpleRNN()
         {
-            //var inputs = np.arange(6 * 10 * 8).reshape((6, 10, 8)).astype(np.float32);
-            ///*var simple_rnn = keras.layers.SimpleRNN(4);
-            //var output = simple_rnn.Apply(inputs);
-            //Assert.AreEqual((32, 4), output.shape);*/
+            var input = keras.Input((784));
+            var x = keras.layers.Reshape((28, 28)).Apply(input);
+            x = keras.layers.SimpleRNN(10).Apply(x);
+            var output = keras.layers.Dense(10, activation: "softmax").Apply(x);
 
-            //var simple_rnn = tf.keras.layers.SimpleRNN(4, return_sequences: true, return_state: true);
-            //var (whole_sequence_output, final_state) = simple_rnn.Apply(inputs);
-            //Assert.AreEqual((6, 10, 4), whole_sequence_output.shape);
-            //Assert.AreEqual((6, 4), final_state.shape);
-
-            var inputs = keras.Input(shape: (10, 8));
-            var x = keras.layers.SimpleRNN(4).Apply(inputs);
-            var output = keras.layers.Dense(10).Apply(x);
-            var model = keras.Model(inputs, output);
+            var model = keras.Model(input, output);
             model.summary();
+            model.compile(keras.optimizers.Adam(), keras.losses.CategoricalCrossentropy(), new string[] { "accuracy" });
+
+            var data_loader = new MnistModelLoader();
+            var dataset = data_loader.LoadAsync(new ModelLoadSetting
+            {
+                TrainDir = "mnist",
+                OneHot = false,
+                ValidationSize = 58000,
+            }).Result;
+
+            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 2);
         }
+
         [TestMethod]
         public void RNNForSimpleRNNCell()
         {
@@ -100,15 +124,13 @@ namespace Tensorflow.Keras.UnitTest.Layers
         }
 
         [TestMethod]
-        public void WlzTest()
+        public void RNNForLSTMCell()
         {
-            long[] b = { 1, 2, 3 };
-            
-            Shape a = new Shape(Unknown).concatenate(b);
-            Console.WriteLine(a);
-
+            var inputs = tf.ones((5, 10, 8));
+            var rnn = tf.keras.layers.RNN(tf.keras.layers.LSTMCell(4));
+            var output = rnn.Apply(inputs);
+            Console.WriteLine($"output: {output}");
+            Assert.AreEqual((5, 4), output.shape);
         }
-
-
     }
 }

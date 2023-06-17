@@ -42,10 +42,10 @@ namespace Tensorflow.Framework
             func_graph.as_default();
             importer.import_graph_def(graph_def, name: "", validate_colocation_constraints: false);
             var input_tensor_names = fdef.Signature.InputArg.Select(x => nested_to_flat_tensor_name[x.Name]);
-            func_graph.Inputs = new Tensors(input_tensor_names.Select(x => func_graph.get_tensor_by_name(x)));
+            func_graph.Inputs = new Tensors(input_tensor_names.Select(x => func_graph.get_tensor_by_name(x)).ToArray());
 
             var output_tensor_names = fdef.Signature.OutputArg.Select(x => nested_to_flat_tensor_name[fdef.Ret[x.Name]]);
-            func_graph.Outputs = new Tensors(output_tensor_names.Select(x => func_graph.get_tensor_by_name(x)));
+            func_graph.Outputs = new Tensors(output_tensor_names.Select(x => func_graph.get_tensor_by_name(x)).ToArray());
             // TODO(Rinne): func_graph.ControlOutputs
             _set_handle_data(func_graph, fdef);
 

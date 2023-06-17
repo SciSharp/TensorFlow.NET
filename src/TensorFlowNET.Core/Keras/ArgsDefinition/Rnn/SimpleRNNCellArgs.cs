@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tensorflow.Keras.ArgsDefinition.Rnn
 {
@@ -25,5 +22,6 @@ namespace Tensorflow.Keras.ArgsDefinition.Rnn
         public IInitializer RecurrentInitializer { get; set; }
         [JsonProperty("bias_initializer")]
         public IInitializer BiasInitializer { get; set; }
+
     }
 }

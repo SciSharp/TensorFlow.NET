@@ -2,6 +2,7 @@
 
 using Tensorflow.Eager;
 using Tensorflow.Contexts;
+using Tensorflow.Exceptions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow;
@@ -29,6 +30,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Abs", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -96,6 +101,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AccumulateNV2", name) { args = new object[] { inputs }, attrs = new Dictionary<string, object>() { ["shape"] = shape } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -157,6 +166,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Acos", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -216,6 +229,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Acosh", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -278,6 +295,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Add", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -338,6 +359,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AddN", name) { args = new object[] { inputs }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -395,6 +420,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AddV2", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -459,6 +488,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "All", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -533,6 +566,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Angle", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -597,6 +634,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Any", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -649,6 +690,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ApproximateEqual", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["tolerance"] = tolerance } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -718,6 +763,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ArgMax", name) { args = new object[] { input, dimension }, attrs = new Dictionary<string, object>() { ["output_type"] = output_type } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -785,6 +834,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ArgMin", name) { args = new object[] { input, dimension }, attrs = new Dictionary<string, object>() { ["output_type"] = output_type } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -857,6 +910,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Asin", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -917,6 +974,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Asinh", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -987,6 +1048,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Atan", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1055,6 +1120,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Atan2", name) { args = new object[] { y, x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1118,6 +1187,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Atanh", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1200,6 +1273,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatMul", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["adj_x"] = adj_x, ["adj_y"] = adj_y } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1290,6 +1367,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatMulV2", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["adj_x"] = adj_x, ["adj_y"] = adj_y } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1386,6 +1467,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatMulV3", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout, ["adj_x"] = adj_x, ["adj_y"] = adj_y } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1458,6 +1543,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Betainc", name) { args = new object[] { a, b, x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1521,6 +1610,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Bincount", name) { args = new object[] { arr, size, weights }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1592,6 +1685,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Bucketize", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["boundaries"] = boundaries } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1644,6 +1741,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Cast", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { ["DstT"] = DstT, ["Truncate"] = Truncate } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1694,6 +1795,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Ceil", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1753,6 +1858,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ClipByValue", name) { args = new object[] { t, clip_value_min, clip_value_max }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1825,6 +1934,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Complex", name) { args = new object[] { real, imag }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1891,6 +2004,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ComplexAbs", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1959,6 +2076,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conj", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2021,6 +2142,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Cos", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2082,6 +2207,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Cosh", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2138,6 +2267,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Cross", name) { args = new object[] { a, b }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2231,6 +2364,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Cumprod", name) { args = new object[] { x, axis }, attrs = new Dictionary<string, object>() { ["exclusive"] = exclusive, ["reverse"] = reverse } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2327,6 +2464,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Cumsum", name) { args = new object[] { x, axis }, attrs = new Dictionary<string, object>() { ["exclusive"] = exclusive, ["reverse"] = reverse } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2412,6 +2553,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "CumulativeLogsumexp", name) { args = new object[] { x, axis }, attrs = new Dictionary<string, object>() { ["exclusive"] = exclusive, ["reverse"] = reverse } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2482,6 +2627,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DenseBincount", name) { args = new object[] { input, size, weights }, attrs = new Dictionary<string, object>() { ["binary_output"] = binary_output } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2539,6 +2688,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Digamma", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2594,6 +2747,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Div", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2652,6 +2809,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DivNoNan", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2721,6 +2882,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Equal", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["incompatible_shape_error"] = incompatible_shape_error } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2772,6 +2937,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Erf", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2821,6 +2990,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Erfc", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2869,6 +3042,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Erfinv", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2932,6 +3109,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "EuclideanNorm", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3014,6 +3195,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Exp", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3080,6 +3265,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Expm1", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3128,6 +3317,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Floor", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3184,6 +3377,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FloorDiv", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3245,6 +3442,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FloorMod", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3315,6 +3516,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Greater", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3383,6 +3588,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "GreaterEqual", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3456,6 +3665,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "HistogramFixedWidth", name) { args = new object[] { values, value_range, nbins }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3526,6 +3739,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Igamma", name) { args = new object[] { a, x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3576,6 +3793,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IgammaGradA", name) { args = new object[] { a, x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3644,6 +3865,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Igammac", name) { args = new object[] { a, x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3710,6 +3935,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Imag", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3764,6 +3993,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Inv", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3820,6 +4053,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InvGrad", name) { args = new object[] { y, dy }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3885,6 +4122,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IsFinite", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3948,6 +4189,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IsInf", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4010,6 +4255,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IsNan", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4078,6 +4327,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Less", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4148,6 +4401,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LessEqual", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4210,6 +4467,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Lgamma", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4275,6 +4536,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LinSpace", name) { args = new object[] { start, stop, num }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4338,6 +4603,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Log", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4399,6 +4668,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Log1p", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4455,6 +4728,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LogicalAnd", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4504,6 +4781,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LogicalNot", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4560,6 +4841,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LogicalOr", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4633,6 +4918,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatMul", name) { args = new object[] { a, b }, attrs = new Dictionary<string, object>() { ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4699,6 +4988,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Max", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4756,6 +5049,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Maximum", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4820,6 +5117,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Mean", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4886,6 +5187,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Min", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4943,6 +5248,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Minimum", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5004,6 +5313,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Mod", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5060,6 +5373,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Mul", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5118,6 +5435,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MulNoNan", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5167,6 +5488,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Ndtri", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5221,6 +5546,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Neg", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5283,6 +5612,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "NextAfter", name) { args = new object[] { x1, x2 }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5340,6 +5673,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "NotEqual", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["incompatible_shape_error"] = incompatible_shape_error } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5404,6 +5741,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Polygamma", name) { args = new object[] { a, x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5466,6 +5807,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Pow", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5530,6 +5875,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Prod", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5615,6 +5964,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizeDownAndShrinkRange", name) { args = new object[] { input, input_min, input_max }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5672,6 +6025,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedAdd", name) { args = new object[] { x, y, min_x, max_x, min_y, max_y }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5758,6 +6115,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMatMul", name) { args = new object[] { a, b, min_a, max_a, min_b, max_b }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput, ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["Tactivation"] = Tactivation } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5821,6 +6182,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMul", name) { args = new object[] { x, y, min_x, max_x, min_y, max_y }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5896,6 +6261,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RaggedBincount", name) { args = new object[] { splits, values, size, weights }, attrs = new Dictionary<string, object>() { ["binary_output"] = binary_output } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5966,6 +6335,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Range", name) { args = new object[] { start, limit, delta }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6033,6 +6406,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Real", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["Tout"] = Tout } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6092,6 +6469,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RealDiv", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6146,6 +6527,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Reciprocal", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6202,6 +6587,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ReciprocalGrad", name) { args = new object[] { y, dy }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6263,6 +6652,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RequantizationRange", name) { args = new object[] { input, input_min, input_max }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6321,6 +6714,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RequantizationRangePerChannel", name) { args = new object[] { input, input_min, input_max }, attrs = new Dictionary<string, object>() { ["clip_value_max"] = clip_value_max } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6394,6 +6791,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Requantize", name) { args = new object[] { input, input_min, input_max, requested_output_min, requested_output_max }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6456,6 +6857,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RequantizePerChannel", name) { args = new object[] { input, input_min, input_max, requested_output_min, requested_output_max }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6524,6 +6929,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Rint", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6579,6 +6988,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Round", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6632,6 +7045,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Rsqrt", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6688,6 +7105,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "RsqrtGrad", name) { args = new object[] { y, dy }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6770,6 +7191,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SegmentMax", name) { args = new object[] { data, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6855,6 +7280,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SegmentMean", name) { args = new object[] { data, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6936,6 +7365,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SegmentMin", name) { args = new object[] { data, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7019,6 +7452,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SegmentProd", name) { args = new object[] { data, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7100,6 +7537,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SegmentSum", name) { args = new object[] { data, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7195,6 +7636,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Select", name) { args = new object[] { condition, t, e }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7247,6 +7692,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SelectV2", name) { args = new object[] { condition, t, e }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7304,6 +7753,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sigmoid", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7359,6 +7812,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SigmoidGrad", name) { args = new object[] { y, dy }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7421,6 +7878,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sign", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7481,6 +7942,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sin", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7543,6 +8008,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sinh", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7604,6 +8073,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SobolSample", name) { args = new object[] { dim, num_results, skip }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7677,6 +8150,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseBincount", name) { args = new object[] { indices, values, dense_shape, size, weights }, attrs = new Dictionary<string, object>() { ["binary_output"] = binary_output } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7749,6 +8226,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseMatMul", name) { args = new object[] { a, b }, attrs = new Dictionary<string, object>() { ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["a_is_sparse"] = a_is_sparse, ["b_is_sparse"] = b_is_sparse } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7813,6 +8294,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentMean", name) { args = new object[] { data, indices, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7872,6 +8357,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentMeanGrad", name) { args = new object[] { grad, indices, segment_ids, output_dim0 }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7938,6 +8427,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentMeanWithNumSegments", name) { args = new object[] { data, indices, segment_ids, num_segments }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7999,6 +8492,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentSqrtN", name) { args = new object[] { data, indices, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8086,6 +8583,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentSum", name) { args = new object[] { data, indices, segment_ids }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8145,6 +8646,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentSumGrad", name) { args = new object[] { grad, indices, segment_ids, output_dim0 }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8232,6 +8737,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSegmentSumWithNumSegments", name) { args = new object[] { data, indices, segment_ids, num_segments }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8289,6 +8798,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sqrt", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8345,6 +8858,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SqrtGrad", name) { args = new object[] { y, dy }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8399,6 +8916,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Square", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8456,6 +8977,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SquaredDifference", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8512,6 +9037,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sub", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8577,6 +9106,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Sum", name) { args = new object[] { input, reduction_indices }, attrs = new Dictionary<string, object>() { ["keep_dims"] = keep_dims } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8641,6 +9174,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Tan", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8704,6 +9241,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Tanh", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8759,6 +9300,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TanhGrad", name) { args = new object[] { y, dy }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8822,6 +9367,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TruncateDiv", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8881,6 +9430,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TruncateMod", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8973,6 +9526,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UnsortedSegmentMax", name) { args = new object[] { data, segment_ids, num_segments }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9060,6 +9617,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UnsortedSegmentMin", name) { args = new object[] { data, segment_ids, num_segments }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9145,6 +9706,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UnsortedSegmentProd", name) { args = new object[] { data, segment_ids, num_segments }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9236,6 +9801,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UnsortedSegmentSum", name) { args = new object[] { data, segment_ids, num_segments }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9288,6 +9857,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Xdivy", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9339,6 +9912,10 @@ public static class gen_math_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Xlog1py", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9389,6 +9966,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Xlogy", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9448,6 +10029,10 @@ public static class gen_math_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Zeta", name) { args = new object[] { x, q }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {

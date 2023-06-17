@@ -155,6 +155,10 @@ namespace Tensorflow.CodeGen
                 }
                 else if (attr.Type == "list(type)")
                 {
+                    if(op.InputArg.Any(x => x.TypeListAttr == attr.Name))
+                    {
+                        continue;
+                    }
                     if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.Type)
                     {
                         List<TF_DataType> values = new();
@@ -174,10 +178,25 @@ namespace Tensorflow.CodeGen
                 else if (attr.Type == "list(shape)")
                 {
                     res.Add((attr.Name, "Shape[]", "NOVALUE"));
+                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.List)
+                    {
+                        List<string> exps = new();
+                        foreach (var value in attr.DefaultValue.List.Shape)
+                        {
+                            exps.Add($"new Shape({string.Join(", ", value.Dim.Select(x => x.Size))})");
+                        }
+                        string expression = "new Shape[]{" + $"{string.Join(", ", exps)}" + "}";
+                        dynamicDefaultValues[attr.Name] = expression;
+                        res.Add((attr.Name, "string[]", $"null"));
+                    }
+                    else
+                    {
+                        res.Add((attr.Name, "string[]", "NOVALUE"));
+                    }
                 }
                 else if (attr.Type == "list(string)")
                 {
-                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.S)
+                    if (attr.DefaultValue is not null && attr.DefaultValue.ValueCase == AttrValue.ValueOneofCase.List)
                     {
                         List<string> values = new();
                         foreach (var value in attr.DefaultValue.List.S)
@@ -231,11 +250,11 @@ namespace Tensorflow.CodeGen
                 }
                 else if (attr.Type == "func")
                 {
-                    res.Add((attr.Name, "Func<Tensors, Tensors>", "NOVALUE"));
+                    res.Add((attr.Name, "object", "NOVALUE"));
                 }
                 else if (attr.Type == "list(func)")
                 {
-                    res.Add((attr.Name, "Func<Tensors, Tensors>[]", "NOVALUE"));
+                    res.Add((attr.Name, "object[]", "NOVALUE"));
                 }
                 else if (attr.Type == "tensor")
                 {

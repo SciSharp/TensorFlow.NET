@@ -11,6 +11,7 @@ using Tensorflow.Common.Extensions;
 using System.Linq.Expressions;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Common.Types;
+using System.Runtime.CompilerServices;
 // from tensorflow.python.distribute import distribution_strategy_context as ds_context;
 
 namespace Tensorflow.Keras.Layers.Rnn
@@ -30,25 +31,39 @@ namespace Tensorflow.Keras.Layers.Rnn
         private int _num_constants;
         protected IVariableV1 _kernel;
         protected IVariableV1 _bias;
-        protected IRnnCell _cell;
+        private IRnnCell _cell;
+        protected IRnnCell Cell
+        {
+            get
+            {
+                return _cell;
+            }
+            init
+            {
+                _cell = value;
+                _self_tracked_trackables.Add(_cell);
+            }
+        }
 
-        public RNN(RNNArgs args) : base(PreConstruct(args))
+        public RNN(IRnnCell cell, RNNArgs args) : base(PreConstruct(args))
         {
             _args = args;
             SupportsMasking = true;
 
-            // if is StackedRnncell
-            if (args.Cells != null)
-            {
-                _cell = new StackedRNNCells(new StackedRNNCellsArgs
-                {
-                    Cells = args.Cells
-                });
-            }
-            else
-            {
-                _cell = args.Cell;
-            }
+            Cell = cell;
+
+            // get input_shape
+            _args = PreConstruct(args);
+
+            _num_constants = 0;
+        }
+
+        public RNN(IEnumerable<IRnnCell> cells, RNNArgs args) : base(PreConstruct(args))
+        {
+            _args = args;
+            SupportsMasking = true;
+
+            Cell = new StackedRNNCells(cells, new StackedRNNCellsArgs());
 
             // get input_shape
             _args = PreConstruct(args);
@@ -65,7 +80,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 if (_states == null)
                 {
                     // CHECK(Rinne): check if this is correct.
-                    var nested = _cell.StateSize.MapStructure<Tensor?>(x => null);
+                    var nested = Cell.StateSize.MapStructure<Tensor?>(x => null);
                     _states = nested.AsNest().ToTensors();
                 }
                 return _states;
@@ -73,7 +88,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             set { _states = value; }
         }
 
-        private OneOf<Shape, List<Shape>> compute_output_shape(Shape input_shape)
+        private INestStructure<Shape> compute_output_shape(Shape input_shape)
         {
             var batch = input_shape[0];
             var time_step = input_shape[1];
@@ -83,13 +98,15 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
 
             // state_size is a array of ints or a positive integer
-            var state_size = _cell.StateSize.ToSingleShape();
-
-            // TODO(wanglongzhi2001),flat_output_size应该是什么类型的，Shape还是Tensor
-            Func<Shape, Shape> _get_output_shape;
-            _get_output_shape = (flat_output_size) =>
+            var state_size = Cell.StateSize;
+            if(state_size?.TotalNestedCount == 1)
             {
-                var output_dim = flat_output_size.as_int_list();
+                state_size = new NestList<long>(state_size.Flatten().First());
+            }
+
+            Func<long, Shape>  _get_output_shape = (flat_output_size) =>
+            {
+                var output_dim = new Shape(flat_output_size).as_int_list();
                 Shape output_shape;
                 if (_args.ReturnSequences)
                 {
@@ -110,33 +127,30 @@ namespace Tensorflow.Keras.Layers.Rnn
                 return output_shape;
             };
 
-            Type type = _cell.GetType();
+            Type type = Cell.GetType();
             PropertyInfo output_size_info = type.GetProperty("output_size");
-            Shape output_shape;
+            INestStructure<Shape> output_shape;
             if (output_size_info != null)
             {
-                output_shape = nest.map_structure(_get_output_shape, _cell.OutputSize.ToSingleShape());
-                // TODO(wanglongzhi2001),output_shape应该简单的就是一个元组还是一个Shape类型
-                output_shape = (output_shape.Length == 1 ? (int)output_shape[0] : output_shape);
+                output_shape = Nest.MapStructure(_get_output_shape, Cell.OutputSize);
             }
             else
             {
-                output_shape = _get_output_shape(state_size);
+                output_shape = new NestNode<Shape>(_get_output_shape(state_size.Flatten().First()));
             }
 
             if (_args.ReturnState)
             {
-                Func<Shape, Shape> _get_state_shape;
-                _get_state_shape = (flat_state) =>
+                Func<long, Shape> _get_state_shape = (flat_state) =>
                 {
-                    var state_shape = new int[] { (int)batch }.concat(flat_state.as_int_list());
+                    var state_shape = new int[] { (int)batch }.concat(new Shape(flat_state).as_int_list());
                     return new Shape(state_shape);
                 };
 
 
-                var state_shape = _get_state_shape(state_size);
+                var state_shape = Nest.MapStructure(_get_state_shape, state_size);
 
-                return new List<Shape> { output_shape, state_shape };
+                return new Nest<Shape>(new[] { output_shape, state_shape } );
             }
             else
             {
@@ -171,7 +185,9 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         public override void build(KerasShapesWrapper input_shape)
         {
-            object get_input_spec(Shape shape)
+            input_shape = new KerasShapesWrapper(input_shape.Shapes[0]);
+
+            InputSpec get_input_spec(Shape shape)
             {
                 var input_spec_shape = shape.as_int_list();
 
@@ -206,7 +222,6 @@ namespace Tensorflow.Keras.Layers.Rnn
                 // append bacth dim
                 state_spec_shape = new int[] { -1 }.concat(state_spec_shape);
                 return new InputSpec(shape: state_spec_shape);
-
             }
 
             // Check whether the input shape contains any nested shapes. It could be
@@ -214,10 +229,13 @@ namespace Tensorflow.Keras.Layers.Rnn
             // numpy inputs.
 
 
-            if (!_cell.Built)
+            if (Cell is Layer layer && !layer.Built)
             {
-                _cell.build(input_shape);
+                layer.build(input_shape);
+                layer.Built = true;
             }
+
+            this.built = true;
         }
 
         /// <summary>
@@ -248,10 +266,10 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             (inputs, initial_state, constants) = _process_inputs(inputs, initial_state, constants);
 
-            _maybe_reset_cell_dropout_mask(_cell);
-            if (_cell is StackedRNNCells)
+            _maybe_reset_cell_dropout_mask(Cell);
+            if (Cell is StackedRNNCells)
             {
-                var stack_cell = _cell as StackedRNNCells;
+                var stack_cell = Cell as StackedRNNCells;
                 foreach (IRnnCell cell in stack_cell.Cells)
                 {
                     _maybe_reset_cell_dropout_mask(cell);
@@ -298,23 +316,23 @@ namespace Tensorflow.Keras.Layers.Rnn
 
             // cell_call_fn = (self.cell.__call__ if callable(self.cell) else self.cell.call)
             Func<Tensors, Tensors, (Tensors, Tensors)> step;
-            bool is_tf_rnn_cell = _cell.IsTFRnnCell;
+            bool is_tf_rnn_cell = false;
             if (constants is not null)
             {
-                if (!_cell.SupportOptionalArgs)
+                if (!Cell.SupportOptionalArgs)
                 {
                     throw new ValueError(
-                          $"RNN cell {_cell} does not support constants." +
+                          $"RNN cell {Cell} does not support constants." +
                           $"Received: constants={constants}");
                 }
 
                 step = (inputs, states) =>
                 {
-                    constants = new Tensors(states.TakeLast(_num_constants));
-                    states = new Tensors(states.SkipLast(_num_constants));
+                    constants = new Tensors(states.TakeLast(_num_constants).ToArray());
+                    states = new Tensors(states.SkipLast(_num_constants).ToArray());
                     states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states[0]) : states;
-                    var (output, new_states) = _cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
-                    return (output, new_states.Single);
+                    var (output, new_states) = Cell.Apply(inputs, states, optional_args: new RnnOptionalArgs() { Constants = constants });
+                    return (output, new_states);
                 };
             }
             else
@@ -322,7 +340,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 step = (inputs, states) =>
                 {
                     states = len(states) == 1 && is_tf_rnn_cell ? new Tensors(states.First()) : states;
-                    var (output, new_states) = _cell.Apply(inputs, states);
+                    var (output, new_states) = Cell.Apply(inputs, states);
                     return (output, new_states);
                 };
             }
@@ -366,6 +384,11 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
             else
             {
+                //var tapeSet = tf.GetTapeSet();
+                //foreach(var tape in tapeSet)
+                //{
+                //    tape.Watch(output);
+                //}
                 return output;
             }
         }
@@ -389,18 +412,18 @@ namespace Tensorflow.Keras.Layers.Rnn
             throw new NotImplementedException();
         }
 
-        private (Tensors inputs, Tensors initial_state, Tensors constants) _process_inputs(Tensors inputs, Tensors initial_state, Tensors constants)
+        protected (Tensors inputs, Tensors initial_state, Tensors constants) _process_inputs(Tensors inputs, Tensors initial_state, Tensors constants)
         {
             if (inputs.Length > 1)
             {
                 if (_num_constants != 0)
                 {
-                    initial_state = new Tensors(inputs.Skip(1));
+                    initial_state = new Tensors(inputs.Skip(1).ToArray());
                 }
                 else
                 {
-                    initial_state = new Tensors(inputs.Skip(1).SkipLast(_num_constants));
-                    constants = new Tensors(inputs.TakeLast(_num_constants));
+                    initial_state = new Tensors(inputs.Skip(1).SkipLast(_num_constants).ToArray());
+                    constants = new Tensors(inputs.TakeLast(_num_constants).ToArray());
                 }
                 if (len(initial_state) == 0)
                     initial_state = null;
@@ -418,7 +441,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                         tmp.add(tf.math.count_nonzero(s.Single()));
                     }
                     var non_zero_count = tf.add_n(tmp);
-                    //initial_state = tf.cond(non_zero_count > 0, () => States, () => initial_state);
+                    initial_state = tf.cond(non_zero_count > 0, States, initial_state);
                     if ((int)non_zero_count.numpy() > 0)
                     {
                         initial_state = States;
@@ -428,16 +451,7 @@ namespace Tensorflow.Keras.Layers.Rnn
                 {
                     initial_state = States;
                 }
-                // TODO(Wanglongzhi2001),
-//                initial_state = tf.nest.map_structure(
-//# When the layer has a inferred dtype, use the dtype from the
-//# cell.
-//                lambda v: tf.cast(
-//                    v, self.compute_dtype or self.cell.compute_dtype
-//                ),
-//                initial_state,
-//            )
-
+                //initial_state = Nest.MapStructure(v => tf.cast(v, this.), initial_state);
             }
             else if (initial_state is null)
             {
@@ -477,7 +491,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         }
 
-        void _maybe_reset_cell_dropout_mask(ILayer cell)
+        protected void _maybe_reset_cell_dropout_mask(ILayer cell)
         {
             if (cell is DropoutRNNCellMixin CellDRCMixin)
             {
@@ -488,26 +502,21 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         private static RNNArgs PreConstruct(RNNArgs args)
         {
-            if (args.Kwargs == null)
-            {
-                args.Kwargs = new Dictionary<string, object>();
-            }
-
             // If true, the output for masked timestep will be zeros, whereas in the
             // false case, output from previous timestep is returned for masked timestep.
-            var zeroOutputForMask = (bool)args.Kwargs.Get("zero_output_for_mask", false);
+            var zeroOutputForMask = args.ZeroOutputForMask;
 
             Shape input_shape;
-            var propIS = (Shape)args.Kwargs.Get("input_shape", null);
-            var propID = (int?)args.Kwargs.Get("input_dim", null);
-            var propIL = (int?)args.Kwargs.Get("input_length", null);
+            var propIS = args.InputShape;
+            var propID = args.InputDim;
+            var propIL = args.InputLength;
 
             if (propIS == null && (propID != null || propIL != null))
             {
                 input_shape = new Shape(
                     propIL ?? -1,
                     propID ?? -1);
-                args.Kwargs["input_shape"] = input_shape;
+                args.InputShape = input_shape;
             }
 
             return args;
@@ -558,36 +567,14 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         protected Tensors get_initial_state(Tensors inputs)
         {
-            var get_initial_state_fn = _cell.GetType().GetMethod("get_initial_state");
-
             var input = inputs[0];
-            var input_shape = inputs.shape;
+            var input_shape = array_ops.shape(inputs);
             var batch_size = _args.TimeMajor ? input_shape[1] : input_shape[0];
             var dtype = input.dtype;
 
-            Tensors init_state = new Tensors();
-
-            if(get_initial_state_fn != null)
-            {
-                init_state = (Tensors)get_initial_state_fn.Invoke(_cell, new object[] { inputs, batch_size, dtype });
-                
-            }
-            //if (_cell is RnnCellBase rnn_base_cell)
-            //{
-            //    init_state = rnn_base_cell.GetInitialState(null, batch_size, dtype);
-            //}
-            else
-            {
-                init_state = RnnUtils.generate_zero_filled_state(batch_size, _cell.StateSize, dtype);
-            }
+            Tensors init_state = Cell.GetInitialState(null, batch_size, dtype);
 
             return init_state;
-        }
-
-        // Check whether the state_size contains multiple states.
-        public static bool is_multiple_state(GeneralizedTensorShape state_size)
-        {
-            return state_size.Shapes.Length > 1;
         }
     }
 }
