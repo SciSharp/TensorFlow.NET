@@ -32,7 +32,7 @@ using Tensorflow.Util;
 using static Tensorflow.Binding;
 using Tensorflow.Framework;
 using Tensorflow.Sessions;
-
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -332,7 +332,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="state"></param>
         /// <param name="training"></param>
         /// <returns></returns>
-        protected virtual Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected virtual Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             if(ReplacedCall is not null)
             {

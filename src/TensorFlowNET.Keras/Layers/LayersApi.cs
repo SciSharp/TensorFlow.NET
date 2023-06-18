@@ -685,6 +685,32 @@ namespace Tensorflow.Keras.Layers
                 Alpha = alpha
             });
 
+
+        public IRnnCell SimpleRNNCell(
+            int units,
+            string activation = "tanh",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f)
+            => new SimpleRNNCell(new SimpleRNNCellArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
+                UseBias = use_bias,
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout
+            });
+
+        public IRnnCell StackedRNNCells(
+            IEnumerable<IRnnCell> cells)
+            => new StackedRNNCells(cells.ToList(), new StackedRNNCellsArgs());
+
         /// <summary>
         /// 
         /// </summary>
@@ -708,6 +734,80 @@ namespace Tensorflow.Keras.Layers
                     ReturnSequences = return_sequences,
                     ReturnState = return_state
                 });
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="return_sequences"></param>
+        /// <param name="return_state"></param>
+        /// <param name="go_backwards"></param>
+        /// <param name="stateful"></param>
+        /// <param name="unroll"></param>
+        /// <param name="time_major"></param>
+        /// <returns></returns>
+        public ILayer RNN(
+            IRnnCell cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false)
+            => new RNN(cell, new RNNArgs
+            {
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                Unroll = unroll,
+                TimeMajor = time_major
+            });
+
+        public ILayer RNN(
+            IEnumerable<IRnnCell> cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false)
+            => new RNN(cell, new RNNArgs
+            {
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                Unroll = unroll,
+                TimeMajor = time_major
+            });
+
+
+        public IRnnCell LSTMCell(int uints,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal", // TODO(Wanglongzhi2001),glorot_uniform has not been developed.
+            string bias_initializer = "zeros",
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2)
+            => new LSTMCell(new LSTMCellArgs
+            {
+                Units = uints,
+                Activation = keras.activations.GetActivationFromName(activation),
+                RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                UseBias = use_bias,
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                UnitForgetBias = unit_forget_bias,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                Implementation = implementation
+            });
 
         /// <summary>
         /// Long Short-Term Memory layer - Hochreiter 1997.
@@ -769,7 +869,8 @@ namespace Tensorflow.Keras.Layers
                     GoBackwards = go_backwards,
                     Stateful = stateful,
                     TimeMajor = time_major,
-                    Unroll = unroll
+                    Unroll = unroll, 
+                    UnitForgetBias = unit_forget_bias
                 });
 
         /// <summary>

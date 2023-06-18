@@ -20,7 +20,7 @@ namespace Tensorflow
 
             // whole_sequence_output has shape `[32, 10, 4]`.
             // final_state has shape `[32, 4]`.
-            var (whole_sequence_output, final_state) = simple_rnn.Apply(inputs);
+            var (whole_sequence_output, final_states) = simple_rnn.Apply(inputs);
         }
     }
 }

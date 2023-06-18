@@ -71,15 +71,15 @@ namespace Tensorflow
         public Tensor[] split(Tensor value, int num_split, Tensor axis, string name = null)
             => array_ops.split(
                 value: value,
-                num_split: num_split,
+                num_or_size_splits: num_split,
                 axis: axis,
                 name: name);
 
         public Tensor[] split(Tensor value, int num_split, int axis, string name = null)
             => array_ops.split(
                 value: value,
-                num_split: num_split,
-                axis: axis,
+                num_or_size_splits: num_split,
+                axis: ops.convert_to_tensor(axis),
                 name: name);
 
         public Tensor ensure_shape(Tensor x, Shape shape, string name = null)

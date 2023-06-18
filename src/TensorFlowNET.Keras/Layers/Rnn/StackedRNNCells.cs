@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using Tensorflow.Keras.ArgsDefinition;
+using System.Linq;
+using Tensorflow.Common.Extensions;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Layers.Rnn
 {
-    public class StackedRNNCells : Layer, RNNArgs.IRnnArgCell
+    public class StackedRNNCells : Layer, IRnnCell
     {
-        public IList<RnnCell> Cells { get; set; }
-        public bool reverse_state_order;
+        public IList<IRnnCell> Cells { get; set; }
+        public bool _reverse_state_order;
 
-        public StackedRNNCells(StackedRNNCellsArgs args) : base(args)
+        public StackedRNNCells(IEnumerable<IRnnCell> cells, StackedRNNCellsArgs args) : base(args)
         {
-            if (args.Kwargs == null)
-            {
-                args.Kwargs = new Dictionary<string, object>();
-            }
+            Cells = cells.ToList(); 
 
-            Cells = args.Cells;
-            reverse_state_order = (bool)args.Kwargs.Get("reverse_state_order", false);
+            _reverse_state_order = args.ReverseStateOrder;
 
-            if (reverse_state_order)
+            if (_reverse_state_order)
             {
                 throw new WarningException("reverse_state_order=True in StackedRNNCells will soon " +
                                            "be deprecated. Please update the code to work with the " +
@@ -32,109 +30,104 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
-        public object state_size
-        {
-            get => throw new NotImplementedException();
-            //@property
-            //def state_size(self) :
-            //    return tuple(c.state_size for c in
-            //                 (self.cells[::- 1] if self.reverse_state_order else self.cells))
-        }
+        public bool SupportOptionalArgs => false;
 
-        public object output_size
+        public INestStructure<long> StateSize
         {
             get
             {
-                var lastCell = Cells[Cells.Count - 1];
-
-                if (lastCell.output_size != -1)
+                if (_reverse_state_order)
                 {
-                    return lastCell.output_size;
-                }
-                else if (RNN._is_multiple_state(lastCell.state_size))
-                {
-                    // return ((dynamic)Cells[-1].state_size)[0];
-                    throw new NotImplementedException("");
+                    var state_sizes = Cells.Reverse().Select(cell => cell.StateSize);
+                    return new Nest<long>(state_sizes);
                 }
                 else
                 {
-                    return Cells[-1].state_size;
+                    var state_sizes = Cells.Select(cell => cell.StateSize);
+                    return new Nest<long>(state_sizes);
                 }
             }
         }
 
-        public object get_initial_state()
+        public INestStructure<long> OutputSize
         {
-            throw new NotImplementedException();
-            //  def get_initial_state(self, inputs= None, batch_size= None, dtype= None) :
-            //    initial_states = []
-            //    for cell in self.cells[::- 1] if self.reverse_state_order else self.cells:
-            //      get_initial_state_fn = getattr(cell, 'get_initial_state', None)
-            //      if get_initial_state_fn:
-            //        initial_states.append(get_initial_state_fn(
-            //            inputs=inputs, batch_size=batch_size, dtype=dtype))
-            //      else:
-            //        initial_states.append(_generate_zero_filled_state_for_cell(
-            //            cell, inputs, batch_size, dtype))
-
-            //    return tuple(initial_states)
+            get
+            {
+                var lastCell = Cells.Last();
+                if(lastCell.OutputSize is not null)
+                {
+                    return lastCell.OutputSize;
+                }
+                else if (RnnUtils.is_multiple_state(lastCell.StateSize))
+                {
+                    return new NestNode<long>(lastCell.StateSize.Flatten().First());
+                }
+                else
+                {
+                    return lastCell.StateSize;
+                }
+            }
         }
 
-        public object call()
+        public Tensors GetInitialState(Tensors inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
         {
-            throw new NotImplementedException();
-            //  def call(self, inputs, states, constants= None, training= None, ** kwargs):
-            //    # Recover per-cell states.
-            //    state_size = (self.state_size[::- 1]
-            //                  if self.reverse_state_order else self.state_size)
-            //    nested_states = nest.pack_sequence_as(state_size, nest.flatten(states))
-
-            //    # Call the cells in order and store the returned states.
-            //    new_nested_states = []
-            //    for cell, states in zip(self.cells, nested_states) :
-            //      states = states if nest.is_nested(states) else [states]
-            //# TF cell does not wrap the state into list when there is only one state.
-            //    is_tf_rnn_cell = getattr(cell, '_is_tf_rnn_cell', None) is not None
-            //      states = states[0] if len(states) == 1 and is_tf_rnn_cell else states
-            //      if generic_utils.has_arg(cell.call, 'training'):
-            //        kwargs['training'] = training
-            //      else:
-            //        kwargs.pop('training', None)
-            //      # Use the __call__ function for callable objects, eg layers, so that it
-            //      # will have the proper name scopes for the ops, etc.
-            //      cell_call_fn = cell.__call__ if callable(cell) else cell.call
-            //      if generic_utils.has_arg(cell.call, 'constants'):
-            //        inputs, states = cell_call_fn(inputs, states,
-            //                                      constants= constants, ** kwargs)
-            //      else:
-            //        inputs, states = cell_call_fn(inputs, states, ** kwargs)
-            //      new_nested_states.append(states)
-
-            //    return inputs, nest.pack_sequence_as(state_size,
-            //                                         nest.flatten(new_nested_states))
+            var cells = _reverse_state_order ? Cells.Reverse() : Cells;
+            List<Tensor> initial_states = new List<Tensor>();
+            foreach (var cell in cells)
+            {
+                initial_states.Add(cell.GetInitialState(inputs, batch_size, dtype));
+            }
+            return new Tensors(initial_states);
         }
 
-        public void build()
+        protected override Tensors Call(Tensors inputs, Tensors states = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
-            throw new NotImplementedException();
-            //  @tf_utils.shape_type_conversion
-            //  def build(self, input_shape) :
-            //    if isinstance(input_shape, list) :
-            //      input_shape = input_shape[0]
-            //    for cell in self.cells:
-            //      if isinstance(cell, Layer) and not cell.built:
-            //        with K.name_scope(cell.name):
-            //          cell.build(input_shape)
-            //          cell.built = True
-            //      if getattr(cell, 'output_size', None) is not None:
-            //        output_dim = cell.output_size
-            //      elif _is_multiple_state(cell.state_size) :
-            //        output_dim = cell.state_size[0]
-            //      else:
-            //        output_dim = cell.state_size
-            //      input_shape = tuple([input_shape[0]] +
-            //                          tensor_shape.TensorShape(output_dim).as_list())
-            //    self.built = True
+            // Recover per-cell states.
+            var state_size = _reverse_state_order ? new NestList<long>(StateSize.Flatten().Reverse()) : StateSize;
+            var nested_states = Nest.PackSequenceAs(state_size, Nest.Flatten(states).ToArray());
+
+            var new_nest_states = Nest<Tensor>.Empty;
+            // Call the cells in order and store the returned states.
+            foreach (var (cell, internal_states) in zip(Cells, nested_states))
+            {
+                RnnOptionalArgs? rnn_optional_args = optional_args as RnnOptionalArgs;
+                Tensors? constants = rnn_optional_args?.Constants;
+
+                Tensors new_states;
+                (inputs, new_states) = cell.Apply(inputs, internal_states, optional_args: new RnnOptionalArgs() { Constants = constants });
+
+                new_nest_states = new_nest_states.MergeWith(new_states);
+            }
+            return Tensors.FromNest((inputs, Nest.PackSequenceAs(state_size, Nest.Flatten(new_nest_states).ToArray())));
+        }
+
+        public override void build(KerasShapesWrapper input_shape)
+        {
+            var shape = input_shape.ToSingleShape();
+            foreach(var cell in Cells)
+            {
+                if(cell is Layer layer && !layer.Built)
+                {
+                    // ignored the name scope.
+                    layer.build(shape);
+                    layer.Built = true;
+                }
+                INestStructure<long> output_dim;
+                if(cell.OutputSize is not null)
+                {
+                    output_dim = cell.OutputSize;
+                }
+                else if (RnnUtils.is_multiple_state(cell.StateSize))
+                {
+                    output_dim = new NestNode<long>(cell.StateSize.Flatten().First());
+                }
+                else
+                {
+                    output_dim = cell.StateSize;
+                }
+                shape = new Shape(new long[] { shape.dims[0] }.Concat(output_dim.Flatten()).ToArray());
+            }
+            this.Built = true;
         }
 
         public override IKerasConfig get_config()

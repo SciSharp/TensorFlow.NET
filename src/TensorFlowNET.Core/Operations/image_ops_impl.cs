@@ -1778,10 +1778,10 @@ new_height, new_width");
             {
                 // a_y_min: [0], a_x_min: [1], a_y_max: [2], a_x_max[3]
                 var a_xy_minmax = array_ops.split(
-                    value: boxes_a, num_split: 4, axis: 2);
+                    value: boxes_a, num_or_size_splits: 4, axis: ops.convert_to_tensor(2));
                 // b_y_min: [0], b_x_min: [1], b_y_max: [2], b_x_max[3]    
                 var b_xy_minmax = array_ops.split(
-                    value: boxes_b, num_split: 4, axis: 2);
+                    value: boxes_b, num_or_size_splits: 4, axis: ops.convert_to_tensor(2));
 
                 var i_xmin = math_ops.maximum(
                     a_xy_minmax[1], array_ops.transpose(b_xy_minmax[1], new[] { 0, 2, 1 }));
@@ -1943,7 +1943,7 @@ new_height, new_width");
                 using (ops.name_scope("canonicalize_coordinates"))
                 {
                     // y_1 = [0], x_1 = [1], y_2 = [2], x_2 = [3]
-                    var yx = array_ops.split(value: boxes, num_split: 4, axis: 2);
+                    var yx = array_ops.split(value: boxes, num_or_size_splits: 4, axis: ops.convert_to_tensor(2));
                     var y_1_is_min = math_ops.reduce_all(
                         gen_math_ops.less_equal(yx[0][0, 0, 0], yx[2][0, 0, 0]));
                     var y_minmax = control_flow_ops.cond(

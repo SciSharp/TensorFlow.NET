@@ -1,6 +1,7 @@
 ﻿using Tensorflow.Keras.ArgsDefinition.Reshaping;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers.Reshaping
 {
@@ -21,7 +22,7 @@ namespace Tensorflow.Keras.Layers.Reshaping
             built = true;
             _buildInputShape = input_shape;
         }
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensor output = inputs;
             if (output.rank != 4)

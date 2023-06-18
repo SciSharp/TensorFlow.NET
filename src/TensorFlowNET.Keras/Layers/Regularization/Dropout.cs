@@ -1,4 +1,5 @@
-﻿using Tensorflow.Keras.ArgsDefinition;
+﻿using Tensorflow.Common.Types;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
@@ -15,7 +16,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             if (training == null)
                 training = false;

@@ -17,6 +17,7 @@
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -36,7 +37,7 @@ namespace Tensorflow.Keras.Layers
             input_spec = new InputSpec(ndim: 4);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             int[] pool_shape;
             int[] strides;

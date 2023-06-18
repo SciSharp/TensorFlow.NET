@@ -1,5 +1,6 @@
 ﻿using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -17,7 +18,7 @@ namespace Tensorflow.Keras.Layers
             this.args = args;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             scale = constant_op.constant(args.Scale, args.DType);
             offset = constant_op.constant(args.Offset, args.DType);

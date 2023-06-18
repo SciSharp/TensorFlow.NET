@@ -16,6 +16,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using static Tensorflow.CppShapeInferenceResult.Types;
 
 namespace Tensorflow
 {
@@ -48,6 +49,19 @@ namespace Tensorflow
         public static string StringPiece(IntPtr handle)
         {
             return handle == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(handle);
+        }
+
+        public unsafe static byte[] ByteStringPiece(IntPtr handle)
+        {
+            byte* str_data = (byte*)handle.ToPointer();
+            List<byte> bytes = new List<byte>();
+            byte current = 255;
+            while (current != ((byte)'\0'))
+            {
+                current = *(str_data++);
+                bytes.Add(current);
+            }
+            return bytes.Take(bytes.Count - 1).ToArray();
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]

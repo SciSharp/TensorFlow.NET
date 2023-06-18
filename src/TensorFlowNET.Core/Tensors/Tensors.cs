@@ -3,6 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
+using Tensorflow.Operations;
+using Tensorflow.Common.Extensions;
 
 namespace Tensorflow
 {
@@ -13,157 +16,278 @@ namespace Tensorflow
     /// and Tensor[] from Tensors implicitily. 
     /// It works for tuple and scalar as well.
     /// </summary>
-    public class Tensors : IEnumerable<Tensor>, IDisposable
+    public sealed class Tensors : Nest<Tensor>, IDisposable
     {
-        List<Tensor> items = new List<Tensor>();
-
-        public TF_DataType dtype => items.First().dtype;
-        public Shape shape => items.First().shape;
-        public int rank => items.First().rank;
-        public Graph graph => items.First().graph;
+        public TF_DataType dtype => this.First().dtype; 
+        public Shape shape => this.First().shape;
+        public int rank => this.First().rank;
+        public Graph graph => this.First().graph;
         public bool IsList { get; set; }
-        public int Length => items.Count();
-
-        public Tensor this[int index]
+        public int Length => this.Count();
+        /// <summary>
+        /// Return a Tensor if `Tensors` has only one tensor, otherwise throw an exception.
+        /// </summary>
+        public Tensor Single
         {
-            get => items[index];
-            set => items[index] = value;
+            get
+            {
+                if (Length != 1)
+                {
+                    throw new ValueError("Tensors with more than one tensor cannot be " +
+                        "implicitly converted to Tensor.");
+                }
+                return this.First();
+            }
+        }
+
+        /// <summary>
+        /// Return a Tensor if `Tensors` has only one tensor, and return null when `Tensors` is empty, 
+        /// otherwise throw an exception.
+        /// </summary>
+        public Tensor? SingleOrNull
+        {
+            get
+            {
+                if (Length > 1)
+                {
+                    throw new ValueError($"Tensors with {Length} tensor cannot be " +
+                        "implicitly converted to Tensor.");
+                }
+                return this.FirstOrDefault();
+            }
         }
 
         public Tensor this[params string[] slices]
-            => items.First()[slices];
-        public Tensors(params Tensor[] tensors)
+            => this.First()[slices];
+
+        internal Tensors(Nest<Tensor> nested) : base(nested)
         {
-            items.AddRange(tensors);
+
         }
 
-        public Tensors(IEnumerable<Tensor> tensors)
+        public Tensors(params Tensor[] tensors): base(DealWithConstructorArrayInput(tensors))
         {
-            items.AddRange(tensors);
+            
         }
 
-        public Tensors(NDArray nd)
+        public Tensors(IList<Tensor> tensors) : base(tensors.Select(x => new Nest<Tensor>(x)))
         {
-            items.Add(ops.convert_to_tensor(nd));
+
         }
 
-        public IEnumerator<Tensor> GetEnumerator()
+        public Tensors(NDArray nd): base(ops.convert_to_tensor(nd))
         {
-            foreach (var tensor in items)
-                yield return tensor;
+            
         }
 
+        /// <summary>
+        /// Get the element in shallow level. For example, for ts = [1, [2, 3], 4], 
+        /// common indexer has ts[1] = 2. Shallow indexer has ts[1] = [2, 3]
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Tensors GetShallow(int index)
+        {
+            if(NestType == NestType.Node)
+            {
+                if(index > 0)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+                return this;
+            }
+            else if(NestType == NestType.List)
+            {
+                return ListValue![index].AsNest().ToTensors();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private static Nest<Tensor> DealWithConstructorArrayInput(Tensor[] tensors)
+        {
+            if (tensors.Length == 0)
+            {
+                return Nest<Tensor>.Empty;
+            }
+            else if(tensors.Length == 1)
+            {
+                return new Nest<Tensor>(tensors[0]);
+            }
+            else
+            {
+                return new Nest<Tensor>(tensors.Select(x => new Nest<Tensor>(x)));
+            }
+        }
+
+        public bool IsSingle()
+        {
+            return Length == 1;
+        }
+
+        public new Tensors MergeWith(Nest<Tensor>? other)
+        {
+            return FromNest(base.MergeWith(other));
+        }
+
+        [Obsolete("This method is not encouraged to be used. It may be removed in the future. If you do want to add " +
+            "a tensor to `Tensors`, creating a new instance with your newly added tensor is a better choice.")]
         public void Add(Tensor tensor)
-            => items.Add(tensor);
+        {
+            if(NestType == NestType.Dictionary)
+            {
+                throw new ValueError("Cannot add a tensor to dictionary type of nested tensors.");
+            }
+            else if(NestType == NestType.Node)
+            {
+                NestType = NestType.List;
+                ListValue = new() { new Nest<Tensor>(NodeValue), new Nest<Tensor>(tensor) };
+                NodeValue = null;
+            }
+            else if(NestType == NestType.List)
+            {
+                ListValue!.Add(new Nest<Tensor>(tensor));
+            }
+            else //Empty
+            {
+                NestType = NestType.Node;
+                NodeValue = tensor;
+            }
+        }
 
+        [Obsolete("This method is not encouraged to be used. It may be removed in the future. If you do want to add " +
+            "some tensors to `Tensors`, creating a new instance with your newly added tensors is a better choice.")]
         public void AddRange(IEnumerable<Tensor> tensors)
-            => items.AddRange(tensors);
+        {
+            if (NestType == NestType.Dictionary)
+            {
+                throw new ValueError("Cannot add a tensor to dictionary type of nested tensors.");
+            }
+            else if (NestType == NestType.Node)
+            {
+                NestType = NestType.List;
+                ListValue = new() { new Nest<Tensor>(NodeValue) };
+                ListValue.AddRange(tensors.Select(x => new Nest<Tensor>(x)));
+                NodeValue = null;
+            }
+            else if(NestType == NestType.List)
+            {
+                ListValue!.AddRange(tensors.Select(x => new Nest<Tensor>(x)));
+            }
+            else // empty
+            {
+                NestType = NestType.List;
+                ListValue = tensors.Select(x => new Nest<Tensor>(x) as INestStructure<Tensor>).ToList();
+            }
+        }
 
+        [Obsolete("This method is not encouraged to be used. It may be removed in the future. If you do want to insert " +
+            "a tensor to `Tensors`, creating a new instance with your newly added tensor is a better choice.")]
         public void Insert(int index, Tensor tensor)
-            => items.Insert(index, tensor);
-
-        IEnumerator IEnumerable.GetEnumerator()
-            => GetEnumerator();
+        {
+            if (NestType == NestType.List)
+            {
+                ListValue.Insert(index, new Nest<Tensor>(tensor));
+            }
+            else if(NestType == NestType.Node)
+            {
+                NestType = NestType.List;
+                ListValue = new() { new Nest<Tensor>(NodeValue) };
+                ListValue.Insert(index, new Nest<Tensor>(tensor));
+                NodeValue = null;
+            }
+            else
+            {
+                throw new ValueError("Cannot add a tensor to dictionary type of nested tensors.");
+            }
+        }
 
         public string[] StringData()
         {
-            EnsureSingleTensor(this, "nnumpy");
-            return this[0].StringData();
+            return Single.StringData();
         }
 
         public string StringData(int index)
         {
-            EnsureSingleTensor(this, "nnumpy");
-            return this[0].StringData(index);
+            return Single.StringData(index);
         }
 
         public NDArray numpy()
         {
-            EnsureSingleTensor(this, "nnumpy");
-            return this[0].numpy();
+            return Single.numpy();
         }
 
+        [Obsolete]
         public T[] ToArray<T>() where T: unmanaged
         {
-            EnsureSingleTensor(this, $"ToArray<{typeof(T)}>");
-            return this[0].ToArray<T>();
+            return Single.ToArray<T>();
         }
 
         #region Explicit Conversions
         public static explicit operator bool(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to bool");
-            return (bool)tensor[0];
+            return (bool)tensor.Single;
         }
 
         public static explicit operator sbyte(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to sbyte");
-            return (sbyte)tensor[0];
+            return (sbyte)tensor.Single;
         }
 
         public static explicit operator byte(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to byte");
-            return (byte)tensor[0];
+            return (byte)tensor.Single;
         }
 
         public static explicit operator ushort(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to ushort");
-            return (ushort)tensor[0];
+            return (ushort)tensor.Single;
         }
 
         public static explicit operator short(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to short");
-            return (short)tensor[0];
+            return (short)tensor.Single;
         }
 
         public static explicit operator int(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to int");
-            return (int)tensor[0];
+            return (int)tensor.Single;
         }
 
         public static explicit operator uint(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to uint");
-            return (uint)tensor[0];
+            return (uint)tensor.Single;
         }
 
         public static explicit operator long(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to long");
-            return (long)tensor[0];
+            return (long)tensor.Single;
         }
 
         public static explicit operator ulong(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to ulong");
-            return (ulong)tensor[0];
+            return (ulong)tensor.Single;
         }
 
         public static explicit operator float(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to byte");
-            return (byte)tensor[0];
+            return (byte)tensor.Single;
         }
 
         public static explicit operator double(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to double");
-            return (double)tensor[0];
+            return (double)tensor.Single;
         }
 
         public static explicit operator string(Tensors tensor)
         {
-            EnsureSingleTensor(tensor, "explicit conversion to string");
-            return (string)tensor[0];
+            return (string)tensor.Single;
         }
 
         public static explicit operator object[](Tensors tensors)
-            => tensors.items.ToArray();
+            => tensors.Flatten().ToArray();
         #endregion
 
         #region Implicit Conversions
@@ -183,56 +307,44 @@ namespace Tensorflow
         public static implicit operator Tensors(List<Tensor> tensors)
             => new Tensors(tensors.ToArray());
 
-        public static implicit operator Tensor(Tensors tensors)
-            => tensors.FirstOrDefault();
+        public static implicit operator Tensor(Tensors? tensors)
+            => tensors?.SingleOrNull;
 
         public static implicit operator Tensor[](Tensors tensors)
-            => tensors.items.ToArray();
-
+            => tensors.Flatten().ToArray();
         #endregion
 
-        public void Deconstruct(out Tensor a, out Tensor b)
+        public static Tensors? FromNest(Nest<Tensor> nested)
         {
-            a = items[0];
-            b = items[1];
+            if(nested == Nest<Tensor>.Empty)
+            {
+                return null;
+            }
+            return new Tensors(nested);
         }
 
-        private static void EnsureSingleTensor(Tensors tensors, string methodnName)
+        public void Deconstruct(out Tensor a, out Tensors? b)
         {
-            if(tensors.Length == 0)
-            {
-                throw new ValueError($"Method `{methodnName}` of `Tensors` cannot be used when `Tensors` contains no Tensor.");
-            }
-            else if(tensors.Length > 1)
-            {
-                throw new ValueError($"Method `{methodnName}` of `Tensors` cannot be used when `Tensors` contains more than one Tensor.");
-            }
+            a = this.First();
+            b = Length == 1? null : new Tensors(this.Skip(1).ToArray());
         }
 
         public override string ToString()
         {
-            if(items.Count == 1)
+            if(Length == 1)
             {
-                return items[0].ToString();
+                return this.First().ToString();
             }
             else
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append($"Totally {items.Count} tensors, which are {string.Join(", ", items.Select(x => x.name))}\n[\n");
-                for(int i = 0; i < items.Count; i++)
-                {
-                    var tensor = items[i];
-                    sb.Append($"Tensor {i}({tensor.name}): {tensor.ToString()}\n");
-                }
-                sb.Append("]\n");
-                return sb.ToString();
+                return $"Totally {Length} tensors: {base.ToString()}";
             }
         }
 
         public void Dispose()
         {
-            foreach (var item in items)
-                item.Dispose();
+            foreach (var tensor in this)
+                tensor.Dispose();
         }
     }
 }

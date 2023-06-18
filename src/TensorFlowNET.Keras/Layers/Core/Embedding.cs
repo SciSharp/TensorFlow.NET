@@ -15,6 +15,7 @@
 ******************************************************************************/
 
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
@@ -66,7 +67,7 @@ namespace Tensorflow.Keras.Layers
             _buildInputShape = input_shape;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             var dtype = inputs.dtype;
             if (dtype != tf.int32 && dtype != tf.int64)

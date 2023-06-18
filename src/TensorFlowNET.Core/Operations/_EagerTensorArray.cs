@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
+using Tensorflow.Eager;
 using Tensorflow.Framework;
 using static Tensorflow.Binding;
 
@@ -37,10 +39,6 @@ namespace Tensorflow.Operations
 
         bool _infer_shape;
         public override bool infer_shape => _infer_shape;
-        public bool _dynamic_size;
-        public Shape _element_shape;
-
-        public List<Tensor> _colocate_with;
 
         Tensor _handle;
         public override Tensor handle => _handle;
@@ -48,12 +46,14 @@ namespace Tensorflow.Operations
         public override Tensor flow => _flow;
         bool _clear_after_read;
         List<Tensor> _tensor_array;
+        List<int> _previous_read_indices;
 
         public _EagerTensorArray(TF_DataType dtype, Tensor size, bool dynamic_size = false,
             bool clear_after_read = true, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
             bool infer_shape = true, Shape? element_shape = null,
             bool colocate_with_first_write_call = true, string name = null)
         {
+            _size = size;
             _flow = constant_op.constant(0);
             _infer_shape = infer_shape;
             _element_shape = element_shape ?? Shape.Null;
@@ -61,16 +61,20 @@ namespace Tensorflow.Operations
             _dtype = dtype.as_base_dtype();
             _dynamic_size = dynamic_size;
             _clear_after_read = clear_after_read;
-            _tensor_array = new List<Tensor>();
+            _tensor_array = Enumerable.Repeat<Tensor>(null, size.numpy()).ToList();
+            _previous_read_indices = new();
         }
 
         public override TensorArray unstack(Tensor value, string name = null)
         {
-            return tf_with(ops.name_scope(name, "TensorArrayUnstack", new { _handle, value }), delegate
+            var tensors = array_ops.unstack(value, name: name);
+            if(tensors.Length > _tensor_array.Count && !_dynamic_size)
             {
-                var num_elements = array_ops.shape(value)[0];
-                return scatter(indices: math_ops.range(0, num_elements), value: value, name: name);
-            });
+                throw new ValueError($"Cannot unstack {tensors.Length} tensors into a TensorArray of static size {_tensor_array.Count}");
+            }
+            _tensor_array = tensors.ToList();
+            // TODO(Rinne): revise the implementation. Here we should return `parent()`.
+            return this;
         }
 
         public TensorArray scatter(Tensor indices, Tensor value, string name = null)
@@ -103,7 +107,19 @@ namespace Tensorflow.Operations
 
                 return ta;
             });*/
-            throw new NotImplementedException("");
+            //if (indices is EagerTensor)
+            //{
+            //    indices = indices as EagerTensor;
+            //    indices = indices.numpy();
+            //}
+
+            //foreach (var (index, val) in zip(indices.ToArray<int>(), array_ops.unstack(value)))
+            //{
+            //    this.write(index, val);
+            //}
+            //return base;
+            //throw new NotImplementedException("");
+            return this;
         }
 
         public void _merge_element_shape(Shape shape)
@@ -116,9 +132,19 @@ namespace Tensorflow.Operations
             _colocate_with.Add(value);
         }
 
+        private Tensor _maybe_zero(int ix)
+        {
+            var val = _tensor_array[ix];
+            if(val is null)
+            {
+                val = _tensor_array[ix] = array_ops.zeros(_element_shape, _dtype);
+            }
+            return val;
+        }
+
         public override Tensor read<T>(T index, string name = null)
         {
-            int index_int = -1;
+            int index_int;
             if (index is int int_index)
                 index_int = int_index;
             else if (index is Tensor tensor_index)
@@ -126,27 +152,75 @@ namespace Tensorflow.Operations
             else
                 throw new ValueError("");
 
+            if(index_int >= _tensor_array.Count)
+            {
+                throw new OutOfRangeError($"Tried to read from index {index_int} but array size is: {_tensor_array.Count} ");
+            }
+
+            var res = _tensor_array[index_int];
+            if(res is null)
+            {
+                if (_previous_read_indices.Contains(index_int))
+                {
+                    throw new InvalidArgumentError($"Could not read index {index_int} twice because it was cleared after " +
+                        $"a previous read (perhaps try setting clear_after_read = false?)");
+                }
+                else
+                {
+                    res = _maybe_zero(index_int);
+                }
+            }
+
             if (_clear_after_read)
             {
                 _tensor_array[index_int] = null;
+                _previous_read_indices.Add(index_int);
             }
-
-            return _tensor_array[index_int];
+            return res;
         }
 
         public override TensorArray write(Tensor index, Tensor value, string name = null)
         {
-            if (_infer_shape)
-                _element_shape = _element_shape.merge_with(value.shape);
-            _tensor_array.add(value);
-            return this;
+            int index_int;
+            if(index is EagerTensor eager)
+            {
+                return write<Tensor>(eager.numpy(), value, name);
+            }
+            throw new InvalidArgumentError("The index is supposed to be an EagerTensor");
         }
 
         public override TensorArray write<T>(int index, T value, string name = null)
         {
-            var value_tensor = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
-            var index_tensor = ops.convert_to_tensor(index, name: "index");
-            return write(index_tensor, value_tensor, name: name);
+            int size = _tensor_array.Count;
+            if(index >= size)
+            {
+                if (!_dynamic_size)
+                {
+                    throw new OutOfRangeError($"Tried to write to index {index} but array is not resizeable and size " +
+                        $"is: {size} ");
+                }
+                _tensor_array.AddRange(Enumerable.Repeat<Tensor>(null, index - size + 1));
+            }
+
+            Tensor tensor = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
+            
+            if(_dtype != tensor.dtype)
+            {
+                throw new InvalidArgumentError($"TensorArray dtype is {_dtype.as_python_name()} but Op is " +
+                    $"trying to write dtype {tensor.dtype.as_python_name()} ");
+            }
+
+            if (!_element_shape.is_compatible_with(tensor.shape))
+            {
+                throw new ValueError($"Incompatible shape for value ({tensor.shape}), expected ({_element_shape})");
+            }
+
+            if (_infer_shape)
+            {
+                _element_shape = _element_shape.merge_with(tensor.shape);
+            }
+            _tensor_array[index] = tensor;
+            return this;
         }
 
         private Tensor size(string name = null)
@@ -156,11 +230,26 @@ namespace Tensorflow.Operations
 
         public override Tensor stack(string name = null)
         {
-            ops.colocate_with(_handle);
-            return tf_with(ops.name_scope(name, "TensorArrayStack", new { _handle }), delegate
+            if(_tensor_array.Count > 0)
             {
-                return gather(math_ops.range(0, size()), name: name);
-            });
+                for(int i = 0; i < _tensor_array.Count; i++)
+                {
+                    _maybe_zero(i);
+                }
+            }
+            if(_tensor_array.Count == 0 && _element_shape.IsFullyDefined)
+            {
+                return ops.convert_to_tensor(new Shape(new long[] { 0 }.Concat(_element_shape.dims).ToArray()), name: name, dtype: _dtype);
+            }
+            else
+            {
+                return ops.convert_to_tensor(_tensor_array, name: name, dtype: _dtype);
+            }
+            //ops.colocate_with(_handle);
+            //return tf_with(ops.name_scope(name, "TensorArrayStack", new { _handle }), delegate
+            //{
+            //    return gather(math_ops.range(0, size()), name: name);
+            //});
         }
 
         public override Tensor gather(Tensor indices, string name = null)

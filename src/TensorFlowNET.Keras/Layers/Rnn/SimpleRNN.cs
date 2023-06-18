@@ -10,23 +10,26 @@ namespace Tensorflow.Keras.Layers.Rnn
     public class SimpleRNN : RNN
     {
         SimpleRNNArgs args;
-        public SimpleRNN(SimpleRNNArgs args) : base(args)
+        public SimpleRNN(SimpleRNNArgs args) : base(CreateCellForArgs(args), args)
         {
             this.args = args;
         }
 
-        public override void build(KerasShapesWrapper input_shape)
+        private static SimpleRNNCell CreateCellForArgs(SimpleRNNArgs args)
         {
-            var single_shape = input_shape.ToSingleShape();
-            var input_dim = single_shape[-1];
-            _buildInputShape = input_shape;
-
-            kernel = add_weight("kernel", (single_shape[-1], args.Units),
-                initializer: args.KernelInitializer
-                //regularizer = self.kernel_regularizer,
-                //constraint = self.kernel_constraint,
-                //caching_device = default_caching_device,
-            );
+            return new SimpleRNNCell(new SimpleRNNCellArgs()
+            {
+                Units = args.Units,
+                Activation = args.Activation,
+                UseBias = args.UseBias,
+                KernelInitializer = args.KernelInitializer,
+                RecurrentInitializer = args.RecurrentInitializer,
+                BiasInitializer = args.BiasInitializer,
+                Dropout = args.Dropout,
+                RecurrentDropout = args.RecurrentDropout,
+                DType = args.DType,
+                Trainable = args.Trainable,
+            });
         }
     }
 }

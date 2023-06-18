@@ -16,7 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Tensorflow.Common.Types;
+using Tensorflow.Eager;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Operations
@@ -32,18 +35,18 @@ namespace Tensorflow.Operations
         /// first tensor written to it.
         /// </summary>
         bool _colocate_with_first_write_call;
-        public bool colocate_with_first_write_call => _colocate_with_first_write_call;
+        public override bool colocate_with_first_write_call => _colocate_with_first_write_call;
 
         bool _infer_shape;
-        public bool infer_shape => _infer_shape;
-        public bool _dynamic_size;
+        public override bool infer_shape => _infer_shape;
         public List<Shape> _element_shape;
 
         public List<Tensor> _colocate_with;
 
         internal Tensor _handle;
-        public Tensor handle => _handle;
+        public override Tensor handle => _handle;
         internal Tensor _flow;
+        public override Tensor flow => _flow;
 
         public _GraphTensorArray(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
             bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
@@ -54,6 +57,7 @@ namespace Tensorflow.Operations
             dynamic_size = dynamic_size ?? false;
             _dynamic_size = dynamic_size.Value;
             _dtype = dtype;
+            _size = size;
 
             _colocate_with_first_write_call = colocate_with_first_write_call;
             if (colocate_with_first_write_call)
@@ -146,7 +150,9 @@ namespace Tensorflow.Operations
 
                 return ta;
             });*/
-            throw new NotImplementedException("");
+
+            //throw new NotImplementedException("");
+            return this;
         }
 
         public void _merge_element_shape(Shape shape)
@@ -230,6 +236,175 @@ namespace Tensorflow.Operations
             //value.set_shape(-1, element_shape.dims);
 
             return value;
+        }
+    }
+
+    public class _GraphTensorArrayV2 : TensorArray
+    {
+        internal TF_DataType _dtype;
+        public override TF_DataType dtype => _dtype;
+
+        /// <summary>
+        /// Used to keep track of what tensors the TensorArray should be
+        /// colocated with.  We choose to colocate the TensorArray with the
+        /// first tensor written to it.
+        /// </summary>
+        bool _colocate_with_first_write_call;
+        public override bool colocate_with_first_write_call => _colocate_with_first_write_call;
+
+        bool _infer_shape;
+        public override bool infer_shape => _infer_shape;
+        public Shape _element_shape;
+
+        public List<Tensor> _colocate_with;
+
+        internal Tensor _handle;
+        public override Tensor handle => _handle;
+        internal Tensor _flow;
+        public override Tensor flow => _flow;
+
+        public _GraphTensorArrayV2(TF_DataType dtype, Tensor size, bool? dynamic_size = null,
+            bool? clear_after_read = null, string tensor_array_name = null, Tensor handle = null, Tensor flow = null,
+            bool infer_shape = true, Shape? element_shape = null,
+            bool colocate_with_first_write_call = true, string name = null)
+        {
+            Debug.Assert(handle is null);
+            dynamic_size = dynamic_size ?? false;
+            _dynamic_size = dynamic_size.Value;
+            _size = size;
+
+            if(flow is not null && flow.dtype != dtypes.variant)
+            {
+                throw new TypeError($"Expected `flow` to be a variant tensor, but received `{flow.dtype}` instead");
+            }
+            if(flow is null && size is null)
+            {
+                throw new ValueError("Argument `size` must be provided if argument `flow` is not provided.");
+            }
+            if(flow is not null && size is not null)
+            {
+                throw new ValueError("Cannot provide both `flow` and `size` arguments at the same time.");
+            }
+            if(flow is not null && element_shape is not null)
+            {
+                throw new ValueError("Cannot provide both `flow` and `element_shape` arguments at the same time.");
+            }
+
+            _dtype = dtype;
+
+            _element_shape = element_shape;
+            _infer_shape = infer_shape;
+            tf_with(ops.name_scope(name, "TensorArrayV2", new object[] { size, flow }), scope =>
+            {
+                if (flow is null)
+                {
+                    _flow = list_ops.tensor_list_reserve(element_shape, size, dtype, scope.scope_name);
+                }
+                else
+                {
+                    _flow = flow;
+                }
+            });
+
+            _colocate_with_first_write_call = false;
+            _colocate_with = null;
+        }
+
+        public override TensorArray unstack(Tensor value, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "TensorArrayUnstack", new { _flow, value }), delegate
+            {
+                value = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
+                Debug.Assert(value.dtype == _dtype);
+                var flow_out = list_ops.tensor_list_from_tensor(value, value.shape.dims.Skip(1).ToArray());
+                return tensor_array_ops.build_ta_with_new_flow(this, flow_out);
+            });
+        }
+
+        public TensorArray scatter(Tensor indices, Tensor value, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "TensorArrayScatter", new { _flow, value, indices }), delegate
+            {
+                value = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
+                Debug.Assert(value.dtype == _dtype);
+                var flow_out = list_ops.tensor_list_scatter(value, indices, _element_shape, _flow);
+                return tensor_array_ops.build_ta_with_new_flow(this, flow_out);
+            });
+        }
+
+        public override Tensor read<T>(T index, string name = null)
+        {
+            if(index is Tensor tensor)
+            {
+                return read(tensor, name);
+            }
+            else
+            {
+                throw new TypeError("Please use non-generic method instead.");
+            }
+        }
+
+        public Tensor read(Tensor index, string name = null)
+        {
+            return tf_with(tf.name_scope(name, "TensorArrayV2Read", new object[] { _flow, index }), scope =>
+            {
+                return list_ops.tensor_list_get_item(_flow, index, _dtype, _element_shape, name);
+            });
+        }
+
+        public override TensorArray write(Tensor index, Tensor value, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "TensorArrayV2Write", new { _flow, index, value }), delegate
+            {
+                value = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
+                Debug.Assert(value.dtype == _dtype);
+                var flow_out = list_ops.tensor_list_set_item(_flow, index, value, _dynamic_size, name);
+
+                return tensor_array_ops.build_ta_with_new_flow(this, flow_out);
+            });
+        }
+
+        public override TensorArray write<T>(int index, T value, string name = null)
+        {
+            var value_tensor = ops.convert_to_tensor(value, preferred_dtype: _dtype, name: "value");
+            var index_tensor = ops.convert_to_tensor(index, name: "index");
+            return write(index_tensor, value_tensor);
+        }
+
+        private Tensor size(string name = null)
+        {
+            if(!_dynamic_size && _size is not null)
+            {
+                return ops.convert_to_tensor(_size, dtypes.int32);
+            }
+            else
+            {
+                return gen_list_ops.tensor_list_length(_flow, name);
+            }
+        }
+
+        public override Tensor stack(string name = null)
+        {
+            return tf_with(ops.name_scope(name, "TensorArrayV2Stack", _flow), delegate
+            {
+                int ta_size;
+                if(!_dynamic_size && (_size is not null))
+                {
+                    var size_tensor = tensor_util.constant_value(_size);
+                    ta_size = size_tensor is null ? -1 : (int)size_tensor;
+                }
+                else
+                {
+                    ta_size = -1;
+                }
+                var value = list_ops.tensor_list_stack(_flow, _dtype, ta_size, _element_shape);
+                return value;
+            });
+        }
+
+        public override Tensor gather(Tensor indices, string name = null)
+        {
+            return list_ops.tensor_list_gather(_flow, indices, _dtype, _element_shape, name);
         }
     }
 }

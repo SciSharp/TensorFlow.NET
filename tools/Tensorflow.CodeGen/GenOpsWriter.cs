@@ -39,6 +39,7 @@ namespace Tensorflow.CodeGen
                 // Add commonly used namespaces.
                 sb.AppendLine("using Tensorflow.Eager;");
                 sb.AppendLine("using Tensorflow.Contexts;");
+                sb.AppendLine("using Tensorflow.Exceptions;");
                 sb.AppendLine("using static Tensorflow.Binding;");
                 sb.AppendLine();
 

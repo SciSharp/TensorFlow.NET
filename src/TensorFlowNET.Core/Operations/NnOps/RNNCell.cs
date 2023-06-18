@@ -16,10 +16,12 @@
 
 using System;
 using System.Collections.Generic;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Keras.Layers.Rnn;
 using Tensorflow.Keras.Saving;
 using Tensorflow.NumPy;
 using Tensorflow.Operations;
@@ -50,7 +52,8 @@ namespace Tensorflow
     /// matching structure of Tensors having shape `[batch_size].concatenate(s)`
     /// for each `s` in `self.batch_size`.
     /// </summary>
-    public abstract class RnnCell : ILayer, RNNArgs.IRnnArgCell
+    [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
+    public abstract class RnnCell : ILayer, IRnnCell
     {
         /// <summary>
         /// Attribute that indicates whether the cell is a TF RNN cell, due the slight
@@ -142,7 +145,7 @@ namespace Tensorflow
             throw new NotImplementedException("_zero_state_tensors");
         }
 
-        public Tensors Apply(Tensors inputs, Tensor state = null, bool is_training = false)
+        public Tensors Apply(Tensors inputs, Tensors state = null, bool is_training = false, IOptionalArgs? optional_args = null)
         {
             throw new NotImplementedException();
         }
@@ -173,5 +176,18 @@ namespace Tensorflow
         {
             throw new NotImplementedException();
         }
+
+        public (Tensor, Tensors) Call(Tensors inputs, Tensors states, bool? training = null)
+        {
+            throw new NotImplementedException();
+        }
+        public Tensors GetInitialState(Tensors inputs = null, Tensor batch_size = null, TF_DataType dtype = TF_DataType.DtInvalid)
+        {
+            throw new NotImplementedException();
+        }
+        public INestStructure<long> StateSize => throw new NotImplementedException();
+        public INestStructure<long> OutputSize => throw new NotImplementedException();
+        public bool IsTFRnnCell => throw new NotImplementedException();
+        public bool SupportOptionalArgs => throw new NotImplementedException();
     }
 }

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
@@ -103,7 +104,7 @@ namespace Tensorflow.Keras.Layers
             _buildInputShape = input_shape;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = false)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = false, IOptionalArgs? optional_args = null)
         {
             var outputs = _convolution_op.Apply(inputs, kernel.AsTensor());
             if (use_bias)
