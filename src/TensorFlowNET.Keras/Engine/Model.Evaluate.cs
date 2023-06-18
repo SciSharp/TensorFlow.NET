@@ -72,7 +72,7 @@ namespace Tensorflow.Keras.Engine
         {
             var data_handler = new DataHandler(new DataHandlerArgs
             {
-                X = new Tensors(x),
+                X = new Tensors(x.ToArray()),
                 Y = y,
                 Model = this,
                 StepsPerExecution = _steps_per_execution
@@ -168,7 +168,8 @@ namespace Tensorflow.Keras.Engine
         Dictionary<string, float> test_step_multi_inputs_function(DataHandler data_handler, Tensor[] data)
         {
             var x_size = data_handler.DataAdapter.GetDataset().FirstInputTensorCount;
-            var outputs = train_step(data_handler, new Tensors(data.Take(x_size)), new Tensors(data.Skip(x_size)));
+            var outputs = train_step(data_handler, new Tensors(data.Take(x_size).ToArray()), new Tensors(data.Skip(x_size).ToArray()));
+            tf_with(ops.control_dependencies(new object[0]), ctl => _train_counter.assign_add(1));
             return outputs;
         }
     }
