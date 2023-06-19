@@ -65,7 +65,34 @@ namespace TensorFlowNET.UnitTest.NumPy
             var y = np.power(x, 3);
             Assert.AreEqual(y, new[] { 0, 1, 8, 27, 64, 125 });
         }
-         [TestMethod]
+        [TestMethod]
+        public void square()
+        {
+            var x = np.arange(6);
+            var y = np.square(x);
+            Assert.AreEqual(y, new[] { 0, 1, 4, 9, 16, 25 });
+        }
+        [TestMethod]
+        public void dotproduct()
+        {
+            var x1 = new NDArray(new[] { 1, 2, 3 });
+            var x2 = new NDArray(new[] { 4, 5, 6 });
+            double result1 = np.dot(x1, x2);
+            NDArray y1 = new float[,] {
+                                    { 1.0f, 2.0f, 3.0f },
+                                    { 4.0f, 5.1f,6.0f },
+                                    { 4.0f, 5.1f,6.0f }
+                                };
+            NDArray y2 = new float[,] {
+                                    { 3.0f, 2.0f, 1.0f },
+                                    { 6.0f, 5.1f, 4.0f },
+                                    { 6.0f, 5.1f, 4.0f }
+                                };
+            double result2 = np.dot(y1, y2);
+            Assert.AreEqual(result1, 32);
+            Assert.AreEqual(Math.Round(result2, 2), 158.02);
+        }
+        [TestMethod]
        public void maximum()
         {
             var x1 = new NDArray(new[,] { { 1, 2, 3 }, { 4, 5.1, 6 } });

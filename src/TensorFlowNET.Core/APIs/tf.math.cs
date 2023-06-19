@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.NumPy;
 using Tensorflow.Operations;
 
 namespace Tensorflow
@@ -42,7 +43,6 @@ namespace Tensorflow
 
             public Tensor multiply(Tensor x, Tensor y, string name = null)
                 => math_ops.multiply(x, y, name: name);
-
             public Tensor divide_no_nan(Tensor a, Tensor b, string name = null)
                 => math_ops.div_no_nan(a, b);
 
@@ -452,7 +452,18 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
-
+        /// <summary>
+        /// return scalar product
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="axes"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor dot_prod<Tx, Ty>(Tx x, Ty y, NDArray axes, string name = null)
+            => math_ops.tensordot(convert_to_tensor(x), convert_to_tensor(y), axes, name: name);
         public Tensor negative(Tensor x, string name = null)
             => gen_math_ops.neg(x, name);
 
