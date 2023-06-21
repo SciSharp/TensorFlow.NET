@@ -303,6 +303,41 @@ namespace Tensorflow.Keras.Layers
                 Units = units,
                 Activation = keras.activations.GetActivationFromName("linear")
             });
+        /// <summary>
+        /// Just your regular densely-connected NN layer.
+        /// 
+        /// Dense implements the operation: output = activation(dot(input, kernel) + bias) where activation is the 
+        /// element-wise activation function passed as the activation argument, kernel is a weights matrix created by the layer, 
+        /// and bias is a bias vector created by the layer (only applicable if use_bias is True).
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you don't specify anything, no activation is applied (ie. "linear" activation: a(x) = x).</param>
+        /// <param name="kernel_initializer">Initializer for the kernel weights matrix.</param>
+        /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector.</param>
+        /// <param name="kernel_regularizer">A regularizer that applies a L1 regularization penalty for kernel.</param>
+        /// <param name="bias_regularizer">A regularizer that applies a L1 regularization penalty for bias.</param>
+        /// <param name="input_shape">N-D tensor with shape: (batch_size, ..., input_dim). The most common situation would be a 2D input with shape (batch_size, input_dim).</param>
+        /// <returns>N-D tensor with shape: (batch_size, ..., units). For instance, for a 2D input with shape (batch_size, input_dim), the output would have shape (batch_size, units).</returns>
+
+        public ILayer Dense(int units,
+            string activation = null,
+            IInitializer kernel_initializer = null,
+            bool use_bias = true,
+            IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            Shape input_shape = null)
+            => new Dense(new DenseArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
+                KernelInitializer = kernel_initializer ?? tf.glorot_uniform_initializer,
+                BiasInitializer = bias_initializer ?? (use_bias ? tf.zeros_initializer : null),
+                InputShape = input_shape,
+                KernelRegularizer = kernel_regularizer,
+                BiasRegularizer = bias_regularizer
+            });
 
         /// <summary>
         /// Just your regular densely-connected NN layer.

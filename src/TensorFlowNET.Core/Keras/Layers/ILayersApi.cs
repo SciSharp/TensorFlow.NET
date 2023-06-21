@@ -105,6 +105,15 @@ namespace Tensorflow.Keras.Layers
             bool use_bias = true,
             IInitializer bias_initializer = null,
             Shape input_shape = null);
+        
+        public ILayer Dense(int units,
+            string activation = null,
+            IInitializer kernel_initializer = null,
+            bool use_bias = true,
+            IInitializer bias_initializer = null,
+            IRegularizer kernel_regularizer = null,
+            IRegularizer bias_regularizer = null,
+            Shape input_shape = null);
 
         public ILayer Dropout(float rate, Shape noise_shape = null, int? seed = null);
 
