@@ -51,17 +51,13 @@ namespace Tensorflow
             return handle == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(handle);
         }
 
-        public unsafe static byte[] ByteStringPiece(IntPtr handle)
+        public unsafe static byte[] ByteStringPiece(Buffer? handle)
         {
-            byte* str_data = (byte*)handle.ToPointer();
-            List<byte> bytes = new List<byte>();
-            byte current = 255;
-            while (current != ((byte)'\0'))
-            {
-                current = *(str_data++);
-                bytes.Add(current);
+            if(handle is null){
+                return new byte[0];
             }
-            return bytes.Take(bytes.Count - 1).ToArray();
+            var data = handle.ToArray();
+            return data;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]

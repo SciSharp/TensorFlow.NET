@@ -31,7 +31,7 @@ namespace Tensorflow.Operations
             }
             else
             {
-                return ops.convert_to_tensor(shape);
+                return ops.convert_to_tensor(shape, dtype: dtypes.int32);
             }
         }
 

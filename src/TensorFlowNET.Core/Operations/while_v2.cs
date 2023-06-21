@@ -38,9 +38,9 @@ namespace Tensorflow.Operations
             int len_orig_loop_vars = orig_loop_vars.Length;
 
             loop_vars = _tensor_array_to_flow(loop_vars);
-            loop_vars = Nest.MapStructure(x => _convert_to_tensor_or_indexed_slices(x, TF_DataType.DtInvalid, null), loop_vars).ToTensors();
+            loop_vars = Nest.MapStructure(x => _convert_to_tensor_or_indexed_slices(x), loop_vars).ToTensors();
 
-            var loop_vars_signature = Nest.MapStructure(x => new TensorSpec(x.shape, x.dtype), _tensor_array_to_flow(loop_vars));
+            var loop_vars_signature = Nest.MapStructure(x => new TensorSpec(x.shape, x.dtype), loop_vars);
 
             var flat_shape_invariants = Nest.Flatten(loop_vars_signature).Select(x => x.shape).ToArray();
 
@@ -379,10 +379,9 @@ namespace Tensorflow.Operations
             return cond_graph.unique_name(cond_graph.Name + "___redundant_placeholder");
         }
 
-        private static Tensor _convert_to_tensor_or_indexed_slices(Tensor value, TF_DataType dtype, 
-            string name)
+        private static Tensor _convert_to_tensor_or_indexed_slices(Tensor value)
         {
-            return ops.convert_to_tensor(value, dtype, name, false);
+            return ops.convert_to_tensor(value, as_ref: false);
         }
 
         private static Tensor _build_maximum_iterations_loop_var(int maximum_iterations = -1)
