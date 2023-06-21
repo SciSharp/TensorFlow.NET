@@ -49,9 +49,30 @@ namespace Tensorflow.NumPy
         [AutoNumPy]
         public static NDArray prod<T>(params T[] array) where T : unmanaged
             => new NDArray(tf.reduce_prod(new NDArray(array)));
+        [AutoNumPy]
+        public static NDArray dot(NDArray x1, NDArray x2, NDArray? axes = null, string? name = null)
+        {
+            //if axes mentioned
+            if (axes != null)
+            {
+                return new NDArray(tf.dot_prod(x1, x2, axes, name));
+            }
+            if (x1.shape.ndim > 1)
+            {
+                x1 = GetFlattenArray(x1);
+            }
+            if (x2.shape.ndim > 1)
+            {
+                x2 = GetFlattenArray(x2);
+            }
+            //if axes not mentioned, default 0,0
+            return new NDArray(tf.dot_prod(x1, x2, axes: new int[] { 0, 0 }, name));
 
+        }
         [AutoNumPy]
         public static NDArray power(NDArray x, NDArray y) => new NDArray(tf.pow(x, y));
+        [AutoNumPy]
+        public static NDArray square(NDArray x) => new NDArray(tf.square(x));
 
         [AutoNumPy]
         public static NDArray sin(NDArray x) => new NDArray(math_ops.sin(x));

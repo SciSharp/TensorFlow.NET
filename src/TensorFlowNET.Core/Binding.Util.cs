@@ -486,7 +486,28 @@ namespace Tensorflow
                     throw new NotImplementedException("");
             }
         }
-
+        public static NDArray GetFlattenArray(NDArray x)
+        {
+            switch (x.GetDataType())
+            {
+                case TF_DataType.TF_FLOAT:
+                    x = x.ToArray<float>();
+                    break;
+                case TF_DataType.TF_DOUBLE:
+                    x = x.ToArray<double>();
+                    break;
+                case TF_DataType.TF_INT16:
+                case TF_DataType.TF_INT32:
+                    x = x.ToArray<int>();
+                    break;
+                case TF_DataType.TF_INT64:
+                    x = x.ToArray<long>();
+                    break;
+                default:
+                    break;
+            }
+            return x;
+        }
         public static TF_DataType GetDataType(this object data)
         {
             var type = data.GetType();

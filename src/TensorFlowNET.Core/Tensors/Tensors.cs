@@ -226,62 +226,62 @@ namespace Tensorflow
         }
 
         #region Explicit Conversions
-        public unsafe static explicit operator bool(Tensors tensor)
+        public static explicit operator bool(Tensors tensor)
         {
             return (bool)tensor.Single;
         }
 
-        public unsafe static explicit operator sbyte(Tensors tensor)
+        public static explicit operator sbyte(Tensors tensor)
         {
             return (sbyte)tensor.Single;
         }
 
-        public unsafe static explicit operator byte(Tensors tensor)
+        public static explicit operator byte(Tensors tensor)
         {
             return (byte)tensor.Single;
         }
 
-        public unsafe static explicit operator ushort(Tensors tensor)
+        public static explicit operator ushort(Tensors tensor)
         {
             return (ushort)tensor.Single;
         }
 
-        public unsafe static explicit operator short(Tensors tensor)
+        public static explicit operator short(Tensors tensor)
         {
             return (short)tensor.Single;
         }
 
-        public unsafe static explicit operator int(Tensors tensor)
+        public static explicit operator int(Tensors tensor)
         {
             return (int)tensor.Single;
         }
 
-        public unsafe static explicit operator uint(Tensors tensor)
+        public static explicit operator uint(Tensors tensor)
         {
             return (uint)tensor.Single;
         }
 
-        public unsafe static explicit operator long(Tensors tensor)
+        public static explicit operator long(Tensors tensor)
         {
             return (long)tensor.Single;
         }
 
-        public unsafe static explicit operator ulong(Tensors tensor)
+        public static explicit operator ulong(Tensors tensor)
         {
             return (ulong)tensor.Single;
         }
 
-        public unsafe static explicit operator float(Tensors tensor)
+        public static explicit operator float(Tensors tensor)
         {
             return (byte)tensor.Single;
         }
 
-        public unsafe static explicit operator double(Tensors tensor)
+        public static explicit operator double(Tensors tensor)
         {
             return (double)tensor.Single;
         }
 
-        public unsafe static explicit operator string(Tensors tensor)
+        public static explicit operator string(Tensors tensor)
         {
             return (string)tensor.Single;
         }

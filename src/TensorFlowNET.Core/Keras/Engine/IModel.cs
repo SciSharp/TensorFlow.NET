@@ -60,7 +60,7 @@ public interface IModel : ILayer
         bool skip_mismatch = false, 
         object options = null);
 
-    Dictionary<string, float> evaluate(NDArray x, NDArray y,
+    Dictionary<string, float> evaluate(Tensor x, Tensor y,
             int batch_size = -1,
             int verbose = 1,
             int steps = -1,
