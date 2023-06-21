@@ -34,7 +34,7 @@ namespace Tensorflow
             return num;
         }
 
-        protected Tensor[] _outputs;
+        internal Tensor[] _outputs;
         public virtual Tensor[] outputs => _outputs;
         public Tensor output => _outputs.FirstOrDefault();
 

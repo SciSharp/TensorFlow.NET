@@ -9,7 +9,7 @@ namespace Tensorflow.CodeGen
 {
     public class OpClassifier
     {
-        private static readonly string _filenamePattern = @"^gen_[a-z]*_ops.py$";
+        private static readonly string _filenamePattern = @"^gen_[a-z_]*_ops.py$";
         private static readonly string _pythonFunctionPattern = @"def\s+(\w+\d*\w*)\((?:\s*\w+\s*(?:=\s*[\S]*)*,\s*)*\s*name=None\):";
         private Dictionary<string, HashSet<string>> _opSet = new();
         public Dictionary<string, HashSet<string>> OpSet => _opSet;

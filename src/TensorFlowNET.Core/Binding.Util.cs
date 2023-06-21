@@ -524,7 +524,7 @@ namespace Tensorflow
                 case Tensors tensors:
                     return tensors.dtype;
                 case IEnumerable<Tensor> tensors:
-                    return tensors.First().dtype;
+                    return tensors.Where(x => x is not null).First().dtype;
                 case RefVariable variable:
                     return variable.dtype;
                 case ResourceVariable variable:

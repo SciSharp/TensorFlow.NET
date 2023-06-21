@@ -90,8 +90,7 @@ namespace Tensorflow.Gradients
                     ? input_values[0].rank + dim_int 
                     : dim_int % input_values[0].rank;
                 var sizes = input_values.Select(x => x.shape[non_neg_concat_dim]).ToArray();
-                var sizes_tensor = constant_op.constant(sizes);
-                out_grads = array_ops.split(grad, sizes_tensor, non_neg_concat_dim).ToList();
+                out_grads = array_ops.split(grad, sizes.Select(x => (int)x).ToArray(), ops.convert_to_tensor(non_neg_concat_dim)).ToList();
             }
             else if (constant_op.is_constant(concat_dim))
             {
@@ -127,7 +126,7 @@ namespace Tensorflow.Gradients
                             new Tensor[] { non_neg_concat_dim, tf.constant(0) },
                             new Tensor[] { tf.constant(1), tf.constant(-1) });
                     var squeeze_sizes = array_ops.squeeze(slice);
-                    out_grads = array_ops.split(axis: grad, value: squeeze_sizes, num_split: (int)non_neg_concat_dim).ToList();
+                    out_grads = array_ops.split(axis: grad, value: squeeze_sizes, num_or_size_splits: (int)non_neg_concat_dim).ToList();
                 }
                 else
                 {

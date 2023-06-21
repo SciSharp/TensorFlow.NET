@@ -170,11 +170,28 @@ namespace Tensorflow
         public Tensor value()
             => GraphElement ?? _read_variable_op();
 
-        protected Tensor _read_variable_op()
+        protected Tensor _read_variable_op(bool no_copy = false)
         {
             variable_accessed(this);
-            var result = gen_resource_variable_ops.read_variable_op(handle, _dtype);
-            resource_variable_ops._maybe_set_handle_data(_dtype, handle, result);
+
+            Tensor read_and_set_handle(bool no_copy)
+            {
+                if (no_copy)
+                {
+                    gen_resource_variable_ops.disable_copy_on_read(handle);
+                }
+                var result = gen_resource_variable_ops.read_variable_op(handle, _dtype);
+                resource_variable_ops._maybe_set_handle_data(_dtype, handle, result);
+                return result;
+            }
+
+            // TODO(Rinne): deal with caching device.
+            var result = read_and_set_handle(no_copy);
+            if (!tf.Context.executing_eagerly())
+            {
+                tf.Runner.TFE_TapeSetRecordOperation("ReadVariableOp", new Tensor[] { result }, new Tensor[] { handle },
+                        backward_function: (x, _) => x);
+            }
 
             // have to set shape when converting to substituent placeholder
             if (result.shape.ndim == -1)

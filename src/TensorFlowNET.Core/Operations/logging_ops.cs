@@ -30,7 +30,7 @@ namespace Tensorflow
                     name: name);
 
             return tf.Context.ExecuteOp("PrintV2", name, new ExecuteOpArgs(formatted_string)
-               .SetAttributes(new { output_stream, end }));
+               .SetAttributes(new { output_stream, end })).SingleOrNull;
         }
     }
 }

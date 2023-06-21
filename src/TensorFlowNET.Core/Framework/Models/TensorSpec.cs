@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Tensorflow.Eager;
 
 namespace Tensorflow.Framework.Models
 {
@@ -23,6 +24,18 @@ namespace Tensorflow.Framework.Models
             var shapes = shape.dims.ToList();
             shapes.Insert(0, dim);
             return new TensorSpec(shapes.ToArray(), _dtype);
+        }
+
+        public static TensorSpec FromTensor(Tensor tensor, string? name = null)
+        {
+            if(tensor is EagerTensor)
+            {
+                return new TensorSpec(tensor.shape, tensor.dtype, name);
+            }
+            else
+            {
+                return new TensorSpec(tensor.shape, tensor.dtype, name ?? tensor.name);
+            }
         }
     }
 }

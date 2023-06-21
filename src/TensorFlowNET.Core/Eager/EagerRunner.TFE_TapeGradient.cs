@@ -65,7 +65,7 @@ namespace Tensorflow.Eager
             {
                 outgrad_vec = output_gradients.ToList();
             }
-            var result = tape.ComputeGradient(target_vec, sources_vec, source_tensors_that_are_targets, outgrad_vec, false);
+            var result = tape.ComputeGradient(target_vec, sources_vec, source_tensors_that_are_targets, outgrad_vec, true);
 
 
             bool unconnected_gradients_zero = unconnected_gradients == "zero";
@@ -137,7 +137,6 @@ namespace Tensorflow.Eager
                 {
                     dims[i] = c_api.TFE_TensorHandleDim(handle, i, status);
                 }
-                Shape tensor_shape = new(dims);
 
                 if(status.Code != TF_Code.TF_OK)
                 {
@@ -145,6 +144,7 @@ namespace Tensorflow.Eager
                 }
                 else
                 {
+                    Shape tensor_shape = new(dims);
                     return new TapeTensor(id, dtype, tensor_shape);
                 }
             }
@@ -173,8 +173,12 @@ namespace Tensorflow.Eager
             return dtype == dtypes.variant || dtype == dtypes.resource;
         }
 
-        bool ListContainNone(long[] list)
+        bool ListContainNone(long[]? list)
         {
+            if(list is null)
+            {
+                return true;
+            }
             int len = list.Length;
             if(len == 0)
             {

@@ -36,6 +36,7 @@ namespace Tensorflow.Util
     //  (np.array([3, 4]), tf.constant([3, 4])))`
     //
 
+    [Obsolete]
     public static class nest
     {
 

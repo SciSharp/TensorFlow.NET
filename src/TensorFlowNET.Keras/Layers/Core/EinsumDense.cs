@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.ArgsDefinition.Core;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -189,7 +190,7 @@ namespace Tensorflow.Keras.Layers
         //    return new dict(base_config.items().ToList() + config.items().ToList());
         //}
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             var ret = tf.linalg.einsum(this.equation, (inputs, this.kernel.AsTensor()));
             if (this.bias != null)

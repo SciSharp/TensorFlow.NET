@@ -2,6 +2,7 @@
 
 using Tensorflow.Eager;
 using Tensorflow.Contexts;
+using Tensorflow.Exceptions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow;
@@ -24,6 +25,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatrixBandPart", name) { args = new object[] { input, num_lower, num_upper }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -76,6 +81,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatrixDiag", name) { args = new object[] { diagonal }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -124,6 +133,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatrixDiagPart", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -174,6 +187,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchMatrixSetDiag", name) { args = new object[] { input, diagonal }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -238,6 +255,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchToSpace", name) { args = new object[] { input, crops }, attrs = new Dictionary<string, object>() { ["block_size"] = block_size } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -300,6 +321,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchToSpaceND", name) { args = new object[] { input, block_shape, crops }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -407,6 +432,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Bitcast", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["type"] = type } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -464,6 +493,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BroadcastArgs", name) { args = new object[] { s0, s1 }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -519,6 +552,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BroadcastGradientArgs", name) { args = new object[] { s0, s1 }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -607,6 +644,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BroadcastTo", name) { args = new object[] { input, shape }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -689,6 +730,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "CheckNumerics", name) { args = new object[] { tensor }, attrs = new Dictionary<string, object>() { ["message"] = message } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -752,6 +797,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "CheckNumericsV2", name) { args = new object[] { tensor }, attrs = new Dictionary<string, object>() { ["message"] = message } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -802,6 +851,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Concat", name) { args = new object[] { concat_dim, values }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -871,6 +924,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ConcatOffset", name) { args = new object[] { concat_dim, shape }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -924,6 +981,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ConcatV2", name) { args = new object[] { values, axis }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -986,6 +1047,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ConjugateTranspose", name) { args = new object[] { x, perm }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1040,6 +1105,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Const", name) { args = new object[] { }, attrs = new Dictionary<string, object>() { ["value"] = value, ["dtype"] = dtype } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1097,6 +1166,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DebugGradientIdentity", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1181,6 +1254,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DeepCopy", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1330,6 +1407,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DepthToSpace", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["block_size"] = block_size, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1452,6 +1533,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Dequantize", name) { args = new object[] { input, min_range, max_range }, attrs = new Dictionary<string, object>() { ["mode"] = mode, ["narrow_range"] = narrow_range, ["axis"] = axis, ["dtype"] = dtype } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1532,6 +1617,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Diag", name) { args = new object[] { diagonal }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1602,6 +1691,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DiagPart", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1674,6 +1767,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "EditDistance", name) { args = new object[] { hypothesis_indices, hypothesis_values, hypothesis_shape, truth_indices, truth_values, truth_shape }, attrs = new Dictionary<string, object>() { ["normalize"] = normalize } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1730,6 +1827,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Empty", name) { args = new object[] { shape }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype, ["init"] = init } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1792,6 +1893,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "EnsureShape", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["shape"] = shape } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1878,6 +1983,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ExpandDims", name) { args = new object[] { input, dim }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1954,6 +2063,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ExtractImagePatches", name) { args = new object[] { images }, attrs = new Dictionary<string, object>() { ["ksizes"] = ksizes, ["strides"] = strides, ["rates"] = rates, ["padding"] = padding } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2029,6 +2142,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ExtractVolumePatches", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["ksizes"] = ksizes, ["strides"] = strides, ["padding"] = padding } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2110,6 +2227,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeQuantWithMinMaxArgs", name) { args = new object[] { inputs }, attrs = new Dictionary<string, object>() { ["min"] = min, ["max"] = max, ["num_bits"] = num_bits, ["narrow_range"] = narrow_range } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2167,6 +2288,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeQuantWithMinMaxArgsGradient", name) { args = new object[] { gradients, inputs }, attrs = new Dictionary<string, object>() { ["min"] = min, ["max"] = max, ["num_bits"] = num_bits, ["narrow_range"] = narrow_range } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2254,6 +2379,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeQuantWithMinMaxVars", name) { args = new object[] { inputs, min, max }, attrs = new Dictionary<string, object>() { ["num_bits"] = num_bits, ["narrow_range"] = narrow_range } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2319,6 +2448,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeQuantWithMinMaxVarsGradient", name) { args = new object[] { gradients, inputs, min, max }, attrs = new Dictionary<string, object>() { ["num_bits"] = num_bits, ["narrow_range"] = narrow_range } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2407,6 +2540,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeQuantWithMinMaxVarsPerChannel", name) { args = new object[] { inputs, min, max }, attrs = new Dictionary<string, object>() { ["num_bits"] = num_bits, ["narrow_range"] = narrow_range } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2472,6 +2609,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FakeQuantWithMinMaxVarsPerChannelGradient", name) { args = new object[] { gradients, inputs, min, max }, attrs = new Dictionary<string, object>() { ["num_bits"] = num_bits, ["narrow_range"] = narrow_range } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2550,6 +2691,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Fill", name) { args = new object[] { dims, value }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2636,6 +2781,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Fingerprint", name) { args = new object[] { data, method }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2716,6 +2865,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Gather", name) { args = new object[] { params_, indices }, attrs = new Dictionary<string, object>() { ["validate_indices"] = validate_indices } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2877,6 +3030,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "GatherNd", name) { args = new object[] { params_, indices }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2961,6 +3118,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "GatherV2", name) { args = new object[] { params_, indices, axis }, attrs = new Dictionary<string, object>() { ["batch_dims"] = batch_dims } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3023,6 +3184,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "GuaranteeConst", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3071,6 +3236,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Identity", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3129,24 +3298,27 @@ public static class gen_array_ops
     /// 
     /// </remarks>
     /// <param name="input"></param>
-    /// <param name="T"></param>
     /// <returns></returns>
-    public static Tensor identity_n(Tensor input, TF_DataType[] T, string? name = null)
+    public static Tensor[] identity_n(Tensors input, string? name = null)
     {
         var _ctx = tf.Context;
         if (_ctx.executing_eagerly())
         {
             try
             {
-                var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IdentityN", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["T"] = T } });
-                return _fast_path_result[0];
+                var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IdentityN", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
+                return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
             }
             try
             {
-                return identity_n_eager_fallback(input, T: T, name: name, ctx: _ctx);
+                return identity_n_eager_fallback(input, name: name, ctx: _ctx);
             }
             catch (Exception)
             {
@@ -3154,7 +3326,6 @@ public static class gen_array_ops
         }
         Dictionary<string, object> keywords = new();
         keywords["input"] = input;
-        keywords["T"] = T;
         var _op = tf.OpDefLib._apply_op_helper("IdentityN", name, keywords);
         var _result = _op.outputs;
         if (_execute.must_record_gradient())
@@ -3162,19 +3333,19 @@ public static class gen_array_ops
             object[] _attrs = new object[] { "T", _op.get_attr("T") };
             _execute.record_gradient("IdentityN", _op.inputs, _attrs, _result);
         }
-        return _result[0];
+        return _result;
     }
 
-    public static Tensor identity_n_eager_fallback(Tensor input, TF_DataType[] T, string name, Context ctx)
+    public static Tensor[] identity_n_eager_fallback(Tensor input, string name, Context ctx)
     {
         Tensor[] _inputs_flat = new Tensor[] { input };
-        object[] _attrs = new object[] { "T", T };
+        object[] _attrs = new object[] { };
         var _result = _execute.execute("IdentityN", 1, inputs: _inputs_flat, attrs: _attrs, ctx: ctx, name: name);
         if (_execute.must_record_gradient())
         {
             _execute.record_gradient("IdentityN", _inputs_flat, _attrs, _result);
         }
-        return _result[0];
+        return _result;
     }
     /// <summary>
     /// Returns immutable tensor from memory region.
@@ -3210,6 +3381,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ImmutableConst", name) { args = new object[] { }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype, ["shape"] = shape, ["memory_region_name"] = memory_region_name } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3264,6 +3439,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InplaceAdd", name) { args = new object[] { x, i, v }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3317,6 +3496,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InplaceSub", name) { args = new object[] { x, i, v }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3369,6 +3552,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InplaceUpdate", name) { args = new object[] { x, i, v }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3439,6 +3626,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InvertPermutation", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3516,6 +3707,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ListDiff", name) { args = new object[] { x, y }, attrs = new Dictionary<string, object>() { ["out_idx"] = out_idx } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3589,6 +3784,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LowerBound", name) { args = new object[] { sorted_inputs, values }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3684,6 +3883,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixBandPart", name) { args = new object[] { input, num_lower, num_upper }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3765,6 +3968,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixDiag", name) { args = new object[] { diagonal }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3845,6 +4052,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixDiagPart", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3968,6 +4179,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixDiagPartV2", name) { args = new object[] { input, k, padding_value }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4136,6 +4351,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixDiagPartV3", name) { args = new object[] { input, k, padding_value }, attrs = new Dictionary<string, object>() { ["align"] = align } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4286,6 +4505,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixDiagV2", name) { args = new object[] { diagonal, k, num_rows, num_cols, padding_value }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4475,6 +4698,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixDiagV3", name) { args = new object[] { diagonal, k, num_rows, num_cols, padding_value }, attrs = new Dictionary<string, object>() { ["align"] = align } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4549,6 +4776,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixSetDiag", name) { args = new object[] { input, diagonal }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4676,6 +4907,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixSetDiagV2", name) { args = new object[] { input, diagonal, k }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4849,6 +5084,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MatrixSetDiagV3", name) { args = new object[] { input, diagonal, k }, attrs = new Dictionary<string, object>() { ["align"] = align } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4944,6 +5183,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MirrorPad", name) { args = new object[] { input, paddings }, attrs = new Dictionary<string, object>() { ["mode"] = mode } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5022,6 +5265,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MirrorPadGrad", name) { args = new object[] { input, paddings }, attrs = new Dictionary<string, object>() { ["mode"] = mode } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5173,6 +5420,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "OneHot", name) { args = new object[] { indices, depth, on_value, off_value }, attrs = new Dictionary<string, object>() { ["axis"] = axis } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5225,6 +5476,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "OnesLike", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5303,6 +5558,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Pack", name) { args = new object[] { values }, attrs = new Dictionary<string, object>() { ["axis"] = axis } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5384,6 +5643,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Pad", name) { args = new object[] { input, paddings }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5464,6 +5727,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "PadV2", name) { args = new object[] { input, paddings, constant_values }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5541,6 +5808,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ParallelConcat", name) { args = new object[] { values }, attrs = new Dictionary<string, object>() { ["shape"] = shape } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5610,6 +5881,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Placeholder", name) { args = new object[] { }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype, ["shape"] = shape } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5677,6 +5952,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "PlaceholderV2", name) { args = new object[] { }, attrs = new Dictionary<string, object>() { ["dtype"] = dtype, ["shape"] = shape } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5731,6 +6010,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "PlaceholderWithDefault", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["shape"] = shape } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5799,6 +6082,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "PreventGradient", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["message"] = message } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5857,6 +6144,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizeAndDequantize", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["signed_input"] = signed_input, ["num_bits"] = num_bits, ["range_given"] = range_given, ["input_min"] = input_min, ["input_max"] = input_max } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6011,6 +6302,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizeAndDequantizeV2", name) { args = new object[] { input, input_min, input_max }, attrs = new Dictionary<string, object>() { ["signed_input"] = signed_input, ["num_bits"] = num_bits, ["range_given"] = range_given, ["round_mode"] = round_mode, ["narrow_range"] = narrow_range, ["axis"] = axis } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6084,6 +6379,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizeAndDequantizeV3", name) { args = new object[] { input, input_min, input_max, num_bits }, attrs = new Dictionary<string, object>() { ["signed_input"] = signed_input, ["range_given"] = range_given, ["narrow_range"] = narrow_range, ["axis"] = axis } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6189,6 +6488,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizeAndDequantizeV4", name) { args = new object[] { input, input_min, input_max }, attrs = new Dictionary<string, object>() { ["signed_input"] = signed_input, ["num_bits"] = num_bits, ["range_given"] = range_given, ["round_mode"] = round_mode, ["narrow_range"] = narrow_range, ["axis"] = axis } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6387,6 +6690,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizeV2", name) { args = new object[] { input, min_range, max_range }, attrs = new Dictionary<string, object>() { ["T"] = T, ["mode"] = mode, ["round_mode"] = round_mode, ["narrow_range"] = narrow_range, ["axis"] = axis, ["ensure_minimum_range"] = ensure_minimum_range } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6454,6 +6761,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConcat", name) { args = new object[] { concat_dim, values, input_mins, input_maxes }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6541,6 +6852,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedInstanceNorm", name) { args = new object[] { x, x_min, x_max }, attrs = new Dictionary<string, object>() { ["output_range_given"] = output_range_given, ["given_y_min"] = given_y_min, ["given_y_max"] = given_y_max, ["variance_epsilon"] = variance_epsilon, ["min_separation"] = min_separation } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6604,6 +6919,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedReshape", name) { args = new object[] { tensor, shape, input_min, input_max }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6673,6 +6992,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Rank", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6815,6 +7138,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Reshape", name) { args = new object[] { tensor, shape }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6883,6 +7210,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ResourceStridedSliceAssign", name) { args = new object[] { ref_, begin, end, strides, value }, attrs = new Dictionary<string, object>() { ["begin_mask"] = begin_mask, ["end_mask"] = end_mask, ["ellipsis_mask"] = ellipsis_mask, ["new_axis_mask"] = new_axis_mask, ["shrink_axis_mask"] = shrink_axis_mask } });
                 return null;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6990,6 +7321,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Reverse", name) { args = new object[] { tensor, dims }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7110,6 +7445,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ReverseSequence", name) { args = new object[] { input, seq_lengths }, attrs = new Dictionary<string, object>() { ["seq_dim"] = seq_dim, ["batch_dim"] = batch_dim } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7209,6 +7548,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ReverseV2", name) { args = new object[] { tensor, axis }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7352,6 +7695,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ScatterNd", name) { args = new object[] { indices, updates, shape }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7442,6 +7789,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ScatterNdNonAliasingAdd", name) { args = new object[] { input, indices, updates }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7506,6 +7857,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Shape", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7561,6 +7916,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ShapeN", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7628,6 +7987,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Size", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7690,6 +8053,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Slice", name) { args = new object[] { input, begin, size }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7740,6 +8107,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Snapshot", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7878,6 +8249,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SpaceToBatch", name) { args = new object[] { input, paddings }, attrs = new Dictionary<string, object>() { ["block_size"] = block_size } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8048,6 +8423,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SpaceToBatchND", name) { args = new object[] { input, block_shape, paddings }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8192,6 +8571,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SpaceToDepth", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["block_size"] = block_size, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8254,6 +8637,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Split", name) { args = new object[] { split_dim, value }, attrs = new Dictionary<string, object>() { ["num_split"] = num_split } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8307,6 +8694,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SplitV", name) { args = new object[] { value, size_splits, split_dim }, attrs = new Dictionary<string, object>() { ["num_split"] = num_split } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8392,6 +8783,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Squeeze", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["squeeze_dims"] = squeeze_dims } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8503,6 +8898,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StopGradient", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -8689,6 +9088,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StridedSlice", name) { args = new object[] { input, begin, end, strides }, attrs = new Dictionary<string, object>() { ["begin_mask"] = begin_mask, ["end_mask"] = end_mask, ["ellipsis_mask"] = ellipsis_mask, ["new_axis_mask"] = new_axis_mask, ["shrink_axis_mask"] = shrink_axis_mask } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8823,6 +9226,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "StridedSliceGrad", name) { args = new object[] { shape, begin, end, strides, dy }, attrs = new Dictionary<string, object>() { ["begin_mask"] = begin_mask, ["end_mask"] = end_mask, ["ellipsis_mask"] = ellipsis_mask, ["new_axis_mask"] = new_axis_mask, ["shrink_axis_mask"] = shrink_axis_mask } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8946,6 +9353,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorScatterAdd", name) { args = new object[] { tensor, indices, updates }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9013,6 +9424,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorScatterMax", name) { args = new object[] { tensor, indices, updates }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9065,6 +9480,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorScatterMin", name) { args = new object[] { tensor, indices, updates }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9185,6 +9604,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorScatterSub", name) { args = new object[] { tensor, indices, updates }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9278,6 +9701,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorScatterUpdate", name) { args = new object[] { tensor, indices, updates }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9347,6 +9774,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TensorStridedSliceUpdate", name) { args = new object[] { input, begin, end, strides, value }, attrs = new Dictionary<string, object>() { ["begin_mask"] = begin_mask, ["end_mask"] = end_mask, ["ellipsis_mask"] = ellipsis_mask, ["new_axis_mask"] = new_axis_mask, ["shrink_axis_mask"] = shrink_axis_mask } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9437,6 +9868,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Tile", name) { args = new object[] { input, multiples }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9495,6 +9930,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TileGrad", name) { args = new object[] { input, multiples }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9551,6 +9990,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Transpose", name) { args = new object[] { x, perm }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9628,6 +10071,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Unique", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { ["out_idx"] = out_idx } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9728,6 +10175,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UniqueV2", name) { args = new object[] { x, axis }, attrs = new Dictionary<string, object>() { ["out_idx"] = out_idx } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9800,6 +10251,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UniqueWithCounts", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { ["out_idx"] = out_idx } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -9904,6 +10359,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UniqueWithCountsV2", name) { args = new object[] { x, axis }, attrs = new Dictionary<string, object>() { ["out_idx"] = out_idx } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -9977,6 +10436,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Unpack", name) { args = new object[] { value }, attrs = new Dictionary<string, object>() { ["num"] = num, ["axis"] = axis } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -10054,6 +10517,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UnravelIndex", name) { args = new object[] { indices, dims }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -10126,6 +10593,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "UpperBound", name) { args = new object[] { sorted_inputs, values }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -10241,6 +10712,10 @@ public static class gen_array_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Where", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -10289,6 +10764,10 @@ public static class gen_array_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ZerosLike", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {

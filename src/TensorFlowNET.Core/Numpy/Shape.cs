@@ -19,13 +19,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.Saving.Common;
 using Tensorflow.NumPy;
 
 namespace Tensorflow
 {
     [JsonConverter(typeof(CustomizedShapeJsonConverter))]
-    public class Shape
+    public class Shape : INestStructure<long>
     {
         public int ndim => _dims == null ? -1 : _dims.Length;
         long[] _dims;
@@ -39,6 +40,27 @@ namespace Tensorflow
                 _strides = _strides ?? ShapeHelper.GetStrides(this);
                 return _strides;
             }
+        }
+
+        public NestType NestType => NestType.List;
+
+        public int ShallowNestedCount => ndim;
+        /// <summary>
+        /// The total item count of depth 1 of the nested structure.
+        /// For example, [1, 2, [3, 4, 5]] has TotalNestedCount = 5.
+        /// </summary>
+        public int TotalNestedCount => ndim;
+
+        public IEnumerable<long> Flatten() => dims.Select(x => x);
+
+        public INestStructure<TOut> MapStructure<TOut>(Func<long, TOut> func)
+        {
+            return new NestList<TOut>(dims.Select(x => func(x)));
+        }
+
+        public Nest<long> AsNest()
+        {
+            return new NestList<long>(Flatten()).AsNest();
         }
 
         #region https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/ranges

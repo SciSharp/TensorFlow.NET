@@ -2,6 +2,7 @@
 
 using Tensorflow.Eager;
 using Tensorflow.Contexts;
+using Tensorflow.Exceptions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow;
@@ -56,6 +57,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ApproxTopK", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["k"] = k, ["reduction_dimension"] = reduction_dimension, ["recall_target"] = recall_target, ["is_max_k"] = is_max_k, ["reduction_input_size_override"] = reduction_input_size_override, ["aggregate_to_topk"] = aggregate_to_topk } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -141,6 +146,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AvgPool", name) { args = new object[] { value }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -231,6 +240,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AvgPool3D", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -315,6 +328,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AvgPool3DGrad", name) { args = new object[] { orig_input_shape, grad }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -398,6 +415,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "AvgPoolGrad", name) { args = new object[] { orig_input_shape, grad }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -476,6 +497,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchNormWithGlobalNormalization", name) { args = new object[] { t, m, v, beta, gamma }, attrs = new Dictionary<string, object>() { ["variance_epsilon"] = variance_epsilon, ["scale_after_normalization"] = scale_after_normalization } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -551,6 +576,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BatchNormWithGlobalNormalizationGrad", name) { args = new object[] { t, m, v, gamma, backprop }, attrs = new Dictionary<string, object>() { ["variance_epsilon"] = variance_epsilon, ["scale_after_normalization"] = scale_after_normalization } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -623,6 +652,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BiasAdd", name) { args = new object[] { value, bias }, attrs = new Dictionary<string, object>() { ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -697,6 +730,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BiasAddGrad", name) { args = new object[] { out_backprop }, attrs = new Dictionary<string, object>() { ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -759,6 +796,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "BiasAddV1", name) { args = new object[] { value, bias }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -883,6 +924,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv2D", name) { args = new object[] { input, filter }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["use_cudnn_on_gpu"] = use_cudnn_on_gpu, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -991,6 +1036,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv2DBackpropFilter", name) { args = new object[] { input, filter_sizes, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["use_cudnn_on_gpu"] = use_cudnn_on_gpu, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1102,6 +1151,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv2DBackpropInput", name) { args = new object[] { input_sizes, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["use_cudnn_on_gpu"] = use_cudnn_on_gpu, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1206,6 +1259,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv3D", name) { args = new object[] { input, filter }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1281,6 +1338,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv3DBackpropFilter", name) { args = new object[] { input, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1371,6 +1432,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv3DBackpropFilterV2", name) { args = new object[] { input, filter_sizes, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1447,6 +1512,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv3DBackpropInput", name) { args = new object[] { input, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1537,6 +1606,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Conv3DBackpropInputV2", name) { args = new object[] { input_sizes, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1610,6 +1683,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DataFormatDimMap", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { ["src_format"] = src_format, ["dst_format"] = dst_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1714,6 +1791,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DataFormatVecPermute", name) { args = new object[] { x }, attrs = new Dictionary<string, object>() { ["src_format"] = src_format, ["dst_format"] = dst_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -1835,6 +1916,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DepthwiseConv2dNative", name) { args = new object[] { input, filter }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -1933,6 +2018,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DepthwiseConv2dNativeBackpropFilter", name) { args = new object[] { input, filter_sizes, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2033,6 +2122,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "DepthwiseConv2dNativeBackpropInput", name) { args = new object[] { input_sizes, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format, ["dilations"] = dilations } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2139,6 +2232,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Dilation2D", name) { args = new object[] { input, filter }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["rates"] = rates, ["padding"] = padding } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2210,6 +2307,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Dilation2DBackpropFilter", name) { args = new object[] { input, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["rates"] = rates, ["padding"] = padding } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2283,6 +2384,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Dilation2DBackpropInput", name) { args = new object[] { input, filter, out_backprop }, attrs = new Dictionary<string, object>() { ["strides"] = strides, ["rates"] = rates, ["padding"] = padding } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2358,6 +2463,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Elu", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2407,6 +2516,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "EluGrad", name) { args = new object[] { gradients, outputs }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2516,6 +2629,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FractionalAvgPool", name) { args = new object[] { value }, attrs = new Dictionary<string, object>() { ["pooling_ratio"] = pooling_ratio, ["pseudo_random"] = pseudo_random, ["overlapping"] = overlapping, ["deterministic"] = deterministic, ["seed"] = seed, ["seed2"] = seed2 } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2595,6 +2712,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FractionalAvgPoolGrad", name) { args = new object[] { orig_input_tensor_shape, out_backprop, row_pooling_sequence, col_pooling_sequence }, attrs = new Dictionary<string, object>() { ["overlapping"] = overlapping } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2731,6 +2852,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FractionalMaxPool", name) { args = new object[] { value }, attrs = new Dictionary<string, object>() { ["pooling_ratio"] = pooling_ratio, ["pseudo_random"] = pseudo_random, ["overlapping"] = overlapping, ["deterministic"] = deterministic, ["seed"] = seed, ["seed2"] = seed2 } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -2802,6 +2927,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FractionalMaxPoolGrad", name) { args = new object[] { orig_input, orig_output, out_backprop, row_pooling_sequence, col_pooling_sequence }, attrs = new Dictionary<string, object>() { ["overlapping"] = overlapping } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2883,6 +3012,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedBatchNorm", name) { args = new object[] { x, scale, offset, mean, variance }, attrs = new Dictionary<string, object>() { ["epsilon"] = epsilon, ["exponential_avg_factor"] = exponential_avg_factor, ["data_format"] = data_format, ["is_training"] = is_training } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -2972,6 +3105,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedBatchNormGrad", name) { args = new object[] { y_backprop, x, scale, reserve_space_1, reserve_space_2 }, attrs = new Dictionary<string, object>() { ["epsilon"] = epsilon, ["data_format"] = data_format, ["is_training"] = is_training } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3058,6 +3195,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedBatchNormGradV2", name) { args = new object[] { y_backprop, x, scale, reserve_space_1, reserve_space_2 }, attrs = new Dictionary<string, object>() { ["epsilon"] = epsilon, ["data_format"] = data_format, ["is_training"] = is_training } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3147,6 +3288,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedBatchNormGradV3", name) { args = new object[] { y_backprop, x, scale, reserve_space_1, reserve_space_2, reserve_space_3 }, attrs = new Dictionary<string, object>() { ["epsilon"] = epsilon, ["data_format"] = data_format, ["is_training"] = is_training } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3235,6 +3380,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedBatchNormV2", name) { args = new object[] { x, scale, offset, mean, variance }, attrs = new Dictionary<string, object>() { ["epsilon"] = epsilon, ["exponential_avg_factor"] = exponential_avg_factor, ["data_format"] = data_format, ["is_training"] = is_training } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3322,6 +3471,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedBatchNormV3", name) { args = new object[] { x, scale, offset, mean, variance }, attrs = new Dictionary<string, object>() { ["epsilon"] = epsilon, ["exponential_avg_factor"] = exponential_avg_factor, ["data_format"] = data_format, ["is_training"] = is_training } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3413,6 +3566,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedPadConv2D", name) { args = new object[] { input, paddings, filter }, attrs = new Dictionary<string, object>() { ["mode"] = mode, ["strides"] = strides, ["padding"] = padding } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3502,6 +3659,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "FusedResizeAndPadConv2D", name) { args = new object[] { input, size, paddings, filter }, attrs = new Dictionary<string, object>() { ["resize_align_corners"] = resize_align_corners, ["mode"] = mode, ["strides"] = strides, ["padding"] = padding } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3582,6 +3743,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InTopK", name) { args = new object[] { predictions, targets }, attrs = new Dictionary<string, object>() { ["k"] = k } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3653,6 +3818,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "InTopKV2", name) { args = new object[] { predictions, targets, k }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3706,6 +3875,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "IsotonicRegression", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["output_dtype"] = output_dtype } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3792,6 +3965,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LRN", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["depth_radius"] = depth_radius, ["bias"] = bias, ["alpha"] = alpha, ["beta"] = beta } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3846,6 +4023,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LeakyRelu", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { ["alpha"] = alpha } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -3897,6 +4078,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LeakyReluGrad", name) { args = new object[] { gradients, features }, attrs = new Dictionary<string, object>() { ["alpha"] = alpha } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -3955,6 +4140,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "LogSoftmax", name) { args = new object[] { logits }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4034,6 +4223,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPool", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4119,6 +4312,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPool3D", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4203,6 +4400,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPool3DGrad", name) { args = new object[] { orig_input, orig_output, grad }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4290,6 +4491,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPool3DGradGrad", name) { args = new object[] { orig_input, orig_output, grad }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4382,6 +4587,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolGrad", name) { args = new object[] { orig_input, orig_output, grad }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["explicit_paddings"] = explicit_paddings, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4469,6 +4678,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolGradGrad", name) { args = new object[] { orig_input, orig_output, grad }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4545,6 +4758,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolGradGradV2", name) { args = new object[] { orig_input, orig_output, grad, ksize, strides }, attrs = new Dictionary<string, object>() { ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4628,6 +4845,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolGradGradWithArgmax", name) { args = new object[] { input, grad, argmax }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["include_batch_in_index"] = include_batch_in_index } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4700,6 +4921,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolGradV2", name) { args = new object[] { orig_input, orig_output, grad, ksize, strides }, attrs = new Dictionary<string, object>() { ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4783,6 +5008,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolGradWithArgmax", name) { args = new object[] { input, grad, argmax }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding, ["include_batch_in_index"] = include_batch_in_index } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -4853,6 +5082,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolV2", name) { args = new object[] { input, ksize, strides }, attrs = new Dictionary<string, object>() { ["padding"] = padding, ["data_format"] = data_format } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -4946,6 +5179,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "MaxPoolWithArgmax", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["Targmax"] = Targmax, ["padding"] = padding, ["include_batch_in_index"] = include_batch_in_index } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5018,6 +5255,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "NthElement", name) { args = new object[] { input, n }, attrs = new Dictionary<string, object>() { ["reverse"] = reverse } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5087,6 +5328,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedAvgPool", name) { args = new object[] { input, min_input, max_input }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5174,6 +5419,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedBatchNormWithGlobalNormalization", name) { args = new object[] { t, t_min, t_max, m, m_min, m_max, v, v_min, v_max, beta, beta_min, beta_max, gamma, gamma_min, gamma_max }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["variance_epsilon"] = variance_epsilon, ["scale_after_normalization"] = scale_after_normalization } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5250,6 +5499,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedBiasAdd", name) { args = new object[] { input, bias, min_input, max_input, min_bias, max_bias }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5344,6 +5597,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2D", name) { args = new object[] { input, filter, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5419,6 +5676,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DAndRelu", name) { args = new object[] { input, filter, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5498,6 +5759,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DAndReluAndRequantize", name) { args = new object[] { input, filter, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5579,6 +5844,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DAndRequantize", name) { args = new object[] { input, filter, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5662,6 +5931,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DPerChannel", name) { args = new object[] { input, filter, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -5738,6 +6011,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBias", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5817,6 +6094,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBiasAndRelu", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5898,6 +6179,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBiasAndReluAndRequantize", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -5981,6 +6266,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBiasAndRequantize", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6068,6 +6357,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBiasSignedSumAndReluAndRequantize", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output, summand, min_summand, max_summand }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6152,6 +6445,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBiasSumAndRelu", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter, summand }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6238,6 +6535,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedConv2DWithBiasSumAndReluAndRequantize", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output, summand, min_summand, max_summand }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6322,6 +6623,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedDepthwiseConv2D", name) { args = new object[] { input, filter, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6399,6 +6704,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedDepthwiseConv2DWithBias", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6483,6 +6792,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedDepthwiseConv2DWithBiasAndRelu", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6570,6 +6883,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedDepthwiseConv2DWithBiasAndReluAndRequantize", name) { args = new object[] { input, filter, bias, min_input, max_input, min_filter, max_filter, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type, ["strides"] = strides, ["padding"] = padding, ["dilations"] = dilations, ["padding_list"] = padding_list } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6660,6 +6977,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMatMulWithBias", name) { args = new object[] { a, b, bias, min_a, max_a, min_b, max_b }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput, ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["input_quant_mode"] = input_quant_mode } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6734,6 +7055,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMatMulWithBiasAndDequantize", name) { args = new object[] { a, b, bias, min_a, max_a, min_b, max_b, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput, ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["input_quant_mode"] = input_quant_mode } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6827,6 +7152,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMatMulWithBiasAndRelu", name) { args = new object[] { a, b, bias, min_a, max_a, min_b, max_b }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput, ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["input_quant_mode"] = input_quant_mode } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -6922,6 +7251,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMatMulWithBiasAndReluAndRequantize", name) { args = new object[] { a, b, bias, min_a, max_a, min_b, max_b, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput, ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["input_quant_mode"] = input_quant_mode } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -6998,6 +7331,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMatMulWithBiasAndRequantize", name) { args = new object[] { a, b, bias, min_a, max_a, min_b, max_b, min_freezed_output, max_freezed_output }, attrs = new Dictionary<string, object>() { ["Toutput"] = Toutput, ["transpose_a"] = transpose_a, ["transpose_b"] = transpose_b, ["input_quant_mode"] = input_quant_mode } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7083,6 +7420,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedMaxPool", name) { args = new object[] { input, min_input, max_input }, attrs = new Dictionary<string, object>() { ["ksize"] = ksize, ["strides"] = strides, ["padding"] = padding } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7140,6 +7481,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedRelu", name) { args = new object[] { features, min_features, max_features }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7194,6 +7539,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedRelu6", name) { args = new object[] { features, min_features, max_features }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7250,6 +7599,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "QuantizedReluX", name) { args = new object[] { features, max_value, min_features, max_features }, attrs = new Dictionary<string, object>() { ["out_type"] = out_type } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7312,6 +7665,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Relu", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7360,6 +7717,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Relu6", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7410,6 +7771,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "ReluGrad", name) { args = new object[] { gradients, features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7472,6 +7837,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Selu", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7521,6 +7890,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SeluGrad", name) { args = new object[] { gradients, outputs }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7579,6 +7952,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Softmax", name) { args = new object[] { logits }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7634,6 +8011,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SoftmaxCrossEntropyWithLogits", name) { args = new object[] { features, labels }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7683,6 +8064,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Softplus", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7734,6 +8119,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SoftplusGrad", name) { args = new object[] { gradients, features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7784,6 +8173,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "Softsign", name) { args = new object[] { features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -7833,6 +8226,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SoftsignGrad", name) { args = new object[] { gradients, features }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result[0];
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7894,6 +8291,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "SparseSoftmaxCrossEntropyWithLogits", name) { args = new object[] { features, labels }, attrs = new Dictionary<string, object>() { } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
@@ -7973,6 +8374,10 @@ public static class gen_nn_ops
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TopK", name) { args = new object[] { input }, attrs = new Dictionary<string, object>() { ["k"] = k, ["sorted"] = sorted } });
                 return _fast_path_result;
             }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
             }
@@ -8044,6 +8449,10 @@ public static class gen_nn_ops
             {
                 var _fast_path_result = tf.Runner.TFE_FastPathExecute(new FastPathOpExecInfo(_ctx, "TopKV2", name) { args = new object[] { input, k }, attrs = new Dictionary<string, object>() { ["sorted"] = sorted } });
                 return _fast_path_result;
+            }
+            catch (NotOkStatusException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
