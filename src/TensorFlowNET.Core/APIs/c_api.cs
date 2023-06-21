@@ -53,6 +53,11 @@ namespace Tensorflow
 
         public unsafe static byte[] ByteStringPiece(IntPtr handle)
         {
+            if (handle == IntPtr.Zero)
+            {
+                return new byte[0];
+            }
+
             byte* str_data = (byte*)handle.ToPointer();
             List<byte> bytes = new List<byte>();
             byte current = 255;
