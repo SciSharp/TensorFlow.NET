@@ -51,7 +51,17 @@ namespace Tensorflow
             return handle == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(handle);
         }
 
-        public unsafe static byte[] ByteStringPiece(IntPtr handle)
+        public unsafe static byte[] ByteStringPiece(Buffer? handle)
+        {
+            if (handle is null)
+            {
+                return new byte[0];
+            }
+            var data = handle.ToArray();
+            return data;
+        }
+          
+          public unsafe static byte[] ByteStringPieceFromNativeString(IntPtr handle)
         {
             if (handle == IntPtr.Zero)
             {
@@ -66,7 +76,8 @@ namespace Tensorflow
                 current = *(str_data++);
                 bytes.Add(current);
             }
-            return bytes.Take(bytes.Count - 1).ToArray();
+            var data = bytes.ToArray();
+            return data;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]

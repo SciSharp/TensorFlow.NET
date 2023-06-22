@@ -544,12 +544,12 @@ public class FuncGraph : Graph, IDisposable
             Tensor placeholder;
             try
             {
-                placeholder = tf.placeholder(tensor.dtype, tensor.shape, name);
+                placeholder = GraphOnlyOps.graph_placeholder(tensor.dtype, tensor.shape, name);
             }
-            catch (ValueError)
+            catch (ValueError ex)
             {
-                // TODO(Rinne): Add warning here.
-                placeholder = tf.placeholder(tensor.dtype, tensor.shape);
+                tf.Logger.Warning(ex.ToString());
+                placeholder = GraphOnlyOps.graph_placeholder(tensor.dtype, tensor.shape);
             }
             handle_data_util.copy_handle_data(tensor, placeholder);
             if (name is not null)
@@ -575,12 +575,12 @@ public class FuncGraph : Graph, IDisposable
             Tensor placeholder;
             try
             {
-                placeholder = tf.placeholder(spec.dtype, spec.shape, requested_name);
+                placeholder = GraphOnlyOps.graph_placeholder(spec.dtype, spec.shape, requested_name);
             }
             catch (ValueError)
             {
                 // TODO(Rinne): Add warning here.
-                placeholder = tf.placeholder(spec.dtype, spec.shape);
+                placeholder = GraphOnlyOps.graph_placeholder(spec.dtype, spec.shape);
             }
             if (name is not null)
             {
