@@ -576,8 +576,14 @@ namespace Tensorflow
         public static HandleData get_resource_handle_data(Tensor graph_op)
         {
             var handle_data = c_api.TFC_GetHandleShapeAndType(graph_op.graph.c_graph, graph_op._as_tf_output());
-            var handle_str = c_api.ByteStringPiece(handle_data.DangerousGetHandle() == IntPtr.Zero ? null : new Buffer(handle_data));
-            return HandleData.Parser.ParseFrom(handle_str);
+            try{
+                var handle_str = c_api.ByteStringPiece(handle_data.DangerousGetHandle() == IntPtr.Zero ? null : new Buffer(handle_data));
+                return HandleData.Parser.ParseFrom(handle_str);
+            }
+            catch(Exception){
+                var handle_str = c_api.ByteStringPieceFromNativeString(handle_data.DangerousGetHandle());
+                return HandleData.Parser.ParseFrom(handle_str);
+            }
         }
 
         public static void dismantle_graph(Graph graph)

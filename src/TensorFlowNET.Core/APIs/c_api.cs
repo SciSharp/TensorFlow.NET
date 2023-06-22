@@ -53,8 +53,10 @@ namespace Tensorflow
 
         public unsafe static byte[] ByteStringPiece(Buffer? handle)
         {
-            if(handle is null){
+            if (handle is null)
+            {
                 return new byte[0];
+            }
             var data = handle.ToArray();
             return data;
         }
