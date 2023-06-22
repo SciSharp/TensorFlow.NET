@@ -5,7 +5,7 @@
     <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.10.0</TargetTensorFlow>
-    <Version>0.100.5</Version>
+    <Version>0.110.0</Version>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
@@ -20,7 +20,7 @@
     <Description>Google's TensorFlow full binding in .NET Standard.
 Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
-    <AssemblyVersion>0.100.5.0</AssemblyVersion>
+    <AssemblyVersion>0.110.0.0</AssemblyVersion>
     <PackageReleaseNotes>
 		tf.net 0.100.x and above are based on tensorflow native 2.10.0
 
@@ -38,7 +38,7 @@ https://tensorflownet.readthedocs.io</Description>
 		tf.net 0.7x.x aligns with TensorFlow v2.7.x native library.
 		tf.net 0.10x.x aligns with TensorFlow v2.10.x native library.
 	</PackageReleaseNotes>
-    <FileVersion>0.100.5.0</FileVersion>
+    <FileVersion>0.110.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageOutputPath>packages</PackageOutputPath>
@@ -110,13 +110,13 @@ https://tensorflownet.readthedocs.io</Description>
   <ItemGroup>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OneOf" Version="3.0.223" />
+    <PackageReference Include="OneOf" Version="3.0.255" />
     <PackageReference Include="Protobuf.Text" Version="0.7.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="all" />
-    <PackageReference Include="System.Memory" Version="4.5.4" PrivateAssets="all" />
+    <PackageReference Include="System.Memory" Version="4.5.5" PrivateAssets="all" />
   </ItemGroup>
 </Project>

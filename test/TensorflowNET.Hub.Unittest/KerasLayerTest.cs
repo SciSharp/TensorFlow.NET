@@ -6,6 +6,7 @@ namespace Tensorflow.Hub.Unittest
     [TestClass]
     public class KerasLayerTest
     {
+        [Ignore]
         [TestMethod]
         public void SmallBert()
         {

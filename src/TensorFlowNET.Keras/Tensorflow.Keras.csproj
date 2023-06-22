@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Tensorflow.Keras</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
-    <Version>0.10.5</Version>
+    <Version>0.11.0</Version>
     <Authors>Haiping Chen</Authors>
     <Product>Keras for .NET</Product>
     <Copyright>Apache 2.0, Haiping Chen 2023</Copyright>
@@ -38,8 +38,8 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <RepositoryType>Git</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>0.10.5.0</AssemblyVersion>
-    <FileVersion>0.10.5.0</FileVersion>
+    <AssemblyVersion>0.11.0.0</AssemblyVersion>
+    <FileVersion>0.11.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Configurations>Debug;Release;GPU</Configurations>
   </PropertyGroup>
@@ -71,7 +71,7 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HDF5-CSharp" Version="1.16.3" />
+    <PackageReference Include="HDF5-CSharp" Version="1.17.0" />
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
