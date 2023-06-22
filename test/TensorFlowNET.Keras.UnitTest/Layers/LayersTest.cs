@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -161,6 +163,26 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Tensor output = layer.Apply(inputs);
             Assert.AreEqual((5, 2), output.shape);
             Assert.IsTrue(output[0].numpy().Equals(new[] { -0.99998f, 0.99998f }));
+
+            // test_layernorm_weights
+            Assert.AreEqual(len(layer.TrainableWeights), 2);
+            Assert.AreEqual(len(layer.Weights), 2);
+
+            var beta = layer.Weights.Where(x => x.Name.StartsWith("beta")).Single();
+            var gamma = layer.Weights.Where(x => x.Name.StartsWith("gamma")).Single();
+
+            // correctness_test
+            layer = keras.layers.LayerNormalization(axis: -1, epsilon: (float) 1e-12);
+            var x = np.random.normal(loc: 5.0f, scale: 10.0f, size: (1000, 2, 2, 2)).astype(tf.float32);
+
+            output = layer.Apply(x);
+
+            var y = (output - beta.numpy()) / gamma.numpy();
+
+            var y_mean = np.mean(y.numpy());
+            var y_std = np.sqrt(np.sum(np.power(y.numpy() - np.mean(y.numpy()), 2)) / 8000);
+            Assert.IsTrue(tf.greater(np.array(0.1f), tf.abs(y_std - 1.0)).ToArray<bool>()[0]);
+            Assert.IsTrue(tf.greater(np.array(0.1f), tf.abs(y_mean)).ToArray<bool>()[0]);
         }
 
         /// <summary>
