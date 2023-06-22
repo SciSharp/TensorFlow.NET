@@ -153,9 +153,22 @@ namespace Tensorflow.Keras.Layers
             }
             else
             {
+                var input_dtype = inputs.dtype;
+                if ((input_dtype == tf.float16) && DType == tf.float32) inputs = tf.cast(inputs, tf.float32);
+                (Tensor mean, Tensor variance) = tf.nn.moments(inputs, axis, keep_dims: true);
 
+                (Tensor scale, Tensor offset) = (_broadcast(gamma), _broadcast(beta));
+
+                outputs = tf.nn.batch_normalization(
+                inputs,
+                mean,
+                variance,
+                offset: offset,
+                scale: scale,
+                variance_epsilon: epsilon);
+
+                outputs = tf.cast(outputs, input_dtype);
             }
-
             // If some components of the shape got lost due to adjustments, fix that.
             outputs.shape = input_shape;
 

@@ -14,8 +14,10 @@
    limitations under the License.
 ******************************************************************************/
 
+using System.Xml.Linq;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
+//using static System.Formats.Asn1.AsnWriter;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -125,6 +127,22 @@ namespace Tensorflow
                     is_training: is_training,
                     name: name,
                     exponential_avg_factor: exponential_avg_factor);
+            public Tensor batch_normalization(Tensor x,
+                        Tensor mean,
+                        Tensor variance,
+                        Tensor offset,
+                        Tensor scale,
+                        float variance_epsilon,
+                        string name = null)
+            {
+                var inv = math_ops.rsqrt(variance + variance_epsilon);
+                tf_with(ops.name_scope(name, "batchnorm", (x, mean, variance, scale, offset)), scope =>
+                {
+                    if (scale != null) inv *= scale;
+                });
+                if (offset != null) return x * math_ops.cast(inv, x.dtype) + math_ops.cast(offset - mean * inv, dtype: x.dtype);
+                else return x * math_ops.cast(inv, x.dtype) + math_ops.cast(-mean * inv, dtype: x.dtype);
+            }
 
             public Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
