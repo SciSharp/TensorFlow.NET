@@ -17,7 +17,6 @@
 using System.Xml.Linq;
 using Tensorflow.Operations;
 using Tensorflow.Operations.Activation;
-//using static System.Formats.Asn1.AsnWriter;
 using static Tensorflow.Binding;
 
 namespace Tensorflow
@@ -127,6 +126,18 @@ namespace Tensorflow
                     is_training: is_training,
                     name: name,
                     exponential_avg_factor: exponential_avg_factor);
+
+            /// <summary>
+            /// Normalizes a tensor by `mean` and `variance`, and applies (optionally) a`scale` \\(\gamma\\) to it, as well as an `offset` \\(\beta\\).
+            /// </summary>
+            /// <param name="x">A floating point tensor.</param>
+            /// <param name="mean">A mean `Tensor`.</param>
+            /// <param name="variance">A variance `Tensor`.</param>
+            /// <param name="offset"> An offset `Tensor`, often denoted \\(\beta\\) in equations, or NULL. If present, will be added to the normalized tensor.</param>
+            /// <param name="scale"> A scale `Tensor`, often denoted \\(\gamma\\) in equations, or NULL. If present, the scale is applied to the normalized tensor.</param>
+            /// <param name="variance_epsilon"> A small float number to avoid dividing by 0.</param>
+            /// <param name="name">A name for this operation.</param>
+            /// <returns>the normalized, scaled, offset tensor.</returns>
             public Tensor batch_normalization(Tensor x,
                         Tensor mean,
                         Tensor variance,
