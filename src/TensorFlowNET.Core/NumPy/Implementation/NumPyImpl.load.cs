@@ -27,9 +27,20 @@ namespace Tensorflow.NumPy
                 Array matrix = Array.CreateInstance(type, shape);
 
                 //if (type == typeof(String))
-                    //return ReadStringMatrix(reader, matrix, bytes, type, shape);
+                //return ReadStringMatrix(reader, matrix, bytes, type, shape);
+                NDArray res = ReadObjectMatrix(reader, matrix, shape);
+                Console.WriteLine("LoadMatrix");
+                Console.WriteLine(res.dims[0]);
+                Console.WriteLine((int)res[0][0]);
+                Console.WriteLine(res.dims[1]);
+                //if (type == typeof(Object))
+                //{
+
+                //}
+                //else 
                 return ReadValueMatrix(reader, matrix, bytes, type, shape);
             }
+
         }
 
         public T Load<T>(Stream stream)
@@ -37,7 +48,7 @@ namespace Tensorflow.NumPy
             ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
         {
             // if (typeof(T).IsArray && (typeof(T).GetElementType().IsArray || typeof(T).GetElementType() == typeof(string)))
-                // return LoadJagged(stream) as T;
+            // return LoadJagged(stream) as T;
             return LoadMatrix(stream) as T;
         }
 
@@ -48,7 +59,7 @@ namespace Tensorflow.NumPy
             shape = null;
 
             // The first 6 bytes are a magic string: exactly "x93NUMPY"
-            if (reader.ReadChar() != 63) return false;
+            if (reader.ReadByte() != 0x93) return false;
             if (reader.ReadChar() != 'N') return false;
             if (reader.ReadChar() != 'U') return false;
             if (reader.ReadChar() != 'M') return false;
@@ -64,6 +75,7 @@ namespace Tensorflow.NumPy
             ushort len = reader.ReadUInt16();
 
             string header = new String(reader.ReadChars(len));
+            Console.WriteLine(header);
             string mark = "'descr': '";
             int s = header.IndexOf(mark) + mark.Length;
             int e = header.IndexOf("'", s + 1);
@@ -93,7 +105,7 @@ namespace Tensorflow.NumPy
         Type GetType(string dtype, out int bytes, out bool? isLittleEndian)
         {
             isLittleEndian = IsLittleEndian(dtype);
-            bytes = Int32.Parse(dtype.Substring(2));
+            bytes = dtype.Length > 2 ? Int32.Parse(dtype.Substring(2)) : 0;
 
             string typeCode = dtype.Substring(1);
 
@@ -121,6 +133,8 @@ namespace Tensorflow.NumPy
                 return typeof(Double);
             if (typeCode.StartsWith("S"))
                 return typeof(String);
+            if (typeCode == "O")
+                return typeof(Object);
 
             throw new NotSupportedException();
         }
