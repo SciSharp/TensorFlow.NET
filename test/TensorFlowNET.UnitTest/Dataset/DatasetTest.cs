@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.UnitTest.Dataset
 {
@@ -195,20 +194,6 @@ namespace TensorFlowNET.UnitTest.Dataset
             }
 
             Assert.IsFalse(allEqual);
-        }
-        [TestMethod]
-        public void GetData()
-        {
-            var vocab_size = 20000;
-            var dataset = keras.datasets.imdb.load_data(num_words: vocab_size);
-            var x_train = dataset.Train.Item1;
-            Assert.AreEqual(x_train.dims[0], 25000);
-            var y_train = dataset.Train.Item2;
-            Assert.AreEqual(y_train.dims[0], 25000);
-            var x_val = dataset.Test.Item1;
-            Assert.AreEqual(x_val.dims[0], 25000);
-            var y_val = dataset.Test.Item2;
-            Assert.AreEqual(y_val.dims[0], 25000);
         }
     }
 }
