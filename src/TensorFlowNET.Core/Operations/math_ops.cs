@@ -269,7 +269,7 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Erf", name, new ExecuteOpArgs(x));
 
         public static Tensor sqrt(Tensor x, string name = null)
-            => gen_math_ops.sqrt(x, name: name);
+            => tf.Context.ExecuteOp("Sqrt", name, new ExecuteOpArgs(x));
 
         public static Tensor multiply(Tensor x, Tensor y, string name = null)
             => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(x, y));

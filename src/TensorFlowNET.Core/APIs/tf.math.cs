@@ -354,7 +354,7 @@ namespace Tensorflow
             => a / b;
 
         public Tensor sqrt(Tensor a, string name = null)
-            => gen_math_ops.sqrt(a, name);
+            => math_ops.sqrt(a, name);
 
         public Tensor sign(Tensor a, string name = null)
             => gen_math_ops.sign(a, name);
