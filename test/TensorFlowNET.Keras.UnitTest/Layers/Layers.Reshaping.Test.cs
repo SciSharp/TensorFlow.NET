@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -16,6 +17,15 @@ namespace Tensorflow.Keras.UnitTest.Layers
             var zero_padding_2d = keras.layers.ZeroPadding2D(new[,] { { 1, 0 }, { 1, 0 } });
             var y = zero_padding_2d.Apply(x);
             Assert.AreEqual((1, 2, 3, 2), y.shape);
+        }
+
+        [TestMethod]
+        public void UpSampling1D()
+        {
+            Shape input_shape = (2, 2, 3);
+            var x = np.arange(input_shape.size).reshape(input_shape);
+            var y = tf.keras.layers.UpSampling1D(size: 2).Apply(x);
+            Assert.AreEqual((2, 4, 3), y.shape);
         }
 
         [TestMethod]

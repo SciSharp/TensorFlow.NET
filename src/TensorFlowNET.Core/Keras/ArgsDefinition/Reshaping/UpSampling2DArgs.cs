@@ -7,7 +7,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         [JsonProperty("size")]
         public Shape Size { get; set; }
         [JsonProperty("data_format")]
-        public string DataFormat { get; set; }
+        public string DataFormat { get; set; } = "channels_last";
         /// <summary>
         /// 'nearest', 'bilinear'
         /// </summary>
