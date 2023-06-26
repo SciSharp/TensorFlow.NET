@@ -956,6 +956,32 @@ namespace Tensorflow.Keras
 
         }
 
+        /// <summary>
+        /// Repeats the elements of a tensor along an axis, like `np.repeat`.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="rep"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
+        public Tensor repeat_elements(Tensor x, int rep, int axis)
+        {
+            var x_shape = x.shape.as_int_list();
+            if (x_shape[axis] != -1)
+            {
+                var splits = tf.split(x, x_shape[axis], axis:axis);
+                var x_rep = splits.SelectMany(s => Enumerable.Repeat(s, rep)).ToArray();
+                return concatenate(x_rep, axis);
+            }
+            //var auxiliary_axis = axis + 1;
+            //x_shape = x.shape;
+            //var x_rep = tf.expand_dims(x, auxiliary_axis);
+            //var reps = np.ones(x_shape.Length + 1);
+            //reps[auxiliary_axis] = rep;
+            //x_rep = tf.tile(x_rep, reps);
+
+            throw new NotImplementedException();
+
+        }
         public Tensor reverse(Tensor input, int axis)
         {
             return reverse(input, new int[] { axis });

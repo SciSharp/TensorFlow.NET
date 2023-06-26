@@ -10,6 +10,9 @@ using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
+    /// <summary>
+    /// Upsampling layer for 2D inputs.
+    /// </summary>
     public class UpSampling2D : Layer
     {
         UpSampling2DArgs args;
