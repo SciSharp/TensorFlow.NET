@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Copyright>Apache 2.0, Haiping Chen $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -22,6 +22,9 @@ Building, training and infering deep learning models.
 https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.110.0.0</AssemblyVersion>
     <PackageReleaseNotes>
+		tf.net 0.110.x and above are based on tensorflow native 2.11.0
+		* RNN, LSTM works.
+		
 		tf.net 0.100.x and above are based on tensorflow native 2.10.0
 
 		* Eager Mode is added finally.
@@ -37,6 +40,7 @@ https://tensorflownet.readthedocs.io</Description>
 		tf.net 0.6x.x aligns with TensorFlow v2.6.x native library.
 		tf.net 0.7x.x aligns with TensorFlow v2.7.x native library.
 		tf.net 0.10x.x aligns with TensorFlow v2.10.x native library.
+		tf.net 0.11x.x aligns with TensorFlow v2.11.x native library.
 	</PackageReleaseNotes>
     <FileVersion>0.110.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

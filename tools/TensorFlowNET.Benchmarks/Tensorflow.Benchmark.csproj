@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.5" />
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.0" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.4" />
   </ItemGroup>
 
   <ItemGroup>
