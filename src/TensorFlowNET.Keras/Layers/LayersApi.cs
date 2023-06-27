@@ -874,6 +874,45 @@ namespace Tensorflow.Keras.Layers
                 });
 
         /// <summary>
+        /// Cell class for the GRU layer.
+        /// </summary>
+        /// <param name="units"></param>
+        /// <param name="activation"></param>
+        /// <param name="recurrent_activation"></param>
+        /// <param name="use_bias"></param>
+        /// <param name="kernel_initializer"></param>
+        /// <param name="recurrent_initializer"></param>
+        /// <param name="bias_initializer"></param>
+        /// <param name="dropout"></param>
+        /// <param name="recurrent_dropout"></param>
+        /// <param name="reset_after"></param>
+        /// <returns></returns>
+        public IRnnCell GRUCell(
+            int units,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            bool reset_after = true)
+            => new GRUCell(new GRUCellArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
+                RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                UseBias = use_bias,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                ResetAfter = reset_after
+            });
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="scale"></param>
@@ -983,5 +1022,9 @@ namespace Tensorflow.Keras.Layers
                 Variance = variance,
                 Invert = invert
             });
+
+
+
+
     }
 }
