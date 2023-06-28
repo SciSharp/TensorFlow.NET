@@ -132,5 +132,18 @@ namespace Tensorflow.Keras.UnitTest.Layers
             Console.WriteLine($"output: {output}");
             Assert.AreEqual((5, 4), output.shape);
         }
+
+        [TestMethod]
+        public void GRUCell()
+        {
+            var inputs = tf.random.normal((32, 10, 8));
+            var rnn = tf.keras.layers.RNN(tf.keras.layers.GRUCell(4));
+            var output = rnn.Apply(inputs);
+            Assert.AreEqual((32, 4), output.shape);
+            rnn = tf.keras.layers.RNN(tf.keras.layers.GRUCell(4, reset_after:false, use_bias:false));
+            output = rnn.Apply(inputs);
+            Assert.AreEqual((32, 4), output.shape);
+
+        }
     }
 }

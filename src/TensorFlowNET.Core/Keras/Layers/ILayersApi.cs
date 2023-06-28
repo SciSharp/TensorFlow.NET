@@ -246,6 +246,18 @@ namespace Tensorflow.Keras.Layers
             bool time_major = false
             );
 
+        public IRnnCell GRUCell(
+            int units,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f, 
+            bool reset_after = true);
+            
         public ILayer Subtract();
     }
 }
