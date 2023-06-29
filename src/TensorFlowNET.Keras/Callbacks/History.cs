@@ -81,4 +81,8 @@ public class History : ICallback
     public void on_test_batch_end(long end_step, Dictionary<string, float> logs)
     {
     }
+
+    public void on_test_end(Dictionary<string, float> logs)
+    {
+    }
 }

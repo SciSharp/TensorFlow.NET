@@ -118,5 +118,8 @@ namespace Tensorflow.Keras.Callbacks
             }
         }
 
+        public void on_test_end(Dictionary<string, float> logs)
+        {
+        }
     }
 }
