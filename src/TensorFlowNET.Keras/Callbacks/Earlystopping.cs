@@ -150,4 +150,8 @@ public class EarlyStopping: ICallback
                 return less_op;
         }
     }
+
+    public void on_test_end(Dictionary<string, float> logs)
+    {
+    }
 }

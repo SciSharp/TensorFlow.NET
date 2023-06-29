@@ -73,4 +73,9 @@ public class CallbackList
     {
         callbacks.ForEach(x => x.on_test_batch_end(end_step, logs));
     }
+
+    public void on_test_end(Dictionary<string, float> logs)
+    {
+        callbacks.ForEach(x => x.on_test_end(logs));
+    }
 }

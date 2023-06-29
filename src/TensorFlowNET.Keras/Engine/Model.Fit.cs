@@ -266,7 +266,7 @@ namespace Tensorflow.Keras.Engine
                 {
                     // Because evaluate calls call_test_batch_end, this interferes with our output on the screen
                     // so we need to pass a is_val parameter to stop on_test_batch_end
-                    var val_logs = evaluate((Tensor)validation_data.Value.Item1, validation_data.Value.Item2, is_val:true);
+                    var val_logs = evaluate(validation_data.Value.Item1, validation_data.Value.Item2, is_val:true);
                     foreach (var log in val_logs)
                     {
                         logs["val_" + log.Key] = log.Value;
