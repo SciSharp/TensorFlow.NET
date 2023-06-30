@@ -587,6 +587,17 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
+        public static Tensor reduce_euclidean_norm(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var distance = tf.Context.ExecuteOp("EuclideanNorm", name,
+                new ExecuteOpArgs(input_tensor, r).SetAttributes(new
+                {
+                    keep_dims = keepdims
+                }));
+            return _may_reduce_to_scalar(keepdims, axis, distance);
+        }
+
         public static Tensor reduce_max(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);

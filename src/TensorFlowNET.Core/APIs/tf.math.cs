@@ -46,6 +46,17 @@ namespace Tensorflow
             public Tensor divide_no_nan(Tensor a, Tensor b, string name = null)
                 => math_ops.div_no_nan(a, b);
 
+            /// <summary>
+            /// Computes the Euclidean norm of elements across dimensions of a tensor.
+            /// </summary>
+            /// <param name="input_tensor">The tensor to reduce. Should have numeric type.</param>
+            /// <param name="axis">The dimensions to reduce. If `None` (the default), reduces all dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`</param>
+            /// <param name="keepdims">If true, retains reduced dimensions with length 1.</param>
+            /// <param name="name">A name for the operation (optional).</param>
+            /// <returns>The reduced tensor, of the same dtype as the input_tensor.</returns>
+            public Tensor reduce_euclidean_norm(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
+                => math_ops.reduce_euclidean_norm(input_tensor, axis: axis, keepdims: keepdims, name);
+
             public Tensor square(Tensor x, string name = null)
                 => math_ops.square(x, name: name);
 
