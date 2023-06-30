@@ -174,7 +174,7 @@ namespace Tensorflow.Keras.Saving
                 }
                 if(node is Functional functional)
                 {
-                    foreach(var name in functional.UnconditionalDependencyNames.Keys)
+                    foreach(var name in functional.UnconditionalDependencyNames.Keys.ToArray())
                     {
                         if(Regex.Match(name, @"^layer(_with_weights)?-[\d+]").Success)
                         {
