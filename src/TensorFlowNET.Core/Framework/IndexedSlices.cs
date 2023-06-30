@@ -49,12 +49,25 @@ namespace Tensorflow.Framework
 
         public static implicit operator Tensor(IndexedSlices indexedSlices)
         {
-            return indexedSlices.values;
+            return _indexed_slices_to_tensor(indexedSlices);
         }
 
         public static implicit operator IndexedSlices(Tensor tensor)
         {
             return tensor.Tag as IndexedSlices;
+        }
+
+        /// <summary>
+        /// Converts an IndexedSlices object `value` to a Tensor.
+        /// </summary>
+        /// <param name="indexedSlices"></param>
+        /// <param name="dtype"></param>
+        /// <param name="name"></param>
+        /// <param name="as_ref"></param>
+        /// <returns></returns>
+        public static Tensor _indexed_slices_to_tensor(IndexedSlices indexedSlices, TF_DataType dtype = TF_DataType.DtInvalid, String name = "", bool as_ref = false)
+        {
+            return gen_math_ops.unsorted_segment_sum(indexedSlices.values, indexedSlices.indices, indexedSlices.dense_shape.slice(0));
         }
     }
 }
