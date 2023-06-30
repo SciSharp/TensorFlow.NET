@@ -110,6 +110,17 @@ namespace Tensorflow.Keras.UnitTest.Layers
             var output_array = model.predict(input_array);
             Assert.AreEqual((32, 10, 64), output_array.shape);
         }
+        [TestMethod]
+        public void EmbeddingGrad()
+        {
+            var inputs = keras.layers.Input(shape: new[] { 32, 10 });
+            var outputs = keras.layers.Embedding(1000, 64, input_length: 10).Apply(inputs);
+            var model = keras.Model(inputs: inputs, outputs: outputs);
+            var input_array = np.random.randint(1000, size: (1, 32, 10));
+            var output_array = np.random.random(size: (1, 32, 10, 64));
+            model.compile("rmsprop", "mse", new[] { "accuracy" });
+            model.fit(input_array, output_array);
+        }
 
         /// <summary>
         /// https://www.tensorflow.org/api_docs/python/tf/keras/layers/Dense
