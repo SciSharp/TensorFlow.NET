@@ -678,7 +678,6 @@ namespace Tensorflow
             var tape = tf.GradientTape().stop_recording();
             var result = gen_array_ops.stop_gradient(input, name);
             tape.StartRecord();
-            tf.GradientTape().PushTape(tape);
             return result;
         }
 

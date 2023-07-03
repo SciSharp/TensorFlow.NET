@@ -144,16 +144,8 @@ namespace Tensorflow
                         Tensor offset,
                         Tensor scale,
                         float variance_epsilon,
-                        string name = null)
-            {
-                var inv = math_ops.rsqrt(variance + variance_epsilon);
-                tf_with(ops.name_scope(name, "batchnorm", (x, mean, variance, scale, offset)), scope =>
-                {
-                    if (scale != null) inv *= scale;
-                });
-                if (offset != null) return x * math_ops.cast(inv, x.dtype) + math_ops.cast(offset - mean * inv, dtype: x.dtype);
-                else return x * math_ops.cast(inv, x.dtype) + math_ops.cast(-mean * inv, dtype: x.dtype);
-            }
+                        string name = null) => nn_impl.batch_normalization(x, mean, variance, offset, scale, variance_epsilon, name);
+
 
             public Tensor max_pool(Tensor value, int[] ksize, int[] strides, string padding, string data_format = "NHWC", string name = null)
                 => nn_ops.max_pool(value, ksize, strides, padding, data_format: data_format, name: name);
