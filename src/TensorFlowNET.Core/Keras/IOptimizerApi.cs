@@ -26,6 +26,27 @@ namespace Tensorflow.Keras
                 string name = "Adam");
 
         /// <summary>
+        /// Adam enables L2 weight decay on gradients.
+        /// </summary>
+        /// <param name="learning_rate"></param>
+        /// <param name="weight_decay"></param>
+        /// <param name="beta_1"></param>
+        /// <param name="beta_2"></param>
+        /// <param name="epsilon"></param>
+        /// <param name="amsgrad"></param>
+        /// <param name="decay_params"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        IOptimizer AdamW(float learning_rate = 0.001f,
+                float weight_decay = 0.004f,
+                float beta_1 = 0.9f,
+                float beta_2 = 0.999f,
+                float epsilon = 1e-7f,
+                bool amsgrad = false,
+                List<string> no_decay_params = null,
+                string name = "AdamW");
+
+        /// <summary>
         /// Construct a new RMSprop optimizer.
         /// </summary>
         /// <param name="learning_rate"></param>

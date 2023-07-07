@@ -29,6 +29,22 @@ namespace Tensorflow.Keras.Optimizers
                 amsgrad: amsgrad,
                 name: name);
 
+        public IOptimizer AdamW(float learning_rate = 0.001f,
+                float weight_decay = 0.004f,
+                float beta_1 = 0.9f,
+                float beta_2 = 0.999f,
+                float epsilon = 1e-7f,
+                bool amsgrad = false,
+                List<string> no_decay_params = null,
+                string name = "AdamW") => new AdamW(learning_rate: learning_rate,
+                    beta_1: beta_1,
+                    beta_2: beta_2,
+                    epsilon: epsilon,
+                    amsgrad: amsgrad,
+                    name: name,
+                    weight_decay: weight_decay,
+                    no_decay_params: no_decay_params);
+
         /// <summary>
         /// Construct a new RMSprop optimizer.
         /// </summary>
