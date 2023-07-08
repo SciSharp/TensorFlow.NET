@@ -791,10 +791,7 @@ namespace Tensorflow
             bool adjoint_a = false, bool adjoint_b = false,
             bool a_is_sparse = false, bool b_is_sparse = false,
             string name = null)
-        {
-            Tensor result = null;
-
-            tf_with(ops.name_scope(name, "MatMul", new Tensor[] { a, b }), scope =>
+            => tf_with(ops.name_scope(name, "MatMul", (a, b)), scope =>
             {
                 name = scope;
 
@@ -815,11 +812,9 @@ namespace Tensorflow
                     transpose_b = true;
                 }
 
-                result = gen_math_ops.mat_mul(a, b, transpose_a, transpose_b, name);
+                return tf.Context.ExecuteOp("MatMul", name, new ExecuteOpArgs(a, b)
+                    .SetAttributes(new { transpose_a, transpose_b }));
             });
-
-            return result;
-        }
 
         public static Tensor batch_matmul(Tensor x, Tensor y,
             bool adj_x = false, bool adj_y = false,

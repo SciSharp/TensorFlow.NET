@@ -892,23 +892,9 @@ namespace Tensorflow
         /// <param name="axis"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Tensor concat(Tensor[] values, int axis, string name = "concat")
-        {
-            if (values.Length == 1) // Degenerate case of one tensor.
-            {
-                return tf_with(ops.name_scope(name), scope =>
-                {
-                    var t = ops.convert_to_tensor(axis, name: "concat_dim", dtype: TF_DataType.TF_INT32);
-                    return identity(values[0], name: scope);
-                });
-            }
-
-            return gen_array_ops.concat_v2(values, ops.convert_to_tensor(axis), name: name);
-        }
-
         public static Tensor concat(Tensor[] values, Tensor axis, string name = "concat")
         {
-            return gen_array_ops.concat_v2(values, axis, name: name);
+            return tf.Context.ExecuteOp("ConcatV2", name, new ExecuteOpArgs(values, axis));
         }
 
         public static Tensor concat(object[] values, int axis, string name = "concat")

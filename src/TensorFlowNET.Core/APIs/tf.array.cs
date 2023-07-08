@@ -91,8 +91,7 @@ namespace Tensorflow
                     return identity(values.First(), name: scope);
                 });
             }
-
-            return gen_array_ops.concat_v2(values.ToArray(), ops.convert_to_tensor(axis), name: name);
+            return array_ops.concat(values.ToArray(), axis, name: name);
         }
 
         /// <summary>

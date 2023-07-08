@@ -138,9 +138,15 @@ namespace Tensorflow
                 else
                 {
                     var graph = get_default_graph();
+                    if (graph is FuncGraph funcGraph)
+                    {
+                        return funcGraph.capture(eager_tensor, name: name);
+                    }
                     if (!graph.building_function)
+                    {
                         throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
-                    return (graph as FuncGraph).capture(eager_tensor, name: name);
+                        // return eager_tensor.AsPlaceholder(name: name);
+                    }
                 }
             }
 
