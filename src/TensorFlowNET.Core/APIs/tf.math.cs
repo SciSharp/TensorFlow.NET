@@ -622,5 +622,7 @@ namespace Tensorflow
             => gen_math_ops.squared_difference(x: x, y: y, name: name);
         public Tensor complex(Tensor real, Tensor imag, Tensorflow.TF_DataType? dtype = null, 
                 string name = null) => gen_ops.complex(real, imag, dtype, name);
+        public Tensor exp(Tensor x,
+                string name = null) => gen_math_ops.exp(x, name);
     }
 }
