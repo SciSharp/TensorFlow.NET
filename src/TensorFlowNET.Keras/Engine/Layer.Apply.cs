@@ -13,7 +13,7 @@ namespace Tensorflow.Keras.Engine
         /// <param name="state"></param>
         /// <param name="training"></param>
         /// <returns></returns>
-        public virtual Tensors Apply(Tensors inputs, Tensors states = null, bool training = false, IOptionalArgs? optional_args = null)
+        public virtual Tensors Apply(Tensors inputs, Tensors states = null, bool? training = false, IOptionalArgs? optional_args = null)
         {
             if (callContext.Value == null)
                 callContext.Value = new CallContext();

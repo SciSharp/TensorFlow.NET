@@ -15,7 +15,7 @@ namespace Tensorflow.Keras
         List<ILayer> Layers { get; }
         List<INode> InboundNodes { get; }
         List<INode> OutboundNodes { get; }
-        Tensors Apply(Tensors inputs, Tensors states = null, bool training = false, IOptionalArgs? optional_args = null);
+        Tensors Apply(Tensors inputs, Tensors states = null, bool? training = false, IOptionalArgs? optional_args = null);
         List<IVariableV1> TrainableVariables { get; }
         List<IVariableV1> TrainableWeights { get; }
         List<IVariableV1> NonTrainableWeights { get; }
