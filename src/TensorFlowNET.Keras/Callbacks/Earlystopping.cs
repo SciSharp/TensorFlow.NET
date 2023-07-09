@@ -5,9 +5,6 @@ namespace Tensorflow.Keras.Callbacks;
 /// <summary>
 /// Stop training when a monitored metric has stopped improving. 
 /// </summary>
-/// <param name="parameters"></param>
-/// <param name="monitor"></param>
-
 public class EarlyStopping: ICallback
 {
     int _paitence;

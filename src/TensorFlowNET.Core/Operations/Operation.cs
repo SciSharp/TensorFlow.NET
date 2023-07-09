@@ -206,12 +206,11 @@ namespace Tensorflow
             return result;
         }
 
-        internal unsafe int _get_attr_int(string name)
+        internal unsafe long _get_attr_int(string name)
         {
-            Status status = new();
-            int result;
-            c_api.TF_OperationGetAttrInt(_handle, name, new IntPtr(&result), status);
-            status.Check(true);
+            long result;
+            c_api.TF_OperationGetAttrInt(_handle, name, new IntPtr(&result), tf.Status);
+            tf.Status.Check(true);
             return result;
         }
 

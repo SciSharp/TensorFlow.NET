@@ -4,11 +4,11 @@
     <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
-    <TargetTensorFlow>2.10.0</TargetTensorFlow>
-    <Version>0.110.1</Version>
+    <TargetTensorFlow>2.11.0</TargetTensorFlow>
+    <Version>0.110.2</Version>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Authors>Haiping Chen, Meinrad Recheis, Eli Belash</Authors>
+    <Authors>Haiping Chen, Eli Belash, Yaohui Liu, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <Copyright>Apache 2.0, Haiping Chen $([System.DateTime]::UtcNow.ToString(yyyy))</Copyright>
@@ -23,7 +23,8 @@ https://tensorflownet.readthedocs.io</Description>
     <AssemblyVersion>0.110.1.0</AssemblyVersion>
     <PackageReleaseNotes>
 		tf.net 0.110.x and above are based on tensorflow native 2.11.0
-		* RNN, LSTM works.
+		* Support RNN, LSTM model.
+		* Support Transformer model.
 		
 		tf.net 0.100.x and above are based on tensorflow native 2.10.0
 
@@ -42,12 +43,11 @@ https://tensorflownet.readthedocs.io</Description>
 		tf.net 0.10x.x aligns with TensorFlow v2.10.x native library.
 		tf.net 0.11x.x aligns with TensorFlow v2.11.x native library.
 	</PackageReleaseNotes>
-    <FileVersion>0.110.1.0</FileVersion>
+    <FileVersion>0.110.2.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageOutputPath>packages</PackageOutputPath>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
     <Platforms>AnyCPU;x64</Platforms>
     <PackageId>TensorFlow.NET</PackageId>
     <Configurations>Debug;Release;GPU</Configurations>
@@ -86,6 +86,66 @@ https://tensorflownet.readthedocs.io</Description>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|netstandard2.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|netstandard2.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -377,8 +377,8 @@ namespace Tensorflow.Gradients
                   grad,
                   op.get_attr_list<int>("ksize"),
                   op.get_attr_list<int>("strides"),
-                  op.get_attr("padding").ToString(),
-                  op.get_attr("data_format").ToString())
+                  op.get_attr<string>("padding"),
+                  op.get_attr<string>("data_format"))
             };
         }
 

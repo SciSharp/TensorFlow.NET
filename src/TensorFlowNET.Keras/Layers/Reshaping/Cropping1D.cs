@@ -2,7 +2,6 @@
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Common.Types;
-using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers.Reshaping
 {

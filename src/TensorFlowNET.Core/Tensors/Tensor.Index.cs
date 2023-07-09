@@ -180,8 +180,7 @@ namespace Tensorflow
                             array_ops.stack(end.ToArray()),
                             array_ops.stack(strides.ToArray()));
 
-                    return gen_array_ops.strided_slice(
-                        this,
+                    return array_ops.strided_slice(this,
                         packed_begin,
                         packed_end,
                         packed_strides,

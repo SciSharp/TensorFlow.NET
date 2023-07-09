@@ -693,7 +693,6 @@ namespace Tensorflow.Keras.Saving
         /// Infers input shape of layer from SavedModel functions.
         /// </summary>
         /// <param name="layer_node_id"></param>
-        /// <param name="convert_to_shapes"></param>
         /// <returns></returns>
         private TensorSpec _infer_inputs(int layer_node_id)
         {

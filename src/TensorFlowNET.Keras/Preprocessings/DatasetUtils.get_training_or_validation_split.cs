@@ -6,7 +6,7 @@ namespace Tensorflow.Keras.Preprocessings
     public partial class DatasetUtils
     {
         /// <summary>
-        /// Potentially restict samples & labels to a training or validation split.
+        /// Potentially restict samples and labels to a training or validation split.
         /// </summary>
         /// <param name="samples"></param>
         /// <param name="labels"></param>

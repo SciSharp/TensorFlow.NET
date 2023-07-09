@@ -1,7 +1,5 @@
 ﻿using System;
 using Tensorflow.Keras.Utils;
-using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -9,14 +7,6 @@ namespace Tensorflow.Keras.Engine
     {
         Tensors FunctionalConstructionCall(Tensors inputs)
         {
-            bool mask_arg_passed_by_framework = false;
-            bool training_arg_passed_by_framework = false;
-            Tensor training_value = null;
-            if (training_value == null)
-            {
-                training_arg_passed_by_framework = true;
-            }
-
             if (base_layer_utils.needs_keras_history(inputs))
                 base_layer_utils.create_keras_history(inputs);
 

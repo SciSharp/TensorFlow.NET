@@ -15,7 +15,7 @@ namespace Tensorflow.Keras.Engine
     public partial class Model
     {
         /// <summary>
-        /// Returns the loss value & metrics values for the model in test mode.
+        /// Returns the loss value and metrics values for the model in test mode.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>

@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Tensorflow.Keras</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
-    <Version>0.11.1</Version>
+    <Version>0.11.2</Version>
     <Authors>Haiping Chen</Authors>
     <Product>Keras for .NET</Product>
     <Copyright>Apache 2.0, Haiping Chen 2023</Copyright>
@@ -26,7 +26,8 @@
 * Add Subtract layer
 * Text preprocessing
 * Preprocessing.timeseries_dataset_from_array
-* Fixed memory leak for YOLOv3 model.</PackageReleaseNotes>
+* Fixed memory leak for YOLOv3 model.
+* Support RNN and LSTM models</PackageReleaseNotes>
     <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
@@ -36,10 +37,10 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageOutputPath>packages</PackageOutputPath>
     <RepositoryType>Git</RepositoryType>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>0.11.1.0</AssemblyVersion>
-    <FileVersion>0.11.1.0</FileVersion>
+    <AssemblyVersion>0.11.2.0</AssemblyVersion>
+    <FileVersion>0.11.2.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Configurations>Debug;Release;GPU</Configurations>
   </PropertyGroup>
@@ -68,6 +69,74 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|x64'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|x64'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|netstandard2.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|netstandard2.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

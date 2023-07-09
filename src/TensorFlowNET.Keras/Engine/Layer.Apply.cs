@@ -10,7 +10,7 @@ namespace Tensorflow.Keras.Engine
         /// Wraps `call`, applying pre- and post-processing steps.
         /// </summary>
         /// <param name="inputs"></param>
-        /// <param name="state"></param>
+        /// <param name="states"></param>
         /// <param name="training"></param>
         /// <returns></returns>
         public virtual Tensors Apply(Tensors inputs, Tensors states = null, bool? training = false, IOptionalArgs? optional_args = null)

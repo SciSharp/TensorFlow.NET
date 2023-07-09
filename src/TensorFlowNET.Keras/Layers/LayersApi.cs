@@ -183,9 +183,6 @@ namespace Tensorflow.Keras.Layers
         /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
         /// <param name="kernel_initializer">The name of the initializer for the kernel weights matrix (see keras.initializers).</param>
         /// <param name="bias_initializer">The name of the initializer for the bias vector (see keras.initializers).</param>
-        /// <param name="kernel_regularizer">The name of the regularizer function applied to the kernel weights matrix (see keras.regularizers).</param>
-        /// <param name="bias_regularizer">The name of the regularizer function applied to the bias vector (see keras.regularizers).</param>
-        /// <param name="activity_regularizer">The name of the regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
         /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public ILayer Conv2D(int filters,
             Shape kernel_size = null,

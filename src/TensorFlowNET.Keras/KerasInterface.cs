@@ -72,8 +72,8 @@ namespace Tensorflow.Keras
         /// <summary>
         /// `Model` groups layers into an object with training and inference features.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
+        /// <param name="inputs"></param>
+        /// <param name="outputs"></param>
         /// <returns></returns>
         public IModel Model(Tensors inputs, Tensors outputs, string name = null)
             => new Functional(inputs, outputs, name: name);

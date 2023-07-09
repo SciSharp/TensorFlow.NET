@@ -242,10 +242,9 @@ namespace Tensorflow.Keras.Layers.Rnn
         /// 
         /// </summary>
         /// <param name="inputs"></param>
-        /// <param name="mask">Binary tensor of shape [batch_size, timesteps] indicating whether a given timestep should be masked</param>
-        /// <param name="training"></param>
         /// <param name="initial_state">List of initial state tensors to be passed to the first call of the cell</param>
-        /// <param name="constants">List of constant tensors to be passed to the cell at each timestep</param>
+        /// <param name="training"></param>
+        /// <param name="optional_args"></param>
         /// <returns></returns>
         /// <exception cref="ValueError"></exception>
         /// <exception cref="NotImplementedException"></exception>

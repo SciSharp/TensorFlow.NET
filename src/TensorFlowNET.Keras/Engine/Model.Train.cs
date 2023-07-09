@@ -29,7 +29,9 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// The logic for one training step.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data_handler"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         /// <returns></returns>
         Dictionary<string, float> train_step(DataHandler data_handler, Tensors x, Tensors y)
         {
