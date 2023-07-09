@@ -145,7 +145,7 @@ namespace Tensorflow
             throw new NotImplementedException("_zero_state_tensors");
         }
 
-        public Tensors Apply(Tensors inputs, Tensors state = null, bool is_training = false, IOptionalArgs? optional_args = null)
+        public Tensors Apply(Tensors inputs, Tensors state = null, bool? is_training = false, IOptionalArgs? optional_args = null)
         {
             throw new NotImplementedException();
         }

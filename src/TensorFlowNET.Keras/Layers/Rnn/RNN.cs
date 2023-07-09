@@ -393,7 +393,7 @@ namespace Tensorflow.Keras.Layers.Rnn
             }
         }
 
-        public override Tensors Apply(Tensors inputs, Tensors initial_states = null, bool training = false, IOptionalArgs? optional_args = null)
+        public override Tensors Apply(Tensors inputs, Tensors initial_states = null, bool? training = false, IOptionalArgs? optional_args = null)
         {
             RnnOptionalArgs? rnn_optional_args = optional_args as RnnOptionalArgs;
             if (optional_args is not null && rnn_optional_args is null)

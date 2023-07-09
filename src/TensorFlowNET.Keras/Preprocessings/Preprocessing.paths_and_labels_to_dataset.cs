@@ -6,6 +6,31 @@ namespace Tensorflow.Keras
 {
     public partial class Preprocessing
     {
+
+        /// <summary>
+        /// 图片路径转为数据处理用的dataset
+        /// </summary>
+        /// <param name="image_paths"></param>
+        /// <param name="image_size"></param>
+        /// <param name="num_channels"></param>
+        /// <param name="interpolation">
+        /// 用于调整大小的插值方法。支持`bilinear`、`nearest`、`bicubic`、`area`、`lanczos3`、`lanczos5`、`gaussian`、`mitchellcubic`。
+        /// 默认为`'bilinear'`。
+        /// </param>
+        /// <returns></returns>
+        public IDatasetV2 paths_to_dataset(string[] image_paths,
+                    Shape image_size,
+                    int num_channels = 3,
+                    int num_classes = 6,
+                    string interpolation = "bilinear")
+        {
+            var path_ds = tf.data.Dataset.from_tensor_slices(image_paths);
+            var img_ds = path_ds.map(x => path_to_image(x, image_size, num_channels, interpolation));
+            var label_ds = dataset_utils.labels_to_dataset(new int[num_classes] , "", num_classes);
+
+            return img_ds;
+        }
+
         public IDatasetV2 paths_and_labels_to_dataset(string[] image_paths,
             Shape image_size,
             int num_channels,

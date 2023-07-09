@@ -58,6 +58,7 @@ namespace Tensorflow.Keras
             if (shuffle)
                 dataset = dataset.shuffle(batch_size * 8, seed: seed);
             dataset = dataset.batch(batch_size);
+            dataset.class_names = class_name_list;
             return dataset;
         }
 
