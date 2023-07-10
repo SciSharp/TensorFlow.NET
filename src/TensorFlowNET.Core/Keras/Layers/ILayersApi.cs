@@ -1,5 +1,6 @@
 ﻿using System;
 using Tensorflow.Framework.Models;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers.Rnn;
 using Tensorflow.NumPy;
 using static Google.Protobuf.Reflection.FieldDescriptorProto.Types;
@@ -135,7 +136,7 @@ namespace Tensorflow.Keras.Layers
         public ILayer GlobalMaxPooling1D(string data_format = "channels_last");
         public ILayer GlobalMaxPooling2D(string data_format = "channels_last");
 
-        public Tensors Input(Shape shape = null,
+        public KerasTensor Input(Shape shape = null,
             int batch_size = -1,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid,

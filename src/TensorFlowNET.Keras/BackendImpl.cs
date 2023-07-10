@@ -76,7 +76,7 @@ namespace Tensorflow.Keras
             _GRAPH_VARIABLES[graph.graph_key] = v;
         }
 
-        public Tensor placeholder(Shape shape = null,
+        public KerasTensor placeholder(Shape shape = null,
             int ndim = -1,
             TF_DataType dtype = TF_DataType.DtInvalid,
             bool sparse = false,

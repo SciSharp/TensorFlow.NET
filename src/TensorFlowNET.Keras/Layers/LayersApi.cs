@@ -466,7 +466,7 @@ namespace Tensorflow.Keras.Layers
         /// In this case, values of 'None' in the 'shape' argument represent ragged dimensions. For more information about RaggedTensors, see this guide.
         /// </param>
         /// <returns>A tensor.</returns>
-        public Tensors Input(Shape shape = null,
+        public KerasTensor Input(Shape shape = null,
             int batch_size = -1,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid, 
