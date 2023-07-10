@@ -208,7 +208,7 @@ namespace Tensorflow
         }
 
         public static Tensor flip_left_right(Tensor image)
-            => _flip(image, 1, "flip_left_right");
+            => _flip(image, 0, "flip_left_right");
 
         public static Tensor flip_up_down(Tensor image)
             => _flip(image, 1, "flip_up_down");
@@ -226,7 +226,7 @@ namespace Tensorflow
                   }
                   else if (shape.ndim == 4)
                   {
-                      return gen_array_ops.reverse(image, ops.convert_to_tensor(new[] { flip_index + 1 }));
+                      return gen_array_ops.reverse_v2(image, ops.convert_to_tensor(new[] { (flip_index + 1) % 2 }));
                   }
                   else
                   {
