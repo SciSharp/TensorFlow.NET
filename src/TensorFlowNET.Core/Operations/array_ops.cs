@@ -603,7 +603,17 @@ namespace Tensorflow
                     }
                 }
 
-                return gen_array_ops.shape(input, name: name, out_type: out_type);
+                return tf.Context.ExecuteOp("Shape", name, new ExecuteOpArgs(input)
+                {
+                    GetGradientAttrs = (op) => new
+                    {
+                        T = op.get_attr<TF_DataType>("T"),
+                        out_type = op.get_attr<TF_DataType>("out_type")
+                    }
+                }.SetAttributes(new
+                {
+                    out_type
+                })).First();
             });
         }
 
@@ -703,23 +713,26 @@ namespace Tensorflow
             int new_axis_mask = 0,
             int shrink_axis_mask = 0,
             string name = null)
-        {
-            var op = gen_array_ops.strided_slice(
-                input: input_,
-                begin: begin,
-                end: end,
-                strides: strides,
-                begin_mask: begin_mask,
-                end_mask: end_mask,
-                ellipsis_mask: ellipsis_mask,
-                new_axis_mask: new_axis_mask,
-                shrink_axis_mask: shrink_axis_mask,
-                name: name);
-
-            string parent_name = name;
-
-            return op;
-        }
+                => tf.Context.ExecuteOp("StridedSlice", name, new ExecuteOpArgs(input_, begin, end, strides)
+                {
+                    GetGradientAttrs = (op) => new
+                    {
+                        T = op.get_attr<TF_DataType>("T"),
+                        Index = op.get_attr<TF_DataType>("Index"),
+                        begin_mask = op.get_attr<long>("begin_mask"),
+                        end_mask = op.get_attr<long>("end_mask"),
+                        ellipsis_mask = op.get_attr<long>("ellipsis_mask"),
+                        new_axis_mask = op.get_attr<long>("new_axis_mask"),
+                        shrink_axis_mask = op.get_attr<long>("shrink_axis_mask")
+                    }
+                }.SetAttributes(new
+                {
+                    begin_mask,
+                    end_mask,
+                    ellipsis_mask,
+                    new_axis_mask,
+                    shrink_axis_mask
+                }));
 
         /// <summary>
         /// Returns the gradient of `StridedSlice`.

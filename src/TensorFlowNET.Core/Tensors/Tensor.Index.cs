@@ -42,7 +42,7 @@ namespace Tensorflow
                                 array_ops.stack(args.End),
                                 array_ops.stack(args.Strides));
 
-                        return gen_array_ops.strided_slice(
+                        return array_ops.strided_slice(
                             this,
                             packed_begin,
                             packed_end,

@@ -5,12 +5,17 @@
 /// </summary>
 public class KerasTensor
 {
-    private Tensor _tensor;
-    public void SetTensor(Tensors tensor) 
-        => _tensor = tensor;
+    private Tensors _inferred_value;
+    public Tensors inferred_value 
+    {
+        get => _inferred_value;
+        set => _inferred_value = value;
+    }
 
-    private TensorSpec _type_spec;
     private string _name;
+    private TensorSpec _type_spec;
+    public Shape shape => _type_spec.shape;
+    public TF_DataType dtype => _type_spec.dtype;
 
     public KerasTensor(TensorSpec type_spec, string name = null)
     {
@@ -22,15 +27,23 @@ public class KerasTensor
     {
         var type_spec = tensor.ToTensorSpec();
         var kt = new KerasTensor(type_spec, name: tensor.name);
-        kt.SetTensor(tensor);
+        kt.inferred_value = tensor;
         return kt;
     }
 
+    public override string ToString()
+        => _inferred_value.Length switch
+        {
+            > 1 => "[" + string.Join(", ", _inferred_value.Select(x => $"<KerasTensor: shape={x.shape} dtype={x.dtype}>")) + "]",
+            1 => $"<KerasTensor: shape={_inferred_value.shape} dtype={_inferred_value.dtype}>",
+            _ => _inferred_value.ToString(),
+        };
+
     public static implicit operator Tensors(KerasTensor kt)
-        => kt._tensor;
+        => kt._inferred_value;
 
     public static implicit operator Tensor(KerasTensor kt)
-        => kt._tensor;
+        => kt._inferred_value;
 
     public static implicit operator KerasTensor(Tensor tensor)
         => from_tensor(tensor);
