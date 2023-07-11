@@ -1,11 +1,11 @@
 ﻿using System.Data;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Operations.Activation;
 using static HDF.PInvoke.H5Z;
 using static Tensorflow.ApiDef.Types;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     public class SimpleRNN : RNN
     {

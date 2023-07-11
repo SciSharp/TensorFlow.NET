@@ -1,7 +1,7 @@
 ﻿using System;
 using Tensorflow.Framework.Models;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers.Rnn;
+using Tensorflow.Keras.Layers;
 using Tensorflow.NumPy;
 using static Google.Protobuf.Reflection.FieldDescriptorProto.Types;
 

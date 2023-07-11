@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers.Rnn;
+using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Metrics;
 using Tensorflow.Train;
 

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Util;
@@ -14,7 +13,7 @@ using Tensorflow.Common.Types;
 using System.Runtime.CompilerServices;
 // from tensorflow.python.distribute import distribution_strategy_context as ds_context;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     /// <summary>
     /// Base class for recurrent layers.
@@ -185,6 +184,7 @@ namespace Tensorflow.Keras.Layers.Rnn
 
         public override void build(KerasShapesWrapper input_shape)
         {
+            _buildInputShape = input_shape;
             input_shape = new KerasShapesWrapper(input_shape.Shapes[0]);
 
             InputSpec get_input_spec(Shape shape)

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
 using Tensorflow.Keras.Saving;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     /// <summary>
     /// Cell class for the GRU layer.

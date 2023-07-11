@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using static Tensorflow.Binding; 
 
-namespace Tensorflow.Keras.ArgsDefinition.Rnn
+namespace Tensorflow.Keras.ArgsDefinition
 {
     // TODO: complete the implementation
     public class LSTMCellArgs : AutoSerializeLayerArgs

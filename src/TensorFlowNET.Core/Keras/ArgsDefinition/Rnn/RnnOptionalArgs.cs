@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Common.Types;
 
-namespace Tensorflow.Keras.ArgsDefinition.Rnn
+namespace Tensorflow.Keras.ArgsDefinition
 {
     public class RnnOptionalArgs: IOptionalArgs
     {

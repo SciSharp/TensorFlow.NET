@@ -571,7 +571,9 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
                 return true;
             else
-                throw new NotImplementedException("");
+                // TODO(Wanglongzhi2001), implement the false case
+                return true;
+            //throw new NotImplementedException("");
         }
 
         public static bool inside_function()

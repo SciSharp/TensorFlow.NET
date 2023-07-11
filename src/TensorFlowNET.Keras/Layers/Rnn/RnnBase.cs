@@ -4,7 +4,7 @@ using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     public abstract class RnnBase: Layer
     {

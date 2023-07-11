@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Common.Types;
@@ -9,7 +9,7 @@ using Tensorflow.Common.Extensions;
 using Tensorflow.Keras.Utils;
 using Tensorflow.Graphs;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     /// <summary>
     /// Cell class for SimpleRNN.

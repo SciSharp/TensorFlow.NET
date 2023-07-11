@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using Tensorflow.NumPy;
@@ -77,6 +79,31 @@ public class ModelLoadTest
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
+    }
+
+    [TestMethod]
+    public void LSTMLoad()
+    {
+        var inputs = np.random.randn(10, 5, 3);
+        var outputs = np.random.randn(10, 1);
+        var model = keras.Sequential();
+        model.add(keras.Input(shape: (5, 3)));
+        var lstm = keras.layers.LSTM(32);
+
+        model.add(lstm);
+
+        model.add(keras.layers.Dense(1, keras.activations.Sigmoid));
+
+        model.compile(optimizer: keras.optimizers.Adam(),
+                    loss: keras.losses.MeanSquaredError(),
+        new[] { "accuracy" });
+
+        var result = model.fit(inputs.numpy(), outputs.numpy(), batch_size: 10, epochs: 3, workers: 16, use_multiprocessing: true);
+
+        model.save("LSTM_Random");
+
+        var model_loaded = keras.models.load_model("LSTM_Random");
+        model_loaded.summary();
     }
 
     [Ignore]
