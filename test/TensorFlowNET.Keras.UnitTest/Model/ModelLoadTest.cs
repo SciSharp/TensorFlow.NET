@@ -84,26 +84,12 @@ public class ModelLoadTest
     [TestMethod]
     public void LSTMLoad()
     {
-        var inputs = np.random.randn(10, 5, 3);
-        var outputs = np.random.randn(10, 1);
-        var model = keras.Sequential();
-        model.add(keras.Input(shape: (5, 3)));
-        var lstm = keras.layers.LSTM(32);
-
-        model.add(lstm);
-
-        model.add(keras.layers.Dense(1, keras.activations.Sigmoid));
-
-        model.compile(optimizer: keras.optimizers.Adam(),
-                    loss: keras.losses.MeanSquaredError(),
-        new[] { "accuracy" });
-
-        var result = model.fit(inputs.numpy(), outputs.numpy(), batch_size: 10, epochs: 3, workers: 16, use_multiprocessing: true);
-
-        model.save("LSTM_Random");
-
-        var model_loaded = keras.models.load_model("LSTM_Random");
-        model_loaded.summary();
+        var model = tf.keras.models.load_model(@"Assets/lstm_from_sequential");
+        model.summary();
+        model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.MeanSquaredError(), new string[] { "accuracy" });
+        var inputs = tf.random.normal(shape: (10, 5, 3));
+        var outputs = tf.random.normal(shape: (10, 1));
+        model.fit(inputs.numpy(), outputs.numpy(), batch_size: 10, epochs: 5, workers: 16, use_multiprocessing: true);
     }
 
     [Ignore]
