@@ -9,6 +9,7 @@ namespace Tensorflow.Keras
 
         /// <summary>
         /// 图片路径转为数据处理用的dataset
+        /// 通常用于预测时读取图片
         /// </summary>
         /// <param name="image_paths"></param>
         /// <param name="image_size"></param>
