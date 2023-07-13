@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Common.Types;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     public interface IRnnCell: ILayer
     {

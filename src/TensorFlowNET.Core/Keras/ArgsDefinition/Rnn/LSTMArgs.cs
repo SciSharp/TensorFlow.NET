@@ -1,4 +1,4 @@
-﻿namespace Tensorflow.Keras.ArgsDefinition.Rnn
+﻿namespace Tensorflow.Keras.ArgsDefinition
 {
     public class LSTMArgs : RNNArgs
     {

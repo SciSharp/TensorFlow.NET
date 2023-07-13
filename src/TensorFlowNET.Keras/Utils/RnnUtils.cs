@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using Tensorflow.Common.Types;
-using Tensorflow.Keras.Layers.Rnn;
+using Tensorflow.Keras.Layers;
 using Tensorflow.Common.Extensions;
 
 namespace Tensorflow.Keras.Utils

@@ -3,12 +3,12 @@ using System.ComponentModel;
 using System.Linq;
 using Tensorflow.Common.Extensions;
 using Tensorflow.Common.Types;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Keras.Utils;
 
-namespace Tensorflow.Keras.Layers.Rnn
+namespace Tensorflow.Keras.Layers
 {
     public class StackedRNNCells : Layer, IRnnCell
     {

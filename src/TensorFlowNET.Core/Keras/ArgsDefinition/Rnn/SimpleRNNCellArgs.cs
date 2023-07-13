@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Tensorflow.Keras.ArgsDefinition.Rnn
+namespace Tensorflow.Keras.ArgsDefinition
 {
     public class SimpleRNNCellArgs: AutoSerializeLayerArgs
     {

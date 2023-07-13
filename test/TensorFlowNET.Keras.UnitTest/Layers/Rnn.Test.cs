@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tensorflow.Common.Types;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers.Rnn;
+using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Saving;
 using Tensorflow.NumPy;
 using Tensorflow.Train;
