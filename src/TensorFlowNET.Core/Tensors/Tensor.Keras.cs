@@ -18,6 +18,10 @@ namespace Tensorflow;
 
 public partial class Tensor
 {
-    public TensorSpec ToTensorSpec()
-        => new TensorSpec(shape, dtype, name);
+    public bool IsFromKerasTensor { get; set; }
+
+    /// <summary>
+    /// Keras History: (Layer, (node_index, tensor_index))
+    /// </summary>
+    public KerasHistory KerasHistory { get; set; }
 }
