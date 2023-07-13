@@ -102,11 +102,12 @@ namespace Tensorflow
             {
                 throw new ValueError("\'image\' must be fully defined.");
             }
-            for (int x = 1; x < 4; x++)
+            var dims = image_shape["-3:"];
+            foreach (var dim in dims.dims)
             {
-                if (image_shape.dims[x] == 0)
+                if (dim == 0)
                 {
-                    throw new ValueError(String.Format("inner 3 dims of \'image.shape\' must be > 0: {0}", image_shape));
+                    throw new ValueError("inner 3 dimensions of \'image\' must be > 0: " + image_shape);
                 }
             }
 
@@ -965,9 +966,9 @@ new_height, new_width");
                  if (Array.Exists(new[] { dtypes.float16, dtypes.float32 }, orig_dtype => orig_dtype == orig_dtype))
                      image = convert_image_dtype(image, dtypes.float32);
 
-                 var num_pixels_ = array_ops.shape(image).dims;
-                 num_pixels_ = num_pixels_.Skip(num_pixels_.Length - 3).Take(num_pixels_.Length - (num_pixels_.Length - 3)).ToArray();
-                 Tensor num_pixels = math_ops.reduce_prod(new Tensor(num_pixels_));
+                 var x = image.shape["-3:"];
+                 var num_pixels = math_ops.reduce_prod(x);
+
                  Tensor image_mean = math_ops.reduce_mean(image, axis: new(-1, -2, -3), keepdims: true);
 
                  var stddev = math_ops.reduce_std(image, axis: new(-1, -2, -3), keepdims: true);
