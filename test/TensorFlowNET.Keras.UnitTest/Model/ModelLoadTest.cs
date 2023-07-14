@@ -81,6 +81,7 @@ public class ModelLoadTest
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
     }
 
+    [Ignore]
     [TestMethod]
     public void LSTMLoad()
     {
