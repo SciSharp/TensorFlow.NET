@@ -29,6 +29,7 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Saving;
 using Tensorflow.Train;
+using System.Text.RegularExpressions;
 
 namespace Tensorflow.Keras.Utils
 {
@@ -126,12 +127,15 @@ namespace Tensorflow.Keras.Utils
 
         public static string to_snake_case(string name)
         {
-            return string.Concat(name.Select((x, i) =>
+            string intermediate = Regex.Replace(name, "(.)([A-Z][a-z0-9]+)", "$1_$2");
+            string insecure = Regex.Replace(intermediate, "([a-z])([A-Z])", "$1_$2").ToLower();
+
+            if (insecure[0] != '_')
             {
-                return i > 0 && char.IsUpper(x) && !Char.IsDigit(name[i - 1]) ?
-                    "_" + x.ToString() :
-                    x.ToString();
-            })).ToLower();
+                return insecure;
+            }
+
+            return "private" + insecure;
         }
 
         /// <summary>
