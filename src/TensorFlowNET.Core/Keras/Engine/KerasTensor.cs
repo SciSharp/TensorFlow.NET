@@ -30,21 +30,32 @@ public class KerasTensor
     public static KerasTensor from_tensor(Tensor tensor)
     {
         var type_spec = tensor.ToTensorSpec();
-        var kt = new KerasTensor(type_spec, name: tensor.name);
+        Shape? inferred_value = default;
+        if (tensor.dtype == TF_DataType.TF_INT32 && tensor.rank < 2)
+        {
+            inferred_value = tf.ones(tensor).shape;
+        }
+        var kt = new KerasTensor(type_spec, inferred_value: inferred_value, name: tensor.name);
         kt.original_tensors = tensor;
         return kt;
     }
 
+    public KerasTensor this[int idx] 
+        => _original_tensors.First()[idx];
+
+    public KerasTensor this[params Slice[] slices]
+        => _original_tensors.First()[slices];
+
     public override string ToString()
         => _original_tensors.Length switch
         {
-            > 1 => "[" + string.Join(", ", _original_tensors.Select(x => $"KerasTensor: shape={x.shape} dtype={x.dtype}")) + "]",
-            1 => $"KerasTensor: shape={_original_tensors.shape} {GetInferredValueString()} dtype={_original_tensors.dtype}",
+            > 1 => "[" + string.Join(", ", _original_tensors.Select(x => $"KerasTensor: shape={x.shape} dtype={x.dtype.as_numpy_name()}{GetInferredValueString()}")) + "]",
+            1 => $"KerasTensor: shape={_original_tensors.shape} dtype={_original_tensors.dtype.as_numpy_name()}{GetInferredValueString()}",
             _ => _original_tensors.ToString(),
         };
 
     private string GetInferredValueString()
-        => _inferred_value == null ? "" : "";
+        => _inferred_value == null ? "" : $" inferred_value={_inferred_value}";
 
     public static implicit operator Tensors(KerasTensor kt)
         => kt._original_tensors;

@@ -46,6 +46,9 @@ namespace Tensorflow
         public Tensor ones(Shape shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
             => array_ops.ones(shape, dtype, name);
 
+        public Tensor ones(Tensor shape, TF_DataType dtype = TF_DataType.TF_FLOAT, string name = null)
+            => array_ops.ones(shape, dtype, name);
+
         public Tensor size(Tensor input,
             string name = null,
             TF_DataType out_type = TF_DataType.TF_INT32) => array_ops.size(input,

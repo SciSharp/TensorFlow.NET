@@ -144,9 +144,16 @@ namespace Tensorflow
                     }
                     if (!graph.building_function)
                     {
-                        throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
-                        // return eager_tensor.AsPlaceholder(name: name);
+                        // throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
+                        return eager_tensor.AsPlaceholder(name: name);
                     }
+                }
+            }
+            else if (value is KerasTensor kt)
+            {
+                if (kt.inferred_value != null)
+                {
+                    return convert_to_tensor(kt.inferred_value, dtype: kt.dtype, name: name);
                 }
             }
 

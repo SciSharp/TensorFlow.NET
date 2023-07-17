@@ -23,7 +23,7 @@ namespace Tensorflow
             => gen_array_ops.tile(input, multiples, name);
 
         public Tensor tile(Tensor input, object[] multiples, string name = null)
-            => gen_array_ops.tile(input, ops.convert_to_tensor(multiples), name);
+            => array_ops.tile(input, multiples, name);
 
         public Tensor tile(Tensor input, Shape multiples, string name = null) 
         {

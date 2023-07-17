@@ -137,7 +137,7 @@ namespace Tensorflow
             if(shape.Length > 1)
             {
                 shapeTensor = ops.convert_to_tensor(shape, dtypes.int32);
-                if(shapeTensor.ndim > 1)
+                if (shapeTensor.ndim > 1)
                 {
                     shapeTensor = array_ops.reshape(shapeTensor, new Shape(-1));
                 }
@@ -304,6 +304,10 @@ namespace Tensorflow
                         {
                             elems_as_tensors.Add(tensor);
                         }
+                        else if (elem is KerasTensor kt)
+                        {
+                            elems_as_tensors.Add(kt);
+                        }
                         else
                         {
                             var elem_tensor = constant_op.constant(elem, dtype: dtype, name: i.ToString());
@@ -404,7 +408,10 @@ namespace Tensorflow
             => gen_array_ops.reshape(tensor, shape, name: name);
 
         public static Tensor reshape(Tensor tensor, object[] shape, string name = null)
-            => gen_array_ops.reshape(tensor, ops.convert_to_tensor(shape), name: name);
+        {
+            var dims = shape_utils.from_object_array(shape);
+            return gen_array_ops.reshape(tensor, dims, name: name);
+        }
 
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
@@ -425,6 +432,10 @@ namespace Tensorflow
             return tf_with(ops.name_scope(name, "ones", new { shape }), scope =>
             {
                 name = scope;
+                if (shape._shape_tuple().Length == 0)
+                {
+                    shape = reshape(shape, new Shape(-1));
+                }
                 var output = gen_array_ops.fill(shape, constant_op.constant(1.0f, dtype: dtype), name: name);
                 return output;
             });
@@ -646,6 +657,20 @@ namespace Tensorflow
                     Tmultiples = op.get_attr<TF_DataType>("Tmultiples")
                 }
             });
+
+        public static Tensor tile(Tensor input, object[] multiples, string name = null)
+        {
+            Shape dims = shape_utils.from_object_array(multiples);
+
+            return tf.Context.ExecuteOp("Tile", name, new ExecuteOpArgs(input, dims)
+            {
+                GetGradientAttrs = (op) => new
+                {
+                    T = op.get_attr<TF_DataType>("T"),
+                    Tmultiples = op.get_attr<TF_DataType>("Tmultiples")
+                }
+            });
+        }
 
         public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
         {
