@@ -40,5 +40,10 @@ namespace Tensorflow.Keras.ArgsDefinition
         public bool ZeroOutputForMask { get; set; } = false;
         [JsonProperty("recurrent_dropout")]
         public float RecurrentDropout { get; set; } = .0f;
+
+        public RNNArgs Clone()
+        {
+            return (RNNArgs)MemberwiseClone();
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tensorflow.Common.Types;
+using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Saving;
@@ -38,8 +39,6 @@ namespace Tensorflow.Keras.UnitTest.Layers
             var cells = new IRnnCell[] { tf.keras.layers.SimpleRNNCell(4), tf.keras.layers.SimpleRNNCell(5) };
             var stackedRNNCell = tf.keras.layers.StackedRNNCells(cells);
             var (output, state) = stackedRNNCell.Apply(inputs, states);
-            Console.WriteLine(output);
-            Console.WriteLine(state.shape);
             Assert.AreEqual((32, 5), output.shape);
             Assert.AreEqual((32, 4), state[0].shape);
         }
@@ -108,6 +107,7 @@ namespace Tensorflow.Keras.UnitTest.Layers
             var inputs = tf.random.normal((32, 10, 8));
             var cell = tf.keras.layers.SimpleRNNCell(10, dropout: 0.5f, recurrent_dropout: 0.5f);
             var rnn = tf.keras.layers.RNN(cell: cell);
+            var cgf = rnn.get_config();
             var output = rnn.Apply(inputs);
             Assert.AreEqual((32, 10), output.shape);
 
@@ -144,6 +144,15 @@ namespace Tensorflow.Keras.UnitTest.Layers
             output = rnn.Apply(inputs);
             Assert.AreEqual((32, 4), output.shape);
 
+        }
+
+        [TestMethod]
+        public void Bidirectional()
+        {
+            var bi = tf.keras.layers.Bidirectional(keras.layers.LSTM(10, return_sequences:true));
+            var inputs = tf.random.normal((32, 10, 8));
+            var outputs = bi.Apply(inputs);
+            Assert.AreEqual((32, 10, 20), outputs.shape);
         }
     }
 }
