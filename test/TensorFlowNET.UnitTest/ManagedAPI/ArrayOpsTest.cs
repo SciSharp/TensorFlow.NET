@@ -2,6 +2,7 @@
 using Tensorflow.NumPy;
 using Tensorflow;
 using static Tensorflow.Binding;
+using System.Linq;
 
 namespace TensorFlowNET.UnitTest.ManagedAPI
 {
@@ -91,6 +92,18 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             Assert.AreEqual(ta.read(0).numpy(), 10f);
             Assert.AreEqual(ta.read(1).numpy(), 20f);
             Assert.AreEqual(ta.read(2).numpy(), 30f);
+        }
+
+        /// <summary>
+        /// https://www.tensorflow.org/api_docs/python/tf/reverse
+        /// </summary>
+        [TestMethod]
+        public void ReverseArray()
+        {
+            var a = tf.random.normal((2, 3));
+            var b = tf.reverse(a, -1);
+            Assert.IsTrue(Equal(a[0].ToArray<float>().Reverse().ToArray(), b[0].ToArray<float>()));
+            Assert.IsTrue(Equal(a[1].ToArray<float>().Reverse().ToArray(), b[1].ToArray<float>()));
         }
     }
 }

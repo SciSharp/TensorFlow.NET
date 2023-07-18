@@ -413,6 +413,16 @@ namespace Tensorflow
             return gen_array_ops.reshape(tensor, dims, name: name);
         }
 
+        public static Tensor reverse(Tensor tensor, Tensor axis, string name = null)
+            => tf.Context.ExecuteOp("ReverseV2", name, new ExecuteOpArgs(tensor, axis)
+            {
+                GetGradientAttrs = (op) => new
+                {
+                    T = op.get_attr<TF_DataType>("T"),
+                    Tidx = op.get_attr<TF_DataType>("Tidx")
+                }
+            });
+
         private static Tensor ones_like_impl<T>(T tensor, TF_DataType dtype, string name, bool optimize = true)
         {
             return tf_with(ops.name_scope(name, "ones_like", new { tensor }), scope =>
@@ -658,11 +668,9 @@ namespace Tensorflow
                 }
             });
 
-        public static Tensor tile(Tensor input, object[] multiples, string name = null)
+        /*public static Tensor tile(Tensor input, Shape multiples, string name = null)
         {
-            Shape dims = shape_utils.from_object_array(multiples);
-
-            return tf.Context.ExecuteOp("Tile", name, new ExecuteOpArgs(input, dims)
+            return tf.Context.ExecuteOp("Tile", name, new ExecuteOpArgs(input, multiples)
             {
                 GetGradientAttrs = (op) => new
                 {
@@ -670,7 +678,7 @@ namespace Tensorflow
                     Tmultiples = op.get_attr<TF_DataType>("Tmultiples")
                 }
             });
-        }
+        }*/
 
         public static Tensor zeros_like(Tensor tensor, TF_DataType dtype = TF_DataType.DtInvalid, string name = null, bool optimize = true)
         {

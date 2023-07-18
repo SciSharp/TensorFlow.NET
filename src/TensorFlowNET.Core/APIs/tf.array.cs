@@ -162,14 +162,17 @@ namespace Tensorflow
         /// Reverses specific dimensions of a tensor.
         /// </summary>
         /// <param name="tensor"></param>
-        /// <param name="axis"></param>
+        /// <param name="axis">The indices of the dimensions to reverse. Must be in the range [-rank(tensor), rank(tensor)).</param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Tensor reverse(Tensor tensor, int[] axis, string name = null)
-            => gen_array_ops.reverse(tensor, ops.convert_to_tensor(axis), name: name);
-
-        public Tensor reverse(Tensor tensor, Tensor axis, string name = null)
-            => gen_array_ops.reverse(tensor, axis, name: name);
+        public Tensor reverse(Tensor tensor, Axis axis, string name = null)
+        {
+            if (axis.IsScalar)
+            {
+                axis = new Axis(axis.axis);
+            }
+            return array_ops.reverse(tensor, axis, name: name);
+        }
 
         /// <summary>
         /// Returns the rank of a tensor.
