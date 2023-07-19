@@ -3,6 +3,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Common.Types;
 using Tensorflow.Common.Extensions;
+using Tensorflow.Keras.Saving;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -14,15 +15,15 @@ namespace Tensorflow.Keras.Layers
     /// </summary>
     public class LSTM : RNN
     {
-        LSTMArgs args;
+        LSTMArgs _args;
         InputSpec[] _state_spec;
         InputSpec _input_spec;
         bool _could_use_gpu_kernel;
-
+        public LSTMArgs Args { get => _args; }
         public LSTM(LSTMArgs args) :
             base(CreateCell(args), args)
         {
-            this.args = args;
+            _args = args;
             _input_spec = new InputSpec(ndim: 3);
             _state_spec = new[] { args.Units, args.Units }.Select(dim => new InputSpec(shape: (-1, dim))).ToArray();
             _could_use_gpu_kernel = args.Activation == keras.activations.Tanh
@@ -71,7 +72,7 @@ namespace Tensorflow.Keras.Layers
 
             var single_input = inputs.Single;
             var input_shape = single_input.shape;
-            var timesteps = args.TimeMajor ? input_shape[0] : input_shape[1];
+            var timesteps = _args.TimeMajor ? input_shape[0] : input_shape[1];
 
             _maybe_reset_cell_dropout_mask(Cell);
 
@@ -87,26 +88,26 @@ namespace Tensorflow.Keras.Layers
                 inputs,
                 initial_state,
                 constants: null,
-                go_backwards: args.GoBackwards,
+                go_backwards: _args.GoBackwards,
                 mask: mask,
-                unroll: args.Unroll,
+                unroll: _args.Unroll,
                 input_length: ops.convert_to_tensor(timesteps),
-                time_major: args.TimeMajor,
-                zero_output_for_mask: args.ZeroOutputForMask,
-                return_all_outputs: args.ReturnSequences
+                time_major: _args.TimeMajor,
+                zero_output_for_mask: _args.ZeroOutputForMask,
+                return_all_outputs: _args.ReturnSequences
             );
 
             Tensor output;
-            if (args.ReturnSequences)
+            if (_args.ReturnSequences)
             {
-                output = keras.backend.maybe_convert_to_ragged(false, outputs, (int)timesteps, args.GoBackwards);
+                output = keras.backend.maybe_convert_to_ragged(false, outputs, (int)timesteps, _args.GoBackwards);
             }
             else
             {
                 output = last_output;
             }
 
-            if (args.ReturnState)
+            if (_args.ReturnState)
             {
                 return new Tensor[] { output }.Concat(states).ToArray().ToTensors();
             }
@@ -115,5 +116,11 @@ namespace Tensorflow.Keras.Layers
                 return output;
             }
         }
+
+        public override IKerasConfig get_config()
+        {
+            return _args;
+        }
+
     }
 }

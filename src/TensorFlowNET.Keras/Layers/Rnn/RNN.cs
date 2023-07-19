@@ -31,7 +31,9 @@ namespace Tensorflow.Keras.Layers
         protected IVariableV1 _kernel;
         protected IVariableV1 _bias;
         private IRnnCell _cell;
-        protected IRnnCell Cell
+
+        public RNNArgs Args { get => _args; }
+        public IRnnCell Cell
         {
             get
             {
@@ -570,10 +572,13 @@ namespace Tensorflow.Keras.Layers
             var input_shape = array_ops.shape(inputs);
             var batch_size = _args.TimeMajor ? input_shape[1] : input_shape[0];
             var dtype = input.dtype;
-
             Tensors init_state = Cell.GetInitialState(null, batch_size, dtype);
-
             return init_state;
+        }
+
+        public override IKerasConfig get_config()
+        {
+            return _args;
         }
     }
 }

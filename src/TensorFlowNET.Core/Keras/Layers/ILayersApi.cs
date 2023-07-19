@@ -258,7 +258,19 @@ namespace Tensorflow.Keras.Layers
             float dropout = 0f,
             float recurrent_dropout = 0f, 
             bool reset_after = true);
-            
+
+        /// <summary>
+        /// Bidirectional wrapper for RNNs.
+        /// </summary>
+        /// <param name="layer">`keras.layers.RNN` instance, such as `keras.layers.LSTM` or `keras.layers.GRU`</param>
+        /// automatically.</param>
+        /// <returns></returns>
+        public ILayer Bidirectional(
+                ILayer layer,
+                string merge_mode = "concat",
+                NDArray weights = null,
+                ILayer backward_layer = null);
+
         public ILayer Subtract();
     }
 }

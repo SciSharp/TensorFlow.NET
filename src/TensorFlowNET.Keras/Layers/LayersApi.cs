@@ -908,6 +908,20 @@ namespace Tensorflow.Keras.Layers
                 ResetAfter = reset_after
             });
 
+        public ILayer Bidirectional(
+        ILayer layer,
+        string merge_mode = "concat",
+        NDArray weights = null,
+        ILayer backward_layer = null)
+        => new Bidirectional(new BidirectionalArgs
+        {
+            Layer = layer,
+            MergeMode = merge_mode,
+            Weights = weights,
+            BackwardLayer = backward_layer
+        });
+
+
         /// <summary>
         /// 
         /// </summary>
