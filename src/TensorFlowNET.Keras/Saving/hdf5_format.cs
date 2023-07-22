@@ -196,9 +196,8 @@ namespace Tensorflow.Keras.Saving
                     {
                         var crDataGroup = g;
                         string[] name_split = name.Split('/');
-                        for(int i = 0; i < name_split.Length; i++)
+                        for(int i = 0; i < name_split.Length - 1; i++)
                         {
-                            if (i == name_split.Length - 1) break;
                             crDataGroup = Hdf5.CreateOrOpenGroup(crDataGroup, Hdf5Utils.NormalizedName(name_split[i]));
                         }
                         WriteDataset(crDataGroup, name_split[name_split.Length - 1], tensor);
