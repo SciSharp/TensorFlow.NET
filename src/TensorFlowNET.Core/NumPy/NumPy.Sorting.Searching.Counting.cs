@@ -14,6 +14,10 @@ namespace Tensorflow.NumPy
             => new NDArray(math_ops.argmax(a, axis ?? 0));
 
         [AutoNumPy]
+        public static NDArray argmin(NDArray a, Axis? axis = null)
+            => new NDArray(math_ops.argmin(a, axis ?? 0));
+
+        [AutoNumPy]
         public static NDArray argsort(NDArray a, Axis? axis = null)
             => new NDArray(sort_ops.argsort(a, axis: axis ?? -1));
 
