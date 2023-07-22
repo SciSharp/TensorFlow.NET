@@ -133,10 +133,8 @@ namespace Tensorflow.Keras.Saving
                 long g = H5G.open(f, name);
                 var weight_names = load_attributes_from_hdf5_group(g, "weight_names");
                 foreach (var i_ in weight_names)
-                {
-                    var vm = Regex.Replace(i_, "/", "$");
-                    vm = i_.Split('/')[0] + "/$" + vm.Substring(i_.Split('/')[0].Length + 1, i_.Length - i_.Split('/')[0].Length - 1); 
-                    (success, Array result) = Hdf5.ReadDataset<float>(g, vm);
+                { 
+                    (success, Array result) = Hdf5.ReadDataset<float>(g, i_);
                     if (success)
                         weight_values.Add(np.array(result));
                 }
@@ -196,9 +194,13 @@ namespace Tensorflow.Keras.Saving
                     var tensor = val.AsTensor();
                     if (name.IndexOf("/") > 1)
                     {
-                        var crDataGroup = Hdf5.CreateOrOpenGroup(g, Hdf5Utils.NormalizedName(name.Split('/')[0]));
-                        var _name = Regex.Replace(name.Substring(name.Split('/')[0].Length, name.Length - name.Split('/')[0].Length), "/", "$");
-                        WriteDataset(crDataGroup, _name, tensor);
+                        var crDataGroup = g;
+                        string[] name_split = name.Split('/');
+                        for(int i = 0; i < name_split.Length - 1; i++)
+                        {
+                            crDataGroup = Hdf5.CreateOrOpenGroup(crDataGroup, Hdf5Utils.NormalizedName(name_split[i]));
+                        }
+                        WriteDataset(crDataGroup, name_split[name_split.Length - 1], tensor);
                         Hdf5.CloseGroup(crDataGroup);
                     }
                     else
