@@ -28,9 +28,14 @@ namespace TensorFlowNET.UnitTest
         {
             var input = np.array(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f);
             var image = tf.reshape(input, new int[] { 3, 3, 1 });
-            var img = tf.image.adjust_contrast(image, 2.0f);
+
+            var init = tf.global_variables_initializer();
+            var sess = tf.Session();
+            sess.run(init);
+            var adjust_contrast = tf.image.adjust_contrast(image, 2.0f);
+            var result = sess.run(adjust_contrast);
             var res = np.array(-4f, -2f, 0f, 2f, 4f, 6f, 8f, 10f, 12f).reshape((3,3,1));
-            Assert.AreEqual(img.numpy(), res);
+            Assert.AreEqual(result.numpy(), res);
         }
 
         [Ignore]
@@ -48,25 +53,31 @@ namespace TensorFlowNET.UnitTest
         [TestMethod]
         public void combined_non_max_suppression()
         {
-            var boxesX = tf.constant(new float[,] { { 200, 100, 150, 100 }, { 220, 120, 150, 100 }, { 190, 110, 150, 100 },{ 210, 112, 150, 100 } });
+            var boxesX = tf.constant(new float[,] { { 200, 100, 150, 100 }, { 220, 120, 150, 100 }, { 190, 110, 150, 100 }, { 210, 112, 150, 100 } });
             var boxes1 = tf.reshape(boxesX, (1, 4, 1, 4));
-            var scoresX = tf.constant(new float[,] { { 0.2f, 0.7f, 0.1f },{ 0.1f, 0.8f, 0.1f },{ 0.3f, 0.6f, 0.1f },{ 0.05f, 0.9f, 0.05f } });
+            var scoresX = tf.constant(new float[,] { { 0.2f, 0.7f, 0.1f }, { 0.1f, 0.8f, 0.1f }, { 0.3f, 0.6f, 0.1f }, { 0.05f, 0.9f, 0.05f } });
             var scores1 = tf.reshape(scoresX, (1, 4, 3));
-            var (boxes, scores, classes, valid_detections) = tf.image.combined_non_max_suppression(boxes1, scores1, 10, 10, 0.5f, 0.2f, clip_boxes:false);
+
+            var init = tf.global_variables_initializer();
+            var sess = tf.Session();
+            sess.run(init);
+
+            var (boxes, scores, classes, valid_detections) = tf.image.combined_non_max_suppression(boxes1, scores1, 10, 10, 0.5f, 0.2f, clip_boxes: false);
+            var result = sess.run((boxes, scores, classes, valid_detections));
 
             var boxes_gt = tf.constant(new float[,] { { 210f, 112f, 150f, 100f }, { 200f, 100f, 150f, 100f }, { 190f, 110f, 150f, 100f },
                 { 0f, 0f, 0f, 0f},{ 0f, 0f, 0f, 0f},{ 0f, 0f, 0f, 0f},{ 0f, 0f, 0f , 0f},{ 0f, 0f, 0f, 0f},{ 0f , 0f, 0f, 0f},{ 0f, 0f, 0f, 0f} });
-            boxes_gt = tf.reshape(boxes_gt,(1, 10, 4));
-            Assert.AreEqual(boxes.numpy(), boxes_gt.numpy());
+            boxes_gt = tf.reshape(boxes_gt, (1, 10, 4));
+            Assert.AreEqual(result.Item1.numpy(), boxes_gt.numpy());
             var scores_gt = tf.constant(new float[,] { { 0.9f, 0.7f, 0.3f, 0f, 0f, 0f, 0f, 0f, 0f, 0f } });
             scores_gt = tf.reshape(scores_gt, (1, 10));
-            Assert.AreEqual(scores.numpy(), scores_gt.numpy());
+            Assert.AreEqual(result.Item2.numpy(), scores_gt.numpy());
             var classes_gt = tf.constant(new float[,] { { 1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f } });
             classes_gt = tf.reshape(classes_gt, (1, 10));
-            Assert.AreEqual(classes.numpy(), classes_gt.numpy());
+            Assert.AreEqual(result.Item3.numpy(), classes_gt.numpy());
             var valid_detections_gt = tf.constant(new int[,] { { 3 } });
             valid_detections_gt = tf.reshape(valid_detections_gt, (1));
-            Assert.AreEqual(valid_detections.numpy(), valid_detections_gt.numpy());
+            Assert.AreEqual(result.Item4.numpy(), valid_detections_gt.numpy());
         }
 
         [TestMethod]
