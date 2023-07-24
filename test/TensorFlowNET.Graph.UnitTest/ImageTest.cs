@@ -3,6 +3,7 @@ using Tensorflow.NumPy;
 using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
+using System;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -23,12 +24,74 @@ namespace TensorFlowNET.UnitTest
         }
 
         [TestMethod]
+        public void adjust_contrast()
+        {
+            var input = np.array(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f);
+            var image = tf.reshape(input, new int[] { 3, 3, 1 });
+            var img = tf.image.adjust_contrast(image, 2.0f);
+            var res = np.array(-4f, -2f, 0f, 2f, 4f, 6f, 8f, 10f, 12f).reshape((3,3,1));
+            Assert.AreEqual(img.numpy(), res);
+        }
+
+        [Ignore]
+        [TestMethod]
+        public void adjust_hue()
+        {
+            var image = tf.constant(new int[] {1,2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18});
+            image = tf.reshape(image, new int[] { 3, 2, 3 });
+            var adjusted_image = tf.image.adjust_hue(image, 0.2f);
+            var res = tf.constant(new int[] {2,1,3, 4, 5, 6,8,7,9,11,10,12,14,13,15,17,16,18});
+            res = tf.reshape(res,(3,2,3));
+            Assert.AreEqual(adjusted_image, res);
+        }
+
+        [TestMethod]
+        public void combined_non_max_suppression()
+        {
+            var boxesX = tf.constant(new float[,] { { 200, 100, 150, 100 }, { 220, 120, 150, 100 }, { 190, 110, 150, 100 },{ 210, 112, 150, 100 } });
+            var boxes1 = tf.reshape(boxesX, (1, 4, 1, 4));
+            var scoresX = tf.constant(new float[,] { { 0.2f, 0.7f, 0.1f },{ 0.1f, 0.8f, 0.1f },{ 0.3f, 0.6f, 0.1f },{ 0.05f, 0.9f, 0.05f } });
+            var scores1 = tf.reshape(scoresX, (1, 4, 3));
+            var (boxes, scores, classes, valid_detections) = tf.image.combined_non_max_suppression(boxes1, scores1, 10, 10, 0.5f, 0.2f, clip_boxes:false);
+
+            var boxes_gt = tf.constant(new float[,] { { 210f, 112f, 150f, 100f }, { 200f, 100f, 150f, 100f }, { 190f, 110f, 150f, 100f },
+                { 0f, 0f, 0f, 0f},{ 0f, 0f, 0f, 0f},{ 0f, 0f, 0f, 0f},{ 0f, 0f, 0f , 0f},{ 0f, 0f, 0f, 0f},{ 0f , 0f, 0f, 0f},{ 0f, 0f, 0f, 0f} });
+            boxes_gt = tf.reshape(boxes_gt,(1, 10, 4));
+            Assert.AreEqual(boxes.numpy(), boxes_gt.numpy());
+            var scores_gt = tf.constant(new float[,] { { 0.9f, 0.7f, 0.3f, 0f, 0f, 0f, 0f, 0f, 0f, 0f } });
+            scores_gt = tf.reshape(scores_gt, (1, 10));
+            Assert.AreEqual(scores.numpy(), scores_gt.numpy());
+            var classes_gt = tf.constant(new float[,] { { 1f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f } });
+            classes_gt = tf.reshape(classes_gt, (1, 10));
+            Assert.AreEqual(classes.numpy(), classes_gt.numpy());
+            var valid_detections_gt = tf.constant(new int[,] { { 3 } });
+            valid_detections_gt = tf.reshape(valid_detections_gt, (1));
+            Assert.AreEqual(valid_detections.numpy(), valid_detections_gt.numpy());
+        }
+
+        [TestMethod]
+        public void crop_and_resize()
+        {
+            int BATCH_SIZE = 1;
+            int NUM_BOXES = 5;
+            int IMAGE_HEIGHT = 256;
+            int IMAGE_WIDTH = 256;
+            int CHANNELS = 3;
+            var crop_size = tf.constant(new int[] { 24, 24 });
+            var image = tf.random.uniform((BATCH_SIZE, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS));
+            var boxes = tf.random.uniform((NUM_BOXES, 4));
+            var box_ind = tf.random.uniform((NUM_BOXES), minval: 0, maxval: BATCH_SIZE, dtype: TF_DataType.TF_INT32);
+            var output = tf.image.crop_and_resize(image, boxes, box_ind, crop_size);
+            Assert.AreEqual((5,24,24,3), output.shape);
+        }
+
+        [TestMethod]
         public void decode_image()
         {
             var img = tf.image.decode_image(contents);
             Assert.AreEqual(img.name, "decode_image/DecodeImage:0");
         }
-
+            
         [TestMethod]
         public void resize_image()
         {
