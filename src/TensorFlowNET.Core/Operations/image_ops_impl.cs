@@ -2047,6 +2047,22 @@ new_height, new_width");
             });
         }
 
+        public static Tensor encode_jpeg(Tensor contents, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "encode_jpeg"), scope =>
+            {
+                return gen_ops.encode_jpeg(contents, name:name);
+            });
+        }
+
+        public static Tensor encode_png(Tensor contents, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "encode_png"), scope =>
+            {
+                return gen_ops.encode_png(contents, name: name);
+            });
+        }
+
         public static Tensor is_jpeg(Tensor contents, string name = null)
         {
             return tf_with(ops.name_scope(name, "is_jpeg"), scope =>

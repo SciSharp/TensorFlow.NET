@@ -39083,13 +39083,14 @@ namespace Tensorflow.Operations
         /// <remarks>
         ///    creates directory if not existing.
         /// </remarks>
-        public static Operation write_file(Tensor filename, Tensor contents, string name = "WriteFile")
+        public static Tensor write_file(Tensor filename, Tensor contents, string name = "WriteFile")
         {
             var dict = new Dictionary<string, object>();
             dict["filename"] = filename;
             dict["contents"] = contents;
             var op = tf.OpDefLib._apply_op_helper("WriteFile", name: name, keywords: dict);
-            return op;
+            op.run();
+            return op.output;
         }
 
         /// <summary>
