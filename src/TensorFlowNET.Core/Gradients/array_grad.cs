@@ -373,5 +373,13 @@ namespace Tensorflow.Gradients
             var p = op.inputs[1];
             return new Tensor[] { array_ops.transpose(grads[0], array_ops.invert_permutation(p)), null };
         }
+
+        [RegisterGradient("ReverseV2")]
+        public static Tensor[] _ReverseV2Grad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var axis = op.inputs[1];
+            return new Tensor[] { array_ops.reverse(grad, axis), null };
+        }
     }
 }
