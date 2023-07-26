@@ -174,6 +174,20 @@ namespace Tensorflow
             return array_ops.reverse(tensor, axis, name: name);
         }
 
+
+        /// <summary>
+        /// Reverses specific dimensions of a tensor.
+        /// </summary>
+        /// <param name="tensor"></param>
+        /// <param name="axis"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor reverse_v2(Tensor tensor, int[] axis, string name = null)
+            => gen_array_ops.reverse_v2(tensor, ops.convert_to_tensor(axis), name: name);
+
+        public Tensor reverse_v2(Tensor tensor, Tensor axis, string name = null)
+            => gen_array_ops.reverse_v2(tensor, axis, name: name);
+
         /// <summary>
         /// Returns the rank of a tensor.
         /// </summary>
