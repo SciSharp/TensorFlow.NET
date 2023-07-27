@@ -4,6 +4,7 @@ using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
 using System;
+using System.IO;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -163,6 +164,33 @@ namespace TensorFlowNET.UnitTest
             // check if flipped and no cropping occured
             Assert.AreEqual(result.size, 16ul);
             Assert.AreEqual(result[0, 0, 0, 0], 12f);
+        }
+
+        [TestMethod]
+        public void ImageSaveTest()
+        {
+            var imgPath = TestHelper.GetFullPathFromDataDir("img001.bmp");
+            var jpegImgPath = TestHelper.GetFullPathFromDataDir("img001.jpeg");
+            var pngImgPath = TestHelper.GetFullPathFromDataDir("img001.png");
+
+            File.Delete(jpegImgPath);
+            File.Delete(pngImgPath);
+
+            var contents = tf.io.read_file(imgPath);
+            var bmp = tf.image.decode_image(contents);
+            Assert.AreEqual(bmp.name, "decode_image/DecodeImage:0");
+
+            var jpeg = tf.image.encode_jpeg(bmp);
+            tf.io.write_file(jpegImgPath, jpeg);
+            Assert.IsTrue(File.Exists(jpegImgPath));
+
+            var png = tf.image.encode_png(bmp);
+            tf.io.write_file(pngImgPath, png);
+            Assert.IsTrue(File.Exists(pngImgPath));
+
+            // 如果要测试图片正确性，可以注释下面两行代码
+            File.Delete(jpegImgPath);
+            File.Delete(pngImgPath);
         }
     }
 }
