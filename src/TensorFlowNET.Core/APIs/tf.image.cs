@@ -339,6 +339,13 @@ namespace Tensorflow
                 => image_ops_impl.decode_image(contents, channels: channels, dtype: dtype,
                     name: name, expand_animations: expand_animations);
 
+            public Tensor encode_png(Tensor contents, string name = null)
+                    => image_ops_impl.encode_png(contents, name: name);
+
+            public Tensor encode_jpeg(Tensor contents, string name = null)
+                    => image_ops_impl.encode_jpeg(contents, name: name);
+
+
             /// <summary>
             /// Convenience function to check if the 'contents' encodes a JPEG image.
             /// </summary>
