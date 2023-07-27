@@ -16,6 +16,7 @@
 
 using System.Collections.Generic;
 using Tensorflow.IO;
+using Tensorflow.Operations;
 
 namespace Tensorflow
 {
@@ -46,6 +47,12 @@ namespace Tensorflow
             public Tensor[] restore_v2(Tensor prefix, string[] tensor_names,
                 string[] shape_and_slices, TF_DataType[] dtypes, string name = null)
                 => ops.restore_v2(prefix, tensor_names, shape_and_slices, dtypes, name: name);
+
+            public void write_file(string filename, Tensor conentes, string name = null)
+                => write_file(Tensorflow.ops.convert_to_tensor(filename, TF_DataType.TF_STRING), conentes, name);
+
+            public void write_file(Tensor filename, Tensor conentes, string name = null)
+                => gen_ops.write_file(filename, conentes, name);
         }
 
         public GFile gfile = new GFile();
