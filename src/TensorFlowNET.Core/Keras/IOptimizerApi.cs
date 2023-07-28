@@ -63,6 +63,6 @@ namespace Tensorflow.Keras
                 bool centered = false,
                 string name = "RMSprop");
 
-        IOptimizer SGD(float learning_rate);
+        IOptimizer SGD(float learning_rate, float momentum);
     }
 }
