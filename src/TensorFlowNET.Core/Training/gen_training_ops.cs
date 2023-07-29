@@ -51,5 +51,9 @@ namespace Tensorflow
         public static Tensor resource_apply_gradient_descent(Tensor var, Tensor alpha, Tensor delta, bool use_locking = false, string name = null)
             => tf.Context.ExecuteOp("ResourceApplyGradientDescent", name, 
                 new ExecuteOpArgs(var, alpha, delta).SetAttributes(new { use_locking }));
+
+        public static Tensor resource_apply_keras_momentum(Tensor var, Tensor accum, Tensor lr, Tensor grad, Tensor momentum, bool use_locking = false, bool use_nesterov = false, string name = null)
+            => tf.Context.ExecuteOp("ResourceApplyKerasMomentum", name, 
+                new ExecuteOpArgs(var, accum, lr, grad, momentum).SetAttributes(new { use_locking, use_nesterov }));
     }
 }
