@@ -31,7 +31,7 @@ namespace Tensorflow.Keras.Datasets
         /// <param name="oov_char"></param>
         /// <param name="index_from"></param>
         /// <returns></returns>
-        public DatasetPass load_data(string path = "imdb.npz",
+        public DatasetPass load_data(string? path = "imdb.npz",
             int num_words = -1,
             int skip_top = 0,
             int maxlen = -1,
@@ -42,7 +42,7 @@ namespace Tensorflow.Keras.Datasets
         {
             if (maxlen == -1) throw new InvalidArgumentError("maxlen must be assigned.");
             
-            var dst = Download();
+            var dst = path ?? Download();
 
             var lines = File.ReadAllLines(Path.Combine(dst, "imdb_train.txt"));
             var x_train_string = new string[lines.Length];
@@ -55,7 +55,7 @@ namespace Tensorflow.Keras.Datasets
 
             var x_train = keras.preprocessing.sequence.pad_sequences(PraseData(x_train_string), maxlen: maxlen);
 
-            File.ReadAllLines(Path.Combine(dst, "imdb_test.txt"));
+            lines = File.ReadAllLines(Path.Combine(dst, "imdb_test.txt"));
             var x_test_string = new string[lines.Length];
             var y_test = np.zeros(new int[] { lines.Length }, np.int64);
             for (int i = 0; i < lines.Length; i++)
