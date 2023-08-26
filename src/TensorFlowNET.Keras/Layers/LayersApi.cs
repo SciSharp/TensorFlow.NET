@@ -240,7 +240,7 @@ namespace Tensorflow.Keras.Layers
             string kernel_regularizer = null,
             string bias_regularizer = null,
             string activity_regularizer = null)
-                => new Conv2DTranspose(new Conv2DArgs
+                => new Conv2DTranspose(new Conv2DTransposeArgs
                 {
                     Rank = 2,
                     Filters = filters,
@@ -568,7 +568,7 @@ namespace Tensorflow.Keras.Layers
             int? strides = null,
             string padding = "valid",
             string data_format = null)
-            => new MaxPooling1D(new Pooling1DArgs
+            => new MaxPooling1D(new MaxPooling1DArgs
             {
                 PoolSize = pool_size ?? 2,
                 Strides = strides ?? (pool_size ?? 2),
@@ -944,21 +944,21 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         /// <returns></returns>
         public ILayer Add()
-            => new Add(new MergeArgs { });
+            => new Add(new AddArgs { });
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public ILayer Subtract()
-            => new Subtract(new MergeArgs { });
+            => new Subtract(new SubtractArgs { });
 
         /// <summary>
         /// Global max pooling operation for spatial data.
         /// </summary>
         /// <returns></returns>
         public ILayer GlobalAveragePooling2D()
-            => new GlobalAveragePooling2D(new Pooling2DArgs { });
+            => new GlobalAveragePooling2D(new GlobalAveragePooling2DArgs { });
 
         /// <summary>
         /// Global average pooling operation for temporal data.
@@ -968,7 +968,7 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <returns></returns>
         public ILayer GlobalAveragePooling1D(string data_format = "channels_last")
-            => new GlobalAveragePooling1D(new Pooling1DArgs { DataFormat = data_format });
+            => new GlobalAveragePooling1D(new GlobalAveragePooling1DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Global max pooling operation for spatial data.
@@ -977,7 +977,7 @@ namespace Tensorflow.Keras.Layers
         /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width).</param>
         /// <returns></returns>
         public ILayer GlobalAveragePooling2D(string data_format = "channels_last")
-            => new GlobalAveragePooling2D(new Pooling2DArgs { DataFormat = data_format });
+            => new GlobalAveragePooling2D(new GlobalAveragePooling2DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Global max pooling operation for 1D temporal data.
@@ -988,7 +988,7 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <returns></returns>
         public ILayer GlobalMaxPooling1D(string data_format = "channels_last")
-            => new GlobalMaxPooling1D(new Pooling1DArgs { DataFormat = data_format });
+            => new GlobalMaxPooling1D(new GlobalMaxPooling1DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Global max pooling operation for spatial data.
@@ -997,7 +997,7 @@ namespace Tensorflow.Keras.Layers
         /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width).</param>
         /// <returns></returns>
         public ILayer GlobalMaxPooling2D(string data_format = "channels_last")
-            => new GlobalMaxPooling2D(new Pooling2DArgs { DataFormat = data_format });
+            => new GlobalMaxPooling2D(new GlobalMaxPooling2DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Get an weights initializer from its name.
