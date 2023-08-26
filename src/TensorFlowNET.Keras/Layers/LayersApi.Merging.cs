@@ -14,7 +14,7 @@ namespace Tensorflow.Keras.Layers
         /// <param name="axis">Axis along which to concatenate.</param>
         /// <returns></returns>
         public ILayer Concatenate(int axis = -1)
-            => new Concatenate(new MergeArgs
+            => new Concatenate(new ConcatenateArgs
             {
                 Axis = axis
             });
