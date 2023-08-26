@@ -7,27 +7,30 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Tensorflow.Keras</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
-    <Version>0.11.2</Version>
+    <Version>0.11.3</Version>
     <Authors>Haiping Chen</Authors>
     <Product>Keras for .NET</Product>
-    <Copyright>Apache 2.0, Haiping Chen 2023</Copyright>
+    <Copyright>Apache 2.0, Haiping Chen since 2018</Copyright>
     <PackageId>TensorFlow.Keras</PackageId>
     <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
-    <PackageReleaseNotes>Keras for .NET is a C# version of Keras ported from the python version.
+    <PackageReleaseNotes>
+		Keras for .NET is a C# version of Keras ported from the python version.
 
-* Support CIFAR-10 dataset in keras.datasets.
-* Support Conv2D functional API.
-* Support BatchNormalization layer.
-* Building keras model in subclass, functional and sequential api
-* Implemented backward_function.
-* Support model.load_weights.
-* Add Subtract layer
-* Text preprocessing
-* Preprocessing.timeseries_dataset_from_array
-* Fixed memory leak for YOLOv3 model.
-* Support RNN and LSTM models</PackageReleaseNotes>
+		* Support CIFAR-10 dataset in keras.datasets.
+		* Support Conv2D functional API.
+		* Support BatchNormalization layer.
+		* Building keras model in subclass, functional and sequential api
+		* Implemented backward_function.
+		* Support model.load_weights.
+		* Add Subtract layer
+		* Text preprocessing
+		* Preprocessing.timeseries_dataset_from_array
+		* Fixed memory leak for YOLOv3 model.
+		* Support RNN and LSTM models
+		* Support Transformer model
+	</PackageReleaseNotes>
     <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
@@ -39,8 +42,8 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <RepositoryType>Git</RepositoryType>
     <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>0.11.2.0</AssemblyVersion>
-    <FileVersion>0.11.2.0</FileVersion>
+    <AssemblyVersion>0.11.3.0</AssemblyVersion>
+    <FileVersion>0.11.3.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Configurations>Debug;Release;GPU</Configurations>
   </PropertyGroup>
@@ -140,7 +143,7 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HDF5-CSharp" Version="1.17.0" />
+    <PackageReference Include="HDF5-CSharp" Version="1.18.0" />
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>

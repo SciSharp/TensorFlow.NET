@@ -71,7 +71,7 @@ namespace Tensorflow.Keras.Optimizers
                 Name = name
             });
 
-        public IOptimizer SGD(float learning_rate, float momentum)
+        public IOptimizer SGD(float learning_rate = 0.01f, float momentum = 0f)
             => new SGD(learning_rate, momentum);
     }
 }
