@@ -259,6 +259,25 @@ namespace Tensorflow.Keras.Layers
             float recurrent_dropout = 0f, 
             bool reset_after = true);
 
+        public ILayer GRU(
+            int units,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false,
+            bool reset_after = true
+            );
+
         /// <summary>
         /// Bidirectional wrapper for RNNs.
         /// </summary>

@@ -25,8 +25,8 @@ namespace Tensorflow.Keras.Layers
         private RNNArgs _args;
         private object _input_spec = null; // or NoneValue??
         private object _state_spec = null;
-        private Tensors _states = null;
         private object _constants_spec = null;
+        private Tensors _states = null;
         private int _num_constants;
         protected IVariableV1 _kernel;
         protected IVariableV1 _bias;
@@ -469,7 +469,7 @@ namespace Tensorflow.Keras.Layers
             return (inputs, initial_state, constants);
         }
 
-        private void _validate_args_if_ragged(bool is_ragged_input, Tensors mask)
+        protected void _validate_args_if_ragged(bool is_ragged_input, Tensors mask)
         {
             if (!is_ragged_input)
             {
@@ -527,44 +527,6 @@ namespace Tensorflow.Keras.Layers
         {
             throw new NotImplementedException();
         }
-
-        // 好像不能cell不能传接口类型
-        //public RNN New(IRnnArgCell cell,
-        //    bool return_sequences = false,
-        //    bool return_state = false,
-        //    bool go_backwards = false,
-        //    bool stateful = false,
-        //    bool unroll = false,
-        //    bool time_major = false)
-        //        => new RNN(new RNNArgs
-        //        {
-        //            Cell = cell,
-        //            ReturnSequences = return_sequences,
-        //            ReturnState = return_state,
-        //            GoBackwards = go_backwards,
-        //            Stateful = stateful,
-        //            Unroll = unroll,
-        //            TimeMajor = time_major
-        //        });
-
-        //public RNN New(List<IRnnArgCell> cell,
-        //    bool return_sequences = false,
-        //    bool return_state = false,
-        //    bool go_backwards = false,
-        //    bool stateful = false,
-        //    bool unroll = false,
-        //    bool time_major = false)
-        //        => new RNN(new RNNArgs
-        //        {
-        //            Cell = cell,
-        //            ReturnSequences = return_sequences,
-        //            ReturnState = return_state,
-        //            GoBackwards = go_backwards,
-        //            Stateful = stateful,
-        //            Unroll = unroll,
-        //            TimeMajor = time_major
-        //        });
-
 
         protected Tensors get_initial_state(Tensors inputs)
         {

@@ -147,6 +147,15 @@ namespace Tensorflow.Keras.UnitTest.Layers
         }
 
         [TestMethod]
+        public void GRU()
+        {
+            var inputs = tf.ones((32, 10, 8));
+            var gru = tf.keras.layers.GRU(4);
+            var output = gru.Apply(inputs);
+            Assert.AreEqual((32, 4), output.shape);
+        }
+
+        [TestMethod]
         public void Bidirectional()
         {
             var bi = tf.keras.layers.Bidirectional(keras.layers.LSTM(10, return_sequences:true));
