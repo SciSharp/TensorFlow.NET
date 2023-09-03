@@ -784,7 +784,7 @@ namespace Tensorflow.Keras.Layers
             string recurrent_activation = "sigmoid",
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
-            string recurrent_initializer = "orthogonal", // TODO(Wanglongzhi2001),glorot_uniform has not been developed.
+            string recurrent_initializer = "orthogonal",
             string bias_initializer = "zeros",
             bool unit_forget_bias = true,
             float dropout = 0f,
@@ -907,6 +907,65 @@ namespace Tensorflow.Keras.Layers
                 RecurrentDropout = recurrent_dropout,
                 ResetAfter = reset_after
             });
+
+        /// <summary>
+        /// Gated Recurrent Unit - Cho et al. 2014.
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you pass `None`, no activation is applied.(ie. "linear" activation: `a(x) = x`).</param>
+        /// <param name="recurrent_activation">Activation function to use for the recurrent step. If you pass `None`, no activation is applied. (ie. "linear" activation: `a(x) = x`).</param>
+        /// <param name="use_bias">Boolean, (default `True`), whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the `kernel` weights matrix, used for the linear transformation of the inputs. Default: `glorot_uniform`.</param>
+        /// <param name="recurrent_initializer">Initializer for the `recurrent_kernel` weights matrix, used for the linear transformation of the recurrent state. Default: `orthogonal`.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector. Default: `zeros`.</param>
+        /// <param name="dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the inputs. Default: 0.</param>
+        /// <param name="recurrent_dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the recurrent state. Default: 0.</param>
+        /// <param name="implementation"></param>
+        /// <param name="return_sequences">Boolean. Whether to return the last output in the output sequence, or the full sequence. Default: `False`.</param>
+        /// <param name="return_state">Boolean. Whether to return the last state in addition to the output. Default: `False`.</param>
+        /// <param name="go_backwards">Boolean (default `False`). If True, process the input sequence backwards and return the reversed sequence.</param>
+        /// <param name="stateful">Boolean (default False). If True, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</param>
+        /// <param name="unroll">Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN,</param>
+        /// <param name="time_major">The shape format of the `inputs` and `outputs` tensors.</param>
+        /// <param name="reset_after">GRU convention (whether to apply reset gate after or before matrix multiplication). False = "before", True = "after" (default and cuDNN compatible).</param>
+        /// <returns></returns>
+        public ILayer GRU(
+            int units,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false,
+            bool reset_after = true
+            )
+                => new GRU(new GRUArgs
+                {
+                    Units = units,
+                    Activation = keras.activations.GetActivationFromName(activation),
+                    RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                    KernelInitializer = GetInitializerByName(kernel_initializer),
+                    RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    UseBias = use_bias,
+                    Dropout = dropout,
+                    RecurrentDropout = recurrent_dropout,
+                    ReturnSequences = return_sequences,
+                    ReturnState = return_state,
+                    GoBackwards = go_backwards,
+                    Stateful = stateful,
+                    TimeMajor = time_major,
+                    Unroll = unroll,
+                    ResetAfter = reset_after
+                });
 
         public ILayer Bidirectional(
         ILayer layer,
