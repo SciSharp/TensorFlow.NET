@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Razorvine.Pickle;
+using Razorvine.Pickle.Objects;
 
 namespace Tensorflow.NumPy
 {
@@ -17,28 +18,36 @@ namespace Tensorflow.NumPy
     {
         public object construct(object[] args)
         {
-            //Console.WriteLine(args.Length);
-            //for (int i = 0; i < args.Length; i++)
-            //{
-            //    Console.WriteLine(args[i]);
-            //}
-            Console.WriteLine("MultiArrayConstructor");
-
+            if (args.Length != 3) 
+                throw new InvalidArgumentError($"Invalid number of arguments in MultiArrayConstructor._reconstruct. Expected three arguments. Given {args.Length} arguments.");
+            
+            var types = (ClassDictConstructor)args[0];
+            if (types.module != "numpy" || types.name != "ndarray") 
+                throw new RuntimeError("_reconstruct: First argument must be a sub-type of ndarray");
+            
             var arg1 = (Object[])args[1];
             var dims = new int[arg1.Length];
             for (var i = 0; i < arg1.Length; i++)
             {
                 dims[i] = (int)arg1[i];
             }
+            var shape = new Shape(dims);
 
-            var dtype = TF_DataType.DtInvalid;
-            switch (args[2])
+            TF_DataType dtype;
+            string identifier;
+            if (args[2].GetType() == typeof(string))
+                identifier = (string)args[2];
+            else
+                identifier = Encoding.UTF8.GetString((byte[])args[2]);
+            switch (identifier)
             {
-                case "b": dtype = TF_DataType.DtUint8Ref; break;
-                default: throw new NotImplementedException("cannot parse" + args[2]);
+                case "u": dtype = np.uint32; break;
+                case "c": dtype = np.complex_; break;
+                case "f": dtype = np.float32; break;
+                case "b": dtype = np.@bool; break;
+                default: throw new NotImplementedException($"Unsupported data type: {args[2]}");
             }
-            return new NDArray(new Shape(dims), dtype);
-
+            return new NDArray(shape, dtype);
         }
     }
 }

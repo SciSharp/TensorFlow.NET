@@ -99,9 +99,6 @@ namespace Tensorflow.NumPy
 
         NDArray ReadObjectMatrix(BinaryReader reader, Array matrix, int[] shape)
         {
-            //int data = reader.ReadByte();
-            //Console.WriteLine(data);
-            //Console.WriteLine(reader.ReadByte());
             Stream stream = reader.BaseStream;
             Unpickler.registerConstructor("numpy.core.multiarray", "_reconstruct", new MultiArrayConstructor());
             Unpickler.registerConstructor("numpy", "dtype", new DtypeConstructor());

@@ -28,17 +28,17 @@ namespace Tensorflow.NumPy
 
                 //if (type == typeof(String))
                 //return ReadStringMatrix(reader, matrix, bytes, type, shape);
-                NDArray res = ReadObjectMatrix(reader, matrix, shape);
-                Console.WriteLine("LoadMatrix");
-                Console.WriteLine(res.dims[0]);
-                Console.WriteLine((int)res[0][0]);
-                Console.WriteLine(res.dims[1]);
-                //if (type == typeof(Object))
-                //{
 
-                //}
-                //else 
-                return ReadValueMatrix(reader, matrix, bytes, type, shape);
+                if (type == typeof(Object))
+                {
+                    NDArray res = ReadObjectMatrix(reader, matrix, shape);
+                    // res = res.reconstructedNDArray;
+                    return res.reconstructedArray;
+                }
+                else
+                {
+                    return ReadValueMatrix(reader, matrix, bytes, type, shape);
+                }
             }
 
         }
@@ -133,7 +133,7 @@ namespace Tensorflow.NumPy
                 return typeof(Double);
             if (typeCode.StartsWith("S"))
                 return typeof(String);
-            if (typeCode == "O")
+            if (typeCode.StartsWith("O"))
                 return typeof(Object);
 
             throw new NotSupportedException();

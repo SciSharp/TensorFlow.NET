@@ -16,25 +16,50 @@ namespace Tensorflow.NumPy
     {
         public object construct(object[] args)
         {
-            Console.WriteLine("DtypeConstructor");
-            Console.WriteLine(args.Length);
-            for (int i = 0; i < args.Length; i++)
-            {
-                Console.WriteLine(args[i]);
-            }
-            return new demo();
+            var typeCode = (string)args[0];
+            TF_DataType dtype;
+            if (typeCode == "b1")
+                dtype = np.@bool;
+            else if (typeCode == "i1")
+                dtype = np.@byte;
+            else if (typeCode == "i2")
+                dtype = np.int16;
+            else if (typeCode == "i4")
+                dtype = np.int32;
+            else if (typeCode == "i8")
+                dtype = np.int64;
+            else if (typeCode == "u1")
+                dtype = np.ubyte;
+            else if (typeCode == "u2")
+                dtype = np.uint16;
+            else if (typeCode == "u4")
+                dtype = np.uint32;
+            else if (typeCode == "u8")
+                dtype = np.uint64;
+            else if (typeCode == "f4")
+                dtype = np.float32;
+            else if (typeCode == "f8")
+                dtype = np.float64;
+            else if (typeCode.StartsWith("S"))
+                dtype = np.@string;
+            else if (typeCode.StartsWith("O"))
+                dtype = np.@object;
+            else
+                throw new NotSupportedException();
+            return new TF_DataType_Warpper(dtype);
         }
     }
-    class demo
+    public class TF_DataType_Warpper
     {
-        public void __setstate__(object[] args)
+        TF_DataType dtype { get; set; }
+        public TF_DataType_Warpper(TF_DataType dtype)
         {
-            Console.WriteLine("demo __setstate__");
-            Console.WriteLine(args.Length);
-            for (int i = 0; i < args.Length; i++)
-            {
-                Console.WriteLine(args[i]);
-            }
+            this.dtype = dtype;
+        }
+        public void __setstate__(object[] args) { }
+        public static implicit operator TF_DataType(TF_DataType_Warpper dtypeWarpper)
+        {
+            return dtypeWarpper.dtype;
         }
     }
 }

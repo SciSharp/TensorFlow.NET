@@ -70,7 +70,7 @@ namespace Tensorflow.Keras.Datasets
     public class Imdb
     {
         string origin_folder = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/";
-        string file_name = "imdb.npz";
+        string file_name = "simple.npz";
         string dest_folder = "imdb";
         /// <summary>
         /// Loads the [IMDB dataset](https://ai.stanford.edu/~amaas/data/sentiment/).
@@ -128,13 +128,15 @@ namespace Tensorflow.Keras.Datasets
 
         (NDArray, NDArray) LoadX(byte[] bytes)
         {
-            var y = np.Load_Npz<byte[]>(bytes);
-            return (y["x_train.npy"], y["x_test.npy"]);
+            var y = np.Load_Npz<int[,]>(bytes);
+            var x_train = y["x_train.npy"];
+            var x_test = y["x_test.npy"];
+            return (x_train, x_test);
         }
 
         (NDArray, NDArray) LoadY(byte[] bytes)
         {
-            var y = np.Load_Npz<long[]>(bytes);
+            var y = np.Load_Npz<int[]>(bytes);
             return (y["y_train.npy"], y["y_test.npy"]);
         }
 
