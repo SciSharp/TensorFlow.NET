@@ -5,13 +5,6 @@ using System.Text;
 using Tensorflow.Keras.Utils;
 using Tensorflow.NumPy;
 using System.Linq;
-using Google.Protobuf.Collections;
-using Microsoft.VisualBasic;
-using OneOf.Types;
-using static HDF.PInvoke.H5;
-using System.Data;
-using System.Reflection.Emit;
-using System.Xml.Linq;
 
 namespace Tensorflow.Keras.Datasets
 {
@@ -70,8 +63,9 @@ namespace Tensorflow.Keras.Datasets
     public class Imdb
     {
         string origin_folder = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/";
-        string file_name = "simple.npz";
+        string file_name = "imdb.npz";
         string dest_folder = "imdb";
+
         /// <summary>
         /// Loads the [IMDB dataset](https://ai.stanford.edu/~amaas/data/sentiment/).
         /// </summary>
@@ -95,8 +89,9 @@ namespace Tensorflow.Keras.Datasets
         {
             var dst = Download();
             var fileBytes = File.ReadAllBytes(Path.Combine(dst, file_name));
-            var (x_train, x_test) = LoadX(fileBytes);
             var (y_train, y_test) = LoadY(fileBytes);
+            var (x_train, x_test) = LoadX(fileBytes);
+            
             /*var lines = File.ReadAllLines(Path.Combine(dst, "imdb_train.txt"));
             var x_train_string = new string[lines.Length];
             var y_train = np.zeros(new int[] { lines.Length }, np.int64);
@@ -129,14 +124,12 @@ namespace Tensorflow.Keras.Datasets
         (NDArray, NDArray) LoadX(byte[] bytes)
         {
             var y = np.Load_Npz<int[,]>(bytes);
-            var x_train = y["x_train.npy"];
-            var x_test = y["x_test.npy"];
-            return (x_train, x_test);
+            return (y["x_train.npy"], y["x_test.npy"]);
         }
 
         (NDArray, NDArray) LoadY(byte[] bytes)
         {
-            var y = np.Load_Npz<int[]>(bytes);
+            var y = np.Load_Npz<long[]>(bytes);
             return (y["y_train.npy"], y["y_test.npy"]);
         }
 

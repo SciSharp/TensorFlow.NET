@@ -30,17 +30,12 @@ namespace Tensorflow.NumPy
                 //return ReadStringMatrix(reader, matrix, bytes, type, shape);
 
                 if (type == typeof(Object))
-                {
-                    NDArray res = ReadObjectMatrix(reader, matrix, shape);
-                    // res = res.reconstructedNDArray;
-                    return res.reconstructedArray;
-                }
+                    return ReadObjectMatrix(reader, matrix, shape);
                 else
                 {
                     return ReadValueMatrix(reader, matrix, bytes, type, shape);
                 }
             }
-
         }
 
         public T Load<T>(Stream stream)
@@ -59,7 +54,7 @@ namespace Tensorflow.NumPy
             shape = null;
 
             // The first 6 bytes are a magic string: exactly "x93NUMPY"
-            if (reader.ReadByte() != 0x93) return false;
+            if (reader.ReadChar() != 63) return false;
             if (reader.ReadChar() != 'N') return false;
             if (reader.ReadChar() != 'U') return false;
             if (reader.ReadChar() != 'M') return false;
@@ -75,7 +70,6 @@ namespace Tensorflow.NumPy
             ushort len = reader.ReadUInt16();
 
             string header = new String(reader.ReadChars(len));
-            Console.WriteLine(header);
             string mark = "'descr': '";
             int s = header.IndexOf(mark) + mark.Length;
             int e = header.IndexOf("'", s + 1);

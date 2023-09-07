@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Razorvine.Pickle;
 
-namespace Tensorflow.NumPy
+namespace Tensorflow.NumPy.Pickle
 {
     /// <summary>
     /// 
@@ -46,20 +46,7 @@ namespace Tensorflow.NumPy
                 dtype = np.@object;
             else
                 throw new NotSupportedException();
-            return new TF_DataType_Warpper(dtype);
-        }
-    }
-    public class TF_DataType_Warpper
-    {
-        TF_DataType dtype { get; set; }
-        public TF_DataType_Warpper(TF_DataType dtype)
-        {
-            this.dtype = dtype;
-        }
-        public void __setstate__(object[] args) { }
-        public static implicit operator TF_DataType(TF_DataType_Warpper dtypeWarpper)
-        {
-            return dtypeWarpper.dtype;
+            return new DTypePickleWarpper(dtype);
         }
     }
 }

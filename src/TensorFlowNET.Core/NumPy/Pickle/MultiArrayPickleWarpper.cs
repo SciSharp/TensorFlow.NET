@@ -5,12 +5,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tensorflow.NumPy
+namespace Tensorflow.NumPy.Pickle
 {
-    public partial class NDArray
+    public class MultiArrayPickleWarpper
     {
+        public Shape reconstructedShape { get; set; }
+        public TF_DataType reconstructedDType { get; set; }
         public NDArray reconstructedNDArray { get; set; }
-        public Array reconstructedArray { get; set; }
+        public Array reconstructedMultiArray { get; set; }
+        public MultiArrayPickleWarpper(Shape shape, TF_DataType dtype)
+        {
+            reconstructedShape = shape;
+            reconstructedDType = dtype;
+        }
         public void __setstate__(object[] args)
         {
             if (args.Length != 5)
@@ -18,7 +25,7 @@ namespace Tensorflow.NumPy
 
             var version = (int)args[0]; // version
 
-            var arg1 = (Object[])args[1];
+            var arg1 = (object[])args[1];
             var dims = new int[arg1.Length];
             for (var i = 0; i < arg1.Length; i++)
             {
@@ -26,7 +33,7 @@ namespace Tensorflow.NumPy
             }
             var _ShapeLike = new Shape(dims); // shape
 
-            TF_DataType _DType_co = (TF_DataType_Warpper)args[2]; // DType
+            TF_DataType _DType_co = (DTypePickleWarpper)args[2]; // DType
 
             var F_continuous = (bool)args[3]; // F-continuous
             if (F_continuous)
@@ -45,12 +52,12 @@ namespace Tensorflow.NumPy
 
             if (data.GetType() == typeof(ArrayList))
             {
-                SetState((ArrayList)data);
+                Reconstruct((ArrayList)data);
             }
             else
                 throw new NotImplementedException("");
         }
-        private void SetState(ArrayList arrayList)
+        private void Reconstruct(ArrayList arrayList)
         {
             int ndim = 1;
             var subArrayList = arrayList;
@@ -66,10 +73,8 @@ namespace Tensorflow.NumPy
                 {
                     int[] list = (int[])arrayList.ToArray(typeof(int));
                     Shape shape = new Shape(new int[] { arrayList.Count });
-                    reconstructedArray = list;
+                    reconstructedMultiArray = list;
                     reconstructedNDArray = new NDArray(list, shape);
-                    //SetData(new[] { new Slice() }, new NDArray(list, shape));
-                    //set_shape(shape);
                 }
                 if (ndim == 2)
                 {
@@ -89,20 +94,26 @@ namespace Tensorflow.NumPy
                             var element = subArray[j];
                             if (element == null)
                                 throw new NoNullAllowedException("the element of ArrayList cannot be null.");
-                            list[i,j] = (int) element;
+                            list[i, j] = (int)element;
                         }
                     }
                     Shape shape = new Shape(new int[] { arrayList.Count, secondDim });
-                    reconstructedArray = list;
+                    reconstructedMultiArray = list;
                     reconstructedNDArray = new NDArray(list, shape);
-                    //SetData(new[] { new Slice() }, new NDArray(list, shape));
-                    //set_shape(shape);
                 }
                 if (ndim > 2)
                     throw new NotImplementedException("can't handle ArrayList with more than two dimensions.");
             }
             else
                 throw new NotImplementedException("");
+        }
+        public static implicit operator Array(MultiArrayPickleWarpper arrayWarpper)
+        {
+            return arrayWarpper.reconstructedMultiArray;
+        }
+        public static implicit operator NDArray(MultiArrayPickleWarpper arrayWarpper)
+        {
+            return arrayWarpper.reconstructedNDArray;
         }
     }
 }

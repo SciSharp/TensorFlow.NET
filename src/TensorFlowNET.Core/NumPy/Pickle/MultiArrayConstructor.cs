@@ -5,7 +5,7 @@ using System.Text;
 using Razorvine.Pickle;
 using Razorvine.Pickle.Objects;
 
-namespace Tensorflow.NumPy
+namespace Tensorflow.NumPy.Pickle
 {
     /// <summary>
     /// Creates multiarrays of objects. Returns a primitive type multiarray such as int[][] if 
@@ -18,14 +18,14 @@ namespace Tensorflow.NumPy
     {
         public object construct(object[] args)
         {
-            if (args.Length != 3) 
+            if (args.Length != 3)
                 throw new InvalidArgumentError($"Invalid number of arguments in MultiArrayConstructor._reconstruct. Expected three arguments. Given {args.Length} arguments.");
-            
+
             var types = (ClassDictConstructor)args[0];
-            if (types.module != "numpy" || types.name != "ndarray") 
+            if (types.module != "numpy" || types.name != "ndarray")
                 throw new RuntimeError("_reconstruct: First argument must be a sub-type of ndarray");
-            
-            var arg1 = (Object[])args[1];
+
+            var arg1 = (object[])args[1];
             var dims = new int[arg1.Length];
             for (var i = 0; i < arg1.Length; i++)
             {
@@ -47,7 +47,7 @@ namespace Tensorflow.NumPy
                 case "b": dtype = np.@bool; break;
                 default: throw new NotImplementedException($"Unsupported data type: {args[2]}");
             }
-            return new NDArray(shape, dtype);
+            return new MultiArrayPickleWarpper(shape, dtype);
         }
     }
 }
