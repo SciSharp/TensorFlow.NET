@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Optimizers;
 using Tensorflow.Keras.UnitTest.Helpers;
 using Tensorflow.NumPy;
@@ -77,6 +79,18 @@ public class ModelLoadTest
         }).Result;
 
         model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size, num_epochs);
+    }
+
+    [Ignore]
+    [TestMethod]
+    public void LSTMLoad()
+    {
+        var model = tf.keras.models.load_model(@"Assets/lstm_from_sequential");
+        model.summary();
+        model.compile(tf.keras.optimizers.Adam(), tf.keras.losses.MeanSquaredError(), new string[] { "accuracy" });
+        var inputs = tf.random.normal(shape: (10, 5, 3));
+        var outputs = tf.random.normal(shape: (10, 1));
+        model.fit(inputs.numpy(), outputs.numpy(), batch_size: 10, epochs: 5, workers: 16, use_multiprocessing: true);
     }
 
     [Ignore]

@@ -2,7 +2,7 @@
 
 namespace Tensorflow.Keras.Losses;
 
-public class SigmoidFocalCrossEntropy : LossFunctionWrapper, ILossFunc
+public class SigmoidFocalCrossEntropy : LossFunctionWrapper
 {
     float _alpha;
     float _gamma;
@@ -19,7 +19,6 @@ public class SigmoidFocalCrossEntropy : LossFunctionWrapper, ILossFunc
         _alpha = alpha;
         _gamma = gamma;
     }
-
 
     public override Tensor Apply(Tensor y_true, Tensor y_pred, bool from_logits = false, int axis = -1)
     {

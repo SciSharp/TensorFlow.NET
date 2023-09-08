@@ -44,7 +44,6 @@ namespace Tensorflow.Keras
         /// <summary>
         /// Register the name-activation mapping in this static class.
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="activation"></param>
         private static void RegisterActivation(Activation activation)
         {

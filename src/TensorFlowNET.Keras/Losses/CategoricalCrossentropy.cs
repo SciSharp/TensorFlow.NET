@@ -1,8 +1,9 @@
 ﻿namespace Tensorflow.Keras.Losses;
 
-public class CategoricalCrossentropy : LossFunctionWrapper, ILossFunc
+public class CategoricalCrossentropy : LossFunctionWrapper
 {
     float label_smoothing;
+
     public CategoricalCrossentropy(
         bool from_logits = false,
         float label_smoothing = 0,
@@ -14,7 +15,6 @@ public class CategoricalCrossentropy : LossFunctionWrapper, ILossFunc
     {
         this.label_smoothing = label_smoothing;
     }
-
 
     public override Tensor Apply(Tensor y_true, Tensor y_pred, bool from_logits = false, int axis = -1)
     {

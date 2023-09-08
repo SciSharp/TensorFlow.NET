@@ -6,6 +6,7 @@ using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 using System;
 using System.Linq;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
@@ -252,7 +253,7 @@ namespace Tensorflow.Keras.Layers
             return (attention_output, attention_scores);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensors _inp;
             Tensor _mask = null;
@@ -349,7 +350,7 @@ namespace Tensorflow.Keras.Layers
             //}
 
             if (return_attention_scores)
-                return (attention_output, attention_scores);
+                return (attention_output, attention_scores.Single);
             return attention_output;
         }
     }

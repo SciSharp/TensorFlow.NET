@@ -6,6 +6,7 @@ using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Saving;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers {
     public class Permute : Layer
@@ -28,7 +29,7 @@ namespace Tensorflow.Keras.Layers {
             built = true;
             _buildInputShape = input_shape;
         }
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensor outputs = inputs;
             return tf.transpose(outputs, new Axis(permute));

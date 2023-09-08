@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
@@ -101,7 +102,7 @@ namespace Tensorflow.Keras.Layers
             return input_shape;
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensor outputs = null;
             var inputs_dtype = inputs.dtype.as_base_dtype();
@@ -152,9 +153,22 @@ namespace Tensorflow.Keras.Layers
             }
             else
             {
+                var input_dtype = inputs.dtype;
+                if ((input_dtype == tf.float16) && DType == tf.float32) inputs = tf.cast(inputs, tf.float32);
+                (Tensor mean, Tensor variance) = tf.nn.moments(inputs, axis, keep_dims: true);
 
+                (Tensor scale, Tensor offset) = (_broadcast(gamma), _broadcast(beta));
+
+                outputs = tf.nn.batch_normalization(
+                inputs,
+                mean,
+                variance,
+                offset: offset,
+                scale: scale,
+                variance_epsilon: epsilon);
+
+                outputs = tf.cast(outputs, input_dtype);
             }
-
             // If some components of the shape got lost due to adjustments, fix that.
             outputs.shape = input_shape;
 

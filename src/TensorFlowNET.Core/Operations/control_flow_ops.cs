@@ -675,16 +675,17 @@ namespace Tensorflow
             }
         }
 
-        public static Tensor[] while_loop(Func<Tensor[], Tensor> cond,
-            Func<Tensor[], Tensor[]> body,
-            Tensor[] loop_vars,
+        public static Tensors while_loop(Func<Tensors, Tensor> cond,
+            Func<Tensors, Tensors> body,
+            Tensors loop_vars,
             int parallel_iterations = 10,
             string name = null)
         {
             var executing_eagerly = tf.Context.executing_eagerly();
             if (!executing_eagerly)
             {
-                throw new NotImplementedException("");
+                return while_v2.while_loop(cond, body, loop_vars, parallel_iterations: parallel_iterations,
+                    name: name);
             }
 
             return tf_with(ops.name_scope("name", "while"), delegate

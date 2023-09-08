@@ -102,11 +102,12 @@ namespace Tensorflow
             {
                 throw new ValueError("\'image\' must be fully defined.");
             }
-            for (int x = 1; x < 4; x++)
+            var dims = image_shape["-3:"];
+            foreach (var dim in dims.dims)
             {
-                if (image_shape.dims[x] == 0)
+                if (dim == 0)
                 {
-                    throw new ValueError(String.Format("inner 3 dims of \'image.shape\' must be > 0: {0}", image_shape));
+                    throw new ValueError("inner 3 dimensions of \'image\' must be > 0: " + image_shape);
                 }
             }
 
@@ -208,7 +209,7 @@ namespace Tensorflow
         }
 
         public static Tensor flip_left_right(Tensor image)
-            => _flip(image, 1, "flip_left_right");
+            => _flip(image, 0, "flip_left_right");
 
         public static Tensor flip_up_down(Tensor image)
             => _flip(image, 1, "flip_up_down");
@@ -226,7 +227,7 @@ namespace Tensorflow
                   }
                   else if (shape.ndim == 4)
                   {
-                      return gen_array_ops.reverse(image, ops.convert_to_tensor(new[] { flip_index + 1 }));
+                      return gen_array_ops.reverse_v2(image, ops.convert_to_tensor(new[] { (flip_index + 1) % 2 }));
                   }
                   else
                   {
@@ -965,9 +966,9 @@ new_height, new_width");
                  if (Array.Exists(new[] { dtypes.float16, dtypes.float32 }, orig_dtype => orig_dtype == orig_dtype))
                      image = convert_image_dtype(image, dtypes.float32);
 
-                 var num_pixels_ = array_ops.shape(image).dims;
-                 num_pixels_ = num_pixels_.Skip(num_pixels_.Length - 3).Take(num_pixels_.Length - (num_pixels_.Length - 3)).ToArray();
-                 Tensor num_pixels = math_ops.reduce_prod(new Tensor(num_pixels_));
+                 var x = image.shape["-3:"];
+                 var num_pixels = math_ops.reduce_prod(x);
+
                  Tensor image_mean = math_ops.reduce_mean(image, axis: new(-1, -2, -3), keepdims: true);
 
                  var stddev = math_ops.reduce_std(image, axis: new(-1, -2, -3), keepdims: true);
@@ -1778,10 +1779,10 @@ new_height, new_width");
             {
                 // a_y_min: [0], a_x_min: [1], a_y_max: [2], a_x_max[3]
                 var a_xy_minmax = array_ops.split(
-                    value: boxes_a, num_split: 4, axis: 2);
+                    value: boxes_a, num_or_size_splits: 4, axis: ops.convert_to_tensor(2));
                 // b_y_min: [0], b_x_min: [1], b_y_max: [2], b_x_max[3]    
                 var b_xy_minmax = array_ops.split(
-                    value: boxes_b, num_split: 4, axis: 2);
+                    value: boxes_b, num_or_size_splits: 4, axis: ops.convert_to_tensor(2));
 
                 var i_xmin = math_ops.maximum(
                     a_xy_minmax[1], array_ops.transpose(b_xy_minmax[1], new[] { 0, 2, 1 }));
@@ -1943,7 +1944,7 @@ new_height, new_width");
                 using (ops.name_scope("canonicalize_coordinates"))
                 {
                     // y_1 = [0], x_1 = [1], y_2 = [2], x_2 = [3]
-                    var yx = array_ops.split(value: boxes, num_split: 4, axis: 2);
+                    var yx = array_ops.split(value: boxes, num_or_size_splits: 4, axis: ops.convert_to_tensor(2));
                     var y_1_is_min = math_ops.reduce_all(
                         gen_math_ops.less_equal(yx[0][0, 0, 0], yx[2][0, 0, 0]));
                     var y_minmax = control_flow_ops.cond(

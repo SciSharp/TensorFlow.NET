@@ -7,39 +7,43 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Tensorflow.Keras</RootNamespace>
     <Platforms>AnyCPU;x64</Platforms>
-    <Version>0.10.5</Version>
+    <Version>0.11.3</Version>
     <Authors>Haiping Chen</Authors>
     <Product>Keras for .NET</Product>
-    <Copyright>Apache 2.0, Haiping Chen 2023</Copyright>
+    <Copyright>Apache 2.0, Haiping Chen since 2018</Copyright>
     <PackageId>TensorFlow.Keras</PackageId>
     <PackageProjectUrl>https://github.com/SciSharp/TensorFlow.NET</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
     <RepositoryUrl>https://github.com/SciSharp/TensorFlow.NET</RepositoryUrl>
-    <PackageReleaseNotes>Keras for .NET is a C# version of Keras ported from the python version.
+    <PackageReleaseNotes>
+		Keras for .NET is a C# version of Keras ported from the python version.
 
-* Support CIFAR-10 dataset in keras.datasets.
-* Support Conv2D functional API.
-* Support BatchNormalization layer.
-* Building keras model in subclass, functional and sequential api
-* Implemented backward_function.
-* Support model.load_weights.
-* Add Subtract layer
-* Text preprocessing
-* Preprocessing.timeseries_dataset_from_array
-* Fixed memory leak for YOLOv3 model.</PackageReleaseNotes>
+		* Support CIFAR-10 dataset in keras.datasets.
+		* Support Conv2D functional API.
+		* Support BatchNormalization layer.
+		* Building keras model in subclass, functional and sequential api
+		* Implemented backward_function.
+		* Support model.load_weights.
+		* Add Subtract layer
+		* Text preprocessing
+		* Preprocessing.timeseries_dataset_from_array
+		* Fixed memory leak for YOLOv3 model.
+		* Support RNN and LSTM models
+		* Support Transformer model
+	</PackageReleaseNotes>
     <Description>Keras for .NET
 
 Keras is an API designed for human beings, not machines. Keras follows best practices for reducing cognitive load: it offers consistent &amp; simple APIs, it minimizes the number of user actions required for common use cases, and it provides clear &amp; actionable error messages.</Description>
     <Company>SciSharp STACK</Company>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <PackageTags>tensorflow, keras, deep learning, machine learning</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageOutputPath>packages</PackageOutputPath>
     <RepositoryType>Git</RepositoryType>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>Open.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>0.10.5.0</AssemblyVersion>
-    <FileVersion>0.10.5.0</FileVersion>
+    <AssemblyVersion>0.11.3.0</AssemblyVersion>
+    <FileVersion>0.11.3.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Configurations>Debug;Release;GPU</Configurations>
   </PropertyGroup>
@@ -70,9 +74,77 @@ Keras is an API designed for human beings, not machines. Keras follows best prac
     <DefineConstants />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|x64'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|x64'">
+    <Optimize>True</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|x64'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|x64'">
+    <Optimize>False</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|netstandard2.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|netstandard2.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1573,1591,1712,8602,8603,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="HDF5-CSharp" Version="1.16.3" />
-    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
+    <PackageReference Include="HDF5-CSharp" Version="1.18.0" />
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 

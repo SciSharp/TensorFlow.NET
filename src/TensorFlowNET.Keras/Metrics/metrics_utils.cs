@@ -304,7 +304,7 @@ public class metrics_utils
         var NEG_INF = -1e10;
         var (_, top_k_idx) = tf.math.top_k(x, k, sorted: false);
         var top_k_mask = tf.reduce_sum(
-            tf.one_hot(top_k_idx, (int)x.shape[-1], axis: -1), axis: -2);
+            tf.one_hot(top_k_idx.Single, (int)x.shape[-1], axis: -1), axis: -2);
         return x * top_k_mask + NEG_INF * (1 - top_k_mask);
     }
 }

@@ -21,7 +21,7 @@ namespace Tensorflow.Keras.Engine
         {
             var data = iterator.next();
             var x_size = data_handler.DataAdapter.GetDataset().FirstInputTensorCount;
-            var outputs = train_step(data_handler, new Tensors(data.Take(x_size)), new Tensors(data.Skip(x_size)));
+            var outputs = train_step(data_handler, new Tensors(data.Take(x_size).ToArray()), new Tensors(data.Skip(x_size).ToArray()));
             tf_with(ops.control_dependencies(new object[0]), ctl => _train_counter.assign_add(1));
             return outputs;
         }
@@ -29,7 +29,9 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// The logic for one training step.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data_handler"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         /// <returns></returns>
         Dictionary<string, float> train_step(DataHandler data_handler, Tensors x, Tensors y)
         {

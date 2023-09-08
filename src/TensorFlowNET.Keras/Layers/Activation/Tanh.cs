@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
+using Tensorflow.Common.Types;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Layers
@@ -13,7 +14,7 @@ namespace Tensorflow.Keras.Layers
         {
             // Tanh has no arguments
         }
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensor x = inputs;
 

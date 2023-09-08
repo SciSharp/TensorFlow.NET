@@ -7,6 +7,8 @@ using HDF5CSharp;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 namespace Tensorflow.Keras.Saving
 {
     public class hdf5_format
@@ -131,7 +133,7 @@ namespace Tensorflow.Keras.Saving
                 long g = H5G.open(f, name);
                 var weight_names = load_attributes_from_hdf5_group(g, "weight_names");
                 foreach (var i_ in weight_names)
-                {
+                { 
                     (success, Array result) = Hdf5.ReadDataset<float>(g, i_);
                     if (success)
                         weight_values.Add(np.array(result));
@@ -192,8 +194,13 @@ namespace Tensorflow.Keras.Saving
                     var tensor = val.AsTensor();
                     if (name.IndexOf("/") > 1)
                     {
-                        var crDataGroup = Hdf5.CreateOrOpenGroup(g, Hdf5Utils.NormalizedName(name.Split('/')[0]));
-                        WriteDataset(crDataGroup, name.Split('/')[1], tensor);
+                        var crDataGroup = g;
+                        string[] name_split = name.Split('/');
+                        for(int i = 0; i < name_split.Length - 1; i++)
+                        {
+                            crDataGroup = Hdf5.CreateOrOpenGroup(crDataGroup, Hdf5Utils.NormalizedName(name_split[i]));
+                        }
+                        WriteDataset(crDataGroup, name_split[name_split.Length - 1], tensor);
                         Hdf5.CloseGroup(crDataGroup);
                     }
                     else

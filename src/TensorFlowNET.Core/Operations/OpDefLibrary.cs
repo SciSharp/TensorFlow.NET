@@ -15,9 +15,11 @@
 ******************************************************************************/
 
 using Google.Protobuf;
+using Google.Protobuf.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.Functions;
 using static Tensorflow.Binding;
 using static Tensorflow.OpDef.Types;
 
@@ -387,9 +389,13 @@ namespace Tensorflow
                 case "list(type)":
                     attr_value.List.Type.AddRange((value as IList<TF_DataType>).Select(x => _MakeType(x, attr_def)));
                     break;
+                case "list(float)":
+                    if (value != null)
+                        attr_value.List.F.AddRange((value as IEnumerable<float>).ToArray());
+                    break;
                 case "list(int)":
                     if (value != null)
-                        attr_value.List.I.AddRange((value as int[]).Select(x => Convert.ToInt64(x)));
+                        attr_value.List.I.AddRange((value as IEnumerable<int>).Select(x => Convert.ToInt64(x)));
                     break;
                 case "bool":
                     attr_value.B = (bool)value;
@@ -420,11 +426,61 @@ namespace Tensorflow
                 case "list(shape)":
                     attr_value.List.Shape.AddRange((value as Shape[]).Select(x => _MakeShape(x, attr_def)));
                     break;
+                case "func":
+                    attr_value.Func = _MakeFunc(value, attr_def.Name);
+                    break;
+                case "list(func)":
+                    attr_value.List.Func.AddRange(_MakeFuncList(value, attr_def.Name));
+                    break;
+                case "list(string)":
+                    attr_value.List.S.AddRange((value as IEnumerable<string>).Select(x => ByteString.CopyFromUtf8(x)));
+                    break;
                 default:
                     throw new TypeError($"SetAttrValue: can't not convert attr_def.Type '{attr_def.Type}' to protos.");
             }
 
             return attr_value;
+        }
+
+        private NameAttrList _MakeFunc(object func, string arg_name)
+        {
+            if(func is NameAttrList attrList)
+            {
+                return attrList;
+            }
+            NameAttrList fn_attr;
+            if(func is string funcStr)
+            {
+                fn_attr = new NameAttrList() { Name = funcStr };
+            }
+            else if(func is ConcreteFunction concrete)
+            {
+                concrete.AddTograph(ops.get_default_graph());
+                fn_attr = concrete.AsNameAttrList;
+            }
+            else if(func is EagerDefinedFunction eager)
+            {
+                eager.AddToGraph(ops.get_default_graph());
+                fn_attr = new NameAttrList() { Name = eager.Name };
+            }
+            else
+            {
+                throw new TypeError($"Don't know how to convert {func} to a func for argument {arg_name}");
+            }
+            return fn_attr;
+        }
+
+        private List<NameAttrList> _MakeFuncList(object funcList, string arg_name)
+        {
+            List<NameAttrList> res = new List<NameAttrList>();
+            if(funcList is IEnumerable enumerable)
+            {
+                foreach(var func in enumerable)
+                {
+                    res.Add(_MakeFunc(func, arg_name));
+                }
+            }
+            return res;
         }
 
         private bool _IsListParameter(ArgDef arg)

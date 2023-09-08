@@ -8,6 +8,7 @@ using Tensorflow.Gradients;
 using Tensorflow.Graphs;
 using Tensorflow.Train;
 using Tensorflow.Util;
+using Tensorflow.Common.Extensions;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Functions
@@ -40,6 +41,18 @@ namespace Tensorflow.Functions
         public Tensor[] FlatStructuredOutputs => func_graph.FlatStructuredOutputs;
         public IEnumerable<IVariableV1> Variables => func_graph.Variables;
         public IEnumerable<IVariableV1> TrainableVariables => func_graph.TrainableVariables;
+        internal NameAttrList AsNameAttrList
+        {
+            get
+            {
+                NameAttrList ret = new() { Name = this.Name };
+                foreach (var (name, value) in _attrs)
+                {
+                    ret.Attr[name] = value;
+                }
+                return ret;
+            }
+        }
 
         public ConcreteFunction(string name)
         {

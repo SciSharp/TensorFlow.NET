@@ -1,23 +1,18 @@
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.ArgsDefinition;
-using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tensorflow.Keras.Saving;
-
-/// <summary>
-/// Base class for attention layers that can be used in sequence DNN/CNN models.
-///This file follows the terminology of https://arxiv.org/abs/1706.03762 Figure 2.
-///Attention is formed by three tensors: Query, Key and Value.
-/// </summary>
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
 
     /// <summary>
     /// Base Attention class for Dense networks.
+    /// This file follows the terminology of https://arxiv.org/abs/1706.03762 Figure 2.
+    /// Attention is formed by three tensors: Query, Key and Value.
     /// This class is suitable for Dense or CNN networks, and not for RNN networks.
     /// Implementations of attention mechanisms should inherit from this class, and
     /// reuse the `apply_attention_scores()` method.
@@ -114,7 +109,7 @@ namespace Tensorflow.Keras.Layers
             return (tf.linalg.einsum("bij,bjk->bik", (weights, value)), weights);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             Tensors _inp;
             Tensors _mask = null;

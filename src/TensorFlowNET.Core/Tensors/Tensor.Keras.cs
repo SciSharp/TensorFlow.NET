@@ -1,6 +1,6 @@
 ﻿/*****************************************************************************
    Copyright 2018 The TensorFlow.NET Authors. All Rights Reserved.
-
+   
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -14,12 +14,14 @@
    limitations under the License.
 ******************************************************************************/
 
-namespace Tensorflow
-{
-    public partial class tensorflow
-    {
-        public Tensor exp(Tensor x,
-                string name = null) => gen_math_ops.exp(x, name);
+namespace Tensorflow;
 
-    }
+public partial class Tensor
+{
+    public bool IsFromKerasTensor { get; set; }
+
+    /// <summary>
+    /// Keras History: (Layer, (node_index, tensor_index))
+    /// </summary>
+    public KerasHistory KerasHistory { get; set; }
 }

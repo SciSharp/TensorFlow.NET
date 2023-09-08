@@ -68,19 +68,26 @@ namespace Tensorflow
         /// <param name="name">A name for the operation (optional)</param>
         /// <returns>if num_or_size_splits is a scalar returns num_or_size_splits Tensor objects;
         /// if num_or_size_splits is a 1-D Tensor returns num_or_size_splits.get_shape[0] Tensor objects resulting from splitting value.</returns>
-        public Tensor[] split(Tensor value, int num_split, Tensor axis, string name = null)
+        public Tensor[] split(Tensor value, int num_split, Axis axis, string name = null)
             => array_ops.split(
                 value: value,
-                num_split: num_split,
+                num_or_size_splits: num_split,
                 axis: axis,
                 name: name);
 
-        public Tensor[] split(Tensor value, int num_split, int axis, string name = null)
+        public Tensor[] split(Tensor value, int[] num_split, Axis axis, string name = null)
             => array_ops.split(
                 value: value,
-                num_split: num_split,
+                num_or_size_splits: num_split,
                 axis: axis,
                 name: name);
+
+        //public Tensor[] split(Tensor value, int num_split, Axis axis, string name = null)
+        //    => array_ops.split(
+        //        value: value,
+        //        num_or_size_splits: num_split,
+        //        axis: axis,
+        //        name: name);
 
         public Tensor ensure_shape(Tensor x, Shape shape, string name = null)
         {

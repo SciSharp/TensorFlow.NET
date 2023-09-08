@@ -77,6 +77,9 @@ namespace Tensorflow
         public static Tensor argmax(Tensor input, Axis dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
             => gen_math_ops.arg_max(input, dimension, output_type: output_type, name: name);
 
+        public static Tensor argmin(Tensor input, Axis dimension, TF_DataType output_type = TF_DataType.TF_INT64, string name = null)
+            => gen_math_ops.arg_min(input, dimension, output_type: output_type, name: name);
+
         public static Tensor round(Tensor x, string name = null)
         {
             x = ops.convert_to_tensor(x, name: "x");
@@ -269,7 +272,7 @@ namespace Tensorflow
             => tf.Context.ExecuteOp("Erf", name, new ExecuteOpArgs(x));
 
         public static Tensor sqrt(Tensor x, string name = null)
-            => gen_math_ops.sqrt(x, name: name);
+            => tf.Context.ExecuteOp("Sqrt", name, new ExecuteOpArgs(x));
 
         public static Tensor multiply(Tensor x, Tensor y, string name = null)
             => tf.Context.ExecuteOp("Mul", name, new ExecuteOpArgs(x, y));
@@ -587,6 +590,17 @@ namespace Tensorflow
             return _may_reduce_to_scalar(keepdims, axis, max);
         }
 
+        public static Tensor reduce_euclidean_norm(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
+        {
+            var r = _ReductionDims(input_tensor, axis);
+            var distance = tf.Context.ExecuteOp("EuclideanNorm", name,
+                new ExecuteOpArgs(input_tensor, r).SetAttributes(new
+                {
+                    keep_dims = keepdims
+                }));
+            return _may_reduce_to_scalar(keepdims, axis, distance);
+        }
+
         public static Tensor reduce_max(Tensor input_tensor, Axis axis = null, bool keepdims = false, string name = null)
         {
             var r = _ReductionDims(input_tensor, axis);
@@ -780,10 +794,7 @@ namespace Tensorflow
             bool adjoint_a = false, bool adjoint_b = false,
             bool a_is_sparse = false, bool b_is_sparse = false,
             string name = null)
-        {
-            Tensor result = null;
-
-            tf_with(ops.name_scope(name, "MatMul", new Tensor[] { a, b }), scope =>
+            => tf_with(ops.name_scope(name, "MatMul", (a, b)), scope =>
             {
                 name = scope;
 
@@ -804,11 +815,9 @@ namespace Tensorflow
                     transpose_b = true;
                 }
 
-                result = gen_math_ops.mat_mul(a, b, transpose_a, transpose_b, name);
+                return tf.Context.ExecuteOp("MatMul", name, new ExecuteOpArgs(a, b)
+                    .SetAttributes(new { transpose_a, transpose_b }));
             });
-
-            return result;
-        }
 
         public static Tensor batch_matmul(Tensor x, Tensor y,
             bool adj_x = false, bool adj_y = false,

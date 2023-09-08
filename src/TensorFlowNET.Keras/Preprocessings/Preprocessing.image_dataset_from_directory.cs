@@ -9,6 +9,37 @@ namespace Tensorflow.Keras
         public static string[] WHITELIST_FORMATS = new[] { ".bmp", ".gif", ".jpeg", ".jpg", ".png" };
 
         /// <summary>
+        /// Function that calculates the classification statistics for a given array of classified data. 
+        /// The function takes an array of classified data as input and returns a dictionary containing the count and percentage of each class in the input array. 
+        /// This function can be used to analyze the distribution of classes in a dataset or to evaluate the performance of a classification model.
+        /// </summary>
+        /// <remarks>
+        /// code from copilot
+        /// </remarks>
+        /// <param name="label_ids"></param>
+        /// <param name="label_class_names"></param>
+        Dictionary<string, double> get_classification_statistics(int[] label_ids, string[] label_class_names)
+        {
+            var countDict = label_ids.GroupBy(x => x)
+                        .ToDictionary(g => g.Key, g => g.Count());
+            var totalCount = label_ids.Length;
+            var ratioDict = label_class_names.ToDictionary(name => name,
+                                                    name =>
+                                                    (double)(countDict.ContainsKey(Array.IndexOf(label_class_names, name)) 
+                                                    ? countDict[Array.IndexOf(label_class_names, name)] : 0)
+                                                    / totalCount);
+
+            print("Classification statistics:");
+            foreach (string labelName in label_class_names)
+            {
+                double ratio = ratioDict[labelName];
+                print($"{labelName}: {ratio * 100:F2}%");
+            }
+
+            return ratioDict;
+        }
+
+        /// <summary>
         /// Generates a `tf.data.Dataset` from image files in a directory.
         /// https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image_dataset_from_directory
         /// </summary>
@@ -53,11 +84,13 @@ namespace Tensorflow.Keras
                 follow_links: follow_links);
 
             (image_paths, label_list) = keras.preprocessing.dataset_utils.get_training_or_validation_split(image_paths, label_list, validation_split, subset);
+            get_classification_statistics(label_list, class_name_list);
 
             var dataset = paths_and_labels_to_dataset(image_paths, image_size, num_channels, label_list, label_mode, class_name_list.Length, interpolation);
             if (shuffle)
                 dataset = dataset.shuffle(batch_size * 8, seed: seed);
             dataset = dataset.batch(batch_size);
+            dataset.class_names = class_name_list;
             return dataset;
         }
 
@@ -129,7 +162,7 @@ namespace Tensorflow.Keras
             var indices = z.map(m =>
             {
                 var (i, positions) = m;
-                return tf.range(positions[i], positions[i] + sequence_length_tensor * sampling_rate_tensor, sampling_rate_tensor);
+                return tf.range(positions.Single[i], positions.Single[i] + sequence_length_tensor * sampling_rate_tensor, sampling_rate_tensor);
             }, num_parallel_calls: -1);
             var dataset = sequences_from_indices(data, indices, start_index, end_index);
 

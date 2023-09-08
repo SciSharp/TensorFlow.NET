@@ -46,9 +46,9 @@ namespace Tensorflow
     /// </summary>
     public partial class Operation : ITensorOrOperation
     {
-        private readonly IntPtr _handle; // _c_op in python
+        protected IntPtr _handle; // _c_op in python
 
-        private readonly Graph _graph;
+        protected Graph _graph;
 
         internal Func<Operation, object[], Tensor[]> _gradient_function;
 
@@ -69,6 +69,7 @@ namespace Tensorflow
         //private OperationDescription _op_desc;
 
         public NodeDef node_def => GetNodeDef();
+        protected Operation() { }
 
         public Operation(IntPtr handle, Graph g = null)
         {
@@ -185,7 +186,16 @@ namespace Tensorflow
         }
 
         public virtual T get_attr<T>(string name)
-            => (T)get_attr(name);
+        {
+            if (typeof(T).IsValueType)
+            {
+                return (T)Convert.ChangeType(get_attr(name), typeof(T));
+            }
+            else
+            {
+                return (T)get_attr(name);
+            }
+        }
 
         internal unsafe TF_DataType _get_attr_type(string name)
         {
@@ -196,12 +206,11 @@ namespace Tensorflow
             return result;
         }
 
-        internal unsafe int _get_attr_int(string name)
+        internal unsafe long _get_attr_int(string name)
         {
-            Status status = new();
-            int result;
-            c_api.TF_OperationGetAttrInt(_handle, name, new IntPtr(&result), status);
-            status.Check(true);
+            long result;
+            c_api.TF_OperationGetAttrInt(_handle, name, new IntPtr(&result), tf.Status);
+            tf.Status.Check(true);
             return result;
         }
 

@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Tensorflow.NumPy;
 using Tensorflow.Operations;
 
 namespace Tensorflow
@@ -42,9 +43,19 @@ namespace Tensorflow
 
             public Tensor multiply(Tensor x, Tensor y, string name = null)
                 => math_ops.multiply(x, y, name: name);
-
             public Tensor divide_no_nan(Tensor a, Tensor b, string name = null)
                 => math_ops.div_no_nan(a, b);
+
+            /// <summary>
+            /// Computes the Euclidean norm of elements across dimensions of a tensor.
+            /// </summary>
+            /// <param name="input_tensor">The tensor to reduce. Should have numeric type.</param>
+            /// <param name="axis">The dimensions to reduce. If `None` (the default), reduces all dimensions.Must be in the range `[-rank(input_tensor), rank(input_tensor))`</param>
+            /// <param name="keepdims">If true, retains reduced dimensions with length 1.</param>
+            /// <param name="name">A name for the operation (optional).</param>
+            /// <returns>The reduced tensor, of the same dtype as the input_tensor.</returns>
+            public Tensor reduce_euclidean_norm(Tensor input_tensor, Axis? axis = null, bool keepdims = false, string name = null)
+                => math_ops.reduce_euclidean_norm(input_tensor, axis: axis, keepdims: keepdims, name);
 
             public Tensor square(Tensor x, string name = null)
                 => math_ops.square(x, name: name);
@@ -354,7 +365,7 @@ namespace Tensorflow
             => a / b;
 
         public Tensor sqrt(Tensor a, string name = null)
-            => gen_math_ops.sqrt(a, name);
+            => math_ops.sqrt(a, name);
 
         public Tensor sign(Tensor a, string name = null)
             => gen_math_ops.sign(a, name);
@@ -452,7 +463,18 @@ namespace Tensorflow
         /// <returns></returns>
         public Tensor multiply<Tx, Ty>(Tx x, Ty y, string name = null)
             => gen_math_ops.mul(ops.convert_to_tensor(x), ops.convert_to_tensor(y), name: name);
-
+        /// <summary>
+        /// return scalar product
+        /// </summary>
+        /// <typeparam name="Tx"></typeparam>
+        /// <typeparam name="Ty"></typeparam>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="axes"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor dot_prod<Tx, Ty>(Tx x, Ty y, NDArray axes, string name = null)
+            => math_ops.tensordot(convert_to_tensor(x), convert_to_tensor(y), axes, name: name);
         public Tensor negative(Tensor x, string name = null)
             => gen_math_ops.neg(x, name);
 
@@ -600,5 +622,7 @@ namespace Tensorflow
             => gen_math_ops.squared_difference(x: x, y: y, name: name);
         public Tensor complex(Tensor real, Tensor imag, Tensorflow.TF_DataType? dtype = null, 
                 string name = null) => gen_ops.complex(real, imag, dtype, name);
+        public Tensor exp(Tensor x,
+                string name = null) => gen_math_ops.exp(x, name);
     }
 }

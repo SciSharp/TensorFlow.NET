@@ -1,4 +1,5 @@
-﻿using Tensorflow.Keras.Engine;
+﻿using Tensorflow.Common.Types;
+using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
 using Tensorflow.NumPy;
 using Tensorflow.Training;
@@ -14,7 +15,7 @@ namespace Tensorflow.Keras
         List<ILayer> Layers { get; }
         List<INode> InboundNodes { get; }
         List<INode> OutboundNodes { get; }
-        Tensors Apply(Tensors inputs, Tensor state = null, bool training = false);
+        Tensors Apply(Tensors inputs, Tensors states = null, bool? training = false, IOptionalArgs? optional_args = null);
         List<IVariableV1> TrainableVariables { get; }
         List<IVariableV1> TrainableWeights { get; }
         List<IVariableV1> NonTrainableWeights { get; }

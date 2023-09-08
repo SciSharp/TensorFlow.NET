@@ -107,7 +107,13 @@ namespace Tensorflow.NumPy
         public static implicit operator NDArray(bool value)
             => new NDArray(value);
 
+        public static implicit operator NDArray(byte value)
+            => new NDArray(value);
+
         public static implicit operator NDArray(int value)
+            => new NDArray(value);
+
+        public static implicit operator NDArray(long value)
             => new NDArray(value);
 
         public static implicit operator NDArray(float value)

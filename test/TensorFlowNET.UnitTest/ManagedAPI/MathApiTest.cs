@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
 using Tensorflow;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 
 namespace TensorFlowNET.UnitTest.ManagedAPI
@@ -56,6 +58,27 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var expected = new float[] { 0.8427007f, -0.5204999f, 0.99999845f, -0.9970206f, 0f, -1f };
             var actual = erf.ToArray<float>();
             Assert.IsTrue(Equal(expected, actual));
+        }
+
+        [TestMethod]
+        public void ReduceEuclideanNorm()
+        {
+            var x = tf.constant(new[,] { { 1, 2, 3 }, { 1, 1, 1 } });
+            Assert.AreEqual(tf.math.reduce_euclidean_norm(x).numpy(), 4);
+
+            var y = tf.constant(new[,] { { 1, 2, 3 }, { 1, 1, 1 } }, dtype: tf.float32);
+            Assert.IsTrue(Equal(tf.math.reduce_euclidean_norm(y).numpy(), 4.1231055f));
+
+            Assert.IsTrue(Equal(tf.math.reduce_euclidean_norm(y, 0).ToArray<float>(), 
+                new float[] { np.sqrt(2f), np.sqrt(5f), np.sqrt(10f) }));
+
+            Assert.IsTrue(Equal(tf.math.reduce_euclidean_norm(y, 1).ToArray<float>(),
+                new float[] { np.sqrt(14f), np.sqrt(3f) }));
+
+            Assert.IsTrue(Equal(tf.math.reduce_euclidean_norm(y, 1, keepdims: true).ToArray<float>(),
+                new float[] { np.sqrt(14f), np.sqrt(3f) }));
+
+            Assert.AreEqual(tf.math.reduce_euclidean_norm(y, (0, 1)).numpy(), np.sqrt(17f));
         }
     }
 }

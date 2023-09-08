@@ -74,8 +74,3 @@ namespace Tensorflow
             => IsScalar ? $"{axis[0]}" : $"({string.Join(", ", axis)})";
     }
 }
-
-namespace System.Runtime.CompilerServices
-{
-    internal static class IsExternalInit { }
-}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Tensorflow.Common.Types;
 using Tensorflow.Framework;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
@@ -23,7 +24,7 @@ namespace Tensorflow.Keras.Layers
             _channels_first = args.DataFormat == "channels_first";
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             if (_channels_first)
             {

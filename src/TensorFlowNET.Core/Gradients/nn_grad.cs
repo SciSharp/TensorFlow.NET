@@ -365,6 +365,23 @@ namespace Tensorflow.Gradients
             };
         }
 
+        [RegisterGradient("AvgPool")]
+        public static Tensor[] _AvgPoolGrad(Operation op, Tensor[] grads)
+        {
+            Tensor grad = grads[0];
+            
+            return new Tensor[]
+            {
+                gen_nn_ops.avg_pool_grad(
+                  array_ops.shape(op.inputs[0]),
+                  grad,
+                  op.get_attr_list<int>("ksize"),
+                  op.get_attr_list<int>("strides"),
+                  op.get_attr<string>("padding"),
+                  op.get_attr<string>("data_format"))
+            };
+        }
+
         /// <summary>
         /// Return the gradients for TopK.
         /// </summary>

@@ -31,6 +31,6 @@ namespace Tensorflow
         public Tensor reshape(Tensor tensor,
                 object[] shape,
                 string name = null)
-            => gen_array_ops.reshape(tensor, ops.convert_to_tensor(shape), name);
+            => array_ops.reshape(tensor, shape, name);
     }
 }

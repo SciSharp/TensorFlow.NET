@@ -52,7 +52,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         /// <summary>
         /// Convert a Tensor of indices into a dataset of batched indices.
         /// </summary>
-        /// <param name="tensor"></param>
+        /// <param name="indices"></param>
         /// <returns></returns>
         IDatasetV2 slice_batch_indices(Tensor indices)
         {

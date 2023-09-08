@@ -21,6 +21,7 @@ using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Layers;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.KerasApi;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -143,7 +144,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             if (!_has_explicit_input_shape)
             {

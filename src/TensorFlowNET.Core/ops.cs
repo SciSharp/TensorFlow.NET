@@ -138,9 +138,22 @@ namespace Tensorflow
                 else
                 {
                     var graph = get_default_graph();
+                    if (graph is FuncGraph funcGraph)
+                    {
+                        return funcGraph.capture(eager_tensor, name: name);
+                    }
                     if (!graph.building_function)
-                        throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
-                    return (graph as FuncGraph).capture(eager_tensor, name: name);
+                    {
+                        // throw new RuntimeError("Attempting to capture an EagerTensor without building a function.");
+                        return eager_tensor.AsPlaceholder(name: name);
+                    }
+                }
+            }
+            else if (value is KerasTensor kt)
+            {
+                if (kt.inferred_value != null)
+                {
+                    return convert_to_tensor(kt.inferred_value, dtype: kt.dtype, name: name);
                 }
             }
 
@@ -565,7 +578,9 @@ namespace Tensorflow
             if (tf.Context.executing_eagerly())
                 return true;
             else
-                throw new NotImplementedException("");
+                // TODO(Wanglongzhi2001), implement the false case
+                return true;
+            //throw new NotImplementedException("");
         }
 
         public static bool inside_function()
@@ -576,7 +591,14 @@ namespace Tensorflow
         public static HandleData get_resource_handle_data(Tensor graph_op)
         {
             var handle_data = c_api.TFC_GetHandleShapeAndType(graph_op.graph.c_graph, graph_op._as_tf_output());
-            return HandleData.Parser.ParseFrom(tf.compat.as_bytes(c_api.StringPiece(handle_data)));
+            try{
+                var handle_str = c_api.ByteStringPiece(handle_data.DangerousGetHandle() == IntPtr.Zero ? null : new Buffer(handle_data));
+                return HandleData.Parser.ParseFrom(handle_str);
+            }
+            catch(Exception){
+                var handle_str = c_api.ByteStringPieceFromNativeString(handle_data.DangerousGetHandle());
+                return HandleData.Parser.ParseFrom(handle_str);
+            }
         }
 
         public static void dismantle_graph(Graph graph)

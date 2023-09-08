@@ -6,9 +6,13 @@ using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Utils;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
+using Tensorflow.Common.Types;
 
 namespace Tensorflow.Keras.Layers
 {
+    /// <summary>
+    /// Upsampling layer for 2D inputs.
+    /// </summary>
     public class UpSampling2D : Layer
     {
         UpSampling2DArgs args;
@@ -24,7 +28,7 @@ namespace Tensorflow.Keras.Layers
             inputSpec = new InputSpec(ndim: 4);
         }
 
-        protected override Tensors Call(Tensors inputs, Tensor state = null, bool? training = null)
+        protected override Tensors Call(Tensors inputs, Tensors state = null, bool? training = null, IOptionalArgs? optional_args = null)
         {
             return keras.backend.resize_images(inputs, 
                 size[0], size[1], 

@@ -1,8 +1,9 @@
 ﻿namespace Tensorflow.Keras.Losses;
 
-public class BinaryCrossentropy : LossFunctionWrapper, ILossFunc
+public class BinaryCrossentropy : LossFunctionWrapper
 {
     float label_smoothing;
+
     public BinaryCrossentropy(
         bool from_logits = false,
         float label_smoothing = 0,
@@ -14,7 +15,6 @@ public class BinaryCrossentropy : LossFunctionWrapper, ILossFunc
     {
         this.label_smoothing = label_smoothing;
     }
-
 
     public override Tensor Apply(Tensor y_true, Tensor y_pred, bool from_logits = false, int axis = -1)
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tensorflow.Keras.Saving
+namespace Tensorflow.Common.Types
 {
     public class TensorShapeConfig
     {

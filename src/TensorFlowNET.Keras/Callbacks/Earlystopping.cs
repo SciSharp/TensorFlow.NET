@@ -5,13 +5,10 @@ namespace Tensorflow.Keras.Callbacks;
 /// <summary>
 /// Stop training when a monitored metric has stopped improving. 
 /// </summary>
-/// <param name="parameters"></param>
-/// <param name="monitor"></param>
-
 public class EarlyStopping: ICallback
 {
     int _paitence;
-    int _min_delta;
+    float _min_delta;
     int _verbose;
     int _stopped_epoch;
     int _wait;
@@ -26,7 +23,7 @@ public class EarlyStopping: ICallback
     CallbackParams _parameters;
     public Dictionary<string, List<float>>? history { get; set; }
     // user need to pass a CallbackParams to EarlyStopping, CallbackParams at least need the model
-    public EarlyStopping(CallbackParams parameters,string monitor = "val_loss", int min_delta = 0, int patience = 0,
+    public EarlyStopping(CallbackParams parameters,string monitor = "val_loss", float min_delta = 0f, int patience = 0,
         int verbose = 1, string mode = "auto", float baseline = 0f, bool restore_best_weights = false,
         int start_from_epoch = 0)
     {
@@ -149,5 +146,9 @@ public class EarlyStopping: ICallback
             else
                 return less_op;
         }
+    }
+
+    public void on_test_end(Dictionary<string, float> logs)
+    {
     }
 }

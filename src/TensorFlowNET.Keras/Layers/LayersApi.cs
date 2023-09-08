@@ -2,9 +2,8 @@
 using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.ArgsDefinition.Core;
-using Tensorflow.Keras.ArgsDefinition.Rnn;
 using Tensorflow.Keras.Engine;
-using Tensorflow.Keras.Layers.Rnn;
+using Tensorflow.Keras.Layers;
 using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
@@ -183,9 +182,6 @@ namespace Tensorflow.Keras.Layers
         /// <param name="use_bias">Boolean, whether the layer uses a bias vector.</param>
         /// <param name="kernel_initializer">The name of the initializer for the kernel weights matrix (see keras.initializers).</param>
         /// <param name="bias_initializer">The name of the initializer for the bias vector (see keras.initializers).</param>
-        /// <param name="kernel_regularizer">The name of the regularizer function applied to the kernel weights matrix (see keras.regularizers).</param>
-        /// <param name="bias_regularizer">The name of the regularizer function applied to the bias vector (see keras.regularizers).</param>
-        /// <param name="activity_regularizer">The name of the regularizer function applied to the output of the layer (its "activation") (see keras.regularizers).</param>
         /// <returns>A tensor of rank 4+ representing activation(conv2d(inputs, kernel) + bias).</returns>
         public ILayer Conv2D(int filters,
             Shape kernel_size = null,
@@ -244,7 +240,7 @@ namespace Tensorflow.Keras.Layers
             string kernel_regularizer = null,
             string bias_regularizer = null,
             string activity_regularizer = null)
-                => new Conv2DTranspose(new Conv2DArgs
+                => new Conv2DTranspose(new Conv2DTransposeArgs
                 {
                     Rank = 2,
                     Filters = filters,
@@ -469,7 +465,7 @@ namespace Tensorflow.Keras.Layers
         /// In this case, values of 'None' in the 'shape' argument represent ragged dimensions. For more information about RaggedTensors, see this guide.
         /// </param>
         /// <returns>A tensor.</returns>
-        public Tensors Input(Shape shape = null,
+        public KerasTensor Input(Shape shape = null,
             int batch_size = -1,
             string name = null,
             TF_DataType dtype = TF_DataType.DtInvalid, 
@@ -572,7 +568,7 @@ namespace Tensorflow.Keras.Layers
             int? strides = null,
             string padding = "valid",
             string data_format = null)
-            => new MaxPooling1D(new Pooling1DArgs
+            => new MaxPooling1D(new MaxPooling1DArgs
             {
                 PoolSize = pool_size ?? 2,
                 Strides = strides ?? (pool_size ?? 2),
@@ -685,6 +681,32 @@ namespace Tensorflow.Keras.Layers
                 Alpha = alpha
             });
 
+
+        public IRnnCell SimpleRNNCell(
+            int units,
+            string activation = "tanh",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f)
+            => new SimpleRNNCell(new SimpleRNNCellArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
+                UseBias = use_bias,
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout
+            });
+
+        public IRnnCell StackedRNNCells(
+            IEnumerable<IRnnCell> cells)
+            => new StackedRNNCells(cells.ToList(), new StackedRNNCellsArgs());
+
         /// <summary>
         /// 
         /// </summary>
@@ -708,6 +730,80 @@ namespace Tensorflow.Keras.Layers
                     ReturnSequences = return_sequences,
                     ReturnState = return_state
                 });
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <param name="return_sequences"></param>
+        /// <param name="return_state"></param>
+        /// <param name="go_backwards"></param>
+        /// <param name="stateful"></param>
+        /// <param name="unroll"></param>
+        /// <param name="time_major"></param>
+        /// <returns></returns>
+        public ILayer RNN(
+            IRnnCell cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false)
+            => new RNN(cell, new RNNArgs
+            {
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                Unroll = unroll,
+                TimeMajor = time_major
+            });
+
+        public ILayer RNN(
+            IEnumerable<IRnnCell> cell,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false)
+            => new RNN(cell, new RNNArgs
+            {
+                ReturnSequences = return_sequences,
+                ReturnState = return_state,
+                GoBackwards = go_backwards,
+                Stateful = stateful,
+                Unroll = unroll,
+                TimeMajor = time_major
+            });
+
+
+        public IRnnCell LSTMCell(int uints,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            bool unit_forget_bias = true,
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            int implementation = 2)
+            => new LSTMCell(new LSTMCellArgs
+            {
+                Units = uints,
+                Activation = keras.activations.GetActivationFromName(activation),
+                RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                UseBias = use_bias,
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                UnitForgetBias = unit_forget_bias,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                Implementation = implementation
+            });
 
         /// <summary>
         /// Long Short-Term Memory layer - Hochreiter 1997.
@@ -769,8 +865,121 @@ namespace Tensorflow.Keras.Layers
                     GoBackwards = go_backwards,
                     Stateful = stateful,
                     TimeMajor = time_major,
-                    Unroll = unroll
+                    Unroll = unroll, 
+                    UnitForgetBias = unit_forget_bias
                 });
+
+        /// <summary>
+        /// Cell class for the GRU layer.
+        /// </summary>
+        /// <param name="units"></param>
+        /// <param name="activation"></param>
+        /// <param name="recurrent_activation"></param>
+        /// <param name="use_bias"></param>
+        /// <param name="kernel_initializer"></param>
+        /// <param name="recurrent_initializer"></param>
+        /// <param name="bias_initializer"></param>
+        /// <param name="dropout"></param>
+        /// <param name="recurrent_dropout"></param>
+        /// <param name="reset_after"></param>
+        /// <returns></returns>
+        public IRnnCell GRUCell(
+            int units,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            bool reset_after = true)
+            => new GRUCell(new GRUCellArgs
+            {
+                Units = units,
+                Activation = keras.activations.GetActivationFromName(activation),
+                RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                KernelInitializer = GetInitializerByName(kernel_initializer),
+                RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                BiasInitializer = GetInitializerByName(bias_initializer),
+                UseBias = use_bias,
+                Dropout = dropout,
+                RecurrentDropout = recurrent_dropout,
+                ResetAfter = reset_after
+            });
+
+        /// <summary>
+        /// Gated Recurrent Unit - Cho et al. 2014.
+        /// </summary>
+        /// <param name="units">Positive integer, dimensionality of the output space.</param>
+        /// <param name="activation">Activation function to use. If you pass `None`, no activation is applied.(ie. "linear" activation: `a(x) = x`).</param>
+        /// <param name="recurrent_activation">Activation function to use for the recurrent step. If you pass `None`, no activation is applied. (ie. "linear" activation: `a(x) = x`).</param>
+        /// <param name="use_bias">Boolean, (default `True`), whether the layer uses a bias vector.</param>
+        /// <param name="kernel_initializer">Initializer for the `kernel` weights matrix, used for the linear transformation of the inputs. Default: `glorot_uniform`.</param>
+        /// <param name="recurrent_initializer">Initializer for the `recurrent_kernel` weights matrix, used for the linear transformation of the recurrent state. Default: `orthogonal`.</param>
+        /// <param name="bias_initializer">Initializer for the bias vector. Default: `zeros`.</param>
+        /// <param name="dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the inputs. Default: 0.</param>
+        /// <param name="recurrent_dropout">Float between 0 and 1. Fraction of the units to drop for the linear transformation of the recurrent state. Default: 0.</param>
+        /// <param name="implementation"></param>
+        /// <param name="return_sequences">Boolean. Whether to return the last output in the output sequence, or the full sequence. Default: `False`.</param>
+        /// <param name="return_state">Boolean. Whether to return the last state in addition to the output. Default: `False`.</param>
+        /// <param name="go_backwards">Boolean (default `False`). If True, process the input sequence backwards and return the reversed sequence.</param>
+        /// <param name="stateful">Boolean (default False). If True, the last state for each sample at index i in a batch will be used as initial state for the sample of index i in the following batch.</param>
+        /// <param name="unroll">Boolean (default False). If True, the network will be unrolled, else a symbolic loop will be used. Unrolling can speed-up a RNN,</param>
+        /// <param name="time_major">The shape format of the `inputs` and `outputs` tensors.</param>
+        /// <param name="reset_after">GRU convention (whether to apply reset gate after or before matrix multiplication). False = "before", True = "after" (default and cuDNN compatible).</param>
+        /// <returns></returns>
+        public ILayer GRU(
+            int units,
+            string activation = "tanh",
+            string recurrent_activation = "sigmoid",
+            bool use_bias = true,
+            string kernel_initializer = "glorot_uniform",
+            string recurrent_initializer = "orthogonal",
+            string bias_initializer = "zeros",
+            float dropout = 0f,
+            float recurrent_dropout = 0f,
+            bool return_sequences = false,
+            bool return_state = false,
+            bool go_backwards = false,
+            bool stateful = false,
+            bool unroll = false,
+            bool time_major = false,
+            bool reset_after = true
+            )
+                => new GRU(new GRUArgs
+                {
+                    Units = units,
+                    Activation = keras.activations.GetActivationFromName(activation),
+                    RecurrentActivation = keras.activations.GetActivationFromName(recurrent_activation),
+                    KernelInitializer = GetInitializerByName(kernel_initializer),
+                    RecurrentInitializer = GetInitializerByName(recurrent_initializer),
+                    BiasInitializer = GetInitializerByName(bias_initializer),
+                    UseBias = use_bias,
+                    Dropout = dropout,
+                    RecurrentDropout = recurrent_dropout,
+                    ReturnSequences = return_sequences,
+                    ReturnState = return_state,
+                    GoBackwards = go_backwards,
+                    Stateful = stateful,
+                    TimeMajor = time_major,
+                    Unroll = unroll,
+                    ResetAfter = reset_after
+                });
+
+        public ILayer Bidirectional(
+        ILayer layer,
+        string merge_mode = "concat",
+        NDArray weights = null,
+        ILayer backward_layer = null)
+        => new Bidirectional(new BidirectionalArgs
+        {
+            Layer = layer,
+            MergeMode = merge_mode,
+            Weights = weights,
+            BackwardLayer = backward_layer
+        });
+
 
         /// <summary>
         /// 
@@ -794,21 +1003,21 @@ namespace Tensorflow.Keras.Layers
         /// </summary>
         /// <returns></returns>
         public ILayer Add()
-            => new Add(new MergeArgs { });
+            => new Add(new AddArgs { });
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public ILayer Subtract()
-            => new Subtract(new MergeArgs { });
+            => new Subtract(new SubtractArgs { });
 
         /// <summary>
         /// Global max pooling operation for spatial data.
         /// </summary>
         /// <returns></returns>
         public ILayer GlobalAveragePooling2D()
-            => new GlobalAveragePooling2D(new Pooling2DArgs { });
+            => new GlobalAveragePooling2D(new GlobalAveragePooling2DArgs { });
 
         /// <summary>
         /// Global average pooling operation for temporal data.
@@ -818,7 +1027,7 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <returns></returns>
         public ILayer GlobalAveragePooling1D(string data_format = "channels_last")
-            => new GlobalAveragePooling1D(new Pooling1DArgs { DataFormat = data_format });
+            => new GlobalAveragePooling1D(new GlobalAveragePooling1DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Global max pooling operation for spatial data.
@@ -827,7 +1036,7 @@ namespace Tensorflow.Keras.Layers
         /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width).</param>
         /// <returns></returns>
         public ILayer GlobalAveragePooling2D(string data_format = "channels_last")
-            => new GlobalAveragePooling2D(new Pooling2DArgs { DataFormat = data_format });
+            => new GlobalAveragePooling2D(new GlobalAveragePooling2DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Global max pooling operation for 1D temporal data.
@@ -838,7 +1047,7 @@ namespace Tensorflow.Keras.Layers
         /// </param>
         /// <returns></returns>
         public ILayer GlobalMaxPooling1D(string data_format = "channels_last")
-            => new GlobalMaxPooling1D(new Pooling1DArgs { DataFormat = data_format });
+            => new GlobalMaxPooling1D(new GlobalMaxPooling1DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Global max pooling operation for spatial data.
@@ -847,7 +1056,7 @@ namespace Tensorflow.Keras.Layers
         /// channels_last corresponds to inputs with shape (batch, height, width, channels) while channels_first corresponds to inputs with shape (batch, channels, height, width).</param>
         /// <returns></returns>
         public ILayer GlobalMaxPooling2D(string data_format = "channels_last")
-            => new GlobalMaxPooling2D(new Pooling2DArgs { DataFormat = data_format });
+            => new GlobalMaxPooling2D(new GlobalMaxPooling2DArgs { DataFormat = data_format });
 
         /// <summary>
         /// Get an weights initializer from its name.
@@ -882,5 +1091,9 @@ namespace Tensorflow.Keras.Layers
                 Variance = variance,
                 Invert = invert
             });
+
+
+
+
     }
 }

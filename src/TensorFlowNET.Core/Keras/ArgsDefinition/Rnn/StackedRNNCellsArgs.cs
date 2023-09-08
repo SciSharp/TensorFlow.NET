@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using Tensorflow.Keras.Layers;
 
-namespace Tensorflow.Keras.ArgsDefinition.Rnn
+namespace Tensorflow.Keras.ArgsDefinition
 {
     public class StackedRNNCellsArgs : LayerArgs
     {
-        public IList<RnnCell> Cells { get; set; }
-        public Dictionary<string, object> Kwargs { get; set; } = null;
+        public bool ReverseStateOrder = false;
     }
 }

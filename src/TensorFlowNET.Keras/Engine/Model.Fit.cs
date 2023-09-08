@@ -110,7 +110,7 @@ namespace Tensorflow.Keras.Engine
 
             var data_handler = new DataHandler(new DataHandlerArgs
             {
-                X = new Tensors(train_x),
+                X = new Tensors(train_x.ToArray()),
                 Y = train_y,
                 BatchSize = batch_size,
                 InitialEpoch = initial_epoch,
@@ -142,6 +142,7 @@ namespace Tensorflow.Keras.Engine
             int verbose = 1,
             List<ICallback> callbacks = null,
             IDatasetV2 validation_data = null,
+            int validation_step = 10,   // 间隔多少次会进行一次验证
             bool shuffle = true,
             int initial_epoch = 0,
             int max_queue_size = 10,
@@ -164,11 +165,11 @@ namespace Tensorflow.Keras.Engine
             });
 
 
-            return FitInternal(data_handler, epochs, verbose, callbacks, validation_data: validation_data,
+            return FitInternal(data_handler, epochs, validation_step, verbose, callbacks, validation_data: validation_data,
                     train_step_func: train_step_function);
         }
 
-        History FitInternal(DataHandler data_handler, int epochs, int verbose, List<ICallback> callbackList, IDatasetV2 validation_data, 
+        History FitInternal(DataHandler data_handler, int epochs, int validation_step, int verbose, List<ICallback> callbackList, IDatasetV2 validation_data, 
             Func<DataHandler, OwnedIterator, Dictionary<string, float>> train_step_func)
         {
             stop_training = false;
@@ -207,6 +208,9 @@ namespace Tensorflow.Keras.Engine
 
                 if (validation_data != null)
                 {
+                    if (validation_step > 0 && epoch ==0 || (epoch) % validation_step != 0)
+                        continue;
+
                     var val_logs = evaluate(validation_data);
                     foreach(var log in val_logs)
                     {
@@ -266,7 +270,7 @@ namespace Tensorflow.Keras.Engine
                 {
                     // Because evaluate calls call_test_batch_end, this interferes with our output on the screen
                     // so we need to pass a is_val parameter to stop on_test_batch_end
-                    var val_logs = evaluate((Tensor)validation_data.Value.Item1, validation_data.Value.Item2, is_val:true);
+                    var val_logs = evaluate(validation_data.Value.Item1, validation_data.Value.Item2, is_val:true);
                     foreach (var log in val_logs)
                     {
                         logs["val_" + log.Key] = log.Value;

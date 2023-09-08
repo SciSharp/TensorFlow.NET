@@ -81,7 +81,7 @@ public class FuncGraph : Graph, IDisposable
     public IEnumerable<IVariableV1> TrainableVariables => Variables.Where(v => v.Trainable);
     public Dictionary<string, AttrValue> Attrs { get; set; }
 
-    Dictionary<long, (Tensor, Tensor)> _captures
+    internal Dictionary<long, (Tensor, Tensor)> _captures
         = new Dictionary<long, (Tensor, Tensor)>();
 
     public Tensor[] external_captures
@@ -399,7 +399,7 @@ public class FuncGraph : Graph, IDisposable
         var flat_func_args = nest.flatten(func_args as object);
         var flat_func_kwargs = nest.flatten(func_kwargs as object);
         func_graph.Inputs = new Tensors(flat_func_args.concat(flat_func_kwargs)
-            .Where(x => x is Tensor).Select(x => (Tensor)x));
+            .Where(x => x is Tensor).Select(x => (Tensor)x).ToArray());
 
         //var func_args_before = nest.pack_sequence_as(func_args, flat_func_args, true);
         //var func_kwargs_before = nest.pack_sequence_as(func_kwargs, flat_func_kwargs, true);
@@ -544,12 +544,12 @@ public class FuncGraph : Graph, IDisposable
             Tensor placeholder;
             try
             {
-                placeholder = tf.placeholder(tensor.dtype, tensor.shape, name);
+                placeholder = GraphOnlyOps.graph_placeholder(tensor.dtype, tensor.shape, name);
             }
-            catch (ValueError)
+            catch (ValueError ex)
             {
-                // TODO(Rinne): Add warning here.
-                placeholder = tf.placeholder(tensor.dtype, tensor.shape);
+                tf.Logger.Warning(ex.ToString());
+                placeholder = GraphOnlyOps.graph_placeholder(tensor.dtype, tensor.shape);
             }
             handle_data_util.copy_handle_data(tensor, placeholder);
             if (name is not null)
@@ -575,12 +575,12 @@ public class FuncGraph : Graph, IDisposable
             Tensor placeholder;
             try
             {
-                placeholder = tf.placeholder(spec.dtype, spec.shape, requested_name);
+                placeholder = GraphOnlyOps.graph_placeholder(spec.dtype, spec.shape, requested_name);
             }
             catch (ValueError)
             {
                 // TODO(Rinne): Add warning here.
-                placeholder = tf.placeholder(spec.dtype, spec.shape);
+                placeholder = GraphOnlyOps.graph_placeholder(spec.dtype, spec.shape);
             }
             if (name is not null)
             {

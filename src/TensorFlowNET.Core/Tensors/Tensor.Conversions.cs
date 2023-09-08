@@ -14,19 +14,10 @@
    limitations under the License.
 ******************************************************************************/
 
-using Tensorflow.NumPy;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using Tensorflow.Framework.Models;
-using static Tensorflow.Binding;
+namespace Tensorflow;
 
-namespace Tensorflow
+public partial class Tensor
 {
-    [SuppressMessage("ReSharper", "InvokeAsExtensionMethod")]
-    public partial class Tensor
-    {
-        public TensorSpec ToTensorSpec()
-            => new TensorSpec(shape, dtype, name);
-    }
+    public TensorSpec ToTensorSpec()
+        => new TensorSpec(shape, dtype, name);
 }

@@ -10,14 +10,14 @@ namespace Tensorflow.Keras.Layers {
             public ILayer ELU ( float alpha = 0.1f )
                   => new ELU(new ELUArgs { Alpha = alpha });
             public ILayer SELU ()
-                  => new SELU(new LayerArgs { });
+                  => new SELU(new SELUArgs { });
             public ILayer Softmax(int axis = -1) => new Softmax(new SoftmaxArgs { axis = axis });
             public ILayer Softmax ( Axis axis ) => new Softmax(new SoftmaxArgs { axis = axis });
-            public ILayer Softplus () => new Softplus(new LayerArgs { });
-            public ILayer HardSigmoid () => new HardSigmoid(new LayerArgs { });
-            public ILayer Softsign () => new Softsign(new LayerArgs { });
-            public ILayer Swish () => new Swish(new LayerArgs { });
-            public ILayer Tanh () => new Tanh(new LayerArgs { });
-            public ILayer Exponential () => new Exponential(new LayerArgs { });
+            public ILayer Softplus () => new Softplus(new SoftplusArgs { });
+            public ILayer HardSigmoid () => new HardSigmoid(new HardSigmoidArgs { });
+            public ILayer Softsign () => new Softsign(new SoftsignArgs { });
+            public ILayer Swish () => new Swish(new SwishArgs { });
+            public ILayer Tanh () => new Tanh(new TanhArgs { });
+            public ILayer Exponential () => new Exponential(new ExponentialArgs { });
       }
 }

@@ -11,6 +11,7 @@ namespace Tensorflow
     /// Basic LSTM recurrent network cell.
     /// The implementation is based on: http://arxiv.org/abs/1409.2329.
     /// </summary>
+    [Obsolete("This is an incompleted tf v1 api, pleas use keras RNNs instead.")]
     public class BasicLstmCell : LayerRnnCell
     {
         int _num_units;
@@ -88,7 +89,7 @@ namespace Tensorflow
             gate_inputs = nn_ops.bias_add(gate_inputs, _bias);
 
             // i = input_gate, j = new_input, f = forget_gate, o = output_gate
-            var tensors = array_ops.split(value: gate_inputs, num_split: 4, axis: one);
+            var tensors = array_ops.split(value: gate_inputs, num_or_size_splits: 4, axis: one);
             var (i, j, f, o) = (tensors[0], tensors[1], tensors[2], tensors[3]);
 
             var forget_bias_tensor = constant_op.constant(_forget_bias, dtype: f.dtype);

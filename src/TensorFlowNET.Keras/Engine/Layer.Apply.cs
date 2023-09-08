@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Tensorflow.Common.Types;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.Keras.Engine
@@ -8,11 +9,11 @@ namespace Tensorflow.Keras.Engine
         /// <summary>
         /// Wraps `call`, applying pre- and post-processing steps.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="state"></param>
+        /// <param name="inputs"></param>
+        /// <param name="states"></param>
         /// <param name="training"></param>
         /// <returns></returns>
-        public Tensors Apply(Tensors inputs, Tensor state = null, bool training = false)
+        public virtual Tensors Apply(Tensors inputs, Tensors states = null, bool? training = false, IOptionalArgs? optional_args = null)
         {
             if (callContext.Value == null)
                 callContext.Value = new CallContext();
@@ -30,12 +31,14 @@ namespace Tensorflow.Keras.Engine
             if (!built)
                 MaybeBuild(inputs);
 
-            var outputs = Call(inputs, state: state, training: training);
+            var outputs = Call(inputs, state: states, training: training);
 
             // memory leak
             // _set_connectivity_metadata_(inputs, outputs);
             _handle_activity_regularization(inputs, outputs);
             _set_mask_metadata(inputs, outputs, null);
+
+            // TODO(Rinne): set save spec if null
 
             scope.__exit__();
 

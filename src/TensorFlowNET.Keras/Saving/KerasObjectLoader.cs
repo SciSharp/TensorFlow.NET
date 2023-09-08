@@ -8,12 +8,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Tensorflow.Extensions;
+using Tensorflow.Common.Extensions;
 using Tensorflow.Framework.Models;
 using Tensorflow.Keras.ArgsDefinition;
 using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Layers;
-using Tensorflow.Keras.Layers.Rnn;
 using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Saving.SavedModel;
@@ -174,7 +173,7 @@ namespace Tensorflow.Keras.Saving
                 }
                 if(node is Functional functional)
                 {
-                    foreach(var name in functional.UnconditionalDependencyNames.Keys)
+                    foreach(var name in functional.UnconditionalDependencyNames.Keys.ToArray())
                     {
                         if(Regex.Match(name, @"^layer(_with_weights)?-[\d+]").Success)
                         {
@@ -693,7 +692,6 @@ namespace Tensorflow.Keras.Saving
         /// Infers input shape of layer from SavedModel functions.
         /// </summary>
         /// <param name="layer_node_id"></param>
-        /// <param name="convert_to_shapes"></param>
         /// <returns></returns>
         private TensorSpec _infer_inputs(int layer_node_id)
         {
