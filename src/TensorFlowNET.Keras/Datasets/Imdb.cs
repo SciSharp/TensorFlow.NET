@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Tensorflow.Keras.Utils;
-using Tensorflow.NumPy;
-using System.Linq;
 
 namespace Tensorflow.Keras.Datasets
 {
@@ -41,14 +39,14 @@ namespace Tensorflow.Keras.Datasets
     ///     `skip_top` limits will be replaced with this character.
     /// index_from: int. Index actual words with this index and higher.
     ///     Returns:
-    /// Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
+    /// Tuple of Numpy arrays: `(x_train, labels_train), (x_test, labels_test)`.
     /// 
     /// ** x_train, x_test**: lists of sequences, which are lists of indexes
     ///     (integers). If the num_words argument was specific, the maximum
     ///     possible index value is `num_words - 1`. If the `maxlen` argument was
     ///     specified, the largest possible sequence length is `maxlen`.
     /// 
-    /// ** y_train, y_test**: lists of integer labels(1 or 0).
+    /// ** labels_train, labels_test**: lists of integer labels(1 or 0).
     /// 
     /// Raises:
     /// ValueError: in case `maxlen` is so low
@@ -63,7 +61,6 @@ namespace Tensorflow.Keras.Datasets
     public class Imdb
     {
         string origin_folder = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/";
-        string file_name = "imdb.npz";
         string dest_folder = "imdb";
 
         /// <summary>
@@ -78,43 +75,139 @@ namespace Tensorflow.Keras.Datasets
         /// <param name="oov_char"></param>
         /// <param name="index_from"></param>
         /// <returns></returns>
-        public DatasetPass load_data(string? path = "imdb.npz",
-            int num_words = -1,
+        public DatasetPass load_data(
+            string path = "imdb.npz",
+            int? num_words = null,
             int skip_top = 0,
-            int maxlen = -1,
+            int? maxlen = null,
             int seed = 113,
-            int start_char = 1,
-            int oov_char= 2,
+            int? start_char = 1,
+            int? oov_char = 2,
             int index_from = 3)
         {
-            if (maxlen == -1) throw new InvalidArgumentError("maxlen must be assigned.");
-            
-            var dst = path ?? Download();
-            var fileBytes = File.ReadAllBytes(Path.Combine(dst, file_name));
-            var (y_train, y_test) = LoadY(fileBytes);
+            path = data_utils.get_file(
+                path,
+                origin: Path.Combine(origin_folder, "imdb.npz"),
+                file_hash: "69664113be75683a8fe16e3ed0ab59fda8886cb3cd7ada244f7d9544e4676b9f"
+            );
+            path = Path.Combine(path, "imdb.npz");
+            var fileBytes = File.ReadAllBytes(path);
             var (x_train, x_test) = LoadX(fileBytes);
-            
-            /*var lines = File.ReadAllLines(Path.Combine(dst, "imdb_train.txt"));
-            var x_train_string = new string[lines.Length];
-            var y_train = np.zeros(new int[] { lines.Length }, np.int64);
-            for (int i = 0; i < lines.Length; i++)
+            var (labels_train, labels_test) = LoadY(fileBytes);
+            x_test.astype(np.int32);
+            labels_test.astype(np.int32);
+
+            var indices = np.arange<int>(len(x_train));
+            np.random.shuffle(indices, seed);
+            x_train = x_train[indices];
+            labels_train = labels_train[indices];
+
+            indices = np.arange<int>(len(x_test));
+            np.random.shuffle(indices, seed);
+            x_test = x_test[indices];
+            labels_test = labels_test[indices];
+
+            if (start_char != null)
             {
-                y_train[i] = long.Parse(lines[i].Substring(0, 1));
-                x_train_string[i] = lines[i].Substring(2);
+                int[,] new_x_train = new int[x_train.shape[0], x_train.shape[1] + 1];
+                for (var i = 0; i < x_train.shape[0]; i++)
+                {
+                    new_x_train[i, 0] = (int)start_char;
+                    for (var j = 0; j < x_train.shape[1]; j++)
+                    {
+                        new_x_train[i, j + 1] = x_train[i][j];
+                    }
+                }
+                int[,] new_x_test = new int[x_test.shape[0], x_test.shape[1] + 1];
+                for (var i = 0; i < x_test.shape[0]; i++)
+                {
+                    new_x_test[i, 0] = (int)start_char;
+                    for (var j = 0; j < x_test.shape[1]; j++)
+                    {
+                        new_x_test[i, j + 1] = x_test[i][j];
+                    }
+                }
+                x_train = new NDArray(new_x_train);
+                x_test = new NDArray(new_x_test);
+            }
+            else if (index_from != 0)
+            {
+                for (var i = 0; i < x_train.shape[0]; i++)
+                {
+                    for (var j = 0; j < x_train.shape[1]; j++)
+                    {
+                        if (x_train[i, j] != 0)
+                            x_train[i, j] += index_from;
+                    }
+                }
+                for (var i = 0; i < x_test.shape[0]; i++)
+                {
+                    for (var j = 0; j < x_test.shape[1]; j++)
+                    {
+                        if (x_test[i, j] != 0)
+                            x_test[i, j] += index_from;
+                    }
+                }
             }
 
-            var x_train = keras.preprocessing.sequence.pad_sequences(PraseData(x_train_string), maxlen: maxlen);
-
-            lines = File.ReadAllLines(Path.Combine(dst, "imdb_test.txt"));
-            var x_test_string = new string[lines.Length];
-            var y_test = np.zeros(new int[] { lines.Length }, np.int64);
-            for (int i = 0; i < lines.Length; i++)
+            if (maxlen != null)
             {
-                y_test[i] = long.Parse(lines[i].Substring(0, 1));
-                x_test_string[i] = lines[i].Substring(2);
+                (x_train, labels_train) = data_utils._remove_long_seq((int)maxlen, x_train, labels_train);
+                (x_test, labels_test) = data_utils._remove_long_seq((int)maxlen, x_test, labels_test);
+                if (x_train.size == 0 || x_test.size == 0)
+                    throw new ValueError("After filtering for sequences shorter than maxlen=" +
+                        $"{maxlen}, no sequence was kept. Increase maxlen.");
             }
 
-            var x_test = np.array(x_test_string);*/
+            var xs = np.concatenate(new[] { x_train, x_test });
+            var labels = np.concatenate(new[] { labels_train, labels_test });
+
+            if(num_words == null)
+            {
+                num_words = 0;
+                for (var i = 0; i < xs.shape[0]; i++)
+                    for (var j = 0; j < xs.shape[1]; j++)
+                        num_words = max((int)num_words, (int)xs[i][j]);
+            }
+
+            // by convention, use 2 as OOV word
+            // reserve 'index_from' (=3 by default) characters:
+            // 0 (padding), 1 (start), 2 (OOV)
+            if (oov_char != null)
+            {
+                int[,] new_xs = new int[xs.shape[0], xs.shape[1]];
+                for(var i = 0; i < xs.shape[0]; i++)
+                {
+                    for(var j = 0; j < xs.shape[1]; j++)
+                    {
+                        if ((int)xs[i][j] == 0 || skip_top <= (int)xs[i][j] && (int)xs[i][j] < num_words)
+                            new_xs[i, j] = (int)xs[i][j];
+                        else
+                            new_xs[i, j] = (int)oov_char;
+                    }
+                }
+                xs = new NDArray(new_xs);
+            }
+            else
+            {
+                int[,] new_xs = new int[xs.shape[0], xs.shape[1]];
+                for (var i = 0; i < xs.shape[0]; i++)
+                {
+                    int k = 0;
+                    for (var j = 0; j < xs.shape[1]; j++)
+                    {
+                        if ((int)xs[i][j] == 0 || skip_top <= (int)xs[i][j] && (int)xs[i][j] < num_words)
+                            new_xs[i, k++] = (int)xs[i][j];
+                    }
+                }
+                xs = new NDArray(new_xs);
+            }
+
+            var idx = len(x_train);
+            x_train = xs[$"0:{idx}"];
+            x_test = xs[$"{idx}:"];
+            var y_train = labels[$"0:{idx}"];
+            var y_test = labels[$"{idx}:"];
 
             return new DatasetPass
             {
@@ -125,43 +218,14 @@ namespace Tensorflow.Keras.Datasets
 
         (NDArray, NDArray) LoadX(byte[] bytes)
         {
-            var y = np.Load_Npz<int[,]>(bytes);
-            return (y["x_train.npy"], y["x_test.npy"]);
+            var x = np.Load_Npz<int[,]>(bytes);
+            return (x["x_train.npy"], x["x_test.npy"]);
         }
 
         (NDArray, NDArray) LoadY(byte[] bytes)
         {
             var y = np.Load_Npz<long[]>(bytes);
             return (y["y_train.npy"], y["y_test.npy"]);
-        }
-
-        string Download()
-        {
-            var dst = Path.Combine(Path.GetTempPath(), dest_folder);
-            Directory.CreateDirectory(dst);
-
-            Web.Download(origin_folder + file_name, dst, file_name);
-
-            return dst;
-            // return Path.Combine(dst, file_name);
-        }
-
-        protected IEnumerable<int[]> PraseData(string[] x)
-        {
-            var data_list = new List<int[]>();
-            for (int i = 0; i < len(x); i++)
-            {
-                var list_string = x[i];
-                var cleaned_list_string = list_string.Replace("[", "").Replace("]", "").Replace(" ", "");
-                string[] number_strings = cleaned_list_string.Split(',');
-                int[] numbers = new int[number_strings.Length];
-                for (int j = 0; j < number_strings.Length; j++)
-                {
-                    numbers[j] = int.Parse(number_strings[j]);
-    }
-                data_list.Add(numbers);
-            }
-            return data_list;
         }
     }
 }

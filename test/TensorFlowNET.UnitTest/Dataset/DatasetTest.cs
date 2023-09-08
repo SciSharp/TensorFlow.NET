@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
 using static Tensorflow.KerasApi;
 
@@ -207,10 +209,28 @@ namespace TensorFlowNET.UnitTest.Dataset
             var y_train = dataset.Train.Item2;
             var x_val = dataset.Test.Item1;
             var y_val = dataset.Test.Item2;
-            print(len(x_train) + "Training sequences");
-            print(len(x_val) + "Validation sequences");
-            //x_train = keras.preprocessing.sequence.pad_sequences((IEnumerable<int[]>)x_train, maxlen: maxlen);
-            //x_val = keras.preprocessing.sequence.pad_sequences((IEnumerable<int[]>)x_val, maxlen: maxlen);
+
+            x_train = keras.preprocessing.sequence.pad_sequences(RemoveZeros(x_train), maxlen: maxlen);
+            x_val = keras.preprocessing.sequence.pad_sequences(RemoveZeros(x_val), maxlen: maxlen);
+            print(len(x_train) + " Training sequences");
+            print(len(x_val) + " Validation sequences");
+        }
+        IEnumerable<int[]> RemoveZeros(NDArray data)
+        {
+            List<int[]> new_data = new List<int[]>();
+            for (var i = 0; i < data.shape[0]; i++)
+            {
+                List<int> new_array = new List<int>();
+                for (var j = 0; j < data.shape[1]; j++)
+                {
+                    if (data[i][j] == 0)
+                        break;
+                    else
+                        new_array.Add((int)data[i][j]);
+                }
+                new_data.Add(new_array.ToArray());
+            }
+            return new_data;
         }
     }
 }

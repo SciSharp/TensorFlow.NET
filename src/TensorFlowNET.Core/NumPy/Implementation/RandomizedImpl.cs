@@ -14,9 +14,9 @@ namespace Tensorflow.NumPy
         public NDArray permutation(NDArray x) => new NDArray(random_ops.random_shuffle(x));
 
         [AutoNumPy]
-        public void shuffle(NDArray x)
+        public void shuffle(NDArray x, int? seed = null)
         {
-            var y = random_ops.random_shuffle(x);
+            var y = random_ops.random_shuffle(x, seed);
             Marshal.Copy(y.BufferToArray(), 0, x.TensorDataPointer, (int)x.bytesize);
         }
 
