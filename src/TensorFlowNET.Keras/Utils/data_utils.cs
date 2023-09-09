@@ -39,5 +39,54 @@ namespace Tensorflow.Keras.Utils
 
             return datadir;
         }
+
+        public static (NDArray, NDArray) _remove_long_seq(int maxlen, NDArray seq, NDArray label)
+        {
+            /*Removes sequences that exceed the maximum length.
+
+            Args:
+                maxlen: Int, maximum length of the output sequences.
+                seq: List of lists, where each sublist is a sequence.
+                label: List where each element is an integer.
+
+            Returns:
+                    new_seq, new_label: shortened lists for `seq` and `label`.
+
+            */
+            List<int[]> new_seq = new List<int[]>();
+            List<long> new_label = new List<long>();
+
+            var seq_array = (int[,])seq.ToMultiDimArray<int>();
+            var label_array = (long[])label.ToArray<long>();
+            for (var i = 0; i < seq_array.GetLength(0); i++)
+            {
+                if (maxlen < seq_array.GetLength(1) && seq_array[i,maxlen] != 0)
+                    continue;
+                int[] sentence = new int[maxlen];
+                for (var j = 0; j < maxlen && j < seq_array.GetLength(1); j++)
+                {
+                    sentence[j] = seq_array[i, j];
+                }
+                new_seq.Add(sentence);
+                new_label.Add(label_array[i]);
+            }
+
+            int[,] new_seq_array = new int[new_seq.Count, maxlen];
+            long[] new_label_array = new long[new_label.Count];
+
+            for (var i = 0; i < new_seq.Count; i++)
+            {
+                for (var j = 0; j < maxlen; j++)
+                {
+                    new_seq_array[i, j] = new_seq[i][j];
+                }
+            }
+
+            for (var i = 0; i < new_label.Count; i++)
+            {
+                new_label_array[i] = new_label[i];
+            }
+            return (new_seq_array, new_label_array);
+        }
     }
 }

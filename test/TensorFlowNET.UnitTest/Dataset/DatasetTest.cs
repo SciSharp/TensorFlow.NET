@@ -1,7 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Tensorflow.NumPy;
 using static Tensorflow.Binding;
+using static Tensorflow.KerasApi;
 
 namespace TensorFlowNET.UnitTest.Dataset
 {
@@ -194,6 +197,41 @@ namespace TensorFlowNET.UnitTest.Dataset
             }
 
             Assert.IsFalse(allEqual);
+        }
+        [Ignore]
+        [TestMethod]
+        public void GetData()
+        {
+            var vocab_size = 20000; // Only consider the top 20k words
+            var maxlen = 200; // Only consider the first 200 words of each movie review
+            var dataset = keras.datasets.imdb.load_data(num_words: vocab_size, maxlen: maxlen);
+            var x_train = dataset.Train.Item1;
+            var y_train = dataset.Train.Item2;
+            var x_val = dataset.Test.Item1;
+            var y_val = dataset.Test.Item2;
+
+            x_train = keras.preprocessing.sequence.pad_sequences(RemoveZeros(x_train), maxlen: maxlen);
+            x_val = keras.preprocessing.sequence.pad_sequences(RemoveZeros(x_val), maxlen: maxlen);
+            print(len(x_train) + " Training sequences");
+            print(len(x_val) + " Validation sequences");
+        }
+        IEnumerable<int[]> RemoveZeros(NDArray data)
+        {
+            var data_array = (int[,])data.ToMultiDimArray<int>();
+            List<int[]> new_data = new List<int[]>();
+            for (var i = 0; i < data_array.GetLength(0); i++)
+            {
+                List<int> new_array = new List<int>();
+                for (var j = 0; j < data_array.GetLength(1); j++)
+                {
+                    if (data_array[i, j] == 0)
+                        break;
+                    else
+                        new_array.Add(data_array[i, j]);
+                }
+                new_data.Add(new_array.ToArray());
+            }
+            return new_data;
         }
     }
 }

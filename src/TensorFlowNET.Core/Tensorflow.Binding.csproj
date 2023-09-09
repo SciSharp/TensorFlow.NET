@@ -176,6 +176,7 @@ https://tensorflownet.readthedocs.io</Description>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OneOf" Version="3.0.255" />
     <PackageReference Include="Protobuf.Text" Version="0.7.1" />
+    <PackageReference Include="Razorvine.Pickle" Version="1.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
   </ItemGroup>
 

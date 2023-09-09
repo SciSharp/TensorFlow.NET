@@ -43,7 +43,9 @@ public partial class np
     public static readonly TF_DataType @decimal = TF_DataType.TF_DOUBLE;
     public static readonly TF_DataType complex_ = TF_DataType.TF_COMPLEX;
     public static readonly TF_DataType complex64 = TF_DataType.TF_COMPLEX64;
-    public static readonly TF_DataType complex128 = TF_DataType.TF_COMPLEX128; 
+    public static readonly TF_DataType complex128 = TF_DataType.TF_COMPLEX128;
+    public static readonly TF_DataType @string = TF_DataType.TF_STRING;
+    public static readonly TF_DataType @object = TF_DataType.TF_VARIANT;
     #endregion
 
     public static double nan => double.NaN;

@@ -10,6 +10,7 @@ namespace Tensorflow.NumPy
         public unsafe static T Scalar<T>(NDArray nd) where T : unmanaged
             => nd.dtype switch
             {
+                TF_DataType.TF_BOOL => Scalar<T>(*(bool*)nd.data),
                 TF_DataType.TF_UINT8 => Scalar<T>(*(byte*)nd.data),
                 TF_DataType.TF_FLOAT => Scalar<T>(*(float*)nd.data),
                 TF_DataType.TF_INT32 => Scalar<T>(*(int*)nd.data),

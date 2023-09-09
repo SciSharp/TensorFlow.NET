@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Tensorflow.Util;
+using Razorvine.Pickle;
+using Tensorflow.NumPy.Pickle;
 using static Tensorflow.Binding;
 
 namespace Tensorflow.NumPy
@@ -95,6 +97,13 @@ namespace Tensorflow.NumPy
             System.Buffer.BlockCopy(buffer, 0, matrix, 0, buffer.Length);
 
             return matrix;
+        }
+
+        Array ReadObjectMatrix(BinaryReader reader, Array matrix, int[] shape)
+        {
+            Stream stream = reader.BaseStream;
+            var unpickler = new Unpickler();
+            return (MultiArrayPickleWarpper)unpickler.load(stream);
         }
 
         public (NDArray, NDArray) meshgrid<T>(T[] array, bool copy = true, bool sparse = false)

@@ -14,6 +14,7 @@
    limitations under the License.
 ******************************************************************************/
 
+using Razorvine.Pickle;
 using Serilog;
 using Serilog.Core;
 using System.Reflection;
@@ -22,6 +23,7 @@ using Tensorflow.Contexts;
 using Tensorflow.Eager;
 using Tensorflow.Gradients;
 using Tensorflow.Keras;
+using Tensorflow.NumPy.Pickle;
 
 namespace Tensorflow
 {
@@ -98,6 +100,10 @@ namespace Tensorflow
                     "please visit https://github.com/SciSharp/TensorFlow.NET. If it still not work after installing the backend, please submit an " +
                     "issue to https://github.com/SciSharp/TensorFlow.NET/issues");
             }
+
+            // register numpy reconstructor for pickle
+            Unpickler.registerConstructor("numpy.core.multiarray", "_reconstruct", new MultiArrayConstructor());
+            Unpickler.registerConstructor("numpy", "dtype", new DtypeConstructor());
         }
 
         public string VERSION => c_api.StringPiece(c_api.TF_Version());

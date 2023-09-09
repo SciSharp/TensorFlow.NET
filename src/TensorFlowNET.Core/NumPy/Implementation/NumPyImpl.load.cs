@@ -27,8 +27,14 @@ namespace Tensorflow.NumPy
                 Array matrix = Array.CreateInstance(type, shape);
 
                 //if (type == typeof(String))
-                    //return ReadStringMatrix(reader, matrix, bytes, type, shape);
-                return ReadValueMatrix(reader, matrix, bytes, type, shape);
+                //return ReadStringMatrix(reader, matrix, bytes, type, shape);
+
+                if (type == typeof(Object))
+                    return ReadObjectMatrix(reader, matrix, shape);
+                else
+                {
+                    return ReadValueMatrix(reader, matrix, bytes, type, shape);
+                }
             }
         }
 
@@ -37,7 +43,7 @@ namespace Tensorflow.NumPy
             ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
         {
             // if (typeof(T).IsArray && (typeof(T).GetElementType().IsArray || typeof(T).GetElementType() == typeof(string)))
-                // return LoadJagged(stream) as T;
+            // return LoadJagged(stream) as T;
             return LoadMatrix(stream) as T;
         }
 
@@ -93,7 +99,7 @@ namespace Tensorflow.NumPy
         Type GetType(string dtype, out int bytes, out bool? isLittleEndian)
         {
             isLittleEndian = IsLittleEndian(dtype);
-            bytes = Int32.Parse(dtype.Substring(2));
+            bytes = dtype.Length > 2 ? Int32.Parse(dtype.Substring(2)) : 0;
 
             string typeCode = dtype.Substring(1);
 
@@ -121,6 +127,8 @@ namespace Tensorflow.NumPy
                 return typeof(Double);
             if (typeCode.StartsWith("S"))
                 return typeof(String);
+            if (typeCode.StartsWith("O"))
+                return typeof(Object);
 
             throw new NotSupportedException();
         }
