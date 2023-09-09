@@ -94,8 +94,6 @@ namespace Tensorflow.Keras.Datasets
             var fileBytes = File.ReadAllBytes(path);
             var (x_train, x_test) = LoadX(fileBytes);
             var (labels_train, labels_test) = LoadY(fileBytes);
-            x_test.astype(np.int32);
-            labels_test.astype(np.int32);
 
             var indices = np.arange<int>(len(x_train));
             np.random.shuffle(indices, seed);
@@ -107,67 +105,80 @@ namespace Tensorflow.Keras.Datasets
             x_test = x_test[indices];
             labels_test = labels_test[indices];
 
+            var x_train_array = (int[,])x_train.ToMultiDimArray<int>();
+            var x_test_array = (int[,])x_test.ToMultiDimArray<int>();
+            var labels_train_array = (long[])labels_train.ToArray<long>();
+            var labels_test_array = (long[])labels_test.ToArray<long>();
+
             if (start_char != null)
             {
-                int[,] new_x_train = new int[x_train.shape[0], x_train.shape[1] + 1];
-                for (var i = 0; i < x_train.shape[0]; i++)
+                int[,] new_x_train_array = new int[x_train_array.GetLength(0), x_train_array.GetLength(1) + 1];
+                for (var i = 0; i < x_train_array.GetLength(0); i++)
                 {
-                    new_x_train[i, 0] = (int)start_char;
-                    for (var j = 0; j < x_train.shape[1]; j++)
+                    new_x_train_array[i, 0] = (int)start_char;
+                    for (var j = 0; j < x_train_array.GetLength(1); j++)
                     {
-                        new_x_train[i, j + 1] = x_train[i][j];
+                        if (x_train_array[i, j] == 0)
+                            break;
+                        new_x_train_array[i, j + 1] = x_train_array[i, j];
                     }
                 }
-                int[,] new_x_test = new int[x_test.shape[0], x_test.shape[1] + 1];
-                for (var i = 0; i < x_test.shape[0]; i++)
+                int[,] new_x_test_array = new int[x_test_array.GetLength(0), x_test_array.GetLength(1) + 1];
+                for (var i = 0; i < x_test_array.GetLength(0); i++)
                 {
-                    new_x_test[i, 0] = (int)start_char;
-                    for (var j = 0; j < x_test.shape[1]; j++)
+                    new_x_test_array[i, 0] = (int)start_char;
+                    for (var j = 0; j < x_test_array.GetLength(1); j++)
                     {
-                        new_x_test[i, j + 1] = x_test[i][j];
+                        if (x_test_array[i, j] == 0)
+                            break;
+                        new_x_test_array[i, j + 1] = x_test_array[i, j];
                     }
                 }
-                x_train = new NDArray(new_x_train);
-                x_test = new NDArray(new_x_test);
+                x_train_array = new_x_train_array;
+                x_test_array = new_x_test_array;
             }
             else if (index_from != 0)
             {
-                for (var i = 0; i < x_train.shape[0]; i++)
+                for (var i = 0; i < x_train_array.GetLength(0); i++)
                 {
-                    for (var j = 0; j < x_train.shape[1]; j++)
+                    for (var j = 0; j < x_train_array.GetLength(1); j++)
                     {
-                        if (x_train[i, j] != 0)
-                            x_train[i, j] += index_from;
+                        if (x_train_array[i, j] == 0)
+                            break;
+                        x_train_array[i, j] += index_from;
                     }
                 }
-                for (var i = 0; i < x_test.shape[0]; i++)
+                for (var i = 0; i < x_test_array.GetLength(0); i++)
                 {
-                    for (var j = 0; j < x_test.shape[1]; j++)
+                    for (var j = 0; j < x_test_array.GetLength(1); j++)
                     {
-                        if (x_test[i, j] != 0)
-                            x_test[i, j] += index_from;
+                        if (x_test_array[i, j] == 0)
+                            break;
+                        x_test[i, j] += index_from;
                     }
                 }
             }
 
-            if (maxlen != null)
+            if (maxlen == null)
             {
-                (x_train, labels_train) = data_utils._remove_long_seq((int)maxlen, x_train, labels_train);
-                (x_test, labels_test) = data_utils._remove_long_seq((int)maxlen, x_test, labels_test);
-                if (x_train.size == 0 || x_test.size == 0)
-                    throw new ValueError("After filtering for sequences shorter than maxlen=" +
-                        $"{maxlen}, no sequence was kept. Increase maxlen.");
+                maxlen = max(x_train_array.GetLength(1), x_test_array.GetLength(1));
             }
+            (x_train, labels_train) = data_utils._remove_long_seq((int)maxlen, x_train_array, labels_train_array);
+            (x_test, labels_test) = data_utils._remove_long_seq((int)maxlen, x_test_array, labels_test_array);
+            if (x_train.size == 0 || x_test.size == 0)
+                throw new ValueError("After filtering for sequences shorter than maxlen=" +
+                    $"{maxlen}, no sequence was kept. Increase maxlen.");
 
             var xs = np.concatenate(new[] { x_train, x_test });
             var labels = np.concatenate(new[] { labels_train, labels_test });
+            var xs_array = (int[,])xs.ToMultiDimArray<int>();
 
-            if(num_words == null)
+            if (num_words == null)
             {
                 num_words = 0;
-                for (var i = 0; i < xs.shape[0]; i++)
-                    for (var j = 0; j < xs.shape[1]; j++)
-                        num_words = max((int)num_words, (int)xs[i][j]);
+                for (var i = 0; i < xs_array.GetLength(0); i++)
+                    for (var j = 0; j < xs_array.GetLength(1); j++)
+                        num_words = max((int)num_words, (int)xs_array[i, j]);
             }
 
             // by convention, use 2 as OOV word
@@ -175,32 +186,32 @@ namespace Tensorflow.Keras.Datasets
             // 0 (padding), 1 (start), 2 (OOV)
             if (oov_char != null)
             {
-                int[,] new_xs = new int[xs.shape[0], xs.shape[1]];
-                for(var i = 0; i < xs.shape[0]; i++)
+                int[,] new_xs_array = new int[xs_array.GetLength(0), xs_array.GetLength(1)];
+                for (var i = 0; i < xs_array.GetLength(0); i++)
                 {
-                    for(var j = 0; j < xs.shape[1]; j++)
+                    for (var j = 0; j < xs_array.GetLength(1); j++)
                     {
-                        if ((int)xs[i][j] == 0 || skip_top <= (int)xs[i][j] && (int)xs[i][j] < num_words)
-                            new_xs[i, j] = (int)xs[i][j];
+                        if (xs_array[i, j] == 0 || skip_top <= xs_array[i, j] && xs_array[i, j] < num_words)
+                            new_xs_array[i, j] = xs_array[i, j];
                         else
-                            new_xs[i, j] = (int)oov_char;
+                            new_xs_array[i, j] = (int)oov_char;
                     }
                 }
-                xs = new NDArray(new_xs);
+                xs = new NDArray(new_xs_array);
             }
             else
             {
-                int[,] new_xs = new int[xs.shape[0], xs.shape[1]];
-                for (var i = 0; i < xs.shape[0]; i++)
+                int[,] new_xs_array = new int[xs_array.GetLength(0), xs_array.GetLength(1)];
+                for (var i = 0; i < xs_array.GetLength(0); i++)
                 {
                     int k = 0;
-                    for (var j = 0; j < xs.shape[1]; j++)
+                    for (var j = 0; j < xs_array.GetLength(1); j++)
                     {
-                        if ((int)xs[i][j] == 0 || skip_top <= (int)xs[i][j] && (int)xs[i][j] < num_words)
-                            new_xs[i, k++] = (int)xs[i][j];
+                        if (xs_array[i, j] == 0 || skip_top <= xs_array[i, j] && xs_array[i, j] < num_words)
+                            new_xs_array[i, k++] = xs_array[i, j];
                     }
                 }
-                xs = new NDArray(new_xs);
+                xs = new NDArray(new_xs_array);
             }
 
             var idx = len(x_train);

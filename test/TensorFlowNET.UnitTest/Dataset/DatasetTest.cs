@@ -204,7 +204,7 @@ namespace TensorFlowNET.UnitTest.Dataset
         {
             var vocab_size = 20000; // Only consider the top 20k words
             var maxlen = 200; // Only consider the first 200 words of each movie review
-            var dataset = keras.datasets.imdb.load_data(num_words: vocab_size);
+            var dataset = keras.datasets.imdb.load_data(num_words: vocab_size, maxlen: maxlen);
             var x_train = dataset.Train.Item1;
             var y_train = dataset.Train.Item2;
             var x_val = dataset.Test.Item1;
@@ -217,16 +217,17 @@ namespace TensorFlowNET.UnitTest.Dataset
         }
         IEnumerable<int[]> RemoveZeros(NDArray data)
         {
+            var data_array = (int[,])data.ToMultiDimArray<int>();
             List<int[]> new_data = new List<int[]>();
-            for (var i = 0; i < data.shape[0]; i++)
+            for (var i = 0; i < data_array.GetLength(0); i++)
             {
                 List<int> new_array = new List<int>();
-                for (var j = 0; j < data.shape[1]; j++)
+                for (var j = 0; j < data_array.GetLength(1); j++)
                 {
-                    if (data[i][j] == 0)
+                    if (data_array[i, j] == 0)
                         break;
                     else
-                        new_array.Add((int)data[i][j]);
+                        new_array.Add(data_array[i, j]);
                 }
                 new_data.Add(new_array.ToArray());
             }
