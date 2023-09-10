@@ -224,6 +224,10 @@ namespace Tensorflow.Keras.Engine
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                if (stop_training)
+                {
+                    break;
+                }
             }
 
             return callbacks.History;
@@ -283,6 +287,10 @@ namespace Tensorflow.Keras.Engine
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                if (stop_training)
+                {
+                    break;
+                }
             }
 
             return callbacks.History;
@@ -339,6 +347,10 @@ namespace Tensorflow.Keras.Engine
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
+                if (stop_training)
+                {
+                    break;
+                }
             }
 
             return callbacks.History;
