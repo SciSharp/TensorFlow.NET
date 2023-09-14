@@ -394,7 +394,7 @@ namespace TensorFlowNET.UnitTest.Gradient
             // Test that we differentiate both 'x' and 'y' correctly when x is a
             // predecessor of y.
 
-            self.cached_session();
+            var sess = self.cached_session().Single();
             var x = tf.constant(1.0);
             var y = x * 2.0;
             var z = y * 3.0;
