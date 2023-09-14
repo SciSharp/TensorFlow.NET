@@ -394,13 +394,15 @@ namespace TensorFlowNET.UnitTest.Gradient
             // Test that we differentiate both 'x' and 'y' correctly when x is a
             // predecessor of y.
 
-            var sess = self.cached_session().Single();
-            var x = tf.constant(1.0);
-            var y = x * 2.0;
-            var z = y * 3.0;
-            var grads = tf.gradients(z, new[] { x, y });
-            self.assertTrue(all(grads.Select(x => x != null)));
-            self.assertEqual(6.0, grads[0].eval());
+            using (self.cached_session())
+            {
+                var x = tf.constant(1.0);
+                var y = x * 2.0;
+                var z = y * 3.0;
+                var grads = tf.gradients(z, new[] { x, y });
+                self.assertTrue(all(grads.Select(x => x != null)));
+                self.assertEqual(6.0, grads[0].eval());
+            }   
         }
 
         [Ignore("TODO")]
