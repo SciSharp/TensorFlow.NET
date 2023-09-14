@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
+using Tensorflow.Framework;
 
 namespace TensorFlowNET.UnitTest.Gradient
 {
@@ -394,6 +395,8 @@ namespace TensorFlowNET.UnitTest.Gradient
             // Test that we differentiate both 'x' and 'y' correctly when x is a
             // predecessor of y.
 
+            //TODO: @test_util.run_v1_only("b/120545219")
+
             using (self.cached_session())
             {
                 var x = tf.constant(1.0);
@@ -402,66 +405,61 @@ namespace TensorFlowNET.UnitTest.Gradient
                 var grads = tf.gradients(z, new[] { x, y });
                 self.assertTrue(all(grads.Select(x => x != null)));
                 self.assertEqual(6.0, grads[0].eval());
-            }   
+            }
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testAggregationMethodAccumulateN()
         {
+            //TODO: @test_util.run_v1_only("b/120545219")
 
-            //@test_util.run_v1_only("b/120545219")
-            //def testAggregationMethodAccumulateN(self):
-            //  with self.cached_session():
-            //    x = constant(1.0)
-            //    y = x * 2.0
-            //    z = y + y + y + y + y + y + y + y + y + y
-            //    grads = gradients.gradients(
-            //        z, [x, y],
-            //        aggregation_method=gradients.AggregationMethod.
-            //        EXPERIMENTAL_ACCUMULATE_N)
-            //    self.assertTrue(all(x is not None for x in grads))
-            //    self.assertEqual(20.0, grads[0].eval())
-            //    self.assertEqual(10.0, grads[1].eval())
-
+            using (self.cached_session())
+            {
+                var x = tf.constant(1.0);
+                var y = x * 2.0;
+                var z = y + y + y + y + y + y + y + y + y + y;
+                var grads = tf.gradients(z, new[] { x, y },
+                        aggregation_method: AggregationMethod.EXPERIMENTAL_ACCUMULATE_N);
+                self.assertTrue(all(grads.Select(x => x != null)));
+                self.assertEqual(20.0, grads[0].eval());
+                self.assertEqual(10.0, grads[1].eval());
+            }
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testAggregationMethodAddN()
         {
-            //@test_util.run_v1_only("b/120545219")
-            //def testAggregationMethodAddN(self):
-            //  with self.cached_session():
-            //    x = constant(1.0)
-            //    y = x * 2.0
-            //    z = y + y + y + y + y + y + y + y + y + y
-            //    grads = gradients.gradients(
-            //        z, [x, y], aggregation_method=gradients.AggregationMethod.ADD_N)
-            //    self.assertTrue(all(x is not None for x in grads))
-            //    self.assertEqual(20.0, grads[0].eval())
-            //    self.assertEqual(10.0, grads[1].eval())
+            //TODO: @test_util.run_v1_only("b/120545219")
 
-
+            using (self.cached_session())
+            {
+                var x = tf.constant(1.0);
+                var y = x * 2.0;
+                var z = y + y + y + y + y + y + y + y + y + y;
+                var grads = tf.gradients(z, new[] { x, y },
+                        aggregation_method: AggregationMethod.ADD_N);
+                self.assertTrue(grads.All(x => x != null));
+                self.assertEqual(20.0, grads[0].eval());
+                self.assertEqual(10.0, grads[1].eval());
+            }
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testAggregationMethodTree()
         {
-            //@test_util.run_v1_only("b/120545219")
-            //def testAggregationMethodTree(self):
-            //  with self.cached_session():
-            //    x = constant(1.0)
-            //    y = x * 2.0
-            //    z = y + y + y + y + y + y + y + y + y + y
-            //    grads = gradients.gradients(
-            //        z, [x, y],
-            //        aggregation_method=gradients.AggregationMethod.EXPERIMENTAL_TREE)
-            //    self.assertTrue(all(x is not None for x in grads))
-            //    self.assertEqual(20.0, grads[0].eval())
-            //    self.assertEqual(10.0, grads[1].eval())
+            //TODO: @test_util.run_v1_only("b/120545219")
 
+            using (self.cached_session())
+            {
+                var x = tf.constant(1.0);
+                var y = x * 2.0;
+                var z = y + y + y + y + y + y + y + y + y + y;
+                var grads = tf.gradients(z, new[] { x, y },
+                        aggregation_method: AggregationMethod.EXPERIMENTAL_TREE);
+                self.assertTrue(grads.All(x => x != null));
+                self.assertEqual(20.0, grads[0].eval());
+                self.assertEqual(10.0, grads[1].eval());
+            }
         }
 
         [Ignore("TODO")]
@@ -490,24 +488,32 @@ namespace TensorFlowNET.UnitTest.Gradient
             //    self.assertTrue(isinstance(grads[0], ops.Tensor))
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testSingletonIndexedSlices()
         {
+            tf.Graph().as_default();
 
-            //def testSingletonIndexedSlices(self):
-            //  with ops.Graph().as_default():
-            //    x = array_ops.placeholder(dtypes.float32)
-            //    y = array_ops.identity(x)
-            //    dy = ops.IndexedSlices(
-            //        array_ops.placeholder(dtypes.float32),
-            //        array_ops.placeholder(dtypes.int32))
-            //    dx, = gradients.gradients(y, x, grad_ys=dy)
-            //    # The IndexedSlices gradient of tf.identity is the identity map.
-            //    with self.cached_session() as sess:
-            //      vdx, vdy = sess.run(
-            //          [dx, dy], feed_dict={x: [1.0], dy.indices: [0], dy.values: [2.0]})
-            //    self.assertEqual(vdx, vdy)
+            var x = tf.placeholder(TF_DataType.TF_FLOAT);
+            var y = tf.identity(x);
+            var dy_indices = tf.placeholder(TF_DataType.TF_INT32);
+            var dy_values = tf.placeholder(TF_DataType.TF_FLOAT);
+            Tensor dy = new IndexedSlices(dy_values, dy_indices);
+            var dx = tf.gradients(new[] { y }, new[] { x }, grad_ys: new[] { dy })[0];
+            // The IndexedSlices gradient of tf.identity is the identity map.
+            using (var sess = self.cached_session())
+            {
+                var feed_dict = new FeedItem[]
+                {
+                    ( x, new Tensor(new float[] { 1.0f }) ),
+                    (dy_indices, new Tensor(new int[] { 0 })),
+                    (dy_values, new Tensor(new float[] { 2.0f }))
+                };
+                var result = sess.run(new[] { dx, dy }, feed_dict);
+                var vdx = result[0];
+                var vdy = result[1];
+                self.assertEqual(vdx, vdy);
+            }
+
         }
 
         [Ignore("TODO")]
@@ -575,26 +581,25 @@ namespace TensorFlowNET.UnitTest.Gradient
             //    self.assertIsNotNone(gradient)
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testDependentYs()
         {
-            //@test_util.run_v1_only("b/120545219")
-            //def testDependentYs(self):
-            //  with self.cached_session():
-            //    x = constant_op.constant(3.0)
-            //    y = math_ops.square(x)
-            //    y1 = math_ops.square(y)
-            //    y2 = math_ops.square(y1)
-            //    g = gradients.gradients([y, y2], x)
-            //    self.assertAllClose(17502.0, g[0].eval())
-            //    g = gradients.gradients(y + y2, x)
-            //    self.assertAllClose(17502.0, g[0].eval())
-            //    z = array_ops.identity(y)
-            //    z2 = array_ops.identity(y2)
-            //    g = gradients.gradients([z, z2], x)
-            //    self.assertAllClose(17502.0, g[0].eval())
-
+            //TODO: @test_util.run_v1_only("b/120545219")
+            using (self.cached_session())
+            {
+                var x = constant_op.constant(3.0);
+                var y = math_ops.square(x);
+                var y1 = math_ops.square(y);
+                var y2 = math_ops.square(y1);
+                var g = tf.gradients(new[] { y, y2 }, new[] { x });
+                self.assertAllClose(17502.0, g[0].eval());
+                g = tf.gradients(y + y2, x);
+                self.assertAllClose(17502.0, g[0].eval());
+                var z = array_ops.identity(y);
+                var z2 = array_ops.identity(y2);
+                g = tf.gradients(new[] { z, z2 }, new[] { x });
+                self.assertAllClose(17502.0, g[0].eval());
+            }
         }
 
         [Ignore("TODO")]
@@ -602,75 +607,152 @@ namespace TensorFlowNET.UnitTest.Gradient
         public void testPartialDerivatives()
         {
 
-            //@test_util.run_v1_only("b/120545219")
-            //def testPartialDerivatives(self):
-            //  with self.cached_session():
-            //    x = constant_op.constant(1.)
-            //    y = 2 * x
-            //    z = x + y
-            //    totalg = gradients.gradients(z, [x, y])
-            //    self.assertEqual([3.0, 1.0], [g.eval() for g in totalg])
-            //    partialg = gradients.gradients(z, [x, y], stop_gradients=[x, y])
-            //    self.assertEqual([1.0, 1.0], [g.eval() for g in partialg])
+            //TODO: @test_util.run_v1_only("b/120545219")
+            using (self.cached_session())
+            {
+                var x = tf.constant(1.0);
+                var y = 2 * x;
+                var z = x + y;
+                var totalg = tf.gradients(z, new[] { x, y });
+                self.assertEqual(new[] { 3.0, 1.0 }, totalg.Select(g => g.eval()));
+                var partialg = tf.gradients(z, new[] { x, y }, stop_gradients: new[] { x, y });
+                self.assertEqual(new[] { 1.0, 1.0 }, partialg.Select(g => g.eval()));
+            }
         }
 
-        [Ignore("TODO")]
+        // TODO: remove when np.testing.assert_allclose(a, b) is implemented
+        private class CollectionComparer : System.Collections.IComparer
+        {
+            private readonly double _epsilon = 1e-07;
+
+            public int Compare(object x, object y)
+            {
+                var a = (double)x;
+                var b = (double)y;
+
+                double delta = Math.Abs(a - b);
+                if (delta < _epsilon)
+                {
+                    return 0;
+                }
+                return a.CompareTo(b);
+            }
+        }
+
+        private struct Case
+        {
+            public Tensor[] grad1;
+            public Tensor[] grad2;
+            public string constants;
+            public string variables;
+        }
+
+        [Ignore("FIXME")]
         [TestMethod]
         public void testStopGradients()
         {
+            
+            //TODO: @test_util.run_v1_only("b/120545219")
+            Dictionary<char, Tensor> makeGraph(RandomizedImpl rng, string stop_gradients)
+            {
+                Tensor functionOf(Tensor[] xs, int k)
+                {
+                    var shape = new Shape(k, k);
+                    // TODO: replace by DefaultIfEmpty() before Aggregate().
+                    if (!xs.Any())
+                    {
+                        return rng.random(shape).astype(np.float32);
+                    }
+                    return xs.Select(x => gen_math_ops.mat_mul(rng.random(shape).astype(np.float32), x))
+                        .Aggregate((t1, t2) => t1 + t2)
+                    + rng.random(shape).astype(np.float32);
+                }
 
+                var a = functionOf(Array.Empty<Tensor>(), 3);
+                if (stop_gradients.Contains('a')) a = array_ops.stop_gradient(a);
+                var b = functionOf(new Tensor[] { a }, 3);
+                if (stop_gradients.Contains('b')) b = array_ops.stop_gradient(b);
+                var c = functionOf(new Tensor[] { a, b }, 3);
+                if (stop_gradients.Contains('c')) c = array_ops.stop_gradient(c);
+                var d = functionOf(new Tensor[] { b, c }, 3);
+                if (stop_gradients.Contains('d')) d = array_ops.stop_gradient(d);
 
-            //@test_util.run_v1_only("b/120545219")
-            //def testStopGradients(self):
-            //  def _MakeGraph(rng, stop_gradients=()):
-            //    def _FunctionOf(xs, k=3):
-            //      return ops.convert_to_tensor(
-            //          sum(math_ops.matmul(rng.rand(k, k), x) for x in xs)
-            //          + rng.rand(k, k))
+                return new Dictionary<char, Tensor>
+                    {
+                        { 'a', a },
+                        { 'b', b },
+                        { 'c', c },
+                        { 'd', d }
+                    };
+            }
 
-            //    a = _FunctionOf([])
-            //    if "a" in stop_gradients: a = array_ops.stop_gradient(a)
-            //    b = _FunctionOf([a])
-            //    if "b" in stop_gradients: b = array_ops.stop_gradient(b)
-            //    c = _FunctionOf([a, b])
-            //    if "c" in stop_gradients: c = array_ops.stop_gradient(c)
-            //    d = _FunctionOf([b, c])
-            //    if "d" in stop_gradients: d = array_ops.stop_gradient(d)
-            //    return dict(a=a, b=b, c=c, d=d)
+            Tensor[] gradients(Tensor[] ys, Tensor[] xs, Tensor[] stop_gradients = null)
+            {
+                var dydxs = tf.gradients(ys, xs, stop_gradients);
+                dydxs = dydxs.Select((dydx, i) => dydx == null ? xs[i] * 0 : dydx).ToArray();
+                return dydxs;
+            }
 
-            //  def _Gradients(ys, xs, **kwargs):
-            //    dydxs = gradients.gradients(ys, xs, **kwargs)
-            //    dydxs = [0. * x if dydx is None else dydx
-            //             for x, dydx in zip(xs, dydxs)]
-            //    return dydxs
-            //  seed = np.random.randint(1000)
-            //  cases = []
-            //  subsets = [""] + "a b c d ab ac ad bc bd cd abc abd acd bcd abcd".split()
-            //  graph = _MakeGraph(np.random.RandomState(seed))
-            //  for constants in subsets:
-            //    graph_with_stops = _MakeGraph(np.random.RandomState(seed), constants)
-            //    for variables_ in subsets:
-            //      # compute the gradient when stopped using tf.stop_gradients
-            //      grad1 = _Gradients([graph_with_stops["d"]],
-            //                         [graph_with_stops[v] for v in variables_])
-            //      # compute the gradient when stopped using the stop_gradients kwarg
-            //      grad2 = _Gradients([graph["d"]],
-            //                         [graph[v] for v in variables_],
-            //                         stop_gradients=[graph[v] for v in constants])
-            //      cases.append(dict(grad1=grad1, grad2=grad2,
-            //                        constants=constants, variables=variables_))
+            var seed = np.random.randint(1000);
+            // TODO: remove next line when np.random.RandomState implemented.
+            tf.set_random_seed(seed);
+            var cases = new List<Case>();
+            // TODO: add "" case.
+            var subsets = new List<string> { "" }.Concat("a b c d ab ac ad bc bd cd abc abd acd bcd abcd".Split());
+            // TODO: pass np.random.RandomState(seed) instead of np.random
+            var graph = makeGraph(np.random, string.Empty);
+            foreach (var constants in subsets)
+            {
+                var graphWithStops = makeGraph(np.random, constants);
+                foreach (var variables_ in subsets)
+                {
+                    // compute the gradient when stopped using tf.stop_gradients
+                    var grad1 = gradients(
+                        new[] { graphWithStops['d'] },
+                        variables_.ToCharArray().Select(v => graphWithStops[v]).ToArray()
+                    );
+                    // compute the gradient when stopped using the stop_gradients from args
+                    var grad2 = gradients(
+                        new[] { graph['d'] },
+                        variables_.ToCharArray().Select(v => graph[v]).ToArray(),
+                        constants.ToCharArray().Select(c => graph[c]).DefaultIfEmpty(null)?.ToArray()
+                    );
+                    cases.Add(new Case
+                    {
+                        grad1 = grad1,
+                        grad2 = grad2,
+                        variables = variables_,
+                        constants = constants,
+                    }) ;
+                }
+            }
 
-            //  # evaluate all tensors in one call to session.run for speed
-            //  with self.cached_session() as sess:
-            //    results = sess.run([(case["grad1"], case["grad2"]) for case in cases])
+            // evaluate all tensors in one call to session.run for speed
+            using (var sess = self.cached_session())
+            {
+                var results = sess.run(
+                    cases.Select(case_ => (
+                        case_.grad1,
+                        case_.grad2
+                    )).ToArray()
+                );
 
-            //  for (npgrad1, npgrad2), case in zip(results, cases):
-            //    for a, b in zip(npgrad1, npgrad2):
-            //      np.testing.assert_allclose(a, b)
-
+                foreach (var (result, case_) in results.Zip(cases))
+                {
+                    var npgrad1 = result[0];
+                    var npgrad2 = result[1];
+                    foreach (var (a, b) in npgrad1.Zip(npgrad2))
+                    {
+                        // TODO: np.testing.assert_allclose(a, b);
+                        CollectionAssert.AreEqual(a.ToArray(), b.ToArray(), new CollectionComparer());
+                    }
+                }
+            }
         }
 
-        [Ignore("TODO")]
+
+
+        [Ignore("TODO: Unconnected gradients are not implemented")]
         [TestMethod]
         public void testUnconnectedGradientsNoneUnconnectedGradients()
         {
@@ -685,7 +767,7 @@ namespace TensorFlowNET.UnitTest.Gradient
             //  self.assertIsNone(grad[0])
         }
 
-        [Ignore("TODO")]
+        [Ignore("TODO: Unconnected gradients are not implemented")]
         [TestMethod]
         public void testUnconnectedGradientsZerosUnconnectedGradients()
         {
@@ -699,15 +781,21 @@ namespace TensorFlowNET.UnitTest.Gradient
             //        [y], [x], unconnected_gradients="zero")
             //    with self.cached_session() as sess:
             //      self.assertAllEqual([[0.0, 0.0], [0.0, 0.0]], self.evaluate(grads)[0])
+
+            // tf.Graph().as_default();
+            // var x = tf.constant(1.0, shape: new long[] { 2, 2 });
+            // var y = tf.constant(3.0, shape: new long[] { 3, 1 });
+            // var grads = tf.gradients(new[] { y }, new[] { x }, unconnected_gradients: "zero");
+            // using (self.cached_session())
+            // {
+            //     self.assertAllEqual(new[,] { { 0.0, 0.0 }, { 0.0, 0.0 } }, self.evaluate(grads)[0]);
+            // }
         }
 
-        [Ignore("TODO")]
+        [Ignore("TODO: Unconnected gradients are not implemented")]
         [TestMethod]
         public void testUnconnectedGradientsZeroConnectedGradients()
         {
-
-
-
             //def testUnconnectedGradientsZeroConnectedGradients(self):
             //  with ops.Graph().as_default():
             //    x = constant(1.0)
@@ -716,9 +804,19 @@ namespace TensorFlowNET.UnitTest.Gradient
             //        [y], [x], unconnected_gradients="zero")
             //    with self.cached_session() as sess:
             //      self.assertEquals(3.0, self.evaluate(grad)[0])
+
+            // tf.Graph().as_default();
+
+            // var x = tf.constant(1.0f);
+            // var y = x * 3.0f;
+            // var grad = tf.gradients(new [] { y }, new [] { x }, unconnected_gradients: "zero");
+            // using (var sess = tf.Session())
+            // {
+            //     self.assertEquals(3.0, self.evaluate(grad)[0]);
+            // }
         }
 
-        [Ignore("TODO")]
+        [Ignore("TODO: Unconnected gradients are not implemented")]
         [TestMethod]
         public void testUnknownUnconnectedGradientsValueGiven()
         {
@@ -729,15 +827,6 @@ namespace TensorFlowNET.UnitTest.Gradient
             //    with self.assertRaisesRegexp(
             //        ValueError, "Unknown value for unconnected_gradients: 'nonsense'"):
             //      gradients.gradients([y], [x], unconnected_gradients="nonsense")
-
         }
-
-
-
-        /*
-
-
-
-         */
     }
 }
