@@ -388,22 +388,21 @@ namespace TensorFlowNET.UnitTest.Gradient
 
         }
 
-        [Ignore("TODO")]
         [TestMethod]
         public void testBoundaryContinue()
         {
-            //@test_util.run_v1_only("b/120545219")
-            //def testBoundaryContinue(self):
-            //  # Test that we differentiate both 'x' and 'y' correctly when x is a
-            //  # predecessor of y.
-            //  with self.cached_session():
-            //    x = constant(1.0)
-            //    y = x * 2.0
-            //    z = y * 3.0
-            //    grads = gradients.gradients(z, [x, y])
-            //    self.assertTrue(all(x is not None for x in grads))
-            //    self.assertEqual(6.0, grads[0].eval())
+            // Test that we differentiate both 'x' and 'y' correctly when x is a
+            // predecessor of y.
 
+            using (self.cached_session())
+            {
+                var x = tf.constant(1.0);
+                var y = x * 2.0;
+                var z = y * 3.0;
+                var grads = tf.gradients(z, new[] { x, y });
+                self.assertTrue(all(grads.Select(x => x != null)));
+                self.assertEqual(6.0, grads[0].eval());
+            }   
         }
 
         [Ignore("TODO")]

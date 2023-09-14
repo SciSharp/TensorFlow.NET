@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
 
@@ -23,7 +24,7 @@ namespace TensorFlowNET.UnitTest.ControlFlowTest
         private void _testWhileContextHelper(int maximum_iterations)
         {
             // TODO: implement missing code dependencies
-            var sess = this.cached_session();
+            using var sess = this.cached_session();
             var i = constant_op.constant(0, name: "i");
             var c = new Func<Tensor, Tensor>(x => gen_math_ops.less(x, ops.convert_to_tensor(10), name: "c"));
             var b = new Func<Tensor, Tensor>(x => math_ops.add(x, 1, name: "c"));
