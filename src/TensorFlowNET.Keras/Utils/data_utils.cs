@@ -40,7 +40,7 @@ namespace Tensorflow.Keras.Utils
             return datadir;
         }
 
-        public static (NDArray, NDArray) _remove_long_seq(int maxlen, NDArray seq, NDArray label)
+        public static (int[,], long[]) _remove_long_seq(int maxlen, int[,] seq, long[] label)
         {
             /*Removes sequences that exceed the maximum length.
 
@@ -56,19 +56,17 @@ namespace Tensorflow.Keras.Utils
             List<int[]> new_seq = new List<int[]>();
             List<long> new_label = new List<long>();
 
-            var seq_array = (int[,])seq.ToMultiDimArray<int>();
-            var label_array = (long[])label.ToArray<long>();
-            for (var i = 0; i < seq_array.GetLength(0); i++)
+            for (var i = 0; i < seq.GetLength(0); i++)
             {
-                if (maxlen < seq_array.GetLength(1) && seq_array[i,maxlen] != 0)
+                if (maxlen < seq.GetLength(1) && seq[i, maxlen] != 0)
                     continue;
                 int[] sentence = new int[maxlen];
-                for (var j = 0; j < maxlen && j < seq_array.GetLength(1); j++)
+                for (var j = 0; j < maxlen && j < seq.GetLength(1); j++)
                 {
-                    sentence[j] = seq_array[i, j];
+                    sentence[j] = seq[i, j];
                 }
                 new_seq.Add(sentence);
-                new_label.Add(label_array[i]);
+                new_label.Add(label[i]);
             }
 
             int[,] new_seq_array = new int[new_seq.Count, maxlen];

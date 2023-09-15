@@ -116,23 +116,13 @@ namespace Tensorflow.Keras.Datasets
                 for (var i = 0; i < x_train_array.GetLength(0); i++)
                 {
                     new_x_train_array[i, 0] = (int)start_char;
-                    for (var j = 0; j < x_train_array.GetLength(1); j++)
-                    {
-                        if (x_train_array[i, j] == 0)
-                            break;
-                        new_x_train_array[i, j + 1] = x_train_array[i, j];
-                    }
+                    Array.Copy(x_train_array, i * x_train_array.GetLength(1), new_x_train_array, i * new_x_train_array.GetLength(1) + 1, x_train_array.GetLength(1));
                 }
                 int[,] new_x_test_array = new int[x_test_array.GetLength(0), x_test_array.GetLength(1) + 1];
                 for (var i = 0; i < x_test_array.GetLength(0); i++)
                 {
                     new_x_test_array[i, 0] = (int)start_char;
-                    for (var j = 0; j < x_test_array.GetLength(1); j++)
-                    {
-                        if (x_test_array[i, j] == 0)
-                            break;
-                        new_x_test_array[i, j + 1] = x_test_array[i, j];
-                    }
+                    Array.Copy(x_test_array, i * x_test_array.GetLength(1), new_x_test_array, i * new_x_test_array.GetLength(1) + 1, x_test_array.GetLength(1));
                 }
                 x_train_array = new_x_train_array;
                 x_test_array = new_x_test_array;
@@ -163,15 +153,19 @@ namespace Tensorflow.Keras.Datasets
             {
                 maxlen = max(x_train_array.GetLength(1), x_test_array.GetLength(1));
             }
-            (x_train, labels_train) = data_utils._remove_long_seq((int)maxlen, x_train_array, labels_train_array);
-            (x_test, labels_test) = data_utils._remove_long_seq((int)maxlen, x_test_array, labels_test_array);
-            if (x_train.size == 0 || x_test.size == 0)
+            (x_train_array, labels_train_array) = data_utils._remove_long_seq((int)maxlen, x_train_array, labels_train_array);
+            (x_test_array, labels_test_array) = data_utils._remove_long_seq((int)maxlen, x_test_array, labels_test_array);
+            if (x_train_array.Length == 0 || x_test_array.Length == 0)
                 throw new ValueError("After filtering for sequences shorter than maxlen=" +
                     $"{maxlen}, no sequence was kept. Increase maxlen.");
 
-            var xs = np.concatenate(new[] { x_train, x_test });
-            var labels = np.concatenate(new[] { labels_train, labels_test });
-            var xs_array = (int[,])xs.ToMultiDimArray<int>();
+            int[,] xs_array = new int[x_train_array.GetLength(0) + x_test_array.GetLength(0), (int)maxlen];
+            Array.Copy(x_train_array, xs_array, x_train_array.Length);
+            Array.Copy(x_test_array, 0, xs_array, x_train_array.Length, x_train_array.Length);
+
+            long[] labels_array = new long[labels_train_array.Length + labels_test_array.Length];
+            Array.Copy(labels_train_array, labels_array, labels_train_array.Length);
+            Array.Copy(labels_test_array, 0, labels_array, labels_train_array.Length, labels_test_array.Length);
 
             if (num_words == null)
             {
@@ -197,7 +191,7 @@ namespace Tensorflow.Keras.Datasets
                             new_xs_array[i, j] = (int)oov_char;
                     }
                 }
-                xs = new NDArray(new_xs_array);
+                xs_array = new_xs_array;
             }
             else
             {
@@ -211,19 +205,19 @@ namespace Tensorflow.Keras.Datasets
                             new_xs_array[i, k++] = xs_array[i, j];
                     }
                 }
-                xs = new NDArray(new_xs_array);
+                xs_array = new_xs_array;
             }
 
-            var idx = len(x_train);
-            x_train = xs[$"0:{idx}"];
-            x_test = xs[$"{idx}:"];
-            var y_train = labels[$"0:{idx}"];
-            var y_test = labels[$"{idx}:"];
+            Array.Copy(xs_array, x_train_array, x_train_array.Length);
+            Array.Copy(xs_array, x_train_array.Length, x_test_array, 0, x_train_array.Length);
+
+            Array.Copy(labels_array, labels_train_array, labels_train_array.Length);
+            Array.Copy(labels_array, labels_train_array.Length, labels_test_array, 0, labels_test_array.Length);
 
             return new DatasetPass
             {
-                Train = (x_train, y_train),
-                Test = (x_test, y_test)
+                Train = (x_train_array, labels_train_array),
+                Test = (x_test_array, labels_test_array)
             };
         }
 
