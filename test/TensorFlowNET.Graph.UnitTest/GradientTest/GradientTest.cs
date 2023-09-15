@@ -488,17 +488,20 @@ namespace TensorFlowNET.UnitTest.Gradient
             //    self.assertTrue(isinstance(grads[0], ops.Tensor))
         }
 
-        [Ignore("FIXME")]
+        [Ignore("TODO: CompositeTensors are not supported yet.")]
         [TestMethod]
         public void testSingletonIndexedSlices()
         {
             tf.Graph().as_default();
 
+            // TODO: uncomment when CompositeTensors are supported.
+            /*
             var x = tf.placeholder(TF_DataType.TF_FLOAT);
             var y = tf.identity(x);
             var dy_indices = tf.placeholder(TF_DataType.TF_INT32);
             var dy_values = tf.placeholder(TF_DataType.TF_FLOAT);
-            Tensor dy = new IndexedSlices(dy_values, dy_indices);
+            var dy = new IndexedSlices(dy_values, dy_indices);
+           
             var dx = tf.gradients(new[] { y }, new[] { x }, grad_ys: new[] { dy })[0];
             // The IndexedSlices gradient of tf.identity is the identity map.
             using (var sess = self.cached_session())
@@ -514,6 +517,7 @@ namespace TensorFlowNET.UnitTest.Gradient
                 var vdy = result[1];
                 self.assertEqual(vdx, vdy);
             }
+            */
 
         }
 
