@@ -180,10 +180,11 @@ namespace Tensorflow.Keras.Datasets
             // 0 (padding), 1 (start), 2 (OOV)
             if (oov_char != null)
             {
-                int[,] new_xs_array = new int[xs_array.GetLength(0), xs_array.GetLength(1)];
-                for (var i = 0; i < xs_array.GetLength(0); i++)
+                var (d1, d2) = (xs_array.GetLength(0), xs_array.GetLength(1));
+                int[,] new_xs_array = new int[d1, d2];
+                for (var i = 0; i < d1; i++)
                 {
-                    for (var j = 0; j < xs_array.GetLength(1); j++)
+                    for (var j = 0; j < d2; j++)
                     {
                         if (xs_array[i, j] == 0 || skip_top <= xs_array[i, j] && xs_array[i, j] < num_words)
                             new_xs_array[i, j] = xs_array[i, j];
@@ -195,11 +196,12 @@ namespace Tensorflow.Keras.Datasets
             }
             else
             {
-                int[,] new_xs_array = new int[xs_array.GetLength(0), xs_array.GetLength(1)];
-                for (var i = 0; i < xs_array.GetLength(0); i++)
+                var (d1, d2) = (xs_array.GetLength(0), xs_array.GetLength(1));
+                int[,] new_xs_array = new int[d1, d2];
+                for (var i = 0; i < d1; i++)
                 {
                     int k = 0;
-                    for (var j = 0; j < xs_array.GetLength(1); j++)
+                    for (var j = 0; j < d2; j++)
                     {
                         if (xs_array[i, j] == 0 || skip_top <= xs_array[i, j] && xs_array[i, j] < num_words)
                             new_xs_array[i, k++] = xs_array[i, j];
