@@ -101,9 +101,10 @@ namespace Tensorflow.NumPy
 
         Array ReadObjectMatrix(BinaryReader reader, Array matrix, int[] shape)
         {
-            Stream stream = reader.BaseStream;
+            Stream deflateStream = reader.BaseStream;
+            BufferedStream bufferedStream = new BufferedStream(deflateStream);
             var unpickler = new Unpickler();
-            return (MultiArrayPickleWarpper)unpickler.load(stream);
+            return (MultiArrayPickleWarpper)unpickler.load(bufferedStream);
         }
 
         public (NDArray, NDArray) meshgrid<T>(T[] array, bool copy = true, bool sparse = false)
