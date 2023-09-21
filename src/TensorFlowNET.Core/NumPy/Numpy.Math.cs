@@ -85,5 +85,11 @@ namespace Tensorflow.NumPy
 
         [AutoNumPy]
         public static NDArray add(NDArray x, NDArray y) => new NDArray(math_ops.add(x, y));
+
+        [AutoNumPy]
+        public static NDArray greater(NDArray x, NDArray y) => new NDArray(tf.greater(x, y));
+
+        [AutoNumPy]
+        public static NDArray less(NDArray x, NDArray y) => new NDArray(tf.less(x, y));
     }
 }
