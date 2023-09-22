@@ -53,15 +53,17 @@ namespace Tensorflow.Keras.Utils
                     new_seq, new_label: shortened lists for `seq` and `label`.
 
             */
+            var nRow = seq.GetLength(0);
+            var nCol = seq.GetLength(1);
             List<int[]> new_seq = new List<int[]>();
             List<long> new_label = new List<long>();
 
-            for (var i = 0; i < seq.GetLength(0); i++)
+            for (var i = 0; i < nRow; i++)
             {
-                if (maxlen < seq.GetLength(1) && seq[i, maxlen] != 0)
+                if (maxlen < nCol && seq[i, maxlen] != 0)
                     continue;
                 int[] sentence = new int[maxlen];
-                for (var j = 0; j < maxlen && j < seq.GetLength(1); j++)
+                for (var j = 0; j < maxlen && j < nCol; j++)
                 {
                     sentence[j] = seq[i, j];
                 }
