@@ -5,7 +5,7 @@
     <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.11.0</TargetTensorFlow>
-    <Version>0.110.3</Version>
+    <Version>0.110.4</Version>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Eli Belash, Yaohui Liu, Meinrad Recheis</Authors>
@@ -25,7 +25,8 @@ https://tensorflownet.readthedocs.io</Description>
 		tf.net 0.110.x and above are based on tensorflow native 2.11.0
 		* Support RNN, LSTM model.
 		* Support Transformer model.
-		
+		* Added IMDB dataset.
+
 		tf.net 0.100.x and above are based on tensorflow native 2.10.0
 
 		* Eager Mode is added finally.
@@ -43,7 +44,7 @@ https://tensorflownet.readthedocs.io</Description>
 		tf.net 0.10x.x aligns with TensorFlow v2.10.x native library.
 		tf.net 0.11x.x aligns with TensorFlow v2.11.x native library.
 	</PackageReleaseNotes>
-    <FileVersion>0.110.3.0</FileVersion>
+    <FileVersion>0.110.4.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageOutputPath>packages</PackageOutputPath>
@@ -174,7 +175,7 @@ https://tensorflownet.readthedocs.io</Description>
   <ItemGroup>
     <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OneOf" Version="3.0.255" />
+    <PackageReference Include="OneOf" Version="3.0.263" />
     <PackageReference Include="Protobuf.Text" Version="0.7.1" />
     <PackageReference Include="Razorvine.Pickle" Version="1.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
