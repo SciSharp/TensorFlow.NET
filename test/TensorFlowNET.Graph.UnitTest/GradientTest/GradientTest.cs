@@ -776,8 +776,6 @@ namespace TensorFlowNET.UnitTest.Gradient
         [TestMethod]
         public void testUnconnectedGradientsZerosUnconnectedGradients()
         {
-
-
             //def testUnconnectedGradientsZerosUnconnectedGradients(self):
             //  with ops.Graph().as_default():
             //    x = constant(1.0, shape=[2, 2])

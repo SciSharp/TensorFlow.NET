@@ -72,7 +72,9 @@ namespace Tensorflow
         public static Operation variables_initializer(IVariableV1[] var_list, string name = "init")
         {
             if (var_list.Length > 0)
+            {
                 return control_flow_ops.group(var_list.Select(x => x.Initializer).ToArray(), name);
+            }
             else
                 return gen_control_flow_ops.no_op(name: name);
         }
@@ -155,7 +157,10 @@ namespace Tensorflow
 
         public static Tensor global_variables_initializer()
         {
-            throw new NotImplementedException();
+            // if context.executing_eagerly():
+            //      return control_flow_ops.no_op(name = "global_variables_initializer")
+            var group =  variables_initializer(global_variables().ToArray());
+            return group;
         }
     }
 }
