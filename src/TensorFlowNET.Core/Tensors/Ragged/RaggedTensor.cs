@@ -163,5 +163,38 @@ namespace Tensorflow
         {
             return tensor.Tag as RaggedTensor;
         }
+        public Tensor nrows(TF_DataType out_type, string name = null)
+        {
+            tf_with(ops.name_scope(name, "RaggedNRows"), scope =>
+            {
+                return math_ops.cast(this._row_partition.nrows(), dtype: out_type);
+            });
+            return null;
+        }
+        public RaggedTensor row_lengths(int axis=-1, string name=null)
+        {
+            if (axis == 0) return this._row_partition.nrows();
+            if (axis == 1) return this._row_partition.row_lengths();
+            var values = (RaggedTensor)this._values;
+            axis = array_ops.get_positive_axis(
+                axis, this.shape.rank, ndims_name: "rank(this)");
+            if (axis == 0) return this.nrows(this._row_partition.GetDataType());
+            else if (axis == 1)
+            {
+                var splits = this._row_partition.row_splits;
+                return splits[new Slice(start: 1)] - splits[new Slice(stop: -1)];
+
+            }
+            else if (this._values is RaggedTensor)
+            {
+                return values.row_lengths(axis - 1);
+            }
+            else
+            {
+                var shape = array_ops.shape(values, out_type: this._row_partition.GetDataType());
+                return array_ops.ones(shape[new Slice(stop:axis - 1)], this._row_partition.GetDataType()) *
+                            shape[axis - 1];
+            }
+        }
     }
 }
