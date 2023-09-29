@@ -1139,5 +1139,18 @@ namespace Tensorflow
             var _op = tf.OpDefLib._apply_op_helper("Placeholder", name: name, args: new { dtype, shape });
             return _op.output;
         }
+
+        public static int get_positive_axis(int axis, int ndims=-100, string axis_name="axis", string ndims_name= "ndims")
+        {
+            if(ndims != -100)
+            {
+                if (axis >= 0 && axis < ndims) return axis;
+                else if (-ndims <= axis && axis < 0) return axis + ndims;
+                else throw new ValueError($"{axis_name}={axis} out of bounds:expected {-ndims}<={axis_name}<{ndims}");
+                
+            } else if(axis < 0) throw new ValueError($"{axis_name}={axis} may only be negative if {ndims_name} is statically known.");
+            return axis;
+        }
+
     }
 }
