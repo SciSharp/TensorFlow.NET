@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Tensorflow.Keras.ArgsDefinition;
 using static Tensorflow.Binding;
+using Tensorflow.Keras.Utils;
 
 namespace Tensorflow.Keras.Engine.DataAdapters
 {
@@ -28,6 +29,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public DataHandler(DataHandlerArgs args)
         {
             this.args = args;
+            
             if (args.StepsPerExecution == null)
             {
                 _steps_per_execution = tf.Variable(1L);
@@ -48,6 +50,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                     BatchSize = args.BatchSize,
                     Steps = args.StepsPerEpoch,
                     Epochs = args.Epochs - args.InitialEpoch,
+                    SampleWeight = args.SampleWeight,
                     Shuffle = args.Shuffle,
                     MaxQueueSize = args.MaxQueueSize,
                     Worker = args.Workers,

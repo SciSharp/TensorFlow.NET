@@ -26,11 +26,11 @@ namespace Tensorflow.Keras.Engine
         /// </summary>
         /// <param name="y_true"></param>
         /// <param name="y_pred"></param>
-        public Tensor Call(Tensor y_true, Tensor y_pred)
+        public Tensor Call(Tensor y_true, Tensor y_pred, Tensor sample_weight = null)
         {
             if (!_built)
                 Build(y_pred);
-            var loss_value = _losses.Call(y_true, y_pred);
+            var loss_value = _losses.Call(y_true, y_pred, sample_weight:sample_weight);
             var loss_metric_value = loss_value;
             var batch_dim = array_ops.shape(y_true)[0];
 
