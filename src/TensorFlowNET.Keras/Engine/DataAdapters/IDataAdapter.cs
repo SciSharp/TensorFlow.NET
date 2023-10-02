@@ -17,6 +17,8 @@
         IDatasetV2 GetDataset();
         int GetSize();
         (Tensors, Tensors) Expand1d(Tensors x, Tensors y);
+        (Tensors, Tensors, Tensors) Expand1d(Tensors x, Tensors y, Tensors sample_weight);
+
         bool ShouldRecreateIterator();
     }
 }

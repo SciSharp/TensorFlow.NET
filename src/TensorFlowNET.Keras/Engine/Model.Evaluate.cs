@@ -30,6 +30,7 @@ namespace Tensorflow.Keras.Engine
         public Dictionary<string, float> evaluate(NDArray x, NDArray y,
             int batch_size = -1,
             int verbose = 1,
+            NDArray sample_weight = null,
             int steps = -1,
             int max_queue_size = 10,
             int workers = 1,
@@ -51,6 +52,7 @@ namespace Tensorflow.Keras.Engine
                 StepsPerEpoch = steps,
                 InitialEpoch = 0,
                 Epochs = 1,
+                SampleWeight = sample_weight,
                 MaxQueueSize = max_queue_size,
                 Workers = workers,
                 UseMultiprocessing = use_multiprocessing,
@@ -140,7 +142,8 @@ namespace Tensorflow.Keras.Engine
         Dictionary<string, float> test_function(DataHandler data_handler, OwnedIterator iterator)
         {
             var data = iterator.next();
-            var outputs = test_step(data_handler, data[0], data[1]);
+            var outputs = data.Length == 2 ? test_step(data_handler, data[0], data[1]) :
+                            test_step(data_handler, data[0], data[1], data[2]);
             tf_with(ops.control_dependencies(new object[0]), ctl => _test_counter.assign_add(1));
             return outputs;
         }
@@ -149,17 +152,23 @@ namespace Tensorflow.Keras.Engine
         {
             var data = iterator.next();
             var x_size = data_handler.DataAdapter.GetDataset().FirstInputTensorCount;
-            var outputs = test_step(data_handler, data.Take(x_size).ToArray(), data.Skip(x_size).ToArray());
+            var outputs = data.Length == 2 ?
+                            test_step(data_handler, new Tensors(data.Take(x_size).ToArray()), new Tensors(data.Skip(x_size).ToArray())) :
+                            test_step(
+                                data_handler,
+                                new Tensors(data.Take(x_size).ToArray()),
+                                new Tensors(data.Skip(x_size).Take(x_size).ToArray()),
+                                new Tensors(data.Skip(2 * x_size).ToArray()));
             tf_with(ops.control_dependencies(new object[0]), ctl => _test_counter.assign_add(1));
             return outputs;
         }
 
 
-        Dictionary<string, float> test_step(DataHandler data_handler, Tensors x, Tensors y)
+        Dictionary<string, float> test_step(DataHandler data_handler, Tensors x, Tensors y, Tensors sample_weight = null)
         {
-            (x, y) = data_handler.DataAdapter.Expand1d(x, y);
+            (x, y, sample_weight) = data_handler.DataAdapter.Expand1d(x, y, sample_weight);
             var y_pred = Apply(x, training: false);
-            var loss = compiled_loss.Call(y, y_pred);
+            var loss = compiled_loss.Call(y, y_pred, sample_weight:sample_weight);
             compiled_metrics.update_state(y, y_pred);
             return metrics.Select(x => (x.Name, x.result())).ToDictionary(x => x.Item1, x => (float)x.Item2);
         }

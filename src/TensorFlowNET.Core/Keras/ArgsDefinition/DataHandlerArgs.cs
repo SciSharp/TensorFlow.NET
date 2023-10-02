@@ -1,5 +1,6 @@
 ﻿using Tensorflow.Keras.Engine;
 using Tensorflow.Keras.Saving;
+using Tensorflow.NumPy;
 
 namespace Tensorflow.Keras.ArgsDefinition
 {
@@ -18,5 +19,7 @@ namespace Tensorflow.Keras.ArgsDefinition
         public bool UseMultiprocessing { get; set; } = false;
         public IModel Model { get; set; }
         public IVariableV1 StepsPerExecution { get; set; }
+        public Dictionary<int, float> ClassWeight = null;
+        public NDArray SampleWeight = null;
     }
 }

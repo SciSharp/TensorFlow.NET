@@ -74,8 +74,8 @@ namespace Tensorflow.Keras.UnitTest.Layers
                 OneHot = true,
                 ValidationSize = 55000,
             }).Result;
-
-            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 1);
+            var sample_weight = np.ones(((int)dataset.Train.Data.shape[0]));
+            model.fit(dataset.Train.Data, dataset.Train.Labels, batch_size: 16, epochs: 1, sample_weight:sample_weight);
         }
 
         [TestMethod]
