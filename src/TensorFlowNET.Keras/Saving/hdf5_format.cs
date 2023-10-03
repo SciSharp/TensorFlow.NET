@@ -82,7 +82,7 @@ namespace Tensorflow.Keras.Saving
 
         }
 
-        public static void load_weights_from_hdf5_group(long f, List<ILayer> layers)
+        public static List<(IVariableV1, NDArray)> load_weights_from_hdf5_group(long f, List<ILayer> layers)
         {
             string original_keras_version = "2.5.0";
             string original_backend = null;
@@ -152,7 +152,7 @@ namespace Tensorflow.Keras.Saving
                 weight_value_tuples.AddRange(zip(symbolic_weights, weight_values));
             }
 
-            keras.backend.batch_set_value(weight_value_tuples);
+            return weight_value_tuples;
         }
 
         public static void toarrayf4(long filepath = -1, Dictionary<string, object> custom_objects = null, bool compile = false)
