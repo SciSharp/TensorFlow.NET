@@ -164,11 +164,20 @@ namespace Tensorflow.Keras.Engine
         }
 
 
-        Dictionary<string, float> test_step(DataHandler data_handler, Tensors x, Tensors y, Tensors sample_weight = null)
+        Dictionary<string, float> test_step(DataHandler data_handler, Tensors x, Tensors y)
+        {
+            (x,y) = data_handler.DataAdapter.Expand1d(x, y);
+            var y_pred = Apply(x, training: false);
+            var loss = compiled_loss.Call(y, y_pred);
+            compiled_metrics.update_state(y, y_pred);
+            return metrics.Select(x => (x.Name, x.result())).ToDictionary(x => x.Item1, x => (float)x.Item2);
+        }
+
+        Dictionary<string, float> test_step(DataHandler data_handler, Tensors x, Tensors y, Tensors sample_weight)
         {
             (x, y, sample_weight) = data_handler.DataAdapter.Expand1d(x, y, sample_weight);
             var y_pred = Apply(x, training: false);
-            var loss = compiled_loss.Call(y, y_pred, sample_weight:sample_weight);
+            var loss = compiled_loss.Call(y, y_pred, sample_weight: sample_weight);
             compiled_metrics.update_state(y, y_pred);
             return metrics.Select(x => (x.Name, x.result())).ToDictionary(x => x.Item1, x => (float)x.Item2);
         }

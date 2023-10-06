@@ -63,12 +63,6 @@ namespace Tensorflow.Keras.Engine
                 ((x, y, sample_weight), validation_data) = DataAdapter.train_validation_split((x, y, sample_weight), validation_split);
             }
 
-            // TODO(Wanglongzhi2001)
-            if (class_weight != null)
-            {
-                throw new NotImplementedException("class_weight is not implemented");
-            }
-
             var data_handler = new DataHandler(new DataHandlerArgs
             {
                 X = x,
@@ -78,6 +72,7 @@ namespace Tensorflow.Keras.Engine
                 InitialEpoch = initial_epoch,
                 Epochs = epochs,
                 Shuffle = shuffle,
+                ClassWeight = class_weight,
                 MaxQueueSize = max_queue_size,
                 Workers = workers,
                 UseMultiprocessing = use_multiprocessing,
@@ -126,11 +121,12 @@ namespace Tensorflow.Keras.Engine
             {
                 X = new Tensors(x.ToArray()),
                 Y = y,
+                SampleWeight = sample_weight,
                 BatchSize = batch_size,
                 InitialEpoch = initial_epoch,
                 Epochs = epochs,
                 Shuffle = shuffle,
-                SampleWeight = sample_weight,
+                ClassWeight = class_weight,
                 MaxQueueSize = max_queue_size,
                 Workers = workers,
                 UseMultiprocessing = use_multiprocessing,
@@ -174,6 +170,7 @@ namespace Tensorflow.Keras.Engine
                 InitialEpoch = initial_epoch,
                 Epochs = epochs,
                 Shuffle = shuffle,
+                SampleWeight = sample_weight,
                 MaxQueueSize = max_queue_size,
                 Workers = workers,
                 UseMultiprocessing = use_multiprocessing,
