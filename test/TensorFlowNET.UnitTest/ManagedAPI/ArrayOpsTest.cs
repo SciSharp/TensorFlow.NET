@@ -3,6 +3,7 @@ using Tensorflow.NumPy;
 using Tensorflow;
 using static Tensorflow.Binding;
 using System.Linq;
+using Tensorflow.Operations;
 
 namespace TensorFlowNET.UnitTest.ManagedAPI
 {
@@ -104,6 +105,322 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var b = tf.reverse(a, -1);
             Assert.IsTrue(Equal(a[0].ToArray<float>().Reverse().ToArray(), b[0].ToArray<float>()));
             Assert.IsTrue(Equal(a[1].ToArray<float>().Reverse().ToArray(), b[1].ToArray<float>()));
+        }
+
+        [TestMethod]
+        public void ReverseImgArray3D()
+        {
+            // 创建 sourceImg 数组
+            var sourceImgArray = new float[,,] {
+            {
+                { 237, 28, 36 },
+                { 255, 255, 255 },
+                { 255, 255, 255 }
+            },
+            {
+                { 255, 255, 255 },
+                { 255, 255, 255 },
+                { 255, 255, 255 }
+            }
+        };
+            var sourceImg = ops.convert_to_tensor(sourceImgArray);
+
+            // 创建 lrImg 数组
+            var lrImgArray = new float[,,] {
+            {
+                { 255, 255, 255 },
+                { 255, 255, 255 },
+                { 237, 28, 36 }
+            },
+            {
+                { 255, 255, 255 },
+                { 255, 255, 255 },
+                { 255, 255, 255 }
+            }
+        };
+            var lrImg = ops.convert_to_tensor(lrImgArray);
+
+            var lr = tf.image.flip_left_right(sourceImg);
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr.numpy().ToArray<float>()), "tf.image.flip_left_right fail.");
+
+            var lr2 = tf.reverse(sourceImg, 1);
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr2.numpy().ToArray<float>()), "tf.reverse (axis=1) fail.");
+
+            var lr3 = gen_array_ops.reverse_v2(sourceImg, ops.convert_to_tensor(new[] { 1 }));
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr3.numpy().ToArray<float>()), "gen_array_ops.reverse_v2 axis=1 fail.");
+
+            // 创建 udImg  数组
+            var udImgArray = new float[,,] {
+            {
+                { 255, 255, 255 },
+                { 255, 255, 255 },
+                { 255, 255, 255 }
+            },
+            {
+                { 237, 28, 36 },
+                { 255, 255, 255 },
+                { 255, 255, 255 }
+            }
+        };
+            var udImg = ops.convert_to_tensor(udImgArray);
+
+            var ud = tf.image.flip_up_down(sourceImg);
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud.numpy().ToArray<float>()), "tf.image.flip_up_down fail.");
+
+            var ud2 = tf.reverse(sourceImg, new Axis(0));
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud2.numpy().ToArray<float>()), "tf.reverse (axis=0) fail.");
+
+            var ud3 = gen_array_ops.reverse_v2(sourceImg, ops.convert_to_tensor(new[] { 0 }));
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud3.numpy().ToArray<float>()), "gen_array_ops.reverse_v2 axis=0 fail.");
+        }
+
+        [TestMethod]
+        public void ReverseImgArray4D()
+        {
+            // 原图左上角，加一张左右翻转后的图片
+            var m = new float[,,,] {
+            {
+                {
+                    { 237, 28, 36 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            },
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 237, 28, 36 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            }
+        };
+            var sourceImg = ops.convert_to_tensor(m);
+
+            var lrArray = new float[,,,] {
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 237, 28, 36 },
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            },
+            {
+                {
+                    { 237, 28, 36 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            }
+        };
+            var lrImg = ops.convert_to_tensor(lrArray);
+
+            // 创建 ud 数组
+            var udArray = new float[,,,] {
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 237, 28, 36 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            },
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 237, 28, 36 }
+                }
+            }
+        };
+            var udImg = ops.convert_to_tensor(udArray);
+
+            var ud3 = gen_array_ops.reverse_v2(sourceImg, ops.convert_to_tensor(new[] { 1 }));
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud3.numpy().ToArray<float>()), "gen_array_ops.reverse_v2 axis=1 fail.");
+
+            var ud2 = tf.reverse(sourceImg, new Axis(1));
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud2.numpy().ToArray<float>()), "tf.reverse (axis=1) fail.");
+
+            var ud = tf.image.flip_up_down(sourceImg);
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud.numpy().ToArray<float>()), "tf.image.flip_up_down fail.");
+
+            // 左右翻转
+            var lr = tf.image.flip_left_right(sourceImg);
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr.numpy().ToArray<float>()), "tf.image.flip_left_right fail.");
+
+            var lr2 = tf.reverse(sourceImg, 0);
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr2.numpy().ToArray<float>()), "tf.reverse (axis=1) fail.");
+
+            var lr3 = gen_array_ops.reverse_v2(sourceImg, ops.convert_to_tensor(new[] { 0 }));
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr3.numpy().ToArray<float>()), "gen_array_ops.reverse_v2 axis=1 fail.");
+
+        }
+
+        [TestMethod]
+        public void ReverseImgArray4D_3x3()
+        {
+            // 原图左上角，加一张左右翻转后的图片
+            var m = new float[,,,] {
+            {
+                {
+                    { 237, 28, 36 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            },
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 237, 28, 36 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            }
+        };
+            var sourceImg = ops.convert_to_tensor(m);
+
+            var lrArray = new float[,,,] {
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 237, 28, 36 },
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            },
+            {
+                {
+                    { 237, 28, 36 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            }
+        };
+            var lrImg = ops.convert_to_tensor(lrArray);
+
+            // 创建 ud 数组
+            var udArray = new float[,,,] {
+            {
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 237, 28, 36 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                }
+            },
+            {                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 255, 255, 255 }
+                },
+                {
+                    { 255, 255, 255 },
+                    { 255, 255, 255 },
+                    { 237, 28, 36 }
+                }
+            }
+        };
+            var udImg = ops.convert_to_tensor(udArray);
+
+            var ud3 = gen_array_ops.reverse_v2(sourceImg, ops.convert_to_tensor(new[] { 1 }));
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud3.numpy().ToArray<float>()), "gen_array_ops.reverse_v2 axis=1 fail.");
+
+            var ud2 = tf.reverse(sourceImg, new Axis(1));
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud2.numpy().ToArray<float>()), "tf.reverse (axis=1) fail.");
+
+            var ud = tf.image.flip_up_down(sourceImg);
+            Assert.IsTrue(Equal(udImg.numpy().ToArray<float>(), ud.numpy().ToArray<float>()), "tf.image.flip_up_down fail.");
+
+            // 左右翻转
+            var lr = tf.image.flip_left_right(sourceImg);
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr.numpy().ToArray<float>()), "tf.image.flip_left_right fail.");
+
+            var lr2 = tf.reverse(sourceImg, 0);
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr2.numpy().ToArray<float>()), "tf.reverse (axis=1) fail.");
+
+            var lr3 = gen_array_ops.reverse_v2(sourceImg, ops.convert_to_tensor(new[] { 0 }));
+            Assert.IsTrue(Equal(lrImg.numpy().ToArray<float>(), lr3.numpy().ToArray<float>()), "gen_array_ops.reverse_v2 axis=1 fail.");
+
         }
     }
 }

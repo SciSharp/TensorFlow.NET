@@ -56,6 +56,12 @@ namespace Tensorflow.Keras.Layers
             string bias_initializer = "zeros");
 
         public ILayer Conv2D(int filters,
+                Shape kernel_size = null,
+                Shape strides = null,
+                string padding = "valid"
+            );
+
+        public ILayer Conv2D(int filters,
             Shape kernel_size = null,
             Shape strides = null,
             string padding = "valid",

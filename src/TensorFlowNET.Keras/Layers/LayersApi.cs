@@ -112,7 +112,28 @@ namespace Tensorflow.Keras.Layers
                 KernelInitializer = GetInitializerByName(kernel_initializer),
                 BiasInitializer = GetInitializerByName(bias_initializer)
             });
-
+        public ILayer Conv2D(int filters,
+                Shape kernel_size = null,
+                Shape strides = null,
+                string padding = "valid")
+        => new Conv2D(new Conv2DArgs
+        {
+            Rank = 2,
+            Filters = filters,
+            KernelSize = (kernel_size == null) ? (5, 5) : kernel_size,
+            Strides = strides == null ? (1, 1) : strides,
+            Padding = padding,
+            DataFormat = null,
+            DilationRate = (1, 1),
+            Groups = 1,
+            UseBias = false,
+            KernelRegularizer = null,
+            KernelInitializer =tf.glorot_uniform_initializer,
+            BiasInitializer = tf.zeros_initializer,
+            BiasRegularizer = null,
+            ActivityRegularizer = null,
+            Activation = keras.activations.Linear,
+        });
         /// <summary>
         /// 2D convolution layer (e.g. spatial convolution over images).
         /// This layer creates a convolution kernel that is convolved with the layer input to produce a tensor of outputs.
