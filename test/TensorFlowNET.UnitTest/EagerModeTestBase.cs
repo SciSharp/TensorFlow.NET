@@ -20,6 +20,20 @@ namespace TensorFlowNET.UnitTest
             return Math.Abs(f1 - f2) <= tolerance;
         }
 
+        public bool Equal(long[] l1, long[] l2)
+        {
+            if (l1.Length != l2.Length)
+                return false;
+
+            for (var i = 0; i < l1.Length; i++)
+            {
+                if (l1[i] != l2[i])
+                    return false;
+            }
+
+            return true;
+        }
+
         public bool Equal(float[] f1, float[] f2)
         {
             bool ret = false;

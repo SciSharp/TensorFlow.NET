@@ -210,6 +210,38 @@ namespace Tensorflow.Keras.Layers
                     Activation = keras.activations.GetActivationFromName(activation)
                 });
 
+        public ILayer DepthwiseConv2D(Shape kernel_size = null,
+                Shape strides = null,
+                string padding = "valid",
+                string data_format = null,
+                Shape dilation_rate = null,
+                int groups = 1,
+                int depth_multiplier = 1,
+                string activation = null,
+                bool use_bias = false,
+                string kernel_initializer = "glorot_uniform",
+                string bias_initializer = "zeros",
+                string depthwise_initializer = "glorot_uniform"
+                )
+                    => new DepthwiseConv2D(new DepthwiseConv2DArgs
+                    {
+                        Rank = 2,
+                        Filters = 1,
+                        KernelSize = (kernel_size == null) ? (5, 5) : kernel_size,
+                        Strides = strides == null ? (1) : strides,
+                        Padding = padding,
+                        DepthMultiplier = depth_multiplier,
+                        DataFormat = data_format,
+                        DilationRate = dilation_rate == null ? (1) : dilation_rate,
+                        Groups = groups,
+                        UseBias = use_bias,
+                        KernelInitializer = GetInitializerByName(kernel_initializer),
+                        DepthwiseInitializer = GetInitializerByName(depthwise_initializer == null ? kernel_initializer : depthwise_initializer),
+                        BiasInitializer = GetInitializerByName(bias_initializer),
+                        Activation = keras.activations.GetActivationFromName(activation),
+                    });
+
+
         /// <summary>
         /// Transposed convolution layer (sometimes called Deconvolution).
         /// </summary>
