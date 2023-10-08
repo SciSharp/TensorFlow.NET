@@ -41,6 +41,7 @@ namespace Tensorflow.Keras.Engine
             List<ICallback> callbacks = null,
             float validation_split = 0f,
             ValidationDataPack validation_data = null,
+            int validation_step = 10,
             bool shuffle = true,
             Dictionary<int, float> class_weight = null,
             NDArray sample_weight = null,
@@ -147,7 +148,7 @@ namespace Tensorflow.Keras.Engine
             }
         }
 
-        public History fit(IDatasetV2 dataset, 
+        public ICallback fit(IDatasetV2 dataset, 
             int batch_size = -1,
             int epochs = 1,
             int verbose = 1,
@@ -156,7 +157,6 @@ namespace Tensorflow.Keras.Engine
             int validation_step = 10,
             bool shuffle = true,
             Dictionary<int, float> class_weight = null,
-            NDArray sample_weight = null,
             int initial_epoch = 0,
             int max_queue_size = 10,
             int workers = 1,
@@ -170,7 +170,7 @@ namespace Tensorflow.Keras.Engine
                 InitialEpoch = initial_epoch,
                 Epochs = epochs,
                 Shuffle = shuffle,
-                SampleWeight = sample_weight,
+                ClassWeight = class_weight,
                 MaxQueueSize = max_queue_size,
                 Workers = workers,
                 UseMultiprocessing = use_multiprocessing,
@@ -218,6 +218,7 @@ namespace Tensorflow.Keras.Engine
                     var end_step = step + data_handler.StepIncrement;
                     End_step = end_step;
                     callbacks.on_train_batch_end(end_step, logs);
+                    GC.Collect();
                 }
 
                 if (validation_data != null)
@@ -233,11 +234,10 @@ namespace Tensorflow.Keras.Engine
                     callbacks.on_train_batch_end(End_step, logs);
                 }
 
+                GC.Collect();
 
                 callbacks.on_epoch_end(epoch, logs);
 
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
                 if (stop_training)
                 {
                     break;
@@ -282,6 +282,7 @@ namespace Tensorflow.Keras.Engine
                     var end_step = step + data_handler.StepIncrement;
                     End_step = end_step;
                     callbacks.on_train_batch_end(end_step, logs);
+                    GC.Collect();
                 }
 
                 if (validation_data != null)
@@ -301,7 +302,6 @@ namespace Tensorflow.Keras.Engine
                 callbacks.on_epoch_end(epoch, logs);
 
                 GC.Collect();
-                GC.WaitForPendingFinalizers();
                 if (stop_training)
                 {
                     break;

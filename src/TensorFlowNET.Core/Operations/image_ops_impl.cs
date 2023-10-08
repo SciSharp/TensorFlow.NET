@@ -102,7 +102,10 @@ namespace Tensorflow
             {
                 throw new ValueError("\'image\' must be fully defined.");
             }
-            var dims = image_shape["-3:"];
+            var dims = new Shape(new[] {
+                                image_shape.dims[image_shape.dims.Length - 3],
+                                image_shape.dims[image_shape.dims.Length - 2],
+                                image_shape.dims[image_shape.dims.Length - 1]});
             foreach (var dim in dims.dims)
             {
                 if (dim == 0)
@@ -112,16 +115,18 @@ namespace Tensorflow
             }
 
             var image_shape_last_three_elements = new Shape(new[] {
-                                                image_shape.dims[image_shape.dims.Length - 1],
+                                                image_shape.dims[image_shape.dims.Length - 3],
                                                 image_shape.dims[image_shape.dims.Length - 2],
-                                                image_shape.dims[image_shape.dims.Length - 3]});
+                                                image_shape.dims[image_shape.dims.Length - 1]});
             if (!image_shape_last_three_elements.IsFullyDefined)
             {
                 Tensor image_shape_ = array_ops.shape(image);
-                var image_shape_return = tf.constant(new[] {
-                    image_shape_.dims[image_shape.dims.Length - 1],
-                    image_shape_.dims[image_shape.dims.Length - 2],
-                    image_shape_.dims[image_shape.dims.Length - 3]});
+                var image_shape_return = tf.slice(image_shape_, new[] { Math.Max(image_shape.dims.Length - 3, 0) }, new[] { 3 });
+
+                //var image_shape_return = tf.constant(new[] {
+                //    image_shape_.dims[image_shape_.dims.Length - 3],
+                //    image_shape_.dims[image_shape_.dims.Length - 2],
+                //    image_shape_.dims[image_shape_.dims.Length - 1]});
 
                 return new Operation[] {
                     check_ops.assert_positive(
@@ -209,10 +214,10 @@ namespace Tensorflow
         }
 
         public static Tensor flip_left_right(Tensor image)
-            => _flip(image, 0, "flip_left_right");
+            => _flip(image, 1, "flip_left_right");
 
         public static Tensor flip_up_down(Tensor image)
-            => _flip(image, 1, "flip_up_down");
+            => _flip(image, 0, "flip_up_down");
 
         internal static Tensor _flip(Tensor image, int flip_index, string scope_name)
         {
@@ -223,11 +228,11 @@ namespace Tensorflow
                   Shape shape = image.shape;
                   if (shape.ndim == 3 || shape.ndim == Unknown)
                   {
-                      return fix_image_flip_shape(image, gen_array_ops.reverse(image, ops.convert_to_tensor(new int[] { flip_index })));
+                      return fix_image_flip_shape(image, gen_array_ops.reverse_v2(image, ops.convert_to_tensor(new int[] { flip_index })));
                   }
                   else if (shape.ndim == 4)
                   {
-                      return gen_array_ops.reverse_v2(image, ops.convert_to_tensor(new[] { (flip_index + 1) % 2 }));
+                      return gen_array_ops.reverse_v2(image, ops.convert_to_tensor(new[] { flip_index + 1 }));
                   }
                   else
                   {
@@ -2044,6 +2049,22 @@ new_height, new_width");
                 var iou_threshold_tensor = ops.convert_to_tensor(iou_threshold, name: "iou_threshold");
                 var score_threshold_tensor = ops.convert_to_tensor(score_threshold, name: "score_threshold");
                 return gen_ops.non_max_suppression_v4(boxes, scores, max_output_size, iou_threshold_tensor, score_threshold_tensor, pad_to_max_output_size);
+            });
+        }
+
+        public static Tensor encode_jpeg(Tensor contents, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "encode_jpeg"), scope =>
+            {
+                return gen_ops.encode_jpeg(contents, name:name);
+            });
+        }
+
+        public static Tensor encode_png(Tensor contents, string name = null)
+        {
+            return tf_with(ops.name_scope(name, "encode_png"), scope =>
+            {
+                return gen_ops.encode_png(contents, name: name);
             });
         }
 

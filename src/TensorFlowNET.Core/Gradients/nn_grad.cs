@@ -229,6 +229,37 @@ namespace Tensorflow.Gradients
             };
         }
 
+        /// <summary>
+        /// Gradient function for Conv2D.
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="grads"></param>
+        /// <returns></returns>
+        [RegisterGradient("DepthwiseConv2dNative")]
+        public static Tensor[] _DepthwiseConv2DGrad(Operation op, Tensor[] grads)
+        {
+            var dilations = op.get_attr_list<int>("dilations");
+            var strides = op.get_attr_list<int>("strides");
+            var padding = op.get_attr<string>("padding");
+            var explicit_paddings = op.get_attr_list<int>("explicit_paddings");
+            var data_format = op.get_attr<string>("data_format");
+            var shape = gen_array_ops.shape_n(new Tensor[] { op.inputs[0], op.inputs[1] });
+
+            return new Tensor[]
+            {
+                gen_nn_ops.depthwise_conv2d_native_backprop_input(
+                    shape[0], op.inputs[1], grads[0],
+                    strides, padding, explicit_paddings,
+                    dilations: dilations,
+                    data_format: data_format),
+                gen_nn_ops.depthwise_conv2d_native_backprop_filter(op.inputs[0], shape[1], grads[0],
+                    strides, padding,
+                    dilations: dilations,
+                    explicit_paddings: explicit_paddings,                    
+                    data_format: data_format)
+            };
+        }
+
         [RegisterGradient("FusedBatchNorm")]
         public static Tensor[] _FusedBatchNormGrad(Operation op, Tensor[] grads)
             => _BaseFusedBatchNormGrad(op, 0, grads);

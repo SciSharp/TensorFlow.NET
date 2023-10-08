@@ -4,6 +4,7 @@ using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
 using System;
+using System.IO;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -163,6 +164,95 @@ namespace TensorFlowNET.UnitTest
             // check if flipped and no cropping occured
             Assert.AreEqual(result.size, 16ul);
             Assert.AreEqual(result[0, 0, 0, 0], 12f);
+        }
+
+        [TestMethod]
+        public void ImageSaveTest()
+        {
+            var imgPath = TestHelper.GetFullPathFromDataDir("img001.bmp");
+            var jpegImgPath = TestHelper.GetFullPathFromDataDir("img001.jpeg");
+            var pngImgPath = TestHelper.GetFullPathFromDataDir("img001.png");
+
+            File.Delete(jpegImgPath);
+            File.Delete(pngImgPath);
+
+            var contents = tf.io.read_file(imgPath);
+            var bmp = tf.image.decode_image(contents);
+            Assert.AreEqual(bmp.name, "decode_image/DecodeImage:0");
+
+            var jpeg = tf.image.encode_jpeg(bmp);
+            var op1 = tf.io.write_file(jpegImgPath, jpeg);
+
+            var png = tf.image.encode_png(bmp);
+            var op2 = tf.io.write_file(pngImgPath, png);
+
+            this.session().run(op1);
+            this.session().run(op2);
+
+            Assert.IsTrue(File.Exists(jpegImgPath), "not find file:" + jpegImgPath);
+            Assert.IsTrue(File.Exists(pngImgPath), "not find file:" + pngImgPath);
+
+            // 如果要测试图片正确性，需要注释下面两行代码
+            File.Delete(jpegImgPath);
+            File.Delete(pngImgPath);
+        }
+
+        [TestMethod]
+        public void ImageFlipTest()
+        {
+            var imgPath = TestHelper.GetFullPathFromDataDir("img001.bmp");
+
+            var contents = tf.io.read_file(imgPath);
+            var bmp = tf.image.decode_image(contents);
+
+            // 左右翻转
+            var lrImgPath = TestHelper.GetFullPathFromDataDir("img001_lr.png");
+            File.Delete(lrImgPath);
+
+            var lr = tf.image.flip_left_right(bmp);
+            var png = tf.image.encode_png(lr);
+            var op = tf.io.write_file(lrImgPath, png);
+            this.session().run(op);
+
+            Assert.IsTrue(File.Exists(lrImgPath), "not find file:" + lrImgPath);
+
+            // 上下翻转
+            var updownImgPath = TestHelper.GetFullPathFromDataDir("img001_updown.png");
+            File.Delete(updownImgPath);
+
+            var updown = tf.image.flip_up_down(bmp);
+            var pngupdown = tf.image.encode_png(updown);
+            var op2 = tf.io.write_file(updownImgPath, pngupdown);
+            this.session().run(op2);
+            Assert.IsTrue(File.Exists(updownImgPath));
+
+
+            // 暂时先人工观测图片是否翻转，观测时需要删除下面这两行代码
+            File.Delete(lrImgPath);
+            File.Delete(updownImgPath);
+
+            // 多图翻转
+            // 目前直接通过 bmp 拿到 shape ，这里先用默认定义图片大小来构建了
+            var mImg = tf.stack(new[] { bmp, lr }, axis:0);
+            print(mImg.shape);
+
+            var up2 = tf.image.flip_up_down(mImg);
+
+            var updownImgPath_m1 = TestHelper.GetFullPathFromDataDir("img001_m_ud.png");   // 直接上下翻转
+            File.Delete(updownImgPath_m1);
+
+            var img001_updown_m2 = TestHelper.GetFullPathFromDataDir("img001_m_lr_ud.png");   // 先左右再上下
+            File.Delete(img001_updown_m2);
+
+            var png2 = tf.image.encode_png(up2[0]);
+            tf.io.write_file(updownImgPath_m1, png2);
+
+            png2 = tf.image.encode_png(up2[1]);
+            tf.io.write_file(img001_updown_m2, png2);
+
+            // 如果要测试图片正确性，需要注释下面两行代码
+            File.Delete(updownImgPath_m1);
+            File.Delete(img001_updown_m2);
         }
     }
 }

@@ -132,6 +132,7 @@ namespace Tensorflow.Keras.Engine
                     var end_step = step + data_handler.StepIncrement;
                     if (!is_val)
                         callbacks.on_test_batch_end(end_step, logs);
+                    GC.Collect();
                 }
             }
             callbacks.on_test_end(logs);
@@ -167,7 +168,9 @@ namespace Tensorflow.Keras.Engine
         Dictionary<string, float> test_step(DataHandler data_handler, Tensors x, Tensors y)
         {
             (x,y) = data_handler.DataAdapter.Expand1d(x, y);
+
             var y_pred = Apply(x, training: false);
+
             var loss = compiled_loss.Call(y, y_pred);
             compiled_metrics.update_state(y, y_pred);
             return metrics.Select(x => (x.Name, x.result())).ToDictionary(x => x.Item1, x => (float)x.Item2);
