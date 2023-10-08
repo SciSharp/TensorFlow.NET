@@ -24,6 +24,7 @@ public interface IModel : ILayer
             List<ICallback> callbacks = null,
             float validation_split = 0f,
             ValidationDataPack validation_data = null,
+            int validation_step = 10,
             bool shuffle = true,
             Dictionary<int, float> class_weight = null,
             NDArray sample_weight = null,
@@ -42,6 +43,20 @@ public interface IModel : ILayer
             bool shuffle = true,
             Dictionary<int, float> class_weight = null,
             NDArray sample_weight = null,
+            int initial_epoch = 0,
+            int max_queue_size = 10,
+            int workers = 1,
+            bool use_multiprocessing = false);
+
+    public ICallback fit(IDatasetV2 dataset,
+            int batch_size = -1,
+            int epochs = 1,
+            int verbose = 1,
+            List<ICallback> callbacks = null,
+            IDatasetV2 validation_data = null,
+            int validation_step = 10,   // 间隔多少次会进行一次验证
+            bool shuffle = true,
+            Dictionary<int, float> class_weight = null,
             int initial_epoch = 0,
             int max_queue_size = 10,
             int workers = 1,
@@ -78,6 +93,14 @@ public interface IModel : ILayer
             bool is_val = false);
 
     Tensors predict(Tensors x,
+            int batch_size = -1,
+            int verbose = 0,
+            int steps = -1,
+            int max_queue_size = 10,
+            int workers = 1,
+            bool use_multiprocessing = false);
+
+    public Tensors predict(IDatasetV2 dataset,
             int batch_size = -1,
             int verbose = 0,
             int steps = -1,
