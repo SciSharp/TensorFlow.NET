@@ -31,6 +31,15 @@ namespace Tensorflow.NumPy
         public static NDArray stack(params NDArray[] arrays) => new NDArray(array_ops.stack(arrays));
 
         [AutoNumPy]
+        public static NDArray stack(NDArray[] arrays, int axis = 0) => new NDArray(array_ops.stack(arrays, axis));
+        
+        [AutoNumPy]
+        public static NDArray stack((NDArray, NDArray) tuple, int axis = 0) => new NDArray(array_ops.stack(new[] { tuple.Item1, tuple.Item2 }, axis));
+
+        [AutoNumPy]
+        public static NDArray stack((NDArray, NDArray, NDArray) tuple, int axis = 0) => new NDArray(array_ops.stack(new[] { tuple.Item1, tuple.Item2, tuple.Item3 }, axis));
+
+        [AutoNumPy]
         public static NDArray moveaxis(NDArray array, Axis source, Axis destination) => new NDArray(array_ops.moveaxis(array, source, destination));
     }
 }

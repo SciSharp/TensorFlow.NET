@@ -112,12 +112,23 @@ namespace Tensorflow.Keras.Utils
             foreach (var token in layersToken)
             {
                 var args = deserialize_layer_args(token["class_name"].ToObject<string>(), token["config"]);
+
+                List<NodeConfig> nodeConfig = null; //python tensorflow sometimes exports inbound nodes in an extra nested array
+                if (token["inbound_nodes"].Count() > 0 && token["inbound_nodes"][0].Count() > 0 && token["inbound_nodes"][0][0].Count() > 0)
+                {
+                    nodeConfig = token["inbound_nodes"].ToObject<List<List<NodeConfig>>>().FirstOrDefault() ?? new List<NodeConfig>();
+                }
+                else
+                {
+                    nodeConfig = token["inbound_nodes"].ToObject<List<NodeConfig>>();
+                }
+
                 config.Layers.Add(new LayerConfig()
                 {
                     Config = args, 
                     Name = token["name"].ToObject<string>(), 
                     ClassName = token["class_name"].ToObject<string>(), 
-                    InboundNodes = token["inbound_nodes"].ToObject<List<NodeConfig>>()
+                    InboundNodes = nodeConfig,
                 });
             }
             config.InputLayers = json["input_layers"].ToObject<List<NodeConfig>>();
