@@ -180,6 +180,9 @@ namespace Tensorflow.Keras.Layers
         public ILayer Normalization(Shape? input_shape = null, int? axis = -1, float? mean = null, float? variance = null, bool invert = false);
         public ILayer LeakyReLU(float alpha = 0.3f);
 
+        public ILayer ReLU6();
+
+
         public IRnnCell LSTMCell(int uints,
             string activation = "tanh",
             string recurrent_activation = "sigmoid",
