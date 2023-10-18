@@ -20,6 +20,11 @@ namespace Tensorflow.Keras
             Name = "relu",
             ActivationFunction = (features, name) => tf.Context.ExecuteOp("Relu", name, new ExecuteOpArgs(features))
         };
+        private static Activation _relu6 = new Activation()
+        {
+            Name = "relu6",
+            ActivationFunction = (features, name) => tf.Context.ExecuteOp("Relu6", name, new ExecuteOpArgs(features))
+        };
         private static Activation _sigmoid = new Activation()
         {
             Name = "sigmoid",
@@ -55,6 +60,7 @@ namespace Tensorflow.Keras
             _nameActivationMap = new Dictionary<string, Activation>();
 
             RegisterActivation(_relu);
+            RegisterActivation(_relu6);
             RegisterActivation(_linear);
             RegisterActivation(_sigmoid);
             RegisterActivation(_softmax);
@@ -65,6 +71,7 @@ namespace Tensorflow.Keras
         public Activation Linear => _linear;
 
         public Activation Relu => _relu;
+        public Activation Relu6 => _relu6;
 
         public Activation Sigmoid => _sigmoid;
 

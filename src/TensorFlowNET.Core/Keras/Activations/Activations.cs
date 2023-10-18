@@ -32,6 +32,7 @@ namespace Tensorflow.Keras
         Activation Linear { get; }
 
         Activation Relu { get; }
+        Activation Relu6 { get; }
 
         Activation Sigmoid { get; }
 

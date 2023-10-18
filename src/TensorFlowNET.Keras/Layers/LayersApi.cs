@@ -735,6 +735,15 @@ namespace Tensorflow.Keras.Layers
             });
 
 
+        /// <summary>
+        /// Leaky version of a Rectified Linear Unit.
+        /// </summary>
+        /// <param name="alpha">Negative slope coefficient.</param>
+        /// <returns></returns>
+        public ILayer ReLU6()
+            => new ReLu6();
+
+
         public IRnnCell SimpleRNNCell(
             int units,
             string activation = "tanh",
