@@ -829,7 +829,7 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `input`.
         /// Contains the same data as `input`, but has one or more dimensions of
         /// size 1 removed.</returns>
-        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
+        public static Tensor squeeze(Tensor input, Axis axis = null, string name = null)
             => gen_array_ops.squeeze(input, axis, name);
 
         public static Tensor identity(Tensor input, string name = null)
@@ -990,7 +990,7 @@ namespace Tensorflow
             return @params.sparse_read(indices, name);
         }
 
-        public static Tensor transpose<T1>(T1 a, Axis perm, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1>(T1 a, Axis perm = null, string name = "transpose", bool conjugate = false)
         {
             return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
