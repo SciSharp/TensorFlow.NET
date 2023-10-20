@@ -141,6 +141,16 @@ namespace Tensorflow
             => array_ops.gather(@params, indices, name: name, axis: ops.convert_to_tensor(axis));
 
         /// <summary>
+        /// Gather slices from `params` into a Tensor with shape specified by `indices`.
+        /// </summary>
+        /// <param name="params"></param>
+        /// <param name="indices"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Tensor gather_nd(Tensor @params, Tensor indices, string name = null)
+            => gen_array_ops.gather_nd(@params, indices, name: name);
+
+        /// <summary>
         /// Return the elements, either from `x` or `y`, depending on the `condition`.
         /// </summary>
         /// <returns></returns>

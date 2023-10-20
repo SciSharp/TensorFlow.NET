@@ -403,7 +403,26 @@ namespace Tensorflow.Gradients
                 input_grad.set_shape(op.inputs[0].GetShape());
             }
             return new Tensor[] { input_grad, null };
-
         }
+
+        [RegisterGradient("GatherNd")]
+        public static Tensor[] _GatherNdGrad(Operation op, Tensor[] grads)
+        {
+            var @ref = op.inputs[0];
+            var indices = op.inputs[1];
+            var grad = grads[0];
+            var ref_shape = array_ops.shape(@ref, out_type: indices.dtype);
+            Tensor ref_grad = null;
+            if (indices.shape.ndim == 2 && indices.shape.dims[indices.shape.Length - 1] == 1)
+            {
+                ref_grad = (Tensor)new IndexedSlices(grad, array_ops.squeeze(indices, axis: -1), ref_shape);
+            }
+            else
+            {
+                ref_grad = gen_array_ops.scatter_nd(indices, grad, ref_shape);
+            }
+            return new Tensor[] { ref_grad, null };
+        }
+
     }
 }
