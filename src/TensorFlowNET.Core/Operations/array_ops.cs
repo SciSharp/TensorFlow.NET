@@ -990,7 +990,7 @@ namespace Tensorflow
             return @params.sparse_read(indices, name);
         }
 
-        public static Tensor transpose<T1>(T1 a, Axis perm, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1>(T1 a, Axis perm = null, string name = "transpose", bool conjugate = false)
         {
             return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
             {

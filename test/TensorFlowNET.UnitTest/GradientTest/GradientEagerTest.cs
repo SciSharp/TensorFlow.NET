@@ -173,5 +173,19 @@ namespace TensorFlowNET.UnitTest.Gradient
             var result = grad(x, 4);
             Assert.AreEqual((float)result, 4.0f);
         }
+
+        [TestMethod]
+        public void Tile()
+        {
+            var a = tf.constant(new int[] { 1 }, TF_DataType.TF_FLOAT);
+            var b = tf.constant(new int[] { 2 });
+            using (var tape = tf.GradientTape())
+            {
+                tape.watch(a);
+                var y = tf.tile(a, b);
+                var grad = tape.gradient(y, a);
+                Assert.AreEqual((float)grad.numpy(), 2.0f);
+            }
+        }
     }
 }
