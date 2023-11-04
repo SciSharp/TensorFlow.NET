@@ -428,9 +428,9 @@ namespace Tensorflow.Operations
                 return x;
 
             var x_rank = array_ops.rank(x);
-            var con1 = new object[]
+            var con1 = new Tensor[]
             {
-                new []{1, 0 },
+                new Tensor(new int[]{0, 2}),
                 math_ops.range(2, x_rank)
             };
             var x_t = array_ops.transpose(x, array_ops.concat(con1, 0));

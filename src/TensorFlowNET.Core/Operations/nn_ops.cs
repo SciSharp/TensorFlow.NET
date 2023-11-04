@@ -287,7 +287,7 @@ namespace Tensorflow
                 new[] { math_ops.subtract(rank, 1) },
                 new[] { constant_op.constant(1) });
 
-            var ops = array_ops.concat(new[] { new[] { -1 }, (object)last_dim_size }, 0);
+            var ops = array_ops.concat(new Tensor[] { new Tensor(new int[] {1}), last_dim_size }, 0);
             var output = array_ops.reshape(logits, ops);
 
             // Set output shape if known.
