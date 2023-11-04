@@ -3,6 +3,7 @@ using Tensorflow.NumPy;
 using System;
 using System.Linq;
 using static Tensorflow.Binding;
+using Tensorflow;
 
 namespace TensorFlowNET.UnitTest.Basics
 {
@@ -60,14 +61,14 @@ namespace TensorFlowNET.UnitTest.Basics
             Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 15, 21, 16, 22, 17, 23 }, result[0, 3].ToArray<int>()));
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void boolean_mask()
         {
+            if (!tf.executing_eagerly())
+                tf.enable_eager_execution();
             var tensor = new[] { 0, 1, 2, 3 };
             var mask = np.array(new[] { true, false, true, false });
             var masked = tf.boolean_mask(tensor, mask);
-            var sess = tf.Session();
-            var result = sess.run(masked);
             Assert.IsTrue(Enumerable.SequenceEqual(new int[] { 0, 2 }, masked.ToArray<int>()));
         }
     }
