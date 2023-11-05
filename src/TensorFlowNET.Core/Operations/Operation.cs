@@ -437,7 +437,7 @@ namespace Tensorflow
         internal void _set_attr_with_buf(string attr_name, Buffer attr_buf)
         {
             Status status = new();
-            c_api.TFC_SetAttr(graph, _handle, attr_name, attr_buf, status);
+            c_api.TF_SetAttr(graph, _handle, attr_name, attr_buf, status);
             status.Check(true);
         }
     }

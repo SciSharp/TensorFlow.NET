@@ -20,12 +20,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.4" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowNET.Recommenders\Tensorflow.Recommenders.csproj" />
     <ProjectReference Include="..\..\src\TensorFlowNET.Text\Tensorflow.Text.csproj" />
+    <ProjectReference Include="..\Tensorflow.UnitTest.RedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
   </ItemGroup>
 
 </Project>
