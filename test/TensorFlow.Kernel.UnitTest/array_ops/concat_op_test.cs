@@ -1,9 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tensorflow;
 using Tensorflow.NumPy;
-using TensorFlow;
 using static Tensorflow.Binding;
-using static Tensorflow.KerasApi;
 
 namespace TensorFlow.Kernel.UnitTest
 {
@@ -23,14 +21,14 @@ namespace TensorFlow.Kernel.UnitTest
         [TestMethod]
         public void testConcatNegativeAxis()
         {
-            var t1 = tf.constant(new int[,] {{ 1, 2, 3 }, { 4, 5, 6 } });
+            var t1 = tf.constant(new int[,] { { 1, 2, 3 }, { 4, 5, 6 } });
             var t2 = tf.constant(new int[,] { { 7, 8, 9 }, { 10, 11, 12 } });
             var c = array_ops.concat(new[] { t1, t2 }, -2);
             var expected = np.array(new int[,,] { { { 1, 2, 3 }, { 4, 5, 6 } }, { { 7, 8, 9 }, { 10, 11, 12 } } });
             Assert.IsTrue(Enumerable.SequenceEqual(expected.ToArray<int>(), c.numpy().ToArray<int>()));
 
             c = array_ops.concat(new[] { t1, t2 }, -1);
-            expected = np.array(new int[,] { {  1, 2, 3, 7, 8, 9  }, {  4, 5, 6, 10, 11, 12  } });
+            expected = np.array(new int[,] { { 1, 2, 3, 7, 8, 9 }, { 4, 5, 6, 10, 11, 12 } });
             Assert.IsTrue(Enumerable.SequenceEqual(expected.ToArray<int>(), c.numpy().ToArray<int>()));
         }
 
@@ -54,7 +52,7 @@ namespace TensorFlow.Kernel.UnitTest
         [DataRow(TF_DataType.TF_INT64)]
         public void testConcatAxisType(TF_DataType dtype)
         {
-            var t1 = tf.constant(new int[,] { { 1, 2, 3 }, {4, 5, 6 } });
+            var t1 = tf.constant(new int[,] { { 1, 2, 3 }, { 4, 5, 6 } });
             var t2 = tf.constant(new int[,] { { 7, 8, 9 }, { 10, 11, 12 } });
             var c = array_ops.concat(new[] { t1, t2 }, tf.constant(1, dtype: dtype));
             var expected = np.array(new int[,] { { 1, 2, 3, 7, 8, 9 }, { 4, 5, 6, 10, 11, 12 } });
