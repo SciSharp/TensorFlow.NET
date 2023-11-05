@@ -945,12 +945,12 @@ namespace Tensorflow
         /// <returns></returns>
         public static Tensor concat(Tensor[] values, Tensor axis, string name = "concat")
         {
-            return gen_array_ops.concat_v2(values, axis, name: name);
+            return tf.Context.ExecuteOp("ConcatV2", name, new ExecuteOpArgs(values, axis));
         }
 
-        public static Tensor concat(Tensor[] values, Axis axis, string name = "concat")
+        public static Tensor concat(object[] values, int axis, string name = "concat")
         {
-            return gen_array_ops.concat_v2(values, axis, name: name);
+            return tf.Context.ExecuteOp("ConcatV2", name, new ExecuteOpArgs(values, axis));
         }
 
         /// <summary>
