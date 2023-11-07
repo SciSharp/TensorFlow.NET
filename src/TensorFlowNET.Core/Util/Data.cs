@@ -9,9 +9,9 @@ namespace Tensorflow.Util
     /// </summary>
     public class ValidationDataPack
     {
-        public OneOf<NDArray, NDArray[]> val_x;
-        public NDArray val_y;
-        public NDArray val_sample_weight = null;
+        internal OneOf<NDArray, NDArray[]> val_x;
+        internal NDArray val_y;
+        internal NDArray val_sample_weight = null;
         public bool val_x_is_array = false;
         public ValidationDataPack((NDArray, NDArray) validation_data)
         {
@@ -33,7 +33,7 @@ namespace Tensorflow.Util
             val_x_is_array = true;
         }
 
-        public ValidationDataPack((IEnumerable<NDArray>, NDArray, NDArray) validation_data)
+        internal ValidationDataPack((IEnumerable<NDArray>, NDArray, NDArray) validation_data)
         {
             this.val_x = validation_data.Item1.ToArray();
             this.val_y = validation_data.Item2;
