@@ -92,9 +92,17 @@ namespace Tensorflow.Keras.Engine.DataAdapters
             var train_y = y[new Slice(0, train_count)];
             var val_x = x.Select(x => x[new Slice(train_count)] as NDArray);
             var val_y = y[new Slice(train_count)];
-            NDArray tmp_sample_weight = sample_weight;
-            sample_weight = sample_weight[new Slice(0, train_count)];
-            ValidationDataPack validation_data = (val_x, val_y, tmp_sample_weight[new Slice(train_count)]);
+
+            ValidationDataPack validation_data;
+            if (sample_weight != null)
+            {
+                validation_data = (val_x, val_y, sample_weight[new Slice(train_count)]);
+                sample_weight = sample_weight[new Slice(0, train_count)];
+            }
+            else
+            {
+                validation_data = (val_x, val_y);
+            }
             return ((train_x, train_y, sample_weight), validation_data);
         }
     }
