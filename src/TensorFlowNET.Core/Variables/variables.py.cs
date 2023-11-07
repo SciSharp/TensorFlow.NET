@@ -154,13 +154,5 @@ namespace Tensorflow
 
             return op;
         }
-
-        public static Tensor global_variables_initializer()
-        {
-            // if context.executing_eagerly():
-            //      return control_flow_ops.no_op(name = "global_variables_initializer")
-            var group =  variables_initializer(global_variables().ToArray());
-            return group;
-        }
     }
 }

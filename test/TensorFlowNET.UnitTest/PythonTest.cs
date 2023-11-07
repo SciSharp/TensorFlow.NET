@@ -6,6 +6,7 @@ using System.Collections;
 using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
+using System.Collections.Generic;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -144,11 +145,12 @@ namespace TensorFlowNET.UnitTest
             Assert.IsTrue(np.allclose(array1, array2, rtol: eps));
         }
 
-        private class CollectionComparer : System.Collections.IComparer
+        private class CollectionComparer : IComparer
         {
             private readonly double _epsilon;
 
-            public CollectionComparer(double eps = 1e-06) {
+            public CollectionComparer(double eps = 1e-06)
+            {
                 _epsilon = eps;
             }
             public int Compare(object x, object y)
@@ -166,13 +168,15 @@ namespace TensorFlowNET.UnitTest
         }
 
         public void assertAllCloseAccordingToType<T>(
-            T[] expected,
-            T[] given,
+            ICollection expected,
+            ICollection<T> given,
             double eps = 1e-6,
             float float_eps = 1e-6f)
         {
             // TODO: check if any of arguments is not double and change toletance
-            CollectionAssert.AreEqual(expected, given, new CollectionComparer(eps));
+            // remove givenAsDouble and cast expected instead
+            var givenAsDouble = given.Select(x => Convert.ToDouble(x)).ToArray();
+            CollectionAssert.AreEqual(expected, givenAsDouble, new CollectionComparer(eps));
         }
 
         public void assertProtoEquals(object toProto, object o)
@@ -241,17 +245,25 @@ namespace TensorFlowNET.UnitTest
             //    return self._eval_helper(tensors)
             //  else:
             {
-                var sess = tf.Session();
+                var sess = tf.get_default_session();
                 var ndarray = tensor.eval(sess);
-                if (typeof(T) == typeof(double))
+                if (typeof(T) == typeof(double)
+                    || typeof(T) == typeof(float)
+                    || typeof(T) == typeof(int))
                 {
-                    double x = ndarray;
-                    result = x;
+                    result = Convert.ChangeType(ndarray, typeof(T));
                 }
-                else if (typeof(T) == typeof(int))
+                else if (typeof(T) == typeof(double[]))
                 {
-                    int x = ndarray;
-                    result = x;
+                    result = ndarray.ToMultiDimArray<double>();
+                }
+                else if (typeof(T) == typeof(float[]))
+                {
+                    result = ndarray.ToMultiDimArray<float>();
+                }
+                else if (typeof(T) == typeof(int[]))
+                {
+                    result = ndarray.ToMultiDimArray<int>();
                 }
                 else
                 {
@@ -457,12 +469,12 @@ namespace TensorFlowNET.UnitTest
             else
             {
 
-                if (crash_if_inconsistent_args && !self._cached_graph.Equals(graph))
+                if (crash_if_inconsistent_args && self._cached_graph != null && !self._cached_graph.Equals(graph))
                     throw new ValueError(@"The graph used to get the cached session is 
                                            different than the one that was used to create the
                                            session. Maybe create a new session with 
                                            self.session()");
-                if (crash_if_inconsistent_args && !self._cached_config.Equals(config))
+                if (crash_if_inconsistent_args && self._cached_config != null && !self._cached_config.Equals(config))
                 {
                     throw new ValueError(@"The config used to get the cached session is 
                                            different than the one that was used to create the 
