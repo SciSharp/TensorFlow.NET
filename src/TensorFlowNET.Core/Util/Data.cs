@@ -33,7 +33,7 @@ namespace Tensorflow.Util
             val_x_is_array = true;
         }
 
-        internal ValidationDataPack((IEnumerable<NDArray>, NDArray, NDArray) validation_data)
+        public ValidationDataPack((IEnumerable<NDArray>, NDArray, NDArray) validation_data)
         {
             this.val_x = validation_data.Item1.ToArray();
             this.val_y = validation_data.Item2;
