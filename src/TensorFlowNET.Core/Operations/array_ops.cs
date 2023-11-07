@@ -166,6 +166,11 @@ namespace Tensorflow
                     throw new ValueError("mask cannot be scalar.");
 
                 var leading_size = gen_math_ops.prod(shape(tensor_tensor)[$"{axis}:{axis + ndims_mask}"], ops.convert_to_tensor(new[] { 0 }));
+                if (leading_size.rank == 0)
+                {
+                    leading_size = expand_dims(leading_size, 0);
+                }
+
                 var shape1 = concat(new[]
                 {
                     shape(tensor_tensor)[$":{axis}"],
@@ -185,7 +190,7 @@ namespace Tensorflow
 
         private static Tensor _apply_mask_1d(Tensor reshaped_tensor, Tensor mask, int axis = 0)
         {
-            var indices = squeeze(where(mask), axis: new[] { 1 });
+            var indices = squeeze(where_v2(mask), axis: new[] { 1 });
             return gather(reshaped_tensor, indices, axis: ops.convert_to_tensor(axis));
         }
 
@@ -829,7 +834,7 @@ namespace Tensorflow
         /// <returns>A `Tensor`. Has the same type as `input`.
         /// Contains the same data as `input`, but has one or more dimensions of
         /// size 1 removed.</returns>
-        public static Tensor squeeze(Tensor input, int[] axis = null, string name = null)
+        public static Tensor squeeze(Tensor input, Axis axis = null, string name = null)
             => gen_array_ops.squeeze(input, axis, name);
 
         public static Tensor identity(Tensor input, string name = null)
@@ -990,7 +995,7 @@ namespace Tensorflow
             return @params.sparse_read(indices, name);
         }
 
-        public static Tensor transpose<T1>(T1 a, Axis perm, string name = "transpose", bool conjugate = false)
+        public static Tensor transpose<T1>(T1 a, Axis perm = null, string name = "transpose", bool conjugate = false)
         {
             return tf_with(ops.name_scope(name, "transpose", new { a }), scope =>
             {
@@ -1139,5 +1144,18 @@ namespace Tensorflow
             var _op = tf.OpDefLib._apply_op_helper("Placeholder", name: name, args: new { dtype, shape });
             return _op.output;
         }
+
+        public static int get_positive_axis(int axis, int ndims=-100, string axis_name="axis", string ndims_name= "ndims")
+        {
+            if(ndims != -100)
+            {
+                if (axis >= 0 && axis < ndims) return axis;
+                else if (-ndims <= axis && axis < 0) return axis + ndims;
+                else throw new ValueError($"{axis_name}={axis} out of bounds:expected {-ndims}<={axis_name}<{ndims}");
+                
+            } else if(axis < 0) throw new ValueError($"{axis_name}={axis} may only be negative if {ndims_name} is statically known.");
+            return axis;
+        }
+
     }
 }

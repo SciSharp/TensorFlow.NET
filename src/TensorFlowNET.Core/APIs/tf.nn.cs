@@ -101,6 +101,8 @@ namespace Tensorflow
                     name: name);
 
             public IActivation relu() => new relu();
+
+
             public IActivation swish() => new swish();
             public IActivation tanh() => new tanh();
 
@@ -110,6 +112,9 @@ namespace Tensorflow
 
             public Tensor relu(Tensor features, string name = null)
                 => gen_nn_ops.relu(features, name);
+
+            public Tensor relu6(Tensor features, string name = null)
+                    => gen_nn_ops.relu6(features, name);
 
             public Tensor[] fused_batch_norm(Tensor x,
                 Tensor scale,

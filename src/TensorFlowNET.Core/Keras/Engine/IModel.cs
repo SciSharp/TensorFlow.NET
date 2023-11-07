@@ -3,6 +3,7 @@ using Tensorflow.Keras.Losses;
 using Tensorflow.Keras.Metrics;
 using Tensorflow.Keras.Saving;
 using Tensorflow.NumPy;
+using Tensorflow.Util;
 
 namespace Tensorflow.Keras.Engine;
 
@@ -22,8 +23,11 @@ public interface IModel : ILayer
             int verbose = 1,
             List<ICallback> callbacks = null,
             float validation_split = 0f,
-            (NDArray val_x, NDArray val_y)? validation_data = null,
+            ValidationDataPack validation_data = null,
+            int validation_step = 10,
             bool shuffle = true,
+            Dictionary<int, float> class_weight = null,
+            NDArray sample_weight = null,
             int initial_epoch = 0,
             int max_queue_size = 10,
             int workers = 1,
@@ -35,8 +39,24 @@ public interface IModel : ILayer
             int verbose = 1,
             List<ICallback> callbacks = null,
             float validation_split = 0f,
-            (IEnumerable<NDArray> val_x, NDArray val_y)? validation_data = null,
+            ValidationDataPack validation_data = null,
             bool shuffle = true,
+            Dictionary<int, float> class_weight = null,
+            NDArray sample_weight = null,
+            int initial_epoch = 0,
+            int max_queue_size = 10,
+            int workers = 1,
+            bool use_multiprocessing = false);
+
+    public ICallback fit(IDatasetV2 dataset,
+            int batch_size = -1,
+            int epochs = 1,
+            int verbose = 1,
+            List<ICallback> callbacks = null,
+            IDatasetV2 validation_data = null,
+            int validation_step = 10,   // 间隔多少次会进行一次验证
+            bool shuffle = true,
+            Dictionary<int, float> class_weight = null,
             int initial_epoch = 0,
             int max_queue_size = 10,
             int workers = 1,
@@ -63,6 +83,8 @@ public interface IModel : ILayer
     Dictionary<string, float> evaluate(NDArray x, NDArray y,
             int batch_size = -1,
             int verbose = 1,
+            NDArray sample_weight = null,
+
             int steps = -1,
             int max_queue_size = 10,
             int workers = 1,
@@ -71,6 +93,14 @@ public interface IModel : ILayer
             bool is_val = false);
 
     Tensors predict(Tensors x,
+            int batch_size = -1,
+            int verbose = 0,
+            int steps = -1,
+            int max_queue_size = 10,
+            int workers = 1,
+            bool use_multiprocessing = false);
+
+    public Tensors predict(IDatasetV2 dataset,
             int batch_size = -1,
             int verbose = 0,
             int steps = -1,

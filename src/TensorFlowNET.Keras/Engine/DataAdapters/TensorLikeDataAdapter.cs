@@ -20,7 +20,7 @@ namespace Tensorflow.Keras.Engine.DataAdapters
         public TensorLikeDataAdapter(DataAdapterArgs args)
         {
             this.args = args;
-            _process_tensorlike();
+            Tensor sample_weight_tensor = args.SampleWeight != null ? _process_tensorlike(args.SampleWeight) : null;
             num_samples = (int)args.X.shape[0];
             var batch_size = args.BatchSize == -1 ? 32 : args.BatchSize;
             _batch_size = batch_size;
@@ -37,6 +37,8 @@ namespace Tensorflow.Keras.Engine.DataAdapters
                 inputs.AddRange(args.X);
             if (args.Y != null)
                 inputs.AddRange(args.Y);
+            if (sample_weight_tensor != null)
+                inputs.Add(sample_weight_tensor);
             dataset = slice_inputs(indices_dataset, inputs);
             dataset.FirstInputTensorCount = args.X.Length;
         }
@@ -94,8 +96,9 @@ namespace Tensorflow.Keras.Engine.DataAdapters
 
         public override bool ShouldRecreateIterator() => false;
 
-        void _process_tensorlike()
+        Tensor _process_tensorlike(NDArray sample_weights)
         {
+            return tf.convert_to_tensor(sample_weights);
         }
     }
 }

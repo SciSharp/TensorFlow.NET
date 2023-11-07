@@ -249,6 +249,9 @@ namespace Tensorflow
                     case sbyte val:
                         tensor_proto.IntVal.AddRange(new[] { (int)val });
                         break;
+                    case byte val:
+                        tensor_proto.IntVal.AddRange(new[] { (int)val });
+                        break;
                     case int val:
                         tensor_proto.IntVal.AddRange(new[] { val });
                         break;
@@ -262,7 +265,7 @@ namespace Tensorflow
                         tensor_proto.DoubleVal.AddRange(new[] { val });
                         break;
                     default:
-                        throw new Exception("make_tensor_proto Not Implemented");
+                        throw new Exception($"make_tensor_proto Not Implemented {values.GetType().Name}");
                 }
             }
 

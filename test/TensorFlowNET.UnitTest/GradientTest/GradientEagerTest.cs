@@ -62,7 +62,7 @@ namespace TensorFlowNET.UnitTest.Gradient
             // Calcute the gradient of (x1-x2)^2 
             // by Automatic Differentiation in Eager mode
             // Expected is 2*(abs(x1-x2))
-            Tensor x1 = new NDArray( new float[] { 1, 3, 5, 21, 19, 17 });
+            Tensor x1 = new NDArray(new float[] { 1, 3, 5, 21, 19, 17 });
             Tensor x2 = new NDArray(new float[] { 29, 27, 23, 7, 11, 13 });
             float[] expected = new float[]
             {
@@ -172,6 +172,35 @@ namespace TensorFlowNET.UnitTest.Gradient
             var x = tf.constant(2.0f);
             var result = grad(x, 4);
             Assert.AreEqual((float)result, 4.0f);
+        }
+
+        [TestMethod]
+        public void Tile()
+        {
+            var a = tf.constant(new int[] { 1 }, TF_DataType.TF_FLOAT);
+            var b = tf.constant(new int[] { 2 });
+            using (var tape = tf.GradientTape())
+            {
+                tape.watch(a);
+                var y = tf.tile(a, b);
+                var grad = tape.gradient(y, a);
+                Assert.AreEqual((float)grad.numpy(), 2.0f);
+            }
+        }
+
+        [TestMethod]
+        public void GatherNdTest()
+        {
+            var x = tf.constant(new float[,] { { 1.0f, 2.0f, 3.0f }, { 1.0f, 2.0f, 3.0f }, { 1.0f, 2.0f, 3.0f } }, dtype: TF_DataType.TF_FLOAT);
+            var indices = tf.constant(new int[,] { { 0, 1 }, { 1, 1 }, { 2, 1 } }, dtype: TF_DataType.TF_INT32);
+            using (var tape = tf.GradientTape())
+            {
+                tape.watch(x);
+                var res = tf.gather_nd(x, indices);
+                var grad = tape.gradient(res, x);
+                var expected = np.array(new float[,] { { 0f, 1f, 0f }, { 0f, 1f, 0f }, { 0f, 1f, 0f } });
+                Assert.IsTrue(Enumerable.SequenceEqual(grad.ToArray<float>(), expected.ToArray<float>()));
+            }
         }
     }
 }

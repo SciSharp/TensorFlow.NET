@@ -51,7 +51,7 @@ namespace Tensorflow.Operations
             }
             Status status = new();
             var proto = handle_data.ToByteArray();
-            c_api.TFC_SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), proto, proto.Length, status);
+            c_api.TF_SetHandleShapeAndType(target_t.graph.c_graph, target_t._as_tf_output(), proto, proto.Length, status);
             status.Check(true);
         }
 

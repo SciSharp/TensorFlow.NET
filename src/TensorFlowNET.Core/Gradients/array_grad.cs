@@ -381,5 +381,48 @@ namespace Tensorflow.Gradients
             var axis = op.inputs[1];
             return new Tensor[] { array_ops.reverse(grad, axis), null };
         }
+
+        [RegisterGradient("Tile")]
+        public static Tensor[] _TileGrad(Operation op, Tensor[] grads)
+        {
+            var grad = grads[0];
+            var input_shape = array_ops.shape(op.inputs[0], out_type: op.inputs[1].dtype);
+            var split_shape = array_ops.reshape(array_ops.transpose(array_ops.stack(new Tensor[] { op.inputs[1], input_shape })), new Shape(-1));
+            var axes = math_ops.range(0, array_ops.size(split_shape), 2);
+
+            //# Sum reduces grad along the first dimension for IndexedSlices
+            //if isinstance(grad, indexed_slices_lib.IndexedSlices):
+            //input_shape_0 = math_ops.cast(input_shape[0], grad.indices.dtype)
+            //grad = math_ops.unsorted_segment_sum(
+            //    grad.values, math_ops.mod(grad.indices, input_shape_0), input_shape_0)
+            //split_shape = array_ops.concat([[1], split_shape[1:]], axis = 0)
+
+            var input_grad = math_ops.reduce_sum(array_ops.reshape(grad, split_shape), axes);
+            if (!tf.Context.executing_eagerly())
+            {
+                input_grad.set_shape(op.inputs[0].GetShape());
+            }
+            return new Tensor[] { input_grad, null };
+        }
+
+        [RegisterGradient("GatherNd")]
+        public static Tensor[] _GatherNdGrad(Operation op, Tensor[] grads)
+        {
+            var @ref = op.inputs[0];
+            var indices = op.inputs[1];
+            var grad = grads[0];
+            var ref_shape = array_ops.shape(@ref, out_type: indices.dtype);
+            Tensor ref_grad = null;
+            if (indices.shape.ndim == 2 && indices.shape.dims[indices.shape.Length - 1] == 1)
+            {
+                ref_grad = (Tensor)new IndexedSlices(grad, array_ops.squeeze(indices, axis: -1), ref_shape);
+            }
+            else
+            {
+                ref_grad = gen_array_ops.scatter_nd(indices, grad, ref_shape);
+            }
+            return new Tensor[] { ref_grad, null };
+        }
+
     }
 }

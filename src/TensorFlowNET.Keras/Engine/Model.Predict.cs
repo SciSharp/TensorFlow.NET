@@ -102,9 +102,9 @@ namespace Tensorflow.Keras.Engine
                         for (int i = 0; i < batch_outputs.Length; i++)
                             batch_outputs[i] = tf.concat(new Tensor[] { batch_outputs[i], tmp_batch_outputs[i] }, axis: 0);
                     }
-
                     var end_step = step + data_handler.StepIncrement;
                     callbacks.on_predict_batch_end(end_step, new Dictionary<string, Tensors> { { "outputs", batch_outputs } });
+                    GC.Collect();
                 }
             }
 

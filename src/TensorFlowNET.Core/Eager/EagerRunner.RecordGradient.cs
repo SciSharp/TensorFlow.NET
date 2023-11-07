@@ -80,6 +80,11 @@ namespace Tensorflow.Eager
                      Tensor[] op_outputs)
             => (out_grads, unneeded_gradients) =>
             {
+                if(!ops.gradientFunctions.ContainsKey(op_name))
+                {
+                    throw new Exception($"gradientFunctions not find op_name: {op_name}");
+                }
+
                 if (ops.gradientFunctions[op_name] == null)
                     return new Tensor[op_inputs.Length];
 

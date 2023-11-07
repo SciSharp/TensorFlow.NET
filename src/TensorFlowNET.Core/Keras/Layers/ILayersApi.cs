@@ -56,6 +56,12 @@ namespace Tensorflow.Keras.Layers
             string bias_initializer = "zeros");
 
         public ILayer Conv2D(int filters,
+                Shape kernel_size = null,
+                Shape strides = null,
+                string padding = "valid"
+            );
+
+        public ILayer Conv2D(int filters,
             Shape kernel_size = null,
             Shape strides = null,
             string padding = "valid",
@@ -95,6 +101,19 @@ namespace Tensorflow.Keras.Layers
             bool use_bias = true,
             string kernel_initializer = "glorot_uniform",
             string bias_initializer = "zeros");
+        public ILayer DepthwiseConv2D(Shape kernel_size = null,
+            Shape strides = null,
+            string padding = "valid",
+            string data_format = null,
+            Shape dilation_rate = null,
+            int groups = 1,
+            int depth_multiplier = 1,
+            string activation = null,
+            bool use_bias = false,
+            string kernel_initializer = "glorot_uniform",
+            string bias_initializer = "zeros",
+            string depthwise_initializer = "glorot_uniform"
+            );
 
         public ILayer Dense(int units);
         public ILayer Dense(int units,
@@ -160,6 +179,9 @@ namespace Tensorflow.Keras.Layers
 
         public ILayer Normalization(Shape? input_shape = null, int? axis = -1, float? mean = null, float? variance = null, bool invert = false);
         public ILayer LeakyReLU(float alpha = 0.3f);
+
+        public ILayer ReLU6();
+
 
         public IRnnCell LSTMCell(int uints,
             string activation = "tanh",

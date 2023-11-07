@@ -27,6 +27,6 @@ public abstract partial class Layer
             children = new Dictionary<string, Trackable>();
         }
 
-        return children.Concat(base._trackable_children(save_type, cache)).ToDictionary(x => x.Key, x => x.Value);
+        return children.Concat(base._trackable_children(save_type, cache)).GroupBy(x => x.Key).Select(g => g.First()).ToDictionary(x => x.Key, x => x.Value);
     }
 }
