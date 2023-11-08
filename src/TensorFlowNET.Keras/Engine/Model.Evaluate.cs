@@ -70,13 +70,19 @@ namespace Tensorflow.Keras.Engine
             return evaluate(data_handler, callbacks, is_val, test_function);
         }
 
-        public Dictionary<string, float> evaluate(IEnumerable<Tensor> x, Tensor y, int verbose = 1, bool is_val = false)
+        public Dictionary<string, float> evaluate(
+            IEnumerable<Tensor> x, 
+            Tensor y, 
+            int verbose = 1,
+            NDArray sample_weight = null,
+            bool is_val = false)
         {
             var data_handler = new DataHandler(new DataHandlerArgs
             {
                 X = new Tensors(x.ToArray()),
                 Y = y,
                 Model = this,
+                SampleWeight = sample_weight,
                 StepsPerExecution = _steps_per_execution
             });
 
