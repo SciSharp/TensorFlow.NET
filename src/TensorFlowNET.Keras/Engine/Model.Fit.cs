@@ -7,6 +7,7 @@ using Tensorflow.Keras.Engine.DataAdapters;
 using System.Diagnostics;
 using Tensorflow.Keras.Callbacks;
 using Tensorflow.Util;
+using OneOf;
 
 namespace Tensorflow.Keras.Engine
 {
@@ -287,10 +288,24 @@ namespace Tensorflow.Keras.Engine
 
                 if (validation_data != null)
                 {
-                    // Because evaluate calls call_test_batch_end, this interferes with our output on the screen
-                    // so we need to pass a is_val parameter to stop on_test_batch_end
-                    var (val_x, val_y, val_sample_weight) = validation_data;
-                    var val_logs = evaluate(val_x, val_y, sample_weight:val_sample_weight, is_val:true);
+                    NDArray val_x;
+                    NDArray[] val_x_array;
+                    NDArray val_y;
+                    NDArray val_sample_weight;
+                    Dictionary<string, float> val_logs;
+                    if (!validation_data.val_x_is_array)
+                    {
+                        (val_x, val_y, val_sample_weight) = validation_data;
+                        // Because evaluate calls call_test_batch_end, this interferes with our output on the screen
+                        // so we need to pass a is_val parameter to stop on_test_batch_end
+                        val_logs = evaluate(val_x, val_y, sample_weight: val_sample_weight, is_val: true);
+
+                    }
+                    else
+                    {
+                        (val_x_array, val_y, val_sample_weight, _) = validation_data;
+                         val_logs = evaluate(val_x_array, val_y, sample_weight: val_sample_weight, is_val: true);
+                    }
                     foreach (var log in val_logs)
                     {
                         logs["val_" + log.Key] = log.Value;
