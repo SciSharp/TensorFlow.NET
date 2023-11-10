@@ -625,25 +625,6 @@ namespace TensorFlowNET.UnitTest.Gradient
             }
         }
 
-        // TODO: remove when np.testing.assert_allclose(a, b) is implemented
-        private class CollectionComparer : System.Collections.IComparer
-        {
-            private readonly double _epsilon = 1e-07;
-
-            public int Compare(object x, object y)
-            {
-                var a = (double)x;
-                var b = (double)y;
-
-                double delta = Math.Abs(a - b);
-                if (delta < _epsilon)
-                {
-                    return 0;
-                }
-                return a.CompareTo(b);
-            }
-        }
-
         private struct Case
         {
             public Tensor[] grad1;
@@ -748,8 +729,7 @@ namespace TensorFlowNET.UnitTest.Gradient
                     var npgrad2 = result[1];
                     foreach (var (a, b) in npgrad1.Zip(npgrad2))
                     {
-                        // TODO: np.testing.assert_allclose(a, b);
-                        CollectionAssert.AreEqual(a.ToArray(), b.ToArray(), new CollectionComparer());
+                        self.assertAllClose(a, b);
                     }
                 }
             }
