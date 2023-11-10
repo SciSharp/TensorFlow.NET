@@ -1,8 +1,5 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Diagnostics;
-using System.Linq;
 using Tensorflow.NumPy;
 using TensorFlowNET.UnitTest;
 using static Tensorflow.Binding;
@@ -27,8 +24,8 @@ namespace Tensorflow.Keras.UnitTest.Optimizers
             var dtype = GetTypeForNumericType<T>();
 
             // train.GradientDescentOptimizer is V1 only API.
-            //tf.Graph().as_default();
-            /*using (var sess = self.cached_session())
+            tf.Graph().as_default();
+            using (var sess = self.cached_session())
             {
                 var var0 = tf.Variable(new[] { 1.0, 2.0 }, dtype: dtype);
                 var var1 = tf.Variable(new[] { 3.0, 4.0 }, dtype: dtype);
@@ -59,7 +56,7 @@ namespace Tensorflow.Keras.UnitTest.Optimizers
                     new[] { 3.0 - 3.0 * 0.01, 4.0 - 3.0 * 0.01 },
                     self.evaluate<T[]>(var1));
                 // TODO: self.assertEqual(0, len(optimizer.variables()));
-            }*/
+            }
         }
 
         [TestMethod]
@@ -67,7 +64,7 @@ namespace Tensorflow.Keras.UnitTest.Optimizers
         {
             //TODO: add np.half
             TestBasic<float>();
-            // TestBasic<double>();
+            TestBasic<double>();
         }
 
         private void TestTensorLearningRate<T>() where T : struct
@@ -115,8 +112,8 @@ namespace Tensorflow.Keras.UnitTest.Optimizers
         public void TestTensorLearningRate()
         {
             //TODO: add np.half
-            // TestTensorLearningRate<float>();
-            // TestTensorLearningRate<double>();
+            TestTensorLearningRate<float>();
+            TestTensorLearningRate<double>();
         }
     }
 }

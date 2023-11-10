@@ -15,6 +15,8 @@ namespace TensorFlowNET.UnitTest.Training
         [TestMethod]
         public void LinearRegression()
         {
+            tf.Graph().as_default();
+
             // Initialize the weights to `5.0` and the bias to `0.0`
             // In practice, these should be initialized to random values (for example, with `tf.random.normal`)
             var W = tf.Variable(5.0f);
