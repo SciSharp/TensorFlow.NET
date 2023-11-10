@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using Tensorflow;
 using Tensorflow.NumPy;
-using TensorFlowNET.UnitTest;
 using static Tensorflow.Binding;
 
-namespace Tensorflow.Keras.UnitTest.Optimizers
+namespace TensorFlowNET.UnitTest.Training
 {
     [TestClass]
     public class GradientDescentOptimizerTest : PythonTest
