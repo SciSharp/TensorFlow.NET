@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using Tensorflow.NumPy;
-using System;
 using System.Collections;
-using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
-using System.Collections.Generic;
 
 namespace TensorFlowNET.UnitTest
 {
