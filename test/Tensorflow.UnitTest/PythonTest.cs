@@ -86,9 +86,9 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual(JObject.FromObject(expected).ToString(), JObject.FromObject(given).ToString());
                 return;
             }
-            if (given is ICollection && expected is ICollection)
+            if (given is ICollection collectionGiven && expected is ICollection collectionExpected)
             {
-                assertItemsEqual(given as ICollection, expected as ICollection);
+                assertItemsEqual(collectionGiven, collectionExpected);
                 return;
             }
             if (given is float && expected is float)
@@ -150,8 +150,21 @@ namespace TensorFlowNET.UnitTest
             {
                 _epsilon = eps;
             }
-            public int Compare(object x, object y)
+            public int Compare(object? x, object? y)
             {
+                if (x == null && y == null)
+                {
+                    return 0;
+                }
+                else if (x == null)
+                {
+                    return -1; 
+                }
+                else if (y == null)
+                {
+                    return 1;
+                }
+
                 var a = (double)x;
                 var b = (double)y;
 
@@ -206,7 +219,7 @@ namespace TensorFlowNET.UnitTest
         //    return nest.map_structure(self._eval_tensor, tensors);
         //}
 
-        protected object _eval_tensor(object tensor)
+        protected object? _eval_tensor(object tensor)
         {
             if (tensor == null)
                 return None;
@@ -273,7 +286,7 @@ namespace TensorFlowNET.UnitTest
 
 
         ///Returns a TensorFlow Session for use in executing tests.
-        public Session cached_session(
+        public Session? cached_session(
             Graph? graph = null, object? config = null, bool use_gpu = false, bool force_gpu = false)
         {
             // This method behaves differently than self.session(): for performance reasons
@@ -369,7 +382,7 @@ namespace TensorFlowNET.UnitTest
             return s.as_default();
         }
 
-        private Session _constrain_devices_and_set_default(Session sess, bool use_gpu, bool force_gpu)
+        private Session? _constrain_devices_and_set_default(Session sess, bool use_gpu, bool force_gpu)
         {
             // Set the session and its graph to global default and constrain devices."""
             if (tf.executing_eagerly())
@@ -404,7 +417,7 @@ namespace TensorFlowNET.UnitTest
         }
 
         // See session() for details.
-        private Session _create_session(Graph graph, object cfg, bool forceGpu)
+        private Session _create_session(Graph? graph, object? cfg, bool forceGpu)
         {
             var prepare_config = new Func<object, object>((config) =>
             {
@@ -485,7 +498,7 @@ namespace TensorFlowNET.UnitTest
                                            session. Maybe create a new session with 
                                            self.session()");
                 }
-                return _cached_session;
+                return self._cached_session;
             }
         }
 

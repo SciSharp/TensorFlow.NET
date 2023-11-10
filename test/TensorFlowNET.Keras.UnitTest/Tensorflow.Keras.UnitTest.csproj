@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TensorFlowNET.Keras\Tensorflow.Keras.csproj" />
     <ProjectReference Include="..\..\tools\Tensorflow.UnitTest.RedistHolder\Tensorflow.UnitTest.RedistHolder.csproj" />
+    <ProjectReference Include="..\TensorFlow.Kernel.UnitTest\TensorFlow.Kernel.UnitTest.csproj" />
   </ItemGroup>
 
   <ItemGroup>
