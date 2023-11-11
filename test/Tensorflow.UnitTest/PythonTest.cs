@@ -1,12 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using Tensorflow.NumPy;
-using System;
 using System.Collections;
-using System.Linq;
 using Tensorflow;
 using static Tensorflow.Binding;
-using System.Collections.Generic;
 
 namespace TensorFlowNET.UnitTest
 {
@@ -89,9 +86,9 @@ namespace TensorFlowNET.UnitTest
                 Assert.AreEqual(JObject.FromObject(expected).ToString(), JObject.FromObject(given).ToString());
                 return;
             }
-            if (given is ICollection && expected is ICollection)
+            if (given is ICollection collectionGiven && expected is ICollection collectionExpected)
             {
-                assertItemsEqual(given as ICollection, expected as ICollection);
+                assertItemsEqual(collectionGiven, collectionExpected);
                 return;
             }
             if (given is float && expected is float)
@@ -136,13 +133,23 @@ namespace TensorFlowNET.UnitTest
 
         public void assertAllClose(NDArray array1, NDArray array2, double eps = 1e-5)
         {
-            Assert.IsTrue(np.allclose(array1, array2, rtol: eps));
+            CollectionAssert.AreEqual(array1.ToArray(), array2.ToArray(), new CollectionComparer(eps));
+
+            //TODO: Assert.IsTrue(np.allclose(array1, array2, rtol: eps));
         }
 
         public void assertAllClose(double value, NDArray array2, double eps = 1e-5)
         {
+            if (array2.shape.IsScalar)
+            {
+                double value2 = array2;
+                Assert.AreEqual(value, value2, eps);
+                return;
+            }
             var array1 = np.ones_like(array2) * value;
-            Assert.IsTrue(np.allclose(array1, array2, rtol: eps));
+            CollectionAssert.AreEqual(array1.ToArray(), array2.ToArray(), new CollectionComparer(eps));
+
+            //TODO: Assert.IsTrue(np.allclose(array1, array2, rtol: eps));
         }
 
         private class CollectionComparer : IComparer
@@ -153,8 +160,21 @@ namespace TensorFlowNET.UnitTest
             {
                 _epsilon = eps;
             }
-            public int Compare(object x, object y)
+            public int Compare(object? x, object? y)
             {
+                if (x == null && y == null)
+                {
+                    return 0;
+                }
+                else if (x == null)
+                {
+                    return -1;
+                }
+                else if (y == null)
+                {
+                    return 1;
+                }
+
                 var a = (double)x;
                 var b = (double)y;
 
@@ -188,9 +208,9 @@ namespace TensorFlowNET.UnitTest
 
         #region tensor evaluation and test session
 
-        private Session _cached_session = null;
-        private Graph _cached_graph = null;
-        private object _cached_config = null;
+        private Session? _cached_session = null;
+        private Graph? _cached_graph = null;
+        private object? _cached_config = null;
         private bool _cached_force_gpu = false;
 
         private void _ClearCachedSession()
@@ -209,7 +229,7 @@ namespace TensorFlowNET.UnitTest
         //    return nest.map_structure(self._eval_tensor, tensors);
         //}
 
-        protected object _eval_tensor(object tensor)
+        protected object? _eval_tensor(object tensor)
         {
             if (tensor == null)
                 return None;
@@ -240,7 +260,7 @@ namespace TensorFlowNET.UnitTest
         /// </summary>
         public T evaluate<T>(Tensor tensor)
         {
-            object result = null;
+            object? result = null;
             //  if context.executing_eagerly():
             //    return self._eval_helper(tensors)
             //  else:
@@ -276,8 +296,8 @@ namespace TensorFlowNET.UnitTest
 
 
         ///Returns a TensorFlow Session for use in executing tests.
-        public Session cached_session(
-            Graph graph = null, object config = null, bool use_gpu = false, bool force_gpu = false)
+        public Session? cached_session(
+            Graph? graph = null, object? config = null, bool use_gpu = false, bool force_gpu = false)
         {
             // This method behaves differently than self.session(): for performance reasons
             // `cached_session` will by default reuse the same session within the same
@@ -328,7 +348,7 @@ namespace TensorFlowNET.UnitTest
         }
 
         //Returns a TensorFlow Session for use in executing tests.
-        public Session session(Graph graph = null, object config = null, bool use_gpu = false, bool force_gpu = false)
+        public Session session(Graph? graph = null, object? config = null, bool use_gpu = false, bool force_gpu = false)
         {
             //Note that this will set this session and the graph as global defaults.
 
@@ -362,7 +382,7 @@ namespace TensorFlowNET.UnitTest
             //  A Session object that should be used as a context manager to surround
             //  the graph building and execution code in a test case.
 
-            Session s = null;
+            Session? s = null;
             //if (context.executing_eagerly())
             //  yield None
             //else 
@@ -372,7 +392,7 @@ namespace TensorFlowNET.UnitTest
             return s.as_default();
         }
 
-        private Session _constrain_devices_and_set_default(Session sess, bool use_gpu, bool force_gpu)
+        private Session? _constrain_devices_and_set_default(Session sess, bool use_gpu, bool force_gpu)
         {
             // Set the session and its graph to global default and constrain devices."""
             if (tf.executing_eagerly())
@@ -407,7 +427,7 @@ namespace TensorFlowNET.UnitTest
         }
 
         // See session() for details.
-        private Session _create_session(Graph graph, object cfg, bool forceGpu)
+        private Session _create_session(Graph? graph, object? cfg, bool forceGpu)
         {
             var prepare_config = new Func<object, object>((config) =>
             {
@@ -451,8 +471,8 @@ namespace TensorFlowNET.UnitTest
         }
 
         private Session _get_cached_session(
-                          Graph graph = null,
-                          object config = null,
+                          Graph? graph = null,
+                          object? config = null,
                           bool force_gpu = false,
                           bool crash_if_inconsistent_args = true)
         {
@@ -488,7 +508,7 @@ namespace TensorFlowNET.UnitTest
                                            session. Maybe create a new session with 
                                            self.session()");
                 }
-                return _cached_session;
+                return self._cached_session;
             }
         }
 
