@@ -88,7 +88,7 @@ public class AugmentedGraphView: ObjectGraphView
 
     public override (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>) breadth_first_traversal()
     {
-        Trackable get_merged_trackable(Trackable x)
+        void merged_trackable(Trackable x)
         {
             // TODO: complete it with new definitions `Asset` and `TrackableConstant`.
             return x;
@@ -100,7 +100,7 @@ public class AugmentedGraphView: ObjectGraphView
             // skip the deletion of cache (maybe do it later).
             foreach(var pair in _children_cache[obj])
             {
-                _children_cache[obj][pair.Key] = get_merged_trackable(pair.Value);
+                merged_trackable(pair.Value);
             }
         }
 
