@@ -91,8 +91,8 @@ public class AugmentedGraphView: ObjectGraphView
         void merged_trackable(Trackable x)
         {
             // TODO: complete it with new definitions `Asset` and `TrackableConstant`.
-            return x;
         }
+
         var trackable_objects = base.breadth_first_traversal();
 
         foreach(var obj in _children_cache.Keys)
