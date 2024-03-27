@@ -175,8 +175,8 @@ namespace TensorFlowNET.UnitTest
                     return 1;
                 }
 
-                var a = (double)x;
-                var b = (double)y;
+                var a = Convert.ToDouble(x);
+                var b = Convert.ToDouble(y);
 
                 double delta = Math.Abs(a - b);
                 if (delta < _epsilon)
@@ -185,6 +185,19 @@ namespace TensorFlowNET.UnitTest
                 }
                 return a.CompareTo(b);
             }
+        }
+
+        public void assertAllCloseAccordingToType<T>(
+            double[,] expected,
+            T[,] given,
+            double eps = 1e-6,
+            float float_eps = 1e-6f)
+        {
+            Assert.AreEqual(expected.GetLength(0), given.GetLength(0));
+            Assert.AreEqual(expected.GetLength(1), given.GetLength(1));
+
+            var flattenGiven = given.Cast<T>().ToArray();
+            assertAllCloseAccordingToType(expected, flattenGiven, eps, float_eps);
         }
 
         public void assertAllCloseAccordingToType<T>(
@@ -267,21 +280,35 @@ namespace TensorFlowNET.UnitTest
             {
                 var sess = tf.get_default_session();
                 var ndarray = tensor.eval(sess);
-                if (typeof(T) == typeof(double)
-                    || typeof(T) == typeof(float)
-                    || typeof(T) == typeof(int))
+
+                if (typeof(T) == typeof(int))
                 {
-                    result = Convert.ChangeType(ndarray, typeof(T));
+                    int i = ndarray;
+                    result = i;
                 }
-                else if (typeof(T) == typeof(double[]))
+                else if (typeof(T) == typeof(float))
+                {
+                    float f = ndarray;
+                    result = f;
+                }
+                else if (typeof(T) == typeof(double))
+                {
+                    double d = ndarray;
+                    result = d;
+                }
+                else if (
+                    typeof(T) == typeof(double[])
+                    || typeof(T) == typeof(double[,]))
                 {
                     result = ndarray.ToMultiDimArray<double>();
                 }
-                else if (typeof(T) == typeof(float[]))
+                else if (typeof(T) == typeof(float[])
+                    || typeof(T) == typeof(float[,]))
                 {
                     result = ndarray.ToMultiDimArray<float>();
                 }
-                else if (typeof(T) == typeof(int[]))
+                else if (typeof(T) == typeof(int[]) 
+                    || typeof(T) == typeof(int[,]))
                 {
                     result = ndarray.ToMultiDimArray<int>();
                 }
