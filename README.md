@@ -15,6 +15,14 @@
 
 English | [中文](docs/README-CN.md)
 
+> [!IMPORTANT]
+> We're happy that our work on tensorflow.net has attracted many users. However, at this time, none of the main maintainers of this repo is available for new features and bug fix. We won't refuse PRs and will help to review them.
+> 
+> If you would like to be a contributor or maintainer of tensorflow.net, we'd like to help you to start up.
+>
+> We feel sorry for that and we'll resume the maintaining for this project once one of us has bandwidth for it.
+>   
+
 *master branch and v0.100.x is corresponding to tensorflow v2.10, v0.6x branch is from tensorflow v2.6, v0.15-tensorflow1.15 is from tensorflow1.15. Please add `https://www.myget.org/F/scisharp/api/v3/index.json` to nuget source to use nightly release.*
 
 
