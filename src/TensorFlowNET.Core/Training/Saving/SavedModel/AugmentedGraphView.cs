@@ -109,15 +109,11 @@ public class AugmentedGraphView: ObjectGraphView
 
     public List<(string, Trackable)> list_dependencies(Trackable obj)
     {
-        IDictionary<string, Trackable> children;
-        if (!_children_cache.ContainsKey(obj))
+        if (!_children_cache.TryGetValue(obj, out var children))
         {
             children= new Dictionary<string, Trackable>();
         }
-        else
-        {
-            children= _children_cache[obj];
-        }
+
         List<(string, Trackable)> res = new();
         foreach(var pair in obj.deserialization_dependencies(children))
         {
