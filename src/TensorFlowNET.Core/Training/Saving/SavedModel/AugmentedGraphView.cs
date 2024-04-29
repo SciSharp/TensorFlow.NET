@@ -88,11 +88,11 @@ public class AugmentedGraphView: ObjectGraphView
 
     public override (IList<Trackable>, IDictionary<Trackable, IEnumerable<TrackableReference>>) breadth_first_traversal()
     {
-        Trackable get_merged_trackable(Trackable x)
+        void merged_trackable(Trackable x)
         {
             // TODO: complete it with new definitions `Asset` and `TrackableConstant`.
-            return x;
         }
+
         var trackable_objects = base.breadth_first_traversal();
 
         foreach(var obj in _children_cache.Keys)
@@ -100,7 +100,7 @@ public class AugmentedGraphView: ObjectGraphView
             // skip the deletion of cache (maybe do it later).
             foreach(var pair in _children_cache[obj])
             {
-                _children_cache[obj][pair.Key] = get_merged_trackable(pair.Value);
+                merged_trackable(pair.Value);
             }
         }
 
@@ -109,15 +109,11 @@ public class AugmentedGraphView: ObjectGraphView
 
     public List<(string, Trackable)> list_dependencies(Trackable obj)
     {
-        IDictionary<string, Trackable> children;
-        if (!_children_cache.ContainsKey(obj))
+        if (!_children_cache.TryGetValue(obj, out var children))
         {
             children= new Dictionary<string, Trackable>();
         }
-        else
-        {
-            children= _children_cache[obj];
-        }
+
         List<(string, Trackable)> res = new();
         foreach(var pair in obj.deserialization_dependencies(children))
         {
