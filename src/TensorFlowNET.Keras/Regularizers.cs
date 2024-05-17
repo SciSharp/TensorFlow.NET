@@ -1,6 +1,6 @@
 ﻿namespace Tensorflow.Keras
 {
-  public class Regularizers
+  public class Regularizers: IRegularizerApi
   {
     public IRegularizer l1(float l1 = 0.01f)
         => new Tensorflow.Operations.Regularizers.L1(l1);
@@ -13,5 +13,11 @@
     //# and no l1 penalty.
     public IRegularizer l1l2(float l1 = 0.00f, float l2 = 0.00f)
         => new Tensorflow.Operations.Regularizers.L1L2(l1, l2);
+
+    public IRegularizer L1 => l1();
+
+    public IRegularizer L2 => l2();
+
+    public IRegularizer L1L2 => l1l2();
   }
 }
