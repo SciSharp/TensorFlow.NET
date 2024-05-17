@@ -16,6 +16,7 @@ namespace Tensorflow.Keras
 
   public interface IRegularizerApi
   {
+    IRegularizer GetRegularizerFromName(string name);
     IRegularizer L1 { get; }
     IRegularizer L2 { get; }
     IRegularizer L1L2 { get; }
