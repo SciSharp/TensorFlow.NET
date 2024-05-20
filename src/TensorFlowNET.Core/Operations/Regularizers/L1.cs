@@ -9,7 +9,7 @@ namespace Tensorflow.Operations.Regularizers
     float _l1;
     private readonly Dictionary<string, object> _config;
 
-    public string ClassName => "L2";
+    public string ClassName => "L1";
     public virtual IDictionary<string, object> Config => _config;
 
     public L1(float l1 = 0.01f)

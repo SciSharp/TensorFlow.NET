@@ -12,5 +12,14 @@ namespace Tensorflow.Keras
     [JsonProperty("config")]
     IDictionary<string, object> Config { get; }
     Tensor Apply(RegularizerArgs args);
-    }
+  }
+
+  public interface IRegularizerApi
+  {
+    IRegularizer GetRegularizerFromName(string name);
+    IRegularizer L1 { get; }
+    IRegularizer L2 { get; }
+    IRegularizer L1L2 { get; }
+  }
+
 }
