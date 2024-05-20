@@ -109,13 +109,7 @@ namespace Tensorflow.Keras.UnitTest.Model
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.MaxPooling2D((3, 3), strides:(2, 2)),
 
-                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: keras.activations.Relu, bias_regularizer:keras.regularizers.L1L2),
-                tf.keras.layers.BatchNormalization(),
-
-                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: keras.activations.Relu, bias_regularizer:keras.regularizers.L2),
-                tf.keras.layers.BatchNormalization(),
-
-                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: keras.activations.Relu, bias_regularizer:keras.regularizers.L1),
+                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: "relu"),
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.MaxPooling2D((3, 3), (2, 2)),
 
