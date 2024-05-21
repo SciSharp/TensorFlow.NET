@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Tensorflow.Keras.Engine;
@@ -128,6 +129,53 @@ public class ModelLoadTest
         model.summary();
     }
 
+
+    [TestMethod]
+    public void BiasRegularizerSaveAndLoad()
+    {
+        var savemodel = keras.Sequential(new List<ILayer>()
+            {
+                tf.keras.layers.InputLayer((227, 227, 3)),
+                tf.keras.layers.Conv2D(96, (11, 11), (4, 4), activation:"relu", padding:"valid"),
+                tf.keras.layers.BatchNormalization(),
+                tf.keras.layers.MaxPooling2D((3, 3), strides:(2, 2)),
+
+                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: keras.activations.Relu, bias_regularizer:keras.regularizers.L1L2),
+                tf.keras.layers.BatchNormalization(),
+
+                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: keras.activations.Relu, bias_regularizer:keras.regularizers.L2),
+                tf.keras.layers.BatchNormalization(),
+
+                tf.keras.layers.Conv2D(256, (5, 5), (1, 1), "same", activation: keras.activations.Relu, bias_regularizer:keras.regularizers.L1),
+                tf.keras.layers.BatchNormalization(),
+                tf.keras.layers.MaxPooling2D((3, 3), (2, 2)),
+
+                tf.keras.layers.Flatten(),
+
+                tf.keras.layers.Dense(1000, activation: "linear"),
+                tf.keras.layers.Softmax(1)
+            });
+
+        savemodel.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
+
+        var num_epochs = 1;
+        var batch_size = 8;
+
+        var trainDataset = new RandomDataSet(new Shape(227, 227, 3), 16);
+
+        savemodel.fit(trainDataset.Data, trainDataset.Labels, batch_size, num_epochs);
+
+        savemodel.save(@"./bias_regularizer_save_and_load", save_format: "tf");
+
+        var loadModel = tf.keras.models.load_model(@"./bias_regularizer_save_and_load");
+        loadModel.summary();
+
+        loadModel.compile(tf.keras.optimizers.Adam(), tf.keras.losses.SparseCategoricalCrossentropy(from_logits: true), new string[] { "accuracy" });
+
+        var fitDataset = new RandomDataSet(new Shape(227, 227, 3), 16);
+
+        loadModel.fit(fitDataset.Data, fitDataset.Labels, batch_size, num_epochs);
+    }
 
 
     [TestMethod]
