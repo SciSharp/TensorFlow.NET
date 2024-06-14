@@ -178,10 +178,15 @@ namespace Tensorflow
                 values = values switch
                 {
                     long[] longValues when dtype == TF_DataType.TF_INT32 => longValues.Select(x => (int)x).ToArray(),
+                    long[] longValues => values,
                     float[] floatValues when dtype == TF_DataType.TF_DOUBLE => floatValues.Select(x => (double)x).ToArray(),
+                    float[] floatValues => values,
                     float[,] float2DValues when dtype == TF_DataType.TF_DOUBLE => ConvertArray2D(float2DValues, Convert.ToDouble),
+                    float[,] float2DValues => values,
                     double[] doubleValues when dtype == TF_DataType.TF_FLOAT => doubleValues.Select(x => (float)x).ToArray(),
-                    double[,] double2DValues when dtype == TF_DataType.TF_DOUBLE => ConvertArray2D(double2DValues, Convert.ToSingle),
+                    double[] doubleValues => values,
+                    double[,] double2DValues when dtype == TF_DataType.TF_FLOAT => ConvertArray2D(double2DValues, Convert.ToSingle),
+                    double[,] double2DValues => values,
                     _ => Convert.ChangeType(values, new_system_dtype),
                 };
                 dtype = values.GetDataType();
