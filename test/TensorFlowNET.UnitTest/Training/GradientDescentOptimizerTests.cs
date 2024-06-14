@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using Tensorflow;
@@ -82,7 +82,7 @@ namespace TensorFlowNET.UnitTest.Training
 
                 var pred = math_ops.matmul(var0, x) + var1;
                 var loss = pred * pred;
-                var sgd_op = tf.train.GradientDescentOptimizer(3.0f).minimize(loss);
+                var sgd_op = tf.train.GradientDescentOptimizer(1.0f).minimize(loss);
 
                 var global_variables = tf.global_variables_initializer();
                 sess.run(global_variables);
