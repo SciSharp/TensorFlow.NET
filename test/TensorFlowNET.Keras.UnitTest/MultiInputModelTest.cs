@@ -54,6 +54,13 @@ namespace Tensorflow.Keras.UnitTest
             var x = new NDArray[] { x1, x2 };
             model.fit(x, dataset.Train.Labels, batch_size: 8, epochs: 3);
 
+            x1 = x1["0:8"];
+            x2 = x1;
+
+            x = new NDArray[] { x1, x2 };
+            var y = dataset.Train.Labels["0:8"];
+            (model as Engine.Model).evaluate(x, y);
+
             x1 = np.ones((1, 28, 28, 1), TF_DataType.TF_FLOAT);
             x2 = np.zeros((1, 28, 28, 1), TF_DataType.TF_FLOAT);
             var pred = model.predict((x1, x2));
