@@ -112,7 +112,19 @@ namespace Tensorflow.Keras.Engine
                 Steps = data_handler.Inferredsteps
             });
 
-            return evaluate(data_handler, callbacks, is_val, test_function);
+            Func<DataHandler, OwnedIterator, Dictionary<string, float>> testFunction;
+
+            if (data_handler.DataAdapter.GetDataset().structure.Length > 2 ||
+                data_handler.DataAdapter.GetDataset().FirstInputTensorCount > 1)
+            {
+                testFunction = test_step_multi_inputs_function;
+            }
+            else
+            {
+                testFunction = test_function;
+            }
+
+            return evaluate(data_handler, callbacks, is_val, testFunction);
         }
 
         /// <summary>
