@@ -180,7 +180,7 @@ namespace Tensorflow.Keras.Engine
             var (nodes_in_decreasing_depth, layer_indices) = BuildMap(outputs);
             var network_nodes = nodes_in_decreasing_depth
                 .Select(node => MakeNodeKey(node.Layer.Name, node.Layer.InboundNodes.IndexOf(node)))
-                .ToArray();
+                .ToList();
 
             var nodes_depths = new Dictionary<INode, int>();
             var layers_depths = new Dictionary<ILayer, int>();
@@ -221,7 +221,7 @@ namespace Tensorflow.Keras.Engine
                     layers_depths[input_layer] = 0;
                     layer_indices[input_layer] = -1;
                     nodes_depths[input_layer.InboundNodes[0]] = 0;
-                    network_nodes.add(MakeNodeKey(input_layer.Name, 0));
+                    network_nodes.Add(MakeNodeKey(input_layer.Name, 0));
                 }
             }
 
@@ -231,7 +231,7 @@ namespace Tensorflow.Keras.Engine
             {
                 if (!nodes_by_depth.ContainsKey(depth))
                     nodes_by_depth[depth] = new List<INode>();
-                nodes_by_depth[depth].append(node);
+                nodes_by_depth[depth].Add(node);
             }
 
             var layers_by_depth = new Dictionary<int, List<ILayer>>();
@@ -239,7 +239,7 @@ namespace Tensorflow.Keras.Engine
             {
                 if (!layers_by_depth.ContainsKey(depth))
                     layers_by_depth[depth] = new List<ILayer>();
-                layers_by_depth[depth].append(layer);
+                layers_by_depth[depth].Add(layer);
             }
 
             // Get sorted list of layer depths.
@@ -260,7 +260,7 @@ namespace Tensorflow.Keras.Engine
             // Get sorted list of node depths.
             depth_keys = nodes_by_depth.Keys.OrderBy(x => x).Reverse();
 
-            return (network_nodes, nodes_by_depth, layers, layers_by_depth);
+            return (network_nodes.ToArray(), nodes_by_depth, layers, layers_by_depth);
         }
 
         string MakeNodeKey(string layer_name, int node_index)
