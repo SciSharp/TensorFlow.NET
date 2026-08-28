@@ -191,15 +191,16 @@ More adcanced examples could be found in [TensorFlow.NET Examples](https://githu
 
 ## Version Relationships
 
-| TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.7, cuda 11 |tensorflow 2.10, cuda 11 |
-| -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ | ------------ |
-| tf.net 0.10x, tf.keras 0.10 |  |  |  |  |  | x |
-| tf.net 0.7x, tf.keras 0.7   |  |  |  |  | x |  |
-| tf.net 0.4x, tf.keras 0.5   |  |  |  | x |  |  |
-| tf.net 0.3x, tf.keras 0.4   |  |  | x |  |  |  |
-| tf.net 0.2x                 |  | x | x |  |  |  |
-| tf.net 0.15                 | x | x |  |  |  |  |
-| tf.net 0.14                 | x |  |  |  |  |  |
+| TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.7, cuda 11 |tensorflow 2.10, cuda 11 | tensorflow 2.15+ (target) |
+| -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ | ------------ | ------------ |
+| tf.net 0.150x, tf.keras 0.150|  |  |  |  |  |  | x |
+| tf.net 0.10x, tf.keras 0.10 |  |  |  |  |  | x |  |
+| tf.net 0.7x, tf.keras 0.7   |  |  |  |  | x |  |  |
+| tf.net 0.4x, tf.keras 0.5   |  |  |  | x |  |  |  |
+| tf.net 0.3x, tf.keras 0.4   |  |  | x |  |  |  |  |
+| tf.net 0.2x                 |  | x | x |  |  |  |  |
+| tf.net 0.15                 | x | x |  |  |  |  |  |
+| tf.net 0.14                 | x |  |  |  |  |  |  |
 
 
 ```
@@ -207,6 +208,28 @@ tf.net 0.4x -> tf native 2.4
 tf.net 0.6x -> tf native 2.6      
 tf.net 0.7x -> tf native 2.7
 tf.net 0.10x -> tf native 2.10
+tf.net 0.150x -> tf native 2.15
+```
+
+## Roadmap & SOT Objectives (TensorFlow 2.16 - 2.22+ Parity)
+
+Based on the official Python TensorFlow reference implementation (Source of Truth):
+
+1. **Native C-API & Runtime Upstream Synchronization**:
+   - Upgrade native redist bindings from TF 2.10/2.15 to TF 2.16+ / TF 2.22+ C-API binaries.
+   - Synchronize `CApi/c_api.cs` and `CApi/tf_status.cs` with upstream C-API changes.
+
+2. **Keras 3 Multi-Backend Parity**:
+   - Modernize `TensorFlowNET.Keras` abstractions toward Keras 3 stateless layer patterns and unified serialization.
+
+3. **Expanded DTypes and Quantization Support**:
+   - Add native C# support for 8-bit floats (`FLOAT8_E4M3FN`, `FLOAT8_E5M2`) and 4-bit quantized operations (`QUI4`).
+   - Broaden native `bfloat16` and `float16` kernel interoperability across all tensor mathematical ops.
+
+4. **Advanced Operations, Second-Order Gradients & `tf.data`**:
+   - Implement missing second-order gradients in `GradientTape` (e.g. `SoftsignGrad`, `AdjustContrastv2`).
+   - Align `TensorFlowNET.Core/NumPy` with updated `tf.experimental.numpy` behavior.
+   - Port modern `tf.data` pipeline features (`Dataset.scan`, dynamic multithreaded buffering).
 ...
 ```
 

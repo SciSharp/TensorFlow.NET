@@ -83,6 +83,19 @@ src/
 
 ### Key Architectural Concepts
 - **Source of Truth (SOT)**: The official Python TensorFlow codebase located at `refs/py-tensorflow-sot` (`D:\Users\samuel\source\repos\NT\refs\py-tensorflow-sot`) serves as the strict reference implementation for all mathematical behavior, operator semantics, graph/eager execution semantics, and API signatures. Reference files under `refs/` are read-only.
+- **Branching, Tagging & Python TensorFlow Version Mapping**:
+  - **Version Mapping Scheme**: TF.NET versions directly mirror TensorFlow Python versions:
+    - `v0.150.x` / `v0.15.x` -> Python TensorFlow `v2.15` / `v1.15`
+    - `master` / `v0.110.x` / `v0.100.x` -> Python TensorFlow `v2.11` / `v2.10`
+    - `v0.6x` -> Python TensorFlow `v2.6`
+    - `v0.40` -> Python TensorFlow `v2.4`
+  - **Branches**:
+    - `master`: Main development line targeting parity with TensorFlow 2.10+.
+    - Maintenance / version branches (e.g. `v0.6x`, `v0.15-tensorflow1.15`): Target specific legacy TensorFlow releases.
+  - **Tags**: Semantic versioning prefixed with `v` (e.g. `v0.110.4-Transformer-Model`, `v0.100.5`), used by CI/CD packaging to determine the base version.
+  - **Releases & CI/CD Pipeline**:
+    - Automatic packaging triggered on PR merge to `master` with `auto-release` label (`.github/workflows/release_prepare.yml` -> `release.yml`).
+    - Produces `-nightly` packages pushed to MyGet feed (`https://www.myget.org/F/scisharp/api/v3/index.json`) and stable releases pushed to NuGet (`TensorFlow.NET`, `TensorFlow.Keras`, `Tensorflow.Hub`).
 - **Python / C# Idiom Parity**: Standard static imports provide syntax matching Python TensorFlow:
   ```csharp
   using static Tensorflow.Binding;
@@ -92,3 +105,26 @@ src/
   ```
 - **Execution Modes**: Supports both `Eager` mode (imperative tensor operations) and `Graph` mode (`tf.Graph`, `tf.Session`, `tf.placeholder`).
 - **Native Interop Lifecycle**: Native `c_api` allocations (`SafeHandle`, `TF_Tensor`, `TF_Status`, `TF_Operation`) are wrapped via `DisposableObject` and memory lifetime management in `TensorFlowNET.Core`.
+
+---
+
+## Roadmap & SOT Feature Gap Objectives
+
+Targeting alignment with modern Python TensorFlow (TF 2.16 - 2.22+ in `refs/py-tensorflow-sot`):
+
+1. **Native C-API & Runtime Upstream Synchronization**:
+   - Upgrade native redist bindings from TF 2.10/2.15 to TF 2.16+ / TF 2.22+ C-API binaries.
+   - Synchronize `CApi/c_api.cs` and `CApi/tf_status.cs` with upstream C-API changes (e.g. filesystem interface transitions).
+
+2. **Keras 3 Multi-Backend Parity**:
+   - Modernize `TensorFlowNET.Keras` abstractions beyond Keras 2.x legacy tight graph coupling toward Keras 3 stateless layer patterns and unified serialization.
+
+3. **Expanded DTypes and Quantization Support**:
+   - Implement native C# support and memory conversions for 8-bit floats (`FLOAT8_E4M3FN`, `FLOAT8_E5M2`) and 4-bit quantized operations (`QUI4`).
+   - Broaden native `bfloat16` and `float16` kernel interoperability across all tensor mathematical ops.
+
+4. **Advanced Operations, Second-Order Gradients & `tf.data`**:
+   - Add missing second-order gradients in `GradientTape` (e.g. `SoftsignGrad`, `AdjustContrastv2`).
+   - Expand `TensorFlowNET.Core/NumPy` to match updated `tf.experimental.numpy` behavior (e.g. tolerance handling in `isclose`/`allclose`).
+   - Port newer `tf.data` pipeline features (`Dataset.scan`, dynamic multithreaded buffering).
+
