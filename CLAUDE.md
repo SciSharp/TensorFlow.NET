@@ -82,6 +82,7 @@ src/
 ```
 
 ### Key Architectural Concepts
+- **Source of Truth (SOT)**: The official Python TensorFlow codebase located at `refs/py-tensorflow-sot` (`D:\Users\samuel\source\repos\NT\refs\py-tensorflow-sot`) serves as the strict reference implementation for all mathematical behavior, operator semantics, graph/eager execution semantics, and API signatures. Reference files under `refs/` are read-only.
 - **Python / C# Idiom Parity**: Standard static imports provide syntax matching Python TensorFlow:
   ```csharp
   using static Tensorflow.Binding;
