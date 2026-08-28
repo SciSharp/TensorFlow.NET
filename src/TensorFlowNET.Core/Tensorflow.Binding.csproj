@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
     <AssemblyName>Tensorflow.Binding</AssemblyName>
     <RootNamespace>Tensorflow</RootNamespace>
     <TargetTensorFlow>2.15.0</TargetTensorFlow>
     <Version>0.150.0</Version>
-    <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Haiping Chen, Eli Belash, Yaohui Liu, Meinrad Recheis</Authors>
     <Company>SciSharp STACK</Company>
@@ -149,6 +148,68 @@ https://tensorflownet.readthedocs.io</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net6.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <!-- net8.0 warn suppression -->
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net8.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net8.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <!-- net9.0 warn suppression -->
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|x64'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net9.0|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='GPU|net9.0|x64'">
     <WarningLevel>1</WarningLevel>
     <NoWarn>$(NoWarn),1570,1573,1591,1712,8603,8604,8625,CS0612</NoWarn>
   </PropertyGroup>

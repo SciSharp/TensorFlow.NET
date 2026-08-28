@@ -44,7 +44,7 @@ namespace TensorFlowNET.UnitTest.ManagedAPI
             var x = tf.constant(0f);
             var w = tf.Variable(new float[] { 1, 1 });
             using var gt = tf.GradientTape();
-            var y = x * w;
+            var y = x * (Tensor)w;
             var gr = gt.gradient(y, w);
             Assert.AreEqual(new float[] { 0, 0 }, gr.numpy());
         }

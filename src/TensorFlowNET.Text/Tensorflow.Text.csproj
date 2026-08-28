@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0</TargetFrameworks>
     <RootNamespace>Tensorflow.Text</RootNamespace>
     <AssemblyName>Tensorflow.Text</AssemblyName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

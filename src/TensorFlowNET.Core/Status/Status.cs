@@ -65,6 +65,38 @@ namespace Tensorflow
             TF_SetStatus(_handle, code, msg);
         }
 
+        /// <summary>
+        /// Attaches a key/value payload to this status. No-op when status is OK.
+        /// Overwrites any existing payload for the same key.
+        /// </summary>
+        /// <param name="key">payload key</param>
+        /// <param name="value">payload value</param>
+        public void SetPayload(string key, string value)
+        {
+            TF_SetPayload(_handle, key, value);
+        }
+
+        /// <summary>
+        /// Iterates over all stored payloads, invoking visitor(key, value, capture) for each.
+        /// key and value IntPtrs are only valid during the callback.
+        /// </summary>
+        /// <param name="visitor">callback invoked per payload entry</param>
+        /// <param name="capture">passed to visitor unmodified</param>
+        public void ForEachPayload(c_api.TF_PayloadVisitor visitor, IntPtr capture)
+        {
+            TF_ForEachPayload(_handle, visitor, capture);
+        }
+
+        /// <summary>
+        /// Sets status from an I/O error code (e.g., errno). Clears previous info.
+        /// </summary>
+        /// <param name="errorCode">errno-style error code</param>
+        /// <param name="context">operation context description</param>
+        public void SetFromIOError(int errorCode, string context)
+        {
+            TF_SetStatusFromIOError(_handle, errorCode, context);
+        }
+
         public bool ok() => Code == TF_Code.TF_OK;
 
         /// <summary>

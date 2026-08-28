@@ -32,12 +32,25 @@ namespace Tensorflow
         public static TF_DataType uint64 = TF_DataType.TF_UINT64;
         public static TF_DataType float32 = TF_DataType.TF_FLOAT; // is that float32?
         public static TF_DataType float16 = TF_DataType.TF_HALF;
+        public static TF_DataType bfloat16 = TF_DataType.TF_BFLOAT16;
         public static TF_DataType float64 = TF_DataType.TF_DOUBLE;
         public static TF_DataType complex = TF_DataType.TF_COMPLEX;
         public static TF_DataType complex64 = TF_DataType.TF_COMPLEX64;
         public static TF_DataType complex128 = TF_DataType.TF_COMPLEX128;
         public static TF_DataType variant = TF_DataType.TF_VARIANT;
         public static TF_DataType resource = TF_DataType.TF_RESOURCE;
+        public static TF_DataType int16 = TF_DataType.TF_INT16;
+        public static TF_DataType uint16 = TF_DataType.TF_UINT16;
+        public static TF_DataType float8_e5m2 = TF_DataType.TF_FLOAT8_E5M2;
+        public static TF_DataType float8_e4m3fn = TF_DataType.TF_FLOAT8_E4M3FN;
+        public static TF_DataType float8_e4m3fnuz = TF_DataType.TF_FLOAT8_E4M3FNUZ;
+        public static TF_DataType float8_e4m3b11fnuz = TF_DataType.TF_FLOAT8_E4M3B11FNUZ;
+        public static TF_DataType float8_e5m2fnuz = TF_DataType.TF_FLOAT8_E5M2FNUZ;
+        public static TF_DataType int4 = TF_DataType.TF_INT4;
+        public static TF_DataType uint4 = TF_DataType.TF_UINT4;
+        public static TF_DataType int2 = TF_DataType.TF_INT2;
+        public static TF_DataType uint2 = TF_DataType.TF_UINT2;
+        public static TF_DataType float4_e2m1fn = TF_DataType.TF_FLOAT4_E2M1FN;
 
         /// <summary>
         /// 
@@ -159,13 +172,25 @@ namespace Tensorflow
                 "uint32" => TF_DataType.TF_UINT32,
                 "int64" => TF_DataType.TF_INT64,
                 "uint64" => TF_DataType.TF_UINT64,
-                "float16" => TF_DataType.TF_BFLOAT16,
+                "float16" => TF_DataType.TF_HALF,
+                "half" => TF_DataType.TF_HALF,
+                "bfloat16" => TF_DataType.TF_BFLOAT16,
                 "float32" => TF_DataType.TF_FLOAT,
                 "single" => TF_DataType.TF_FLOAT,
                 "float64" => TF_DataType.TF_DOUBLE,
                 "double" => TF_DataType.TF_DOUBLE,
                 "complex" => TF_DataType.TF_COMPLEX128,
                 "string" => TF_DataType.TF_STRING,
+                "float8_e5m2" => TF_DataType.TF_FLOAT8_E5M2,
+                "float8_e4m3fn" => TF_DataType.TF_FLOAT8_E4M3FN,
+                "float8_e4m3fnuz" => TF_DataType.TF_FLOAT8_E4M3FNUZ,
+                "float8_e4m3b11fnuz" => TF_DataType.TF_FLOAT8_E4M3B11FNUZ,
+                "float8_e5m2fnuz" => TF_DataType.TF_FLOAT8_E5M2FNUZ,
+                "int4" => TF_DataType.TF_INT4,
+                "uint4" => TF_DataType.TF_UINT4,
+                "int2" => TF_DataType.TF_INT2,
+                "uint2" => TF_DataType.TF_UINT2,
+                "float4_e2m1fn" => TF_DataType.TF_FLOAT4_E2M1FN,
                 _ => TF_DataType.DtInvalid
             };
 
@@ -226,18 +251,35 @@ namespace Tensorflow
         public static int get_datatype_size(this TF_DataType type)
             => type.as_base_dtype() switch
             {
+                TF_DataType.TF_STRING => 8,
                 TF_DataType.TF_BOOL => sizeof(bool),
                 TF_DataType.TF_UINT8 => sizeof(byte),
                 TF_DataType.TF_INT8 => sizeof(sbyte),
                 TF_DataType.TF_UINT16 => sizeof(ushort),
                 TF_DataType.TF_INT16 => sizeof(short),
+                TF_DataType.TF_BFLOAT16 => 2,
+                TF_DataType.TF_HALF => 2,
                 TF_DataType.TF_UINT32 => sizeof(uint),
                 TF_DataType.TF_INT32 => sizeof(int),
                 TF_DataType.TF_UINT64 => sizeof(ulong),
                 TF_DataType.TF_INT64 => sizeof(long),
                 TF_DataType.TF_FLOAT => sizeof(float),
                 TF_DataType.TF_DOUBLE => sizeof(double),
-                _ => throw new NotImplementedException("")
+                // 8-bit floats: 1 byte each
+                TF_DataType.TF_FLOAT8_E5M2 => 1,
+                TF_DataType.TF_FLOAT8_E4M3FN => 1,
+                TF_DataType.TF_FLOAT8_E4M3FNUZ => 1,
+                TF_DataType.TF_FLOAT8_E4M3B11FNUZ => 1,
+                TF_DataType.TF_FLOAT8_E5M2FNUZ => 1,
+                // sub-byte types: C-API reports 1 byte (storage unit)
+                // ponytail: true sub-byte packing (TF_INT4=4-bit) needs C-API TF_DataTypeSize;
+                //           use 1 here as safe .NET allocation unit until redist ≥ TF 2.16
+                TF_DataType.TF_INT4 => 1,
+                TF_DataType.TF_UINT4 => 1,
+                TF_DataType.TF_INT2 => 1,
+                TF_DataType.TF_UINT2 => 1,
+                TF_DataType.TF_FLOAT4_E2M1FN => 1,
+                _ => throw new NotImplementedException($"get_datatype_size not implemented for {type}")
             };
 
         public static Type as_numpy_dtype(this DataType type)
@@ -314,7 +356,16 @@ namespace Tensorflow
 
         public static bool is_floating(this TF_DataType type)
         {
-            return type == TF_DataType.TF_HALF || type == TF_DataType.TF_FLOAT || type == TF_DataType.TF_DOUBLE;
+            return type == TF_DataType.TF_HALF
+                || type == TF_DataType.TF_FLOAT
+                || type == TF_DataType.TF_DOUBLE
+                || type == TF_DataType.TF_BFLOAT16
+                || type == TF_DataType.TF_FLOAT8_E5M2
+                || type == TF_DataType.TF_FLOAT8_E4M3FN
+                || type == TF_DataType.TF_FLOAT8_E4M3FNUZ
+                || type == TF_DataType.TF_FLOAT8_E4M3B11FNUZ
+                || type == TF_DataType.TF_FLOAT8_E5M2FNUZ
+                || type == TF_DataType.TF_FLOAT4_E2M1FN;
         }
 
         public static bool is_ref_dtype(this TF_DataType type)
@@ -340,7 +391,9 @@ namespace Tensorflow
 
         public static bool is_value_dtype(this TF_DataType type)
         {
-            return ((int)type >= 1 && (int)type <= 19)
+            // covers TF_FLOAT(1)..TF_FLOAT4_E2M1FN(33) and the out-of-sequence UINT32/UINT64
+            int v = (int)type;
+            return (v >= 1 && v <= 33)
                 || type == TF_DataType.TF_UINT32
                 || type == TF_DataType.TF_UINT64;
         }

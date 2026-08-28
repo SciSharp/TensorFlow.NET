@@ -157,6 +157,44 @@ namespace Tensorflow
         public static extern void TF_SetShape(SafeTensorHandle tensor, long[] dims, int num_dims);
 
         /// <summary>
+        /// Returns the alignment in bytes required for allocating aligned tensors.
+        /// Use with TF_NewTensor to satisfy TensorFlow memory alignment preferences.
+        /// </summary>
+        [DllImport(TensorFlowLibName)]
+        public static extern ulong TF_TensorDefaultAlignment();
+
+        /// <summary>
+        /// Returns the number of elements in the tensor.
+        /// </summary>
+        /// <param name="tensor">const TF_Tensor*</param>
+        /// <returns>element count</returns>
+        [DllImport(TensorFlowLibName)]
+        public static extern long TF_TensorElementCount(SafeTensorHandle tensor);
+
+        /// <summary>
+        /// Copies the internal data representation of <paramref name="from"/> into <paramref name="to"/>
+        /// with a new shape and type. Both tensors must occupy the same number of bytes.
+        /// Sets *status to TF_INVALID_ARGUMENT on incompatible size or zero-size dtypes.
+        /// </summary>
+        /// <param name="from">source tensor (const TF_Tensor*)</param>
+        /// <param name="type">new TF_DataType for the destination tensor</param>
+        /// <param name="to">destination tensor (TF_Tensor*)</param>
+        /// <param name="new_dims">new shape dims array (const int64_t*)</param>
+        /// <param name="num_new_dims">number of dimensions</param>
+        /// <param name="status">TF_Status* set to TF_OK on success</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_TensorBitcastFrom(SafeTensorHandle from, TF_DataType type, SafeTensorHandle to, long[] new_dims, int num_new_dims, SafeStatusHandle status);
+
+        /// <summary>
+        /// Returns true iff the tensor buffer satisfies TensorFlow's alignment requirements.
+        /// </summary>
+        /// <param name="tensor">const TF_Tensor*</param>
+        /// <returns>non-zero when aligned</returns>
+        [DllImport(TensorFlowLibName)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool TF_TensorIsAligned(SafeTensorHandle tensor);
+
+        /// <summary>
         /// Return the size in bytes required to encode a string `len` bytes long into a
         /// TF_STRING tensor.
         /// </summary>
