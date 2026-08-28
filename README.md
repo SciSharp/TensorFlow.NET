@@ -213,23 +213,7 @@ tf.net 0.150x -> tf native 2.15
 
 ## Roadmap & SOT Objectives (TensorFlow 2.16 - 2.22+ Parity)
 
-Based on the official Python TensorFlow reference implementation (Source of Truth):
-
-1. **Native C-API & Runtime Upstream Synchronization**:
-   - Upgrade native redist bindings from TF 2.10/2.15 to TF 2.16+ / TF 2.22+ C-API binaries.
-   - Synchronize `CApi/c_api.cs` and `CApi/tf_status.cs` with upstream C-API changes.
-
-2. **Keras 3 Multi-Backend Parity**:
-   - Modernize `TensorFlowNET.Keras` abstractions toward Keras 3 stateless layer patterns and unified serialization.
-
-3. **Expanded DTypes and Quantization Support**:
-   - Add native C# support for 8-bit floats (`FLOAT8_E4M3FN`, `FLOAT8_E5M2`) and 4-bit quantized operations (`QUI4`).
-   - Broaden native `bfloat16` and `float16` kernel interoperability across all tensor mathematical ops.
-
-4. **Advanced Operations, Second-Order Gradients & `tf.data`**:
-   - Implement missing second-order gradients in `GradientTape` (e.g. `SoftsignGrad`, `AdjustContrastv2`).
-   - Align `TensorFlowNET.Core/NumPy` with updated `tf.experimental.numpy` behavior.
-   - Port modern `tf.data` pipeline features (`Dataset.scan`, dynamic multithreaded buffering).
+The official engineering roadmap targeting modern Python TensorFlow (v2.16 LTS through v2.22+) parity and .NET 8/9 runtime modernization is maintained in **[ROADMAP.md](ROADMAP.md)**.
 ...
 ```
 
