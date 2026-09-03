@@ -35,6 +35,16 @@ namespace Tensorflow
         TF_VARIANT = 21,
         TF_UINT32 = 22,
         TF_UINT64 = 23,
+        TF_FLOAT8_E5M2 = 24,       // 5 exponent bits, 2 mantissa bits
+        TF_FLOAT8_E4M3FN = 25,     // 4 exponent bits, 3 mantissa bits, finite-only, 2 NaNs
+        TF_FLOAT8_E4M3FNUZ = 26,   // 4 exponent bits, 3 mantissa bits, finite-only, with NaN
+        TF_FLOAT8_E4M3B11FNUZ = 27, // 4 exponent bits, 3 mantissa bits, 11-bit bias, finite-only, NaNs
+        TF_FLOAT8_E5M2FNUZ = 28,   // 5 exponent bits, 2 mantissa bits, finite-only, with NaN
+        TF_INT4 = 29,
+        TF_UINT4 = 30,
+        TF_INT2 = 31,
+        TF_UINT2 = 32,
+        TF_FLOAT4_E2M1FN = 33,     // 2 exponent bits, 1 mantissa bit, finite-only
 
         DtFloatRef = 101, // DT_FLOAT_REF
         DtDoubleRef = 102, // DT_DOUBLE_REF

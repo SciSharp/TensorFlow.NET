@@ -108,7 +108,7 @@ namespace TensorFlowNET.UnitTest.Gradient
             var x = tf.Variable(1.0f);
             using var tape1 = tf.GradientTape();
             using var tape2 = tf.GradientTape();
-            var y = x * x * x;
+            var y = (Tensor)x * (Tensor)x * (Tensor)x;
             var dy_dx = tape2.gradient(y, x);
             Assert.AreEqual((float)dy_dx, 3.0f);
             var d2y_d2x = tape1.gradient(dy_dx, x);

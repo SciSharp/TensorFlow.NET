@@ -62,5 +62,38 @@ namespace Tensorflow
         /// <param name="msg"></param>
         [DllImport(TensorFlowLibName)]
         public static extern void TF_SetStatus(SafeStatusHandle s, TF_Code code, string msg);
+
+        /// <summary>
+        /// Record &lt;key, value&gt; as a payload in *s. Overwrites previous payload with same key.
+        /// No-op when status is TF_OK.
+        /// </summary>
+        /// <param name="s">TF_Status*</param>
+        /// <param name="key">null-terminated key string</param>
+        /// <param name="value">null-terminated value string</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetPayload(SafeStatusHandle s, string key, string value);
+
+        /// <summary>
+        /// Iterates over stored payloads and calls visitor(key, value, capture) for each one.
+        /// key and value are only valid during the callback.
+        /// </summary>
+        /// <param name="s">const TF_Status*</param>
+        /// <param name="visitor">callback invoked per payload entry</param>
+        /// <param name="capture">passed to visitor unmodified</param>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void TF_PayloadVisitor(IntPtr key, IntPtr value, IntPtr capture);
+
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_ForEachPayload(SafeStatusHandle s, TF_PayloadVisitor visitor, IntPtr capture);
+
+        /// <summary>
+        /// Converts from an I/O error code (e.g., errno) to a TF_Status value.
+        /// Any previous information is lost. Prefer over TF_SetStatus for I/O errors.
+        /// </summary>
+        /// <param name="s">TF_Status*</param>
+        /// <param name="error_code">errno-style error code</param>
+        /// <param name="context">null-terminated context string</param>
+        [DllImport(TensorFlowLibName)]
+        public static extern void TF_SetStatusFromIOError(SafeStatusHandle s, int error_code, string context);
     }
 }

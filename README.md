@@ -191,15 +191,16 @@ More adcanced examples could be found in [TensorFlow.NET Examples](https://githu
 
 ## Version Relationships
 
-| TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.7, cuda 11 |tensorflow 2.10, cuda 11 |
-| -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ | ------------ |
-| tf.net 0.10x, tf.keras 0.10 |  |  |  |  |  | x |
-| tf.net 0.7x, tf.keras 0.7   |  |  |  |  | x |  |
-| tf.net 0.4x, tf.keras 0.5   |  |  |  | x |  |  |
-| tf.net 0.3x, tf.keras 0.4   |  |  | x |  |  |  |
-| tf.net 0.2x                 |  | x | x |  |  |  |
-| tf.net 0.15                 | x | x |  |  |  |  |
-| tf.net 0.14                 | x |  |  |  |  |  |
+| TensorFlow.NET Versions                 | tensorflow 1.14, cuda 10.0 | tensorflow 1.15, cuda 10.0 | tensorflow 2.3, cuda 10.1 | tensorflow 2.4, cuda 11 | tensorflow 2.7, cuda 11 |tensorflow 2.10, cuda 11 | tensorflow 2.15+ (target) |
+| -------------------------- | ------------- | -------------- | ------------- | ------------- | ------------ | ------------ | ------------ |
+| tf.net 0.150x, tf.keras 0.150|  |  |  |  |  |  | x |
+| tf.net 0.10x, tf.keras 0.10 |  |  |  |  |  | x |  |
+| tf.net 0.7x, tf.keras 0.7   |  |  |  |  | x |  |  |
+| tf.net 0.4x, tf.keras 0.5   |  |  |  | x |  |  |  |
+| tf.net 0.3x, tf.keras 0.4   |  |  | x |  |  |  |  |
+| tf.net 0.2x                 |  | x | x |  |  |  |  |
+| tf.net 0.15                 | x | x |  |  |  |  |  |
+| tf.net 0.14                 | x |  |  |  |  |  |  |
 
 
 ```
@@ -207,6 +208,12 @@ tf.net 0.4x -> tf native 2.4
 tf.net 0.6x -> tf native 2.6      
 tf.net 0.7x -> tf native 2.7
 tf.net 0.10x -> tf native 2.10
+tf.net 0.150x -> tf native 2.15
+```
+
+## Roadmap & SOT Objectives (TensorFlow 2.16 - 2.22+ Parity)
+
+The official engineering roadmap targeting modern Python TensorFlow (v2.16 LTS through v2.22+) parity and .NET 8/9 runtime modernization is maintained in **[ROADMAP.md](ROADMAP.md)**.
 ...
 ```
 
