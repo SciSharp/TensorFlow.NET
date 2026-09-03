@@ -238,16 +238,16 @@ https://tensorflownet.readthedocs.io</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.149" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="OneOf" Version="3.0.263" />
+    <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.150" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="OneOf" Version="3.0.271" />
     <PackageReference Include="Protobuf.Text" Version="0.7.2" />
-    <PackageReference Include="Razorvine.Pickle" Version="1.4.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Razorvine.Pickle" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="all" />
-    <PackageReference Include="System.Memory" Version="4.5.5" PrivateAssets="all" />
+    <PackageReference Include="System.Memory" Version="4.6.3" PrivateAssets="all" />
   </ItemGroup>
 </Project>
